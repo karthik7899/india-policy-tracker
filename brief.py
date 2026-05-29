@@ -1,5 +1,6 @@
 import os
 import sys
+import re
 import json
 import datetime
 import urllib.parse
@@ -565,6 +566,125 @@ def update_live_stock_prices():
             except Exception as e:
                 print(f"Error updating price/metrics for {yahoo_ticker}: {e}. Using static price.")
 
+def fetch_screener_fundamentals():
+    """Enriches STOCK_WATCHLIST with actual filed financial data from Screener.in.
+    
+    This provides a 'ground truth' data layer from BSE/NSE company filings,
+    complementing Yahoo Finance's analyst estimates. Data includes:
+    - PE Ratio, ROCE, ROE (valuation & efficiency metrics)
+    - Market Cap, Book Value
+    - Latest quarterly Sales, Net Profit, EPS (actual reported numbers)
+    - Promoter/FII/DII holding percentages
+    
+    Source: Screener.in (aggregates BSE/NSE filed data)
+    """
+    import time
+    print("Fetching actual filed fundamentals from Screener.in (BSE/NSE filings)...")
+    
+    for sector, stocks in STOCK_WATCHLIST.items():
+        for stock in stocks:
+            ticker = stock["ticker"]
+            
+            # Initialize screener fields
+            stock["screener"] = {}
+            
+            try:
+                # Try consolidated first (better for companies with subsidiaries)
+                url = f"https://www.screener.in/company/{ticker}/consolidated/"
+                headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
+                
+                r = requests.get(url, headers=headers, timeout=15)
+                r.encoding = 'utf-8'  # Force UTF-8 (Screener.in uses ₹ symbols)
+                if r.status_code != 200:
+                    # Fallback to standalone
+                    url = f"https://www.screener.in/company/{ticker}/"
+                    r = requests.get(url, headers=headers, timeout=15)
+                    r.encoding = 'utf-8'
+                    if r.status_code != 200:
+                        print(f"  {ticker}: Screener.in returned HTTP {r.status_code}. Skipping.")
+                        continue
+                
+                html = r.text
+                sc = {}
+                
+                # --- EXTRACT TOP-LEVEL RATIOS ---
+                # Pattern: <span class="name">Label</span> ... <span class="number">VALUE</span>
+                def extract_ratio(label):
+                    pattern = rf'{label}\s*</span>.*?<span class="number">\s*([\d,\.]+)\s*</span>'
+                    match = re.search(pattern, html, re.DOTALL)
+                    if match:
+                        return match.group(1).replace(",", "")
+                    return None
+                
+                sc["market_cap"] = extract_ratio("Market Cap")      # in Cr.
+                sc["pe_ratio"] = extract_ratio("Stock P/E")
+                sc["industry_pe"] = extract_ratio("Industry PE")
+                sc["book_value"] = extract_ratio("Book Value")
+                sc["roce"] = extract_ratio("ROCE")                  # %
+                sc["roe"] = extract_ratio("ROE")                    # %
+                sc["dividend_yield"] = extract_ratio("Dividend Yield")
+                
+                # --- EXTRACT QUARTERLY RESULTS (actual filed numbers) ---
+                qs_match = re.search(r'id="quarters"(.*?)(?:</section>)', html, re.DOTALL)
+                if qs_match:
+                    qs = qs_match.group(1)
+                    
+                    # Get latest quarter name
+                    q_headers = re.findall(r'data-date-key="[^"]*">\s*(\w+ \d{4})', qs)
+                    if q_headers:
+                        sc["latest_quarter"] = q_headers[-1]
+                    
+                    # Extract row values from quarterly table
+                    def extract_row_last(label):
+                        row_match = re.search(rf'{label}.*?</tr>', qs, re.DOTALL)
+                        if row_match:
+                            vals = re.findall(r'<td[^>]*>\s*([\d,\.\-]+)\s*</td>', row_match.group(0))
+                            if vals:
+                                return vals[-1].replace(",", "")
+                        return None
+                    
+                    sc["q_sales"] = extract_row_last("Sales")
+                    sc["q_net_profit"] = extract_row_last("Net Profit")
+                    sc["q_opm"] = extract_row_last("OPM")
+                    sc["q_eps"] = extract_row_last("EPS in Rs")
+                
+                # --- EXTRACT SHAREHOLDING PATTERN ---
+                sh_match = re.search(r'id="shareholding"(.*?)(?:</section>|id=")', html, re.DOTALL)
+                if sh_match:
+                    sh = sh_match.group(1)
+                    def extract_holding(label):
+                        match = re.search(rf'{label}.*?<td[^>]*>\s*([\d\.]+)\s*%', sh, re.DOTALL)
+                        return match.group(1) if match else None
+                    sc["promoter_pct"] = extract_holding("Promoters")
+                    sc["fii_pct"] = extract_holding("FIIs")
+                    sc["dii_pct"] = extract_holding("DIIs")
+                
+                # Remove None values and store
+                sc = {k: v for k, v in sc.items() if v is not None}
+                stock["screener"] = sc
+                
+                # Build log line
+                log_parts = []
+                if sc.get("pe_ratio"):
+                    ind_pe = f" vs Ind:{sc['industry_pe']}" if sc.get("industry_pe") else ""
+                    log_parts.append(f"PE={sc['pe_ratio']}{ind_pe}")
+                if sc.get("roce"):
+                    log_parts.append(f"ROCE={sc['roce']}%")
+                if sc.get("roe"):
+                    log_parts.append(f"ROE={sc['roe']}%")
+                if sc.get("q_sales"):
+                    log_parts.append(f"Q.Sales=Rs.{sc['q_sales']}Cr")
+                if sc.get("promoter_pct"):
+                    log_parts.append(f"Promoter={sc['promoter_pct']}%")
+                    
+                print(f"  {ticker}: {' | '.join(log_parts)}")
+                
+                # Rate limit: be polite to Screener.in (free service)
+                time.sleep(0.5)
+                
+            except Exception as e:
+                print(f"  {ticker}: Screener.in error: {str(e).encode('ascii', 'replace').decode()}. Skipping.")
+
 def detect_emerging_players(brief_data):
     """Scans aggregated news titles for corporate names not currently in the watchlist."""
     print("Scanning headlines for emerging players...")
@@ -795,7 +915,10 @@ if __name__ == "__main__":
     # Fetch live Yahoo Finance prices, broker targets, and growth metrics for the final curated watchlist
     update_live_stock_prices()
     
-    # Save the updated stock metrics (prices, targets, ratings, growth) back to watchlist.json
+    # Enrich with actual filed fundamentals from Screener.in (PE, ROCE, ROE, quarterly results)
+    fetch_screener_fundamentals()
+    
+    # Save the updated stock metrics (prices, targets, ratings, growth, fundamentals) back to watchlist.json
     save_watchlist()
     
     # Save the updated data for dashboard display

@@ -552,6 +552,33 @@ function renderSectorDetail(sectorKey) {
         const analystBadge = formatAnalystBadge(s);
         const growthBadge = formatGrowthBadge(s.revenue_growth, 'badge');
         const earningsBadge = s.earnings_growth ? `<span style="font-size: 9px; padding: 2px 6px; background: rgba(139, 92, 246, 0.12); color: #a78bfa; border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 4px; display: inline-block; font-weight: 600;">EPS ${s.earnings_growth}</span>` : '';
+        
+        // Build Screener.in fundamentals row (actual filed data)
+        const sc = s.screener || {};
+        let screenerHtml = '';
+        if (Object.keys(sc).length > 0) {
+            const peHtml = sc.pe_ratio ? `<span class="sc-chip">PE <strong>${sc.pe_ratio}</strong>${sc.industry_pe ? ` <small style="opacity:0.5">vs Ind:${sc.industry_pe}</small>` : ''}</span>` : '';
+            const roceHtml = sc.roce ? `<span class="sc-chip">ROCE <strong>${sc.roce}%</strong></span>` : '';
+            const roeHtml = sc.roe ? `<span class="sc-chip">ROE <strong>${sc.roe}%</strong></span>` : '';
+            const qSalesHtml = sc.q_sales ? `<span class="sc-chip">Q.Sales <strong>₹${Number(sc.q_sales).toLocaleString('en-IN')}Cr</strong></span>` : '';
+            const qProfitHtml = sc.q_net_profit ? `<span class="sc-chip">Q.Profit <strong>₹${Number(sc.q_net_profit).toLocaleString('en-IN')}Cr</strong></span>` : '';
+            const promoterHtml = sc.promoter_pct ? `<span class="sc-chip">Promoter <strong>${sc.promoter_pct}%</strong></span>` : '';
+            const fiiHtml = sc.fii_pct ? `<span class="sc-chip">FII <strong>${sc.fii_pct}%</strong></span>` : '';
+            const qtrLabel = sc.latest_quarter ? `<small style="color: var(--text-muted); font-size: 9px;">${sc.latest_quarter}</small>` : '';
+            
+            screenerHtml = `
+                <div class="dsc-fundamentals" style="margin-top: 10px; padding: 10px 12px; background: rgba(245, 158, 11, 0.04); border: 1px solid rgba(245, 158, 11, 0.12); border-radius: 8px;">
+                    <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+                        <span style="font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #f59e0b;">📊 Filed Fundamentals</span>
+                        ${qtrLabel}
+                        <span style="font-size: 8px; color: var(--text-muted); margin-left: auto;">Source: Screener.in (BSE/NSE)</span>
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                        ${peHtml}${roceHtml}${roeHtml}${qSalesHtml}${qProfitHtml}${promoterHtml}${fiiHtml}
+                    </div>
+                </div>`;
+        }
+        
         stocksHtml += `
             <div class="detail-stock-card">
                 <div class="dsc-header">
@@ -572,6 +599,7 @@ function renderSectorDetail(sectorKey) {
                     <span>Analysts: <strong>${s.analyst_count || '—'}</strong></span>
                 </div>
                 <p class="dsc-catalyst"><strong>Watchlist Catalyst:</strong> ${s.catalyst}</p>
+                ${screenerHtml}
             </div>
         `;
     });
