@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>India Policy & Growth Sector Impact Dashboard</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo-area">
+                <span class="logo-icon">🇮🇳</span>
+                <div class="logo-text">
+                    <h1>BharatPolicy</h1>
+                    <p>Intelligence Platform</p>
+                </div>
+            </div>
+            
+            <nav class="nav-menu">
+                <button class="nav-btn active" data-tab="dashboard">
+                    <span class="btn-icon">📊</span> Dashboard
+                </button>
+                <button class="nav-btn" data-tab="sectors">
+                    <span class="btn-icon">📁</span> Sector Watch
+                </button>
+                <button class="nav-btn" data-tab="stocks">
+                    <span class="btn-icon">📈</span> Growth Stocks
+                </button>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="status-indicator">
+                    <span class="dot"></span>
+                    <span>System Active</span>
+                </div>
+                <p class="version-text">v1.2.0 • 2026 Edition</p>
+            </div>
+        </aside>
+        
+        <!-- Main Content Area -->
+        <main class="main-content">
+            
+            <!-- App Header -->
+            <header class="app-header">
+                <div class="header-title">
+                    <h2 id="page-title">Policy & Sector Overview</h2>
+                    <p id="page-subtitle">Real-time mapping of government policies to market indicators.</p>
+                </div>
+                <div class="last-updated-badge">
+                    <span class="clock-icon">🕒</span>
+                    <span id="update-time">Last Refreshed: Loading...</span>
+                </div>
+            </header>
+            
+            <!-- Dashboard Tab -->
+            <section id="tab-dashboard" class="tab-pane active">
+                
+                <!-- Stat Cards Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">Tracked Sectors</span>
+                            <span class="stat-icon-bg bg-blue">⚡</span>
+                        </div>
+                        <h3 class="stat-value">8</h3>
+                        <p class="stat-sub">High-growth focus areas</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">Watchlist Companies</span>
+                            <span class="stat-icon-bg bg-green">🏢</span>
+                        </div>
+                        <h3 class="stat-value" id="total-stocks-val">23</h3>
+                        <p class="stat-sub">Across mid & large cap</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">Active Policy Signals</span>
+                            <span class="stat-icon-bg bg-purple">📜</span>
+                        </div>
+                        <h3 class="stat-value" id="active-signals-val">Loading...</h3>
+                        <p class="stat-sub">PIB & media updates parsed</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">Average Potential</span>
+                            <span class="stat-icon-bg bg-orange">🔥</span>
+                        </div>
+                        <h3 class="stat-value">27.3%</h3>
+                        <p class="stat-sub">Medium term target growth</p>
+                    </div>
+                </div>
+                
+                <!-- Dashboard Workspace (Grid) -->
+                <div class="dashboard-grid">
+                    
+                    <!-- Left: Selected Sector and Stock Analysis -->
+                    <div class="grid-col-left">
+                        <div class="glass-card">
+                            <div class="card-header">
+                                <h3>📊 Growth Potential By Sector</h3>
+                                <p>Comparison of target growth potential in Curated Portfolios</p>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="growthChart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <!-- Watchlist Stock Highlights -->
+                        <div class="glass-card mt-24">
+                            <div class="card-header">
+                                <h3>🚀 Top High-Growth Picks</h3>
+                                <p>Stocks showing strongest alignment with recent guidelines</p>
+                            </div>
+                            <div class="highlights-list" id="top-picks-list">
+                                <!-- Pre-populated dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right: Live Policy Feed & Sector Filters -->
+                    <div class="grid-col-right">
+                        <div class="glass-card flex-grow">
+                            <div class="feed-header">
+                                <div>
+                                    <h3>📰 Sector Intelligence Feed</h3>
+                                    <p>Filter announcements by selecting a sector category</p>
+                                </div>
+                                <div class="filter-controls">
+                                    <select id="sector-selector" class="dropdown-filter">
+                                        <option value="all">All Sectors</option>
+                                        <!-- Populated dynamically -->
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <!-- Sector Chips -->
+                            <div class="sector-chips" id="sector-chips-container">
+                                <!-- Populated dynamically -->
+                            </div>
+                            
+                            <!-- News List -->
+                            <div class="feed-list" id="policy-feed-list">
+                                <!-- Loaded dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </section>
+            
+            <!-- Sector Detail Tab -->
+            <section id="tab-sectors" class="tab-pane">
+                <div class="sectors-split-layout">
+                    <!-- Left List -->
+                    <div class="sectors-sidebar-list" id="sectors-nav-list">
+                        <!-- Populated dynamically -->
+                    </div>
+                    
+                    <!-- Right Detail Panel -->
+                    <div class="sector-detail-panel" id="sector-details-content">
+                        <!-- Rendered dynamically -->
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Stock Screener Tab -->
+            <section id="tab-stocks" class="tab-pane">
+                <div class="glass-card">
+                    <div class="table-header-bar">
+                        <h3>📈 Integrated Stock Catalysts Database</h3>
+                        <div class="search-bar-container">
+                            <span class="search-icon">🔍</span>
+                            <input type="text" id="stock-search" placeholder="Search by name, ticker, or catalyst...">
+                        </div>
+                    </div>
+                    
+                    <div class="table-scroll-container">
+                        <table class="premium-table">
+                            <thead>
+                                <tr>
+                                    <th>Ticker</th>
+                                    <th>Company</th>
+                                    <th>Sector</th>
+                                    <th>CMP</th>
+                                    <th>Target Price</th>
+                                    <th>Potential</th>
+                                    <th>Core Growth Catalyst</th>
+                                </tr>
+                            </thead>
+                            <tbody id="stocks-table-body">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            
+        </main>
+    </div>
+    
+    <!-- Custom Logic Script -->
+    <script src="app.js"></script>
+</body>
+</html>
