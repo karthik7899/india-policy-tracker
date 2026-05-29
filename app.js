@@ -198,8 +198,10 @@ function initDashboard(data) {
     
     // Calculate total policy announcements
     let totalAnnouncements = 0;
-    Object.values(data.briefing).forEach(items => {
-        totalAnnouncements += items.length;
+    Object.keys(data.briefing).forEach(key => {
+        if (key !== "emerging_players" && Array.isArray(data.briefing[key])) {
+            totalAnnouncements += data.briefing[key].length;
+        }
     });
     document.getElementById("active-signals-val").textContent = totalAnnouncements;
     
@@ -287,12 +289,14 @@ function renderPolicyFeed(data) {
     
     if (activeSectorFilter === "all") {
         Object.keys(data.briefing).forEach(sectorKey => {
-            data.briefing[sectorKey].forEach(item => {
-                feedItems.push({ ...item, sectorKey: sectorKey });
-            });
+            if (sectorKey !== "emerging_players" && Array.isArray(data.briefing[sectorKey])) {
+                data.briefing[sectorKey].forEach(item => {
+                    feedItems.push({ ...item, sectorKey: sectorKey });
+                });
+            }
         });
     } else {
-        if (data.briefing[activeSectorFilter]) {
+        if (activeSectorFilter !== "emerging_players" && data.briefing[activeSectorFilter]) {
             data.briefing[activeSectorFilter].forEach(item => {
                 feedItems.push({ ...item, sectorKey: activeSectorFilter });
             });
