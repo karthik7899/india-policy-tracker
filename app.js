@@ -175,7 +175,7 @@ function setupTabToggles() {
 
 // Fetch dashboard data
 function loadDashboardData() {
-    fetch("dashboard_data.json")
+    fetch("dashboard_data.json?t=" + Date.now())
         .then(response => {
             if (!response.ok) throw new Error("JSON file missing");
             return response.json();
