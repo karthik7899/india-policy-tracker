@@ -721,16 +721,19 @@ def detect_emerging_players(brief_data):
     corp_pattern = re.compile(r'\b([A-Z][a-zA-Z0-9]+(?:\s+[A-Z][a-zA-Z0-9]+)*)\s+(?:Ltd|Limited|Corp|Corporation|Technologies|Enterprises|Solutions|Infrastructure)\b')
 
     for sector, news_items in brief_data.items():
+        if sector == "emerging_players":
+            continue
         detected = []
         for item in news_items:
             title = item["title"]
-            matches = corp_pattern.findall(title)
-            for match in matches:
-                match_lower = match.lower()
-                if match_lower not in existing_ids and match_lower not in ignored and len(match) > 3:
-                    if match not in detected:
-                        detected.append(match)
-                        print(f"Detected emerging player in {sector}: {match}")
+            for m in corp_pattern.finditer(title):
+                captured = m.group(1)
+                full = m.group(0)
+                captured_lower = captured.lower()
+                if captured_lower not in existing_ids and captured_lower not in ignored and len(captured) >= 3:
+                    if full not in detected:
+                        detected.append(full)
+                        print(f"Detected emerging player in {sector}: {full}")
         if detected:
             emerging_players[sector] = detected
             
