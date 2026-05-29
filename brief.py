@@ -99,7 +99,7 @@ SECTOR_QUERIES = {
     "data_center_support": [
         'site:pib.gov.in "data center" OR "digital infrastructure"',
         'India data center policy expansion investments',
-        '"Anant Raj" OR "Schneider" data center power'
+        '"Anant Raj" OR "Schneider" OR "Netweb" data center'
     ],
     "cybersecurity": [
         'site:pib.gov.in "cyber security" OR "cybersecurity" OR "CERT-In"',
