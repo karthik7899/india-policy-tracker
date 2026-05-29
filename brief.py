@@ -624,6 +624,19 @@ def fetch_screener_fundamentals():
                 sc["roe"] = extract_ratio("ROE")                    # %
                 sc["dividend_yield"] = extract_ratio("Dividend Yield")
                 
+                # If Industry PE not found (consolidated pages often omit it), try standalone page
+                if not sc.get("industry_pe") and "/consolidated/" in url:
+                    try:
+                        r2 = requests.get(f"https://www.screener.in/company/{ticker}/", headers=headers, timeout=10)
+                        r2.encoding = 'utf-8'
+                        if r2.status_code == 200:
+                            html2 = r2.text
+                            ind_match = re.search(r'Industry PE\s*</span>.*?<span class="number">\s*([\d,\.]+)\s*</span>', html2, re.DOTALL)
+                            if ind_match:
+                                sc["industry_pe"] = ind_match.group(1).replace(",", "")
+                    except Exception:
+                        pass
+                
                 # --- EXTRACT QUARTERLY RESULTS (actual filed numbers) ---
                 qs_match = re.search(r'id="quarters"(.*?)(?:</section>)', html, re.DOTALL)
                 if qs_match:
