@@ -293,24 +293,42 @@ def build_html_email(brief_data):
         for s in stocks:
             rating_text = s.get("rating", "N/A")
             growth_val = s.get("revenue_growth")
+            earnings_val = s.get("earnings_growth")
+            analyst_count = s.get("analyst_count")
+            
+            # Contextual revenue growth badge
             growth_badge = ""
             if growth_val:
-                # Green badge for positive growth
-                growth_badge = f"<span class='badge badge-positive' style='margin-left: 6px; font-size: 9px;'>🔥 {growth_val} YoY</span>"
+                is_negative = growth_val.startswith("-")
+                if is_negative:
+                    growth_badge = f"<span style='margin-left: 6px; font-size: 9px; background-color: #7f1d1d; color: #f87171; padding: 2px 6px; border-radius: 4px; font-weight: bold; display: inline-block;'>📉 {growth_val} YoY</span>"
+                else:
+                    growth_badge = f"<span style='margin-left: 6px; font-size: 9px; background-color: #065f46; color: #34d399; padding: 2px 6px; border-radius: 4px; font-weight: bold; display: inline-block;'>🔥 {growth_val} YoY</span>"
+            
+            # Contextual earnings growth badge
+            earnings_badge = ""
+            if earnings_val:
+                is_negative = earnings_val.startswith("-")
+                if is_negative:
+                    earnings_badge = f"<span style='margin-left: 4px; font-size: 8px; background-color: #2a1215; color: #f87171; padding: 2px 5px; border-radius: 3px; display: inline-block;'>EPS {earnings_val}</span>"
+                else:
+                    earnings_badge = f"<span style='margin-left: 4px; font-size: 8px; background-color: #1e1b4b; color: #a78bfa; padding: 2px 5px; border-radius: 3px; display: inline-block;'>EPS {earnings_val}</span>"
             
             potential_str = s['growth_pct']
-            potential_color = "#34d399" # green
+            potential_color = "#34d399"  # green
             if potential_str.startswith("-"):
-                potential_color = "#f87171" # red
-            elif potential_str == "0.0%":
+                potential_color = "#f87171"  # red
+            elif potential_str == "0.0%" or potential_str == "+0.0%":
                 potential_color = "#cbd5e1"
             
-            rating_badge = f"<span class='badge badge-neutral' style='font-size: 8px; margin-left: 6px; background-color: #1e293b; color: #60a5fa;'>{rating_text}</span>" if rating_text != "N/A" else ""
+            # Rating badge with analyst count
+            analyst_str = f" ({analyst_count})" if analyst_count else ""
+            rating_badge = f"<span class='badge badge-neutral' style='font-size: 8px; margin-left: 6px; background-color: #1e293b; color: #60a5fa;'>{rating_text}{analyst_str}</span>" if rating_text != "N/A" else ""
             
             stock_rows += f"""
             <tr>
                 <td class="stock-ticker">{s['ticker']}{rating_badge}</td>
-                <td>{s['name']}{growth_badge}</td>
+                <td>{s['name']}{growth_badge}{earnings_badge}</td>
                 <td>₹{s['price']}</td>
                 <td>₹{s['target']}</td>
                 <td class="stock-growth" style="color: {potential_color} !important;">{potential_str}</td>
@@ -422,8 +440,20 @@ def send_email(html_content):
         return False
 
 def update_live_stock_prices():
-    """Updates STOCK_WATCHLIST with live prices, broker targets, and growth metrics from Yahoo Finance."""
-    print("Fetching live stock prices and broker metrics from Yahoo Finance...")
+    """Updates STOCK_WATCHLIST with live prices and multi-source estimation metrics from Yahoo Finance.
+    
+    Fetches the following for each stock:
+    - Live closing price (from historical data)
+    - targetMedianPrice (more robust than mean - less affected by outlier analyst estimates)
+    - targetMeanPrice (average analyst consensus)
+    - targetHighPrice / targetLowPrice (range of analyst targets)
+    - numberOfAnalystOpinions (analyst coverage depth - higher = more reliable)
+    - recommendationKey (buy/hold/sell consensus label)
+    - recommendationMean (1=Strong Buy to 5=Sell, numeric score)
+    - revenueGrowth (YoY revenue growth rate)
+    - earningsGrowth (YoY earnings/EPS growth rate)
+    """
+    print("Fetching live stock prices and multi-source estimation metrics from Yahoo Finance...")
     try:
         import yfinance as yf
     except ImportError:
@@ -438,6 +468,12 @@ def update_live_stock_prices():
             # Set default values for new keys
             stock["rating"] = "N/A"
             stock["revenue_growth"] = None
+            stock["earnings_growth"] = None
+            stock["analyst_count"] = None
+            stock["target_median"] = None
+            stock["target_high"] = None
+            stock["target_low"] = None
+            stock["rec_score"] = None
             
             try:
                 ticker_obj = yf.Ticker(yahoo_ticker)
@@ -451,34 +487,80 @@ def update_live_stock_prices():
                     live_price = float(stock["price"])
                     print(f"Warning: No close history for {yahoo_ticker}. Using static price.")
                 
-                # Fetch broker targets and financials from t.info
+                # Fetch broker targets and financials from .info
                 info = ticker_obj.info
                 if info:
-                    # Update target price to consensus analyst target if available
-                    consensus_target = info.get("targetMeanPrice")
-                    if consensus_target and float(consensus_target) > 0:
-                        stock["target"] = f"{float(consensus_target):.2f}"
+                    # --- TARGET PRICE ESTIMATION (multi-source cross-reference) ---
+                    # Primary: Use MEDIAN target (more robust against outlier analysts)
+                    # Fallback: Use MEAN target if median not available
+                    median_target = info.get("targetMedianPrice")
+                    mean_target = info.get("targetMeanPrice")
+                    high_target = info.get("targetHighPrice")
+                    low_target = info.get("targetLowPrice")
+                    analyst_count = info.get("numberOfAnalystOpinions")
                     
-                    # Fetch rating (e.g. buy, hold)
+                    # Store analyst coverage depth
+                    if analyst_count and int(analyst_count) > 0:
+                        stock["analyst_count"] = int(analyst_count)
+                    
+                    # Primary target: prefer median, fall back to mean
+                    chosen_target = None
+                    if median_target and float(median_target) > 0:
+                        chosen_target = float(median_target)
+                        stock["target_median"] = f"{chosen_target:.2f}"
+                    if mean_target and float(mean_target) > 0:
+                        if chosen_target is None:
+                            chosen_target = float(mean_target)
+                        # Always store mean as fallback reference
+                        stock["target"] = f"{float(mean_target):.2f}"
+                    if chosen_target:
+                        stock["target"] = f"{chosen_target:.2f}"
+                        
+                    # Store target range for confidence assessment
+                    if high_target and float(high_target) > 0:
+                        stock["target_high"] = f"{float(high_target):.2f}"
+                    if low_target and float(low_target) > 0:
+                        stock["target_low"] = f"{float(low_target):.2f}"
+                    
+                    # --- ANALYST RECOMMENDATION ---
+                    # recommendationKey: human readable (buy, hold, sell, strong_buy, etc.)
+                    # recommendationMean: numeric 1.0 (Strong Buy) to 5.0 (Sell)
                     rating = info.get("recommendationKey")
                     if rating:
                         stock["rating"] = rating.replace("_", " ").title()
+                    rec_mean = info.get("recommendationMean")
+                    if rec_mean is not None:
+                        stock["rec_score"] = round(float(rec_mean), 1)
                     
-                    # Fetch revenue growth YoY
+                    # --- GROWTH METRICS ---
+                    # Revenue growth: YoY top-line growth
                     rev_growth = info.get("revenueGrowth")
                     if rev_growth is not None:
-                        stock["revenue_growth"] = f"{float(rev_growth) * 100:.1f}%"
+                        growth_pct = float(rev_growth) * 100
+                        sign = "+" if growth_pct > 0 else ""
+                        stock["revenue_growth"] = f"{sign}{growth_pct:.1f}%"
+                        
+                    # Earnings growth: YoY EPS/profit growth (complementary signal)
+                    earn_growth = info.get("earningsGrowth")
+                    if earn_growth is not None:
+                        eg_pct = float(earn_growth) * 100
+                        sign = "+" if eg_pct > 0 else ""
+                        stock["earnings_growth"] = f"{sign}{eg_pct:.1f}%"
                 
                 # Recalculate potential growth based on live price and target price
                 target_price = float(stock["target"])
                 if live_price > 0:
                     growth_val = ((target_price - live_price) / live_price) * 100
-                    stock["growth_pct"] = f"{growth_val:.1f}%"
+                    sign = "+" if growth_val > 0 else ""
+                    stock["growth_pct"] = f"{sign}{growth_val:.1f}%"
                     
-                    growth_info = f"Price = {live_price:.2f}, Target = {target_price:.2f} ({growth_val:.1f}%)"
+                    # Build detailed log line
+                    growth_info = f"Price = {live_price:.2f}, Target = {target_price:.2f} ({sign}{growth_val:.1f}%)"
                     rating_info = f" [Rating: {stock['rating']}]" if stock['rating'] != 'N/A' else ""
-                    growth_alert = f" [Growth: {stock['revenue_growth']}]" if stock['revenue_growth'] else ""
-                    print(f"Updated {ticker}: {growth_info}{rating_info}{growth_alert}")
+                    analyst_info = f" [Analysts: {stock['analyst_count']}]" if stock['analyst_count'] else ""
+                    growth_alert = f" [Rev: {stock['revenue_growth']}]" if stock['revenue_growth'] else ""
+                    earnings_alert = f" [EPS: {stock['earnings_growth']}]" if stock['earnings_growth'] else ""
+                    print(f"Updated {ticker}: {growth_info}{rating_info}{analyst_info}{growth_alert}{earnings_alert}")
                     
             except Exception as e:
                 print(f"Error updating price/metrics for {yahoo_ticker}: {e}. Using static price.")

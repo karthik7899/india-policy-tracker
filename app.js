@@ -95,6 +95,40 @@ let appData = null;
 let activeSectorFilter = "all";
 let growthChartInstance = null;
 
+// Helper: Format YoY growth with contextual icon/color
+function formatGrowthBadge(growthStr, style = 'inline') {
+    if (!growthStr) return style === 'table' ? `<span style="color: var(--text-muted);">—</span>` : '';
+    const val = parseFloat(growthStr.replace('%', ''));
+    if (isNaN(val)) return style === 'table' ? `<span style="color: var(--text-muted);">—</span>` : '';
+    
+    if (val > 0) {
+        if (style === 'table') return `<span style="font-weight: 700; color: #34d399;">🔥 +${growthStr} YoY</span>`;
+        return `<span style="font-size: 9px; padding: 2px 6px; background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 4px; display: inline-block; font-weight: 600;">🔥 +${growthStr} YoY</span>`;
+    } else {
+        if (style === 'table') return `<span style="font-weight: 700; color: #f87171;">📉 ${growthStr} YoY</span>`;
+        return `<span style="font-size: 9px; padding: 2px 6px; background: rgba(239, 68, 68, 0.12); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 4px; display: inline-block; font-weight: 600;">📉 ${growthStr} YoY</span>`;
+    }
+}
+
+// Helper: Format potential growth with proper sign and color
+function formatPotential(pctStr) {
+    if (!pctStr) return '—';
+    const val = parseFloat(pctStr.replace('%', ''));
+    if (isNaN(val)) return pctStr;
+    if (val > 0) return `<span style="font-weight:700; color:#34d399;">+${pctStr}</span>`;
+    if (val < 0) return `<span style="font-weight:700; color:#f87171;">${pctStr}</span>`;
+    return `<span style="font-weight:700; color:#cbd5e1;">0.0%</span>`;
+}
+
+// Helper: Format analyst info badge
+function formatAnalystBadge(stock) {
+    const rating = stock.rating;
+    const count = stock.analyst_count;
+    if (!rating || rating === 'N/A') return `<span style="color: var(--text-muted);">—</span>`;
+    const countStr = count ? ` (${count})` : '';
+    return `<span class="badge badge-rating">${rating}${countStr}</span>`;
+}
+
 // Initialize App
 document.addEventListener("DOMContentLoaded", () => {
     setupTabToggles();
@@ -317,7 +351,7 @@ function renderTopPicks(data) {
         .filter(s => s.rawPctValue >= 28)
         .sort((a,b) => b.rawPctValue - a.rawPctValue);
         
-    topPicks.slice(0, 4).forEach(s => {
+    topPicks.slice(0, 6).forEach(s => {
         const item = document.createElement("div");
         item.className = "highlight-item";
         item.innerHTML = `
@@ -327,7 +361,7 @@ function renderTopPicks(data) {
             </div>
             <div class="hl-right">
                 <span class="hl-price">CMP: ₹${s.price}</span>
-                <div class="hl-pct">+${s.growth_pct} Target</div>
+                <div class="hl-pct">${formatPotential(s.growth_pct)} Target</div>
             </div>
         `;
         container.appendChild(item);
@@ -515,8 +549,9 @@ function renderSectorDetail(sectorKey) {
     
     let stocksHtml = "";
     stocks.forEach(s => {
-        const ratingBadge = s.rating && s.rating !== "N/A" ? `<span class="badge badge-rating" style="font-size: 9px; padding: 2px 6px; background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 4px; display: inline-block;">${s.rating}</span>` : '';
-        const growthBadge = s.revenue_growth ? `<span class="badge badge-growth" style="font-size: 9px; padding: 2px 6px; background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 4px; display: inline-block;">🔥 ${s.revenue_growth} YoY</span>` : '';
+        const analystBadge = formatAnalystBadge(s);
+        const growthBadge = formatGrowthBadge(s.revenue_growth, 'badge');
+        const earningsBadge = s.earnings_growth ? `<span style="font-size: 9px; padding: 2px 6px; background: rgba(139, 92, 246, 0.12); color: #a78bfa; border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 4px; display: inline-block; font-weight: 600;">EPS ${s.earnings_growth}</span>` : '';
         stocksHtml += `
             <div class="detail-stock-card">
                 <div class="dsc-header">
@@ -524,15 +559,17 @@ function renderSectorDetail(sectorKey) {
                         <h4 style="display: flex; align-items: center; flex-wrap: wrap; gap: 8px;">
                             ${s.name} 
                             <span style="background-color: rgba(59, 130, 246, 0.1); color: var(--primary); padding: 2px 6px; border-radius: 4px; font-weight: 700; font-size: 11px;">${s.ticker}</span>
-                            ${ratingBadge}
+                            ${analystBadge}
                             ${growthBadge}
+                            ${earningsBadge}
                         </h4>
                     </div>
-                    <span class="dsc-pot">+${s.growth_pct}</span>
+                    <span class="dsc-pot">${formatPotential(s.growth_pct)}</span>
                 </div>
                 <div class="dsc-metrics" style="margin-top: 12px;">
                     <span>CMP: <strong>₹${s.price}</strong></span>
-                    <span>Target: <strong>₹${s.target}</strong></span>
+                    <span>Target: <strong>₹${s.target}</strong> <small style="color: var(--text-muted);">(Median: ₹${s.target_median || s.target})</small></span>
+                    <span>Analysts: <strong>${s.analyst_count || '—'}</strong></span>
                 </div>
                 <p class="dsc-catalyst"><strong>Watchlist Catalyst:</strong> ${s.catalyst}</p>
             </div>
@@ -587,17 +624,15 @@ function renderStocksTable(filterQuery = "") {
                 
             if (matchesSearch) {
                 const tr = document.createElement("tr");
-                const ratingBadge = s.rating && s.rating !== "N/A" ? `<span class="badge badge-rating">${s.rating}</span>` : `<span style="color: var(--text-muted);">—</span>`;
-                const growthVal = s.revenue_growth ? `<span class="growth-val-green">🔥 ${s.revenue_growth}</span>` : `<span style="color: var(--text-muted);">—</span>`;
                 tr.innerHTML = `
                     <td class="t-ticker">${s.ticker}</td>
                     <td><strong>${s.name}</strong></td>
                     <td><span class="chip" style="display:inline-block; border-color:transparent; background-color:rgba(255,255,255,0.03);">${sectorLabel}</span></td>
                     <td>₹${s.price}</td>
                     <td>₹${s.target}</td>
-                    <td class="t-potential">+${s.growth_pct}</td>
-                    <td>${growthVal}</td>
-                    <td>${ratingBadge}</td>
+                    <td class="t-potential">${formatPotential(s.growth_pct)}</td>
+                    <td>${formatGrowthBadge(s.revenue_growth, 'table')}</td>
+                    <td>${formatAnalystBadge(s)}</td>
                     <td class="t-catalyst">${s.catalyst}</td>
                 `;
                 tbody.appendChild(tr);
