@@ -178,39 +178,68 @@ def clean_news_item(entry, query_term):
         "relevance": query_term
     }
 
-def fetch_feed_data():
-    """Fetches news and policy announcements from Google News RSS for all sectors."""
-    print("Initializing RSS Aggregation engine...")
-    today_brief = {}
+def fetch_query_feed(sector, query):
+    """Worker function to fetch news for a single query."""
+    query_with_time = f"{query} when:7d"
+    encoded_query = urllib.parse.quote(query_with_time)
+    rss_url = f"https://news.google.com/rss/search?q={encoded_query}&hl=en-IN&gl=IN&ceid=IN:en"
     
+    sector_news = []
+    try:
+        feed = feedparser.parse(rss_url)
+        for entry in feed.entries[:3]:
+            cleaned = clean_news_item(entry, query)
+            if cleaned is not None:
+                sector_news.append(cleaned)
+    except Exception as e:
+        print(f"Error parsing feed for query '{query}': {e}")
+    return sector, sector_news
+
+def fetch_feed_data():
+    """Fetches news and policy announcements from Google News RSS for all sectors in parallel."""
+    print("Initializing RSS Aggregation engine (Parallelized)...")
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+    
+    today_brief = {}
+    tasks = []
+    
+    # Prepare all tasks
     for sector, queries in SECTOR_QUERIES.items():
-        print(f"Aggregating feed data for sector: {sector}...")
+        today_brief[sector] = []
+        for query in queries:
+            tasks.append((sector, query))
+            
+    # Execute tasks in parallel using a ThreadPoolExecutor
+    sector_results = {sector: [] for sector in SECTOR_QUERIES}
+    
+    with ThreadPoolExecutor(max_workers=10) as executor:
+        future_to_task = {
+            executor.submit(fetch_query_feed, sector, query): (sector, query)
+            for sector, query in tasks
+        }
+        
+        for future in as_completed(future_to_task):
+            sector, query = future_to_task[future]
+            try:
+                sec, news_list = future.result()
+                sector_results[sec].extend(news_list)
+            except Exception as e:
+                print(f"Error in parallel task for {sector} - {query}: {e}")
+                
+    # Post-process results (deduplicate and filter per sector)
+    for sector in SECTOR_QUERIES:
         sector_news = []
         seen_titles = set()
-        
-        for query in queries:
-            # Append " when:7d" to ensure Google only returns recent articles
-            query_with_time = f"{query} when:7d"
-            encoded_query = urllib.parse.quote(query_with_time)
-            rss_url = f"https://news.google.com/rss/search?q={encoded_query}&hl=en-IN&gl=IN&ceid=IN:en"
-            
-            try:
-                feed = feedparser.parse(rss_url)
-                # Take top 3 articles per query to ensure high relevance
-                for entry in feed.entries[:3]:
-                    cleaned = clean_news_item(entry, query)
-                    if cleaned is None:
-                        continue
-                    title_lower = cleaned["title"].lower()
-                    if title_lower not in seen_titles:
-                        seen_titles.add(title_lower)
-                        sector_news.append(cleaned)
-            except Exception as e:
-                print(f"Error parsing feed for query '{query}': {e}")
+        for cleaned in sector_results[sector]:
+            title_lower = cleaned["title"].lower()
+            if title_lower not in seen_titles:
+                seen_titles.add(title_lower)
+                sector_news.append(cleaned)
                 
         # Sort so Positive impacts are highlighted first
         sector_news.sort(key=lambda x: 1 if x["impact"] == "Positive" else (3 if x["impact"] == "Negative" else 2))
         today_brief[sector] = sector_news[:4] # Store top 4 articles per sector
+        print(f"Aggregated {len(today_brief[sector])} feed items for sector: {sector}")
         
     return today_brief
 
@@ -440,131 +469,123 @@ def send_email(html_content):
         print(f"FAILED: SMTP connection error: {e}")
         return False
 
-def update_live_stock_prices():
-    """Updates STOCK_WATCHLIST with live prices and multi-source estimation metrics from Yahoo Finance.
+def update_single_stock(stock):
+    """Worker function to fetch Yahoo Finance metrics for a single stock."""
+    import yfinance as yf
+    ticker = stock["ticker"]
+    yahoo_ticker = f"{ticker}.NS"
     
-    Fetches the following for each stock:
-    - Live closing price (from historical data)
-    - targetMedianPrice (more robust than mean - less affected by outlier analyst estimates)
-    - targetMeanPrice (average analyst consensus)
-    - targetHighPrice / targetLowPrice (range of analyst targets)
-    - numberOfAnalystOpinions (analyst coverage depth - higher = more reliable)
-    - recommendationKey (buy/hold/sell consensus label)
-    - recommendationMean (1=Strong Buy to 5=Sell, numeric score)
-    - revenueGrowth (YoY revenue growth rate)
-    - earningsGrowth (YoY earnings/EPS growth rate)
-    """
-    print("Fetching live stock prices and multi-source estimation metrics from Yahoo Finance...")
+    # Set default values for new keys
+    stock["rating"] = "N/A"
+    stock["revenue_growth"] = None
+    stock["earnings_growth"] = None
+    stock["analyst_count"] = None
+    stock["target_median"] = None
+    stock["target_high"] = None
+    stock["target_low"] = None
+    stock["rec_score"] = None
+    
+    try:
+        ticker_obj = yf.Ticker(yahoo_ticker)
+        
+        # Fetch live price
+        hist = ticker_obj.history(period="1d")
+        if not hist.empty:
+            live_price = float(hist['Close'].iloc[-1])
+            stock["price"] = f"{live_price:.2f}"
+        else:
+            live_price = float(stock["price"])
+            print(f"Warning: No close history for {yahoo_ticker}. Using static price.")
+        
+        # Fetch broker targets and financials from .info
+        info = ticker_obj.info
+        if info:
+            # --- TARGET PRICE ESTIMATION ---
+            median_target = info.get("targetMedianPrice")
+            mean_target = info.get("targetMeanPrice")
+            high_target = info.get("targetHighPrice")
+            low_target = info.get("targetLowPrice")
+            analyst_count = info.get("numberOfAnalystOpinions")
+            
+            if analyst_count and int(analyst_count) > 0:
+                stock["analyst_count"] = int(analyst_count)
+            
+            chosen_target = None
+            if median_target and float(median_target) > 0:
+                chosen_target = float(median_target)
+                stock["target_median"] = f"{chosen_target:.2f}"
+            if mean_target and float(mean_target) > 0:
+                if chosen_target is None:
+                    chosen_target = float(mean_target)
+                stock["target"] = f"{float(mean_target):.2f}"
+            if chosen_target:
+                stock["target"] = f"{chosen_target:.2f}"
+                
+            if high_target and float(high_target) > 0:
+                stock["target_high"] = f"{float(high_target):.2f}"
+            if low_target and float(low_target) > 0:
+                stock["target_low"] = f"{float(low_target):.2f}"
+            
+            rating = info.get("recommendationKey")
+            if rating:
+                stock["rating"] = rating.replace("_", " ").title()
+            rec_mean = info.get("recommendationMean")
+            if rec_mean is not None:
+                stock["rec_score"] = round(float(rec_mean), 1)
+            
+            rev_growth = info.get("revenueGrowth")
+            if rev_growth is not None:
+                growth_pct = float(rev_growth) * 100
+                sign = "+" if growth_pct > 0 else ""
+                stock["revenue_growth"] = f"{sign}{growth_pct:.1f}%"
+                
+            earn_growth = info.get("earningsGrowth")
+            if earn_growth is not None:
+                eg_pct = float(earn_growth) * 100
+                sign = "+" if eg_pct > 0 else ""
+                stock["earnings_growth"] = f"{sign}{eg_pct:.1f}%"
+        
+        # Recalculate potential growth based on live price and target price
+        target_price = float(stock["target"])
+        if live_price > 0:
+            growth_val = ((target_price - live_price) / live_price) * 100
+            sign = "+" if growth_val > 0 else ""
+            stock["growth_pct"] = f"{sign}{growth_val:.1f}%"
+            
+            # Build detailed log line
+            growth_info = f"Price = {live_price:.2f}, Target = {target_price:.2f} ({sign}{growth_val:.1f}%)"
+            rating_info = f" [Rating: {stock['rating']}]" if stock['rating'] != 'N/A' else ""
+            analyst_info = f" [Analysts: {stock['analyst_count']}]" if stock['analyst_count'] else ""
+            growth_alert = f" [Rev: {stock['revenue_growth']}]" if stock['revenue_growth'] else ""
+            earnings_alert = f" [EPS: {stock['earnings_growth']}]" if stock['earnings_growth'] else ""
+            print(f"Updated {ticker}: {growth_info}{rating_info}{analyst_info}{growth_alert}{earnings_alert}")
+            
+    except Exception as e:
+        print(f"Error updating price/metrics for {yahoo_ticker}: {e}. Using static price.")
+
+def update_live_stock_prices():
+    """Updates STOCK_WATCHLIST with live prices and multi-source estimation metrics from Yahoo Finance in parallel."""
+    print("Fetching live stock prices and multi-source estimation metrics from Yahoo Finance (Parallelized)...")
     try:
         import yfinance as yf
     except ImportError:
         print("[WARNING] yfinance not installed. Skip live stock price update. Using static mock prices.")
         return
 
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+    
+    # Flatten stocks into a single list
+    all_stocks = []
     for sector, stocks in STOCK_WATCHLIST.items():
-        for stock in stocks:
-            ticker = stock["ticker"]
-            yahoo_ticker = f"{ticker}.NS"
-            
-            # Set default values for new keys
-            stock["rating"] = "N/A"
-            stock["revenue_growth"] = None
-            stock["earnings_growth"] = None
-            stock["analyst_count"] = None
-            stock["target_median"] = None
-            stock["target_high"] = None
-            stock["target_low"] = None
-            stock["rec_score"] = None
-            
+        all_stocks.extend(stocks)
+        
+    with ThreadPoolExecutor(max_workers=8) as executor:
+        futures = [executor.submit(update_single_stock, stock) for stock in all_stocks]
+        for future in as_completed(futures):
             try:
-                ticker_obj = yf.Ticker(yahoo_ticker)
-                
-                # Fetch live price
-                hist = ticker_obj.history(period="1d")
-                if not hist.empty:
-                    live_price = float(hist['Close'].iloc[-1])
-                    stock["price"] = f"{live_price:.2f}"
-                else:
-                    live_price = float(stock["price"])
-                    print(f"Warning: No close history for {yahoo_ticker}. Using static price.")
-                
-                # Fetch broker targets and financials from .info
-                info = ticker_obj.info
-                if info:
-                    # --- TARGET PRICE ESTIMATION (multi-source cross-reference) ---
-                    # Primary: Use MEDIAN target (more robust against outlier analysts)
-                    # Fallback: Use MEAN target if median not available
-                    median_target = info.get("targetMedianPrice")
-                    mean_target = info.get("targetMeanPrice")
-                    high_target = info.get("targetHighPrice")
-                    low_target = info.get("targetLowPrice")
-                    analyst_count = info.get("numberOfAnalystOpinions")
-                    
-                    # Store analyst coverage depth
-                    if analyst_count and int(analyst_count) > 0:
-                        stock["analyst_count"] = int(analyst_count)
-                    
-                    # Primary target: prefer median, fall back to mean
-                    chosen_target = None
-                    if median_target and float(median_target) > 0:
-                        chosen_target = float(median_target)
-                        stock["target_median"] = f"{chosen_target:.2f}"
-                    if mean_target and float(mean_target) > 0:
-                        if chosen_target is None:
-                            chosen_target = float(mean_target)
-                        # Always store mean as fallback reference
-                        stock["target"] = f"{float(mean_target):.2f}"
-                    if chosen_target:
-                        stock["target"] = f"{chosen_target:.2f}"
-                        
-                    # Store target range for confidence assessment
-                    if high_target and float(high_target) > 0:
-                        stock["target_high"] = f"{float(high_target):.2f}"
-                    if low_target and float(low_target) > 0:
-                        stock["target_low"] = f"{float(low_target):.2f}"
-                    
-                    # --- ANALYST RECOMMENDATION ---
-                    # recommendationKey: human readable (buy, hold, sell, strong_buy, etc.)
-                    # recommendationMean: numeric 1.0 (Strong Buy) to 5.0 (Sell)
-                    rating = info.get("recommendationKey")
-                    if rating:
-                        stock["rating"] = rating.replace("_", " ").title()
-                    rec_mean = info.get("recommendationMean")
-                    if rec_mean is not None:
-                        stock["rec_score"] = round(float(rec_mean), 1)
-                    
-                    # --- GROWTH METRICS ---
-                    # Revenue growth: YoY top-line growth
-                    rev_growth = info.get("revenueGrowth")
-                    if rev_growth is not None:
-                        growth_pct = float(rev_growth) * 100
-                        sign = "+" if growth_pct > 0 else ""
-                        stock["revenue_growth"] = f"{sign}{growth_pct:.1f}%"
-                        
-                    # Earnings growth: YoY EPS/profit growth (complementary signal)
-                    earn_growth = info.get("earningsGrowth")
-                    if earn_growth is not None:
-                        eg_pct = float(earn_growth) * 100
-                        sign = "+" if eg_pct > 0 else ""
-                        stock["earnings_growth"] = f"{sign}{eg_pct:.1f}%"
-                
-                # Recalculate potential growth based on live price and target price
-                target_price = float(stock["target"])
-                if live_price > 0:
-                    growth_val = ((target_price - live_price) / live_price) * 100
-                    sign = "+" if growth_val > 0 else ""
-                    stock["growth_pct"] = f"{sign}{growth_val:.1f}%"
-                    
-                    # Build detailed log line
-                    growth_info = f"Price = {live_price:.2f}, Target = {target_price:.2f} ({sign}{growth_val:.1f}%)"
-                    rating_info = f" [Rating: {stock['rating']}]" if stock['rating'] != 'N/A' else ""
-                    analyst_info = f" [Analysts: {stock['analyst_count']}]" if stock['analyst_count'] else ""
-                    growth_alert = f" [Rev: {stock['revenue_growth']}]" if stock['revenue_growth'] else ""
-                    earnings_alert = f" [EPS: {stock['earnings_growth']}]" if stock['earnings_growth'] else ""
-                    print(f"Updated {ticker}: {growth_info}{rating_info}{analyst_info}{growth_alert}{earnings_alert}")
-                    
+                future.result()
             except Exception as e:
-                print(f"Error updating price/metrics for {yahoo_ticker}: {e}. Using static price.")
+                print(f"Error in parallel stock update task: {e}")
 
 def fetch_screener_fundamentals():
     """Enriches STOCK_WATCHLIST with actual filed financial data from Screener.in.
