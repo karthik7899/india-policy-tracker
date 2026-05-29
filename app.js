@@ -651,12 +651,20 @@ function renderStocksTable(filterQuery = "") {
                 sectorLabel.toLowerCase().includes(query);
                 
             if (matchesSearch) {
+                const sc = s.screener || {};
+                const peVal = sc.pe_ratio ? sc.pe_ratio : '<span style="color: var(--text-muted);">—</span>';
+                const roceVal = sc.roce ? `${sc.roce}%` : '<span style="color: var(--text-muted);">—</span>';
+                const roeVal = sc.roe ? `${sc.roe}%` : '<span style="color: var(--text-muted);">—</span>';
+
                 const tr = document.createElement("tr");
                 tr.innerHTML = `
                     <td class="t-ticker">${s.ticker}</td>
                     <td><strong>${s.name}</strong></td>
                     <td><span class="chip" style="display:inline-block; border-color:transparent; background-color:rgba(255,255,255,0.03);">${sectorLabel}</span></td>
                     <td>₹${s.price}</td>
+                    <td><strong>${peVal}</strong></td>
+                    <td><strong>${roceVal}</strong></td>
+                    <td><strong>${roeVal}</strong></td>
                     <td>₹${s.target}</td>
                     <td class="t-potential">${formatPotential(s.growth_pct)}</td>
                     <td>${formatGrowthBadge(s.revenue_growth, 'table')}</td>
