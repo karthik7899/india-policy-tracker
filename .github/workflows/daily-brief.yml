@@ -42,6 +42,6 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add dashboard_data.json
-          git commit -m "chore: auto-update daily briefing archive [skip ci]" || echo "No changes to commit"
+          git add dashboard_data.json watchlist.json
+          git commit -m "chore: auto-update daily briefing archive and watchlist database [skip ci]" || echo "No changes to commit"
           git push || echo "No changes to push"

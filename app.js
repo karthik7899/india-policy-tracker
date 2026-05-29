@@ -180,6 +180,7 @@ function initDashboard(data) {
     renderSectorChips(data);
     renderPolicyFeed(data);
     renderTopPicks(data);
+    renderEmergingRadar(data);
     renderCharts(data);
     
     // Setup sector dropdown filter
@@ -333,6 +334,43 @@ function renderTopPicks(data) {
     });
 }
 
+// Render Emerging Competitors scanned from news
+function renderEmergingRadar(data) {
+    const container = document.getElementById("radar-picks-list");
+    if (!container) return;
+    container.innerHTML = "";
+    
+    const emerging = data.briefing.emerging_players || {};
+    let hasPlayers = false;
+    
+    Object.keys(emerging).forEach(sectorKey => {
+        const sectorLabel = data.sectors[sectorKey]?.label || sectorKey;
+        const sectorIcon = data.sectors[sectorKey]?.icon || "🏢";
+        const players = emerging[sectorKey];
+        
+        players.forEach(name => {
+            hasPlayers = true;
+            const item = document.createElement("div");
+            item.className = "highlight-item";
+            item.innerHTML = `
+                <div class="hl-left">
+                    <span class="hl-ticker" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); font-size: 8px; padding: 2px 4px; border-radius: 4px; font-weight: 800; width: fit-content; margin-bottom: 4px;">RADAR</span>
+                    <span class="hl-name" style="color: #f8fafc; font-weight: 500; font-size: 13px;">${name}</span>
+                </div>
+                <div class="hl-right" style="text-align: right;">
+                    <span class="hl-price" style="font-size: 11px; color: #94a3b8;">${sectorIcon} ${sectorLabel}</span>
+                    <div style="font-size: 9px; color: #fbbf24; margin-top: 2px; font-weight: 600;">Analyzing Listing...</div>
+                </div>
+            `;
+            container.appendChild(item);
+        });
+    });
+    
+    if (!hasPlayers) {
+        container.innerHTML = `<div style="color: var(--text-muted); font-size: 12px; font-style: italic; text-align: center; padding: 15px 0;">No new competitors detected in recent feed. Watchlist stable.</div>`;
+    }
+}
+
 // Render Comparison Chart using Chart.js
 function renderCharts(data) {
     const ctx = document.getElementById("growthChart").getContext("2d");
@@ -477,15 +515,22 @@ function renderSectorDetail(sectorKey) {
     
     let stocksHtml = "";
     stocks.forEach(s => {
+        const ratingBadge = s.rating && s.rating !== "N/A" ? `<span class="badge badge-rating" style="font-size: 9px; padding: 2px 6px; background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 4px; display: inline-block;">${s.rating}</span>` : '';
+        const growthBadge = s.revenue_growth ? `<span class="badge badge-growth" style="font-size: 9px; padding: 2px 6px; background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 4px; display: inline-block;">🔥 ${s.revenue_growth} YoY</span>` : '';
         stocksHtml += `
             <div class="detail-stock-card">
                 <div class="dsc-header">
                     <div class="dsc-ticker-group">
-                        <h4>${s.name} <span>${s.ticker}</span></h4>
+                        <h4 style="display: flex; align-items: center; flex-wrap: wrap; gap: 8px;">
+                            ${s.name} 
+                            <span style="background-color: rgba(59, 130, 246, 0.1); color: var(--primary); padding: 2px 6px; border-radius: 4px; font-weight: 700; font-size: 11px;">${s.ticker}</span>
+                            ${ratingBadge}
+                            ${growthBadge}
+                        </h4>
                     </div>
                     <span class="dsc-pot">+${s.growth_pct}</span>
                 </div>
-                <div class="dsc-metrics">
+                <div class="dsc-metrics" style="margin-top: 12px;">
                     <span>CMP: <strong>₹${s.price}</strong></span>
                     <span>Target: <strong>₹${s.target}</strong></span>
                 </div>
@@ -542,6 +587,8 @@ function renderStocksTable(filterQuery = "") {
                 
             if (matchesSearch) {
                 const tr = document.createElement("tr");
+                const ratingBadge = s.rating && s.rating !== "N/A" ? `<span class="badge badge-rating">${s.rating}</span>` : `<span style="color: var(--text-muted);">—</span>`;
+                const growthVal = s.revenue_growth ? `<span class="growth-val-green">🔥 ${s.revenue_growth}</span>` : `<span style="color: var(--text-muted);">—</span>`;
                 tr.innerHTML = `
                     <td class="t-ticker">${s.ticker}</td>
                     <td><strong>${s.name}</strong></td>
@@ -549,6 +596,8 @@ function renderStocksTable(filterQuery = "") {
                     <td>₹${s.price}</td>
                     <td>₹${s.target}</td>
                     <td class="t-potential">+${s.growth_pct}</td>
+                    <td>${growthVal}</td>
+                    <td>${ratingBadge}</td>
                     <td class="t-catalyst">${s.catalyst}</td>
                 `;
                 tbody.appendChild(tr);
@@ -558,7 +607,7 @@ function renderStocksTable(filterQuery = "") {
     });
     
     if (rowCount === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 30px; color: var(--text-secondary);">No companies found matching your search.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; padding: 30px; color: var(--text-secondary);">No companies found matching your search.</td></tr>`;
     }
 }
 

@@ -20,7 +20,7 @@ except ImportError:
     print("requests is required. Please install it using 'pip install requests'")
     sys.exit(1)
 
-# Curated Stock Watchlist Database
+# Curated Stock Watchlist Database (Default fallback)
 STOCK_WATCHLIST = {
     "clean_energy": [
         {"ticker": "TATAPOWER", "name": "Tata Power", "price": "432.50", "target": "520.00", "growth_pct": "20.2%", "catalyst": "Massive scaling in solar generation, microgrids, and leading India's EV charging network grid."},
@@ -62,6 +62,20 @@ STOCK_WATCHLIST = {
         {"ticker": "RELIANCE", "name": "Reliance Industries", "price": "2912.00", "target": "3500.00", "growth_pct": "20.2%", "catalyst": "Consolidating 5G market share, scaling retail stores, and commissioning green energy gigafactories."}
     ]
 }
+
+# Try loading watchlist from file
+watchlist_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "watchlist.json")
+try:
+    if os.path.exists(watchlist_path):
+        with open(watchlist_path, "r", encoding="utf-8") as f:
+            STOCK_WATCHLIST = json.load(f)
+        print("Successfully loaded STOCK_WATCHLIST from watchlist.json")
+    else:
+        with open(watchlist_path, "w", encoding="utf-8") as f:
+            json.dump(STOCK_WATCHLIST, f, indent=2, ensure_ascii=False)
+        print("Created watchlist.json with default stock database")
+except Exception as e:
+    print(f"Error loading/writing watchlist.json: {e}")
 
 SECTOR_METADATA = {
     "clean_energy": {"label": "Clean Energy", "icon": "⚡", "desc": "Solar, Wind, Green Hydrogen, and Grid Transmission initiatives."},
@@ -252,6 +266,8 @@ def build_html_email(brief_data):
     """
 
     for sector, news_items in brief_data.items():
+        if sector == "emerging_players":
+            continue
         meta = SECTOR_METADATA[sector]
         stocks = STOCK_WATCHLIST[sector]
         
@@ -275,19 +291,46 @@ def build_html_email(brief_data):
         # Format stocks HTML table
         stock_rows = ""
         for s in stocks:
+            rating_text = s.get("rating", "N/A")
+            growth_val = s.get("revenue_growth")
+            growth_badge = ""
+            if growth_val:
+                # Green badge for positive growth
+                growth_badge = f"<span class='badge badge-positive' style='margin-left: 6px; font-size: 9px;'>🔥 {growth_val} YoY</span>"
+            
+            potential_str = s['growth_pct']
+            potential_color = "#34d399" # green
+            if potential_str.startswith("-"):
+                potential_color = "#f87171" # red
+            elif potential_str == "0.0%":
+                potential_color = "#cbd5e1"
+            
+            rating_badge = f"<span class='badge badge-neutral' style='font-size: 8px; margin-left: 6px; background-color: #1e293b; color: #60a5fa;'>{rating_text}</span>" if rating_text != "N/A" else ""
+            
             stock_rows += f"""
             <tr>
-                <td class="stock-ticker">{s['ticker']}</td>
-                <td>{s['name']}</td>
+                <td class="stock-ticker">{s['ticker']}{rating_badge}</td>
+                <td>{s['name']}{growth_badge}</td>
                 <td>₹{s['price']}</td>
                 <td>₹{s['target']}</td>
-                <td class="stock-growth">+{s['growth_pct']}</td>
+                <td class="stock-growth" style="color: {potential_color} !important;">{potential_str}</td>
             </tr>
             <tr>
                 <td colspan="5" class="stock-catalyst">
                     <strong>Catalyst:</strong> {s['catalyst']}
                 </td>
             </tr>
+            """
+
+        # Format emerging players HTML (from dynamic scanner)
+        emerging_html = ""
+        if "emerging_players" in brief_data and sector in brief_data["emerging_players"]:
+            players_str = ", ".join(brief_data["emerging_players"][sector])
+            emerging_html = f"""
+            <div style="margin-top: 15px; padding: 12px; background-color: rgba(245, 158, 11, 0.04); border-left: 3px solid var(--warning); border-radius: 4px; font-size: 11px; color: #94a3b8; line-height: 1.4;">
+                <strong style="color: var(--warning); text-transform: uppercase; font-size: 10px; display: block; margin-bottom: 4px;">📡 Emerging Competitor Radar</strong>
+                Spotted news mentions of <strong>{players_str}</strong>. Mapped as a potential new entrant or disruptive competitor in the {meta['label']} sector.
+            </div>
             """
 
         body_html += f"""
@@ -316,6 +359,7 @@ def build_html_email(brief_data):
                         {stock_rows}
                     </tbody>
                 </table>
+                {emerging_html}
             </div>
         """
 
@@ -378,8 +422,8 @@ def send_email(html_content):
         return False
 
 def update_live_stock_prices():
-    """Updates STOCK_WATCHLIST with live prices from Yahoo Finance and recalculates growth potentials."""
-    print("Fetching live stock prices from Yahoo Finance...")
+    """Updates STOCK_WATCHLIST with live prices, broker targets, and growth metrics from Yahoo Finance."""
+    print("Fetching live stock prices and broker metrics from Yahoo Finance...")
     try:
         import yfinance as yf
     except ImportError:
@@ -390,23 +434,256 @@ def update_live_stock_prices():
         for stock in stocks:
             ticker = stock["ticker"]
             yahoo_ticker = f"{ticker}.NS"
+            
+            # Set default values for new keys
+            stock["rating"] = "N/A"
+            stock["revenue_growth"] = None
+            
             try:
                 ticker_obj = yf.Ticker(yahoo_ticker)
+                
+                # Fetch live price
                 hist = ticker_obj.history(period="1d")
                 if not hist.empty:
                     live_price = float(hist['Close'].iloc[-1])
                     stock["price"] = f"{live_price:.2f}"
-                    
-                    # Recalculate potential growth based on live price and target price
-                    target_price = float(stock["target"])
-                    if live_price > 0:
-                        growth_val = ((target_price - live_price) / live_price) * 100
-                        stock["growth_pct"] = f"{growth_val:.1f}%"
-                        print(f"Updated {ticker}: Price = {live_price:.2f}, Target = {target_price:.2f} ({growth_val:.1f}%)")
                 else:
-                    print(f"Warning: No data returned for {yahoo_ticker}. Using static price.")
+                    live_price = float(stock["price"])
+                    print(f"Warning: No close history for {yahoo_ticker}. Using static price.")
+                
+                # Fetch broker targets and financials from t.info
+                info = ticker_obj.info
+                if info:
+                    # Update target price to consensus analyst target if available
+                    consensus_target = info.get("targetMeanPrice")
+                    if consensus_target and float(consensus_target) > 0:
+                        stock["target"] = f"{float(consensus_target):.2f}"
+                    
+                    # Fetch rating (e.g. buy, hold)
+                    rating = info.get("recommendationKey")
+                    if rating:
+                        stock["rating"] = rating.replace("_", " ").title()
+                    
+                    # Fetch revenue growth YoY
+                    rev_growth = info.get("revenueGrowth")
+                    if rev_growth is not None:
+                        stock["revenue_growth"] = f"{float(rev_growth) * 100:.1f}%"
+                
+                # Recalculate potential growth based on live price and target price
+                target_price = float(stock["target"])
+                if live_price > 0:
+                    growth_val = ((target_price - live_price) / live_price) * 100
+                    stock["growth_pct"] = f"{growth_val:.1f}%"
+                    
+                    growth_info = f"Price = {live_price:.2f}, Target = {target_price:.2f} ({growth_val:.1f}%)"
+                    rating_info = f" [Rating: {stock['rating']}]" if stock['rating'] != 'N/A' else ""
+                    growth_alert = f" [Growth: {stock['revenue_growth']}]" if stock['revenue_growth'] else ""
+                    print(f"Updated {ticker}: {growth_info}{rating_info}{growth_alert}")
+                    
             except Exception as e:
-                print(f"Error updating price for {yahoo_ticker}: {e}. Using static price.")
+                print(f"Error updating price/metrics for {yahoo_ticker}: {e}. Using static price.")
+
+def detect_emerging_players(brief_data):
+    """Scans aggregated news titles for corporate names not currently in the watchlist."""
+    print("Scanning headlines for emerging players...")
+    import re
+    emerging_players = {}
+    
+    # Get set of all existing watchlist names and tickers to exclude them
+    existing_ids = set()
+    for sector, stocks in STOCK_WATCHLIST.items():
+        for s in stocks:
+            existing_ids.add(s["ticker"].lower())
+            existing_ids.add(s["name"].lower())
+            for part in s["name"].split():
+                if len(part) > 3:
+                    existing_ids.add(part.lower())
+                    
+    # General stopwords to ignore
+    ignored = {"india", "delhi", "mumbai", "pib", "union", "minister", "cabinet", "government", "ministry", "national", "state", "monsoon", "ebola", "science", "budget", "digital", "system"}
+
+    # Pattern: Capitalized words followed by corporate identifiers
+    corp_pattern = re.compile(r'\b([A-Z][a-zA-Z0-9]+(?:\s+[A-Z][a-zA-Z0-9]+)*)\s+(?:Ltd|Limited|Corp|Corporation|Technologies|Enterprises|Solutions|Infrastructure)\b')
+
+    for sector, news_items in brief_data.items():
+        detected = []
+        for item in news_items:
+            title = item["title"]
+            matches = corp_pattern.findall(title)
+            for match in matches:
+                match_lower = match.lower()
+                if match_lower not in existing_ids and match_lower not in ignored and len(match) > 3:
+                    if match not in detected:
+                        detected.append(match)
+                        print(f"Detected emerging player in {sector}: {match}")
+        if detected:
+            emerging_players[sector] = detected
+            
+    return emerging_players
+
+def save_watchlist():
+    """Saves STOCK_WATCHLIST back to watchlist.json."""
+    watchlist_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "watchlist.json")
+    try:
+        with open(watchlist_path, "w", encoding="utf-8") as f:
+            json.dump(STOCK_WATCHLIST, f, indent=2, ensure_ascii=False)
+        print("Saved updated watchlist to watchlist.json")
+    except Exception as e:
+        print(f"Error saving watchlist: {e}")
+
+def resolve_ticker_from_name(company_name):
+    """Queries Yahoo Finance Search API to find the NSE/BSE ticker for a company name."""
+    url = f"https://query2.finance.yahoo.com/v1/finance/search?q={urllib.parse.quote(company_name)}&quotesCount=5"
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
+    try:
+        r = requests.get(url, headers=headers, timeout=10)
+        if r.status_code == 200:
+            data = r.json()
+            quotes = data.get("quotes", [])
+            # Search for NSE first
+            for q in quotes:
+                symbol = q.get("symbol", "")
+                if symbol.endswith(".NS"):
+                    return symbol.split(".")[0], q.get("longname") or q.get("shortname") or company_name
+            # Fallback to BSE
+            for q in quotes:
+                symbol = q.get("symbol", "")
+                if symbol.endswith(".BO"):
+                    return symbol.split(".")[0], q.get("longname") or q.get("shortname") or company_name
+    except Exception as e:
+        print(f"Error resolving ticker for {company_name}: {e}")
+    return None, None
+
+def auto_curate_watchlist(brief_data):
+    """Discovers emerging competitors, fetches their metrics, and auto-rotates underperforming watchlist stocks."""
+    print("Starting automated watchlist curation and rotation cycle...")
+    try:
+        import yfinance as yf
+    except ImportError:
+        print("[WARNING] yfinance not installed. Cannot fetch metrics for auto-curation.")
+        return
+        
+    emerging_sectors = detect_emerging_players(brief_data)
+    
+    # Track which players were actually added or rotated
+    rotations_log = []
+    
+    for sector, companies in emerging_sectors.items():
+        if sector not in STOCK_WATCHLIST:
+            continue
+            
+        for name in companies:
+            print(f"Evaluating candidate company: {name} in sector: {sector}")
+            ticker, full_name = resolve_ticker_from_name(name)
+            if not ticker:
+                print(f"Could not resolve ticker for: {name}. Skipping.")
+                continue
+                
+            # Check if this ticker is already in our watchlist for any sector
+            already_watchlisted = False
+            for s_key, s_list in STOCK_WATCHLIST.items():
+                if any(x["ticker"] == ticker for x in s_list):
+                    already_watchlisted = True
+                    break
+            if already_watchlisted:
+                print(f"Ticker {ticker} is already in watchlist. Skipping.")
+                continue
+                
+            # Fetch candidate metrics from Yahoo Finance
+            yahoo_ticker = f"{ticker}.NS"
+            try:
+                ticker_obj = yf.Ticker(yahoo_ticker)
+                hist = ticker_obj.history(period="1d")
+                if hist.empty:
+                    print(f"No market data for {yahoo_ticker}. Skipping candidate.")
+                    continue
+                    
+                live_price = float(hist['Close'].iloc[-1])
+                info = ticker_obj.info or {}
+                
+                # Check target price and compute potential
+                consensus_target = info.get("targetMeanPrice")
+                if consensus_target and float(consensus_target) > 0:
+                    target_price = float(consensus_target)
+                else:
+                    target_price = live_price * 1.25 # Default 25% upside estimate if analysts haven't coverage
+                    
+                growth_pct_val = ((target_price - live_price) / live_price) * 100
+                rating = info.get("recommendationKey", "N/A").replace("_", " ").title()
+                
+                rev_growth_raw = info.get("revenueGrowth")
+                revenue_growth = f"{float(rev_growth_raw) * 100:.1f}%" if rev_growth_raw is not None else None
+                
+                # Eligibility check:
+                # 1. Candidate must have positive potential growth upside
+                # 2. Candidate must have positive revenue growth (> 0%) or Buy rating
+                is_eligible = growth_pct_val > 0
+                if rev_growth_raw is not None and rev_growth_raw < 0:
+                    is_eligible = False
+                    
+                if not is_eligible:
+                    print(f"Candidate {ticker} did not meet positive growth criteria. Skipping.")
+                    continue
+                    
+                # We have a valid, eligible high-growth candidate!
+                # Now find the first news headline related to this candidate to use as a catalyst
+                related_headline = f"Policy tailwinds in the {sector} segment."
+                for item in brief_data.get(sector, []):
+                    if name.lower() in item["title"].lower():
+                        related_headline = item["title"]
+                        break
+                        
+                candidate_stock = {
+                    "ticker": ticker,
+                    "name": full_name,
+                    "price": f"{live_price:.2f}",
+                    "target": f"{target_price:.2f}",
+                    "growth_pct": f"{growth_pct_val:.1f}%",
+                    "catalyst": f"Auto-discovered via media radar. Catalyst: {related_headline}",
+                    "rating": rating,
+                    "revenue_growth": revenue_growth
+                }
+                
+                # Check watchlist size
+                current_watchlist = STOCK_WATCHLIST[sector]
+                if len(current_watchlist) < 5:
+                    # Directly append since there is space
+                    current_watchlist.append(candidate_stock)
+                    print(f"ADDED: {ticker} to {sector} watchlist (Space available: {len(current_watchlist)}/5)")
+                    rotations_log.append(f"Added {full_name} ({ticker}) to {sector}")
+                else:
+                    # Watchlist is full (5 items). Perform rotation logic.
+                    # Find the stock with the lowest potential growth (upside pct)
+                    def get_potential(stock):
+                        try:
+                            return float(stock["growth_pct"].replace("%", ""))
+                        except Exception:
+                            return 0.0
+                            
+                    sorted_watchlist = sorted(current_watchlist, key=get_potential)
+                    weakest_stock = sorted_watchlist[0]
+                    weakest_potential = get_potential(weakest_stock)
+                    
+                    # If candidate has higher growth potential than the weakest stock, rotate!
+                    if growth_pct_val > weakest_potential:
+                        # Remove weakest stock
+                        STOCK_WATCHLIST[sector] = [x for x in current_watchlist if x["ticker"] != weakest_stock["ticker"]]
+                        STOCK_WATCHLIST[sector].append(candidate_stock)
+                        print(f"ROTATED: Replaced underperformer {weakest_stock['ticker']} (Upside: {weakest_stock['growth_pct']}) with high-growth candidate {ticker} (Upside: {candidate_stock['growth_pct']}) in {sector}!")
+                        rotations_log.append(f"Rotated {weakest_stock['name']} ({weakest_stock['ticker']}) out for {full_name} ({ticker}) in {sector}")
+                    else:
+                        print(f"Candidate {ticker} (Upside: {growth_pct_val:.1f}%) did not outperform the weakest watchlist pick {weakest_stock['ticker']} (Upside: {weakest_potential:.1f}%). Skipping rotation.")
+                        
+            except Exception as e:
+                print(f"Error checking financials for candidate {yahoo_ticker}: {e}")
+                
+    if rotations_log:
+        print("\nSummary of Watchlist Rotations:")
+        for log in rotations_log:
+            print(f" - {log}")
+        save_watchlist()
+    else:
+        print("No watchlist changes or rotations needed in this cycle.")
 
 def save_data_for_dashboard(brief_data):
     """Saves the aggregated feed data to a JSON file for the static dashboard."""
@@ -423,19 +700,29 @@ def save_data_for_dashboard(brief_data):
     print("SUCCESS: Updated data saved to 'dashboard_data.json' for web dashboard display.")
 
 if __name__ == "__main__":
-    # Update stock watchlist with live Yahoo Finance prices
-    update_live_stock_prices()
-    
-    # Gather data
+    # Gather news data
     data = fetch_feed_data()
     
-    # Save for dashboard
+    # Scan news headlines for emerging competitor signals
+    emerging = detect_emerging_players(data)
+    data["emerging_players"] = emerging
+    
+    # Auto-curate the watchlist using the newly scanned emerging players (adding/rotating stocks)
+    auto_curate_watchlist(data)
+    
+    # Fetch live Yahoo Finance prices, broker targets, and growth metrics for the final curated watchlist
+    update_live_stock_prices()
+    
+    # Save the updated stock metrics (prices, targets, ratings, growth) back to watchlist.json
+    save_watchlist()
+    
+    # Save the updated data for dashboard display
     save_data_for_dashboard(data)
     
-    # Render HTML
+    # Render final HTML email
     html = build_html_email(data)
     
-    # Mail it
+    # Mail it (or write to email_preview.html locally)
     send_email(html)
     
     print("Briefing cycle finished successfully.")

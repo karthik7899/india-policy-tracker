@@ -838,3 +838,21 @@ body {
         padding: 20px;
     }
 }
+
+/* Watchlist Automation Enhancements */
+.badge-rating {
+    background: rgba(59, 130, 246, 0.15);
+    color: #60a5fa;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    border-radius: 4px;
+    font-size: 10px;
+    padding: 2px 6px;
+    font-weight: 600;
+    text-transform: uppercase;
+    display: inline-block;
+}
+
+.growth-val-green {
+    font-weight: 700;
+    color: var(--success);
+}
