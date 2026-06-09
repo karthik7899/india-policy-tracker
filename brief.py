@@ -344,12 +344,18 @@ def build_html_email(brief_data):
                 else:
                     earnings_badge = f"<span style='margin-left: 4px; font-size: 8px; background-color: #1e1b4b; color: #a78bfa; padding: 2px 5px; border-radius: 3px; display: inline-block;'>EPS {earnings_val}</span>"
             
-            potential_str = s['growth_pct']
-            potential_color = "#34d399"  # green
-            if potential_str.startswith("-"):
-                potential_color = "#f87171"  # red
-            elif potential_str == "0.0%" or potential_str == "+0.0%":
-                potential_color = "#cbd5e1"
+            potential_str = s.get('growth_pct')
+            potential_color = "#cbd5e1"
+            if potential_str:
+                if potential_str.startswith("-"):
+                    potential_color = "#f87171"  # red
+                elif potential_str.startswith("+"):
+                    potential_color = "#34d399"  # green
+            else:
+                potential_str = "—"
+            
+            target_val = s.get('target')
+            target_str = f"₹{target_val}" if target_val else "—"
             
             # Rating badge with analyst count
             analyst_str = f" ({analyst_count})" if analyst_count else ""
@@ -360,7 +366,7 @@ def build_html_email(brief_data):
                 <td class="stock-ticker">{s['ticker']}{rating_badge}</td>
                 <td>{s['name']}{growth_badge}{earnings_badge}</td>
                 <td>₹{s['price']}</td>
-                <td>₹{s['target']}</td>
+                <td>{target_str}</td>
                 <td class="stock-growth" style="color: {potential_color} !important;">{potential_str}</td>
             </tr>
             <tr>
@@ -373,13 +379,23 @@ def build_html_email(brief_data):
         # Format emerging players HTML (from dynamic scanner)
         emerging_html = ""
         if "emerging_players" in brief_data and sector in brief_data["emerging_players"]:
-            players_str = ", ".join(brief_data["emerging_players"][sector])
-            emerging_html = f"""
-            <div style="margin-top: 15px; padding: 12px; background-color: rgba(245, 158, 11, 0.04); border-left: 3px solid var(--warning); border-radius: 4px; font-size: 11px; color: #94a3b8; line-height: 1.4;">
-                <strong style="color: var(--warning); text-transform: uppercase; font-size: 10px; display: block; margin-bottom: 4px;">📡 Emerging Competitor Radar</strong>
-                Spotted news mentions of <strong>{players_str}</strong>. Mapped as a potential new entrant or disruptive competitor in the {meta['label']} sector.
-            </div>
-            """
+            players = brief_data["emerging_players"][sector]
+            if players:
+                players_list = []
+                for p in players:
+                    if isinstance(p, dict):
+                        ticker_str = f" ({p['ticker']})" if p.get('ticker') else ""
+                        players_list.append(f"<strong>{p['name']}</strong>{ticker_str} [{p.get('status', 'Scanned')}]")
+                    else:
+                        players_list.append(f"<strong>{p}</strong>")
+                
+                players_str = ", ".join(players_list)
+                emerging_html = f"""
+                <div style="margin-top: 15px; padding: 12px; background-color: rgba(245, 158, 11, 0.04); border-left: 3px solid var(--warning); border-radius: 4px; font-size: 11px; color: #94a3b8; line-height: 1.4;">
+                    <strong style="color: var(--warning); text-transform: uppercase; font-size: 10px; display: block; margin-bottom: 4px;">📡 Emerging Competitor Radar</strong>
+                    Spotted news mentions of: {players_str}. Mapped as potential new entrants or disruptive competitors in the {meta['label']} sector.
+                </div>
+                """
 
         body_html += f"""
             <div class="section-card">
@@ -517,14 +533,22 @@ def update_single_stock(stock):
             if mean_target and float(mean_target) > 0:
                 if chosen_target is None:
                     chosen_target = float(mean_target)
-                stock["target"] = f"{float(mean_target):.2f}"
+            
             if chosen_target:
                 stock["target"] = f"{chosen_target:.2f}"
+            else:
+                stock["target"] = None
+                stock["target_median"] = None
                 
             if high_target and float(high_target) > 0:
                 stock["target_high"] = f"{float(high_target):.2f}"
+            else:
+                stock["target_high"] = None
+                
             if low_target and float(low_target) > 0:
                 stock["target_low"] = f"{float(low_target):.2f}"
+            else:
+                stock["target_low"] = None
             
             rating = info.get("recommendationKey")
             if rating:
@@ -546,19 +570,23 @@ def update_single_stock(stock):
                 stock["earnings_growth"] = f"{sign}{eg_pct:.1f}%"
         
         # Recalculate potential growth based on live price and target price
-        target_price = float(stock["target"])
-        if live_price > 0:
-            growth_val = ((target_price - live_price) / live_price) * 100
-            sign = "+" if growth_val > 0 else ""
-            stock["growth_pct"] = f"{sign}{growth_val:.1f}%"
-            
-            # Build detailed log line
-            growth_info = f"Price = {live_price:.2f}, Target = {target_price:.2f} ({sign}{growth_val:.1f}%)"
-            rating_info = f" [Rating: {stock['rating']}]" if stock['rating'] != 'N/A' else ""
-            analyst_info = f" [Analysts: {stock['analyst_count']}]" if stock['analyst_count'] else ""
-            growth_alert = f" [Rev: {stock['revenue_growth']}]" if stock['revenue_growth'] else ""
-            earnings_alert = f" [EPS: {stock['earnings_growth']}]" if stock['earnings_growth'] else ""
-            print(f"Updated {ticker}: {growth_info}{rating_info}{analyst_info}{growth_alert}{earnings_alert}")
+        if stock.get("target") is not None:
+            target_price = float(stock["target"])
+            if live_price > 0:
+                growth_val = ((target_price - live_price) / live_price) * 100
+                sign = "+" if growth_val > 0 else ""
+                stock["growth_pct"] = f"{sign}{growth_val:.1f}%"
+                
+                # Build detailed log line
+                growth_info = f"Price = {live_price:.2f}, Target = {target_price:.2f} ({sign}{growth_val:.1f}%)"
+                rating_info = f" [Rating: {stock['rating']}]" if stock['rating'] != 'N/A' else ""
+                analyst_info = f" [Analysts: {stock['analyst_count']}]" if stock['analyst_count'] else ""
+                growth_alert = f" [Rev: {stock['revenue_growth']}]" if stock['revenue_growth'] else ""
+                earnings_alert = f" [EPS: {stock['earnings_growth']}]" if stock['earnings_growth'] else ""
+                print(f"Updated {ticker}: {growth_info}{rating_info}{analyst_info}{growth_alert}{earnings_alert}")
+        else:
+            stock["growth_pct"] = None
+            print(f"Updated {ticker}: Price = {live_price:.2f}, Target = None (No analyst target coverage)")
             
     except Exception as e:
         print(f"Error updating price/metrics for {yahoo_ticker}: {e}. Using static price.")
@@ -807,6 +835,9 @@ def auto_curate_watchlist(brief_data):
     # Track which players were actually added or rotated
     rotations_log = []
     
+    # We will construct a structured emerging_players dictionary
+    structured_emerging = {s: [] for s in SECTOR_METADATA}
+    
     for sector, companies in emerging_sectors.items():
         if sector not in STOCK_WATCHLIST:
             continue
@@ -816,6 +847,12 @@ def auto_curate_watchlist(brief_data):
             ticker, full_name = resolve_ticker_from_name(name)
             if not ticker:
                 print(f"Could not resolve ticker for: {name}. Skipping.")
+                structured_emerging[sector].append({
+                    "name": name,
+                    "ticker": None,
+                    "status": "Unresolved",
+                    "reason": "Could not map company name to a BSE/NSE ticker."
+                })
                 continue
                 
             # Check if this ticker is already in our watchlist for any sector
@@ -826,6 +863,12 @@ def auto_curate_watchlist(brief_data):
                     break
             if already_watchlisted:
                 print(f"Ticker {ticker} is already in watchlist. Skipping.")
+                structured_emerging[sector].append({
+                    "name": full_name or name,
+                    "ticker": ticker,
+                    "status": "Watchlisted",
+                    "reason": f"Already present in the {sector} watchlist."
+                })
                 continue
                 
             # Fetch candidate metrics from Yahoo Finance
@@ -835,6 +878,12 @@ def auto_curate_watchlist(brief_data):
                 hist = ticker_obj.history(period="1d")
                 if hist.empty:
                     print(f"No market data for {yahoo_ticker}. Skipping candidate.")
+                    structured_emerging[sector].append({
+                        "name": full_name or name,
+                        "ticker": ticker,
+                        "status": "Unresolved",
+                        "reason": f"BSE/NSE ticker resolved, but no market trading history found."
+                    })
                     continue
                     
                 live_price = float(hist['Close'].iloc[-1])
@@ -862,6 +911,13 @@ def auto_curate_watchlist(brief_data):
                     
                 if not is_eligible:
                     print(f"Candidate {ticker} did not meet positive growth criteria. Skipping.")
+                    reason_str = "Negative target potential" if growth_pct_val <= 0 else f"Failed growth criteria (YoY revenue {revenue_growth})"
+                    structured_emerging[sector].append({
+                        "name": full_name or name,
+                        "ticker": ticker,
+                        "status": "Growth Divergence",
+                        "reason": reason_str
+                    })
                     continue
                     
                 # We have a valid, eligible high-growth candidate!
@@ -890,6 +946,12 @@ def auto_curate_watchlist(brief_data):
                     current_watchlist.append(candidate_stock)
                     print(f"ADDED: {ticker} to {sector} watchlist (Space available: {len(current_watchlist)}/5)")
                     rotations_log.append(f"Added {full_name} ({ticker}) to {sector}")
+                    structured_emerging[sector].append({
+                        "name": full_name,
+                        "ticker": ticker,
+                        "status": "Watchlisted",
+                        "reason": f"Added to watchlist (new high-growth pick)."
+                    })
                 else:
                     # Watchlist is full (5 items). Perform rotation logic.
                     # Find the stock with the lowest potential growth (upside pct)
@@ -910,12 +972,33 @@ def auto_curate_watchlist(brief_data):
                         STOCK_WATCHLIST[sector].append(candidate_stock)
                         print(f"ROTATED: Replaced underperformer {weakest_stock['ticker']} (Upside: {weakest_stock['growth_pct']}) with high-growth candidate {ticker} (Upside: {candidate_stock['growth_pct']}) in {sector}!")
                         rotations_log.append(f"Rotated {weakest_stock['name']} ({weakest_stock['ticker']}) out for {full_name} ({ticker}) in {sector}")
+                        structured_emerging[sector].append({
+                            "name": full_name,
+                            "ticker": ticker,
+                            "status": "Watchlisted",
+                            "reason": f"Rotated into watchlist replacing {weakest_stock['ticker']}."
+                        })
                     else:
                         print(f"Candidate {ticker} (Upside: {growth_pct_val:.1f}%) did not outperform the weakest watchlist pick {weakest_stock['ticker']} (Upside: {weakest_potential:.1f}%). Skipping rotation.")
+                        structured_emerging[sector].append({
+                            "name": full_name,
+                            "ticker": ticker,
+                            "status": "Pipeline",
+                            "reason": f"Pipeline candidate (Upside {growth_pct_val:.1f}% vs weakest watchlisted {weakest_potential:.1f}%)."
+                        })
                         
             except Exception as e:
                 print(f"Error checking financials for candidate {yahoo_ticker}: {e}")
+                structured_emerging[sector].append({
+                    "name": full_name or name,
+                    "ticker": ticker,
+                    "status": "Unresolved",
+                    "reason": f"Error parsing Yahoo Finance info: {str(e)}"
+                })
                 
+    # Write the structured competitors dictionary back into brief_data
+    brief_data["emerging_players"] = structured_emerging
+    
     if rotations_log:
         print("\nSummary of Watchlist Rotations:")
         for log in rotations_log:

@@ -101,12 +101,16 @@ function formatGrowthBadge(growthStr, style = 'inline') {
     const val = parseFloat(growthStr.replace('%', ''));
     if (isNaN(val)) return style === 'table' ? `<span style="color: var(--text-muted);">—</span>` : '';
     
+    const absValStr = Math.abs(val).toFixed(1) + '%';
     if (val > 0) {
-        if (style === 'table') return `<span style="font-weight: 700; color: #34d399;">🔥 +${growthStr} YoY</span>`;
-        return `<span style="font-size: 9px; padding: 2px 6px; background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 4px; display: inline-block; font-weight: 600;">🔥 +${growthStr} YoY</span>`;
+        if (style === 'table') return `<span style="font-weight: 700; color: #34d399;">🔥 +${absValStr} YoY</span>`;
+        return `<span style="font-size: 9px; padding: 2px 6px; background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 4px; display: inline-block; font-weight: 600;">🔥 +${absValStr} YoY</span>`;
+    } else if (val < 0) {
+        if (style === 'table') return `<span style="font-weight: 700; color: #f87171;">📉 -${absValStr} YoY</span>`;
+        return `<span style="font-size: 9px; padding: 2px 6px; background: rgba(239, 68, 68, 0.12); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 4px; display: inline-block; font-weight: 600;">📉 -${absValStr} YoY</span>`;
     } else {
-        if (style === 'table') return `<span style="font-weight: 700; color: #f87171;">📉 ${growthStr} YoY</span>`;
-        return `<span style="font-size: 9px; padding: 2px 6px; background: rgba(239, 68, 68, 0.12); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 4px; display: inline-block; font-weight: 600;">📉 ${growthStr} YoY</span>`;
+        if (style === 'table') return `<span style="font-weight: 700; color: #cbd5e1;">0.0% YoY</span>`;
+        return `<span style="font-size: 9px; padding: 2px 6px; background: rgba(203, 213, 225, 0.12); color: #cbd5e1; border: 1px solid rgba(203, 213, 225, 0.3); border-radius: 4px; display: inline-block; font-weight: 600;">0.0% YoY</span>`;
     }
 }
 
@@ -115,8 +119,9 @@ function formatPotential(pctStr) {
     if (!pctStr) return '—';
     const val = parseFloat(pctStr.replace('%', ''));
     if (isNaN(val)) return pctStr;
-    if (val > 0) return `<span style="font-weight:700; color:#34d399;">+${pctStr}</span>`;
-    if (val < 0) return `<span style="font-weight:700; color:#f87171;">${pctStr}</span>`;
+    const absValStr = Math.abs(val).toFixed(1) + '%';
+    if (val > 0) return `<span style="font-weight:700; color:#34d399;">+${absValStr}</span>`;
+    if (val < 0) return `<span style="font-weight:700; color:#f87171;">-${absValStr}</span>`;
     return `<span style="font-weight:700; color:#cbd5e1;">0.0%</span>`;
 }
 
@@ -349,7 +354,7 @@ function renderTopPicks(data) {
     // Filter stocks with growth potential >= 28% and sort descending
     let topPicks = allStocks
         .map(s => {
-            const rawPct = parseFloat(s.growth_pct.replace('%', ''));
+            const rawPct = s.growth_pct ? parseFloat(s.growth_pct.replace('%', '')) : -999;
             return { ...s, rawPctValue: rawPct };
         })
         .filter(s => s.rawPctValue >= 28)
@@ -365,7 +370,7 @@ function renderTopPicks(data) {
             </div>
             <div class="hl-right">
                 <span class="hl-price">CMP: ₹${s.price}</span>
-                <div class="hl-pct">${formatPotential(s.growth_pct)} Target</div>
+                <div class="hl-pct">${s.growth_pct ? formatPotential(s.growth_pct) : '—'} Target</div>
             </div>
         `;
         container.appendChild(item);
@@ -386,18 +391,55 @@ function renderEmergingRadar(data) {
         const sectorIcon = data.sectors[sectorKey]?.icon || "🏢";
         const players = emerging[sectorKey];
         
-        players.forEach(name => {
+        players.forEach(p => {
             hasPlayers = true;
+            
+            let displayName = "";
+            let tickerBadge = "";
+            let statusText = "Analyzing Listing...";
+            let statusStyle = "color: #fbbf24; font-size: 9px; font-weight: 600;";
+            let reasonText = "";
+            
+            if (p && typeof p === 'object') {
+                displayName = p.name || "Unknown Company";
+                const ticker = p.ticker;
+                tickerBadge = ticker ? `<span class="hl-ticker" style="margin-left: 6px; font-size: 10px; background: rgba(59, 130, 246, 0.1); color: var(--primary); padding: 1px 4px; border-radius: 3px;">${ticker}</span>` : '';
+                statusText = p.status || "Scanned";
+                reasonText = p.reason ? `<div style="font-size: 10px; color: #64748b; margin-top: 4px; max-width: 220px; line-height: 1.2;">${p.reason}</div>` : '';
+                
+                // Color status dynamically
+                if (statusText === 'Watchlisted') {
+                    statusStyle = 'background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); padding: 2px 6px; border-radius: 4px; font-size: 8px; font-weight: 700;';
+                } else if (statusText === 'Pipeline') {
+                    statusStyle = 'background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); padding: 2px 6px; border-radius: 4px; font-size: 8px; font-weight: 700;';
+                } else if (statusText === 'Growth Divergence') {
+                    statusStyle = 'background: rgba(239, 68, 68, 0.12); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); padding: 2px 6px; border-radius: 4px; font-size: 8px; font-weight: 700;';
+                } else {
+                    statusStyle = 'background: rgba(255, 255, 255, 0.05); color: #94a3b8; border: 1px solid rgba(255, 255, 255, 0.1); padding: 2px 6px; border-radius: 4px; font-size: 8px; font-weight: 700;';
+                }
+            } else {
+                displayName = p || "Unknown Company";
+            }
+            
             const item = document.createElement("div");
             item.className = "highlight-item";
+            item.style.display = "flex";
+            item.style.justifyContent = "space-between";
+            item.style.alignItems = "flex-start";
+            item.style.padding = "12px 16px";
+            
             item.innerHTML = `
-                <div class="hl-left">
-                    <span class="hl-ticker" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); font-size: 8px; padding: 2px 4px; border-radius: 4px; font-weight: 800; width: fit-content; margin-bottom: 4px;">RADAR</span>
-                    <span class="hl-name" style="color: #f8fafc; font-weight: 500; font-size: 13px;">${name}</span>
+                <div class="hl-left" style="display: flex; flex-direction: column; gap: 2px;">
+                    <div style="display: flex; align-items: center;">
+                        <span class="hl-ticker" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); font-size: 8px; padding: 2px 4px; border-radius: 4px; font-weight: 800; width: fit-content;">RADAR</span>
+                        ${tickerBadge}
+                    </div>
+                    <span class="hl-name" style="color: #f8fafc; font-weight: 500; font-size: 13px; margin-top: 4px;">${displayName}</span>
+                    ${reasonText}
                 </div>
-                <div class="hl-right" style="text-align: right;">
+                <div class="hl-right" style="text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
                     <span class="hl-price" style="font-size: 11px; color: #94a3b8;">${sectorIcon} ${sectorLabel}</span>
-                    <div style="font-size: 9px; color: #fbbf24; margin-top: 2px; font-weight: 600;">Analyzing Listing...</div>
+                    <div style="${statusStyle}">${statusText}</div>
                 </div>
             `;
             container.appendChild(item);
@@ -433,10 +475,14 @@ function renderCharts(data) {
         const stocks = data.watchlist[sectorKey];
         
         let sum = 0;
+        let validCount = 0;
         stocks.forEach(s => {
-            sum += parseFloat(s.growth_pct.replace('%', ''));
+            if (s.growth_pct) {
+                sum += parseFloat(s.growth_pct.replace('%', ''));
+                validCount++;
+            }
         });
-        const avg = stocks.length > 0 ? (sum / stocks.length).toFixed(1) : 0;
+        const avg = validCount > 0 ? (sum / validCount).toFixed(1) : 0;
         
         labels.push(sectorLabel);
         averages.push(avg);
@@ -561,28 +607,63 @@ function renderSectorDetail(sectorKey) {
         const sc = s.screener || {};
         let screenerHtml = '';
         if (Object.keys(sc).length > 0) {
-            const peHtml = sc.pe_ratio ? `<span class="sc-chip">PE <strong>${sc.pe_ratio}</strong>${sc.industry_pe ? ` <small style="opacity:0.5">vs Ind:${sc.industry_pe}</small>` : ''}</span>` : '';
-            const roceHtml = sc.roce ? `<span class="sc-chip">ROCE <strong>${sc.roce}%</strong></span>` : '';
-            const roeHtml = sc.roe ? `<span class="sc-chip">ROE <strong>${sc.roe}%</strong></span>` : '';
-            const qSalesHtml = sc.q_sales ? `<span class="sc-chip">Q.Sales <strong>₹${Number(sc.q_sales).toLocaleString('en-IN')}Cr</strong></span>` : '';
-            const qProfitHtml = sc.q_net_profit ? `<span class="sc-chip">Q.Profit <strong>₹${Number(sc.q_net_profit).toLocaleString('en-IN')}Cr</strong></span>` : '';
-            const promoterHtml = sc.promoter_pct ? `<span class="sc-chip">Promoter <strong>${sc.promoter_pct}%</strong></span>` : '';
-            const fiiHtml = sc.fii_pct ? `<span class="sc-chip">FII <strong>${sc.fii_pct}%</strong></span>` : '';
-            const qtrLabel = sc.latest_quarter ? `<small style="color: var(--text-muted); font-size: 9px;">${sc.latest_quarter}</small>` : '';
+            const mcapHtml = sc.market_cap ? `<span class="sc-chip" title="Market Cap">MCAP: <strong>₹${Number(sc.market_cap).toLocaleString('en-IN')} Cr</strong></span>` : '';
+            const peHtml = sc.pe_ratio ? `<span class="sc-chip" title="Price to Earnings">P/E: <strong>${sc.pe_ratio}</strong>${sc.industry_pe ? ` <small style="opacity:0.6">vs Ind:${sc.industry_pe}</small>` : ''}</span>` : '';
+            const roceHtml = sc.roce ? `<span class="sc-chip" title="Return on Capital Employed">ROCE: <strong>${sc.roce}%</strong></span>` : '';
+            const roeHtml = sc.roe ? `<span class="sc-chip" title="Return on Equity">ROE: <strong>${sc.roe}%</strong></span>` : '';
+            
+            const qSalesHtml = sc.q_sales ? `<span class="sc-chip" title="Quarterly Sales">Sales: <strong>₹${Number(sc.q_sales).toLocaleString('en-IN')} Cr</strong></span>` : '';
+            
+            let profitStyle = '';
+            let profitLabel = 'Profit';
+            if (sc.q_net_profit) {
+                const profitNum = parseFloat(sc.q_net_profit);
+                if (profitNum < 0) {
+                    profitStyle = 'style="background: rgba(239, 68, 68, 0.12); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.25);"';
+                    profitLabel = 'Loss';
+                } else {
+                    profitStyle = 'style="background: rgba(16, 185, 129, 0.12); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.25);"';
+                }
+            }
+            const qProfitHtml = sc.q_net_profit ? `<span class="sc-chip" ${profitStyle} title="Quarterly Net Profit/Loss">${profitLabel}: <strong>₹${Number(Math.abs(sc.q_net_profit)).toLocaleString('en-IN')} Cr</strong></span>` : '';
+            
+            const qOpmHtml = sc.q_opm ? `<span class="sc-chip" title="Operating Profit Margin">OPM: <strong>${sc.q_opm}%</strong></span>` : '';
+            const qEpsHtml = sc.q_eps ? `<span class="sc-chip" title="Quarterly Earnings Per Share">EPS: <strong>₹${sc.q_eps}</strong></span>` : '';
+            
+            const promoterHtml = sc.promoter_pct ? `<span class="sc-chip" title="Promoter Shareholding">Promoter: <strong>${sc.promoter_pct}%</strong></span>` : '';
+            const fiiHtml = sc.fii_pct ? `<span class="sc-chip" title="Foreign Institutional Investors">FII: <strong>${sc.fii_pct}%</strong></span>` : '';
+            const diiHtml = sc.dii_pct ? `<span class="sc-chip" title="Domestic Institutional Investors">DII: <strong>${sc.dii_pct}%</strong></span>` : '';
+            const qtrLabel = sc.latest_quarter ? `<small style="color: #f59e0b; font-size: 9px; font-weight: 700; text-transform: uppercase;">(${sc.latest_quarter})</small>` : '';
             
             screenerHtml = `
-                <div class="dsc-fundamentals" style="margin-top: 10px; padding: 10px 12px; background: rgba(245, 158, 11, 0.04); border: 1px solid rgba(245, 158, 11, 0.12); border-radius: 8px;">
-                    <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
-                        <span style="font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #f59e0b;">📊 Filed Fundamentals</span>
-                        ${qtrLabel}
-                        <span style="font-size: 8px; color: var(--text-muted); margin-left: auto;">Source: Screener.in (BSE/NSE)</span>
+                <div class="dsc-fundamentals" style="margin-top: 12px; padding: 12px; background: rgba(30, 41, 59, 0.3); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 8px;">
+                    <!-- Ratios & Shareholding Sub-Section -->
+                    <div style="margin-bottom: 8px;">
+                        <div style="font-size: 8.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #94a3b8; margin-bottom: 6px; display: flex; justify-content: space-between;">
+                            <span>📊 Filed Ratios & Holdings</span>
+                            <span style="font-size: 7.5px; opacity: 0.6;">Source: Screener.in</span>
+                        </div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 4px;">
+                            ${mcapHtml}${peHtml}${roceHtml}${roeHtml}${promoterHtml}${fiiHtml}${diiHtml}
+                        </div>
                     </div>
-                    <div style="display: flex; flex-wrap: wrap; gap: 6px;">
-                        ${peHtml}${roceHtml}${roeHtml}${qSalesHtml}${qProfitHtml}${promoterHtml}${fiiHtml}
+                    <!-- Quarterly Earnings Sub-Section -->
+                    <div>
+                        <div style="font-size: 8.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #94a3b8; margin-bottom: 6px; display: flex; gap: 6px; align-items: center;">
+                            <span>📈 Quarterly Performance</span>
+                            ${qtrLabel}
+                        </div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 4px;">
+                            ${qSalesHtml}${qProfitHtml}${qOpmHtml}${qEpsHtml}
+                        </div>
                     </div>
                 </div>`;
         }
         
+        const targetValText = s.target ? `₹${s.target}` : '<span style="color: var(--text-muted);">—</span>';
+        const medianText = s.target_median ? ` (Median: ₹${s.target_median})` : '';
+        const analystDisplay = s.target ? `<span>Target: <strong>${targetValText}</strong><small style="color: var(--text-secondary);">${medianText}</small></span>` : `<span>Target: <strong>—</strong></span>`;
+
         stocksHtml += `
             <div class="detail-stock-card">
                 <div class="dsc-header">
@@ -599,7 +680,7 @@ function renderSectorDetail(sectorKey) {
                 </div>
                 <div class="dsc-metrics" style="margin-top: 12px;">
                     <span>CMP: <strong>₹${s.price}</strong></span>
-                    <span>Target: <strong>₹${s.target}</strong> <small style="color: var(--text-muted);">(Median: ₹${s.target_median || s.target})</small></span>
+                    ${analystDisplay}
                     <span>Analysts: <strong>${s.analyst_count || '—'}</strong></span>
                 </div>
                 <p class="dsc-catalyst"><strong>Watchlist Catalyst:</strong> ${s.catalyst}</p>
@@ -669,7 +750,7 @@ function renderStocksTable(filterQuery = "") {
                     <td><strong>${peVal}</strong></td>
                     <td><strong>${roceVal}</strong></td>
                     <td><strong>${roeVal}</strong></td>
-                    <td>₹${s.target}</td>
+                    <td>${s.target ? `₹${s.target}` : '<span style="color: var(--text-muted);">—</span>'}</td>
                     <td class="t-potential">${formatPotential(s.growth_pct)}</td>
                     <td>${formatGrowthBadge(s.revenue_growth, 'table')}</td>
                     <td>${formatAnalystBadge(s)}</td>
