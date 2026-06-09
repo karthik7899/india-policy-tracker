@@ -131,10 +131,36 @@ function formatAnalystBadge(stock) {
 
 // Initialize App
 document.addEventListener("DOMContentLoaded", () => {
+    setupThemeToggle();
     setupTabToggles();
     loadDashboardData();
     setupStockSearch();
 });
+
+// Theme Toggle Logic
+function setupThemeToggle() {
+    const toggleBtn = document.getElementById("theme-toggle");
+    if (!toggleBtn) return;
+
+    // Check saved theme or system preference
+    const savedTheme = localStorage.getItem('bharat-policy-theme');
+    const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+
+    if (savedTheme === 'light' || (!savedTheme && prefersLight)) {
+        document.documentElement.setAttribute('data-theme', 'light');
+    }
+
+    toggleBtn.addEventListener("click", () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        if (currentTheme === 'light') {
+            document.documentElement.removeAttribute('data-theme');
+            localStorage.setItem('bharat-policy-theme', 'dark');
+        } else {
+            document.documentElement.setAttribute('data-theme', 'light');
+            localStorage.setItem('bharat-policy-theme', 'light');
+        }
+    });
+}
 
 // Tab Toggling Logic
 function setupTabToggles() {
@@ -175,6 +201,9 @@ function setupTabToggles() {
 
 // Fetch dashboard data
 function loadDashboardData() {
+    const loadingOverlay = document.getElementById("loading-overlay");
+    if (loadingOverlay) loadingOverlay.style.display = "flex";
+
     fetch("dashboard_data.json?t=" + Date.now())
         .then(response => {
             if (!response.ok) throw new Error("JSON file missing");
@@ -184,11 +213,13 @@ function loadDashboardData() {
             console.log("Live dashboard data loaded successfully.");
             appData = data;
             initDashboard(data);
+            if (loadingOverlay) loadingOverlay.style.display = "none";
         })
         .catch(err => {
             console.warn("Failed to load live data, fallback to static mock seed database:", err);
             appData = MOCK_DATA;
             initDashboard(MOCK_DATA);
+            if (loadingOverlay) loadingOverlay.style.display = "none";
         });
 }
 
@@ -636,13 +667,18 @@ function renderSectorDetail(sectorKey) {
 }
 
 // Stock Screener Matrix Rendering
+let currentSortColumn = 'potential';
+let currentSortDirection = 'desc';
+
 function renderStocksTable(filterQuery = "") {
     const tbody = document.getElementById("stocks-table-body");
     tbody.innerHTML = "";
     
     const query = filterQuery.toLowerCase().trim();
     let rowCount = 0;
+    let allStocksList = [];
     
+    // Flatten data for sorting
     Object.keys(appData.watchlist).forEach(sectorKey => {
         const sectorLabel = appData.sectors[sectorKey].label;
         const stocks = appData.watchlist[sectorKey];
@@ -655,35 +691,113 @@ function renderStocksTable(filterQuery = "") {
                 sectorLabel.toLowerCase().includes(query);
                 
             if (matchesSearch) {
-                const sc = s.screener || {};
-                const peVal = sc.pe_ratio ? sc.pe_ratio : '<span style="color: var(--text-muted);">—</span>';
-                const roceVal = sc.roce ? `${sc.roce}%` : '<span style="color: var(--text-muted);">—</span>';
-                const roeVal = sc.roe ? `${sc.roe}%` : '<span style="color: var(--text-muted);">—</span>';
-
-                const tr = document.createElement("tr");
-                tr.innerHTML = `
-                    <td class="t-ticker">${s.ticker}</td>
-                    <td><strong>${s.name}</strong></td>
-                    <td><span class="chip" style="display:inline-block; border-color:transparent; background-color:rgba(255,255,255,0.03);">${sectorLabel}</span></td>
-                    <td>₹${s.price}</td>
-                    <td><strong>${peVal}</strong></td>
-                    <td><strong>${roceVal}</strong></td>
-                    <td><strong>${roeVal}</strong></td>
-                    <td>₹${s.target}</td>
-                    <td class="t-potential">${formatPotential(s.growth_pct)}</td>
-                    <td>${formatGrowthBadge(s.revenue_growth, 'table')}</td>
-                    <td>${formatAnalystBadge(s)}</td>
-                    <td class="t-catalyst">${s.catalyst}</td>
-                `;
-                tbody.appendChild(tr);
-                rowCount++;
+                allStocksList.push({
+                    ...s,
+                    sectorLabel: sectorLabel,
+                    sectorKey: sectorKey
+                });
             }
         });
     });
+
+    // Sort logic
+    allStocksList.sort((a, b) => {
+        let valA, valB;
+
+        const parseNumeric = (val) => {
+            if (!val || val === 'N/A' || val === '—') return -999999;
+            const parsed = parseFloat(String(val).replace(/[^0-9.-]+/g, ""));
+            return isNaN(parsed) ? -999999 : parsed;
+        };
+
+        switch (currentSortColumn) {
+            case 'ticker': valA = a.ticker; valB = b.ticker; break;
+            case 'company': valA = a.name; valB = b.name; break;
+            case 'sector': valA = a.sectorLabel; valB = b.sectorLabel; break;
+            case 'cmp': valA = parseNumeric(a.price); valB = parseNumeric(b.price); break;
+            case 'pe': valA = parseNumeric(a.screener?.pe_ratio); valB = parseNumeric(b.screener?.pe_ratio); break;
+            case 'roce': valA = parseNumeric(a.screener?.roce); valB = parseNumeric(b.screener?.roce); break;
+            case 'roe': valA = parseNumeric(a.screener?.roe); valB = parseNumeric(b.screener?.roe); break;
+            case 'target': valA = parseNumeric(a.target); valB = parseNumeric(b.target); break;
+            case 'potential': valA = parseNumeric(a.growth_pct); valB = parseNumeric(b.growth_pct); break;
+            case 'growth': valA = parseNumeric(a.revenue_growth); valB = parseNumeric(b.revenue_growth); break;
+            case 'rating':
+                // Custom sort for ratings: Strong Buy > Buy > Hold > N/A
+                const ratingScore = (r) => {
+                    if(r === 'Strong Buy') return 4;
+                    if(r === 'Buy') return 3;
+                    if(r === 'Hold') return 2;
+                    if(r === 'Underperform' || r === 'Sell') return 1;
+                    return 0;
+                };
+                valA = ratingScore(a.rating); valB = ratingScore(b.rating); break;
+            default: valA = parseNumeric(a.growth_pct); valB = parseNumeric(b.growth_pct);
+        }
+
+        if (typeof valA === 'string' && typeof valB === 'string') {
+            return currentSortDirection === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
+        } else {
+            return currentSortDirection === 'asc' ? valA - valB : valB - valA;
+        }
+    });
+
+    // Render sorted list
+    allStocksList.forEach(s => {
+        const sc = s.screener || {};
+        const peVal = sc.pe_ratio ? sc.pe_ratio : '<span style="color: var(--text-muted);">—</span>';
+        const roceVal = sc.roce ? `${sc.roce}%` : '<span style="color: var(--text-muted);">—</span>';
+        const roeVal = sc.roe ? `${sc.roe}%` : '<span style="color: var(--text-muted);">—</span>';
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td class="t-ticker">${s.ticker}</td>
+            <td><strong>${s.name}</strong></td>
+            <td><span class="chip" style="display:inline-block; border-color:transparent; background-color:rgba(255,255,255,0.03);">${s.sectorLabel}</span></td>
+            <td>₹${s.price}</td>
+            <td><strong>${peVal}</strong></td>
+            <td><strong>${roceVal}</strong></td>
+            <td><strong>${roeVal}</strong></td>
+            <td>₹${s.target}</td>
+            <td class="t-potential">${formatPotential(s.growth_pct)}</td>
+            <td>${formatGrowthBadge(s.revenue_growth, 'table')}</td>
+            <td>${formatAnalystBadge(s)}</td>
+            <td class="t-catalyst">${s.catalyst}</td>
+        `;
+        tbody.appendChild(tr);
+        rowCount++;
+    });
     
     if (rowCount === 0) {
-        tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; padding: 30px; color: var(--text-secondary);">No companies found matching your search.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="12" style="text-align: center; padding: 30px; color: var(--text-secondary);">No companies found matching your search.</td></tr>`;
     }
+
+    updateSortHeaders();
+}
+
+function setupTableSorting() {
+    const headers = document.querySelectorAll("th.sortable");
+    headers.forEach(header => {
+        header.addEventListener("click", () => {
+            const column = header.getAttribute("data-sort");
+            if (currentSortColumn === column) {
+                currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSortColumn = column;
+                currentSortDirection = 'desc'; // Default to desc for new column
+            }
+            renderStocksTable(document.getElementById("stock-search").value);
+        });
+    });
+}
+
+function updateSortHeaders() {
+    const headers = document.querySelectorAll("th.sortable");
+    headers.forEach(header => {
+        header.classList.remove("asc", "desc");
+        if (header.getAttribute("data-sort") === currentSortColumn) {
+            header.classList.add(currentSortDirection);
+        }
+    });
 }
 
 // Search Filter Input
@@ -692,4 +806,5 @@ function setupStockSearch() {
     input.addEventListener("input", (e) => {
         renderStocksTable(e.target.value);
     });
+    setupTableSorting();
 }

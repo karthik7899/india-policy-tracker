@@ -28,6 +28,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Lint and Format
+        run: |
+          pip install flake8 black
+          black --check .
+          flake8 .
+
       - name: Execute Aggregation & Mailer Script
         env:
           RECEIVER_EMAIL: ${{ secrets.RECEIVER_EMAIL }}
@@ -36,7 +42,7 @@ jobs:
           SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
         run: |
-          python brief.py
+          python main.py
 
       - name: Commit and Push Updated Dashboard Data
         run: |
