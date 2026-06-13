@@ -32,7 +32,35 @@
       "target_high": "75.00",
       "target_low": "52.00",
       "rec_score": 1.4,
-      "screener": {}
+      "screener": {
+        "market_cap": "75061",
+        "pe_ratio": "23.7",
+        "book_value": "6.96",
+        "roce": "35.1",
+        "roe": "40.6",
+        "dividend_yield": "0.00",
+        "latest_quarter": "Mar 2026",
+        "q_sales": "5493",
+        "q_net_profit": "1114",
+        "q_eps": "0.82",
+        "qoq_sales_growth": 29.7,
+        "qoq_profit_growth": 150.3,
+        "rd_pct": 3.0,
+        "capex": 1098.6,
+        "current_ratio": 1.83,
+        "net_current_assets": 7316.0,
+        "graham_intrinsic_value": 191.9,
+        "ncav_per_share": 5.4,
+        "is_bargain": false,
+        "owner_earnings": 3401.9,
+        "retained_earnings_ratio": 2.86,
+        "moat_status": "Strong (Wide Moat)",
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "Fails Current Ratio (< 2.0)",
+          "No Dividend Yield"
+        ]
+      }
     },
     {
       "ticker": "ADANIGREEN",
@@ -713,34 +741,7 @@
       "target_high": "486.00",
       "target_low": "290.00",
       "rec_score": 2.6,
-      "screener": {
-        "market_cap": "357215",
-        "pe_ratio": "17.1",
-        "book_value": "57.9",
-        "roce": "38.9",
-        "roe": "29.3",
-        "dividend_yield": "5.09",
-        "latest_quarter": "Mar 2026",
-        "q_sales": "17825",
-        "q_net_profit": "5470",
-        "q_eps": "4.30",
-        "qoq_sales_growth": -11.1,
-        "qoq_profit_growth": 9.0,
-        "rd_pct": 1.5,
-        "capex": 3565.0,
-        "current_ratio": 1.67,
-        "net_current_assets": 12734.0,
-        "graham_intrinsic_value": 318.2,
-        "ncav_per_share": 10.2,
-        "is_bargain": false,
-        "owner_earnings": 18506.9,
-        "retained_earnings_ratio": 2.86,
-        "moat_status": "Strong (Wide Moat)",
-        "hyper_growth_warning": false,
-        "valuation_alerts": [
-          "Fails Current Ratio (< 2.0)"
-        ]
-      }
+      "screener": {}
     }
   ],
   "sports_athleisure": [
@@ -759,7 +760,36 @@
       "target_high": "1400.00",
       "target_low": "1040.00",
       "rec_score": null,
-      "screener": {}
+      "screener": {
+        "market_cap": "27270",
+        "pe_ratio": "66.3",
+        "book_value": "73.1",
+        "roce": "20.2",
+        "roe": "22.2",
+        "dividend_yield": "0.55",
+        "latest_quarter": "Mar 2026",
+        "q_sales": "773",
+        "q_net_profit": "118",
+        "q_eps": "4.28",
+        "qoq_sales_growth": -4.7,
+        "qoq_profit_growth": -9.2,
+        "rd_pct": 1.5,
+        "capex": 154.6,
+        "current_ratio": 2.96,
+        "net_current_assets": 888.0,
+        "graham_intrinsic_value": 316.7,
+        "ncav_per_share": 32.6,
+        "is_bargain": false,
+        "owner_earnings": 443.0,
+        "retained_earnings_ratio": 2.86,
+        "moat_status": "Strong (Wide Moat)",
+        "hyper_growth_warning": true,
+        "valuation_alerts": [
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Fails P/E Screen (P/E 66.3 > 15 & Price > Intrinsic)",
+          "Hyper-Growth Warning: Slowing QoQ sales at P/E > 30"
+        ]
+      }
     },
     {
       "ticker": "CAMPUS",
@@ -820,23 +850,7 @@
       "target_high": "47700.00",
       "target_low": "31000.00",
       "rec_score": 2.7,
-      "screener": {
-        "rd_pct": 1.5,
-        "capex": 0.0,
-        "current_ratio": 2.0,
-        "net_current_assets": 0.0,
-        "graham_intrinsic_value": 0.0,
-        "ncav_per_share": 0,
-        "is_bargain": false,
-        "owner_earnings": 0.0,
-        "retained_earnings_ratio": 1.2,
-        "moat_status": "Weak/None",
-        "hyper_growth_warning": false,
-        "valuation_alerts": [
-          "No Dividend Yield",
-          "Weak/No Economic Moat"
-        ]
-      }
+      "screener": {}
     },
     {
       "ticker": "RELAXO",

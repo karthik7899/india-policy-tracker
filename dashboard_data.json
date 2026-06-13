@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-13 16:17:59",
+  "last_updated": "2026-06-13 16:21:44",
   "watchlist": {
     "clean_energy": [
       {
@@ -34,7 +34,35 @@
         "target_high": "75.00",
         "target_low": "52.00",
         "rec_score": 1.4,
-        "screener": {}
+        "screener": {
+          "market_cap": "75061",
+          "pe_ratio": "23.7",
+          "book_value": "6.96",
+          "roce": "35.1",
+          "roe": "40.6",
+          "dividend_yield": "0.00",
+          "latest_quarter": "Mar 2026",
+          "q_sales": "5493",
+          "q_net_profit": "1114",
+          "q_eps": "0.82",
+          "qoq_sales_growth": 29.7,
+          "qoq_profit_growth": 150.3,
+          "rd_pct": 3.0,
+          "capex": 1098.6,
+          "current_ratio": 1.83,
+          "net_current_assets": 7316.0,
+          "graham_intrinsic_value": 191.9,
+          "ncav_per_share": 5.4,
+          "is_bargain": false,
+          "owner_earnings": 3401.9,
+          "retained_earnings_ratio": 2.86,
+          "moat_status": "Strong (Wide Moat)",
+          "hyper_growth_warning": false,
+          "valuation_alerts": [
+            "Fails Current Ratio (< 2.0)",
+            "No Dividend Yield"
+          ]
+        }
       },
       {
         "ticker": "ADANIGREEN",
@@ -715,34 +743,7 @@
         "target_high": "486.00",
         "target_low": "290.00",
         "rec_score": 2.6,
-        "screener": {
-          "market_cap": "357215",
-          "pe_ratio": "17.1",
-          "book_value": "57.9",
-          "roce": "38.9",
-          "roe": "29.3",
-          "dividend_yield": "5.09",
-          "latest_quarter": "Mar 2026",
-          "q_sales": "17825",
-          "q_net_profit": "5470",
-          "q_eps": "4.30",
-          "qoq_sales_growth": -11.1,
-          "qoq_profit_growth": 9.0,
-          "rd_pct": 1.5,
-          "capex": 3565.0,
-          "current_ratio": 1.67,
-          "net_current_assets": 12734.0,
-          "graham_intrinsic_value": 318.2,
-          "ncav_per_share": 10.2,
-          "is_bargain": false,
-          "owner_earnings": 18506.9,
-          "retained_earnings_ratio": 2.86,
-          "moat_status": "Strong (Wide Moat)",
-          "hyper_growth_warning": false,
-          "valuation_alerts": [
-            "Fails Current Ratio (< 2.0)"
-          ]
-        }
+        "screener": {}
       }
     ],
     "sports_athleisure": [
@@ -761,7 +762,36 @@
         "target_high": "1400.00",
         "target_low": "1040.00",
         "rec_score": null,
-        "screener": {}
+        "screener": {
+          "market_cap": "27270",
+          "pe_ratio": "66.3",
+          "book_value": "73.1",
+          "roce": "20.2",
+          "roe": "22.2",
+          "dividend_yield": "0.55",
+          "latest_quarter": "Mar 2026",
+          "q_sales": "773",
+          "q_net_profit": "118",
+          "q_eps": "4.28",
+          "qoq_sales_growth": -4.7,
+          "qoq_profit_growth": -9.2,
+          "rd_pct": 1.5,
+          "capex": 154.6,
+          "current_ratio": 2.96,
+          "net_current_assets": 888.0,
+          "graham_intrinsic_value": 316.7,
+          "ncav_per_share": 32.6,
+          "is_bargain": false,
+          "owner_earnings": 443.0,
+          "retained_earnings_ratio": 2.86,
+          "moat_status": "Strong (Wide Moat)",
+          "hyper_growth_warning": true,
+          "valuation_alerts": [
+            "Fails Debt Limit (Debt > Net Assets)",
+            "Fails P/E Screen (P/E 66.3 > 15 & Price > Intrinsic)",
+            "Hyper-Growth Warning: Slowing QoQ sales at P/E > 30"
+          ]
+        }
       },
       {
         "ticker": "CAMPUS",
@@ -822,23 +852,7 @@
         "target_high": "47700.00",
         "target_low": "31000.00",
         "rec_score": 2.7,
-        "screener": {
-          "rd_pct": 1.5,
-          "capex": 0.0,
-          "current_ratio": 2.0,
-          "net_current_assets": 0.0,
-          "graham_intrinsic_value": 0.0,
-          "ncav_per_share": 0,
-          "is_bargain": false,
-          "owner_earnings": 0.0,
-          "retained_earnings_ratio": 1.2,
-          "moat_status": "Weak/None",
-          "hyper_growth_warning": false,
-          "valuation_alerts": [
-            "No Dividend Yield",
-            "Weak/No Economic Moat"
-          ]
-        }
+        "screener": {}
       },
       {
         "ticker": "RELAXO",
@@ -1545,9 +1559,9 @@
         "relevance": "India defense manufacturing offset policies HAL BEL"
       },
       {
-        "title": "Rajnath’s stern message to HAL—stick to your commitment, don’t overpromise",
-        "source": "ThePrint",
-        "link": "https://news.google.com/rss/articles/CBMirAFBVV95cUxQVVZIdWdudG5SeUtGV0IwbVZfcEhSazBLOVJxSzJGUHI0bE4waDdiWkdnOWNUaXI2dlM5TkxiNzJQSVMtVnRmU2U5eklmTU04aGxQT18tdDlVVExWcFp4X0lYSEZFcjNzVmo3OEl6NXc1UTdpRFZHeFRxR3hGTVk4TkxIUVRzdmtxNXJ6eWNrakYtLW40ODkxbHJRbzBpX3N3Mno1Z016ME1XUFQz0gGyAUFVX3lxTFBWcXVza204bXlfN2phS2lxU2w5TzdraXJrdWhQdV9SZVhPaEtnck5mWmtwZ2dzeXdiMk1XS2NBTHVQdl9kamV6SGlPb0tDbW5vc3BMOU43LVQzbWYxOTExS2xQVEZpbGlSYmpBUC0tcDQ5eExKeW1qVzhBS19sWUVSbjZ6Z3AxcVlkWXJkbE9nT09QMFRCQ1V1NG9sZ2N2ZzdFNC15dWZRanpxUjVJX01VRHc?oc=5",
+        "title": "Paras Defence Shares Climb 1.72% on Nearly ₹53-Crore Electro-Optics Order from Bharat Electronics",
+        "source": "HDFC Sky",
+        "link": "https://news.google.com/rss/articles/CBMijwFBVV95cUxOYUdGdlJmSU94bFNIcXZBUzRiR0tTU1FKNlRsbWYtMDRkRmJ4SkVReG91MnEyU1JjWmUycnEzazB5N2loZkxmaTJxQmsxTWd2ZDRmZF90SlpoY0RZZ21mcHZIb19Ocm1oVUxCZ3VkV1Atckg1dEk2WDNCZU1IOHhpNktsdlFwWVRGZUpNT1pPTQ?oc=5",
         "date": "08 Jun 2026",
         "impact": "Positive",
         "relevance": "\"Hindustan Aeronautics\" OR \"Bharat Electronics\" OR \"Astra Microwave\" defence"
@@ -1835,18 +1849,18 @@
         "relevance": "\"ASM Technologies\" OR \"RIR Power\" OR \"SPEL\" semiconductor"
       },
       {
-        "title": "NITI Aayog releases “Future of India’s Semiconductor Industry” Roadmap",
+        "title": "Rajasthan gets its first Semiconductor Plant",
         "source": "PIB",
-        "link": "https://news.google.com/rss/articles/CBMifEFVX3lxTFA0aFl1MzlCU0VuN09WU3ZFNUtZVEdJdzRDenA2Qk5oNjJlZENJbFhfdjRmcXdkZzdJQ0FKWVdQM2xHZ0czSkFscEtadGdVOUVZeEhZOGR2NmZuVC1GVkQ5QmZQbFFGbEJZdm9aQmEyY1RjSHVzZlhZN3dVeHc?oc=5",
-        "date": "11 Jun 2026",
+        "link": "https://news.google.com/rss/articles/CBMifEFVX3lxTE9Pay10NUVYams1NlF0YVEyeW92UTNzOFFINnptMjNFV3R6RTlMN3pncnIxT1pja0ZnaWpmYjR2ZHQtSzM1TkFuS2RGbElndW1yc0lSb0dIYm5WaUVfdDNUdmhUOERnZlJNNzV3aGJOb3phR0xvTExjWEhRVHc?oc=5",
+        "date": "12 Jun 2026",
         "impact": "Neutral",
         "relevance": "site:pib.gov.in \"semiconductor PLI\" OR \"ISM 2.0\" OR \"OSAT\""
       },
       {
-        "title": "Make in India’s Leap in Electronics Manufacturing & Exports",
+        "title": "NITI Aayog releases “Future of India’s Semiconductor Industry” Roadmap",
         "source": "PIB",
-        "link": "https://news.google.com/rss/articles/CBMifkFVX3lxTFBZUUNuQjNNbzNycnZaeEs3a2o2dTVtcFAwUFBrQWtmYjJzQ0RnVEw4NkVUbTdUV09YQmtVWmctdkdMYWhGOWtHcmpiaGQwWTVvU2tjM1JaUmxYTjhEbHhVeVhtMDJmZzlnUFV2YXFpQlIwTmFETU91Tkt0SDFDZw?oc=5",
-        "date": "11 Jun 2026",
+        "link": "https://news.google.com/rss/articles/CBMia0FVX3lxTE1BdmJyOEpsd0RnRjBkNFhmNmV2V2JRX3JXWGxCdU1ZRzJpa19HdUtsLVRlMkw5U1Z4OE43UzdRN005WW5RWHFWVGhJbmJyNEVxbVR2UWEtU0ZaTEhwQmYwVk5iTWIwNW1pX1pV?oc=5",
+        "date": "10 Jun 2026",
         "impact": "Neutral",
         "relevance": "site:pib.gov.in \"semiconductor PLI\" OR \"ISM 2.0\" OR \"OSAT\""
       }
@@ -1903,18 +1917,18 @@
         "relevance": "India smart city CCTV cameras border defense drones"
       },
       {
-        "title": "US Joins India, UK, Germany, France, Japan, Singapore, Australia and Others to Drive Global Security Travel as the 11th International Police Expo & Drone International Expo in New Delhi Ignites Convention Tourism and International Business Mobility",
-        "source": "Travel And Tour World",
-        "link": "https://news.google.com/rss/articles/CBMibkFVX3lxTE10dmo3bE5XR0hORVMyaWxaWUpGUVQxVHBBbGtQUFJHS0J4dHMzNnZSSjU0NElWZDdZLVFrQUJDUk9xcmUyYmFuVHFYNW9JNXk1RkhocXBjYlF1Mlk2bW9UTmpGRE4zSzR5TFh5R1BB?oc=5",
-        "date": "12 Jun 2026",
-        "impact": "Positive",
-        "relevance": "India smart city CCTV cameras border defense drones"
-      },
-      {
         "title": "Security Robots Market Forecast Points Higher Toward 2035 on Autonomous Surveillance Demand",
         "source": "IndexBox",
         "link": "https://news.google.com/rss/articles/CBMivgFBVV95cUxOSnVGSG5zS2g4MkRvQm9hbFFSYXN0QV9aWGRlWDc4cWkydzlZR3pUNGwxa3pUSFpMbGJZa296NDlCY1dETEdtQjRsaXlybXlCWDlZek9GbF9icWw5bGtSSjM4M2VvaS1vME5ONkswVHhib20wY1FPSXBUTEFWRXlRWG5SOU9xd1VZOGs5LVpPOHgtQkx0M1E5SEdwTU9iV2FjVjFEMldBQVRSR2psMG5QUk5aNTNydU1SSmpTb253?oc=5",
         "date": "07 Jun 2026",
+        "impact": "Positive",
+        "relevance": "India smart city CCTV cameras border defense drones"
+      },
+      {
+        "title": "US Joins India, UK, Germany, France, Japan, Singapore, Australia and Others to Drive Global Security Travel as the 11th International Police Expo & Drone International Expo in New Delhi Ignites Convention Tourism and International Business Mobility",
+        "source": "Travel And Tour World",
+        "link": "https://news.google.com/rss/articles/CBMibkFVX3lxTE10dmo3bE5XR0hORVMyaWxaWUpGUVQxVHBBbGtQUFJHS0J4dHMzNnZSSjU0NElWZDdZLVFrQUJDUk9xcmUyYmFuVHFYNW9JNXk1RkhocXBjYlF1Mlk2bW9UTmpGRE4zSzR5TFh5R1BB?oc=5",
+        "date": "12 Jun 2026",
         "impact": "Positive",
         "relevance": "India smart city CCTV cameras border defense drones"
       }
@@ -1991,24 +2005,6 @@
     "emerging_competitors": [],
     "corporate_agreements": [
       {
-        "title": "12.06.2026: Benefit of Section 16(5) is available only where ITC was denied on account of the limitation prescribed under Section 16(4) and not where the credit itself was otherwise ineligible: West Bengal, AAR",
-        "link": "https://news.google.com/rss/articles/CBMiywJBVV95cUxQbmhFZmxyR0JIU2UxRVE3T04zSGxkRzEtZy1Nanc5VnVxYUtmSFhZdnJILTlUeHFucGU2X19rZmpOTEQ5YUhzLXM2X0M4NW9hTzUydWRKQWk0X2RFSUFvcWlqckNKQzRINFE4OXV5cVlBYlVGanFaTjRXTVB5MTVuQXFKTURSQkxKSkNocFkzMGF0Y09kNXNYalZLREtRLTVUeUp0d3Iwd2RuMThaR00ybzhFWkp2bklRdzVjZGxKX09tcktxWjc5RzFKVVp6VEh2bDVjTjNSd0Z6TDlnbW9EanlWM1lsYkxnd3V6ZWc0RGJFLUZXa0tydy04UF9Zay1ZdEpLLWlMUlpacS11eWRBb0R0WHc2MV9kVEkwRTJiZU5rclVzVmo0NEk4UXBDLUQwYnl0ZXUxeWEzNG5qeFdfaDlzUm12eDlHS05N?oc=5",
-        "date": "Fri, 12 Jun 2026 05:27:08 GMT",
-        "source": "taxo.online"
-      },
-      {
-        "title": "From catering to 40-plus cohort to short shelf-life products—ITC’s strategy of micro-segmenting consumers",
-        "link": "https://news.google.com/rss/articles/CBMi6AFBVV95cUxPS252V21FSlNqQkRxMFRNUmFPWXM1YjhEMldaQ0dQRUJGRXZXMC1QUTNQVmZBUXdlT0s3MHpfSTF0a05zcDdJdTJlMW5LSTBrd3ZwTWF0S1dIcHlLbUltZ0l4ODZDZjZCc1VnMEJTRk50c1FwMG1DdkpuTXJjYjV4ekNfOXV4SThEcGlvSWxMRVVKUGtBUTViVGRzdmpYWWp1b2NpLWZZYUw3TEd1ejF1TVN0WksyRldlaVBjZ29CaTRTUk1nN3Ayd3daMl9qbHg2akh2RWo3c1hXMmJrcVp1M1ppSTJqNVpw0gH2AUFVX3lxTE1KcmFPRDE1ZUhnX2RZUHRkWnl3RXZUWXdJNzRZNUpUX3JpVTllalZRTEQzRWtla255emRYSUxlZXNzc29sdEFoT1p3QnlZYlp0VGlKS0lzdXpqN0NwMjFhQU5YVU5wQWtSYmFzYWVfQU5ya2VxOEo4SDBZRWp5SF90aGxyc0dyMnJZejBXUklHYWxLbVF4TGtwRGY4Z3lhSjQtYWNfSGhXZllnZE5LRzYyNlRQQXAtRU92X2drb0pvS3lpTUM4VVNPNTYxRlJrNUktRWJiTjZHVVVKMHpuSU55dHVFeHNBNWZ2Y3ZDT09yNGpEM1BOUQ?oc=5",
-        "date": "Sat, 13 Jun 2026 03:05:00 GMT",
-        "source": "Fortune India"
-      },
-      {
-        "title": "Nifty FMCG top sectoral gainer as HUL, Nestle, ITC rally; easing oil prices boost domestic consumption...",
-        "link": "https://news.google.com/rss/articles/CBMiggJBVV95cUxNbDZrcHhtSXNWU0xoZF9JTWlpMjZEenFpLTlPclNjaUtzMW44aUJDOTRTbmpHb3hmODV6aE4yRVVsMWE0dXk4ZjRRemJHOWNhaXdjUTFOdjVQbW5ocS1nZWVXeFRrSnpDS3QwTEtsN29LUHJUVURkLVpRVUNjTmo4ZHlDNnJ5MmduRkRhNnBReERobVU0WUxEZzZaMXhJWkIzMzBzNUhCM254UC03cHlkdGdCTTA5ck9aa0ZRU3AzaXBVeXNYS0xZWjhmR0s5V0FmX0dWN29WdXNESXBrSlExX2lKWVlVSlNQVzJHczNxX05nWXlJZmxFU1IxQzJSU0dzT3fSAYcCQVVfeXFMT0haV0lsMER6Sm56N0tRcjlfRFVsM09ybHFCT0xTZUNCSnNfMDJXc1plQVc4QWMycjJxd0Qzalo3TnVsTFlXS0hzNVFvT1ZlYUY1a0hVZFJQMy01ZkRQRU5WT0d6R09FZW5GN09sZzJkR1QzN1NwdjJDNkd0b1JfRlo5ZTBMMVdmQm5IamJYZ0w4OHp1eW9HZjkybWM5M2FhZm95Snk0Vmw4bHgwNlAxQjY2X3BwTzFISFRSYXVxVGhpejVNTXBXREwtQ2lSWGhlakNsQ3ZKZmdaMWo4dC1Vc0tUV3V2VEdkZEVCR01PWlVVSlBtWFB4TmpzVzBxOXFvcmFVMklmWWM?oc=5",
-        "date": "Wed, 10 Jun 2026 07:53:15 GMT",
-        "source": "Moneycontrol.com"
-      },
-      {
         "title": "BEL, DGQA sign MoU for long-term provisioning of electronic fuzes",
         "link": "https://news.google.com/rss/articles/CBMipAFBVV95cUxQZU8tNndBZGtNb1RoQmVpQUtEakNqazJRYnBaRThHbmxPQWRfM3d4QXpXUnNMUHVfenJtNFQwWDF1NGtDWnYzZ2dFdTk4RlNZUGNqMGN0RlZGWHpHSkJER1AzMFJVZjZTZXF4S0lkZEdLRnpEbE9OV2VDMlYwb196X21adVAxSFNxcjZycmNORkhtYjJwRm5Wb0Noakd0dG5nVWxydw?oc=5",
         "date": "Wed, 10 Jun 2026 05:01:14 GMT",
@@ -2045,25 +2041,31 @@
         "source": "ARCweb.com"
       },
       {
-        "title": "BHEL secures order worth ₹90 crore from Damodar Valley Corporation; shares trade in the red",
-        "link": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxPcTE1NERGWkwtcWxQdHFKaTdIRGdLN3dfaVMtZDlxVDNQbGtsSVlaQTdHeUVKRVczSWZjUGZud0F4YlpTMTNzdklPMVVfeHl2Sl9BLThxNlZyZUdpbFpNcTVxT2FCZDdSRWw0NkV2YXpMX2hxcjU1akliblF3QW9HRUgzcXd4blE4WTg1RUxHOXlGWDI4aGVHdjRRYUx4bHRLQThJUjEyVmo0WUY5VUY5VDRsVkJ6aGxfMm1UNXFuRW9RamlhMm9uZUdHdWxIYkpFY0NpM0w0ZWkwblpZUFZTb1dn?oc=5",
-        "date": "Thu, 11 Jun 2026 09:37:37 GMT",
-        "source": "Upstox"
+        "title": "AIT, ideaForge sign letter of intent for drone joint venture",
+        "link": "https://news.google.com/rss/articles/CBMitwFBVV95cUxNckRKZXRYeDNCQkstcUdUTGx2eUpYWDJ5ZTZhNUxGS2hkLUhsV3llSmdweS1jVS1kemNtam5UMmJwN2cwMURyU2RNVFF5dGVPbk5UZlZRb2I5WTF5a3dPYmh2T2ozY2w4cTcyUDFhYnFWdURyYTZOdEhxMUhKNDE2UzluQ2FUeFJtNHhCdzlEQnpPcUhpZHg2dVQ4SnI4clo4c0lBdmhTc0QxbkstTHNXTWllbHJTVHM?oc=5",
+        "date": "Mon, 08 Jun 2026 12:32:27 GMT",
+        "source": "Investing.com"
+      },
+      {
+        "title": "American Industrial Technologies and ideaForge Explore Joint Venture for Drone and AI Solutions",
+        "link": "https://news.google.com/rss/articles/CBMizwFBVV95cUxOaVNqeEZETTZDT2JSWktoeklQSFdWR19hUVI3NDE5R2lJZWxLM3cxbGRVNFplSlgzcFlUck9qZ1NOTUE5QzVFUElRb3gtb2FqaGp2N3l5b1FvSzdRekhRS3Y0QnZFYWo5aUFnSGNBSVdvTGlMNFA3eGtHMDYzUU1oOFhjVndJSUZHalRSNzkybkctT2xERlRmM2pGYlViSkFnTDB4UXllYThoOTZRUy03R1VNTnltN3NBS19vN3J2WEJIdzVGandzTGN2ZVV5b0k?oc=5",
+        "date": "Mon, 08 Jun 2026 13:02:55 GMT",
+        "source": "citybiz"
+      },
+      {
+        "title": "Dixon Technologies and Gemtek form optical transceiver joint venture",
+        "link": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxNQ1pQX0daTjhyYzJhQ2lldWdaY29tOU5hRXF2OTZMbGhjbFRBUW5RYzQ1bDNWeG80SWl1c2RwRUFCLWdDNjJXek5DQzhRT3FucW1NYWNwajBuYWQtTUMtSVU4YjRQdEszbGxwLXlkS1hKZ25MMHlxeHlTZ3hTUGZqbm1Ja2dwU2wzZ01pNnQ4RlpMMHY0cFo5MS1kWC1VdENIQ0ZYN1lESXVNWmRwRE5QWHk0cXprYTloMmFWak9vbFRxN1U?oc=5",
+        "date": "Tue, 09 Jun 2026 21:35:04 GMT",
+        "source": "scanx.trade"
+      },
+      {
+        "title": "12.06.2026: Benefit of Section 16(5) is available only where ITC was denied on account of the limitation prescribed under Section 16(4) and not where the credit itself was otherwise ineligible: West Bengal, AAR",
+        "link": "https://news.google.com/rss/articles/CBMiywJBVV95cUxQbmhFZmxyR0JIU2UxRVE3T04zSGxkRzEtZy1Nanc5VnVxYUtmSFhZdnJILTlUeHFucGU2X19rZmpOTEQ5YUhzLXM2X0M4NW9hTzUydWRKQWk0X2RFSUFvcWlqckNKQzRINFE4OXV5cVlBYlVGanFaTjRXTVB5MTVuQXFKTURSQkxKSkNocFkzMGF0Y09kNXNYalZLREtRLTVUeUp0d3Iwd2RuMThaR00ybzhFWkp2bklRdzVjZGxKX09tcktxWjc5RzFKVVp6VEh2bDVjTjNSd0Z6TDlnbW9EanlWM1lsYkxnd3V6ZWc0RGJFLUZXa0tydy04UF9Zay1ZdEpLLWlMUlpacS11eWRBb0R0WHc2MV9kVEkwRTJiZU5rclVzVmo0NEk4UXBDLUQwYnl0ZXUxeWEzNG5qeFdfaDlzUm12eDlHS05N?oc=5",
+        "date": "Fri, 12 Jun 2026 05:27:08 GMT",
+        "source": "taxo.online"
       }
     ],
     "product_launches": [
-      {
-        "title": "ATG unveils Svenska Spel’s Anna Romboli as new CEO",
-        "link": "https://news.google.com/rss/articles/CBMibkFVX3lxTE5udjVuTWx3UXVpV1E4RkxoR3ZnZEZLUTY0TTU4M1ZfZTcycU1vdnZ3QVpkbGlidENnRkxxLV9RdFpaU3owZHQ0ck1LLUk4QS1OeGFNcG4xMUlYZFZadVJ5eTY4bUplaExsR2cyRmNR?oc=5",
-        "date": "Thu, 11 Jun 2026 10:32:47 GMT",
-        "source": "NEXT.io"
-      },
-      {
-        "title": "ATG Taps Svenska Spel Veteran Anna Romboli as CEO",
-        "link": "https://news.google.com/rss/articles/CBMijAFBVV95cUxNZGJBdGV5MGwwSlVuaFoxTmlmc0Y5MFBFUUpYeHNPUlc0REdzcU5WZlFIZ1pVcVhFMnIyMlZ1ZVdlR1d5ZUphLVVpRHBMTU5USFVuY0k2YjVISE0zODVVVlRvOE02SVZBTGlBZXpvbk41TGY2Z1Jxd2RhQ1N5Y0hzMVo3enRyUGY3ZFEzOA?oc=5",
-        "date": "Thu, 11 Jun 2026 12:14:01 GMT",
-        "source": "GamblingNews"
-      },
       {
         "title": "Edinburgh International Film Festival unveils closing night film",
         "link": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE5KZUxZTG5XM0JncF9FWEVSM2szRktWLWM0VUI2eDVMeEVtYlVIUXpQazNMRkRCaUwwVE9jbmdHejRQUkRxUVVlQlcxQTVtMC0xUXRfQjg4ejZUeV9HZG5XZEVWTXVodw?oc=5",
@@ -2077,40 +2079,52 @@
         "source": "ILoveQatar.net"
       },
       {
-        "title": "Moderna seeks Arbutus payout immunity; March patent transactions; Trump unveils ITC picks; UPC provides long-arm guidance; Hikma SCOTUS ruling; plus much more",
-        "link": "https://news.google.com/rss/articles/CBMimgJBVV95cUxNTmE2THZ2eXZCMEJLWU5Da3VueFA3WnFxcUJqM2ZLamZCQ2pPUGNTWU1xVlhBOE5TempZR05PTlItWUNVMVRocDd6VzJ1cGdoVnNJNU5KdDZJNG94b1ZNRkR0X2VKb3JkZUFpX0lCNWpmNHR2UDJ6YWtCQnZsb0c0ZzJiRTdYOXJEdEI0azJ5NVlyT0pBZnUtaENIYzNrWlBtdDl6TERNc3U5Z3VILWEtYnR2Zm9aZFZndjZKcWZDQWxMMFd2b2hKWlUzMzF0N3dtblgxNkFyYzBKYUJRYVhXZmtHcTVobXNUcDlLbkt1YWgtWVdVM0VNSVBLMklTTmNTTGpKTXcwekM1VkVueWNNbjhsR29IOEpGTlE?oc=5",
-        "date": "Sun, 07 Jun 2026 10:36:53 GMT",
-        "source": "IAM Patent"
+        "title": "ATG unveils Svenska Spel’s Anna Romboli as new CEO",
+        "link": "https://news.google.com/rss/articles/CBMibkFVX3lxTE5udjVuTWx3UXVpV1E4RkxoR3ZnZEZLUTY0TTU4M1ZfZTcycU1vdnZ3QVpkbGlidENnRkxxLV9RdFpaU3owZHQ0ck1LLUk4QS1OeGFNcG4xMUlYZFZadVJ5eTY4bUplaExsR2cyRmNR?oc=5",
+        "date": "Thu, 11 Jun 2026 10:32:47 GMT",
+        "source": "NEXT.io"
       },
       {
-        "title": "Campaigns We Like | This week’s standout campaigns from Amazon Now, ITC Mangaldeep, XYXX, and more",
-        "link": "https://news.google.com/rss/articles/CBMigwFBVV95cUxOT2VLU1RLTURybFNYZVNqYmIwYm5DTFRrMkJMbHlyRjNGQWdmbk12LV92ekUyVTNkSTVmeXB2QUI2T055Y3d5UjU1QjZrRWJDNndaT0NQbXd1T0lLdDRmb3B5OHNQMDBrQlVIS1BYdmp0TGNDNi1KRmNLSDYteUg5Z212Yw?oc=5",
-        "date": "Fri, 12 Jun 2026 06:32:37 GMT",
-        "source": "Mediabrief.com"
+        "title": "ATG Taps Svenska Spel Veteran Anna Romboli as CEO",
+        "link": "https://news.google.com/rss/articles/CBMijAFBVV95cUxNZGJBdGV5MGwwSlVuaFoxTmlmc0Y5MFBFUUpYeHNPUlc0REdzcU5WZlFIZ1pVcVhFMnIyMlZ1ZVdlR1d5ZUphLVVpRHBMTU5USFVuY0k2YjVISE0zODVVVlRvOE02SVZBTGlBZXpvbk41TGY2Z1Jxd2RhQ1N5Y0hzMVo3enRyUGY3ZFEzOA?oc=5",
+        "date": "Thu, 11 Jun 2026 12:14:01 GMT",
+        "source": "GamblingNews"
       },
       {
-        "title": "Togo's ATD Unveils Digital Toolkit to Accelerate MSME Digital Transformation",
-        "link": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxNSHJCWlFSY1Fibk8zakNmWXE2MFRQb0RHa1pNMXNEb2lfUEd1ZEN3NXcybVp4VG0yYUN6eV9kTF9OOTVKX1hHLW0xMW14QjVxT25Fa1F6TEhidU1KUHpQdEdNZjdNR1JreWdOVlVWaFdYc2JibFRNUVFuekVBTU1ZbWpmNjVkV3h1eWc5MDVETEhMbjZqN1lrR0lWYnk3Z3VNT1ZNekJpOHpsUm0xQi11SUU4OTNWWVdtZWpz?oc=5",
-        "date": "Wed, 10 Jun 2026 14:36:35 GMT",
-        "source": "Togo First"
+        "title": "President Connolly unveils plaque for Achill Island RNLI’s 30th anniversary",
+        "link": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxQdXUzVU50TmZ6Z3JYZGdYRlVYMWpKbGdodUU1MlJlc3M1SW1HS1JQaFpEOFhJcGZTY1ZuT0dJRjZ1UFRfNjZLbFBiY1RTV1dJNlZfSUlfMXIxZm1SN2c4V3NaYVNVSlZlX2c5U2N6ZjM4amNxSFJ1YWc1SGlIeFVXOWEzOHdpQ2Riam9PYVJmLVVhcXo2aUd3NmtLaXBXZDhoZTFoZUNtNFRJVmdZcjhFcFJITkI5a29KUU93?oc=5",
+        "date": "Mon, 08 Jun 2026 01:37:51 GMT",
+        "source": "RNLI"
       },
       {
-        "title": "NITI Aayog meet: Chhattisgarh CM unveils roadmap to double income of tribals in Bastar",
-        "link": "https://news.google.com/rss/articles/CBMixwFBVV95cUxQdm9LMk1wbldYRXBMNFZROWliNFRQNGduMWJyQWZLcFBkSlJxNjFJZFhPeWNqUEhjSE1WaklNUmRUbWJMTG5SYzU1aDZkWlF6dGpBci1GdWhGY3phRmlvREhQWU96ZUJvaEg5Zm5TYWVTUUZ1djJSQjc0N2JxeUNQNnlkTmpBdUhhVGVlLXB5WFRBMWlWVzJWU2xCMk9VMi1BTFVyZ3h3QUl5VG9SRm9odnB0bEVOV1E0NlpJd2pqMEVKajJfLVgw0gHHAUFVX3lxTFB2b0syTXBuV1hFcEw0VlE5aWI0VFA0Z24xYnJBZktwUGRKUnE2MUlkWE95Y2pQSGNITVZqSU1SZFRtYkxMblJjNTVoNmRaUXp0akFyLUZ1aEZjemFGaW9ESFBZT3plQm9oSDlmblNhZVNRRnV2MlJCNzQ3YnF5Q1A2eWROakF1SGFUZWUtcHlYVEExaVZXMlZTbEIyT1UyLUFMVXJneHdBSXlUb1JGb2h2cHRsRU5XUTQ2Wkl3amowRUpqMl8tWDA?oc=5",
-        "date": "Thu, 11 Jun 2026 12:35:43 GMT",
-        "source": "PSU Watch"
+        "title": "Opera Memphis Unveils 2026-27 Season",
+        "link": "https://news.google.com/rss/articles/CBMia0FVX3lxTE5HT2pSZzBUT09VWVctNVhQZjJ3RGJnVnZPVDZJT29RdndFckpaWWNsQXpkTDhRemZ1ZHpiQ2FBMG0zUmMwcTBCM0lwT21rMzFmRDJvaUNSYkNqSjN4QVlzd2RjcTdUSTk0Qmxj?oc=5",
+        "date": "Fri, 12 Jun 2026 14:06:16 GMT",
+        "source": "OperaWire"
       },
       {
-        "title": "Prestige unveils convention centre in Bengaluru Airport City",
-        "link": "https://news.google.com/rss/articles/CBMi2gFBVV95cUxOTGpURUNTVTdIeEY0VXZIWHBkS3oyWURMZ2NxaTNfdDJHc1dkcUJaV3AtdGp5anRnR2R0ZFlyaDYxTURodUdTNVhRbHNDYWdMVno3dy1aUWZrTVpxUHlLWWNtR042NmYwd05hSENjbGtEMmYyeFVPTFBJY19xRHZydFRMb0hEY2RrbDZITjUzVTlkUlJ5WU01V1h2eTlnMVBhMlB6REVPZmZBekI4dERGYnhXVnVCazNsV2ZrMVdLZkdpSVhETGxneVJGSm5VYjQ1emk5MkdmdWs0UdIB3wFBVV95cUxQMHU2SHo4NVBuZnRod0xwd2JaZTNEVUwzV1VSeTRET3pkMGd2Y3hBMUVSUXBlU3ZNeU5LYnZCbDktLTE5dy1oVjlxNUlWR3BqX09QWnBsRkdBZ2JSTG5lVnc2aTY2WEF1SzhqWUctYlRLMkZsSFpSVnNyY2VRS3BnTGI5b2FVa2prNHJMNDdoSzBmcU9PdE1xNGlhTHdPU2hYUlF1cWhnT0FFWkhUY1pxZ1NEa21leU9IVjFiRE4zeWd5RlEteDE5ZnlIM3NXcE5YTjgtTlp6b1VKWi1UR3ZR?oc=5",
-        "date": "Thu, 11 Jun 2026 11:01:21 GMT",
-        "source": "Business Standard"
+        "title": "SAMSUNG UNVEILS AI-POWERED GALAXY WATCH HEALTH FEATURES AHEAD OF MAJOR SAMSUNG HEALTH UPDATE!",
+        "link": "https://news.google.com/rss/articles/CBMivgFBVV95cUxNQ0V3ek9tam5NR2ttSV9mVzZDYnF6MXVvcU9ZbG90NGsyN0xTMGFRTW1lZ0daQ0Z6SHgyRTRSYnN5X2ZwbGVUb1liUzdjMTRwaTFhdjk1cTVkYWEzZzR6WG1DWmk4ZnRsSThBY0VlbmlzZGZVcExoV3F6V290bWtZMm5fcnlNbjM1cGNBdjgwQVd3Sm4zd0h5eXhaOXRsZi1KV2lqZ2NZNGFRaG5rdURYSUZnbnZ6OVViTkFsa0R3?oc=5",
+        "date": "Sun, 07 Jun 2026 21:03:40 GMT",
+        "source": "vergemagazine.co.uk"
       },
       {
-        "title": "BHEL bags bnew order worth Rs 90 crores from Damodar Valley Corporation",
-        "link": "https://news.google.com/rss/articles/CBMimwFBVV95cUxNcm92eHdHSWxVSVk3cUxReC1uNGl5aWlpcmZQN3U3VHp3eWIxY3JTR2FwX214SlBDdFZab3hVT1h0a0tBTGtDbzQtSkw5dFZaY2pMOUZJU1hYNFd3dGNDNy1NZjBKakNKdDY3a2wzdFZzRFFvS3NGQWREeUxfbzhsc2JlQW8xMHRzVEVVM0tCdm8xYzVnT0hzZ2hQVQ?oc=5",
-        "date": "Fri, 12 Jun 2026 20:32:55 GMT",
-        "source": "BigInfo.in"
+        "title": "Suzlon Unveils Suzlon 2.0 Targets 10 GW Annual Sales By FY31",
+        "link": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxQaW04UVl5aEp2U1Y5QTZEUnFsWVZ2UkFJUGNuQ195OGc0M3lkVDdTMGliZVpmbTJWT2ppOVRKMV9vVUJpYnJkNmdwR3hTMTFPazFTaXAwVXA1RzRxOHFUaWVQcEJ1aTRYeU8yRkFIQUFJeUEwYnY2Mjd1MnQwY1Y3alVKUE9XcVNfd2xsbmNjVE5oeWtJWkpGWXVGTFBKdFhfRjU5T1VOTk9FNG9mSnBqa2RDWFFVSmlQcEdTV3pCbE5kcjRVNWZBZW1xN2ZuTXZudHZZWkhQNWpsOG9LRkZNY25n?oc=5",
+        "date": "Thu, 11 Jun 2026 11:44:26 GMT",
+        "source": "Construction World"
+      },
+      {
+        "title": "Suzlon unveils new purpose-led identity “Good Energies That Work” for the energy-intensive world",
+        "link": "https://news.google.com/rss/articles/CBMizgFBVV95cUxQa0E5MnQ5U3ZWZXFGRi1xcDhxdjFlSnJDS0J3WUt1WlA3LTNqUnMwSDBfUkpEUGltNUI2OVY4ZkdqUHZQWU1VTkhvbGkyNW9oQS0yd1cxVkhvajliMGctZTJJeTVqRTJJYjYyWTZQbmNyaEtxVkZ1b1VwenI2Q2pjOHlnY1czSlFGV3JtWE40RXdUOGdzS2Q0UFdZbWJib2VZUUhVaUxQZnZWOE5kTy12dVR5M3ZNSHhTalc3b19UbGNvTUk3N0x5blZJbHhIQQ?oc=5",
+        "date": "Wed, 10 Jun 2026 02:08:39 GMT",
+        "source": "Passionate In Marketing"
+      },
+      {
+        "title": "Wind-First Renewable Platforms",
+        "link": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE9iSGZJYllwMUxveWFLN25wT081SlktX1hFWG11UXBuZWo2X3ZhU25DclFoVkVTTjBwUXgycko1d3VFM0d1SkQtWW9UR3lmaTlySTBCNjViMNIBXEFVX3lxTE5admNxME8xR25GLUw2R1J1UnRzN1ZxS3pIWWhlWWU1MGEzLWRFdE1oUnhXMldXd21zLWppS0JzejdGMVdFSjRrQ0xac2FzeUZkRGc5T2FpLXFsdkha?oc=5",
+        "date": "Thu, 11 Jun 2026 00:34:36 GMT",
+        "source": "Trend Hunter"
       }
     ],
     "sebi_filings": [],
@@ -2154,6 +2168,20 @@
     ],
     "margin_of_safety": [
       {
+        "ticker": "SUZLON",
+        "name": "Suzlon Energy",
+        "price": "55.08",
+        "pe_ratio": "23.7",
+        "current_ratio": 1.83,
+        "graham_value": 191.9,
+        "is_defensive_pass": false,
+        "is_bargain": false,
+        "alerts": [
+          "Fails Current Ratio (< 2.0)",
+          "No Dividend Yield"
+        ]
+      },
+      {
         "ticker": "SCHNEIDER",
         "name": "Schneider Electric Infra",
         "price": "1105.70",
@@ -2177,12 +2205,12 @@
         "is_defensive_pass": false,
         "is_bargain": false,
         "alerts": [
-          "Fails P/E Screen (P/E 598.0 > 15 & Price > Intrinsic)",
+          "Fails Current Ratio (< 2.0)",
           "Fails Debt Limit (Debt > Net Assets)",
           "Hyper-Growth Warning: Slowing QoQ sales at P/E > 30",
-          "No Dividend Yield",
-          "Fails Current Ratio (< 2.0)",
-          "Weak/No Economic Moat"
+          "Weak/No Economic Moat",
+          "Fails P/E Screen (P/E 598.0 > 15 & Price > Intrinsic)",
+          "No Dividend Yield"
         ]
       },
       {
@@ -2195,9 +2223,9 @@
         "is_defensive_pass": false,
         "is_bargain": false,
         "alerts": [
-          "Fails P/E Screen (P/E 34.7 > 15 & Price > Intrinsic)",
+          "Weak/No Economic Moat",
           "Hyper-Growth Warning: Slowing QoQ sales at P/E > 30",
-          "Weak/No Economic Moat"
+          "Fails P/E Screen (P/E 34.7 > 15 & Price > Intrinsic)"
         ]
       },
       {
@@ -2223,11 +2251,11 @@
         "is_defensive_pass": false,
         "is_bargain": false,
         "alerts": [
-          "Fails P/E Screen (P/E 80.5 > 15 & Price > Intrinsic)",
-          "Hyper-Growth Warning: Slowing QoQ sales at P/E > 30",
-          "No Dividend Yield",
           "Fails Current Ratio (< 2.0)",
-          "Weak/No Economic Moat"
+          "Hyper-Growth Warning: Slowing QoQ sales at P/E > 30",
+          "Weak/No Economic Moat",
+          "No Dividend Yield",
+          "Fails P/E Screen (P/E 80.5 > 15 & Price > Intrinsic)"
         ]
       },
       {
@@ -2240,8 +2268,8 @@
         "is_defensive_pass": false,
         "is_bargain": false,
         "alerts": [
-          "No Dividend Yield",
-          "Fails Current Ratio (< 2.0)"
+          "Fails Current Ratio (< 2.0)",
+          "No Dividend Yield"
         ]
       },
       {
@@ -2293,8 +2321,8 @@
         "is_defensive_pass": false,
         "is_bargain": false,
         "alerts": [
-          "Fails Debt Limit (Debt > Net Assets)",
           "Fails Current Ratio (< 2.0)",
+          "Fails Debt Limit (Debt > Net Assets)",
           "Fails P/E Screen (P/E 49.0 > 15 & Price > Intrinsic)"
         ]
       },
@@ -2322,8 +2350,8 @@
         "is_defensive_pass": false,
         "is_bargain": false,
         "alerts": [
-          "Hyper-Growth Warning: Slowing QoQ sales at P/E > 30",
-          "Fails P/E Screen (P/E 117.0 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 117.0 > 15 & Price > Intrinsic)",
+          "Hyper-Growth Warning: Slowing QoQ sales at P/E > 30"
         ]
       },
       {
@@ -2347,23 +2375,25 @@
         "is_defensive_pass": false,
         "is_bargain": false,
         "alerts": [
-          "Fails Debt Limit (Debt > Net Assets)",
           "Fails Current Ratio (< 2.0)",
-          "Weak/No Economic Moat",
-          "Fails P/E Screen (P/E 70.9 > 15 & Price > Intrinsic)"
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Fails P/E Screen (P/E 70.9 > 15 & Price > Intrinsic)",
+          "Weak/No Economic Moat"
         ]
       },
       {
-        "ticker": "ITC",
-        "name": "ITC Ltd",
-        "price": "285.10",
-        "pe_ratio": "17.1",
-        "current_ratio": 1.67,
-        "graham_value": 318.2,
+        "ticker": "METROBRAND",
+        "name": "Metro Brands Ltd",
+        "price": "1000.50",
+        "pe_ratio": "66.3",
+        "current_ratio": 2.96,
+        "graham_value": 316.7,
         "is_defensive_pass": false,
         "is_bargain": false,
         "alerts": [
-          "Fails Current Ratio (< 2.0)"
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Hyper-Growth Warning: Slowing QoQ sales at P/E > 30",
+          "Fails P/E Screen (P/E 66.3 > 15 & Price > Intrinsic)"
         ]
       },
       {
@@ -2377,20 +2407,6 @@
         "is_bargain": false,
         "alerts": [
           "Fails P/E Screen (P/E 53.6 > 15 & Price > Intrinsic)"
-        ]
-      },
-      {
-        "ticker": "PAGEIND",
-        "name": "Page Industries",
-        "price": "38625.00",
-        "pe_ratio": null,
-        "current_ratio": 2.0,
-        "graham_value": 0.0,
-        "is_defensive_pass": true,
-        "is_bargain": false,
-        "alerts": [
-          "No Dividend Yield",
-          "Weak/No Economic Moat"
         ]
       },
       {
@@ -2430,8 +2446,8 @@
         "is_defensive_pass": false,
         "is_bargain": false,
         "alerts": [
-          "Fails Debt Limit (Debt > Net Assets)",
           "Fails Current Ratio (< 2.0)",
+          "Fails Debt Limit (Debt > Net Assets)",
           "Weak/No Economic Moat"
         ]
       },
@@ -2445,9 +2461,9 @@
         "is_defensive_pass": false,
         "is_bargain": false,
         "alerts": [
+          "Fails Current Ratio (< 2.0)",
           "Fails Debt Limit (Debt > Net Assets)",
           "Fails P/E Screen (P/E 61.0 > 15 & Price > Intrinsic)",
-          "Fails Current Ratio (< 2.0)",
           "Weak/No Economic Moat"
         ]
       },
@@ -2461,10 +2477,10 @@
         "is_defensive_pass": false,
         "is_bargain": false,
         "alerts": [
+          "Weak/No Economic Moat",
           "Fails Debt Limit (Debt > Net Assets)",
-          "No Dividend Yield",
           "Fails P/E Screen (P/E 49.4 > 15 & Price > Intrinsic)",
-          "Weak/No Economic Moat"
+          "No Dividend Yield"
         ]
       },
       {
@@ -2477,8 +2493,8 @@
         "is_defensive_pass": false,
         "is_bargain": false,
         "alerts": [
-          "Fails Debt Limit (Debt > Net Assets)",
           "Fails Current Ratio (< 2.0)",
+          "Fails Debt Limit (Debt > Net Assets)",
           "Weak/No Economic Moat"
         ]
       },
@@ -2492,8 +2508,8 @@
         "is_defensive_pass": false,
         "is_bargain": false,
         "alerts": [
-          "Fails P/E Screen (P/E 27.6 > 15 & Price > Intrinsic)",
-          "Weak/No Economic Moat"
+          "Weak/No Economic Moat",
+          "Fails P/E Screen (P/E 27.6 > 15 & Price > Intrinsic)"
         ]
       },
       {
@@ -2572,6 +2588,19 @@
     ],
     "buffett_valuation": [
       {
+        "ticker": "SUZLON",
+        "name": "Suzlon Energy",
+        "price": "55.08",
+        "owner_earnings": 3401.9,
+        "retained_ratio": 2.86,
+        "moat_status": "Strong (Wide Moat)",
+        "passed_retained_test": true,
+        "alerts": [
+          "Fails Current Ratio (< 2.0)",
+          "No Dividend Yield"
+        ]
+      },
+      {
         "ticker": "SCHNEIDER",
         "name": "Schneider Electric Infra",
         "price": "1105.70",
@@ -2593,12 +2622,12 @@
         "moat_status": "Weak/None",
         "passed_retained_test": true,
         "alerts": [
-          "Fails P/E Screen (P/E 598.0 > 15 & Price > Intrinsic)",
+          "Fails Current Ratio (< 2.0)",
           "Fails Debt Limit (Debt > Net Assets)",
           "Hyper-Growth Warning: Slowing QoQ sales at P/E > 30",
-          "No Dividend Yield",
-          "Fails Current Ratio (< 2.0)",
-          "Weak/No Economic Moat"
+          "Weak/No Economic Moat",
+          "Fails P/E Screen (P/E 598.0 > 15 & Price > Intrinsic)",
+          "No Dividend Yield"
         ]
       },
       {
@@ -2610,9 +2639,9 @@
         "moat_status": "Weak/None",
         "passed_retained_test": true,
         "alerts": [
-          "Fails P/E Screen (P/E 34.7 > 15 & Price > Intrinsic)",
+          "Weak/No Economic Moat",
           "Hyper-Growth Warning: Slowing QoQ sales at P/E > 30",
-          "Weak/No Economic Moat"
+          "Fails P/E Screen (P/E 34.7 > 15 & Price > Intrinsic)"
         ]
       },
       {
@@ -2636,11 +2665,11 @@
         "moat_status": "Weak/None",
         "passed_retained_test": true,
         "alerts": [
-          "Fails P/E Screen (P/E 80.5 > 15 & Price > Intrinsic)",
-          "Hyper-Growth Warning: Slowing QoQ sales at P/E > 30",
-          "No Dividend Yield",
           "Fails Current Ratio (< 2.0)",
-          "Weak/No Economic Moat"
+          "Hyper-Growth Warning: Slowing QoQ sales at P/E > 30",
+          "Weak/No Economic Moat",
+          "No Dividend Yield",
+          "Fails P/E Screen (P/E 80.5 > 15 & Price > Intrinsic)"
         ]
       },
       {
@@ -2652,8 +2681,8 @@
         "moat_status": "Strong (Wide Moat)",
         "passed_retained_test": true,
         "alerts": [
-          "No Dividend Yield",
-          "Fails Current Ratio (< 2.0)"
+          "Fails Current Ratio (< 2.0)",
+          "No Dividend Yield"
         ]
       },
       {
@@ -2701,8 +2730,8 @@
         "moat_status": "Strong (Wide Moat)",
         "passed_retained_test": true,
         "alerts": [
-          "Fails Debt Limit (Debt > Net Assets)",
           "Fails Current Ratio (< 2.0)",
+          "Fails Debt Limit (Debt > Net Assets)",
           "Fails P/E Screen (P/E 49.0 > 15 & Price > Intrinsic)"
         ]
       },
@@ -2728,8 +2757,8 @@
         "moat_status": "Strong (Wide Moat)",
         "passed_retained_test": true,
         "alerts": [
-          "Hyper-Growth Warning: Slowing QoQ sales at P/E > 30",
-          "Fails P/E Screen (P/E 117.0 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 117.0 > 15 & Price > Intrinsic)",
+          "Hyper-Growth Warning: Slowing QoQ sales at P/E > 30"
         ]
       },
       {
@@ -2751,22 +2780,24 @@
         "moat_status": "Weak/None",
         "passed_retained_test": true,
         "alerts": [
-          "Fails Debt Limit (Debt > Net Assets)",
           "Fails Current Ratio (< 2.0)",
-          "Weak/No Economic Moat",
-          "Fails P/E Screen (P/E 70.9 > 15 & Price > Intrinsic)"
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Fails P/E Screen (P/E 70.9 > 15 & Price > Intrinsic)",
+          "Weak/No Economic Moat"
         ]
       },
       {
-        "ticker": "ITC",
-        "name": "ITC Ltd",
-        "price": "285.10",
-        "owner_earnings": 18506.9,
+        "ticker": "METROBRAND",
+        "name": "Metro Brands Ltd",
+        "price": "1000.50",
+        "owner_earnings": 443.0,
         "retained_ratio": 2.86,
         "moat_status": "Strong (Wide Moat)",
         "passed_retained_test": true,
         "alerts": [
-          "Fails Current Ratio (< 2.0)"
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Hyper-Growth Warning: Slowing QoQ sales at P/E > 30",
+          "Fails P/E Screen (P/E 66.3 > 15 & Price > Intrinsic)"
         ]
       },
       {
@@ -2779,19 +2810,6 @@
         "passed_retained_test": true,
         "alerts": [
           "Fails P/E Screen (P/E 53.6 > 15 & Price > Intrinsic)"
-        ]
-      },
-      {
-        "ticker": "PAGEIND",
-        "name": "Page Industries",
-        "price": "38625.00",
-        "owner_earnings": 0.0,
-        "retained_ratio": 1.2,
-        "moat_status": "Weak/None",
-        "passed_retained_test": true,
-        "alerts": [
-          "No Dividend Yield",
-          "Weak/No Economic Moat"
         ]
       },
       {
@@ -2828,8 +2846,8 @@
         "moat_status": "Weak/None",
         "passed_retained_test": true,
         "alerts": [
-          "Fails Debt Limit (Debt > Net Assets)",
           "Fails Current Ratio (< 2.0)",
+          "Fails Debt Limit (Debt > Net Assets)",
           "Weak/No Economic Moat"
         ]
       },
@@ -2842,9 +2860,9 @@
         "moat_status": "Weak/None",
         "passed_retained_test": true,
         "alerts": [
+          "Fails Current Ratio (< 2.0)",
           "Fails Debt Limit (Debt > Net Assets)",
           "Fails P/E Screen (P/E 61.0 > 15 & Price > Intrinsic)",
-          "Fails Current Ratio (< 2.0)",
           "Weak/No Economic Moat"
         ]
       },
@@ -2857,10 +2875,10 @@
         "moat_status": "Weak/None",
         "passed_retained_test": true,
         "alerts": [
+          "Weak/No Economic Moat",
           "Fails Debt Limit (Debt > Net Assets)",
-          "No Dividend Yield",
           "Fails P/E Screen (P/E 49.4 > 15 & Price > Intrinsic)",
-          "Weak/No Economic Moat"
+          "No Dividend Yield"
         ]
       },
       {
@@ -2872,8 +2890,8 @@
         "moat_status": "Weak/None",
         "passed_retained_test": true,
         "alerts": [
-          "Fails Debt Limit (Debt > Net Assets)",
           "Fails Current Ratio (< 2.0)",
+          "Fails Debt Limit (Debt > Net Assets)",
           "Weak/No Economic Moat"
         ]
       },
@@ -2886,8 +2904,8 @@
         "moat_status": "Weak/None",
         "passed_retained_test": true,
         "alerts": [
-          "Fails P/E Screen (P/E 27.6 > 15 & Price > Intrinsic)",
-          "Weak/No Economic Moat"
+          "Weak/No Economic Moat",
+          "Fails P/E Screen (P/E 27.6 > 15 & Price > Intrinsic)"
         ]
       },
       {
