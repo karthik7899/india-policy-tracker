@@ -59,7 +59,16 @@ def build_html_email(brief_data, watchlist):
     """
 
     for sector, news_items in brief_data.items():
-        if sector in ("emerging_players", "emerging_competitors", "corporate_agreements", "product_launches", "sebi_filings", "institutional_activity", "margin_of_safety", "buffett_valuation"):
+        if sector in (
+            "emerging_players",
+            "emerging_competitors",
+            "corporate_agreements",
+            "product_launches",
+            "sebi_filings",
+            "institutional_activity",
+            "margin_of_safety",
+            "buffett_valuation",
+        ):
             continue
         if sector not in SECTOR_METADATA:
             continue
@@ -70,7 +79,15 @@ def build_html_email(brief_data, watchlist):
         news_html = ""
         if news_items:
             for item in news_items:
-                badge_class = "badge-positive" if item["impact"] == "Positive" else ("badge-negative" if item["impact"] == "Negative" else "badge-neutral")
+                badge_class = (
+                    "badge-positive"
+                    if item["impact"] == "Positive"
+                    else (
+                        "badge-negative"
+                        if item["impact"] == "Negative"
+                        else "badge-neutral"
+                    )
+                )
                 news_html += f"""
                 <div class="news-item">
                     <a href="{item['link']}" class="news-title" target="_blank">{item['title']}</a>
@@ -109,7 +126,7 @@ def build_html_email(brief_data, watchlist):
                 else:
                     earnings_badge = f"<span style='margin-left: 4px; font-size: 8px; background-color: #1e1b4b; color: #a78bfa; padding: 2px 5px; border-radius: 3px; display: inline-block;'>EPS {earnings_val}</span>"
 
-            potential_str = s.get('growth_pct')
+            potential_str = s.get("growth_pct")
             potential_color = "#cbd5e1"
             if potential_str:
                 if potential_str.startswith("-"):
@@ -119,12 +136,16 @@ def build_html_email(brief_data, watchlist):
             else:
                 potential_str = "—"
 
-            target_val = s.get('target')
+            target_val = s.get("target")
             target_str = f"₹{target_val}" if target_val else "—"
 
             # Rating badge with analyst count
             analyst_str = f" ({analyst_count})" if analyst_count else ""
-            rating_badge = f"<span class='badge badge-neutral' style='font-size: 8px; margin-left: 6px; background-color: #1e293b; color: #60a5fa;'>{rating_text}{analyst_str}</span>" if rating_text != "N/A" else ""
+            rating_badge = (
+                f"<span class='badge badge-neutral' style='font-size: 8px; margin-left: 6px; background-color: #1e293b; color: #60a5fa;'>{rating_text}{analyst_str}</span>"
+                if rating_text != "N/A"
+                else ""
+            )
 
             stock_rows += f"""
             <tr>
@@ -143,14 +164,19 @@ def build_html_email(brief_data, watchlist):
 
         # Format emerging players HTML (from dynamic scanner)
         emerging_html = ""
-        if "emerging_players" in brief_data and sector in brief_data["emerging_players"]:
+        if (
+            "emerging_players" in brief_data
+            and sector in brief_data["emerging_players"]
+        ):
             players = brief_data["emerging_players"][sector]
             if players:
                 players_list = []
                 for p in players:
                     if isinstance(p, dict):
-                        ticker_str = f" ({p['ticker']})" if p.get('ticker') else ""
-                        players_list.append(f"<strong>{p['name']}</strong>{ticker_str} [{p.get('status', 'Scanned')}]")
+                        ticker_str = f" ({p['ticker']})" if p.get("ticker") else ""
+                        players_list.append(
+                            f"<strong>{p['name']}</strong>{ticker_str} [{p.get('status', 'Scanned')}]"
+                        )
                     else:
                         players_list.append(f"<strong>{p}</strong>")
 
@@ -196,7 +222,12 @@ def build_html_email(brief_data, watchlist):
     agreements_html = ""
     agreements = brief_data.get("corporate_agreements", [])
     if agreements:
-        items = "".join([f"<li><strong>{a['source']}</strong>: {a['title']}</li>" for a in agreements[:5]])
+        items = "".join(
+            [
+                f"<li><strong>{a['source']}</strong>: {a['title']}</li>"
+                for a in agreements[:5]
+            ]
+        )
         agreements_html = f"""
         <div class="section-card">
             <h3 style="color: #60a5fa; margin-bottom: 10px; font-size: 16px;">🤝 Corporate Agreements & Partnerships</h3>
@@ -207,7 +238,12 @@ def build_html_email(brief_data, watchlist):
     launches_html = ""
     launches = brief_data.get("product_launches", [])
     if launches:
-        items = "".join([f"<li><strong>{l['source']}</strong>: {l['title']}</li>" for l in launches[:5]])
+        items = "".join(
+            [
+                f"<li><strong>{l['source']}</strong>: {l['title']}</li>"
+                for l in launches[:5]
+            ]
+        )
         launches_html = f"""
         <div class="section-card">
             <h3 style="color: #34d399; margin-bottom: 10px; font-size: 16px;">🚀 Product Launches & Innovations</h3>
@@ -221,8 +257,18 @@ def build_html_email(brief_data, watchlist):
     sebi_filings = brief_data.get("sebi_filings", [])
 
     if inst_activity or sebi_filings:
-        inst_items = "".join([f"<li><strong>{i['source']}</strong>: {i['headline']}</li>" for i in inst_activity[:4]])
-        sebi_items = "".join([f"<li><strong>{s['theme']}</strong>: {s['fund_name']} <span class='badge badge-neutral' style='font-size: 8px;'>SID Filed</span></li>" for s in sebi_filings[:4]])
+        inst_items = "".join(
+            [
+                f"<li><strong>{i['source']}</strong>: {i['headline']}</li>"
+                for i in inst_activity[:4]
+            ]
+        )
+        sebi_items = "".join(
+            [
+                f"<li><strong>{s['theme']}</strong>: {s['fund_name']} <span class='badge badge-neutral' style='font-size: 8px;'>SID Filed</span></li>"
+                for s in sebi_filings[:4]
+            ]
+        )
         inst_html = f"""
         <div class="section-card">
             <h3 style="color: #a78bfa; margin-bottom: 10px; font-size: 16px;">🏛️ Institutional Capital & Fund Flow Tracker</h3>
@@ -238,16 +284,25 @@ def build_html_email(brief_data, watchlist):
 
     if mos or buffett:
         # Margin of safety items (Graham value screen)
-        passed_mos = [m for m in mos if m['is_defensive_pass'] or m['is_bargain']]
+        passed_mos = [m for m in mos if m["is_defensive_pass"] or m["is_bargain"]]
         mos_items = ""
         for m in passed_mos[:5]:
             screens = []
-            if m['is_defensive_pass']: screens.append("Defensive")
-            if m['is_bargain']: screens.append("Bargain (NCAV)")
+            if m["is_defensive_pass"]:
+                screens.append("Defensive")
+            if m["is_bargain"]:
+                screens.append("Bargain (NCAV)")
             screens_str = " & ".join(screens)
             mos_items += f"<tr><td class='stock-ticker'>{m['ticker']}</td><td>{m['name']}</td><td>₹{m['price']}</td><td style='color: #34d399;'>{screens_str}</td></tr>"
 
-        buffett_items = "".join([f"<tr><td class='stock-ticker'>{b['ticker']}</td><td>{b['moat_status']}</td><td>₹{b['owner_earnings']} Cr</td><td style='color: " + ("#34d399" if b['passed_retained_test'] else "#f87171") + ";'>{'Pass' if b['passed_retained_test'] else 'Fail'}</td></tr>" for b in buffett[:5]])
+        buffett_items = "".join(
+            [
+                f"<tr><td class='stock-ticker'>{b['ticker']}</td><td>{b['moat_status']}</td><td>₹{b['owner_earnings']} Cr</td><td style='color: "
+                + ("#34d399" if b["passed_retained_test"] else "#f87171")
+                + ";'>{'Pass' if b['passed_retained_test'] else 'Fail'}</td></tr>"
+                for b in buffett[:5]
+            ]
+        )
 
         # Valuation Warning / Caution List
         caution_list = []
@@ -258,17 +313,19 @@ def build_html_email(brief_data, watchlist):
                     continue
                 alerts = sc.get("valuation_alerts", [])
                 if alerts:
-                    caution_list.append({
-                        "ticker": s["ticker"],
-                        "name": s["name"],
-                        "price": s["price"],
-                        "alerts": list(set(alerts))
-                    })
+                    caution_list.append(
+                        {
+                            "ticker": s["ticker"],
+                            "name": s["name"],
+                            "price": s["price"],
+                            "alerts": list(set(alerts)),
+                        }
+                    )
 
         caution_items = ""
         if caution_list:
             for c in caution_list[:8]:
-                alerts_str = ", ".join(c['alerts'])
+                alerts_str = ", ".join(c["alerts"])
                 caution_items += f"<tr><td class='stock-ticker'>{c['ticker']}</td><td>{c['name']}</td><td>₹{c['price']}</td><td style='color: #f87171; font-size: 11px;'>{alerts_str}</td></tr>"
         else:
             caution_items = "<tr><td colspan='4' style='text-align: center; color: #cbd5e1;'>All watchlist stocks passed core filters.</td></tr>"

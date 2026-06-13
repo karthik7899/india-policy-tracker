@@ -61,8 +61,8 @@ async def run_pipeline():
         sebi_task = check_sebi_sid_filings_async(session)
         inst_task = fetch_institutional_activity_async(session, watchlist)
 
-        pli_competitors, (agreements, launches), sebi_filings, inst_activity = await asyncio.gather(
-            pli_task, adv_rss_task, sebi_task, inst_task
+        pli_competitors, (agreements, launches), sebi_filings, inst_activity = (
+            await asyncio.gather(pli_task, adv_rss_task, sebi_task, inst_task)
         )
 
         data["emerging_competitors"] = pli_competitors
@@ -89,4 +89,3 @@ async def run_pipeline():
 
 if __name__ == "__main__":
     asyncio.run(run_pipeline())
-
