@@ -162,29 +162,32 @@ async def fetch_all_feeds_async():
 
     return today_brief
 
+
 async def scrape_pib_pli_approvals_async(session, watchlist):
     log.info("Scraping PIB for PLI approval announcements (Async)...")
     query = 'site:pib.gov.in "PLI" AND ("provisionally selected" OR "approved" OR "incentive scheme" OR "applications approved")'
     encoded_query = urllib.parse.quote(f"{query} when:30d")
     rss_url = f"https://news.google.com/rss/search?q={encoded_query}&hl=en-IN&gl=IN&ceid=IN:en"
-    
+
     emerging_pli_competitors = []
     seen = set()
-    
+
     try:
         async with session.get(rss_url, timeout=15) as response:
             if response.status == 200:
                 xml_data = await response.text()
                 feed = feedparser.parse(xml_data)
-                corp_pattern = re.compile(r'\b([A-Z][a-zA-Z0-9]+(?:\s+[A-Z][a-zA-Z0-9]+)*)\s+(?:Ltd|Limited|Corp|Corporation|Enterprises|Solutions|Electronics|Industries|Apparels|Defence|Semiconductors)\b')
-                
+                corp_pattern = re.compile(
+                    r"\b([A-Z][a-zA-Z0-9]+(?:\s+[A-Z][a-zA-Z0-9]+)*)\s+(?:Ltd|Limited|Corp|Corporation|Enterprises|Solutions|Electronics|Industries|Apparels|Defence|Semiconductors)\b"
+                )
+
                 # General watchlist IDs to filter out
                 existing_names = set()
                 for sector, stocks in watchlist.items():
                     for s in stocks:
                         existing_names.add(s["name"].lower())
                         existing_names.add(s["ticker"].lower())
-                        
+
                 for entry in feed.entries[:10]:
                     title = entry.get("title", "")
                     for m in corp_pattern.finditer(title):
@@ -193,42 +196,50 @@ async def scrape_pib_pli_approvals_async(session, watchlist):
                         if name_key not in existing_names and name_key not in seen:
                             seen.add(name_key)
                             from metrics import resolve_ticker_from_name
+
                             ticker, _ = resolve_ticker_from_name(company_name)
                             status = "Unlisted" if not ticker else "Listed Peer"
-                            emerging_pli_competitors.append({
-                                "name": company_name,
-                                "ticker": ticker,
-                                "status": status,
-                                "announcement": title.split(" - ")[0],
-                                "link": entry.get("link", "https://pib.gov.in")
-                            })
-                            log.info(f"PIB PLI approval competitor detected: {company_name} ({status})")
+                            emerging_pli_competitors.append(
+                                {
+                                    "name": company_name,
+                                    "ticker": ticker,
+                                    "status": status,
+                                    "announcement": title.split(" - ")[0],
+                                    "link": entry.get("link", "https://pib.gov.in"),
+                                }
+                            )
+                            log.info(
+                                f"PIB PLI approval competitor detected: {company_name} ({status})"
+                            )
     except Exception as e:
         log.error(f"Error scraping PIB PLI approvals: {e}")
-        
+
     return emerging_pli_competitors
 
+
 async def fetch_advanced_rss_feeds_async(session, watchlist):
-    log.info("Fetching advanced RSS feeds for agreements and product launches (Async)...")
+    log.info(
+        "Fetching advanced RSS feeds for agreements and product launches (Async)..."
+    )
     agreements = []
     launches = []
-    
+
     all_tickers = []
     for sector, stocks in watchlist.items():
         for s in stocks:
             all_tickers.append(s["ticker"])
-            
+
     # Combine queries in chunks of 4 to be polite to RSS service
-    ticker_chunks = [all_tickers[i:i+4] for i in range(0, len(all_tickers), 4)]
-    
+    ticker_chunks = [all_tickers[i : i + 4] for i in range(0, len(all_tickers), 4)]
+
     async def process_chunk(chunk):
         ticker_query = " OR ".join([f'"{t}"' for t in chunk])
-        
+
         # Agreements
-        agree_q = f"({ticker_query}) AND (\"joint venture\" OR \"strategic partnership\" OR \"market share\" OR \"agreement\" OR \"MoU\")"
+        agree_q = f'({ticker_query}) AND ("joint venture" OR "strategic partnership" OR "market share" OR "agreement" OR "MoU")'
         encoded_agree = urllib.parse.quote(f"{agree_q} when:7d")
         rss_agree_url = f"https://news.google.com/rss/search?q={encoded_agree}&hl=en-IN&gl=IN&ceid=IN:en"
-        
+
         try:
             async with session.get(rss_agree_url, timeout=15) as resp:
                 if resp.status == 200:
@@ -236,20 +247,22 @@ async def fetch_advanced_rss_feeds_async(session, watchlist):
                     feed = feedparser.parse(xml_data)
                     for entry in feed.entries[:3]:
                         title = entry.get("title", "")
-                        agreements.append({
-                            "title": title.split(" - ")[0],
-                            "link": entry.get("link", ""),
-                            "date": entry.get("published", ""),
-                            "source": entry.get("source", {}).get("title", "News")
-                        })
+                        agreements.append(
+                            {
+                                "title": title.split(" - ")[0],
+                                "link": entry.get("link", ""),
+                                "date": entry.get("published", ""),
+                                "source": entry.get("source", {}).get("title", "News"),
+                            }
+                        )
         except Exception as e:
             log.error(f"Error fetching agreements chunk: {e}")
-            
+
         # Launches
-        launch_q = f"({ticker_query}) AND (\"product launch\" OR \"unveils\" OR \"commercial production\" OR \"new factory\")"
+        launch_q = f'({ticker_query}) AND ("product launch" OR "unveils" OR "commercial production" OR "new factory")'
         encoded_launch = urllib.parse.quote(f"{launch_q} when:7d")
         rss_launch_url = f"https://news.google.com/rss/search?q={encoded_launch}&hl=en-IN&gl=IN&ceid=IN:en"
-        
+
         try:
             async with session.get(rss_launch_url, timeout=15) as resp:
                 if resp.status == 200:
@@ -257,28 +270,31 @@ async def fetch_advanced_rss_feeds_async(session, watchlist):
                     feed = feedparser.parse(xml_data)
                     for entry in feed.entries[:3]:
                         title = entry.get("title", "")
-                        launches.append({
-                            "title": title.split(" - ")[0],
-                            "link": entry.get("link", ""),
-                            "date": entry.get("published", ""),
-                            "source": entry.get("source", {}).get("title", "News")
-                        })
+                        launches.append(
+                            {
+                                "title": title.split(" - ")[0],
+                                "link": entry.get("link", ""),
+                                "date": entry.get("published", ""),
+                                "source": entry.get("source", {}).get("title", "News"),
+                            }
+                        )
         except Exception as e:
             log.error(f"Error fetching launches chunk: {e}")
 
     await asyncio.gather(*[process_chunk(chunk) for chunk in ticker_chunks])
-            
+
     unique_agreements = {a["title"]: a for a in agreements}.values()
-    unique_launches = {l["title"]: l for l in launches}.values()
-    
+    unique_launches = {launch["title"]: launch for launch in launches}.values()
+
     return list(unique_agreements)[:10], list(unique_launches)[:10]
+
 
 async def check_sebi_sid_filings_async(session):
     log.info("Checking SEBI filings for thematic funds (Incoming Capital) (Async)...")
     query = 'site:sebi.gov.in "Scheme Information Document" AND ("manufacturing" OR "semiconductors" OR "defence" OR "logistics" OR "technology")'
     encoded_query = urllib.parse.quote(f"{query} when:30d")
     rss_url = f"https://news.google.com/rss/search?q={encoded_query}&hl=en-IN&gl=IN&ceid=IN:en"
-    
+
     filings = []
     try:
         async with session.get(rss_url, timeout=15) as response:
@@ -294,26 +310,31 @@ async def check_sebi_sid_filings_async(session):
                         theme = "Semiconductors & Tech"
                     elif "logistics" in title.lower():
                         theme = "Logistics & Infra"
-                        
-                    filings.append({
-                        "fund_name": title.split(" - ")[0].replace("SEBI | ", ""),
-                        "theme": theme,
-                        "status": "Incoming Institutional Capital",
-                        "date": entry.get("published", ""),
-                        "link": entry.get("link", "https://www.sebi.gov.in")
-                    })
+
+                    filings.append(
+                        {
+                            "fund_name": title.split(" - ")[0].replace("SEBI | ", ""),
+                            "theme": theme,
+                            "status": "Incoming Institutional Capital",
+                            "date": entry.get("published", ""),
+                            "link": entry.get("link", "https://www.sebi.gov.in"),
+                        }
+                    )
                     log.info(f"SEBI MF SID filing detected: {title} [{theme}]")
     except Exception as e:
         log.error(f"Error checking SEBI filings: {e}")
-        
+
     return filings
 
+
 async def fetch_institutional_activity_async(session, watchlist):
-    log.info("Fetching institutional activity block deals and mutual fund buying trends (Async)...")
+    log.info(
+        "Fetching institutional activity block deals and mutual fund buying trends (Async)..."
+    )
     query = '"block deal" OR "bulk deal" OR "mutual fund buys" OR "FII buying" India'
     encoded_query = urllib.parse.quote(f"{query} when:7d")
     rss_url = f"https://news.google.com/rss/search?q={encoded_query}&hl=en-IN&gl=IN&ceid=IN:en"
-    
+
     activity = []
     try:
         async with session.get(rss_url, timeout=15) as response:
@@ -322,56 +343,91 @@ async def fetch_institutional_activity_async(session, watchlist):
                 feed = feedparser.parse(xml_data)
                 for entry in feed.entries[:8]:  # Get top 8 entries
                     headline = entry.get("title", "").split(" - ")[0].strip()
-                    
+
                     # Parse block deal headline
                     buyer = "Institutional Investor"
                     action = "Buy"
                     company = "Listed Company"
                     details = "Block Deal"
-                    
-                    if any(w in headline.lower() for w in ["sells", "dumped", "exits", "offloads", "reduces stake"]):
+
+                    if any(
+                        w in headline.lower()
+                        for w in [
+                            "sells",
+                            "dumped",
+                            "exits",
+                            "offloads",
+                            "reduces stake",
+                        ]
+                    ):
                         action = "Sell"
-                    elif any(w in headline.lower() for w in ["buys", "acquires", "purchases", "picks up", "increases stake"]):
+                    elif any(
+                        w in headline.lower()
+                        for w in [
+                            "buys",
+                            "acquires",
+                            "purchases",
+                            "picks up",
+                            "increases stake",
+                        ]
+                    ):
                         action = "Buy"
-                        
-                    buyer_match = re.search(r'^([A-Z0-9][A-Za-z0-9\s\.\&]+?)\s+(?:buys|acquires|sells|purchases|picks up|offloads|exits|increases|decreases|shares|block|bulk|mutual)', headline)
+
+                    buyer_match = re.search(
+                        r"^([A-Z0-9][A-Za-z0-9\s\.\&]+?)\s+(?:buys|acquires|sells|purchases|picks up|offloads|exits|increases|decreases|shares|block|bulk|mutual)",
+                        headline,
+                    )
                     if buyer_match:
                         buyer = buyer_match.group(1).strip()
-                        
-                    details_match = re.search(r'(\d+(?:\.\d+)?%\s*stake|\d+\s*(?:lakh|million|crore)?\s*shares|worth\s*(?:Rs\s*)?\d+\s*(?:cr|crore|crores)?)', headline, re.IGNORECASE)
+
+                    details_match = re.search(
+                        r"(\d+(?:\.\d+)?%\s*stake|\d+\s*(?:lakh|million|crore)?\s*shares|worth\s*(?:Rs\s*)?\d+\s*(?:cr|crore|crores)?)",
+                        headline,
+                        re.IGNORECASE,
+                    )
                     if details_match:
                         details = details_match.group(1).strip()
-                        
-                    company_match = re.search(r'(?:in|of|shares of|stake in|shares in)\s+([A-Z][A-Za-z0-9\s\&]+?)(?:\s+via|\s+worth|\s+for|\s+at|\s+through|\s+block|\s+bulk|$)', headline)
+
+                    company_match = re.search(
+                        r"(?:in|of|shares of|stake in|shares in)\s+([A-Z][A-Za-z0-9\s\&]+?)(?:\s+via|\s+worth|\s+for|\s+at|\s+through|\s+block|\s+bulk|$)",
+                        headline,
+                    )
                     if company_match:
                         company = company_match.group(1).strip()
-                        
+
                     # Match against watchlist stocks
                     matched_company = None
                     matched_ticker = None
                     for sector, stocks in watchlist.items():
                         for s in stocks:
-                            if s["ticker"].lower() in headline.lower() or s["name"].lower() in headline.lower():
+                            if (
+                                s["ticker"].lower() in headline.lower()
+                                or s["name"].lower() in headline.lower()
+                            ):
                                 matched_company = s["name"]
                                 matched_ticker = s["ticker"]
                                 break
                         if matched_company:
                             break
-                            
+
                     if matched_company:
                         company = f"{matched_company} ({matched_ticker})"
-                        
-                    activity.append({
-                        "headline": headline,
-                        "link": entry.get("link", ""),
-                        "source": entry.get("source", {}).get("title", "Finance Media"),
-                        "date": entry.get("published", ""),
-                        "buyer": buyer,
-                        "action": action,
-                        "company": company,
-                        "details": details
-                    })
+
+                    activity.append(
+                        {
+                            "headline": headline,
+                            "link": entry.get("link", ""),
+                            "source": entry.get("source", {}).get(
+                                "title", "Finance Media"
+                            ),
+                            "date": entry.get("published", ""),
+                            "buyer": buyer,
+                            "action": action,
+                            "company": company,
+                            "details": details,
+                        }
+                    )
     except Exception as e:
         log.error(f"Error fetching institutional activity: {e}")
-        
+
     return activity

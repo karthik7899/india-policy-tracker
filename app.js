@@ -165,27 +165,27 @@ function setupTabToggles() {
                 pageSubtitle.textContent = "Real-time mapping of government policies to market indicators.";
                 if (appData) renderCharts(appData);
             } else if (targetTab === "sectors") {
-                pageTitle.textContent = "Sector Detailed Intelligence";
+                pageTitle.textContent = "Government Policy Logs";
                 pageSubtitle.textContent = "Deep dive sector analysis, announcements history, and watchlists.";
                 if (appData) initSectorsTab();
             } else if (targetTab === "agreements") {
-                pageTitle.textContent = "Corporate Agreements & Partnerships";
+                pageTitle.textContent = "Corporate News & Agreements";
                 pageSubtitle.textContent = "Scanned news alerts regarding joint ventures, strategic partnerships, and MoUs.";
                 if (appData) renderAgreementsTable();
             } else if (targetTab === "launches") {
-                pageTitle.textContent = "Product Launches & Capacity Expansion";
+                pageTitle.textContent = "Product Launches";
                 pageSubtitle.textContent = "Real-time alerts on product launches, new manufacturing capacities, and rollouts.";
                 if (appData) renderLaunchesTable();
             } else if (targetTab === "institutional") {
-                pageTitle.textContent = "Institutional Capital Flow Tracker";
+                pageTitle.textContent = "Institutional Activity";
                 pageSubtitle.textContent = "Scheme Information Documents (SIDs) filed by mutual funds and institutional block deal news.";
                 if (appData) renderInstitutionalFlows();
             } else if (targetTab === "graham") {
-                pageTitle.textContent = "Benjamin Graham Valuation Screens";
+                pageTitle.textContent = "Margin of Safety (Deep Value)";
                 pageSubtitle.textContent = "Defensive investor criteria checks and growth intrinsic value calculations.";
                 if (appData) renderGrahamTable();
             } else if (targetTab === "buffett") {
-                pageTitle.textContent = "Warren Buffett Allocation & Moat Screens";
+                pageTitle.textContent = "Owner Earnings & Moats";
                 pageSubtitle.textContent = "Owner earnings, economic moats, and retained value creation metrics.";
                 if (appData) renderBuffettTable();
             } else if (targetTab === "caution") {

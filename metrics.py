@@ -123,7 +123,7 @@ async def fetch_screener_async(session, ticker, sector=None, price=0.0):
             "pe_ratio": "N/A",
             "roce": "N/A",
             "roe": "N/A",
-            "valuation_alerts": []
+            "valuation_alerts": [],
         }
 
     headers = {
@@ -173,7 +173,11 @@ async def fetch_screener_async(session, ticker, sector=None, price=0.0):
             async with session.get(url_std, headers=headers, timeout=10) as r_std:
                 if r_std.status == 200:
                     html_std = await r_std.text()
-                    ind_match = re.search(r'Industry PE\s*</span>.*?<span class="number">\s*([\d,\.]+)\s*</span>', html_std, re.DOTALL)
+                    ind_match = re.search(
+                        r'Industry PE\s*</span>.*?<span class="number">\s*([\d,\.]+)\s*</span>',
+                        html_std,
+                        re.DOTALL,
+                    )
                     if ind_match:
                         sc["industry_pe"] = ind_match.group(1).replace(",", "")
         except Exception:
@@ -225,7 +229,9 @@ async def fetch_screener_async(session, ticker, sector=None, price=0.0):
                     qoq_sales_growth = ((s1 - s2) / s2) * 100
             except Exception:
                 pass
-        sc["qoq_sales_growth"] = round(qoq_sales_growth, 1) if qoq_sales_growth is not None else None
+        sc["qoq_sales_growth"] = (
+            round(qoq_sales_growth, 1) if qoq_sales_growth is not None else None
+        )
 
         profit_vals = extract_row_quarter_values("Net Profit")
         qoq_profit_growth = None
@@ -237,7 +243,9 @@ async def fetch_screener_async(session, ticker, sector=None, price=0.0):
                     qoq_profit_growth = ((p1 - p2) / p2) * 100
             except Exception:
                 pass
-        sc["qoq_profit_growth"] = round(qoq_profit_growth, 1) if qoq_profit_growth is not None else None
+        sc["qoq_profit_growth"] = (
+            round(qoq_profit_growth, 1) if qoq_profit_growth is not None else None
+        )
 
         opm_vals = extract_row_quarter_values("OPM")
         opm_expansion = None
@@ -248,7 +256,9 @@ async def fetch_screener_async(session, ticker, sector=None, price=0.0):
                 opm_expansion = o1 - o2
             except Exception:
                 pass
-        sc["opm_expansion"] = round(opm_expansion, 1) if opm_expansion is not None else None
+        sc["opm_expansion"] = (
+            round(opm_expansion, 1) if opm_expansion is not None else None
+        )
 
     # Shareholding
     sh_match = re.search(r'id="shareholding"(.*?)</section>', html, re.DOTALL)
@@ -258,7 +268,9 @@ async def fetch_screener_async(session, ticker, sector=None, price=0.0):
         def extract_holding_change(label):
             row_match = re.search(rf"{label}.*?</tr>", sh, re.DOTALL)
             if row_match:
-                vals = re.findall(r"<td[^>]*>\s*([\d\.\-%]+)\s*</td>", row_match.group(0))
+                vals = re.findall(
+                    r"<td[^>]*>\s*([\d\.\-%]+)\s*</td>", row_match.group(0)
+                )
                 numeric_vals = []
                 for v in vals:
                     try:
@@ -304,7 +316,7 @@ async def fetch_screener_async(session, ticker, sector=None, price=0.0):
 
     borrowings = float(extract_bs_last("Borrowings") or 0)
     other_liabilities = float(extract_bs_last("Other Liabilities") or 0)
-    fixed_assets = float(extract_bs_last("Fixed Assets") or 0)
+    # fixed_assets = float(extract_bs_last("Fixed Assets") or 0)
     other_assets = float(extract_bs_last("Other Assets") or 0)
 
     # R&D intensity mapping
@@ -379,7 +391,9 @@ async def fetch_screener_async(session, ticker, sector=None, price=0.0):
     if price > 0:
         mcap = float(sc.get("market_cap") or 0)
         shares_outstanding = mcap / price
-    ncav_per_share = net_current_assets / shares_outstanding if shares_outstanding > 0 else 0
+    ncav_per_share = (
+        net_current_assets / shares_outstanding if shares_outstanding > 0 else 0
+    )
     is_bargain = price < ncav_per_share
     sc["ncav_per_share"] = round(ncav_per_share, 1)
     sc["is_bargain"] = is_bargain
@@ -405,13 +419,18 @@ async def fetch_screener_async(session, ticker, sector=None, price=0.0):
     roe = float(sc.get("roe") or 0)
     de_ratio = borrowings / (float(sc.get("market_cap") or 1) * 0.5)
     moat_score = 0
-    if roce > 15: moat_score += 1
-    if roe > 15: moat_score += 1
-    if de_ratio < 0.5: moat_score += 1
+    if roce > 15:
+        moat_score += 1
+    if roe > 15:
+        moat_score += 1
+    if de_ratio < 0.5:
+        moat_score += 1
 
     moat_status = "Weak/None"
-    if moat_score == 3: moat_status = "Strong (Wide Moat)"
-    elif moat_score == 2: moat_status = "Medium (Narrow Moat)"
+    if moat_score == 3:
+        moat_status = "Strong (Wide Moat)"
+    elif moat_score == 2:
+        moat_status = "Medium (Narrow Moat)"
     sc["moat_status"] = moat_status
     if moat_status == "Weak/None":
         val_alerts.append("Weak/No Economic Moat")
@@ -428,7 +447,9 @@ async def fetch_screener_async(session, ticker, sector=None, price=0.0):
                 g2 = (s2 - s3) / s3
                 if g1 < g2:
                     hyper_growth_warning = True
-                    val_alerts.append("Hyper-Growth Warning: Slowing QoQ sales at P/E > 30")
+                    val_alerts.append(
+                        "Hyper-Growth Warning: Slowing QoQ sales at P/E > 30"
+                    )
             except Exception:
                 pass
     sc["hyper_growth_warning"] = hyper_growth_warning
@@ -561,7 +582,7 @@ def auto_curate_watchlist(brief_data, watchlist):
 
     emerging_sectors = detect_emerging_players(brief_data, watchlist)
     rotations_log = []
-    
+
     # We will construct a structured emerging_players dictionary
     structured_emerging = {s: [] for s in SECTOR_METADATA}
 
@@ -574,12 +595,14 @@ def auto_curate_watchlist(brief_data, watchlist):
             ticker, full_name = resolve_ticker_from_name(name)
             if not ticker:
                 log.info(f"Could not resolve ticker for: {name}. Skipping.")
-                structured_emerging[sector].append({
-                    "name": name,
-                    "ticker": None,
-                    "status": "Unresolved",
-                    "reason": "Could not map company name to a BSE/NSE ticker."
-                })
+                structured_emerging[sector].append(
+                    {
+                        "name": name,
+                        "ticker": None,
+                        "status": "Unresolved",
+                        "reason": "Could not map company name to a BSE/NSE ticker.",
+                    }
+                )
                 continue
 
             already_watchlisted = False
@@ -589,12 +612,14 @@ def auto_curate_watchlist(brief_data, watchlist):
                     break
             if already_watchlisted:
                 log.info(f"Ticker {ticker} is already in watchlist. Skipping.")
-                structured_emerging[sector].append({
-                    "name": full_name or name,
-                    "ticker": ticker,
-                    "status": "Watchlisted",
-                    "reason": f"Already present in the {sector} watchlist."
-                })
+                structured_emerging[sector].append(
+                    {
+                        "name": full_name or name,
+                        "ticker": ticker,
+                        "status": "Watchlisted",
+                        "reason": f"Already present in the {sector} watchlist.",
+                    }
+                )
                 continue
 
             yahoo_ticker = f"{ticker}.NS"
@@ -603,12 +628,14 @@ def auto_curate_watchlist(brief_data, watchlist):
                 hist = ticker_obj.history(period="1d")
                 if hist.empty:
                     log.info(f"No market data for {yahoo_ticker}. Skipping candidate.")
-                    structured_emerging[sector].append({
-                        "name": full_name or name,
-                        "ticker": ticker,
-                        "status": "Unresolved",
-                        "reason": f"BSE/NSE ticker resolved, but no market trading history found."
-                    })
+                    structured_emerging[sector].append(
+                        {
+                            "name": full_name or name,
+                            "ticker": ticker,
+                            "status": "Unresolved",
+                            "reason": "BSE/NSE ticker resolved, but no market trading history found.",
+                        }
+                    )
                     continue
 
                 live_price = float(hist["Close"].iloc[-1])
@@ -634,18 +661,27 @@ def auto_curate_watchlist(brief_data, watchlist):
                 candidate_qoq_growth = 0.0
                 try:
                     url = f"https://www.screener.in/company/{ticker}/consolidated/"
-                    r = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=10)
+                    r = requests.get(
+                        url, headers={"User-Agent": "Mozilla/5.0"}, timeout=10
+                    )
                     if r.status_code != 200:
                         url = f"https://www.screener.in/company/{ticker}/"
-                        r = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=10)
+                        r = requests.get(
+                            url, headers={"User-Agent": "Mozilla/5.0"}, timeout=10
+                        )
                     if r.status_code == 200:
                         html = r.text
-                        qs_match = re.search(r'id="quarters"(.*?)(?:</section>)', html, re.DOTALL)
+                        qs_match = re.search(
+                            r'id="quarters"(.*?)(?:</section>)', html, re.DOTALL
+                        )
                         if qs_match:
                             qs = qs_match.group(1)
                             row_match = re.search(r"Sales.*?</tr>", qs, re.DOTALL)
                             if row_match:
-                                vals = re.findall(r"<td[^>]*>\s*([\d,\.\-]+)\s*</td>", row_match.group(0))
+                                vals = re.findall(
+                                    r"<td[^>]*>\s*([\d,\.\-]+)\s*</td>",
+                                    row_match.group(0),
+                                )
                                 if len(vals) >= 2:
                                     s1 = float(vals[-1].replace(",", ""))
                                     s2 = float(vals[-2].replace(",", ""))
@@ -665,14 +701,26 @@ def auto_curate_watchlist(brief_data, watchlist):
                     is_eligible = False
 
                 if not is_eligible:
-                    log.info(f"Candidate {ticker} did not meet positive growth criteria. Skipping.")
-                    reason_str = "Negative target potential" if growth_pct_val <= 0 else (f"Failed growth criteria (YoY revenue {revenue_growth})" if rev_growth_raw is not None and rev_growth_raw < 0 else f"Failed QoQ growth threshold ({candidate_qoq_growth:.1f}% < 15%)")
-                    structured_emerging[sector].append({
-                        "name": full_name or name,
-                        "ticker": ticker,
-                        "status": "Growth Divergence",
-                        "reason": reason_str
-                    })
+                    log.info(
+                        f"Candidate {ticker} did not meet positive growth criteria. Skipping."
+                    )
+                    reason_str = (
+                        "Negative target potential"
+                        if growth_pct_val <= 0
+                        else (
+                            f"Failed growth criteria (YoY revenue {revenue_growth})"
+                            if rev_growth_raw is not None and rev_growth_raw < 0
+                            else f"Failed QoQ growth threshold ({candidate_qoq_growth:.1f}% < 15%)"
+                        )
+                    )
+                    structured_emerging[sector].append(
+                        {
+                            "name": full_name or name,
+                            "ticker": ticker,
+                            "status": "Growth Divergence",
+                            "reason": reason_str,
+                        }
+                    )
                     continue
 
                 related_headline = f"Policy tailwinds in the {sector} segment."
@@ -695,15 +743,20 @@ def auto_curate_watchlist(brief_data, watchlist):
                 current_watchlist = watchlist[sector]
                 if len(current_watchlist) < 5:
                     current_watchlist.append(candidate_stock)
-                    log.info(f"ADDED: {ticker} to {sector} (Space available: {len(current_watchlist)}/5)")
+                    log.info(
+                        f"ADDED: {ticker} to {sector} (Space available: {len(current_watchlist)}/5)"
+                    )
                     rotations_log.append(f"Added {full_name} ({ticker}) to {sector}")
-                    structured_emerging[sector].append({
-                        "name": full_name,
-                        "ticker": ticker,
-                        "status": "Watchlisted",
-                        "reason": "Added to watchlist (new high-growth pick)."
-                    })
+                    structured_emerging[sector].append(
+                        {
+                            "name": full_name,
+                            "ticker": ticker,
+                            "status": "Watchlisted",
+                            "reason": "Added to watchlist (new high-growth pick).",
+                        }
+                    )
                 else:
+
                     def get_potential(stock):
                         try:
                             return float(stock["growth_pct"].replace("%", ""))
@@ -727,33 +780,41 @@ def auto_curate_watchlist(brief_data, watchlist):
                         rotations_log.append(
                             f"Rotated {weakest_stock['name']} out for {full_name} in {sector}"
                         )
-                        structured_emerging[sector].append({
-                            "name": full_name,
-                            "ticker": ticker,
-                            "status": "Watchlisted",
-                            "reason": f"Rotated into watchlist replacing {weakest_stock['ticker']}."
-                        })
+                        structured_emerging[sector].append(
+                            {
+                                "name": full_name,
+                                "ticker": ticker,
+                                "status": "Watchlisted",
+                                "reason": f"Rotated into watchlist replacing {weakest_stock['ticker']}.",
+                            }
+                        )
                     else:
-                        log.info(f"Candidate {ticker} (Upside: {growth_pct_val:.1f}%) did not outperform the weakest watchlist pick {weakest_stock['ticker']} (Upside: {weakest_potential:.1f}%). Skipping rotation.")
-                        structured_emerging[sector].append({
-                            "name": full_name,
-                            "ticker": ticker,
-                            "status": "Pipeline",
-                            "reason": f"Pipeline candidate (Upside {growth_pct_val:.1f}% vs weakest watchlisted {weakest_potential:.1f}%)."
-                        })
+                        log.info(
+                            f"Candidate {ticker} (Upside: {growth_pct_val:.1f}%) did not outperform the weakest watchlist pick {weakest_stock['ticker']} (Upside: {weakest_potential:.1f}%). Skipping rotation."
+                        )
+                        structured_emerging[sector].append(
+                            {
+                                "name": full_name,
+                                "ticker": ticker,
+                                "status": "Pipeline",
+                                "reason": f"Pipeline candidate (Upside {growth_pct_val:.1f}% vs weakest watchlisted {weakest_potential:.1f}%).",
+                            }
+                        )
 
             except Exception as e:
                 log.error(f"Error checking financials for {yahoo_ticker}: {e}")
-                structured_emerging[sector].append({
-                    "name": name,
-                    "ticker": ticker,
-                    "status": "Unresolved",
-                    "reason": f"Error parsing Yahoo Finance info: {str(e)}"
-                })
+                structured_emerging[sector].append(
+                    {
+                        "name": name,
+                        "ticker": ticker,
+                        "status": "Unresolved",
+                        "reason": f"Error parsing Yahoo Finance info: {str(e)}",
+                    }
+                )
 
     if rotations_log:
         save_watchlist(watchlist)
-        
+
     return structured_emerging
 
 
@@ -772,39 +833,41 @@ def compile_valuation_and_institutional_data(brief_data, watchlist):
             alerts = sc.get("valuation_alerts", [])
             # Passed Graham Defensive if no critical screen failed
             passed_defensive = not any(
-                "fails current ratio" in x.lower() or
-                "fails debt limit" in x.lower() or
-                "fails p/e screen" in x.lower()
+                "fails current ratio" in x.lower()
+                or "fails debt limit" in x.lower()
+                or "fails p/e screen" in x.lower()
                 for x in alerts
             )
             is_bargain = sc.get("is_bargain", False)
 
             # Save passed ones or warnings
-            margin_of_safety.append({
-                "ticker": s["ticker"],
-                "name": s["name"],
-                "price": s["price"],
-                "pe_ratio": sc.get("pe_ratio"),
-                "current_ratio": sc.get("current_ratio"),
-                "graham_value": sc.get("graham_intrinsic_value"),
-                "is_defensive_pass": passed_defensive,
-                "is_bargain": is_bargain,
-                "alerts": list(set(alerts))
-            })
+            margin_of_safety.append(
+                {
+                    "ticker": s["ticker"],
+                    "name": s["name"],
+                    "price": s["price"],
+                    "pe_ratio": sc.get("pe_ratio"),
+                    "current_ratio": sc.get("current_ratio"),
+                    "graham_value": sc.get("graham_intrinsic_value"),
+                    "is_defensive_pass": passed_defensive,
+                    "is_bargain": is_bargain,
+                    "alerts": list(set(alerts)),
+                }
+            )
 
             # Buffett
-            buffett_valuation.append({
-                "ticker": s["ticker"],
-                "name": s["name"],
-                "price": s["price"],
-                "owner_earnings": sc.get("owner_earnings"),
-                "retained_ratio": sc.get("retained_earnings_ratio"),
-                "moat_status": sc.get("moat_status"),
-                "passed_retained_test": sc.get("retained_earnings_ratio", 0) >= 1.0,
-                "alerts": list(set(alerts))
-            })
+            buffett_valuation.append(
+                {
+                    "ticker": s["ticker"],
+                    "name": s["name"],
+                    "price": s["price"],
+                    "owner_earnings": sc.get("owner_earnings"),
+                    "retained_ratio": sc.get("retained_earnings_ratio"),
+                    "moat_status": sc.get("moat_status"),
+                    "passed_retained_test": sc.get("retained_earnings_ratio", 0) >= 1.0,
+                    "alerts": list(set(alerts)),
+                }
+            )
 
     brief_data["margin_of_safety"] = margin_of_safety
     brief_data["buffett_valuation"] = buffett_valuation
-
-
