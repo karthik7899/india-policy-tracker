@@ -163,14 +163,37 @@ function setupTabToggles() {
             if (targetTab === "dashboard") {
                 pageTitle.textContent = "Policy & Sector Overview";
                 pageSubtitle.textContent = "Real-time mapping of government policies to market indicators.";
-                // Re-render chart on tab refocus to avoid rendering bugs
                 if (appData) renderCharts(appData);
             } else if (targetTab === "sectors") {
                 pageTitle.textContent = "Sector Detailed Intelligence";
                 pageSubtitle.textContent = "Deep dive sector analysis, announcements history, and watchlists.";
                 if (appData) initSectorsTab();
+            } else if (targetTab === "agreements") {
+                pageTitle.textContent = "Corporate Agreements & Partnerships";
+                pageSubtitle.textContent = "Scanned news alerts regarding joint ventures, strategic partnerships, and MoUs.";
+                if (appData) renderAgreementsTable();
+            } else if (targetTab === "launches") {
+                pageTitle.textContent = "Product Launches & Capacity Expansion";
+                pageSubtitle.textContent = "Real-time alerts on product launches, new manufacturing capacities, and rollouts.";
+                if (appData) renderLaunchesTable();
+            } else if (targetTab === "institutional") {
+                pageTitle.textContent = "Institutional Capital Flow Tracker";
+                pageSubtitle.textContent = "Scheme Information Documents (SIDs) filed by mutual funds and institutional block deal news.";
+                if (appData) renderInstitutionalFlows();
+            } else if (targetTab === "graham") {
+                pageTitle.textContent = "Benjamin Graham Valuation Screens";
+                pageSubtitle.textContent = "Defensive investor criteria checks and growth intrinsic value calculations.";
+                if (appData) renderGrahamTable();
+            } else if (targetTab === "buffett") {
+                pageTitle.textContent = "Warren Buffett Allocation & Moat Screens";
+                pageSubtitle.textContent = "Owner earnings, economic moats, and retained value creation metrics.";
+                if (appData) renderBuffettTable();
+            } else if (targetTab === "caution") {
+                pageTitle.textContent = "Risk Alerts & Valuation Warnings (Caution List)";
+                pageSubtitle.textContent = "Stocks that are not meeting standard value/growth investing filters or showing warning signs.";
+                if (appData) renderCautionTable();
             } else if (targetTab === "stocks") {
-                pageTitle.textContent = "Stock Analyst Matrix";
+                pageTitle.textContent = "Integrated Stocks Screener";
                 pageSubtitle.textContent = "Curated list of companies and their policy-related growth drivers.";
                 if (appData) renderStocksTable();
             }
@@ -741,6 +764,20 @@ function renderStocksTable(filterQuery = "") {
                 const roceVal = sc.roce ? `${sc.roce}%` : '<span style="color: var(--text-muted);">—</span>';
                 const roeVal = sc.roe ? `${sc.roe}%` : '<span style="color: var(--text-muted);">—</span>';
 
+                const qoqSalesVal = sc.qoq_sales_growth !== undefined ? `<strong>${sc.qoq_sales_growth}%</strong>` : '<span style="color: var(--text-muted);">—</span>';
+                const capexVal = sc.capex !== undefined ? `₹${Number(sc.capex).toLocaleString('en-IN')}` : '<span style="color: var(--text-muted);">—</span>';
+                const oeVal = sc.owner_earnings !== undefined ? `₹${Number(sc.owner_earnings).toLocaleString('en-IN')}` : '<span style="color: var(--text-muted);">—</span>';
+                const grahamVal = sc.graham_intrinsic_value !== undefined ? `₹${sc.graham_intrinsic_value}` : '<span style="color: var(--text-muted);">—</span>';
+                
+                let valAlertsHtml = '';
+                if (sectorKey === "macro_indicators") {
+                    valAlertsHtml = '<span style="color: var(--text-muted);">ETF (N/A)</span>';
+                } else if (sc.valuation_alerts && sc.valuation_alerts.length > 0) {
+                    valAlertsHtml = sc.valuation_alerts.map(a => `<span class="badge-danger-alert" style="margin-right: 4px; margin-bottom: 4px; font-size: 8px;">${a}</span>`).join('');
+                } else {
+                    valAlertsHtml = '<span class="badge-success-alert" style="font-size: 8px;">PASSED</span>';
+                }
+
                 const tr = document.createElement("tr");
                 tr.innerHTML = `
                     <td class="t-ticker">${s.ticker}</td>
@@ -748,11 +785,16 @@ function renderStocksTable(filterQuery = "") {
                     <td><span class="chip" style="display:inline-block; border-color:transparent; background-color:rgba(255,255,255,0.03);">${sectorLabel}</span></td>
                     <td>₹${s.price}</td>
                     <td><strong>${peVal}</strong></td>
+                    <td>${qoqSalesVal}</td>
                     <td><strong>${roceVal}</strong></td>
                     <td><strong>${roeVal}</strong></td>
+                    <td>${capexVal}</td>
+                    <td><strong>${oeVal}</strong></td>
+                    <td><strong>${grahamVal}</strong></td>
                     <td>${s.target ? `₹${s.target}` : '<span style="color: var(--text-muted);">—</span>'}</td>
                     <td class="t-potential">${formatPotential(s.growth_pct)}</td>
                     <td>${formatGrowthBadge(s.revenue_growth, 'table')}</td>
+                    <td style="max-width: 150px; white-space: normal;">${valAlertsHtml}</td>
                     <td>${formatAnalystBadge(s)}</td>
                     <td class="t-catalyst">${s.catalyst}</td>
                 `;
@@ -763,14 +805,274 @@ function renderStocksTable(filterQuery = "") {
     });
     
     if (rowCount === 0) {
-        tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; padding: 30px; color: var(--text-secondary);">No companies found matching your search.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="17" style="text-align: center; padding: 30px; color: var(--text-secondary);">No companies found matching your search.</td></tr>`;
     }
 }
 
 // Search Filter Input
 function setupStockSearch() {
     const input = document.getElementById("stock-search");
-    input.addEventListener("input", (e) => {
-        renderStocksTable(e.target.value);
+    if (input) {
+        input.addEventListener("input", (e) => {
+            renderStocksTable(e.target.value);
+        });
+    }
+}
+
+// Render Corporate Agreements List
+function renderAgreementsTable() {
+    const tbody = document.getElementById("agreements-table-body");
+    if (!tbody) return;
+    tbody.innerHTML = "";
+    
+    const agreements = appData.briefing.corporate_agreements || [];
+    if (agreements.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; padding: 20px; color: var(--text-secondary);">No corporate agreements tracked in this cycle.</td></tr>`;
+        return;
+    }
+    
+    agreements.forEach(a => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td><span class="source-badge">${a.source}</span></td>
+            <td><strong>${a.title}</strong></td>
+            <td>${a.date}</td>
+            <td><a href="${a.link}" class="badge-rating" style="text-decoration:none;" target="_blank">View Article</a></td>
+        `;
+        tbody.appendChild(tr);
     });
 }
+
+// Render Product Launches List
+function renderLaunchesTable() {
+    const tbody = document.getElementById("launches-table-body");
+    if (!tbody) return;
+    tbody.innerHTML = "";
+    
+    const launches = appData.briefing.product_launches || [];
+    if (launches.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; padding: 20px; color: var(--text-secondary);">No product launches tracked in this cycle.</td></tr>`;
+        return;
+    }
+    
+    launches.forEach(l => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td><span class="source-badge">${l.source}</span></td>
+            <td><strong>${l.title}</strong></td>
+            <td>${l.date}</td>
+            <td><a href="${l.link}" class="badge-rating" style="text-decoration:none;" target="_blank">View Article</a></td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+// Render Institutional Flows
+function renderInstitutionalFlows() {
+    // SEBI Filings Table
+    const sebiBody = document.getElementById("sebi-filings-body");
+    if (sebiBody) {
+        sebiBody.innerHTML = "";
+        const filings = appData.briefing.sebi_filings || [];
+        if (filings.length === 0) {
+            sebiBody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 20px; color: var(--text-secondary);">No thematic fund filings scanned.</td></tr>`;
+        } else {
+            filings.forEach(f => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td><strong>${f.fund_name}</strong></td>
+                    <td><span class="chip" style="display:inline-block; border-color:transparent; background-color:rgba(255,255,255,0.03);">${f.theme}</span></td>
+                    <td><span class="badge-success-alert">${f.status}</span></td>
+                    <td>${f.date}</td>
+                    <td><a href="${f.link}" class="badge-rating" style="text-decoration:none;" target="_blank">View Document</a></td>
+                `;
+                sebiBody.appendChild(tr);
+            });
+        }
+    }
+    
+    // Institutional Activity Table
+    const instBody = document.getElementById("inst-activity-body");
+    if (instBody) {
+        instBody.innerHTML = "";
+        const activity = appData.briefing.institutional_activity || [];
+        if (activity.length === 0) {
+            instBody.innerHTML = `<tr><td colspan="4" style="text-align: center; padding: 20px; color: var(--text-secondary);">No institutional block deals scanned.</td></tr>`;
+        } else {
+            activity.forEach(act => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td><span class="source-badge">${act.source}</span></td>
+                    <td><strong>${act.headline}</strong></td>
+                    <td>${act.date}</td>
+                    <td><a href="${act.link}" class="badge-rating" style="text-decoration:none;" target="_blank">Link</a></td>
+                `;
+                instBody.appendChild(tr);
+            });
+        }
+    }
+}
+
+// Render Graham Valuation Table
+function renderGrahamTable() {
+    const tbody = document.getElementById("graham-table-body");
+    if (!tbody) return;
+    tbody.innerHTML = "";
+    
+    const stocks = getStockList();
+    
+    stocks.forEach(s => {
+        const sc = s.screener || {};
+        
+        // Skip macro indicators
+        if (s.sectorKey === "macro_indicators") return;
+        
+        const pe = sc.pe_ratio !== undefined ? sc.pe_ratio : '—';
+        const cr = sc.current_ratio !== undefined ? sc.current_ratio : '—';
+        const ncav = sc.net_current_assets !== undefined ? `₹${Number(sc.net_current_assets).toLocaleString('en-IN')}` : '—';
+        const grahamVal = sc.graham_intrinsic_value !== undefined ? `₹${sc.graham_intrinsic_value}` : '—';
+        
+        const isBargainBadge = sc.is_bargain ? 
+            `<span class="badge-success-alert">YES</span>` : 
+            `<span style="color: var(--text-muted);">No</span>`;
+            
+        // Passed defensive if no "Current Ratio", "Debt Limit", or "P/E Screen" failures
+        const alerts = sc.valuation_alerts || [];
+        const hasGrahamFailures = alerts.some(a => a.includes("Current Ratio") || a.includes("Debt Limit") || a.includes("P/E Screen"));
+        const isDefensiveBadge = !hasGrahamFailures ? 
+            `<span class="badge-success-alert">PASS</span>` : 
+            `<span class="badge-danger-alert">FAIL</span>`;
+            
+        let alertBadges = '';
+        const grahamAlerts = alerts.filter(a => a.includes("Current Ratio") || a.includes("Debt Limit") || a.includes("P/E Screen") || a.includes("Dividend"));
+        if (grahamAlerts.length > 0) {
+            alertBadges = grahamAlerts.map(a => `<span class="badge-danger-alert" style="margin-right: 4px; margin-bottom: 4px; font-size: 9px;">${a}</span>`).join('');
+        } else {
+            alertBadges = `<span style="color: var(--text-muted);">None</span>`;
+        }
+        
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td class="t-ticker">${s.ticker}</td>
+            <td><strong>${s.name}</strong></td>
+            <td>₹${s.price}</td>
+            <td><strong>${pe}</strong></td>
+            <td>${cr}</td>
+            <td>${ncav}</td>
+            <td><strong>${grahamVal}</strong></td>
+            <td>${isBargainBadge}</td>
+            <td>${isDefensiveBadge}</td>
+            <td style="max-width: 300px; white-space: normal;">${alertBadges}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+// Render Buffett Valuation Table
+function renderBuffettTable() {
+    const tbody = document.getElementById("buffett-table-body");
+    if (!tbody) return;
+    tbody.innerHTML = "";
+    
+    const stocks = getStockList();
+    
+    stocks.forEach(s => {
+        const sc = s.screener || {};
+        
+        // Skip macro indicators
+        if (s.sectorKey === "macro_indicators") return;
+        
+        const oe = sc.owner_earnings !== undefined ? `₹${Number(sc.owner_earnings).toLocaleString('en-IN')}` : '—';
+        const retainedRatio = sc.retained_earnings_ratio !== undefined ? sc.retained_earnings_ratio : '—';
+        
+        const passedRetained = sc.retained_earnings_ratio >= 1.0 ? 
+            `<span class="badge-success-alert">PASS (>= 1.0)</span>` : 
+            `<span class="badge-danger-alert">FAIL (< 1.0)</span>`;
+            
+        const moat = sc.moat_status || 'Weak/None';
+        let moatBadge = '';
+        if (moat.includes("Strong")) {
+            moatBadge = `<span class="badge-success-alert">${moat}</span>`;
+        } else if (moat.includes("Medium")) {
+            moatBadge = `<span class="badge-warning-alert">${moat}</span>`;
+        } else {
+            moatBadge = `<span class="badge-danger-alert">${moat}</span>`;
+        }
+        
+        const alerts = sc.valuation_alerts || [];
+        const buffettAlerts = alerts.filter(a => a.includes("Retained Earnings") || a.includes("Moat"));
+        let alertBadges = '';
+        if (buffettAlerts.length > 0) {
+            alertBadges = buffettAlerts.map(a => `<span class="badge-danger-alert" style="margin-right: 4px; margin-bottom: 4px; font-size: 9px;">${a}</span>`).join('');
+        } else {
+            alertBadges = `<span style="color: var(--text-muted);">None</span>`;
+        }
+        
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td class="t-ticker">${s.ticker}</td>
+            <td><strong>${s.name}</strong></td>
+            <td>₹${s.price}</td>
+            <td><strong>${oe}</strong></td>
+            <td><strong>${retainedRatio}</strong></td>
+            <td>${passedRetained}</td>
+            <td>${moatBadge}</td>
+            <td style="max-width: 250px; white-space: normal;">${alertBadges}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+// Render Valuation Warnings & Risk Alerts (Caution List)
+function renderCautionTable() {
+    const tbody = document.getElementById("caution-table-body");
+    if (!tbody) return;
+    tbody.innerHTML = "";
+    
+    const stocks = getStockList();
+    let cautionCount = 0;
+    
+    stocks.forEach(s => {
+        const sc = s.screener || {};
+        
+        // Skip macro indicators
+        if (s.sectorKey === "macro_indicators") return;
+        
+        const alerts = sc.valuation_alerts || [];
+        if (alerts.length > 0) {
+            const sectorLabel = appData.sectors[s.sectorKey]?.label || s.sectorKey;
+            const alertBadges = alerts.map(a => {
+                const badgeClass = a.includes("Warning") ? "badge-danger-alert" : "badge-warning-alert";
+                return `<span class="${badgeClass}" style="margin-right: 6px; margin-bottom: 6px; display: inline-block; font-size: 9px;">${a}</span>`;
+            }).join('');
+            
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td class="t-ticker">${s.ticker}</td>
+                <td><strong>${s.name}</strong></td>
+                <td><span class="chip" style="display:inline-block; border-color:transparent; background-color:rgba(255,255,255,0.03);">${sectorLabel}</span></td>
+                <td>₹${s.price}</td>
+                <td style="max-width: 450px; white-space: normal;">${alertBadges}</td>
+            `;
+            tbody.appendChild(tr);
+            cautionCount++;
+        }
+    });
+    
+    if (cautionCount === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 30px; color: var(--text-secondary); font-style: italic;">All watchlist companies have passed core value and growth checks. No caution flags.</td></tr>`;
+    }
+}
+
+// Helper: Get list of all stocks across all sectors
+function getStockList() {
+    let list = [];
+    if (!appData || !appData.watchlist) return list;
+    Object.keys(appData.watchlist).forEach(sectorKey => {
+        appData.watchlist[sectorKey].forEach(s => {
+            list.push({ ...s, sectorKey });
+        });
+    });
+    return list;
+}
+

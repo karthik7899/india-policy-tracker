@@ -882,3 +882,59 @@ body {
     background: rgba(245, 158, 11, 0.12);
     border-color: rgba(245, 158, 11, 0.3);
 }
+
+/* New Layout & Valuation Alerts Classes */
+.institutional-split-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+@media (max-width: 1024px) {
+    .institutional-split-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.alert-card-border {
+    border-left: 4px solid var(--danger);
+}
+
+.danger-text {
+    color: var(--danger) !important;
+}
+
+.badge-danger-alert {
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 4px;
+    font-size: 10px;
+    padding: 2px 6px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.badge-success-alert {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    border-radius: 4px;
+    font-size: 10px;
+    padding: 2px 6px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.badge-warning-alert {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    border-radius: 4px;
+    font-size: 10px;
+    padding: 2px 6px;
+    font-weight: 600;
+    display: inline-block;
+}
+

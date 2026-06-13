@@ -25,7 +25,26 @@
         "latest_quarter": "Mar 2026",
         "q_sales": "14900",
         "q_net_profit": "1416",
-        "q_eps": "3.12"
+        "q_eps": "3.12",
+        "qoq_sales_growth": 6.8,
+        "qoq_profit_growth": 18.6,
+        "rd_pct": 3.0,
+        "capex": 2980.0,
+        "current_ratio": 0.95,
+        "net_current_assets": -2854.0,
+        "graham_intrinsic_value": 275.8,
+        "ncav_per_share": -8.9,
+        "is_bargain": false,
+        "owner_earnings": 8775.3,
+        "retained_earnings_ratio": 2.86,
+        "moat_status": "Weak/None",
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "Fails Current Ratio (< 2.0)",
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Fails P/E Screen (P/E 33.1 > 15 & Price > Intrinsic)",
+          "Weak/No Economic Moat"
+        ]
       }
     },
     {
@@ -53,7 +72,24 @@
         "latest_quarter": "Mar 2026",
         "q_sales": "5493",
         "q_net_profit": "1114",
-        "q_eps": "0.82"
+        "q_eps": "0.82",
+        "qoq_sales_growth": 29.7,
+        "qoq_profit_growth": 150.3,
+        "rd_pct": 3.0,
+        "capex": 1098.6,
+        "current_ratio": 1.83,
+        "net_current_assets": 7316.0,
+        "graham_intrinsic_value": 191.9,
+        "ncav_per_share": 5.4,
+        "is_bargain": false,
+        "owner_earnings": 3401.9,
+        "retained_earnings_ratio": 2.86,
+        "moat_status": "Strong (Wide Moat)",
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "Fails Current Ratio (< 2.0)",
+          "No Dividend Yield"
+        ]
       }
     },
     {
@@ -81,7 +117,27 @@
         "latest_quarter": "Mar 2026",
         "q_sales": "3502",
         "q_net_profit": "514",
-        "q_eps": "2.41"
+        "q_eps": "2.41",
+        "qoq_sales_growth": 33.8,
+        "qoq_profit_growth": 10180.0,
+        "rd_pct": 3.0,
+        "capex": 700.4,
+        "current_ratio": 0.97,
+        "net_current_assets": -642.0,
+        "graham_intrinsic_value": 563.9,
+        "ncav_per_share": -3.9,
+        "is_bargain": false,
+        "owner_earnings": 9639.2,
+        "retained_earnings_ratio": 2.86,
+        "moat_status": "Weak/None",
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "Fails Current Ratio (< 2.0)",
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Fails P/E Screen (P/E 134.0 > 15 & Price > Intrinsic)",
+          "No Dividend Yield",
+          "Weak/No Economic Moat"
+        ]
       }
     }
   ],
@@ -101,7 +157,23 @@
       "target_high": "1320.00",
       "target_low": "970.00",
       "rec_score": 1.0,
-      "screener": {}
+      "screener": {
+        "rd_pct": 1.5,
+        "capex": 0.0,
+        "current_ratio": 2.0,
+        "net_current_assets": 0.0,
+        "graham_intrinsic_value": 0.0,
+        "ncav_per_share": 0,
+        "is_bargain": false,
+        "owner_earnings": 0.0,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Weak/None",
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "No Dividend Yield",
+          "Weak/No Economic Moat"
+        ]
+      }
     },
     {
       "ticker": "STLTECH",
@@ -128,7 +200,27 @@
         "latest_quarter": "Mar 2026",
         "q_sales": "1441",
         "q_net_profit": "59",
-        "q_eps": "1.21"
+        "q_eps": "1.21",
+        "qoq_sales_growth": 14.6,
+        "rd_pct": 1.5,
+        "capex": 288.2,
+        "current_ratio": 1.35,
+        "net_current_assets": 753.0,
+        "graham_intrinsic_value": 182.5,
+        "ncav_per_share": 15.4,
+        "is_bargain": false,
+        "owner_earnings": 103.2,
+        "retained_earnings_ratio": 2.86,
+        "moat_status": "Weak/None",
+        "hyper_growth_warning": true,
+        "valuation_alerts": [
+          "Fails Current Ratio (< 2.0)",
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Fails P/E Screen (P/E 598.0 > 15 & Price > Intrinsic)",
+          "No Dividend Yield",
+          "Weak/No Economic Moat",
+          "Hyper-Growth Warning: Slowing QoQ sales at P/E > 30"
+        ]
       }
     },
     {
@@ -156,7 +248,25 @@
         "latest_quarter": "Mar 2026",
         "q_sales": "647",
         "q_net_profit": "149",
-        "q_eps": "4.07"
+        "q_eps": "4.07",
+        "qoq_sales_growth": 0.8,
+        "qoq_profit_growth": 3.5,
+        "rd_pct": 1.5,
+        "capex": 129.4,
+        "current_ratio": 12.16,
+        "net_current_assets": 4454.0,
+        "graham_intrinsic_value": 301.2,
+        "ncav_per_share": 123.8,
+        "is_bargain": false,
+        "owner_earnings": 521.1,
+        "retained_earnings_ratio": 2.86,
+        "moat_status": "Weak/None",
+        "hyper_growth_warning": true,
+        "valuation_alerts": [
+          "Fails P/E Screen (P/E 34.7 > 15 & Price > Intrinsic)",
+          "Weak/No Economic Moat",
+          "Hyper-Growth Warning: Slowing QoQ sales at P/E > 30"
+        ]
       }
     }
   ],
@@ -186,7 +296,23 @@
         "latest_quarter": "Mar 2026",
         "q_sales": "70698",
         "q_net_profit": "13784",
-        "q_eps": "37.92"
+        "q_eps": "37.92",
+        "qoq_sales_growth": 5.4,
+        "qoq_profit_growth": 28.6,
+        "rd_pct": 10.5,
+        "capex": 14139.6,
+        "current_ratio": 1.81,
+        "net_current_assets": 50527.0,
+        "graham_intrinsic_value": 2927.4,
+        "ncav_per_share": 139.7,
+        "is_bargain": false,
+        "owner_earnings": 41899.0,
+        "retained_earnings_ratio": 2.86,
+        "moat_status": "Strong (Wide Moat)",
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "Fails Current Ratio (< 2.0)"
+        ]
       }
     },
     {
@@ -214,7 +340,27 @@
         "latest_quarter": "Mar 2026",
         "q_sales": "49",
         "q_net_profit": "-20",
-        "q_eps": "-3.68"
+        "q_eps": "-3.68",
+        "qoq_sales_growth": -31.9,
+        "qoq_profit_growth": -385.7,
+        "rd_pct": 10.5,
+        "capex": 9.8,
+        "current_ratio": 1.93,
+        "net_current_assets": 102.0,
+        "graham_intrinsic_value": -272.3,
+        "ncav_per_share": 18.8,
+        "is_bargain": false,
+        "owner_earnings": -89.8,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Weak/None",
+        "hyper_growth_warning": true,
+        "valuation_alerts": [
+          "Fails Current Ratio (< 2.0)",
+          "Fails P/E Screen (P/E 80.5 > 15 & Price > Intrinsic)",
+          "No Dividend Yield",
+          "Weak/No Economic Moat",
+          "Hyper-Growth Warning: Slowing QoQ sales at P/E > 30"
+        ]
       }
     }
   ],
@@ -244,7 +390,24 @@
         "latest_quarter": "Mar 2026",
         "q_sales": "1422",
         "q_net_profit": "169",
-        "q_eps": "14.36"
+        "q_eps": "14.36",
+        "qoq_sales_growth": 24.8,
+        "qoq_profit_growth": 76.0,
+        "rd_pct": 1.5,
+        "capex": 284.4,
+        "current_ratio": 1.6,
+        "net_current_assets": 1159.0,
+        "graham_intrinsic_value": 3337.3,
+        "ncav_per_share": 98.3,
+        "is_bargain": false,
+        "owner_earnings": 406.0,
+        "retained_earnings_ratio": 2.86,
+        "moat_status": "Strong (Wide Moat)",
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "Fails Current Ratio (< 2.0)",
+          "No Dividend Yield"
+        ]
       }
     },
     {
@@ -272,7 +435,25 @@
         "latest_quarter": "Mar 2026",
         "q_sales": "10511",
         "q_net_profit": "298",
-        "q_eps": "42.17"
+        "q_eps": "42.17",
+        "qoq_sales_growth": -1.5,
+        "qoq_profit_growth": -7.2,
+        "rd_pct": 1.5,
+        "capex": 2102.2,
+        "current_ratio": 0.99,
+        "net_current_assets": -79.0,
+        "graham_intrinsic_value": 3120.6,
+        "ncav_per_share": -12.9,
+        "is_bargain": false,
+        "owner_earnings": -830.7,
+        "retained_earnings_ratio": 2.86,
+        "moat_status": "Strong (Wide Moat)",
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "Fails Current Ratio (< 2.0)",
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Fails P/E Screen (P/E 49.0 > 15 & Price > Intrinsic)"
+        ]
       }
     },
     {
@@ -300,7 +481,24 @@
         "latest_quarter": "Mar 2026",
         "q_sales": "267.77",
         "q_net_profit": "-3.39",
-        "q_eps": "-0.60"
+        "q_eps": "-0.60",
+        "qoq_sales_growth": 8.2,
+        "qoq_profit_growth": -124.4,
+        "rd_pct": 1.5,
+        "capex": 53.6,
+        "current_ratio": 2.56,
+        "net_current_assets": 483.0,
+        "graham_intrinsic_value": -59.8,
+        "ncav_per_share": 85.4,
+        "is_bargain": false,
+        "owner_earnings": -56.3,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Weak/None",
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "Fails P/E Screen (P/E 18.5 > 15 & Price > Intrinsic)",
+          "Weak/No Economic Moat"
+        ]
       }
     },
     {
@@ -328,7 +526,23 @@
         "latest_quarter": "Mar 2026",
         "q_sales": "141",
         "q_net_profit": "60",
-        "q_eps": "13.86"
+        "q_eps": "13.86",
+        "qoq_sales_growth": 340.6,
+        "rd_pct": 1.5,
+        "capex": 28.2,
+        "current_ratio": 3.84,
+        "net_current_assets": 330.0,
+        "graham_intrinsic_value": 3243.2,
+        "ncav_per_share": 76.1,
+        "is_bargain": false,
+        "owner_earnings": 218.5,
+        "retained_earnings_ratio": 2.86,
+        "moat_status": "Weak/None",
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "No Dividend Yield",
+          "Weak/No Economic Moat"
+        ]
       }
     },
     {
@@ -356,7 +570,21 @@
         "latest_quarter": "Mar 2026",
         "q_sales": "1450",
         "q_net_profit": "211",
-        "q_eps": "9.26"
+        "q_eps": "9.26",
+        "qoq_sales_growth": 1.3,
+        "qoq_profit_growth": 5.5,
+        "rd_pct": 1.5,
+        "capex": 290.0,
+        "current_ratio": 2.15,
+        "net_current_assets": 1479.0,
+        "graham_intrinsic_value": 685.2,
+        "ncav_per_share": 65.0,
+        "is_bargain": false,
+        "owner_earnings": 560.3,
+        "retained_earnings_ratio": 2.86,
+        "moat_status": "Strong (Wide Moat)",
+        "hyper_growth_warning": false,
+        "valuation_alerts": []
       }
     }
   ],
@@ -386,7 +614,25 @@
         "latest_quarter": "Mar 2026",
         "q_sales": "10511",
         "q_net_profit": "298",
-        "q_eps": "42.17"
+        "q_eps": "42.17",
+        "qoq_sales_growth": -1.5,
+        "qoq_profit_growth": -7.2,
+        "rd_pct": 1.5,
+        "capex": 2102.2,
+        "current_ratio": 0.99,
+        "net_current_assets": -79.0,
+        "graham_intrinsic_value": 3120.6,
+        "ncav_per_share": -12.9,
+        "is_bargain": false,
+        "owner_earnings": -830.7,
+        "retained_earnings_ratio": 2.86,
+        "moat_status": "Strong (Wide Moat)",
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "Fails Current Ratio (< 2.0)",
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Fails P/E Screen (P/E 49.0 > 15 & Price > Intrinsic)"
+        ]
       }
     },
     {
@@ -414,7 +660,24 @@
         "latest_quarter": "Mar 2026",
         "q_sales": "1243",
         "q_net_profit": "91",
-        "q_eps": "13.61"
+        "q_eps": "13.61",
+        "qoq_sales_growth": 54.6,
+        "qoq_profit_growth": 18.2,
+        "rd_pct": 1.5,
+        "capex": 248.6,
+        "current_ratio": 3.68,
+        "net_current_assets": 3299.0,
+        "graham_intrinsic_value": 3184.7,
+        "ncav_per_share": 492.1,
+        "is_bargain": false,
+        "owner_earnings": 188.4,
+        "retained_earnings_ratio": 2.86,
+        "moat_status": "Weak/None",
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "No Dividend Yield",
+          "Weak/No Economic Moat"
+        ]
       }
     },
     {
@@ -442,7 +705,24 @@
         "latest_quarter": "Mar 2026",
         "q_sales": "3442",
         "q_net_profit": "363",
-        "q_eps": "2.32"
+        "q_eps": "2.32",
+        "qoq_sales_growth": 8.4,
+        "qoq_profit_growth": 27.8,
+        "rd_pct": 1.5,
+        "capex": 688.4,
+        "current_ratio": 2.07,
+        "net_current_assets": 4902.0,
+        "graham_intrinsic_value": 234.8,
+        "ncav_per_share": 31.1,
+        "is_bargain": false,
+        "owner_earnings": 773.0,
+        "retained_earnings_ratio": 2.86,
+        "moat_status": "Strong (Wide Moat)",
+        "hyper_growth_warning": true,
+        "valuation_alerts": [
+          "Fails P/E Screen (P/E 117.0 > 15 & Price > Intrinsic)",
+          "Hyper-Growth Warning: Slowing QoQ sales at P/E > 30"
+        ]
       }
     }
   ],
@@ -472,7 +752,21 @@
         "latest_quarter": "Mar 2026",
         "q_sales": "6574",
         "q_net_profit": "879",
-        "q_eps": "2.58"
+        "q_eps": "2.58",
+        "qoq_sales_growth": 56.4,
+        "qoq_profit_growth": 238.1,
+        "rd_pct": 1.5,
+        "capex": 1314.8,
+        "current_ratio": 2.41,
+        "net_current_assets": 4883.0,
+        "graham_intrinsic_value": 603.7,
+        "ncav_per_share": 14.4,
+        "is_bargain": false,
+        "owner_earnings": 2401.8,
+        "retained_earnings_ratio": 2.86,
+        "moat_status": "Strong (Wide Moat)",
+        "hyper_growth_warning": false,
+        "valuation_alerts": []
       }
     },
     {
@@ -500,7 +794,26 @@
         "latest_quarter": "Mar 2026",
         "q_sales": "5434",
         "q_net_profit": "424",
-        "q_eps": "4.24"
+        "q_eps": "4.24",
+        "qoq_sales_growth": 6.3,
+        "qoq_profit_growth": 10.1,
+        "rd_pct": 1.5,
+        "capex": 1086.8,
+        "current_ratio": 1.07,
+        "net_current_assets": 664.0,
+        "graham_intrinsic_value": 357.9,
+        "ncav_per_share": 6.7,
+        "is_bargain": false,
+        "owner_earnings": 834.8,
+        "retained_earnings_ratio": 2.86,
+        "moat_status": "Weak/None",
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "Fails Current Ratio (< 2.0)",
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Fails P/E Screen (P/E 70.9 > 15 & Price > Intrinsic)",
+          "Weak/No Economic Moat"
+        ]
       }
     },
     {
@@ -528,7 +841,23 @@
         "latest_quarter": "Mar 2026",
         "q_sales": "17825",
         "q_net_profit": "5470",
-        "q_eps": "4.30"
+        "q_eps": "4.30",
+        "qoq_sales_growth": -11.1,
+        "qoq_profit_growth": 9.0,
+        "rd_pct": 1.5,
+        "capex": 3565.0,
+        "current_ratio": 1.67,
+        "net_current_assets": 12734.0,
+        "graham_intrinsic_value": 318.2,
+        "ncav_per_share": 10.2,
+        "is_bargain": false,
+        "owner_earnings": 18506.9,
+        "retained_earnings_ratio": 2.86,
+        "moat_status": "Strong (Wide Moat)",
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "Fails Current Ratio (< 2.0)"
+        ]
       }
     }
   ],
@@ -558,7 +887,25 @@
         "latest_quarter": "Mar 2026",
         "q_sales": "773",
         "q_net_profit": "118",
-        "q_eps": "4.28"
+        "q_eps": "4.28",
+        "qoq_sales_growth": -4.7,
+        "qoq_profit_growth": -9.2,
+        "rd_pct": 1.5,
+        "capex": 154.6,
+        "current_ratio": 2.96,
+        "net_current_assets": 888.0,
+        "graham_intrinsic_value": 316.7,
+        "ncav_per_share": 32.6,
+        "is_bargain": false,
+        "owner_earnings": 443.0,
+        "retained_earnings_ratio": 2.86,
+        "moat_status": "Strong (Wide Moat)",
+        "hyper_growth_warning": true,
+        "valuation_alerts": [
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Fails P/E Screen (P/E 66.3 > 15 & Price > Intrinsic)",
+          "Hyper-Growth Warning: Slowing QoQ sales at P/E > 30"
+        ]
       }
     },
     {
@@ -586,7 +933,23 @@
         "latest_quarter": "Jun 2022",
         "q_sales": "338",
         "q_net_profit": "29",
-        "q_eps": "0.94"
+        "q_eps": "0.94",
+        "qoq_sales_growth": -4.0,
+        "qoq_profit_growth": -27.5,
+        "rd_pct": 1.5,
+        "capex": 67.6,
+        "current_ratio": 2.59,
+        "net_current_assets": 392.0,
+        "graham_intrinsic_value": 69.6,
+        "ncav_per_share": 12.8,
+        "is_bargain": false,
+        "owner_earnings": 71.5,
+        "retained_earnings_ratio": 2.86,
+        "moat_status": "Strong (Wide Moat)",
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "Fails P/E Screen (P/E 53.6 > 15 & Price > Intrinsic)"
+        ]
       }
     },
     {
@@ -604,7 +967,23 @@
       "target_high": "47700.00",
       "target_low": "31000.00",
       "rec_score": 2.7,
-      "screener": {}
+      "screener": {
+        "rd_pct": 1.5,
+        "capex": 0.0,
+        "current_ratio": 2.0,
+        "net_current_assets": 0.0,
+        "graham_intrinsic_value": 0.0,
+        "ncav_per_share": 0,
+        "is_bargain": false,
+        "owner_earnings": 0.0,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Weak/None",
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "No Dividend Yield",
+          "Weak/No Economic Moat"
+        ]
+      }
     },
     {
       "ticker": "RELAXO",
@@ -621,7 +1000,23 @@
       "target_high": "440.00",
       "target_low": "280.00",
       "rec_score": 2.8,
-      "screener": {}
+      "screener": {
+        "rd_pct": 1.5,
+        "capex": 0.0,
+        "current_ratio": 2.0,
+        "net_current_assets": 0.0,
+        "graham_intrinsic_value": 0.0,
+        "ncav_per_share": 0,
+        "is_bargain": false,
+        "owner_earnings": 0.0,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Weak/None",
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "No Dividend Yield",
+          "Weak/No Economic Moat"
+        ]
+      }
     }
   ],
   "big_cap_industries": [
@@ -650,7 +1045,23 @@
         "latest_quarter": "Mar 2026",
         "q_sales": "82762",
         "q_net_profit": "6133",
-        "q_eps": "38.71"
+        "q_eps": "38.71",
+        "qoq_sales_growth": 15.8,
+        "qoq_profit_growth": 60.3,
+        "rd_pct": 1.5,
+        "capex": 16552.4,
+        "current_ratio": 1.61,
+        "net_current_assets": 132232.0,
+        "graham_intrinsic_value": 6209.1,
+        "ncav_per_share": 961.2,
+        "is_bargain": false,
+        "owner_earnings": 18019.4,
+        "retained_earnings_ratio": 2.86,
+        "moat_status": "Medium (Narrow Moat)",
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "Fails Current Ratio (< 2.0)"
+        ]
       }
     },
     {
@@ -678,7 +1089,536 @@
         "latest_quarter": "Mar 2026",
         "q_sales": "294059",
         "q_net_profit": "20589",
-        "q_eps": "12.54"
+        "q_eps": "12.54",
+        "qoq_sales_growth": 11.0,
+        "qoq_profit_growth": -7.6,
+        "rd_pct": 1.5,
+        "capex": 58811.8,
+        "current_ratio": 0.65,
+        "net_current_assets": -303821.0,
+        "graham_intrinsic_value": 1529.9,
+        "ncav_per_share": -224.5,
+        "is_bargain": false,
+        "owner_earnings": 55781.2,
+        "retained_earnings_ratio": 2.86,
+        "moat_status": "Weak/None",
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "Fails Current Ratio (< 2.0)",
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Weak/No Economic Moat"
+        ]
+      }
+    }
+  ],
+  "textiles_apparel": [
+    {
+      "ticker": "WELSPUNLIV",
+      "name": "Welspun Living",
+      "price": "138.54",
+      "target": "164.50",
+      "growth_pct": "+18.7%",
+      "catalyst": "Major beneficiary of textile PLI, expanding home textiles capacity and global export market share.",
+      "rating": "None",
+      "revenue_growth": "-8.0%",
+      "earnings_growth": "-22.1%",
+      "analyst_count": 10,
+      "target_median": "164.50",
+      "target_high": "180.00",
+      "target_low": "145.00",
+      "rec_score": null,
+      "screener": {
+        "market_cap": "13288",
+        "pe_ratio": "61.0",
+        "book_value": "51.3",
+        "roce": "6.25",
+        "roe": "4.47",
+        "dividend_yield": "0.07",
+        "latest_quarter": "Mar 2026",
+        "q_sales": "2435",
+        "q_net_profit": "106",
+        "q_eps": "1.08",
+        "qoq_sales_growth": 7.6,
+        "qoq_profit_growth": 3433.3,
+        "rd_pct": 1.5,
+        "capex": 487.0,
+        "current_ratio": 1.5,
+        "net_current_assets": 1611.0,
+        "graham_intrinsic_value": 102.4,
+        "ncav_per_share": 16.8,
+        "is_bargain": false,
+        "owner_earnings": 122.2,
+        "retained_earnings_ratio": 2.86,
+        "moat_status": "Weak/None",
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "Fails Current Ratio (< 2.0)",
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Fails P/E Screen (P/E 61.0 > 15 & Price > Intrinsic)",
+          "Weak/No Economic Moat"
+        ]
+      }
+    },
+    {
+      "ticker": "GOKEX",
+      "name": "Gokaldas Exports",
+      "price": "674.50",
+      "target": "850.00",
+      "growth_pct": "+26.0%",
+      "catalyst": "Top apparel manufacturer, setting up new fabrics processing mill under textile PLI approval.",
+      "rating": "Strong Buy",
+      "revenue_growth": "+5.3%",
+      "earnings_growth": "-34.6%",
+      "analyst_count": 7,
+      "target_median": "850.00",
+      "target_high": "1100.00",
+      "target_low": "799.00",
+      "rec_score": 1.4,
+      "screener": {
+        "market_cap": "4942",
+        "pe_ratio": "49.4",
+        "book_value": "295",
+        "roce": "8.39",
+        "roe": "4.72",
+        "dividend_yield": "0.00",
+        "latest_quarter": "Mar 2026",
+        "q_sales": "1069",
+        "q_net_profit": "36",
+        "q_eps": "4.91",
+        "qoq_sales_growth": 9.2,
+        "qoq_profit_growth": 140.0,
+        "rd_pct": 1.5,
+        "capex": 213.8,
+        "current_ratio": 2.29,
+        "net_current_assets": 1187.0,
+        "graham_intrinsic_value": 528.3,
+        "ncav_per_share": 162.0,
+        "is_bargain": false,
+        "owner_earnings": 32.0,
+        "retained_earnings_ratio": 2.86,
+        "moat_status": "Weak/None",
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Fails P/E Screen (P/E 49.4 > 15 & Price > Intrinsic)",
+          "No Dividend Yield",
+          "Weak/No Economic Moat"
+        ]
+      }
+    },
+    {
+      "ticker": "ARVIND",
+      "name": "Arvind Ltd",
+      "price": "494.50",
+      "target": "555.00",
+      "growth_pct": "+12.2%",
+      "catalyst": "Leading denim manufacturer, investing in technical textiles under recent government schemes.",
+      "rating": "Strong Buy",
+      "revenue_growth": "+15.0%",
+      "earnings_growth": "+5.9%",
+      "analyst_count": 7,
+      "target_median": "555.00",
+      "target_high": "700.00",
+      "target_low": "400.00",
+      "rec_score": 1.0,
+      "screener": {
+        "market_cap": "12963",
+        "pe_ratio": "30.4",
+        "book_value": "154",
+        "roce": "13.8",
+        "roe": "10.9",
+        "dividend_yield": "0.76",
+        "latest_quarter": "Mar 2026",
+        "q_sales": "2553",
+        "q_net_profit": "165",
+        "q_eps": "6.09",
+        "qoq_sales_growth": 7.6,
+        "qoq_profit_growth": 63.4,
+        "rd_pct": 1.5,
+        "capex": 510.6,
+        "current_ratio": 1.42,
+        "net_current_assets": 1320.0,
+        "graham_intrinsic_value": 577.3,
+        "ncav_per_share": 50.4,
+        "is_bargain": false,
+        "owner_earnings": 282.2,
+        "retained_earnings_ratio": 2.86,
+        "moat_status": "Weak/None",
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "Fails Current Ratio (< 2.0)",
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Weak/No Economic Moat"
+        ]
+      }
+    }
+  ],
+  "logistics_heavy_capital": [
+    {
+      "ticker": "CONCOR",
+      "name": "Container Corporation of India",
+      "price": "450.20",
+      "target": "510.00",
+      "growth_pct": "+13.3%",
+      "catalyst": "Dominant railway container carrier, major beneficiary of the ₹10,000 crore container manufacturing scheme.",
+      "rating": "Buy",
+      "revenue_growth": "-1.1%",
+      "earnings_growth": "-12.0%",
+      "analyst_count": 17,
+      "target_median": "510.00",
+      "target_high": "682.00",
+      "target_low": "456.00",
+      "rec_score": 2.5,
+      "screener": {
+        "market_cap": "34288",
+        "pe_ratio": "27.6",
+        "book_value": "170",
+        "roce": "12.4",
+        "roe": "9.81",
+        "dividend_yield": "2.04",
+        "latest_quarter": "Mar 2026",
+        "q_sales": "2263",
+        "q_net_profit": "264",
+        "q_eps": "3.45",
+        "qoq_sales_growth": -1.9,
+        "qoq_profit_growth": -21.2,
+        "rd_pct": 1.5,
+        "capex": 452.6,
+        "current_ratio": 4.75,
+        "net_current_assets": 4759.0,
+        "graham_intrinsic_value": 255.3,
+        "ncav_per_share": 62.5,
+        "is_bargain": false,
+        "owner_earnings": 680.6,
+        "retained_earnings_ratio": 2.86,
+        "moat_status": "Weak/None",
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "Fails P/E Screen (P/E 27.6 > 15 & Price > Intrinsic)",
+          "Weak/No Economic Moat"
+        ]
+      }
+    },
+    {
+      "ticker": "BHEL",
+      "name": "Bharat Heavy Electricals",
+      "price": "378.75",
+      "target": "414.00",
+      "growth_pct": "+9.3%",
+      "catalyst": "State-owned heavy power equipment giant, expanding local container manufacturing and green energy grids.",
+      "rating": "Hold",
+      "revenue_growth": "+36.9%",
+      "earnings_growth": "+156.4%",
+      "analyst_count": 21,
+      "target_median": "414.00",
+      "target_high": "460.00",
+      "target_low": "140.00",
+      "rec_score": 2.9,
+      "screener": {
+        "market_cap": "131883",
+        "pe_ratio": "82.4",
+        "book_value": "75.1",
+        "roce": "8.51",
+        "roe": "6.29",
+        "dividend_yield": "0.13",
+        "latest_quarter": "Mar 2026",
+        "q_sales": "12310",
+        "q_net_profit": "1290",
+        "q_eps": "3.71",
+        "qoq_sales_growth": 45.3,
+        "qoq_profit_growth": 230.8,
+        "rd_pct": 1.5,
+        "capex": 2462.0,
+        "current_ratio": 1.73,
+        "net_current_assets": 30538.0,
+        "graham_intrinsic_value": 868.1,
+        "ncav_per_share": 87.7,
+        "is_bargain": false,
+        "owner_earnings": 3353.0,
+        "retained_earnings_ratio": 2.86,
+        "moat_status": "Weak/None",
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "Fails Current Ratio (< 2.0)",
+          "Weak/No Economic Moat"
+        ]
+      }
+    },
+    {
+      "ticker": "CUMMINSIND",
+      "name": "Cummins India",
+      "price": "5621.50",
+      "target": "5800.00",
+      "growth_pct": "+3.2%",
+      "catalyst": "Leading heavy engine maker, supplying power backups and engines for logistics and railway expansion.",
+      "rating": "Hold",
+      "revenue_growth": "+21.9%",
+      "earnings_growth": "+22.7%",
+      "analyst_count": 23,
+      "target_median": "5800.00",
+      "target_high": "7100.00",
+      "target_low": "3420.00",
+      "rec_score": 2.7,
+      "screener": {
+        "market_cap": "155828",
+        "pe_ratio": "64.3",
+        "book_value": "306",
+        "roce": "39.5",
+        "roe": "30.2",
+        "dividend_yield": "1.17",
+        "latest_quarter": "Mar 2026",
+        "q_sales": "3011",
+        "q_net_profit": "649",
+        "q_eps": "23.43",
+        "qoq_sales_growth": -1.4,
+        "qoq_profit_growth": 33.5,
+        "rd_pct": 1.5,
+        "capex": 602.2,
+        "current_ratio": 2.39,
+        "net_current_assets": 3877.0,
+        "graham_intrinsic_value": 1733.8,
+        "ncav_per_share": 139.9,
+        "is_bargain": false,
+        "owner_earnings": 1996.8,
+        "retained_earnings_ratio": 2.86,
+        "moat_status": "Strong (Wide Moat)",
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "Fails P/E Screen (P/E 64.3 > 15 & Price > Intrinsic)"
+        ]
+      }
+    }
+  ],
+  "aerospace_defence": [
+    {
+      "ticker": "HAL",
+      "name": "Hindustan Aeronautics",
+      "price": "4192.30",
+      "target": "5300.00",
+      "growth_pct": "+26.4%",
+      "catalyst": "State aerospace major, expanding local fighter jet assembly and benefiting from custom duty exemptions.",
+      "rating": "Buy",
+      "revenue_growth": "+1.8%",
+      "earnings_growth": "+5.5%",
+      "analyst_count": 24,
+      "target_median": "5300.00",
+      "target_high": "6300.00",
+      "target_low": "3200.00",
+      "rec_score": 1.8,
+      "screener": {
+        "market_cap": "280371",
+        "pe_ratio": "30.8",
+        "book_value": "614",
+        "roce": "32.0",
+        "roe": "24.0",
+        "dividend_yield": "0.95",
+        "latest_quarter": "Mar 2026",
+        "q_sales": "13942",
+        "q_net_profit": "4196",
+        "q_eps": "62.74",
+        "qoq_sales_growth": 81.1,
+        "qoq_profit_growth": 124.7,
+        "rd_pct": 6.2,
+        "capex": 2788.4,
+        "current_ratio": 1.31,
+        "net_current_assets": 28532.0,
+        "graham_intrinsic_value": 14681.2,
+        "ncav_per_share": 426.6,
+        "is_bargain": false,
+        "owner_earnings": 13996.5,
+        "retained_earnings_ratio": 2.86,
+        "moat_status": "Strong (Wide Moat)",
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "Fails Current Ratio (< 2.0)"
+        ]
+      }
+    },
+    {
+      "ticker": "BEL",
+      "name": "Bharat Electronics",
+      "price": "406.50",
+      "target": "501.00",
+      "growth_pct": "+23.2%",
+      "catalyst": "Defence electronics leader, securing major naval and surveillance command radar orders.",
+      "rating": "None",
+      "revenue_growth": "+11.7%",
+      "earnings_growth": "+4.5%",
+      "analyst_count": 28,
+      "target_median": "501.00",
+      "target_high": "585.00",
+      "target_low": "346.00",
+      "rec_score": null,
+      "screener": {
+        "market_cap": "297143",
+        "pe_ratio": "49.0",
+        "book_value": "32.8",
+        "roce": "36.5",
+        "roe": "27.6",
+        "dividend_yield": "0.59",
+        "latest_quarter": "Mar 2026",
+        "q_sales": "10224",
+        "q_net_profit": "2226",
+        "q_eps": "3.04",
+        "qoq_sales_growth": 42.9,
+        "qoq_profit_growth": 40.9,
+        "rd_pct": 6.2,
+        "capex": 2044.8,
+        "current_ratio": 1.9,
+        "net_current_assets": 18402.0,
+        "graham_intrinsic_value": 711.4,
+        "ncav_per_share": 25.2,
+        "is_bargain": false,
+        "owner_earnings": 6864.4,
+        "retained_earnings_ratio": 2.86,
+        "moat_status": "Strong (Wide Moat)",
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "Fails Current Ratio (< 2.0)"
+        ]
+      }
+    },
+    {
+      "ticker": "ASTRAMICRO",
+      "name": "Astra Microwave",
+      "price": "1443.80",
+      "target": "1470.00",
+      "growth_pct": "+1.8%",
+      "catalyst": "High-end microwave sub-systems maker, critical supplier of radars and satellite payloads.",
+      "rating": "Buy",
+      "revenue_growth": "+19.7%",
+      "earnings_growth": "+43.9%",
+      "analyst_count": 8,
+      "target_median": "1470.00",
+      "target_high": "1665.00",
+      "target_low": "1068.00",
+      "rec_score": 1.6,
+      "screener": {
+        "market_cap": "13708",
+        "pe_ratio": "71.0",
+        "book_value": "138",
+        "roce": "20.2",
+        "roe": "16.0",
+        "dividend_yield": "0.15",
+        "latest_quarter": "Mar 2026",
+        "q_sales": "488",
+        "q_net_profit": "106",
+        "q_eps": "11.16",
+        "qoq_sales_growth": 87.7,
+        "qoq_profit_growth": 125.5,
+        "rd_pct": 6.2,
+        "capex": 97.6,
+        "current_ratio": 4.31,
+        "net_current_assets": 1276.0,
+        "graham_intrinsic_value": 2611.4,
+        "ncav_per_share": 134.4,
+        "is_bargain": false,
+        "owner_earnings": 349.4,
+        "retained_earnings_ratio": 2.86,
+        "moat_status": "Strong (Wide Moat)",
+        "hyper_growth_warning": false,
+        "valuation_alerts": []
+      }
+    }
+  ],
+  "semiconductors_equipment": [
+    {
+      "ticker": "ASMTEC",
+      "name": "ASM Technologies",
+      "price": "1250.00",
+      "target": null,
+      "growth_pct": null,
+      "catalyst": "Engineering design services for semiconductor equipment makers under India Semiconductor Mission (ISM) 2.0.",
+      "rating": "N/A",
+      "revenue_growth": null,
+      "earnings_growth": null,
+      "analyst_count": null,
+      "target_median": null,
+      "target_high": null,
+      "target_low": null,
+      "rec_score": null,
+      "screener": {}
+    },
+    {
+      "ticker": "RIRPOWER",
+      "name": "RIR Power Electronics",
+      "price": "1840.00",
+      "target": null,
+      "growth_pct": null,
+      "catalyst": "Power semiconductor device supplier, building new SiC fab facility under semiconductor PLI.",
+      "rating": "N/A",
+      "revenue_growth": null,
+      "earnings_growth": null,
+      "analyst_count": null,
+      "target_median": null,
+      "target_high": null,
+      "target_low": null,
+      "rec_score": null,
+      "screener": {}
+    },
+    {
+      "ticker": "SPEL",
+      "name": "SPEL Semiconductor",
+      "price": "115.00",
+      "target": null,
+      "growth_pct": null,
+      "catalyst": "First semiconductor OSAT and assembly facility listed, expanding IC testing capabilities.",
+      "rating": "N/A",
+      "revenue_growth": null,
+      "earnings_growth": null,
+      "analyst_count": null,
+      "target_median": null,
+      "target_high": null,
+      "target_low": null,
+      "rec_score": null,
+      "screener": {}
+    }
+  ],
+  "macro_indicators": [
+    {
+      "ticker": "MANUETF",
+      "name": "ICICI Pru Nifty India Manufacturing ETF",
+      "price": "100.50",
+      "target": null,
+      "growth_pct": null,
+      "catalyst": "Passive index fund tracking the broader GVA growth of India's manufacturing sector.",
+      "rating": "N/A",
+      "revenue_growth": null,
+      "earnings_growth": null,
+      "analyst_count": null,
+      "target_median": null,
+      "target_high": null,
+      "target_low": null,
+      "rec_score": null,
+      "screener": {
+        "market_cap": "N/A",
+        "pe_ratio": "N/A",
+        "roce": "N/A",
+        "roe": "N/A",
+        "valuation_alerts": []
+      }
+    },
+    {
+      "ticker": "HDFCMANETF",
+      "name": "HDFC Nifty India Manufacturing ETF",
+      "price": "52.40",
+      "target": null,
+      "growth_pct": null,
+      "catalyst": "Passive index fund tracking manufacturing sector performance under PLI schemes.",
+      "rating": "N/A",
+      "revenue_growth": null,
+      "earnings_growth": null,
+      "analyst_count": null,
+      "target_median": null,
+      "target_high": null,
+      "target_low": null,
+      "rec_score": null,
+      "screener": {
+        "market_cap": "N/A",
+        "pe_ratio": "N/A",
+        "roce": "N/A",
+        "roe": "N/A",
+        "valuation_alerts": []
       }
     }
   ]

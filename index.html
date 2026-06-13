@@ -36,8 +36,26 @@
                 <button class="nav-btn" data-tab="sectors">
                     <span class="btn-icon">📁</span> Sector Watch
                 </button>
+                <button class="nav-btn" data-tab="agreements">
+                    <span class="btn-icon">🤝</span> Agreements
+                </button>
+                <button class="nav-btn" data-tab="launches">
+                    <span class="btn-icon">🚀</span> Launches
+                </button>
+                <button class="nav-btn" data-tab="institutional">
+                    <span class="btn-icon">🏛️</span> Institutional Flow
+                </button>
+                <button class="nav-btn" data-tab="graham">
+                    <span class="btn-icon">🛡️</span> Graham Value
+                </button>
+                <button class="nav-btn" data-tab="buffett">
+                    <span class="btn-icon">🏰</span> Buffett Moat
+                </button>
+                <button class="nav-btn" data-tab="caution">
+                    <span class="btn-icon">⚠️</span> Caution List
+                </button>
                 <button class="nav-btn" data-tab="stocks">
-                    <span class="btn-icon">📈</span> Growth Stocks
+                    <span class="btn-icon">📈</span> Stocks Screener
                 </button>
             </nav>
             
@@ -208,16 +226,209 @@
                                     <th>Sector</th>
                                     <th>CMP</th>
                                     <th>P/E</th>
+                                    <th>QoQ Growth</th>
                                     <th>ROCE</th>
                                     <th>ROE</th>
+                                    <th>CapEx (Cr)</th>
+                                    <th>Owner Earnings (Cr)</th>
+                                    <th>Graham Intrinsic</th>
                                     <th>Target Price</th>
                                     <th>Potential</th>
                                     <th>YoY Growth</th>
+                                    <th>Valuation Alerts</th>
                                     <th>Rating</th>
                                     <th>Core Growth Catalyst</th>
                                 </tr>
                             </thead>
                             <tbody id="stocks-table-body">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Corporate Agreements Tab -->
+            <section id="tab-agreements" class="tab-pane">
+                <div class="glass-card">
+                    <div class="table-header-bar">
+                        <h3>🤝 Corporate Agreements & Partnerships</h3>
+                        <p class="subtitle">Scanned news alerts regarding joint ventures, strategic partnerships, and MoUs.</p>
+                    </div>
+                    <div class="table-scroll-container">
+                        <table class="premium-table">
+                            <thead>
+                                <tr>
+                                    <th>Source</th>
+                                    <th>Title / Announcement Headline</th>
+                                    <th>Date</th>
+                                    <th>Link</th>
+                                </tr>
+                            </thead>
+                            <tbody id="agreements-table-body">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Product Launches Tab -->
+            <section id="tab-launches" class="tab-pane">
+                <div class="glass-card">
+                    <div class="table-header-bar">
+                        <h3>🚀 Product Launches & Innovations</h3>
+                        <p class="subtitle">Real-time alerts on product launches, new manufacturing capacities, and rollouts.</p>
+                    </div>
+                    <div class="table-scroll-container">
+                        <table class="premium-table">
+                            <thead>
+                                <tr>
+                                    <th>Source</th>
+                                    <th>Title / Launch Details</th>
+                                    <th>Date</th>
+                                    <th>Link</th>
+                                </tr>
+                            </thead>
+                            <tbody id="launches-table-body">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Institutional Capital Tab -->
+            <section id="tab-institutional" class="tab-pane">
+                <div class="institutional-split-grid">
+                    <!-- Left: SEBI MF SID Filings -->
+                    <div class="glass-card">
+                        <div class="card-header">
+                            <h3>🏛️ Incoming Capital: SEBI Thematic MF Filings</h3>
+                            <p>Mutual funds filing Scheme Information Documents (SIDs) for manufacturing/defence themes</p>
+                        </div>
+                        <div class="table-scroll-container">
+                            <table class="premium-table">
+                                <thead>
+                                    <tr>
+                                        <th>Fund / Scheme Name</th>
+                                        <th>Theme Category</th>
+                                        <th>Status</th>
+                                        <th>Filing Date</th>
+                                        <th>Link</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="sebi-filings-body">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Right: Block Deals & Buying Activity -->
+                    <div class="glass-card">
+                        <div class="card-header">
+                            <h3>📊 Institutional Activity Feed</h3>
+                            <p>Latest block deals, bulk deals, and mutual fund purchasing news</p>
+                        </div>
+                        <div class="table-scroll-container">
+                            <table class="premium-table">
+                                <thead>
+                                    <tr>
+                                        <th>Media Source</th>
+                                        <th>Deal / Buying News Headline</th>
+                                        <th>Date</th>
+                                        <th>Link</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="inst-activity-body">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Graham Valuation Tab -->
+            <section id="tab-graham" class="tab-pane">
+                <div class="glass-card">
+                    <div class="table-header-bar">
+                        <h3>🛡️ Benjamin Graham Valuation Screens</h3>
+                        <p class="subtitle">Applying defensive investor criteria and calculating growth intrinsic values.</p>
+                    </div>
+                    <div class="table-scroll-container">
+                        <table class="premium-table">
+                            <thead>
+                                <tr>
+                                    <th>Ticker</th>
+                                    <th>Company</th>
+                                    <th>Price</th>
+                                    <th>P/E</th>
+                                    <th>Current Ratio</th>
+                                    <th>NCAV Value (Cr)</th>
+                                    <th>Graham Intrinsic</th>
+                                    <th>Bargain?</th>
+                                    <th>Defensive Pass?</th>
+                                    <th>Valuation Alerts</th>
+                                </tr>
+                            </thead>
+                            <tbody id="graham-table-body">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Buffett Valuation Tab -->
+            <section id="tab-buffett" class="tab-pane">
+                <div class="glass-card">
+                    <div class="table-header-bar">
+                        <h3>🏰 Warren Buffett Allocation & Moat Screens</h3>
+                        <p class="subtitle">Checking Economic Moat metrics, Owner Earnings, and Retained Value creation.</p>
+                    </div>
+                    <div class="table-scroll-container">
+                        <table class="premium-table">
+                            <thead>
+                                <tr>
+                                    <th>Ticker</th>
+                                    <th>Company</th>
+                                    <th>Price</th>
+                                    <th>Owner Earnings (Ann. Cr)</th>
+                                    <th>Retained Ratio ($1 Test)</th>
+                                    <th>Passed Retained Test?</th>
+                                    <th>Economic Moat</th>
+                                    <th>Valuation Alerts</th>
+                                </tr>
+                            </thead>
+                            <tbody id="buffett-table-body">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Caution List / Risk Alerts Tab -->
+            <section id="tab-caution" class="tab-pane">
+                <div class="glass-card alert-card-border">
+                    <div class="table-header-bar">
+                        <h3 class="danger-text">⚠️ Risk Alerts & Valuation Warnings (Caution List)</h3>
+                        <p class="subtitle">Watchlist stocks that are not meeting standard value/growth investing filters.</p>
+                    </div>
+                    <div class="table-scroll-container">
+                        <table class="premium-table">
+                            <thead>
+                                <tr>
+                                    <th>Ticker</th>
+                                    <th>Company</th>
+                                    <th>Sector</th>
+                                    <th>CMP</th>
+                                    <th>Failed Screen Criteria & Warning Signals</th>
+                                </tr>
+                            </thead>
+                            <tbody id="caution-table-body">
                                 <!-- Populated dynamically -->
                             </tbody>
                         </table>

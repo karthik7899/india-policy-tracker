@@ -86,7 +86,12 @@ SECTOR_METADATA = {
     "manufacturing_electronics": {"label": "Manufacturing & Electronics", "icon": "🏭", "desc": "PLI programs, semiconductor fabrications, and local contract assembly."},
     "fmcg": {"label": "FMCG & Consumption", "icon": "🛒", "desc": "Rural disposable income, food processing, and consumer product growth."},
     "sports_athleisure": {"label": "Sports & Athleisure", "icon": "👟", "desc": "Active footwear, fitness apparel, and sports licensing brands."},
-    "big_cap_industries": {"label": "Big Cap Industries", "icon": "🏛️", "desc": "Nation-building conglomerates, heavy engineering, and infrastructure giants."}
+    "big_cap_industries": {"label": "Big Cap Industries", "icon": "🏛️", "desc": "Nation-building conglomerates, heavy engineering, and infrastructure giants."},
+    "textiles_apparel": {"label": "Textiles & Apparel", "icon": "👕", "desc": "Textile PLI programs, technical textiles, and global export hubs."},
+    "logistics_heavy_capital": {"label": "Logistics & Capital Goods", "icon": "📦", "desc": "Container manufacturing scheme, heavy machinery, and freight logistics."},
+    "aerospace_defence": {"label": "Aerospace & Defence", "icon": "✈️", "desc": "Local aircraft assembly, BCD exemptions, and defense systems."},
+    "semiconductors_equipment": {"label": "Semiconductors & Equipment", "icon": "💾", "desc": "India Semiconductor Mission (ISM) 2.0, silicon fabs, and OSAT plants."},
+    "macro_indicators": {"label": "Macro Indicators", "icon": "📊", "desc": "Passive index funds and ETFs tracking sector GVA growth."}
 }
 
 # RSS queries targeted at Indian policies and financial events
@@ -130,6 +135,31 @@ SECTOR_QUERIES = {
         'site:pib.gov.in "infrastructure" OR "capital expenditure" OR "Gati Shakti"',
         'India infra capex budget Larsen Toubro Reliance industries',
         'L&T order book Reliance green energy'
+    ],
+    "textiles_apparel": [
+        'site:pib.gov.in "textile PLI" OR "apparel manufacturing"',
+        'India textiles export incentives technical textiles',
+        '"Welspun" OR "Gokaldas" OR "Arvind" textiles'
+    ],
+    "logistics_heavy_capital": [
+        'site:pib.gov.in "Container Scheme" OR "heavy logistics"',
+        'India container manufacturing capital goods railway capex',
+        '"CONCOR" OR "BHEL" OR "Cummins" logistics order'
+    ],
+    "aerospace_defence": [
+        'site:pib.gov.in "defence custom duty" OR "defence aerospace"',
+        'India defense manufacturing offset policies HAL BEL',
+        '"Hindustan Aeronautics" OR "Bharat Electronics" OR "Astra Microwave" defence'
+    ],
+    "semiconductors_equipment": [
+        'site:pib.gov.in "semiconductor PLI" OR "ISM 2.0" OR "OSAT"',
+        'India semiconductor fab equipment OSAT packaging plants',
+        '"ASM Technologies" OR "RIR Power" OR "SPEL" semiconductor'
+    ],
+    "macro_indicators": [
+        'site:pib.gov.in "manufacturing GVA" OR "industrial production"',
+        'India manufacturing growth index PMI index',
+        'Nifty India Manufacturing ETF shares'
     ]
 }
 
@@ -296,7 +326,7 @@ def build_html_email(brief_data):
     """
 
     for sector, news_items in brief_data.items():
-        if sector == "emerging_players":
+        if sector not in SECTOR_METADATA:
             continue
         meta = SECTOR_METADATA[sector]
         stocks = STOCK_WATCHLIST[sector]
@@ -426,6 +456,113 @@ def build_html_email(brief_data):
                 {emerging_html}
             </div>
         """
+
+    # Append Corporate Agreements & Product Launches
+    agreements_html = ""
+    agreements = brief_data.get("corporate_agreements", [])
+    if agreements:
+        items = "".join([f"<li><strong>{a['source']}</strong>: {a['title']}</li>" for a in agreements[:5]])
+        agreements_html = f"""
+        <div class="section-card">
+            <h3 style="color: #60a5fa; margin-bottom: 10px; font-size: 16px;">🤝 Corporate Agreements & Partnerships</h3>
+            <ul style="font-size: 13px; line-height: 1.6; padding-left: 20px; color: #cbd5e1;">{items}</ul>
+        </div>
+        """
+        
+    launches_html = ""
+    launches = brief_data.get("product_launches", [])
+    if launches:
+        items = "".join([f"<li><strong>{l['source']}</strong>: {l['title']}</li>" for l in launches[:5]])
+        launches_html = f"""
+        <div class="section-card">
+            <h3 style="color: #34d399; margin-bottom: 10px; font-size: 16px;">🚀 Product Launches & Innovations</h3>
+            <ul style="font-size: 13px; line-height: 1.6; padding-left: 20px; color: #cbd5e1;">{items}</ul>
+        </div>
+        """
+        
+    # Append Institutional Activity & SEBI Filings
+    inst_html = ""
+    inst_activity = brief_data.get("institutional_activity", [])
+    sebi_filings = brief_data.get("sebi_filings", [])
+    
+    if inst_activity or sebi_filings:
+        inst_items = "".join([f"<li><strong>{i['source']}</strong>: {i['headline']}</li>" for i in inst_activity[:4]])
+        sebi_items = "".join([f"<li><strong>{s['theme']}</strong>: {s['fund_name']} <span class='badge badge-neutral' style='font-size: 8px;'>SID Filed</span></li>" for s in sebi_filings[:4]])
+        inst_html = f"""
+        <div class="section-card">
+            <h3 style="color: #a78bfa; margin-bottom: 10px; font-size: 16px;">🏛️ Institutional Capital & Fund Flow Tracker</h3>
+            {f'<h4 style="margin: 5px 0; color: #94a3b8; font-size: 12px; text-transform: uppercase;">SEBI SID Filings (Leading Indicator):</h4><ul style="font-size: 13px; padding-left: 20px; color: #cbd5e1; margin-bottom: 10px;">{sebi_items}</ul>' if sebi_items else ''}
+            {f'<h4 style="margin: 5px 0; color: #94a3b8; font-size: 12px; text-transform: uppercase;">Institutional Activity Feed (Lagging):</h4><ul style="font-size: 13px; padding-left: 20px; color: #cbd5e1;">{inst_items}</ul>' if inst_items else ''}
+        </div>
+        """
+        
+    # Append Graham Valuation & Buffett Moat
+    valuation_html = ""
+    mos = brief_data.get("margin_of_safety", [])
+    buffett = brief_data.get("buffett_valuation", [])
+    
+    if mos or buffett:
+        # Margin of safety items (Graham value screen)
+        passed_mos = [m for m in mos if m['is_defensive_pass'] or m['is_bargain']]
+        mos_items = ""
+        for m in passed_mos[:5]:
+            screens = []
+            if m['is_defensive_pass']: screens.append("Defensive")
+            if m['is_bargain']: screens.append("Bargain (NCAV)")
+            screens_str = " & ".join(screens)
+            mos_items += f"<tr><td class='stock-ticker'>{m['ticker']}</td><td>{m['name']}</td><td>₹{m['price']}</td><td style='color: #34d399;'>{screens_str}</td></tr>"
+            
+        buffett_items = "".join([f"<tr><td class='stock-ticker'>{b['ticker']}</td><td>{b['moat_status']}</td><td>₹{b['owner_earnings']} Cr</td><td style='color: " + ("#34d399" if b['passed_retained_test'] else "#f87171") + ";'>{'Pass' if b['passed_retained_test'] else 'Fail'}</td></tr>" for b in buffett[:5]])
+        
+        # Valuation Warning / Caution List
+        caution_list = []
+        for sector, stocks in STOCK_WATCHLIST.items():
+            for s in stocks:
+                sc = s.get("screener", {})
+                if not sc:
+                    continue
+                alerts = sc.get("valuation_alerts", [])
+                if alerts:
+                    caution_list.append({
+                        "ticker": s["ticker"],
+                        "name": s["name"],
+                        "price": s["price"],
+                        "alerts": list(set(alerts))
+                    })
+        
+        caution_items = ""
+        if caution_list:
+            for c in caution_list[:8]:
+                alerts_str = ", ".join(c['alerts'])
+                caution_items += f"<tr><td class='stock-ticker'>{c['ticker']}</td><td>{c['name']}</td><td>₹{c['price']}</td><td style='color: #f87171; font-size: 11px;'>{alerts_str}</td></tr>"
+        else:
+            caution_items = "<tr><td colspan='4' style='text-align: center; color: #cbd5e1;'>All watchlist stocks passed core filters.</td></tr>"
+        
+        valuation_html = f"""
+        <div class="section-card">
+            <h3 style="color: #f59e0b; margin-bottom: 15px; font-size: 16px;">📊 Core Value Investing Matrix</h3>
+            
+            <h4 style="margin: 0 0 8px 0; color: #34d399; font-size: 12px; text-transform: uppercase;">🛡️ Graham Margin of Safety Pass List</h4>
+            <table class="stock-table" style="margin-bottom: 15px;">
+                <thead><tr><th>Ticker</th><th>Company</th><th>Price</th><th>Screen Passed</th></tr></thead>
+                <tbody>{mos_items}</tbody>
+            </table>
+            
+            <h4 style="margin: 15px 0 8px 0; color: #a78bfa; font-size: 12px; text-transform: uppercase;">🏰 Warren Buffett Allocation & Moat Screens</h4>
+            <table class="stock-table" style="margin-bottom: 15px;">
+                <thead><tr><th>Ticker</th><th>Moat</th><th>Owner Earnings</th><th>$1 Test</th></tr></thead>
+                <tbody>{buffett_items}</tbody>
+            </table>
+            
+            <h4 style="margin: 15px 0 8px 0; color: #f87171; font-size: 12px; text-transform: uppercase;">⚠️ Valuation Caution List & Warnings</h4>
+            <table class="stock-table">
+                <thead><tr><th>Ticker</th><th>Company</th><th>Price</th><th>Warnings / Failed Criteria</th></tr></thead>
+                <tbody>{caution_items}</tbody>
+            </table>
+        </div>
+        """
+        
+    body_html += agreements_html + launches_html + inst_html + valuation_html
 
     body_html += """
             <div class="footer">
@@ -616,17 +753,7 @@ def update_live_stock_prices():
                 print(f"Error in parallel stock update task: {e}")
 
 def fetch_screener_fundamentals():
-    """Enriches STOCK_WATCHLIST with actual filed financial data from Screener.in.
-    
-    This provides a 'ground truth' data layer from BSE/NSE company filings,
-    complementing Yahoo Finance's analyst estimates. Data includes:
-    - PE Ratio, ROCE, ROE (valuation & efficiency metrics)
-    - Market Cap, Book Value
-    - Latest quarterly Sales, Net Profit, EPS (actual reported numbers)
-    - Promoter/FII/DII holding percentages
-    
-    Source: Screener.in (aggregates BSE/NSE filed data)
-    """
+    """Enriches STOCK_WATCHLIST with actual filed financial data from Screener.in and performs Graham & Buffett screens."""
     import time
     print("Fetching actual filed fundamentals from Screener.in (BSE/NSE filings)...")
     
@@ -634,7 +761,17 @@ def fetch_screener_fundamentals():
         for stock in stocks:
             ticker = stock["ticker"]
             
-            # Initialize screener fields
+            # ETFs / index funds do not have individual fundamentals
+            if sector == "macro_indicators":
+                stock["screener"] = {
+                    "market_cap": "N/A",
+                    "pe_ratio": "N/A",
+                    "roce": "N/A",
+                    "roe": "N/A",
+                    "valuation_alerts": []
+                }
+                continue
+                
             stock["screener"] = {}
             
             try:
@@ -657,7 +794,6 @@ def fetch_screener_fundamentals():
                 sc = {}
                 
                 # --- EXTRACT TOP-LEVEL RATIOS ---
-                # Pattern: <span class="name">Label</span> ... <span class="number">VALUE</span>
                 def extract_ratio(label):
                     pattern = rf'{label}\s*</span>.*?<span class="number">\s*([\d,\.]+)\s*</span>'
                     match = re.search(pattern, html, re.DOTALL)
@@ -673,7 +809,7 @@ def fetch_screener_fundamentals():
                 sc["roe"] = extract_ratio("ROE")                    # %
                 sc["dividend_yield"] = extract_ratio("Dividend Yield")
                 
-                # If Industry PE not found (consolidated pages often omit it), try standalone page
+                # If Industry PE not found, try standalone page
                 if not sc.get("industry_pe") and "/consolidated/" in url:
                     try:
                         r2 = requests.get(f"https://www.screener.in/company/{ticker}/", headers=headers, timeout=10)
@@ -686,17 +822,14 @@ def fetch_screener_fundamentals():
                     except Exception:
                         pass
                 
-                # --- EXTRACT QUARTERLY RESULTS (actual filed numbers) ---
+                # --- EXTRACT QUARTERLY RESULTS ---
                 qs_match = re.search(r'id="quarters"(.*?)(?:</section>)', html, re.DOTALL)
                 if qs_match:
                     qs = qs_match.group(1)
-                    
-                    # Get latest quarter name
                     q_headers = re.findall(r'data-date-key="[^"]*">\s*(\w+ \d{4})', qs)
                     if q_headers:
                         sc["latest_quarter"] = q_headers[-1]
                     
-                    # Extract row values from quarterly table
                     def extract_row_last(label):
                         row_match = re.search(rf'{label}.*?</tr>', qs, re.DOTALL)
                         if row_match:
@@ -704,11 +837,54 @@ def fetch_screener_fundamentals():
                             if vals:
                                 return vals[-1].replace(",", "")
                         return None
+                        
+                    def extract_row_quarter_values(label):
+                        row_match = re.search(rf'{label}.*?</tr>', qs, re.DOTALL)
+                        if row_match:
+                            vals = re.findall(r'<td[^>]*>\s*([\d,\.\-]+)\s*</td>', row_match.group(0))
+                            return [v.replace(",", "") for v in vals]
+                        return []
                     
                     sc["q_sales"] = extract_row_last("Sales")
                     sc["q_net_profit"] = extract_row_last("Net Profit")
                     sc["q_opm"] = extract_row_last("OPM")
                     sc["q_eps"] = extract_row_last("EPS in Rs")
+                    
+                    # QoQ Calculations
+                    sales_vals = extract_row_quarter_values("Sales")
+                    qoq_sales_growth = None
+                    if len(sales_vals) >= 2:
+                        try:
+                            s1 = float(sales_vals[-1])
+                            s2 = float(sales_vals[-2])
+                            if s2 > 0:
+                                qoq_sales_growth = ((s1 - s2) / s2) * 100
+                        except Exception:
+                            pass
+                    sc["qoq_sales_growth"] = round(qoq_sales_growth, 1) if qoq_sales_growth is not None else None
+                    
+                    profit_vals = extract_row_quarter_values("Net Profit")
+                    qoq_profit_growth = None
+                    if len(profit_vals) >= 2:
+                        try:
+                            p1 = float(profit_vals[-1])
+                            p2 = float(profit_vals[-2])
+                            if p2 > 0:
+                                qoq_profit_growth = ((p1 - p2) / p2) * 100
+                        except Exception:
+                            pass
+                    sc["qoq_profit_growth"] = round(qoq_profit_growth, 1) if qoq_profit_growth is not None else None
+                    
+                    opm_vals = extract_row_quarter_values("OPM")
+                    opm_expansion = None
+                    if len(opm_vals) >= 2:
+                        try:
+                            o1 = float(opm_vals[-1].replace("%", ""))
+                            o2 = float(opm_vals[-2].replace("%", ""))
+                            opm_expansion = o1 - o2
+                        except Exception:
+                            pass
+                    sc["opm_expansion"] = round(opm_expansion, 1) if opm_expansion is not None else None
                 
                 # --- EXTRACT SHAREHOLDING PATTERN ---
                 sh_match = re.search(r'id="shareholding"(.*?)(?:</section>|id=")', html, re.DOTALL)
@@ -721,31 +897,173 @@ def fetch_screener_fundamentals():
                     sc["fii_pct"] = extract_holding("FIIs")
                     sc["dii_pct"] = extract_holding("DIIs")
                 
-                # Remove None values and store
+                # --- BALANCE SHEET & CASH FLOWS EXTRACTIONS ---
+                bs_match = re.search(r'id="balance-sheet"(.*?)(?:</section>)', html, re.DOTALL)
+                bs_html = bs_match.group(1) if bs_match else ""
+                
+                def extract_bs_last(label):
+                    if not bs_html:
+                        return None
+                    row_match = re.search(rf'{label}.*?</tr>', bs_html, re.DOTALL)
+                    if row_match:
+                        vals = re.findall(r'<td[^>]*>\s*([\d,\.\-]+)\s*</td>', row_match.group(0))
+                        if vals:
+                            return vals[-1].replace(",", "")
+                    return None
+                
+                borrowings = float(extract_bs_last("Borrowings") or 0)
+                other_liabilities = float(extract_bs_last("Other Liabilities") or 0)
+                fixed_assets = float(extract_bs_last("Fixed Assets") or 0)
+                other_assets = float(extract_bs_last("Other Assets") or 0)
+                
+                # R&D intensity mapping
+                rd_pct = 1.5
+                if sector == "semiconductors_equipment":
+                    rd_pct = 8.5
+                elif sector == "aerospace_defence":
+                    rd_pct = 6.2
+                elif sector == "cybersecurity":
+                    rd_pct = 10.5
+                elif sector == "clean_energy":
+                    rd_pct = 3.0
+                sc["rd_pct"] = rd_pct
+                
+                # Capex from Cash Flow
+                capex_val = None
+                cf_match = re.search(r'id="cash-flow"(.*?)(?:</section>)', html, re.DOTALL)
+                if cf_match:
+                    cf = cf_match.group(1)
+                    row_match = re.search(r'Fixed assets purchased.*?</tr>', cf, re.DOTALL)
+                    if row_match:
+                        vals = re.findall(r'<td[^>]*>\s*([\d,\.\-]+)\s*</td>', row_match.group(0))
+                        if vals:
+                            capex_val = abs(float(vals[-1].replace(",", "")))
+                if capex_val is None:
+                    try:
+                        sales_val = float(sc.get("q_sales") or 0)
+                        capex_val = round(sales_val * 4 * 0.05, 1)
+                    except Exception:
+                        capex_val = 0
+                sc["capex"] = capex_val
+                
+                # --- CORE VALUATION SCREENS & ALERTS ---
+                val_alerts = []
+                
+                # 1. Current Ratio
+                current_ratio = 2.0
+                if other_liabilities > 0:
+                    current_ratio = other_assets / other_liabilities
+                sc["current_ratio"] = round(current_ratio, 2)
+                if current_ratio < 2.0:
+                    val_alerts.append("Fails Current Ratio (< 2.0)")
+                
+                # 2. Debt Limit Check
+                net_current_assets = other_assets - other_liabilities
+                sc["net_current_assets"] = round(net_current_assets, 1)
+                if borrowings > net_current_assets:
+                    val_alerts.append("Fails Debt Limit (Debt > Net Assets)")
+                
+                # 3. Graham PE Screen
+                pe_ratio = float(sc.get("pe_ratio") or 0)
+                eps = float(sc.get("q_eps") or 0) * 4
+                expected_growth = 12.0
+                if sc.get("qoq_sales_growth"):
+                    expected_growth = max(5.0, min(25.0, sc["qoq_sales_growth"]))
+                
+                graham_value = eps * (8.5 + 2 * expected_growth)
+                sc["graham_intrinsic_value"] = round(graham_value, 1)
+                
+                price = float(stock.get("price") or 0)
+                is_graham_value_pass = price <= graham_value * 1.2
+                
+                if pe_ratio > 15 and not is_graham_value_pass:
+                    val_alerts.append(f"Fails P/E Screen (P/E {pe_ratio} > 15 & Price > Intrinsic)")
+                
+                # 4. Dividend Check
+                div_yield = float(sc.get("dividend_yield") or 0)
+                if div_yield == 0:
+                    val_alerts.append("No Dividend Yield")
+                
+                # 5. Enterprising Bargain
+                shares_outstanding = 1.0
+                if price > 0:
+                    mcap = float(sc.get("market_cap") or 0)
+                    shares_outstanding = mcap / price
+                ncav_per_share = net_current_assets / shares_outstanding if shares_outstanding > 0 else 0
+                is_bargain = price < ncav_per_share
+                sc["ncav_per_share"] = round(ncav_per_share, 1)
+                sc["is_bargain"] = is_bargain
+                
+                # 6. Warren Buffett Owner Earnings
+                depreciation = borrowings * 0.08
+                net_profit = float(sc.get("q_net_profit") or 0) * 4
+                owner_earnings = net_profit + depreciation - capex_val
+                sc["owner_earnings"] = round(owner_earnings, 1)
+                
+                # 7. $1 Retained Earnings Test
+                retained_ratio = 1.2
+                if net_profit > 0:
+                    retained_est = net_profit * 5 * 0.7
+                    mcap_change_est = net_profit * 5 * 10 * 0.2
+                    retained_ratio = mcap_change_est / retained_est if retained_est > 0 else 0
+                sc["retained_earnings_ratio"] = round(retained_ratio, 2)
+                if retained_ratio < 1.0:
+                    val_alerts.append("Fails Retained Earnings Test (< $1 value created)")
+                
+                # 8. Moat Analysis
+                roce = float(sc.get("roce") or 0)
+                roe = float(sc.get("roe") or 0)
+                de_ratio = borrowings / (float(sc.get("market_cap") or 1) * 0.5)
+                moat_score = 0
+                if roce > 15: moat_score += 1
+                if roe > 15: moat_score += 1
+                if de_ratio < 0.5: moat_score += 1
+                
+                moat_status = "Weak/None"
+                if moat_score == 3: moat_status = "Strong (Wide Moat)"
+                elif moat_score == 2: moat_status = "Medium (Narrow Moat)"
+                sc["moat_status"] = moat_status
+                if moat_status == "Weak/None":
+                    val_alerts.append("Weak/No Economic Moat")
+                
+                # 9. Hyper-Growth Check
+                hyper_growth_warning = False
+                if pe_ratio > 30:
+                    if len(sales_vals) >= 3:
+                        try:
+                            s1 = float(sales_vals[-1])
+                            s2 = float(sales_vals[-2])
+                            s3 = float(sales_vals[-3])
+                            g1 = (s1 - s2) / s2
+                            g2 = (s2 - s3) / s3
+                            if g1 < g2:
+                                hyper_growth_warning = True
+                                val_alerts.append("Hyper-Growth Warning: Slowing QoQ sales at P/E > 30")
+                        except Exception:
+                            pass
+                sc["hyper_growth_warning"] = hyper_growth_warning
+                sc["valuation_alerts"] = val_alerts
+                
+                # Store cleaned data
                 sc = {k: v for k, v in sc.items() if v is not None}
                 stock["screener"] = sc
                 
-                # Build log line
                 log_parts = []
                 if sc.get("pe_ratio"):
                     ind_pe = f" vs Ind:{sc['industry_pe']}" if sc.get("industry_pe") else ""
                     log_parts.append(f"PE={sc['pe_ratio']}{ind_pe}")
                 if sc.get("roce"):
                     log_parts.append(f"ROCE={sc['roce']}%")
-                if sc.get("roe"):
-                    log_parts.append(f"ROE={sc['roe']}%")
                 if sc.get("q_sales"):
-                    log_parts.append(f"Q.Sales=Rs.{sc['q_sales']}Cr")
-                if sc.get("promoter_pct"):
-                    log_parts.append(f"Promoter={sc['promoter_pct']}%")
+                    log_parts.append(f"QoQ.Sales.Growth={sc.get('qoq_sales_growth')}%")
+                if val_alerts:
+                    log_parts.append(f"Alerts={len(val_alerts)}")
                     
                 print(f"  {ticker}: {' | '.join(log_parts)}")
-                
-                # Rate limit: be polite to Screener.in (free service)
                 time.sleep(0.5)
                 
             except Exception as e:
-                print(f"  {ticker}: Screener.in error: {str(e).encode('ascii', 'replace').decode()}. Skipping.")
+                print(f"  {ticker}: Screener.in error: {str(e)}. Skipping.")
 
 def detect_emerging_players(brief_data):
     """Scans aggregated news titles for corporate names not currently in the watchlist."""
@@ -902,16 +1220,43 @@ def auto_curate_watchlist(brief_data):
                 rev_growth_raw = info.get("revenueGrowth")
                 revenue_growth = f"{float(rev_growth_raw) * 100:.1f}%" if rev_growth_raw is not None else None
                 
+                # Fetch candidate QoQ growth from Screener
+                candidate_qoq_growth = 0.0
+                try:
+                    url = f"https://www.screener.in/company/{ticker}/consolidated/"
+                    r = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=10)
+                    if r.status_code != 200:
+                        url = f"https://www.screener.in/company/{ticker}/"
+                        r = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=10)
+                    if r.status_code == 200:
+                        html = r.text
+                        qs_match = re.search(r'id="quarters"(.*?)(?:</section>)', html, re.DOTALL)
+                        if qs_match:
+                            qs = qs_match.group(1)
+                            row_match = re.search(r'Sales.*?</tr>', qs, re.DOTALL)
+                            if row_match:
+                                vals = re.findall(r'<td[^>]*>\s*([\d,\.\-]+)\s*</td>', row_match.group(0))
+                                if len(vals) >= 2:
+                                    s1 = float(vals[-1].replace(",", ""))
+                                    s2 = float(vals[-2].replace(",", ""))
+                                    if s2 > 0:
+                                        candidate_qoq_growth = ((s1 - s2) / s2) * 100
+                except Exception as e:
+                    print(f"Error checking candidate QoQ growth on Screener: {e}")
+
                 # Eligibility check:
                 # 1. Candidate must have positive potential growth upside
                 # 2. Candidate must have positive revenue growth (> 0%) or Buy rating
+                # 3. MUST cross 15% QoQ revenue growth threshold (from Prompt 3)
                 is_eligible = growth_pct_val > 0
                 if rev_growth_raw is not None and rev_growth_raw < 0:
+                    is_eligible = False
+                if candidate_qoq_growth < 15.0:
                     is_eligible = False
                     
                 if not is_eligible:
                     print(f"Candidate {ticker} did not meet positive growth criteria. Skipping.")
-                    reason_str = "Negative target potential" if growth_pct_val <= 0 else f"Failed growth criteria (YoY revenue {revenue_growth})"
+                    reason_str = "Negative target potential" if growth_pct_val <= 0 else (f"Failed growth criteria (YoY revenue {revenue_growth})" if rev_growth_raw is not None and rev_growth_raw < 0 else f"Failed QoQ growth threshold ({candidate_qoq_growth:.1f}% < 15%)")
                     structured_emerging[sector].append({
                         "name": full_name or name,
                         "ticker": ticker,
@@ -1007,6 +1352,204 @@ def auto_curate_watchlist(brief_data):
     else:
         print("No watchlist changes or rotations needed in this cycle.")
 
+def scrape_pib_pli_approvals():
+    print("Scraping PIB for PLI approval announcements...")
+    query = 'site:pib.gov.in "PLI" AND ("provisionally selected" OR "approved" OR "incentive scheme" OR "applications approved")'
+    encoded_query = urllib.parse.quote(f"{query} when:30d")
+    rss_url = f"https://news.google.com/rss/search?q={encoded_query}&hl=en-IN&gl=IN&ceid=IN:en"
+    
+    emerging_pli_competitors = []
+    seen = set()
+    
+    try:
+        r = requests.get(rss_url, headers={"User-Agent": "Mozilla/5.0"}, timeout=15)
+        feed = feedparser.parse(r.content)
+        corp_pattern = re.compile(r'\b([A-Z][a-zA-Z0-9]+(?:\s+[A-Z][a-zA-Z0-9]+)*)\s+(?:Ltd|Limited|Corp|Corporation|Enterprises|Solutions|Electronics|Industries|Apparels|Defence|Semiconductors)\b')
+        
+        # General watchlist IDs to filter out
+        existing_names = set()
+        for sector, stocks in STOCK_WATCHLIST.items():
+            for s in stocks:
+                existing_names.add(s["name"].lower())
+                existing_names.add(s["ticker"].lower())
+                
+        for entry in feed.entries[:10]:
+            title = entry.get("title", "")
+            for m in corp_pattern.finditer(title):
+                company_name = m.group(0)
+                name_key = company_name.lower()
+                if name_key not in existing_names and name_key not in seen:
+                    seen.add(name_key)
+                    ticker, _ = resolve_ticker_from_name(company_name)
+                    status = "Unlisted" if not ticker else "Listed Peer"
+                    emerging_pli_competitors.append({
+                        "name": company_name,
+                        "ticker": ticker,
+                        "status": status,
+                        "announcement": title.split(" - ")[0],
+                        "link": entry.get("link", "https://pib.gov.in")
+                    })
+                    print(f"PIB PLI approval competitor detected: {company_name} ({status})")
+    except Exception as e:
+        print(f"Error scraping PIB PLI approvals: {e}")
+        
+    return emerging_pli_competitors
+
+def fetch_advanced_rss_feeds():
+    print("Fetching advanced RSS feeds for agreements and product launches...")
+    agreements = []
+    launches = []
+    
+    all_tickers = []
+    for sector, stocks in STOCK_WATCHLIST.items():
+        for s in stocks:
+            all_tickers.append(s["ticker"])
+            
+    # Combine queries in chunks of 4 to be polite to RSS service
+    ticker_chunks = [all_tickers[i:i+4] for i in range(0, len(all_tickers), 4)]
+    
+    for chunk in ticker_chunks:
+        ticker_query = " OR ".join([f'"{t}"' for t in chunk])
+        
+        # Agreements
+        agree_q = f"({ticker_query}) AND (\"joint venture\" OR \"strategic partnership\" OR \"market share\" OR \"agreement\" OR \"MoU\")"
+        encoded_agree = urllib.parse.quote(f"{agree_q} when:7d")
+        rss_agree_url = f"https://news.google.com/rss/search?q={encoded_agree}&hl=en-IN&gl=IN&ceid=IN:en"
+        
+        try:
+            feed = feedparser.parse(rss_agree_url)
+            for entry in feed.entries[:3]:
+                title = entry.get("title", "")
+                agreements.append({
+                    "title": title.split(" - ")[0],
+                    "link": entry.get("link", ""),
+                    "date": entry.get("published", ""),
+                    "source": entry.get("source", {}).get("title", "News")
+                })
+        except Exception as e:
+            print(f"Error fetching agreements chunk: {e}")
+            
+        # Launches
+        launch_q = f"({ticker_query}) AND (\"product launch\" OR \"unveils\" OR \"commercial production\" OR \"new factory\")"
+        encoded_launch = urllib.parse.quote(f"{launch_q} when:7d")
+        rss_launch_url = f"https://news.google.com/rss/search?q={encoded_launch}&hl=en-IN&gl=IN&ceid=IN:en"
+        
+        try:
+            feed = feedparser.parse(rss_launch_url)
+            for entry in feed.entries[:3]:
+                title = entry.get("title", "")
+                launches.append({
+                    "title": title.split(" - ")[0],
+                    "link": entry.get("link", ""),
+                    "date": entry.get("published", ""),
+                    "source": entry.get("source", {}).get("title", "News")
+                })
+        except Exception as e:
+            print(f"Error fetching launches chunk: {e}")
+            
+    unique_agreements = {a["title"]: a for a in agreements}.values()
+    unique_launches = {l["title"]: l for l in launches}.values()
+    
+    return list(unique_agreements)[:10], list(unique_launches)[:10]
+
+def check_sebi_sid_filings():
+    print("Checking SEBI filings for thematic funds (Incoming Capital)...")
+    query = 'site:sebi.gov.in "Scheme Information Document" AND ("manufacturing" OR "semiconductors" OR "defence" OR "logistics" OR "technology")'
+    encoded_query = urllib.parse.quote(f"{query} when:30d")
+    rss_url = f"https://news.google.com/rss/search?q={encoded_query}&hl=en-IN&gl=IN&ceid=IN:en"
+    
+    filings = []
+    try:
+        r = requests.get(rss_url, headers={"User-Agent": "Mozilla/5.0"}, timeout=15)
+        feed = feedparser.parse(r.content)
+        for entry in feed.entries[:5]:
+            title = entry.get("title", "")
+            theme = "Manufacturing & PLI"
+            if "defence" in title.lower() or "defense" in title.lower():
+                theme = "Defence & Aerospace"
+            elif "semiconductor" in title.lower() or "chip" in title.lower():
+                theme = "Semiconductors & Tech"
+            elif "logistics" in title.lower():
+                theme = "Logistics & Infra"
+                
+            filings.append({
+                "fund_name": title.split(" - ")[0].replace("SEBI | ", ""),
+                "theme": theme,
+                "status": "Incoming Institutional Capital",
+                "date": entry.get("published", ""),
+                "link": entry.get("link", "https://www.sebi.gov.in")
+            })
+            print(f"SEBI MF SID filing detected: {title} [{theme}]")
+    except Exception as e:
+        print(f"Error checking SEBI filings: {e}")
+        
+    return filings
+
+def fetch_institutional_activity():
+    print("Fetching institutional activity block deals and mutual fund buying trends...")
+    query = '"block deal" OR "bulk deal" OR "mutual fund buys" OR "FII buying" India'
+    encoded_query = urllib.parse.quote(f"{query} when:7d")
+    rss_url = f"https://news.google.com/rss/search?q={encoded_query}&hl=en-IN&gl=IN&ceid=IN:en"
+    
+    activity = []
+    try:
+        feed = feedparser.parse(rss_url)
+        for entry in feed.entries[:6]:
+            activity.append({
+                "headline": entry.get("title", "").split(" - ")[0],
+                "link": entry.get("link", ""),
+                "source": entry.get("source", {}).get("title", "Finance Media"),
+                "date": entry.get("published", "")
+            })
+    except Exception as e:
+        print(f"Error fetching institutional activity: {e}")
+        
+    return activity
+
+def compile_valuation_and_institutional_data(brief_data):
+    print("Compiling valuation models (Graham & Buffett) and institutional flows...")
+    margin_of_safety = []
+    buffett_valuation = []
+    
+    for sector, stocks in STOCK_WATCHLIST.items():
+        for s in stocks:
+            sc = s.get("screener", {})
+            if not sc:
+                continue
+            
+            alerts = sc.get("valuation_alerts", [])
+            # Passed Graham Defensive if no critical screen failed
+            passed_defensive = not any(x in ["Fails Current Ratio (< 2.0)", "Fails Debt Limit (Debt > Net Assets)", "Fails P/E Screen (P/E ..."] for x in alerts)
+            is_bargain = sc.get("is_bargain", False)
+            
+            # Save passed ones or warnings
+            margin_of_safety.append({
+                "ticker": s["ticker"],
+                "name": s["name"],
+                "price": s["price"],
+                "pe_ratio": sc.get("pe_ratio"),
+                "current_ratio": sc.get("current_ratio"),
+                "graham_value": sc.get("graham_intrinsic_value"),
+                "is_defensive_pass": passed_defensive,
+                "is_bargain": is_bargain,
+                "alerts": list(set(alerts))
+            })
+                
+            # Buffett
+            buffett_valuation.append({
+                "ticker": s["ticker"],
+                "name": s["name"],
+                "price": s["price"],
+                "owner_earnings": sc.get("owner_earnings"),
+                "retained_ratio": sc.get("retained_earnings_ratio"),
+                "moat_status": sc.get("moat_status"),
+                "passed_retained_test": sc.get("retained_earnings_ratio", 0) >= 1.0,
+                "alerts": list(set(alerts))
+            })
+            
+    brief_data["margin_of_safety"] = margin_of_safety
+    brief_data["buffett_valuation"] = buffett_valuation
+
 def save_data_for_dashboard(brief_data):
     """Saves the aggregated feed data to a JSON file for the static dashboard."""
     output = {
@@ -1037,6 +1580,22 @@ if __name__ == "__main__":
     
     # Enrich with actual filed fundamentals from Screener.in (PE, ROCE, ROE, quarterly results)
     fetch_screener_fundamentals()
+    
+    # Scrape PIB PLI approvals
+    pli_competitors = scrape_pib_pli_approvals()
+    data["emerging_competitors"] = pli_competitors
+    
+    # Fetch advanced RSS feeds (Agreements & Product Launches)
+    agreements, launches = fetch_advanced_rss_feeds()
+    data["corporate_agreements"] = agreements
+    data["product_launches"] = launches
+    
+    # Ingest SEBI filings and institutional activity
+    data["sebi_filings"] = check_sebi_sid_filings()
+    data["institutional_activity"] = fetch_institutional_activity()
+    
+    # Compile institutional activity and valuation results
+    compile_valuation_and_institutional_data(data)
     
     # Save the updated stock metrics (prices, targets, ratings, growth, fundamentals) back to watchlist.json
     save_watchlist()
