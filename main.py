@@ -59,7 +59,7 @@ async def run_pipeline():
         pli_task = scrape_pib_pli_approvals_async(session, watchlist)
         adv_rss_task = fetch_advanced_rss_feeds_async(session, watchlist)
         sebi_task = check_sebi_sid_filings_async(session)
-        inst_task = fetch_institutional_activity_async(session)
+        inst_task = fetch_institutional_activity_async(session, watchlist)
 
         pli_competitors, (agreements, launches), sebi_filings, inst_activity = await asyncio.gather(
             pli_task, adv_rss_task, sebi_task, inst_task

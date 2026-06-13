@@ -778,6 +778,27 @@ function renderStocksTable(filterQuery = "") {
                     valAlertsHtml = '<span class="badge-success-alert" style="font-size: 8px;">PASSED</span>';
                 }
 
+                let instChangeHtml = '';
+                if (sectorKey === "macro_indicators") {
+                    instChangeHtml = '<span style="color: var(--text-muted);">—</span>';
+                } else {
+                    const diiChg = sc.dii_change || 0.0;
+                    const fiiChg = sc.fii_change || 0.0;
+                    let diiBadge = '';
+                    let fiiBadge = '';
+                    if (diiChg > 0) {
+                        diiBadge = `<span class="badge-success-alert" style="margin-right: 4px; font-size: 9px;">🔥 MFs +${diiChg}%</span>`;
+                    } else if (diiChg < 0) {
+                        diiBadge = `<span class="badge-danger-alert" style="margin-right: 4px; font-size: 9px;">📉 MFs ${diiChg}%</span>`;
+                    }
+                    if (fiiChg > 0) {
+                        fiiBadge = `<span class="badge-success-alert" style="font-size: 9px;">✈️ FIIs +${fiiChg}%</span>`;
+                    } else if (fiiChg < 0) {
+                        fiiBadge = `<span class="badge-danger-alert" style="font-size: 9px;">📉 FIIs ${fiiChg}%</span>`;
+                    }
+                    instChangeHtml = (diiBadge || fiiBadge) ? `${diiBadge}${fiiBadge}` : '<span style="color: var(--text-muted);">0.0%</span>';
+                }
+
                 const tr = document.createElement("tr");
                 tr.innerHTML = `
                     <td class="t-ticker">${s.ticker}</td>
@@ -794,6 +815,7 @@ function renderStocksTable(filterQuery = "") {
                     <td>${s.target ? `₹${s.target}` : '<span style="color: var(--text-muted);">—</span>'}</td>
                     <td class="t-potential">${formatPotential(s.growth_pct)}</td>
                     <td>${formatGrowthBadge(s.revenue_growth, 'table')}</td>
+                    <td>${instChangeHtml}</td>
                     <td style="max-width: 150px; white-space: normal;">${valAlertsHtml}</td>
                     <td>${formatAnalystBadge(s)}</td>
                     <td class="t-catalyst">${s.catalyst}</td>
@@ -805,7 +827,7 @@ function renderStocksTable(filterQuery = "") {
     });
     
     if (rowCount === 0) {
-        tbody.innerHTML = `<tr><td colspan="17" style="text-align: center; padding: 30px; color: var(--text-secondary);">No companies found matching your search.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="18" style="text-align: center; padding: 30px; color: var(--text-secondary);">No companies found matching your search.</td></tr>`;
     }
 }
 
@@ -897,15 +919,22 @@ function renderInstitutionalFlows() {
         instBody.innerHTML = "";
         const activity = appData.briefing.institutional_activity || [];
         if (activity.length === 0) {
-            instBody.innerHTML = `<tr><td colspan="4" style="text-align: center; padding: 20px; color: var(--text-secondary);">No institutional block deals scanned.</td></tr>`;
+            instBody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 20px; color: var(--text-secondary);">No institutional block deals scanned.</td></tr>`;
         } else {
             activity.forEach(act => {
+                const actionBadge = act.action === "Buy" ? 
+                    `<span class="badge-success-alert">BUY</span>` : 
+                    `<span class="badge-danger-alert">SELL</span>`;
+                    
                 const tr = document.createElement("tr");
                 tr.innerHTML = `
                     <td><span class="source-badge">${act.source}</span></td>
-                    <td><strong>${act.headline}</strong></td>
+                    <td><strong>${act.buyer}</strong></td>
+                    <td>${actionBadge}</td>
+                    <td><strong>${act.company}</strong></td>
+                    <td>${act.details}</td>
                     <td>${act.date}</td>
-                    <td><a href="${act.link}" class="badge-rating" style="text-decoration:none;" target="_blank">Link</a></td>
+                    <td><a href="${act.link}" class="badge-rating" style="text-decoration:none;" target="_blank">View</a></td>
                 `;
                 instBody.appendChild(tr);
             });

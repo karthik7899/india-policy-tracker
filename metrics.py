@@ -251,17 +251,42 @@ async def fetch_screener_async(session, ticker, sector=None, price=0.0):
         sc["opm_expansion"] = round(opm_expansion, 1) if opm_expansion is not None else None
 
     # Shareholding
-    sh_match = re.search(r'id="shareholding"(.*?)(?:</section>|id=")', html, re.DOTALL)
+    sh_match = re.search(r'id="shareholding"(.*?)</section>', html, re.DOTALL)
     if sh_match:
         sh = sh_match.group(1)
 
-        def extract_holding(label):
-            match = re.search(rf"{label}.*?<td[^>]*>\s*([\d\.]+)\s*%", sh, re.DOTALL)
-            return match.group(1) if match else None
+        def extract_holding_change(label):
+            row_match = re.search(rf"{label}.*?</tr>", sh, re.DOTALL)
+            if row_match:
+                vals = re.findall(r"<td[^>]*>\s*([\d\.\-%]+)\s*</td>", row_match.group(0))
+                numeric_vals = []
+                for v in vals:
+                    try:
+                        numeric_vals.append(float(v.replace("%", "").strip()))
+                    except ValueError:
+                        pass
+                if len(numeric_vals) >= 2:
+                    latest = numeric_vals[-1]
+                    prev = numeric_vals[-2]
+                    change = latest - prev
+                    return latest, round(change, 2)
+                elif len(numeric_vals) == 1:
+                    return numeric_vals[0], 0.0
+            return None, None
 
-        sc["promoter_pct"] = extract_holding("Promoters")
-        sc["fii_pct"] = extract_holding("FIIs")
-        sc["dii_pct"] = extract_holding("DIIs")
+        promoter_pct, promoter_change = extract_holding_change("Promoters")
+        fii_pct, fii_change = extract_holding_change("FIIs")
+        dii_pct, dii_change = extract_holding_change("DIIs")
+
+        if promoter_pct is not None:
+            sc["promoter_pct"] = promoter_pct
+            sc["promoter_change"] = promoter_change
+        if fii_pct is not None:
+            sc["fii_pct"] = fii_pct
+            sc["fii_change"] = fii_change
+        if dii_pct is not None:
+            sc["dii_pct"] = dii_pct
+            sc["dii_change"] = dii_change
 
     # Balance Sheet
     bs_match = re.search(r'id="balance-sheet"(.*?)(?:</section>)', html, re.DOTALL)
