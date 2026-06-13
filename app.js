@@ -136,6 +136,7 @@ function formatAnalystBadge(stock) {
 
 // Initialize App
 document.addEventListener("DOMContentLoaded", () => {
+    setupThemeToggle();
     setupTabToggles();
     loadDashboardData();
     setupStockSearch();
@@ -223,6 +224,10 @@ function loadDashboardData() {
 // Dashboard Page Setup
 function initDashboard(data) {
     document.getElementById("update-time").textContent = `Last Refreshed: ${data.last_updated}`;
+    
+    // Hide loading overlay
+    const overlay = document.getElementById("loading-overlay");
+    if (overlay) overlay.style.display = "none";
     
     // Calculate total policy announcements
     let totalAnnouncements = 0;
@@ -740,13 +745,18 @@ function renderSectorDetail(sectorKey) {
 }
 
 // Stock Screener Matrix Rendering
+let currentSortColumn = 'potential';
+let currentSortDirection = 'desc';
+
 function renderStocksTable(filterQuery = "") {
     const tbody = document.getElementById("stocks-table-body");
+    if (!tbody) return;
     tbody.innerHTML = "";
     
     const query = filterQuery.toLowerCase().trim();
-    let rowCount = 0;
+    let allStocksList = [];
     
+    // Flatten data for sorting
     Object.keys(appData.watchlist).forEach(sectorKey => {
         const sectorLabel = appData.sectors[sectorKey].label;
         const stocks = appData.watchlist[sectorKey];
@@ -759,76 +769,136 @@ function renderStocksTable(filterQuery = "") {
                 sectorLabel.toLowerCase().includes(query);
                 
             if (matchesSearch) {
-                const sc = s.screener || {};
-                const peVal = sc.pe_ratio ? sc.pe_ratio : '<span style="color: var(--text-muted);">—</span>';
-                const roceVal = sc.roce ? `${sc.roce}%` : '<span style="color: var(--text-muted);">—</span>';
-                const roeVal = sc.roe ? `${sc.roe}%` : '<span style="color: var(--text-muted);">—</span>';
-
-                const qoqSalesVal = sc.qoq_sales_growth !== undefined ? `<strong>${sc.qoq_sales_growth}%</strong>` : '<span style="color: var(--text-muted);">—</span>';
-                const capexVal = sc.capex !== undefined ? `₹${Number(sc.capex).toLocaleString('en-IN')}` : '<span style="color: var(--text-muted);">—</span>';
-                const oeVal = sc.owner_earnings !== undefined ? `₹${Number(sc.owner_earnings).toLocaleString('en-IN')}` : '<span style="color: var(--text-muted);">—</span>';
-                const grahamVal = sc.graham_intrinsic_value !== undefined ? `₹${sc.graham_intrinsic_value}` : '<span style="color: var(--text-muted);">—</span>';
-                
-                let valAlertsHtml = '';
-                if (sectorKey === "macro_indicators") {
-                    valAlertsHtml = '<span style="color: var(--text-muted);">ETF (N/A)</span>';
-                } else if (sc.valuation_alerts && sc.valuation_alerts.length > 0) {
-                    valAlertsHtml = sc.valuation_alerts.map(a => `<span class="badge-danger-alert" style="margin-right: 4px; margin-bottom: 4px; font-size: 8px;">${a}</span>`).join('');
-                } else {
-                    valAlertsHtml = '<span class="badge-success-alert" style="font-size: 8px;">PASSED</span>';
-                }
-
-                let instChangeHtml = '';
-                if (sectorKey === "macro_indicators") {
-                    instChangeHtml = '<span style="color: var(--text-muted);">—</span>';
-                } else {
-                    const diiChg = sc.dii_change || 0.0;
-                    const fiiChg = sc.fii_change || 0.0;
-                    let diiBadge = '';
-                    let fiiBadge = '';
-                    if (diiChg > 0) {
-                        diiBadge = `<span class="badge-success-alert" style="margin-right: 4px; font-size: 9px;">🔥 MFs +${diiChg}%</span>`;
-                    } else if (diiChg < 0) {
-                        diiBadge = `<span class="badge-danger-alert" style="margin-right: 4px; font-size: 9px;">📉 MFs ${diiChg}%</span>`;
-                    }
-                    if (fiiChg > 0) {
-                        fiiBadge = `<span class="badge-success-alert" style="font-size: 9px;">✈️ FIIs +${fiiChg}%</span>`;
-                    } else if (fiiChg < 0) {
-                        fiiBadge = `<span class="badge-danger-alert" style="font-size: 9px;">📉 FIIs ${fiiChg}%</span>`;
-                    }
-                    instChangeHtml = (diiBadge || fiiBadge) ? `${diiBadge}${fiiBadge}` : '<span style="color: var(--text-muted);">0.0%</span>';
-                }
-
-                const tr = document.createElement("tr");
-                tr.innerHTML = `
-                    <td class="t-ticker">${s.ticker}</td>
-                    <td><strong>${s.name}</strong></td>
-                    <td><span class="chip" style="display:inline-block; border-color:transparent; background-color:rgba(255,255,255,0.03);">${sectorLabel}</span></td>
-                    <td>₹${s.price}</td>
-                    <td><strong>${peVal}</strong></td>
-                    <td>${qoqSalesVal}</td>
-                    <td><strong>${roceVal}</strong></td>
-                    <td><strong>${roeVal}</strong></td>
-                    <td>${capexVal}</td>
-                    <td><strong>${oeVal}</strong></td>
-                    <td><strong>${grahamVal}</strong></td>
-                    <td>${s.target ? `₹${s.target}` : '<span style="color: var(--text-muted);">—</span>'}</td>
-                    <td class="t-potential">${formatPotential(s.growth_pct)}</td>
-                    <td>${formatGrowthBadge(s.revenue_growth, 'table')}</td>
-                    <td>${instChangeHtml}</td>
-                    <td style="max-width: 150px; white-space: normal;">${valAlertsHtml}</td>
-                    <td>${formatAnalystBadge(s)}</td>
-                    <td class="t-catalyst">${s.catalyst}</td>
-                `;
-                tbody.appendChild(tr);
-                rowCount++;
+                allStocksList.push({
+                    ...s,
+                    sectorLabel: sectorLabel,
+                    sectorKey: sectorKey
+                });
             }
         });
     });
-    
-    if (rowCount === 0) {
+
+    // Sort logic
+    allStocksList.sort((a, b) => {
+        let valA, valB;
+
+        const parseNumeric = (val) => {
+            if (val === undefined || val === null || val === 'N/A' || val === '—') return -999999;
+            const parsed = parseFloat(String(val).replace(/[^0-9.-]+/g, ""));
+            return isNaN(parsed) ? -999999 : parsed;
+        };
+
+        switch (currentSortColumn) {
+            case 'ticker': valA = a.ticker; valB = b.ticker; break;
+            case 'company': valA = a.name; valB = b.name; break;
+            case 'sector': valA = a.sectorLabel; valB = b.sectorLabel; break;
+            case 'cmp': valA = parseNumeric(a.price); valB = parseNumeric(b.price); break;
+            case 'pe': valA = parseNumeric(a.screener?.pe_ratio); valB = parseNumeric(b.screener?.pe_ratio); break;
+            case 'qoq': valA = parseNumeric(a.screener?.qoq_sales_growth); valB = parseNumeric(b.screener?.qoq_sales_growth); break;
+            case 'roce': valA = parseNumeric(a.screener?.roce); valB = parseNumeric(b.screener?.roce); break;
+            case 'roe': valA = parseNumeric(a.screener?.roe); valB = parseNumeric(b.screener?.roe); break;
+            case 'capex': valA = parseNumeric(a.screener?.capex); valB = parseNumeric(b.screener?.capex); break;
+            case 'oe': valA = parseNumeric(a.screener?.owner_earnings); valB = parseNumeric(b.screener?.owner_earnings); break;
+            case 'graham': valA = parseNumeric(a.screener?.graham_intrinsic_value); valB = parseNumeric(b.screener?.graham_intrinsic_value); break;
+            case 'target': valA = parseNumeric(a.target); valB = parseNumeric(b.target); break;
+            case 'potential': valA = parseNumeric(a.growth_pct); valB = parseNumeric(b.growth_pct); break;
+            case 'growth': valA = parseNumeric(a.revenue_growth); valB = parseNumeric(b.revenue_growth); break;
+            case 'inst':
+                const changeA = parseNumeric(a.screener?.fii_change) + parseNumeric(a.screener?.dii_change);
+                const changeB = parseNumeric(b.screener?.fii_change) + parseNumeric(b.screener?.dii_change);
+                valA = changeA; valB = changeB; break;
+            case 'rating':
+                const ratingScore = (r) => {
+                    if (r === 'Strong Buy') return 4;
+                    if (r === 'Buy') return 3;
+                    if (r === 'Hold') return 2;
+                    if (r === 'Underperform' || r === 'Sell') return 1;
+                    return 0;
+                };
+                valA = ratingScore(a.rating); valB = ratingScore(b.rating); break;
+            default: valA = parseNumeric(a.growth_pct); valB = parseNumeric(b.growth_pct);
+        }
+
+        if (typeof valA === 'string' && typeof valB === 'string') {
+            return currentSortDirection === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
+        } else {
+            return currentSortDirection === 'asc' ? valA - valB : valB - valA;
+        }
+    });
+
+    // Render sorted list
+    allStocksList.forEach(s => {
+        const sectorKey = s.sectorKey;
+        const sectorLabel = s.sectorLabel;
+        const sc = s.screener || {};
+        const peVal = sc.pe_ratio ? sc.pe_ratio : '<span style="color: var(--text-muted);">—</span>';
+        const roceVal = sc.roce ? `${sc.roce}%` : '<span style="color: var(--text-muted);">—</span>';
+        const roeVal = sc.roe ? `${sc.roe}%` : '<span style="color: var(--text-muted);">—</span>';
+
+        const qoqSalesVal = sc.qoq_sales_growth !== undefined ? `<strong>${sc.qoq_sales_growth}%</strong>` : '<span style="color: var(--text-muted);">—</span>';
+        const capexVal = sc.capex !== undefined ? `₹${Number(sc.capex).toLocaleString('en-IN')}` : '<span style="color: var(--text-muted);">—</span>';
+        const oeVal = sc.owner_earnings !== undefined ? `₹${Number(sc.owner_earnings).toLocaleString('en-IN')}` : '<span style="color: var(--text-muted);">—</span>';
+        const grahamVal = sc.graham_intrinsic_value !== undefined ? `₹${sc.graham_intrinsic_value}` : '<span style="color: var(--text-muted);">—</span>';
+        
+        let valAlertsHtml = '';
+        if (sectorKey === "macro_indicators") {
+            valAlertsHtml = '<span style="color: var(--text-muted);">ETF (N/A)</span>';
+        } else if (sc.valuation_alerts && sc.valuation_alerts.length > 0) {
+            valAlertsHtml = sc.valuation_alerts.map(a => `<span class="badge-danger-alert" style="margin-right: 4px; margin-bottom: 4px; font-size: 8px;">${a}</span>`).join('');
+        } else {
+            valAlertsHtml = '<span class="badge-success-alert" style="font-size: 8px;">PASSED</span>';
+        }
+
+        let instChangeHtml = '';
+        if (sectorKey === "macro_indicators") {
+            instChangeHtml = '<span style="color: var(--text-muted);">—</span>';
+        } else {
+            const diiChg = sc.dii_change || 0.0;
+            const fiiChg = sc.fii_change || 0.0;
+            let diiBadge = '';
+            let fiiBadge = '';
+            if (diiChg > 0) {
+                diiBadge = `<span class="badge-success-alert" style="margin-right: 4px; font-size: 9px;">🔥 MFs +${diiChg}%</span>`;
+            } else if (diiChg < 0) {
+                diiBadge = `<span class="badge-danger-alert" style="margin-right: 4px; font-size: 9px;">📉 MFs ${diiChg}%</span>`;
+            }
+            if (fiiChg > 0) {
+                fiiBadge = `<span class="badge-success-alert" style="font-size: 9px;">✈️ FIIs +${fiiChg}%</span>`;
+            } else if (fiiChg < 0) {
+                fiiBadge = `<span class="badge-danger-alert" style="font-size: 9px;">📉 FIIs ${fiiChg}%</span>`;
+            }
+            instChangeHtml = (diiBadge || fiiBadge) ? `${diiBadge}${fiiBadge}` : '<span style="color: var(--text-muted);">0.0%</span>';
+        }
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td class="t-ticker">${s.ticker}</td>
+            <td><strong>${s.name}</strong></td>
+            <td><span class="chip" style="display:inline-block; border-color:transparent; background-color:rgba(255,255,255,0.03);">${sectorLabel}</span></td>
+            <td>₹${s.price}</td>
+            <td><strong>${peVal}</strong></td>
+            <td>${qoqSalesVal}</td>
+            <td><strong>${roceVal}</strong></td>
+            <td><strong>${roeVal}</strong></td>
+            <td>${capexVal}</td>
+            <td><strong>${oeVal}</strong></td>
+            <td><strong>${grahamVal}</strong></td>
+            <td>${s.target ? `₹${s.target}` : '<span style="color: var(--text-muted);">—</span>'}</td>
+            <td class="t-potential">${formatPotential(s.growth_pct)}</td>
+            <td>${formatGrowthBadge(s.revenue_growth, 'table')}</td>
+            <td>${instChangeHtml}</td>
+            <td style="max-width: 150px; white-space: normal;">${valAlertsHtml}</td>
+            <td>${formatAnalystBadge(s)}</td>
+            <td style="max-width: 280px; white-space: normal; font-size: 11px;">${s.catalyst}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+    if (allStocksList.length === 0) {
         tbody.innerHTML = `<tr><td colspan="18" style="text-align: center; padding: 30px; color: var(--text-secondary);">No companies found matching your search.</td></tr>`;
     }
+
+    updateSortHeaders();
 }
 
 // Search Filter Input
@@ -839,6 +909,58 @@ function setupStockSearch() {
             renderStocksTable(e.target.value);
         });
     }
+    setupTableSorting();
+}
+
+// Table column sorting setup
+function setupTableSorting() {
+    const headers = document.querySelectorAll("th.sortable");
+    headers.forEach(header => {
+        header.addEventListener("click", () => {
+            const column = header.getAttribute("data-sort");
+            if (currentSortColumn === column) {
+                currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSortColumn = column;
+                currentSortDirection = 'desc'; // Default to desc for new column
+            }
+            renderStocksTable(document.getElementById("stock-search").value);
+        });
+    });
+}
+
+function updateSortHeaders() {
+    const headers = document.querySelectorAll("th.sortable");
+    headers.forEach(header => {
+        header.classList.remove("asc", "desc");
+        if (header.getAttribute("data-sort") === currentSortColumn) {
+            header.classList.add(currentSortDirection);
+        }
+    });
+}
+
+// Theme Toggle Logic
+function setupThemeToggle() {
+    const toggleBtn = document.getElementById("theme-toggle");
+    if (!toggleBtn) return;
+
+    // Check saved theme or system preference
+    const savedTheme = localStorage.getItem('bharat-policy-theme');
+    const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+
+    if (savedTheme === 'light' || (!savedTheme && prefersLight)) {
+        document.documentElement.setAttribute('data-theme', 'light');
+    }
+
+    toggleBtn.addEventListener("click", () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        let newTheme = 'dark';
+        if (currentTheme !== 'light') {
+            newTheme = 'light';
+        }
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('bharat-policy-theme', newTheme);
+    });
 }
 
 // Render Corporate Agreements List
