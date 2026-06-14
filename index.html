@@ -17,6 +17,12 @@
     <link rel="stylesheet" href="styles.css?v=1.2.3">
 </head>
 <body>
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="spinner"></div>
+        <p>Loading Dashboard Data...</p>
+    </div>
+
     <div class="app-container">
         
         <!-- Sidebar Navigation -->
@@ -65,6 +71,13 @@
                     <span>System Active</span>
                 </div>
                 <p class="version-text">v1.2.0 • 2026 Edition</p>
+
+                <div style="margin-top: 15px;">
+                    <button id="theme-toggle" class="nav-btn" style="width: 100%; justify-content: center; gap: 8px;">
+                        <span class="btn-icon">🌓</span>
+                        <span id="theme-toggle-text">Toggle Theme</span>
+                    </button>
+                </div>
             </div>
         </aside>
         
@@ -221,23 +234,23 @@
                         <table class="premium-table">
                             <thead>
                                 <tr>
-                                    <th>Ticker</th>
-                                    <th>Company</th>
-                                    <th>Sector</th>
-                                    <th>CMP</th>
-                                    <th>P/E</th>
-                                    <th>QoQ Growth</th>
-                                    <th>ROCE</th>
-                                    <th>ROE</th>
-                                    <th>CapEx (Cr)</th>
-                                    <th>Owner Earnings (Cr)</th>
-                                    <th>Graham Intrinsic</th>
-                                    <th>Target Price</th>
-                                    <th>Potential</th>
-                                    <th>YoY Growth</th>
-                                    <th>Inst. Change</th>
+                                    <th class="sortable" data-sort="ticker">Ticker <span class="sort-icon">↕</span></th>
+                                    <th class="sortable" data-sort="company">Company <span class="sort-icon">↕</span></th>
+                                    <th class="sortable" data-sort="sector">Sector <span class="sort-icon">↕</span></th>
+                                    <th class="sortable" data-sort="cmp">CMP <span class="sort-icon">↕</span></th>
+                                    <th class="sortable" data-sort="pe">P/E <span class="sort-icon">↕</span></th>
+                                    <th class="sortable" data-sort="qoq">QoQ Growth <span class="sort-icon">↕</span></th>
+                                    <th class="sortable" data-sort="roce">ROCE <span class="sort-icon">↕</span></th>
+                                    <th class="sortable" data-sort="roe">ROE <span class="sort-icon">↕</span></th>
+                                    <th class="sortable" data-sort="capex">CapEx (Cr) <span class="sort-icon">↕</span></th>
+                                    <th class="sortable" data-sort="oe">Owner Earnings (Cr) <span class="sort-icon">↕</span></th>
+                                    <th class="sortable" data-sort="graham">Graham Intrinsic <span class="sort-icon">↕</span></th>
+                                    <th class="sortable" data-sort="target">Target Price <span class="sort-icon">↕</span></th>
+                                    <th class="sortable" data-sort="potential">Potential <span class="sort-icon">↕</span></th>
+                                    <th class="sortable" data-sort="growth">YoY Growth <span class="sort-icon">↕</span></th>
+                                    <th class="sortable" data-sort="inst">Inst. Change <span class="sort-icon">↕</span></th>
                                     <th>Valuation Alerts</th>
-                                    <th>Rating</th>
+                                    <th class="sortable" data-sort="rating">Rating <span class="sort-icon">↕</span></th>
                                     <th>Core Growth Catalyst</th>
                                 </tr>
                             </thead>

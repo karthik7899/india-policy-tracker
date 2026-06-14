@@ -9,17 +9,32 @@ This platform runs entirely in the cloud for free using **GitHub Actions** and *
 ## 🚀 Key Features
 
 * **Daily & Weekly Email Digests:** Delivers beautifully formatted HTML emails highlighting positive, negative, and neutral policy impacts.
-* **Official Data Aggregator:** Scrapes the Press Information Bureau (PIB) of India daily releases and financial news feeds via Google News RSS indexes.
-* **Pre-Seeded Portfolios:** Curated stocks mapped to specific policies across 8 high-growth sectors:
+* **Official Data Aggregator:** Scrapes the Press Information Bureau (PIB) of India daily releases and financial news feeds via Google News RSS indexes concurrently.
+* **Pre-Seeded Portfolios:** Curated stocks mapped to specific policies across 13 high-growth sectors:
   * **Clean Energy:** Solar, wind, and green hydrogen plays (Tata Power, Suzlon, Adani Green).
   * **Data Center Support:** Electrical grids and fiber infrastructure (Schneider, STL, Anant Raj).
   * **Cybersecurity:** Digital security and secure cloud consulting (TCS, Quick Heal).
-  * **Surveillance & CCTV:** IP cameras, safe cities, and UAV defense (Aditya Infotech [CPPLUS], Dixon, Allied Digital, IdeaForge).
+  * **Surveillance & CCTV:** IP cameras, safe cities, and UAV defense (CPPLUS, Dixon, Allied Digital, IdeaForge).
   * **Manufacturing & Electronics:** Semiconductor fabrication and electronics assembly PLI plays (Dixon, Kaynes, CG Power).
   * **FMCG & Consumption:** Rural recovery and consumer brand scaling (Varun Beverages, Tata Consumer, ITC).
   * **Sports & Athleisure:** Athletic footwear and brand franchising (Metro Brands, Campus, Page Industries).
   * **Big Cap Industries:** National infrastructure, energy transition, and conglomerates (L&T, Reliance).
-* **Self-Updating Web Dashboard:** The GitHub Action automatically commits the aggregated news log into the codebase, updating the dashboard instantly without needing a server backend.
+  * **Textiles & Apparel:** Apparel manufacturing, export parks, and production-linked schemes (Welspun Living, Arvind, Gokaldas Exports).
+  * **Logistics & Heavy Capital:** Cargo handling, corridor connectivity, and freight transit infrastructure (Container Corporation, BHEL, Cummins India).
+  * **Aerospace & Defence:** Precision avionics, indigenous manufacture, and military launch platforms (HAL, BEL, Astra Microwave).
+  * **Semiconductors & Equipment:** Cleanroom tooling, design fabs, and machinery (SPEL Semiconductor, RIR Power, ASMPT).
+  * **Macro Indicators:** Broad manufacturing benchmark index funds and sector ETFs (MANUETF, HDFCMANETF).
+* **Value Investing Screeners (Graham & Buffett):**
+  * **Benjamin Graham Screens:** Dynamically calculates expected growth intrinsic value, enterprising bargain NCAV net-assets status, and flags P/E screen deviations.
+  * **Warren Buffett Screens:** Evaluates owner earnings (net profit + depreciation - capex), computes the $1 retained earnings test ratio, and tracks qualitative moat strength.
+* **Institutional Flow Tracker:**
+  * **Holding Pattern Changes:** Scrapes Screener.in to extract promoter, domestic (DII/Mutual Fund), and foreign (FII) quarterly holding shifts.
+  * **Block & Bulk Deals Parser:** Scrapes and structures recent market transactions, identifying the buyer, action (BUY/SELL), target stock, transaction details, and direct media link.
+  * **Thematic Fund Filings:** Scrapes SEBI mutual fund filings (Scheme Information Documents) to watch for upcoming thematic fund launches.
+* **Automated Watchlist Rotation:** 
+  * Checks emerging competitors discovered in news feeds.
+  * Filters candidates through a strict **15% QoQ revenue growth threshold** (via Screener) and rotates weaker-performing watchlist tickers with stronger ones.
+* **Self-Updating Web Dashboard:** The GitHub Action automatically commits the aggregated news log and updated watchlist into the codebase, updating the frontend pages instantly.
 
 ---
 
@@ -54,20 +69,23 @@ Go to your GitHub Repository -> **Settings** -> **Secrets and variables** -> **A
 
 ## 💻 Local Testing & Development
 
-### 1. Running the Script Locally
-Ensure you have the required Python modules installed:
+### 1. Installing Dependencies
+Ensure you have Python installed, then install all required packages from `requirements.txt`:
 ```bash
-pip install feedparser requests
+pip install -r requirements.txt
 ```
 
-To test the RSS aggregator and write `dashboard_data.json` / generate a local HTML email preview (`email_preview.html`), run:
+### 2. Running the Aggregation Pipeline
+To test the scrapers, value investing screeners, and institutional flows locally:
 ```bash
 python brief.py
 ```
+This writes the compiled JSON results to `dashboard_data.json` and outputs a local HTML briefing preview (`email_preview.html`).
 
-### 2. Viewing the Dashboard Locally
-Serve the dashboard using Python's built-in lightweight server:
+### 3. Serving the Web Dashboard
+Serve the directory locally using Python's lightweight web server:
 ```bash
 python -m http.server 8000
 ```
 Then navigate to `http://localhost:8000` in your web browser.
+
