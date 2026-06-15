@@ -1,0 +1,5 @@
+## 2026-06-13 - Rate Limits with yfinance batching and concurrency
+**Learning:** `yf.download` is much faster for a batch of tickers than calling `yf.Ticker(t).history(period="1d")` in a `ThreadPoolExecutor` and avoids rate limits. But getting `info` requires individual requests which takes time and can hit limits. The problem in the review was using `fast_info` in `try/except Exception`, but `info` was still being accessed immediately after. `ticker.info` requires an API call that rate limits us.
+Actually, the reviewer pointed out that changing `ticker_obj.history(period="1d")` to `ticker_obj.fast_info.last_price` CAUSED the performance drop. That is likely because `fast_info` gets rate limited and takes long time when done concurrently, whereas `history()` is optimized better or uses a different endpoint that didn't rate limit in their environment.
+
+**Action:** Revert changes to use `fast_info`. The correct optimization is `yf.download` to fetch all history in one go at the start, or pass a shared `requests.Session()` to `yf.Ticker(t, session=shared_session)`.
