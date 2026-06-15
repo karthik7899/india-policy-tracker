@@ -1,0 +1,3 @@
+## 2024-06-16 - Synchronous Requests Bottleneck in Auto-Curation
+**Learning:** Found a performance bottleneck in `metrics.py` where `auto_curate_watchlist` was making multiple synchronous API calls using `requests.get()` inside a loop (for both ticker resolution and Screener.in checks). This caused significant overhead due to repeated TCP connection setups and SSL handshakes.
+**Action:** Always instantiate a `requests.Session()` object when making multiple synchronous requests to the same or even different domains to benefit from connection pooling, which reuses the underlying TCP connections.
