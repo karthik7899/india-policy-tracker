@@ -1,0 +1,12 @@
+{
+  "name": "bharat-policy-tracker",
+  "version": "1.0.0",
+  "description": "Automated, cloud-based platform that tracks Indian government policy announcements",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^30.4.2",
+    "jest-environment-jsdom": "^30.4.1"
+  }
+}
