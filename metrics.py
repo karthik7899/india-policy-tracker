@@ -8,6 +8,17 @@ from config import save_watchlist
 import urllib.parse
 
 
+
+
+def get_potential(stock):
+    try:
+        pot = stock.get("growth_pct", "0%")
+        if isinstance(pot, str):
+            pot = pot.replace("+", "").replace("%", "")
+        return float(pot)
+    except Exception:
+        return 0.0
+
 def update_single_stock(stock):
     """Worker function to fetch Yahoo Finance metrics for a single stock."""
     ticker = stock["ticker"]
@@ -757,11 +768,6 @@ def auto_curate_watchlist(brief_data, watchlist):
                     )
                 else:
 
-                    def get_potential(stock):
-                        try:
-                            return float(stock["growth_pct"].replace("%", ""))
-                        except Exception:
-                            return 0.0
 
                     sorted_watchlist = sorted(current_watchlist, key=get_potential)
                     weakest_stock = sorted_watchlist[0]
