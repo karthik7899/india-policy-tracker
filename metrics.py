@@ -574,6 +574,13 @@ def resolve_ticker_from_name(company_name):
     return None, None
 
 
+def _get_potential(stock):
+    try:
+        return float(stock["growth_pct"].replace("%", ""))
+    except Exception:
+        return 0.0
+
+
 def auto_curate_watchlist(brief_data, watchlist):
     """Discovers emerging competitors and rotates underperforming stocks."""
     log.info("Starting automated watchlist curation and rotation cycle...")
@@ -757,15 +764,9 @@ def auto_curate_watchlist(brief_data, watchlist):
                     )
                 else:
 
-                    def get_potential(stock):
-                        try:
-                            return float(stock["growth_pct"].replace("%", ""))
-                        except Exception:
-                            return 0.0
-
-                    sorted_watchlist = sorted(current_watchlist, key=get_potential)
+                    sorted_watchlist = sorted(current_watchlist, key=_get_potential)
                     weakest_stock = sorted_watchlist[0]
-                    weakest_potential = get_potential(weakest_stock)
+                    weakest_potential = _get_potential(weakest_stock)
 
                     if growth_pct_val > weakest_potential:
                         watchlist[sector] = [
