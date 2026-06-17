@@ -8,6 +8,19 @@ from config import save_watchlist
 import urllib.parse
 
 
+def extract_ratio(html, label):
+    """
+    Extracts a financial ratio from the Screener.in HTML given a label.
+    """
+    if not html:
+        return None
+    pattern = rf'{label}\s*</span>.*?<span class="number">\s*([\d,\.]+)\s*</span>'
+    match = re.search(pattern, html, re.DOTALL)
+    if match:
+        return match.group(1).replace(",", "")
+    return None
+
+
 def update_single_stock(stock):
     """Worker function to fetch Yahoo Finance metrics for a single stock."""
     ticker = stock["ticker"]
@@ -152,20 +165,13 @@ async def fetch_screener_async(session, ticker, sector=None, price=0.0):
 
     sc = {}
 
-    def extract_ratio(label):
-        pattern = rf'{label}\s*</span>.*?<span class="number">\s*([\d,\.]+)\s*</span>'
-        match = re.search(pattern, html, re.DOTALL)
-        if match:
-            return match.group(1).replace(",", "")
-        return None
-
-    sc["market_cap"] = extract_ratio("Market Cap")
-    sc["pe_ratio"] = extract_ratio("Stock P/E")
-    sc["industry_pe"] = extract_ratio("Industry PE")
-    sc["book_value"] = extract_ratio("Book Value")
-    sc["roce"] = extract_ratio("ROCE")
-    sc["roe"] = extract_ratio("ROE")
-    sc["dividend_yield"] = extract_ratio("Dividend Yield")
+    sc["market_cap"] = extract_ratio(html, "Market Cap")
+    sc["pe_ratio"] = extract_ratio(html, "Stock P/E")
+    sc["industry_pe"] = extract_ratio(html, "Industry PE")
+    sc["book_value"] = extract_ratio(html, "Book Value")
+    sc["roce"] = extract_ratio(html, "ROCE")
+    sc["roe"] = extract_ratio(html, "ROE")
+    sc["dividend_yield"] = extract_ratio(html, "Dividend Yield")
 
     # If Industry PE not found, try standalone page
     if not sc.get("industry_pe") and url_used == url_con:
