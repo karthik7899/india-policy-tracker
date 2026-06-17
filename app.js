@@ -97,8 +97,21 @@ let growthChartInstance = null;
 
 // Helper: Format YoY growth with contextual icon/color
 function formatGrowthBadge(growthStr, style = 'inline') {
-    if (!growthStr) return style === 'table' ? `<span style="color: var(--text-muted);">—</span>` : '';
-    const val = parseFloat(growthStr.replace('%', ''));
+    if (!growthStr || growthStr === "N/A") return `<span class="badge badge-neutral">N/A</span>`;
+
+    let isPositive = false;
+    let text = growthStr;
+
+    // Check if it starts with + or is a positive number
+    if (typeof growthStr === 'string') {
+        if (growthStr.startsWith('+')) isPositive = true;
+        else if (growthStr.startsWith('-')) isPositive = false;
+        else if (parseFloat(growthStr) > 0) isPositive = true;
+    } else if (typeof growthStr === 'number') {
+        isPositive = growthStr > 0;
+    }
+
+    const val = parseFloat(growthStr.toString().replace('%', ''));
     if (isNaN(val)) return style === 'table' ? `<span style="color: var(--text-muted);">—</span>` : '';
     
     const absValStr = Math.abs(val).toFixed(1) + '%';
@@ -1227,3 +1240,10 @@ function getStockList() {
     return list;
 }
 
+
+// Export functions for testing
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        formatGrowthBadge
+    };
+}
