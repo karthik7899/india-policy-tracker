@@ -1,0 +1,3 @@
+## 2024-06-17 - Connection Pooling for Repeated HTTP Requests
+**Learning:** Making multiple synchronous HTTP requests (e.g. evaluating candidates in `auto_curate_watchlist` which performs Screener and Yahoo Finance lookups) using `requests.get` incurs repeated TCP/SSL handshake overhead, which acts as a performance bottleneck specific to this kind of iterative loop architecture.
+**Action:** When a loop involves multiple synchronous `requests.get` calls, instantiate a `requests.Session()` outside the loop and reuse the session inside for connection pooling to avoid redundant handshake overhead.
