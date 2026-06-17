@@ -335,6 +335,13 @@ async def fetch_institutional_activity_async(session, watchlist):
     encoded_query = urllib.parse.quote(f"{query} when:7d")
     rss_url = f"https://news.google.com/rss/search?q={encoded_query}&hl=en-IN&gl=IN&ceid=IN:en"
 
+    # Flatten watchlist for faster lookup
+    flat_watchlist = [
+        (s["ticker"].lower(), s["name"].lower(), s["name"], s["ticker"])
+        for stocks in watchlist.values()
+        for s in stocks
+    ]
+
     activity = []
     try:
         async with session.get(rss_url, timeout=15) as response:
@@ -343,6 +350,7 @@ async def fetch_institutional_activity_async(session, watchlist):
                 feed = feedparser.parse(xml_data)
                 for entry in feed.entries[:8]:  # Get top 8 entries
                     headline = entry.get("title", "").split(" - ")[0].strip()
+                    headline_lower = headline.lower()
 
                     # Parse block deal headline
                     buyer = "Institutional Investor"
@@ -395,19 +403,13 @@ async def fetch_institutional_activity_async(session, watchlist):
                     if company_match:
                         company = company_match.group(1).strip()
 
-                    # Match against watchlist stocks
+                    # Match against watchlist stocks using flattened O(N) lookup
                     matched_company = None
                     matched_ticker = None
-                    for sector, stocks in watchlist.items():
-                        for s in stocks:
-                            if (
-                                s["ticker"].lower() in headline.lower()
-                                or s["name"].lower() in headline.lower()
-                            ):
-                                matched_company = s["name"]
-                                matched_ticker = s["ticker"]
-                                break
-                        if matched_company:
+                    for t_lower, n_lower, name, ticker in flat_watchlist:
+                        if t_lower in headline_lower or n_lower in headline_lower:
+                            matched_company = name
+                            matched_ticker = ticker
                             break
 
                     if matched_company:
