@@ -1,3 +1,4 @@
+import requests
 import re
 import asyncio
 import aiohttp
@@ -546,7 +547,6 @@ def detect_emerging_players(brief_data, watchlist):
 
 
 def resolve_ticker_from_name(company_name):
-    import requests
 
     url = f"https://query2.finance.yahoo.com/v1/finance/search?q={urllib.parse.quote(company_name)}&quotesCount=5"
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
@@ -574,11 +574,146 @@ def resolve_ticker_from_name(company_name):
     return None, None
 
 
+def _check_screener_qoq_growth(ticker: str) -> float:
+    candidate_qoq_growth = 0.0
+    try:
+        url = f"https://www.screener.in/company/{ticker}/consolidated/"
+        r = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=10)
+        if r.status_code != 200:
+            url = f"https://www.screener.in/company/{ticker}/"
+            r = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=10)
+        if r.status_code == 200:
+            html = r.text
+            qs_match = re.search(r'id="quarters"(.*?)(?:</section>)', html, re.DOTALL)
+            if qs_match:
+                qs = qs_match.group(1)
+                row_match = re.search(r"Sales.*?</tr>", qs, re.DOTALL)
+                if row_match:
+                    vals = re.findall(
+                        r"<td[^>]*>\s*([\d,\.\-]+)\s*</td>",
+                        row_match.group(0),
+                    )
+                    if len(vals) >= 2:
+                        s1 = float(vals[-1].replace(",", ""))
+                        s2 = float(vals[-2].replace(",", ""))
+                        if s2 > 0:
+                            candidate_qoq_growth = ((s1 - s2) / s2) * 100
+    except Exception as e:
+        log.error(f"Error checking candidate QoQ growth on Screener: {e}")
+    return candidate_qoq_growth
+
+
+def _evaluate_candidate_eligibility(
+    growth_pct_val,
+    rev_growth_raw,
+    candidate_qoq_growth,
+    ticker,
+    revenue_growth,
+    sector,
+    full_name,
+    name,
+    structured_emerging,
+) -> bool:
+    is_eligible = growth_pct_val > 0
+    if rev_growth_raw is not None and rev_growth_raw < 0:
+        is_eligible = False
+    if candidate_qoq_growth < 15.0:
+        is_eligible = False
+
+    if not is_eligible:
+        log.info(f"Candidate {ticker} did not meet positive growth criteria. Skipping.")
+        reason_str = (
+            "Negative target potential"
+            if growth_pct_val <= 0
+            else (
+                f"Failed growth criteria (YoY revenue {revenue_growth})"
+                if rev_growth_raw is not None and rev_growth_raw < 0
+                else f"Failed QoQ growth threshold ({candidate_qoq_growth:.1f}% < 15%)"
+            )
+        )
+        structured_emerging[sector].append(
+            {
+                "name": full_name or name,
+                "ticker": ticker,
+                "status": "Growth Divergence",
+                "reason": reason_str,
+            }
+        )
+    return is_eligible
+
+
+def _process_watchlist_rotation(
+    sector,
+    ticker,
+    full_name,
+    candidate_stock,
+    growth_pct_val,
+    watchlist,
+    structured_emerging,
+    rotations_log,
+):
+    current_watchlist = watchlist[sector]
+    if len(current_watchlist) < 5:
+        current_watchlist.append(candidate_stock)
+        log.info(
+            f"ADDED: {ticker} to {sector} (Space available: {len(current_watchlist)}/5)"
+        )
+        rotations_log.append(f"Added {full_name} ({ticker}) to {sector}")
+        structured_emerging[sector].append(
+            {
+                "name": full_name,
+                "ticker": ticker,
+                "status": "Watchlisted",
+                "reason": "Added to watchlist (new high-growth pick).",
+            }
+        )
+    else:
+
+        def get_potential(stock):
+            try:
+                return float(stock["growth_pct"].replace("%", ""))
+            except Exception:
+                return 0.0
+
+        sorted_watchlist = sorted(current_watchlist, key=get_potential)
+        weakest_stock = sorted_watchlist[0]
+        weakest_potential = get_potential(weakest_stock)
+
+        if growth_pct_val > weakest_potential:
+            watchlist[sector] = [
+                x for x in current_watchlist if x["ticker"] != weakest_stock["ticker"]
+            ]
+            watchlist[sector].append(candidate_stock)
+            log.info(f"ROTATED: Replaced {weakest_stock['ticker']} with {ticker}")
+            rotations_log.append(
+                f"Rotated {weakest_stock['name']} out for {full_name} in {sector}"
+            )
+            structured_emerging[sector].append(
+                {
+                    "name": full_name,
+                    "ticker": ticker,
+                    "status": "Watchlisted",
+                    "reason": f"Rotated into watchlist replacing {weakest_stock['ticker']}.",
+                }
+            )
+        else:
+            log.info(
+                f"Candidate {ticker} (Upside: {growth_pct_val:.1f}%) did not outperform the weakest watchlist pick {weakest_stock['ticker']} (Upside: {weakest_potential:.1f}%). Skipping rotation."
+            )
+            structured_emerging[sector].append(
+                {
+                    "name": full_name,
+                    "ticker": ticker,
+                    "status": "Pipeline",
+                    "reason": f"Pipeline candidate (Upside {growth_pct_val:.1f}% vs weakest watchlisted {weakest_potential:.1f}%).",
+                }
+            )
+
+
 def auto_curate_watchlist(brief_data, watchlist):
     """Discovers emerging competitors and rotates underperforming stocks."""
     log.info("Starting automated watchlist curation and rotation cycle...")
     from config import SECTOR_METADATA
-    import requests
 
     emerging_sectors = detect_emerging_players(brief_data, watchlist)
     rotations_log = []
@@ -658,69 +793,23 @@ def auto_curate_watchlist(brief_data, watchlist):
                 )
 
                 # Fetch candidate QoQ growth from Screener (synchronously here)
-                candidate_qoq_growth = 0.0
-                try:
-                    url = f"https://www.screener.in/company/{ticker}/consolidated/"
-                    r = requests.get(
-                        url, headers={"User-Agent": "Mozilla/5.0"}, timeout=10
-                    )
-                    if r.status_code != 200:
-                        url = f"https://www.screener.in/company/{ticker}/"
-                        r = requests.get(
-                            url, headers={"User-Agent": "Mozilla/5.0"}, timeout=10
-                        )
-                    if r.status_code == 200:
-                        html = r.text
-                        qs_match = re.search(
-                            r'id="quarters"(.*?)(?:</section>)', html, re.DOTALL
-                        )
-                        if qs_match:
-                            qs = qs_match.group(1)
-                            row_match = re.search(r"Sales.*?</tr>", qs, re.DOTALL)
-                            if row_match:
-                                vals = re.findall(
-                                    r"<td[^>]*>\s*([\d,\.\-]+)\s*</td>",
-                                    row_match.group(0),
-                                )
-                                if len(vals) >= 2:
-                                    s1 = float(vals[-1].replace(",", ""))
-                                    s2 = float(vals[-2].replace(",", ""))
-                                    if s2 > 0:
-                                        candidate_qoq_growth = ((s1 - s2) / s2) * 100
-                except Exception as e:
-                    log.error(f"Error checking candidate QoQ growth on Screener: {e}")
-
+                candidate_qoq_growth = _check_screener_qoq_growth(ticker)
                 # Eligibility check:
                 # 1. Candidate must have positive potential growth upside
                 # 2. Candidate must have positive revenue growth (> 0%) or Buy rating
                 # 3. MUST cross 15% QoQ revenue growth threshold (from Prompt 3)
-                is_eligible = growth_pct_val > 0
-                if rev_growth_raw is not None and rev_growth_raw < 0:
-                    is_eligible = False
-                if candidate_qoq_growth < 15.0:
-                    is_eligible = False
-
+                is_eligible = _evaluate_candidate_eligibility(
+                    growth_pct_val,
+                    rev_growth_raw,
+                    candidate_qoq_growth,
+                    ticker,
+                    revenue_growth,
+                    sector,
+                    full_name,
+                    name,
+                    structured_emerging,
+                )
                 if not is_eligible:
-                    log.info(
-                        f"Candidate {ticker} did not meet positive growth criteria. Skipping."
-                    )
-                    reason_str = (
-                        "Negative target potential"
-                        if growth_pct_val <= 0
-                        else (
-                            f"Failed growth criteria (YoY revenue {revenue_growth})"
-                            if rev_growth_raw is not None and rev_growth_raw < 0
-                            else f"Failed QoQ growth threshold ({candidate_qoq_growth:.1f}% < 15%)"
-                        )
-                    )
-                    structured_emerging[sector].append(
-                        {
-                            "name": full_name or name,
-                            "ticker": ticker,
-                            "status": "Growth Divergence",
-                            "reason": reason_str,
-                        }
-                    )
                     continue
 
                 related_headline = f"Policy tailwinds in the {sector} segment."
@@ -740,67 +829,16 @@ def auto_curate_watchlist(brief_data, watchlist):
                     "revenue_growth": revenue_growth,
                 }
 
-                current_watchlist = watchlist[sector]
-                if len(current_watchlist) < 5:
-                    current_watchlist.append(candidate_stock)
-                    log.info(
-                        f"ADDED: {ticker} to {sector} (Space available: {len(current_watchlist)}/5)"
-                    )
-                    rotations_log.append(f"Added {full_name} ({ticker}) to {sector}")
-                    structured_emerging[sector].append(
-                        {
-                            "name": full_name,
-                            "ticker": ticker,
-                            "status": "Watchlisted",
-                            "reason": "Added to watchlist (new high-growth pick).",
-                        }
-                    )
-                else:
-
-                    def get_potential(stock):
-                        try:
-                            return float(stock["growth_pct"].replace("%", ""))
-                        except Exception:
-                            return 0.0
-
-                    sorted_watchlist = sorted(current_watchlist, key=get_potential)
-                    weakest_stock = sorted_watchlist[0]
-                    weakest_potential = get_potential(weakest_stock)
-
-                    if growth_pct_val > weakest_potential:
-                        watchlist[sector] = [
-                            x
-                            for x in current_watchlist
-                            if x["ticker"] != weakest_stock["ticker"]
-                        ]
-                        watchlist[sector].append(candidate_stock)
-                        log.info(
-                            f"ROTATED: Replaced {weakest_stock['ticker']} with {ticker}"
-                        )
-                        rotations_log.append(
-                            f"Rotated {weakest_stock['name']} out for {full_name} in {sector}"
-                        )
-                        structured_emerging[sector].append(
-                            {
-                                "name": full_name,
-                                "ticker": ticker,
-                                "status": "Watchlisted",
-                                "reason": f"Rotated into watchlist replacing {weakest_stock['ticker']}.",
-                            }
-                        )
-                    else:
-                        log.info(
-                            f"Candidate {ticker} (Upside: {growth_pct_val:.1f}%) did not outperform the weakest watchlist pick {weakest_stock['ticker']} (Upside: {weakest_potential:.1f}%). Skipping rotation."
-                        )
-                        structured_emerging[sector].append(
-                            {
-                                "name": full_name,
-                                "ticker": ticker,
-                                "status": "Pipeline",
-                                "reason": f"Pipeline candidate (Upside {growth_pct_val:.1f}% vs weakest watchlisted {weakest_potential:.1f}%).",
-                            }
-                        )
-
+                _process_watchlist_rotation(
+                    sector,
+                    ticker,
+                    full_name,
+                    candidate_stock,
+                    growth_pct_val,
+                    watchlist,
+                    structured_emerging,
+                    rotations_log,
+                )
             except Exception as e:
                 log.error(f"Error checking financials for {yahoo_ticker}: {e}")
                 structured_emerging[sector].append(
