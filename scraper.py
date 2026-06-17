@@ -2,6 +2,7 @@ import asyncio
 import aiohttp
 import feedparser
 import datetime
+from bs4 import BeautifulSoup
 import urllib.parse
 import re
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
@@ -62,7 +63,15 @@ def analyze_sentiment(title, summary):
 
 def clean_news_item(entry, query_term):
     """Formats and cleans an RSS entry. Returns None if the article is older than 7 days."""
-    title = entry.get("title", "").split(" - ")[0]
+    # Use BeautifulSoup and attribute access based on instructions
+    title = ""
+    if hasattr(entry, "title") and entry.title:
+        title = BeautifulSoup(entry.title, "html.parser").get_text(strip=True)
+    elif entry.get("title"):
+        title = BeautifulSoup(entry.get("title"), "html.parser").get_text(strip=True)
+
+    title = title.split(" - ")[0]
+
     source = entry.get("source", {}).get("title", "Finance Media")
     if " - " in entry.get("title", ""):
         parts = entry.get("title", "").split(" - ")
@@ -72,7 +81,11 @@ def clean_news_item(entry, query_term):
     link = entry.get("link", "")
 
     pub_date_raw = entry.get("published", "")
-    pub_date = datetime.date.today().strftime("%d %b %Y")
+
+    # Fallback to current date if published missing, as specified in the prompt
+    published_dt = datetime.datetime.now()
+    pub_date = published_dt.strftime("%d %b %Y")
+
     if pub_date_raw:
         try:
             parsed_t = entry.get("published_parsed")
@@ -86,6 +99,15 @@ def clean_news_item(entry, query_term):
             pass
 
     summary = entry.get("summary", "")
+    if summary:
+        summary = BeautifulSoup(summary, "html.parser").get_text(strip=True)
+        # Remove trailing "..." or "Read more" typically found in RSS
+        import re
+
+        summary = re.sub(
+            r"(\.\.\.|Read more.*)", "", summary, flags=re.IGNORECASE
+        ).strip()
+
     impact = analyze_sentiment(title, summary)
 
     return {
