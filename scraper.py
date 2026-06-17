@@ -197,7 +197,9 @@ async def scrape_pib_pli_approvals_async(session, watchlist):
                             seen.add(name_key)
                             from metrics import resolve_ticker_from_name
 
-                            ticker, _ = resolve_ticker_from_name(company_name)
+                            ticker, _ = await resolve_ticker_from_name(
+                                session, company_name
+                            )
                             status = "Unlisted" if not ticker else "Listed Peer"
                             emerging_pli_competitors.append(
                                 {

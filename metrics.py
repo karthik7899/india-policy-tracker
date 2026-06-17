@@ -545,36 +545,34 @@ def detect_emerging_players(brief_data, watchlist):
     return emerging_players
 
 
-def resolve_ticker_from_name(company_name):
-    import requests
-
+async def resolve_ticker_from_name(session, company_name):
     url = f"https://query2.finance.yahoo.com/v1/finance/search?q={urllib.parse.quote(company_name)}&quotesCount=5"
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
     try:
-        r = requests.get(url, headers=headers, timeout=10)
-        if r.status_code == 200:
-            data = r.json()
-            quotes = data.get("quotes", [])
-            for q in quotes:
-                symbol = q.get("symbol", "")
-                if symbol.endswith(".NS"):
-                    return (
-                        symbol.split(".")[0],
-                        q.get("longname") or q.get("shortname") or company_name,
-                    )
-            for q in quotes:
-                symbol = q.get("symbol", "")
-                if symbol.endswith(".BO"):
-                    return (
-                        symbol.split(".")[0],
-                        q.get("longname") or q.get("shortname") or company_name,
-                    )
+        async with session.get(url, headers=headers, timeout=10) as r:
+            if r.status == 200:
+                data = await r.json()
+                quotes = data.get("quotes", [])
+                for q in quotes:
+                    symbol = q.get("symbol", "")
+                    if symbol.endswith(".NS"):
+                        return (
+                            symbol.split(".")[0],
+                            q.get("longname") or q.get("shortname") or company_name,
+                        )
+                for q in quotes:
+                    symbol = q.get("symbol", "")
+                    if symbol.endswith(".BO"):
+                        return (
+                            symbol.split(".")[0],
+                            q.get("longname") or q.get("shortname") or company_name,
+                        )
     except Exception as e:
         log.error(f"Error resolving ticker for {company_name}: {e}")
     return None, None
 
 
-def auto_curate_watchlist(brief_data, watchlist):
+async def auto_curate_watchlist(brief_data, watchlist):
     """Discovers emerging competitors and rotates underperforming stocks."""
     log.info("Starting automated watchlist curation and rotation cycle...")
     from config import SECTOR_METADATA
@@ -586,13 +584,30 @@ def auto_curate_watchlist(brief_data, watchlist):
     # We will construct a structured emerging_players dictionary
     structured_emerging = {s: [] for s in SECTOR_METADATA}
 
+    # Pre-resolve tickers concurrently
+    resolved_tickers = {}
+    async with aiohttp.ClientSession() as session:
+        tasks = []
+        names_to_resolve = []
+        for sector, companies in emerging_sectors.items():
+            if sector in watchlist:
+                for name in companies:
+                    if name not in names_to_resolve:
+                        names_to_resolve.append(name)
+                        tasks.append(resolve_ticker_from_name(session, name))
+
+        if tasks:
+            results = await asyncio.gather(*tasks)
+            for name, result in zip(names_to_resolve, results):
+                resolved_tickers[name] = result
+
     for sector, companies in emerging_sectors.items():
         if sector not in watchlist:
             continue
 
         for name in companies:
             log.info(f"Evaluating candidate company: {name} in {sector}")
-            ticker, full_name = resolve_ticker_from_name(name)
+            ticker, full_name = resolved_tickers.get(name, (None, None))
             if not ticker:
                 log.info(f"Could not resolve ticker for: {name}. Skipping.")
                 structured_emerging[sector].append(

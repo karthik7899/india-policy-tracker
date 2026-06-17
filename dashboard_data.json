@@ -1,11 +1,11 @@
 {
-  "last_updated": "2026-06-16 08:30:10",
+  "last_updated": "2026-06-17 02:52:45",
   "watchlist": {
     "clean_energy": [
       {
         "ticker": "TATAPOWER",
         "name": "Tata Power",
-        "price": "402.50",
+        "price": "402.25",
         "target": "426.50",
         "growth_pct": "+6.0%",
         "catalyst": "Massive scaling in solar generation, microgrids, and leading India's EV charging network grid.",
@@ -17,7 +17,43 @@
         "target_high": "525.00",
         "target_low": "300.00",
         "rec_score": 2.6,
-        "screener": {}
+        "screener": {
+          "market_cap": "128533",
+          "pe_ratio": "33.8",
+          "book_value": "124",
+          "roce": "10.5",
+          "roe": "10.1",
+          "dividend_yield": "0.62",
+          "latest_quarter": "Mar 2026",
+          "q_sales": "14900",
+          "q_net_profit": "1416",
+          "q_eps": "3.12",
+          "qoq_sales_growth": 6.8,
+          "qoq_profit_growth": 18.6,
+          "promoter_pct": 46.86,
+          "promoter_change": 0.0,
+          "fii_pct": 10.04,
+          "fii_change": 0.04,
+          "dii_pct": 17.98,
+          "dii_change": 0.78,
+          "rd_pct": 3.0,
+          "capex": 2980.0,
+          "current_ratio": 0.95,
+          "net_current_assets": -2854.0,
+          "graham_intrinsic_value": 275.8,
+          "ncav_per_share": -8.9,
+          "is_bargain": false,
+          "owner_earnings": 8775.3,
+          "retained_earnings_ratio": 2.86,
+          "moat_status": "Weak/None",
+          "hyper_growth_warning": false,
+          "valuation_alerts": [
+            "Fails Current Ratio (< 2.0)",
+            "Fails Debt Limit (Debt > Net Assets)",
+            "Fails P/E Screen (P/E 33.8 > 15 & Price > Intrinsic)",
+            "Weak/No Economic Moat"
+          ]
+        }
       },
       {
         "ticker": "SUZLON",
@@ -26,22 +62,56 @@
         "target": "65.00",
         "growth_pct": "+12.1%",
         "catalyst": "Turnaround story, completely debt-free, dominating wind turbine supply with a record order book.",
-        "rating": "Strong Buy",
-        "revenue_growth": "+44.9%",
-        "earnings_growth": "-5.6%",
-        "analyst_count": 13,
-        "target_median": "65.00",
-        "target_high": "75.00",
-        "target_low": "52.00",
-        "rec_score": 1.4,
-        "screener": {}
+        "rating": "N/A",
+        "revenue_growth": null,
+        "earnings_growth": null,
+        "analyst_count": null,
+        "target_median": null,
+        "target_high": null,
+        "target_low": null,
+        "rec_score": null,
+        "screener": {
+          "market_cap": "78931",
+          "pe_ratio": "25.0",
+          "book_value": "6.96",
+          "roce": "35.1",
+          "roe": "40.6",
+          "dividend_yield": "0.00",
+          "latest_quarter": "Mar 2026",
+          "q_sales": "5493",
+          "q_net_profit": "1114",
+          "q_eps": "0.82",
+          "qoq_sales_growth": 29.7,
+          "qoq_profit_growth": 150.3,
+          "promoter_pct": 11.73,
+          "promoter_change": 0.0,
+          "fii_pct": 23.85,
+          "fii_change": 0.12,
+          "dii_pct": 9.18,
+          "dii_change": -0.05,
+          "rd_pct": 3.0,
+          "capex": 1098.6,
+          "current_ratio": 1.83,
+          "net_current_assets": 7316.0,
+          "graham_intrinsic_value": 191.9,
+          "ncav_per_share": 5.4,
+          "is_bargain": false,
+          "owner_earnings": 3401.9,
+          "retained_earnings_ratio": 2.86,
+          "moat_status": "Strong (Wide Moat)",
+          "hyper_growth_warning": false,
+          "valuation_alerts": [
+            "Fails Current Ratio (< 2.0)",
+            "No Dividend Yield"
+          ]
+        }
       },
       {
         "ticker": "ADANIGREEN",
         "name": "Adani Green Energy",
-        "price": "1486.50",
+        "price": "1482.50",
         "target": "1417.50",
-        "growth_pct": "-4.6%",
+        "growth_pct": "-4.4%",
         "catalyst": "Developing the world's largest renewable energy park in Khavda, Gujarat (30 GW capacity target).",
         "rating": "Strong Buy",
         "revenue_growth": "+14.3%",
@@ -52,8 +122,8 @@
         "target_low": "1000.00",
         "rec_score": 1.5,
         "screener": {
-          "market_cap": "244672",
-          "pe_ratio": "134",
+          "market_cap": "244194",
+          "pe_ratio": "133",
           "book_value": "121",
           "roce": "7.39",
           "roe": "11.4",
@@ -84,7 +154,7 @@
           "valuation_alerts": [
             "Fails Current Ratio (< 2.0)",
             "Fails Debt Limit (Debt > Net Assets)",
-            "Fails P/E Screen (P/E 134.0 > 15 & Price > Intrinsic)",
+            "Fails P/E Screen (P/E 133.0 > 15 & Price > Intrinsic)",
             "No Dividend Yield",
             "Weak/No Economic Moat"
           ]
@@ -95,9 +165,9 @@
       {
         "ticker": "SCHNEIDER",
         "name": "Schneider Electric Infra",
-        "price": "1190.60",
+        "price": "1181.40",
         "target": "1145.00",
-        "growth_pct": "-3.8%",
+        "growth_pct": "-3.1%",
         "catalyst": "Critical supplier of electrical distribution, smart grids, and high-efficiency cooling for data centers.",
         "rating": "Strong Buy",
         "revenue_growth": "+0.5%",
@@ -134,9 +204,9 @@
       {
         "ticker": "STLTECH",
         "name": "Sterlite Technologies (STL)",
-        "price": "604.00",
+        "price": "624.70",
         "target": "547.50",
-        "growth_pct": "-9.4%",
+        "growth_pct": "-12.4%",
         "catalyst": "Expanding optical fiber and cable capacities to meet hyper-scale data center interconnect demands.",
         "rating": "None",
         "revenue_growth": "+1285.6%",
@@ -146,51 +216,14 @@
         "target_high": "655.00",
         "target_low": "440.00",
         "rec_score": null,
-        "screener": {
-          "market_cap": "29583",
-          "pe_ratio": "621",
-          "book_value": "46.5",
-          "roce": "7.75",
-          "roe": "2.24",
-          "dividend_yield": "0.00",
-          "latest_quarter": "Mar 2026",
-          "q_sales": "1441",
-          "q_net_profit": "59",
-          "q_eps": "1.21",
-          "qoq_sales_growth": 14.6,
-          "promoter_pct": 44.44,
-          "promoter_change": -0.01,
-          "fii_pct": 11.47,
-          "fii_change": 0.54,
-          "dii_pct": 10.84,
-          "dii_change": -0.2,
-          "rd_pct": 1.5,
-          "capex": 288.2,
-          "current_ratio": 1.35,
-          "net_current_assets": 753.0,
-          "graham_intrinsic_value": 182.5,
-          "ncav_per_share": 15.4,
-          "is_bargain": false,
-          "owner_earnings": 103.2,
-          "retained_earnings_ratio": 2.86,
-          "moat_status": "Weak/None",
-          "hyper_growth_warning": true,
-          "valuation_alerts": [
-            "Fails Current Ratio (< 2.0)",
-            "Fails Debt Limit (Debt > Net Assets)",
-            "Fails P/E Screen (P/E 621.0 > 15 & Price > Intrinsic)",
-            "No Dividend Yield",
-            "Weak/No Economic Moat",
-            "Hyper-Growth Warning: Slowing QoQ sales at P/E > 30"
-          ]
-        }
+        "screener": {}
       },
       {
         "ticker": "ANANTRAJ",
         "name": "Anant Raj Ltd",
-        "price": "539.50",
+        "price": "540.70",
         "target": "700.00",
-        "growth_pct": "+29.7%",
+        "growth_pct": "+29.5%",
         "catalyst": "Real-estate developer transitioning commercial properties into major data center hubs in NCR.",
         "rating": "None",
         "revenue_growth": "+19.6%",
@@ -201,8 +234,8 @@
         "target_low": "650.00",
         "rec_score": null,
         "screener": {
-          "market_cap": "19396",
-          "pe_ratio": "35.0",
+          "market_cap": "19459",
+          "pe_ratio": "35.1",
           "book_value": "161",
           "roce": "12.1",
           "roe": "11.2",
@@ -224,14 +257,14 @@
           "current_ratio": 12.16,
           "net_current_assets": 4454.0,
           "graham_intrinsic_value": 301.2,
-          "ncav_per_share": 123.9,
+          "ncav_per_share": 123.8,
           "is_bargain": false,
           "owner_earnings": 521.1,
           "retained_earnings_ratio": 2.86,
           "moat_status": "Weak/None",
           "hyper_growth_warning": true,
           "valuation_alerts": [
-            "Fails P/E Screen (P/E 35.0 > 15 & Price > Intrinsic)",
+            "Fails P/E Screen (P/E 35.1 > 15 & Price > Intrinsic)",
             "Weak/No Economic Moat",
             "Hyper-Growth Warning: Slowing QoQ sales at P/E > 30"
           ]
@@ -242,9 +275,9 @@
       {
         "ticker": "TCS",
         "name": "Tata Consultancy Services",
-        "price": "2189.00",
+        "price": "2199.00",
         "target": "2950.00",
-        "growth_pct": "+34.8%",
+        "growth_pct": "+34.2%",
         "catalyst": "Expanding sovereign cloud and secure cyber command centers globally for enterprise clients.",
         "rating": "Buy",
         "revenue_growth": "+9.6%",
@@ -255,12 +288,12 @@
         "target_low": "1775.00",
         "rec_score": 2.1,
         "screener": {
-          "market_cap": "790932",
-          "pe_ratio": "15.0",
+          "market_cap": "795617",
+          "pe_ratio": "15.2",
           "book_value": "296",
           "roce": "63.0",
           "roe": "51.8",
-          "dividend_yield": "2.93",
+          "dividend_yield": "2.91",
           "latest_quarter": "Mar 2026",
           "q_sales": "70698",
           "q_net_profit": "13784",
@@ -278,7 +311,7 @@
           "current_ratio": 1.81,
           "net_current_assets": 50527.0,
           "graham_intrinsic_value": 2927.4,
-          "ncav_per_share": 139.8,
+          "ncav_per_share": 139.7,
           "is_bargain": false,
           "owner_earnings": 41899.0,
           "retained_earnings_ratio": 2.86,
@@ -292,7 +325,7 @@
       {
         "ticker": "QUICKHEAL",
         "name": "Quick Heal Technologies",
-        "price": "175.00",
+        "price": "174.22",
         "target": null,
         "growth_pct": null,
         "catalyst": "Surging enterprise adoption of their 'Seqrite' cybersecurity platform and government IT contracts.",
@@ -304,14 +337,51 @@
         "target_high": null,
         "target_low": null,
         "rec_score": null,
-        "screener": {}
+        "screener": {
+          "market_cap": "945",
+          "pe_ratio": "80.5",
+          "book_value": "80.5",
+          "roce": "10.0",
+          "roe": "10.0",
+          "dividend_yield": "0.00",
+          "latest_quarter": "Mar 2026",
+          "q_sales": "49",
+          "q_net_profit": "-20",
+          "q_eps": "-3.68",
+          "qoq_sales_growth": -31.9,
+          "qoq_profit_growth": -385.7,
+          "promoter_pct": 71.5,
+          "promoter_change": -0.04,
+          "fii_pct": 0.73,
+          "fii_change": 0.28,
+          "dii_pct": 1.16,
+          "dii_change": -1.13,
+          "rd_pct": 10.5,
+          "capex": 9.8,
+          "current_ratio": 1.93,
+          "net_current_assets": 102.0,
+          "graham_intrinsic_value": -272.3,
+          "ncav_per_share": 18.8,
+          "is_bargain": false,
+          "owner_earnings": -89.8,
+          "retained_earnings_ratio": 1.2,
+          "moat_status": "Weak/None",
+          "hyper_growth_warning": true,
+          "valuation_alerts": [
+            "Fails Current Ratio (< 2.0)",
+            "Fails P/E Screen (P/E 80.5 > 15 & Price > Intrinsic)",
+            "No Dividend Yield",
+            "Weak/No Economic Moat",
+            "Hyper-Growth Warning: Slowing QoQ sales at P/E > 30"
+          ]
+        }
       }
     ],
     "surveillance_security": [
       {
         "ticker": "CPPLUS",
         "name": "Aditya Infotech (CP PLUS)",
-        "price": "3376.00",
+        "price": "3376.90",
         "target": "3188.00",
         "growth_pct": "-5.6%",
         "catalyst": "CCTV market leader (35%+ share) newly listed, scaling domestic camera manufacturing under PLI.",
@@ -323,14 +393,48 @@
         "target_high": "3806.00",
         "target_low": "3044.00",
         "rec_score": null,
-        "screener": {}
+        "screener": {
+          "market_cap": "39797",
+          "pe_ratio": "108",
+          "book_value": "159",
+          "roce": "29.6",
+          "roe": "25.4",
+          "dividend_yield": "0.00",
+          "latest_quarter": "Mar 2026",
+          "q_sales": "1422",
+          "q_net_profit": "169",
+          "q_eps": "14.36",
+          "qoq_sales_growth": 24.8,
+          "qoq_profit_growth": 76.0,
+          "promoter_pct": 74.75,
+          "promoter_change": -2.16,
+          "fii_pct": 5.72,
+          "fii_change": 1.35,
+          "dii_pct": 14.75,
+          "dii_change": 4.56,
+          "rd_pct": 1.5,
+          "capex": 284.4,
+          "current_ratio": 1.6,
+          "net_current_assets": 1159.0,
+          "graham_intrinsic_value": 3337.3,
+          "ncav_per_share": 98.3,
+          "is_bargain": false,
+          "owner_earnings": 406.0,
+          "retained_earnings_ratio": 2.86,
+          "moat_status": "Strong (Wide Moat)",
+          "hyper_growth_warning": false,
+          "valuation_alerts": [
+            "Fails Current Ratio (< 2.0)",
+            "No Dividend Yield"
+          ]
+        }
       },
       {
         "ticker": "DIXON",
         "name": "Dixon Technologies",
-        "price": "11940.00",
+        "price": "12235.00",
         "target": "12000.00",
-        "growth_pct": "+0.5%",
+        "growth_pct": "-1.9%",
         "catalyst": "Primary EMS contract manufacturer producing CCTVs and DVRs for CP Plus and others under PLI.",
         "rating": "Buy",
         "revenue_growth": "+2.1%",
@@ -345,9 +449,9 @@
       {
         "ticker": "ADSL",
         "name": "Allied Digital Services",
-        "price": "120.31",
+        "price": "121.66",
         "target": "180.00",
-        "growth_pct": "+49.6%",
+        "growth_pct": "+48.0%",
         "catalyst": "System integrator winning smart/safe city surveillance projects, managing master command centers.",
         "rating": "None",
         "revenue_growth": "+31.0%",
@@ -358,8 +462,8 @@
         "target_low": "180.00",
         "rec_score": null,
         "screener": {
-          "market_cap": "684",
-          "pe_ratio": "19.0",
+          "market_cap": "688",
+          "pe_ratio": "19.1",
           "book_value": "109",
           "roce": "7.32",
           "roe": "5.92",
@@ -381,14 +485,14 @@
           "current_ratio": 2.56,
           "net_current_assets": 483.0,
           "graham_intrinsic_value": -59.8,
-          "ncav_per_share": 85.0,
+          "ncav_per_share": 85.4,
           "is_bargain": false,
           "owner_earnings": -56.3,
           "retained_earnings_ratio": 1.2,
           "moat_status": "Weak/None",
           "hyper_growth_warning": false,
           "valuation_alerts": [
-            "Fails P/E Screen (P/E 19.0 > 15 & Price > Intrinsic)",
+            "Fails P/E Screen (P/E 19.1 > 15 & Price > Intrinsic)",
             "Weak/No Economic Moat"
           ]
         }
@@ -396,9 +500,9 @@
       {
         "ticker": "IDEAFORGE",
         "name": "IdeaForge Technology",
-        "price": "880.00",
+        "price": "908.05",
         "target": "1031.00",
-        "growth_pct": "+17.2%",
+        "growth_pct": "+13.5%",
         "catalyst": "Pioneer in tactical and mapping drone systems, primary supplier for Indian Army and police borders.",
         "rating": "None",
         "revenue_growth": "+594.4%",
@@ -408,14 +512,47 @@
         "target_high": "1187.00",
         "target_low": "875.00",
         "rec_score": null,
-        "screener": {}
+        "screener": {
+          "market_cap": "3940",
+          "pe_ratio": "138",
+          "book_value": "138",
+          "roce": "10.0",
+          "roe": "10.0",
+          "dividend_yield": "0.00",
+          "latest_quarter": "Mar 2026",
+          "q_sales": "141",
+          "q_net_profit": "60",
+          "q_eps": "13.86",
+          "qoq_sales_growth": 340.6,
+          "promoter_pct": 29.04,
+          "promoter_change": 0.07,
+          "fii_pct": 0.73,
+          "fii_change": 0.53,
+          "dii_pct": 1.5,
+          "dii_change": 0.01,
+          "rd_pct": 1.5,
+          "capex": 28.2,
+          "current_ratio": 3.84,
+          "net_current_assets": 330.0,
+          "graham_intrinsic_value": 3243.2,
+          "ncav_per_share": 76.1,
+          "is_bargain": false,
+          "owner_earnings": 218.5,
+          "retained_earnings_ratio": 2.86,
+          "moat_status": "Weak/None",
+          "hyper_growth_warning": false,
+          "valuation_alerts": [
+            "No Dividend Yield",
+            "Weak/No Economic Moat"
+          ]
+        }
       },
       {
         "ticker": "ZENSARTECH",
         "name": "Zensar Technologies Limited",
-        "price": "458.15",
+        "price": "464.20",
         "target": "632.50",
-        "growth_pct": "+38.1%",
+        "growth_pct": "+36.3%",
         "catalyst": "Auto-discovered via media radar. Catalyst: Zen Technologies climbs 4% on launch of anti-drone smart border system",
         "rating": "None",
         "revenue_growth": "+6.7%",
@@ -432,9 +569,9 @@
       {
         "ticker": "DIXON",
         "name": "Dixon Technologies",
-        "price": "11940.00",
+        "price": "12235.00",
         "target": "12000.00",
-        "growth_pct": "+0.5%",
+        "growth_pct": "-1.9%",
         "catalyst": "Leader in electronic assembly (mobile, laptop, LED TV), heavily subsidized under manufacturing PLI.",
         "rating": "Buy",
         "revenue_growth": "+2.1%",
@@ -444,14 +581,49 @@
         "target_high": "15200.00",
         "target_low": "8157.00",
         "rec_score": 2.3,
-        "screener": {}
+        "screener": {
+          "market_cap": "74739",
+          "pe_ratio": "52.0",
+          "book_value": "769",
+          "roce": "42.0",
+          "roe": "37.4",
+          "dividend_yield": "0.07",
+          "latest_quarter": "Mar 2026",
+          "q_sales": "10511",
+          "q_net_profit": "298",
+          "q_eps": "42.17",
+          "qoq_sales_growth": -1.5,
+          "qoq_profit_growth": -7.2,
+          "promoter_pct": 28.69,
+          "promoter_change": -0.14,
+          "fii_pct": 18.3,
+          "fii_change": -0.38,
+          "dii_pct": 28.14,
+          "dii_change": -0.92,
+          "rd_pct": 1.5,
+          "capex": 2102.2,
+          "current_ratio": 0.99,
+          "net_current_assets": -79.0,
+          "graham_intrinsic_value": 3120.6,
+          "ncav_per_share": -12.9,
+          "is_bargain": false,
+          "owner_earnings": -830.7,
+          "retained_earnings_ratio": 2.86,
+          "moat_status": "Strong (Wide Moat)",
+          "hyper_growth_warning": false,
+          "valuation_alerts": [
+            "Fails Current Ratio (< 2.0)",
+            "Fails Debt Limit (Debt > Net Assets)",
+            "Fails P/E Screen (P/E 52.0 > 15 & Price > Intrinsic)"
+          ]
+        }
       },
       {
         "ticker": "KAYNES",
         "name": "Kaynes Technology",
-        "price": "3171.80",
+        "price": "3177.60",
         "target": "3393.00",
-        "growth_pct": "+7.0%",
+        "growth_pct": "+6.8%",
         "catalyst": "High-end electronics and PCBA manufacturing, setting up a state-of-the-art semiconductor OSAT plant.",
         "rating": "Hold",
         "revenue_growth": "+26.2%",
@@ -461,7 +633,41 @@
         "target_high": "4000.00",
         "target_low": "2647.00",
         "rec_score": 3.0,
-        "screener": {}
+        "screener": {
+          "market_cap": "21301",
+          "pe_ratio": "58.2",
+          "book_value": "708",
+          "roce": "13.2",
+          "roe": "9.64",
+          "dividend_yield": "0.00",
+          "latest_quarter": "Mar 2026",
+          "q_sales": "1243",
+          "q_net_profit": "91",
+          "q_eps": "13.61",
+          "qoq_sales_growth": 54.6,
+          "qoq_profit_growth": 18.2,
+          "promoter_pct": 53.46,
+          "promoter_change": 0.0,
+          "fii_pct": 7.28,
+          "fii_change": -1.59,
+          "dii_pct": 15.13,
+          "dii_change": -1.6,
+          "rd_pct": 1.5,
+          "capex": 248.6,
+          "current_ratio": 3.68,
+          "net_current_assets": 3299.0,
+          "graham_intrinsic_value": 3184.7,
+          "ncav_per_share": 492.1,
+          "is_bargain": false,
+          "owner_earnings": 188.4,
+          "retained_earnings_ratio": 2.86,
+          "moat_status": "Weak/None",
+          "hyper_growth_warning": false,
+          "valuation_alerts": [
+            "No Dividend Yield",
+            "Weak/No Economic Moat"
+          ]
+        }
       },
       {
         "ticker": "CGPOWER",
@@ -478,16 +684,50 @@
         "target_high": "1100.00",
         "target_low": "502.00",
         "rec_score": 2.1,
-        "screener": {}
+        "screener": {
+          "market_cap": "148158",
+          "pe_ratio": "120",
+          "book_value": "50.6",
+          "roce": "27.0",
+          "roe": "20.8",
+          "dividend_yield": "0.14",
+          "latest_quarter": "Mar 2026",
+          "q_sales": "3442",
+          "q_net_profit": "363",
+          "q_eps": "2.32",
+          "qoq_sales_growth": 8.4,
+          "qoq_profit_growth": 27.8,
+          "promoter_pct": 56.36,
+          "promoter_change": 0.0,
+          "fii_pct": 12.03,
+          "fii_change": 0.01,
+          "dii_pct": 18.01,
+          "dii_change": 0.49,
+          "rd_pct": 1.5,
+          "capex": 688.4,
+          "current_ratio": 2.07,
+          "net_current_assets": 4902.0,
+          "graham_intrinsic_value": 234.8,
+          "ncav_per_share": 31.1,
+          "is_bargain": false,
+          "owner_earnings": 773.0,
+          "retained_earnings_ratio": 2.86,
+          "moat_status": "Strong (Wide Moat)",
+          "hyper_growth_warning": true,
+          "valuation_alerts": [
+            "Fails P/E Screen (P/E 120.0 > 15 & Price > Intrinsic)",
+            "Hyper-Growth Warning: Slowing QoQ sales at P/E > 30"
+          ]
+        }
       }
     ],
     "fmcg": [
       {
         "ticker": "VBL",
         "name": "Varun Beverages (PepsiCo)",
-        "price": "539.55",
+        "price": "541.05",
         "target": "594.00",
-        "growth_pct": "+10.1%",
+        "growth_pct": "+9.8%",
         "catalyst": "PepsiCo's dominant bottler, expanding into newer territories and scaling dairy/juice products.",
         "rating": "None",
         "revenue_growth": "+18.1%",
@@ -497,43 +737,12 @@
         "target_high": "657.00",
         "target_low": "422.00",
         "rec_score": null,
-        "screener": {
-          "market_cap": "182492",
-          "pe_ratio": "57.4",
-          "book_value": "57.9",
-          "roce": "19.7",
-          "roe": "16.2",
-          "dividend_yield": "0.28",
-          "latest_quarter": "Mar 2026",
-          "q_sales": "6574",
-          "q_net_profit": "879",
-          "q_eps": "2.58",
-          "qoq_sales_growth": 56.4,
-          "qoq_profit_growth": 238.1,
-          "promoter_pct": 59.43,
-          "promoter_change": -0.01,
-          "fii_pct": 19.51,
-          "fii_change": -0.8,
-          "dii_pct": 14.35,
-          "dii_change": 0.79,
-          "rd_pct": 1.5,
-          "capex": 1314.8,
-          "current_ratio": 2.41,
-          "net_current_assets": 4883.0,
-          "graham_intrinsic_value": 603.7,
-          "ncav_per_share": 14.4,
-          "is_bargain": false,
-          "owner_earnings": 2401.8,
-          "retained_earnings_ratio": 2.86,
-          "moat_status": "Strong (Wide Moat)",
-          "hyper_growth_warning": false,
-          "valuation_alerts": []
-        }
+        "screener": {}
       },
       {
         "ticker": "TATACONSUM",
         "name": "Tata Consumer Products",
-        "price": "1131.00",
+        "price": "1130.90",
         "target": "1350.00",
         "growth_pct": "+19.4%",
         "catalyst": "Premiumization strategy in foods & beverages, high-growth acquisitions (Capital Foods, Organic India).",
@@ -545,14 +754,50 @@
         "target_high": "1460.00",
         "target_low": "1124.00",
         "rec_score": 1.8,
-        "screener": {}
+        "screener": {
+          "market_cap": "111919",
+          "pe_ratio": "72.9",
+          "book_value": "220",
+          "roce": "9.24",
+          "roe": "7.35",
+          "dividend_yield": "0.88",
+          "latest_quarter": "Mar 2026",
+          "q_sales": "5434",
+          "q_net_profit": "424",
+          "q_eps": "4.24",
+          "qoq_sales_growth": 6.3,
+          "qoq_profit_growth": 10.1,
+          "promoter_pct": 33.83,
+          "promoter_change": -0.01,
+          "fii_pct": 20.79,
+          "fii_change": -0.39,
+          "dii_pct": 24.18,
+          "dii_change": 0.72,
+          "rd_pct": 1.5,
+          "capex": 1086.8,
+          "current_ratio": 1.07,
+          "net_current_assets": 664.0,
+          "graham_intrinsic_value": 357.9,
+          "ncav_per_share": 6.7,
+          "is_bargain": false,
+          "owner_earnings": 834.8,
+          "retained_earnings_ratio": 2.86,
+          "moat_status": "Weak/None",
+          "hyper_growth_warning": false,
+          "valuation_alerts": [
+            "Fails Current Ratio (< 2.0)",
+            "Fails Debt Limit (Debt > Net Assets)",
+            "Fails P/E Screen (P/E 72.9 > 15 & Price > Intrinsic)",
+            "Weak/No Economic Moat"
+          ]
+        }
       },
       {
         "ticker": "ITC",
         "name": "ITC Ltd",
-        "price": "290.70",
+        "price": "291.65",
         "target": "330.00",
-        "growth_pct": "+13.5%",
+        "growth_pct": "+13.1%",
         "catalyst": "Resilient cigarette margins funding rapid expansion of high-margin FMCG brands, direct rural boost play.",
         "rating": "Hold",
         "revenue_growth": "-5.0%",
@@ -562,16 +807,47 @@
         "target_high": "486.00",
         "target_low": "290.00",
         "rec_score": 2.6,
-        "screener": {}
+        "screener": {
+          "market_cap": "365422",
+          "pe_ratio": "17.5",
+          "book_value": "57.9",
+          "roce": "38.9",
+          "roe": "29.3",
+          "dividend_yield": "4.97",
+          "latest_quarter": "Mar 2026",
+          "q_sales": "17825",
+          "q_net_profit": "5470",
+          "q_eps": "4.30",
+          "qoq_sales_growth": -11.1,
+          "qoq_profit_growth": 9.0,
+          "fii_pct": 34.83,
+          "fii_change": -1.28,
+          "dii_pct": 49.15,
+          "dii_change": 0.25,
+          "rd_pct": 1.5,
+          "capex": 3565.0,
+          "current_ratio": 1.67,
+          "net_current_assets": 12734.0,
+          "graham_intrinsic_value": 318.2,
+          "ncav_per_share": 10.2,
+          "is_bargain": false,
+          "owner_earnings": 18506.9,
+          "retained_earnings_ratio": 2.86,
+          "moat_status": "Strong (Wide Moat)",
+          "hyper_growth_warning": false,
+          "valuation_alerts": [
+            "Fails Current Ratio (< 2.0)"
+          ]
+        }
       }
     ],
     "sports_athleisure": [
       {
         "ticker": "METROBRAND",
         "name": "Metro Brands Ltd",
-        "price": "1002.10",
+        "price": "1004.40",
         "target": "1250.00",
-        "growth_pct": "+24.7%",
+        "growth_pct": "+24.5%",
         "catalyst": "Exclusive retail rights for Fila and Foot Locker in India, expanding athleisure footprint rapidly.",
         "rating": "None",
         "revenue_growth": "+20.3%",
@@ -582,8 +858,8 @@
         "target_low": "1040.00",
         "rec_score": null,
         "screener": {
-          "market_cap": "27331",
-          "pe_ratio": "66.5",
+          "market_cap": "27376",
+          "pe_ratio": "66.6",
           "book_value": "73.1",
           "roce": "20.2",
           "roe": "22.2",
@@ -613,7 +889,7 @@
           "hyper_growth_warning": true,
           "valuation_alerts": [
             "Fails Debt Limit (Debt > Net Assets)",
-            "Fails P/E Screen (P/E 66.5 > 15 & Price > Intrinsic)",
+            "Fails P/E Screen (P/E 66.6 > 15 & Price > Intrinsic)",
             "Hyper-Growth Warning: Slowing QoQ sales at P/E > 30"
           ]
         }
@@ -621,9 +897,9 @@
       {
         "ticker": "CAMPUS",
         "name": "Campus Activewear",
-        "price": "233.30",
+        "price": "233.15",
         "target": "307.00",
-        "growth_pct": "+31.6%",
+        "growth_pct": "+31.7%",
         "catalyst": "Dominant direct-to-consumer sports footwear brand in tier-2/3 cities, major beneficiary of fitness trends.",
         "rating": "None",
         "revenue_growth": "+12.3%",
@@ -633,14 +909,47 @@
         "target_high": "349.00",
         "target_low": "247.00",
         "rec_score": null,
-        "screener": {}
+        "screener": {
+          "market_cap": "7125",
+          "pe_ratio": "52.4",
+          "book_value": "0.64",
+          "roce": "31.8",
+          "roe": "29.5",
+          "dividend_yield": "0.64",
+          "latest_quarter": "Jun 2022",
+          "q_sales": "338",
+          "q_net_profit": "29",
+          "q_eps": "0.94",
+          "qoq_sales_growth": -4.0,
+          "qoq_profit_growth": -27.5,
+          "promoter_pct": 72.09,
+          "promoter_change": -0.02,
+          "fii_pct": 6.07,
+          "fii_change": -0.08,
+          "dii_pct": 11.6,
+          "dii_change": -0.11,
+          "rd_pct": 1.5,
+          "capex": 67.6,
+          "current_ratio": 2.59,
+          "net_current_assets": 392.0,
+          "graham_intrinsic_value": 69.6,
+          "ncav_per_share": 12.8,
+          "is_bargain": false,
+          "owner_earnings": 71.5,
+          "retained_earnings_ratio": 2.86,
+          "moat_status": "Strong (Wide Moat)",
+          "hyper_growth_warning": false,
+          "valuation_alerts": [
+            "Fails P/E Screen (P/E 52.4 > 15 & Price > Intrinsic)"
+          ]
+        }
       },
       {
         "ticker": "PAGEIND",
         "name": "Page Industries",
-        "price": "38975.00",
+        "price": "39065.00",
         "target": "41350.00",
-        "growth_pct": "+6.1%",
+        "growth_pct": "+5.8%",
         "catalyst": "Jockey master franchise holder, expanding sports shorts, tees, and athleisure wear into rural hubs.",
         "rating": "Hold",
         "revenue_growth": "+14.1%",
@@ -677,9 +986,9 @@
       {
         "ticker": "RELAXO",
         "name": "Relaxo Footwears Limited",
-        "price": "348.90",
+        "price": "350.85",
         "target": "388.00",
-        "growth_pct": "+11.2%",
+        "growth_pct": "+10.6%",
         "catalyst": "Auto-discovered via media radar. Catalyst: Relaxo Footwears Ltd (RELAXO) Share Price",
         "rating": "Hold",
         "revenue_growth": "+8.0%",
@@ -718,9 +1027,9 @@
       {
         "ticker": "LT",
         "name": "Larsen & Toubro (L&T)",
-        "price": "4189.80",
+        "price": "4186.40",
         "target": "4550.00",
-        "growth_pct": "+8.6%",
+        "growth_pct": "+8.7%",
         "catalyst": "Heavy infrastructure leader, direct beneficiary of the government's ₹11.11 Lakh Cr CAPEX budget.",
         "rating": "Buy",
         "revenue_growth": "+11.7%",
@@ -735,9 +1044,9 @@
       {
         "ticker": "RELIANCE",
         "name": "Reliance Industries",
-        "price": "1330.20",
+        "price": "1328.80",
         "target": "1695.00",
-        "growth_pct": "+27.4%",
+        "growth_pct": "+27.6%",
         "catalyst": "Consolidating 5G market share, scaling retail stores, and commissioning green energy gigafactories.",
         "rating": "Strong Buy",
         "revenue_growth": "+12.5%",
@@ -748,12 +1057,12 @@
         "target_low": "1510.00",
         "rec_score": 1.3,
         "screener": {
-          "market_cap": "1800639",
+          "market_cap": "1798203",
           "pe_ratio": "23.1",
           "book_value": "668",
           "roce": "10.3",
           "roe": "8.91",
-          "dividend_yield": "0.46",
+          "dividend_yield": "0.45",
           "latest_quarter": "Mar 2026",
           "q_sales": "294059",
           "q_net_profit": "20589",
@@ -771,7 +1080,7 @@
           "current_ratio": 0.65,
           "net_current_assets": -303821.0,
           "graham_intrinsic_value": 1529.9,
-          "ncav_per_share": -224.4,
+          "ncav_per_share": -224.5,
           "is_bargain": false,
           "owner_earnings": 55781.2,
           "retained_earnings_ratio": 2.86,
@@ -789,9 +1098,9 @@
       {
         "ticker": "WELSPUNLIV",
         "name": "Welspun Living",
-        "price": "146.22",
+        "price": "145.78",
         "target": "164.50",
-        "growth_pct": "+12.5%",
+        "growth_pct": "+12.8%",
         "catalyst": "Major beneficiary of textile PLI, expanding home textiles capacity and global export market share.",
         "rating": "None",
         "revenue_growth": "-8.0%",
@@ -801,14 +1110,50 @@
         "target_high": "180.00",
         "target_low": "145.00",
         "rec_score": null,
-        "screener": {}
+        "screener": {
+          "market_cap": "13983",
+          "pe_ratio": "64.2",
+          "book_value": "51.3",
+          "roce": "6.25",
+          "roe": "4.47",
+          "dividend_yield": "0.07",
+          "latest_quarter": "Mar 2026",
+          "q_sales": "2435",
+          "q_net_profit": "106",
+          "q_eps": "1.08",
+          "qoq_sales_growth": 7.6,
+          "qoq_profit_growth": 3433.3,
+          "promoter_pct": 66.24,
+          "promoter_change": 0.0,
+          "fii_pct": 4.99,
+          "fii_change": -0.04,
+          "dii_pct": 11.18,
+          "dii_change": 0.75,
+          "rd_pct": 1.5,
+          "capex": 487.0,
+          "current_ratio": 1.5,
+          "net_current_assets": 1611.0,
+          "graham_intrinsic_value": 102.4,
+          "ncav_per_share": 16.8,
+          "is_bargain": false,
+          "owner_earnings": 122.2,
+          "retained_earnings_ratio": 2.86,
+          "moat_status": "Weak/None",
+          "hyper_growth_warning": false,
+          "valuation_alerts": [
+            "Fails Current Ratio (< 2.0)",
+            "Fails Debt Limit (Debt > Net Assets)",
+            "Fails P/E Screen (P/E 64.2 > 15 & Price > Intrinsic)",
+            "Weak/No Economic Moat"
+          ]
+        }
       },
       {
         "ticker": "GOKEX",
         "name": "Gokaldas Exports",
-        "price": "709.40",
+        "price": "710.30",
         "target": "850.00",
-        "growth_pct": "+19.8%",
+        "growth_pct": "+19.7%",
         "catalyst": "Top apparel manufacturer, setting up new fabrics processing mill under textile PLI approval.",
         "rating": "Strong Buy",
         "revenue_growth": "+5.3%",
@@ -818,14 +1163,50 @@
         "target_high": "1100.00",
         "target_low": "799.00",
         "rec_score": 1.4,
-        "screener": {}
+        "screener": {
+          "market_cap": "5205",
+          "pe_ratio": "52.0",
+          "book_value": "295",
+          "roce": "8.39",
+          "roe": "4.72",
+          "dividend_yield": "0.00",
+          "latest_quarter": "Mar 2026",
+          "q_sales": "1069",
+          "q_net_profit": "36",
+          "q_eps": "4.91",
+          "qoq_sales_growth": 9.2,
+          "qoq_profit_growth": 140.0,
+          "promoter_pct": 9.15,
+          "promoter_change": 0.0,
+          "fii_pct": 19.85,
+          "fii_change": -3.86,
+          "dii_pct": 37.58,
+          "dii_change": -1.45,
+          "rd_pct": 1.5,
+          "capex": 213.8,
+          "current_ratio": 2.29,
+          "net_current_assets": 1187.0,
+          "graham_intrinsic_value": 528.3,
+          "ncav_per_share": 162.0,
+          "is_bargain": false,
+          "owner_earnings": 32.0,
+          "retained_earnings_ratio": 2.86,
+          "moat_status": "Weak/None",
+          "hyper_growth_warning": false,
+          "valuation_alerts": [
+            "Fails Debt Limit (Debt > Net Assets)",
+            "Fails P/E Screen (P/E 52.0 > 15 & Price > Intrinsic)",
+            "No Dividend Yield",
+            "Weak/No Economic Moat"
+          ]
+        }
       },
       {
         "ticker": "ARVIND",
         "name": "Arvind Ltd",
-        "price": "494.70",
+        "price": "496.40",
         "target": "555.00",
-        "growth_pct": "+12.2%",
+        "growth_pct": "+11.8%",
         "catalyst": "Leading denim manufacturer, investing in technical textiles under recent government schemes.",
         "rating": "Strong Buy",
         "revenue_growth": "+15.0%",
@@ -835,16 +1216,51 @@
         "target_high": "700.00",
         "target_low": "400.00",
         "rec_score": 1.0,
-        "screener": {}
+        "screener": {
+          "market_cap": "13013",
+          "pe_ratio": "30.6",
+          "book_value": "154",
+          "roce": "13.8",
+          "roe": "10.9",
+          "dividend_yield": "0.76",
+          "latest_quarter": "Mar 2026",
+          "q_sales": "2553",
+          "q_net_profit": "165",
+          "q_eps": "6.09",
+          "qoq_sales_growth": 7.6,
+          "qoq_profit_growth": 63.4,
+          "promoter_pct": 39.53,
+          "promoter_change": 0.0,
+          "fii_pct": 16.1,
+          "fii_change": -0.41,
+          "dii_pct": 20.04,
+          "dii_change": 0.74,
+          "rd_pct": 1.5,
+          "capex": 510.6,
+          "current_ratio": 1.42,
+          "net_current_assets": 1320.0,
+          "graham_intrinsic_value": 577.3,
+          "ncav_per_share": 50.4,
+          "is_bargain": false,
+          "owner_earnings": 282.2,
+          "retained_earnings_ratio": 2.86,
+          "moat_status": "Weak/None",
+          "hyper_growth_warning": false,
+          "valuation_alerts": [
+            "Fails Current Ratio (< 2.0)",
+            "Fails Debt Limit (Debt > Net Assets)",
+            "Weak/No Economic Moat"
+          ]
+        }
       }
     ],
     "logistics_heavy_capital": [
       {
         "ticker": "CONCOR",
         "name": "Container Corporation of India",
-        "price": "456.80",
+        "price": "463.35",
         "target": "510.00",
-        "growth_pct": "+11.6%",
+        "growth_pct": "+10.1%",
         "catalyst": "Dominant railway container carrier, major beneficiary of the ₹10,000 crore container manufacturing scheme.",
         "rating": "Hold",
         "revenue_growth": "-1.1%",
@@ -854,14 +1270,48 @@
         "target_high": "625.00",
         "target_low": "456.00",
         "rec_score": 2.6,
-        "screener": {}
+        "screener": {
+          "market_cap": "35290",
+          "pe_ratio": "28.4",
+          "book_value": "170",
+          "roce": "12.4",
+          "roe": "9.81",
+          "dividend_yield": "1.99",
+          "latest_quarter": "Mar 2026",
+          "q_sales": "2263",
+          "q_net_profit": "264",
+          "q_eps": "3.45",
+          "qoq_sales_growth": -1.9,
+          "qoq_profit_growth": -21.2,
+          "promoter_pct": 54.8,
+          "promoter_change": 0.0,
+          "fii_pct": 8.32,
+          "fii_change": -0.73,
+          "dii_pct": 29.77,
+          "dii_change": 1.09,
+          "rd_pct": 1.5,
+          "capex": 452.6,
+          "current_ratio": 4.75,
+          "net_current_assets": 4759.0,
+          "graham_intrinsic_value": 255.3,
+          "ncav_per_share": 62.5,
+          "is_bargain": false,
+          "owner_earnings": 680.6,
+          "retained_earnings_ratio": 2.86,
+          "moat_status": "Weak/None",
+          "hyper_growth_warning": false,
+          "valuation_alerts": [
+            "Fails P/E Screen (P/E 28.4 > 15 & Price > Intrinsic)",
+            "Weak/No Economic Moat"
+          ]
+        }
       },
       {
         "ticker": "BHEL",
         "name": "Bharat Heavy Electricals",
-        "price": "383.80",
+        "price": "384.20",
         "target": "414.00",
-        "growth_pct": "+7.9%",
+        "growth_pct": "+7.8%",
         "catalyst": "State-owned heavy power equipment giant, expanding local container manufacturing and green energy grids.",
         "rating": "Hold",
         "revenue_growth": "+36.9%",
@@ -872,8 +1322,8 @@
         "target_low": "140.00",
         "rec_score": 2.9,
         "screener": {
-          "market_cap": "133607",
-          "pe_ratio": "83.5",
+          "market_cap": "133781",
+          "pe_ratio": "83.6",
           "book_value": "75.1",
           "roce": "8.51",
           "roe": "6.29",
@@ -910,9 +1360,9 @@
       {
         "ticker": "CUMMINSIND",
         "name": "Cummins India",
-        "price": "5733.50",
+        "price": "5723.50",
         "target": "5800.00",
-        "growth_pct": "+1.2%",
+        "growth_pct": "+1.3%",
         "catalyst": "Leading heavy engine maker, supplying power backups and engines for logistics and railway expansion.",
         "rating": "Hold",
         "revenue_growth": "+21.9%",
@@ -923,12 +1373,12 @@
         "target_low": "3420.00",
         "rec_score": 2.7,
         "screener": {
-          "market_cap": "158697",
-          "pe_ratio": "65.5",
+          "market_cap": "158655",
+          "pe_ratio": "65.4",
           "book_value": "306",
           "roce": "39.5",
           "roe": "30.2",
-          "dividend_yield": "1.14",
+          "dividend_yield": "1.15",
           "latest_quarter": "Mar 2026",
           "q_sales": "3011",
           "q_net_profit": "649",
@@ -946,14 +1396,14 @@
           "current_ratio": 2.39,
           "net_current_assets": 3877.0,
           "graham_intrinsic_value": 1733.8,
-          "ncav_per_share": 140.1,
+          "ncav_per_share": 139.9,
           "is_bargain": false,
           "owner_earnings": 1996.8,
           "retained_earnings_ratio": 2.86,
           "moat_status": "Strong (Wide Moat)",
           "hyper_growth_warning": false,
           "valuation_alerts": [
-            "Fails P/E Screen (P/E 65.5 > 15 & Price > Intrinsic)"
+            "Fails P/E Screen (P/E 65.4 > 15 & Price > Intrinsic)"
           ]
         }
       }
@@ -962,9 +1412,9 @@
       {
         "ticker": "HAL",
         "name": "Hindustan Aeronautics",
-        "price": "4266.70",
+        "price": "4255.80",
         "target": "5300.00",
-        "growth_pct": "+24.2%",
+        "growth_pct": "+24.5%",
         "catalyst": "State aerospace major, expanding local fighter jet assembly and benefiting from custom duty exemptions.",
         "rating": "Buy",
         "revenue_growth": "+1.8%",
@@ -975,12 +1425,12 @@
         "target_low": "3200.00",
         "rec_score": 1.8,
         "screener": {
-          "market_cap": "285099",
+          "market_cap": "284617",
           "pe_ratio": "31.2",
           "book_value": "614",
           "roce": "32.0",
           "roe": "24.0",
-          "dividend_yield": "0.93",
+          "dividend_yield": "0.94",
           "latest_quarter": "Mar 2026",
           "q_sales": "13942",
           "q_net_profit": "4196",
@@ -998,7 +1448,7 @@
           "current_ratio": 1.31,
           "net_current_assets": 28532.0,
           "graham_intrinsic_value": 14681.2,
-          "ncav_per_share": 427.0,
+          "ncav_per_share": 426.6,
           "is_bargain": false,
           "owner_earnings": 13996.5,
           "retained_earnings_ratio": 2.86,
@@ -1012,9 +1462,9 @@
       {
         "ticker": "BEL",
         "name": "Bharat Electronics",
-        "price": "408.05",
+        "price": "407.55",
         "target": "501.00",
-        "growth_pct": "+22.8%",
+        "growth_pct": "+22.9%",
         "catalyst": "Defence electronics leader, securing major naval and surveillance command radar orders.",
         "rating": "None",
         "revenue_growth": "+11.7%",
@@ -1024,14 +1474,47 @@
         "target_high": "585.00",
         "target_low": "346.00",
         "rec_score": null,
-        "screener": {}
+        "screener": {
+          "market_cap": "297910",
+          "pe_ratio": "49.1",
+          "book_value": "32.8",
+          "roce": "36.5",
+          "roe": "27.6",
+          "dividend_yield": "0.59",
+          "latest_quarter": "Mar 2026",
+          "q_sales": "10224",
+          "q_net_profit": "2226",
+          "q_eps": "3.04",
+          "qoq_sales_growth": 42.9,
+          "qoq_profit_growth": 40.9,
+          "promoter_pct": 51.14,
+          "promoter_change": 0.0,
+          "fii_pct": 19.51,
+          "fii_change": 1.0,
+          "dii_pct": 20.0,
+          "dii_change": -0.47,
+          "rd_pct": 6.2,
+          "capex": 2044.8,
+          "current_ratio": 1.9,
+          "net_current_assets": 18402.0,
+          "graham_intrinsic_value": 711.4,
+          "ncav_per_share": 25.2,
+          "is_bargain": false,
+          "owner_earnings": 6864.4,
+          "retained_earnings_ratio": 2.86,
+          "moat_status": "Strong (Wide Moat)",
+          "hyper_growth_warning": false,
+          "valuation_alerts": [
+            "Fails Current Ratio (< 2.0)"
+          ]
+        }
       },
       {
         "ticker": "ASTRAMICRO",
         "name": "Astra Microwave",
-        "price": "1457.50",
+        "price": "1480.10",
         "target": "1470.00",
-        "growth_pct": "+0.9%",
+        "growth_pct": "-0.7%",
         "catalyst": "High-end microwave sub-systems maker, critical supplier of radars and satellite payloads.",
         "rating": "Buy",
         "revenue_growth": "+19.7%",
@@ -1042,8 +1525,8 @@
         "target_low": "1068.00",
         "rec_score": 1.6,
         "screener": {
-          "market_cap": "13799",
-          "pe_ratio": "71.5",
+          "market_cap": "14053",
+          "pe_ratio": "72.8",
           "book_value": "138",
           "roce": "20.2",
           "roe": "16.0",
@@ -1065,7 +1548,7 @@
           "current_ratio": 4.31,
           "net_current_assets": 1276.0,
           "graham_intrinsic_value": 2611.4,
-          "ncav_per_share": 134.8,
+          "ncav_per_share": 134.4,
           "is_bargain": false,
           "owner_earnings": 349.4,
           "retained_earnings_ratio": 2.86,
@@ -1263,18 +1746,18 @@
         "relevance": "site:pib.gov.in \"defence custom duty\" OR \"defence aerospace\""
       },
       {
-        "title": "Top defence stocks to buy now: HAL, Zen Technologies, Bharat Electronics, Apollo Micro in Choice Broking’s list",
-        "source": "Mint",
-        "link": "https://news.google.com/rss/articles/CBMiiwJBVV95cUxOTVJ2dkZZNWpOV3Q3LUVXRFQzeGZraG5DRE5WeXpVV1pzbW5mNVpRUl9fb1Q1TDN1eld5eHFnN2pZMkdIQkJ6SW1oWUdvTENLa2hTWW1iN004aVVVTF9nTGJrNkxmVHJHUFlaTnV2LUpDUkFXam1RSmwzN2J5eUhZeU94S1NUMmZWelRIa3pmdzRFS2ItYVdGc25IUGRlb2N4SWd1MnFIOTJtRmkwSXloR1BtSkRHTDJ3WTRYbENJVTZqQUt6Q0l3dFBkQ1lYNjNScWpxdUpuYlFRcmJ5aExfMTBEYk5WQ1g4YzVjN2c0Tk8tOEVYRldlb2QxNVJPSEw0S3loMFpWZzk1bk3SAZACQVVfeXFMT1Ntb3ltMFZWUFlTc1hwcE5HTGk5UmpVUkwwV3FnWXk0dVY3c0VFWFdteE94NlRCR0lSTXJ1Q25DMFZGN1BoM3lSY012MEVjR25BZWJWVk9Ca2U0LUZKUkdhcFpIb3lsN0hrYVpNcTlKWmdVUFhWNUd0MXRDTmxJckduVlhhc0NYYXB5U2dGb19kZjl4VW5VeDhFMFNYamFtT3J5ekh5Zjh6XzdsU0hWcEFPQ2VqQUJaaXNjMVVHcUpmNDJHMVFoWmpmVHFSa2djbDRCZWRQSzhFUjQ0Tzk5RHczSDNyQWxuY2t0QlBlQjhzeVRQV3I3REJVR19IRGNhOUU2RDNhYTdHNmZBVy15VTQ?oc=5",
-        "date": "09 Jun 2026",
-        "impact": "Positive",
-        "relevance": "India defense manufacturing offset policies HAL BEL"
-      },
-      {
         "title": "Government must expedite Tejas, not merely penalise Hindustan Aeronautics",
         "source": "The New Indian Express",
         "link": "https://news.google.com/rss/articles/CBMixgFBVV95cUxNTXdKQng4UlVzT3IySU1qZWIzd0pUam5DZ3RhVkQwekZSTW8xT1pkMklPYThldXhJZVFnSEN4N3RPN3ZsdVFsY3hJRmZVeWNKYUd5Y0F6ZEJXMVZQbXNWcWFZWjRxWEdjZTUwZ0RReW9Da3d5VUVYS3l2b0JiS2txQWpjMmZMOGtKajNZd3IyM3lTZTJlbDBpZGZMWFZEa3VlZGtyU0QxZGZwU3RKam5ad0habXpZYThxWXBITFJfa2hHRnNHV1HSAdMBQVVfeXFMT09VZ1JxR3c4LTU3c2FtMUFKRk1UamY0VFZsTlZvQ3lHZmZmRXdrTkRlS2dScHNZVzVHclRnU2Zkb09aXzJpelc4NmRtRmdBdWpOSl9ZMjZFZzFidjFreE5pNEZ2SG5fR1RzbmVNcHpENlpsR19sbXY3Zk9lT0l0MGFxNWZuODBCVldybm5JSTlUV3FpRHprQlpRLXpiNkt6T1FBa2VKTVJySGFZQ3FmcjFBNi1heGdOZlZUU1JNMDdHVUs0dFVzMzVJRG9IX1cwendSTQ?oc=5",
         "date": "11 Jun 2026",
+        "impact": "Neutral",
+        "relevance": "\"Hindustan Aeronautics\" OR \"Bharat Electronics\" OR \"Astra Microwave\" defence"
+      },
+      {
+        "title": "Defence Production Secretary inaugurates LCH production line at HAL’s new helicopter factory",
+        "source": "DD News",
+        "link": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxOTjJya3ZJeGtkTUpxMmVOSnJ4QV8taFV6Zy1tT1NrR2FiYkxxREdRb1BtMTZpem56eVU1NVY4NHNLT3RIeGxtYmNuZzZSWkI3VUdfeGp0cGRlLXQwZUZwbHN5QmZhcFNzX3p2SHJ4TGtwQTQtSHRsVFo1MGZXOHpCLThEcFFZNjBXVVpHMjRQOWNHLW0wU3hpUkYtT2xRSjA1d2VaRmdoUzRYblRnNGlaZU4waFdlRTh1?oc=5",
+        "date": "16 Jun 2026",
         "impact": "Neutral",
         "relevance": "\"Hindustan Aeronautics\" OR \"Bharat Electronics\" OR \"Astra Microwave\" defence"
       }
@@ -1285,6 +1768,14 @@
         "source": "PIB",
         "link": "https://news.google.com/rss/articles/CBMiaEFVX3lxTFB6OW9rSkMyS2VjNXd6V2UwWEJNMW9pOTVyUUFoenFIT2RxbXc2Sm04UUFTZVVBaWpaR2Z1ZzdDR2ZrdmtjY0lreVN5THV3aUhJaTFtdzE3X1VQMU5lRDM0XzVJX1M3c3ZK?oc=5",
         "date": "15 Jun 2026",
+        "impact": "Positive",
+        "relevance": "site:pib.gov.in \"infrastructure\" OR \"capital expenditure\" OR \"Gati Shakti\""
+      },
+      {
+        "title": "India AI Mission launches Indigenous Varya, a Video Story Generating AI Model Claiming to Offer Quality at Affordable Price",
+        "source": "PIB",
+        "link": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE9zc3NEaU5fckF3dGxxaDByUlJlWjhUVFpESk4yZzJza0toVlFKd01MNkQ0TjQ0RWNoX0VCY0QxdS1ydTZGVTFwdm5GTElsUExqUVdNLXdsX1lvOTNhTDJKRFdUQ0hvMHBs?oc=5",
+        "date": "12 Jun 2026",
         "impact": "Positive",
         "relevance": "site:pib.gov.in \"infrastructure\" OR \"capital expenditure\" OR \"Gati Shakti\""
       },
@@ -1301,14 +1792,6 @@
         "source": "Whalesbook",
         "link": "https://news.google.com/rss/articles/CBMi4wFBVV95cUxPbHNQSWt5Ukg2c0hXbF9QUFhfNS11UW9nQkJoUWpaa2FEcHdvcXFuUHU5UkE3U016TXNnbXl5cWZsRXFGWmsyQTdldzFJdXNFU2N1YzV5S2VqVkdWTzRhVGR5M2RwUndlRXR0S1hpQ3Z0NWxDcHlZWnN1U3JpUDd6NHU5Q2FHWmR3MWZPZXVGek1KY3VHZXNQMFJHWFNXczFkOFlfTWtMOEVaSVR1UFZ2UWlzcS1KMC02Ny1BQ0w4WHV6cE9PeU40S3ZwWDRiSVBHTVl5UkIxaVVDTkZFdW9xb3F2bw?oc=5",
         "date": "12 Jun 2026",
-        "impact": "Positive",
-        "relevance": "L&T order book Reliance green energy"
-      },
-      {
-        "title": "Private capex reviving strongly and Middle-East momentum intact: L&T CFO R Shankar Raman",
-        "source": "Big News Network.com",
-        "link": "https://news.google.com/rss/articles/CBMizAFBVV95cUxQdHJtM0xwamZ5UHAxRjZ5anRNYlNzakhLLVUtcE9YOE41YXQ2bVRmNVF4bjhpUVhoWnlibTNDMmxaUkpHUm9aSVJVNDBMUUpMc3RVRXA5Nm5JekxBSlJGcXItU2lKckl1T3dIR1cxa0d5S01uRTd0TGFDR3pCVFFnRGgtY2FDUjczb3Z3VUhacUUySHRDT1J1YURTU29ReWNDRkVMMjRiZ0ZlVVBqdURtWHBpc3RKaFhMQ2VWTVVkX2J4TGFPMnR1QmJqYkY?oc=5",
-        "date": "09 Jun 2026",
         "impact": "Positive",
         "relevance": "L&T order book Reliance green energy"
       }
@@ -1331,28 +1814,28 @@
         "relevance": "India clean energy policy ministry power"
       },
       {
-        "title": "Union Minister Shripad Yesso Naik virtually addresses India Energy Transition Summit 2026 | Akashvani News",
-        "source": "Newsonair",
-        "link": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNRTZjU3NOU0ZfYzVxdXgzTXdLeGlnQTlDcUtPRlJUZC1RbWE5dkN2NXhBQVhVeU41MW9rNndHYklDS3piSjVXcy1VQ2tWbGFhVUNVMFRWcl9lRTkyekxHdHBWdm1TRXpfZmJxcXZKSHB5SlBXYTRoQ2lDbkJoTmVRYUVMLTR0cnU3ek5GZC0teHluTElKcnpUNmJvWmlIZjRVTUI5bDRMemNKVnpsUG5Hb0EtaEVwdw?oc=5",
+        "title": "Union Minister Pralhad Joshi Launches First-Ever Wind Supply Chain Portal",
+        "source": "PIB",
+        "link": "https://news.google.com/rss/articles/CBMiekFVX3lxTFBYWXI3dDd5RUk0U1BjcDFySzMxWVJ2SVUtUTFaekZsYU8wS082Qjd6aGNYQ2NvSkpJcTcycWUzNldtNWQyaDdpVVZ2Y1preC1KQS0yLU9BaEFzRFBzWS1kWWRkcGpkMVVqZ180eTJDd043QUZyTTdhLVBR?oc=5",
         "date": "15 Jun 2026",
         "impact": "Positive",
         "relevance": "India clean energy policy ministry power"
       },
       {
-        "title": "Vikram Solar, Suzlon Energy, Waaree Energies: How renewable energy stocks are performing on June 9",
-        "source": "Upstox",
-        "link": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxQRFBMdlA0TVo5Zkp4QWtFdjB0QjVaWDktc1B3ZnpDaUZPWUlSb2t4SDFVMzhxTXhockg0MWRJZ3djY1JOWUhRVUxQMnVyRndrQ2V3XzNGVXljNTRyVVpVT1Qwa2JsZXF6bFYzVllzYkxhUjhOZ01UYnFRSFllSXZhX014WGR5YVhDdWZKdE9HZGd5a0VlV2pFd3NlMHBZOFgtX1EwLU14cm5lcHdJNHh6SkgtZUU5bTBhcy0xTlJTbHFkZnZETFdlQndzM1VrNU96aTY2NlpVZ3hLUDNNVWNYamhMbWV6YkRIYlE?oc=5",
-        "date": "09 Jun 2026",
+        "title": "Union Minister Shripad Yesso Naik virtually addresses India Energy Transition Summit 2026",
+        "source": "Newsonair",
+        "link": "https://news.google.com/rss/articles/CBMitgFBVV95cUxNRTZjU3NOU0ZfYzVxdXgzTXdLeGlnQTlDcUtPRlJUZC1RbWE5dkN2NXhBQVhVeU41MW9rNndHYklDS3piSjVXcy1VQ2tWbGFhVUNVMFRWcl9lRTkyekxHdHBWdm1TRXpfZmJxcXZKSHB5SlBXYTRoQ2lDbkJoTmVRYUVMLTR0cnU3ek5GZC0teHluTElKcnpUNmJvWmlIZjRVTUI5bDRMemNKVnpsUG5Hb0EtaEVwdw?oc=5",
+        "date": "16 Jun 2026",
         "impact": "Positive",
-        "relevance": "\"Adani Green\" OR \"Tata Power\" OR \"Suzlon\" energy order"
+        "relevance": "India clean energy policy ministry power"
       }
     ],
     "cybersecurity": [
       {
-        "title": "Letters of Approval handed over in the presence of the Union Education Minister, Shri Dharmendra Pradhan to University of Bristol, University of York and University of New South Wales to set up campuses in India",
+        "title": "Empowered Youth, Stronger Nation: India’s Vision for Viksit Bharat @ 2047",
         "source": "PIB",
-        "link": "https://news.google.com/rss/articles/CBMiekFVX3lxTE5DSmRvcV8zVTdNX0U4UkhZdU1ncnpQQzVxX2R6bF8xQllsUEY2em81QW9uVnhCd0lRZVEyZWpER0xCNVM3RVlDSUc2akFBX1ROY0Nqd2lLRkVnMjJsMWtoNW5XNkFWSDZqWS1FbnpPN1FYT0NWTE5Ya1hn?oc=5",
-        "date": "09 Jun 2026",
+        "link": "https://news.google.com/rss/articles/CBMie0FVX3lxTE5mdXFTUlQyeFBjcW1BUmtpZU5zZ0NLWXZ1Z241R0J2cUpQVkdxbWF6MGdRaHFWZUxCOVZhOGFYY3k4ZUFIVEJnODFDRS12b2toaGtLcVdTbTQxRTRSR01lODZFLVJGQ2NPMU5JdjVDaEc5N1hqQTFEeVZsdw?oc=5",
+        "date": "13 Jun 2026",
         "impact": "Positive",
         "relevance": "site:pib.gov.in \"cyber security\" OR \"cybersecurity\" OR \"CERT-In\""
       },
@@ -1365,18 +1848,18 @@
         "relevance": "site:pib.gov.in \"cyber security\" OR \"cybersecurity\" OR \"CERT-In\""
       },
       {
-        "title": "Empowered Youth, Stronger Nation: India’s Vision for Viksit Bharat @ 2047",
+        "title": "Letters of Approval handed over in the presence of the Union Education Minister, Shri Dharmendra Pradhan to University of Bristol, University of York and University of New South Wales to set up campuses in India",
         "source": "PIB",
-        "link": "https://news.google.com/rss/articles/CBMie0FVX3lxTE5mdXFTUlQyeFBjcW1BUmtpZU5zZ0NLWXZ1Z241R0J2cUpQVkdxbWF6MGdRaHFWZUxCOVZhOGFYY3k4ZUFIVEJnODFDRS12b2toaGtLcVdTbTQxRTRSR01lODZFLVJGQ2NPMU5JdjVDaEc5N1hqQTFEeVZsdw?oc=5",
-        "date": "13 Jun 2026",
+        "link": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE9IRlhrS2NVcWxFcl96blBmVFJYNzMzYzVhc2Y4cHJScUthX3F1Mm05X290bUctVGJ6SHgwdE9sSDhiWEhWYzZ3emdLTTRseGFNV1oxTXlSZ1J5eXpCZFdPNnJOVU85U2Jj?oc=5",
+        "date": "16 Jun 2026",
         "impact": "Positive",
         "relevance": "site:pib.gov.in \"cyber security\" OR \"cybersecurity\" OR \"CERT-In\""
       },
       {
-        "title": "Trust becomes the new security perimeter as AI fuels impersonation attacks",
-        "source": "CRN Asia",
-        "link": "https://news.google.com/rss/articles/CBMitAFBVV95cUxQZmVWaVRHcUI1NzNCZkNyNmMtS0YyWUlmS0E3Y1NLWWNwVWQtMVhtRzVIUmxVanplcU1YZjlyOWRRWHNjaF84TjVqY2F5Mk5Pc0lHTGUwMUFpUXhpYkhqWmd3MW43ZDk3cFgyRnFsZWh5WWRyNlZhMmdTdkE0U2RCR1FZUWZmR0Z6R3I5SVFFX25WMXppMVBpUWJMZXhjOGRjTDMwTTR5U3lMV2ZYcWpUV0dOWmc?oc=5",
-        "date": "10 Jun 2026",
+        "title": "Government Policies for an Open, Safe and Trusted Internet in India",
+        "source": "IBEF",
+        "link": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNSlVXTkI1cDUxckpQeU1PalZDLTN4TjNMaFlINWVPNFpsQXQzTHhkYWhKaDRaY1l2ay1lUjV0aVVXcEhWeUhxekk5YzN3Wkh0QXdLNEN2YzNiWDVJN0RyVHFKM1NpSUQ1N3lmQ0V5Vlk1LTdORWhZa19hUVFwWjJQNjNCeXBKdlRlclEzUndpSjFxNW9JcTY3VA?oc=5",
+        "date": "15 Jun 2026",
         "impact": "Positive",
         "relevance": "India cyber security policy enterprise network protection"
       }
@@ -1387,14 +1870,6 @@
         "source": "PIB",
         "link": "https://news.google.com/rss/articles/CBMie0FVX3lxTFBsLVg0djhpN3lrY1Y5YUJMZzZ2STRHb1ZZb2dmRmw0TG1PY1VJQXBVWG41OFk4bnFFTndybGhRb0xUQVFoMy1oTXh2Y0Z1N2YyYkpiRlFjQWVQSXZRa0hRemRhd01iOXJIR3lnSGNEVkpKcDUwLXhfbmhEcw?oc=5",
         "date": "12 Jun 2026",
-        "impact": "Neutral",
-        "relevance": "site:pib.gov.in \"data center\" OR \"digital infrastructure\""
-      },
-      {
-        "title": "Infrastructure at the Core of India’s Development",
-        "source": "PIB",
-        "link": "https://news.google.com/rss/articles/CBMie0FVX3lxTE91MzRsajJmdTVzREtOWTRFeDA3R3B1Z19EX0pzSTkyU3NCR0E4Qi1KWng0X3pLd3piOXYyZlRrOGJPd3FNdktLZUZ6ck5Zd1h1RW52NkxSMXF1Q2Z1TF9LeWJDa1lDVHoxOFFIeThZMkxEUUZfTm1hdmNGbw?oc=5",
-        "date": "09 Jun 2026",
         "impact": "Neutral",
         "relevance": "site:pib.gov.in \"data center\" OR \"digital infrastructure\""
       },
@@ -1413,6 +1888,14 @@
         "date": "11 Jun 2026",
         "impact": "Neutral",
         "relevance": "India data center policy expansion investments"
+      },
+      {
+        "title": "Meta signs first AI data center deal in India with Reliance",
+        "source": "TechCrunch",
+        "link": "https://news.google.com/rss/articles/CBMimgFBVV95cUxPUmFUaW1pRGhMUVR0RWFKRUdmVnVHMFFNVkNzZTluYjJvVkltMkhHQTIwaDJKdVZQVm5oNXlLTFRKb3NUWFpIYlZqNTE2MHNIeExsNFpSY2VaVGJUMF9lQlVhRi1UdldYTGJHMWpYSzZVbkZUcHdSaHBhUTlpZkljOXlSdnhYazJPM3VqWFA1MjZLSVZRblg2OS1R?oc=5",
+        "date": "10 Jun 2026",
+        "impact": "Neutral",
+        "relevance": "India data center policy expansion investments"
       }
     ],
     "fmcg": [
@@ -1425,25 +1908,25 @@
         "relevance": "site:pib.gov.in \"agriculture\" OR \"rural development\" OR \"food processing\""
       },
       {
-        "title": "Iran peace deal eases cost pressures, but consumers shouldn't expect FMCG price cuts yet",
-        "source": "Fortune India",
-        "link": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxPNk43MTFCQU4tRGd0Q1poa08zS2VTRE1CNHBmaGMwR1RNaHBsXzdkS29ydThPWV9GbE9UMkFteHU5UVFkTUlFXzJ1dkpoV2JwSDlleGNuaHdsaDc5T0p6Qy1CeHpINjI3NjIxbXZ3eXRZakRWWTJKaklpQlVCd1VVZHNCRDhWVVphTy1kc1VSd1B0em1pekg5ZkxWSEZRenpKbUlNcVpVT080THNlbGpGZ3c4d25XR1pSM2E3dFdibG1qNlR6TFZBUVhfY0Q0WU53bHIyN0xXRG1QUENxbkVr0gHfAUFVX3lxTE82TjcxMUJBTi1EZ3RDWmhrTzNLZVNETUI0cGZoYzBHVE1ocGxfN2RLb3J1OE9ZX0ZsT1QyQW14dTlRUWRNSUVfMnV2SmhXYnBIOWV4Y25od2xoNzlPSnpDLUJ4ekg2Mjc2MjFtdnd5dFlqRFZZMkpqSWlCVUJ3VVVkc0JEOFZVWmFPLWRzVVJ3UHR6bWl6SDlmTFZIRlF6ekptSU1xWlVPTzRMc2VsakZndzh3bldHWlIzYTd0V2JsbWo2VHpMVkFRWF9jRDRZTndscjI3TFdEbVBQQ3FuRWs?oc=5",
-        "date": "15 Jun 2026",
+        "title": "P&G India sees rural consumption growth soften amid inflation pressures",
+        "source": "Business Standard",
+        "link": "https://news.google.com/rss/articles/CBMi3AFBVV95cUxORjVNNTdvMnlJaXY0MnJXbGR2RUJPNEdvX290LS1PTWZuX1pRWTB5QUlxVzFVMHVOajUzRHdRczBIVW1oaDJSazNRQS02RVI4eWFoU2pMNnpnRElMWllsRy1feUxUd2U5dGgwcHdWRDd2ckVxRlZJRkFlMFdxU2NXQXNNVXktS095YzlNODFfbExobVRhZnpZNHF1X05QYm80MUd0UzU4UUhvNWpVUlF6TUMyTXNXc181QW9tTnpIaURVb0VkT09xUjNWQ0J4a0Q0YlRjanB3RElVWl9o0gHcAUFVX3lxTE5GNU01N28yeUlpdjQycldsZHZFQk80R29fb3QtLU9NZm5fWlFZMHlBSXFXMVUwdU5qNTNEd1FzMEhVbWhoMlJrM1FBLTZFUjh5YWhTakw2emdESUxaWWxHLV95TFR3ZTl0aDBwd1ZEN3ZyRXFGVklGQWUwV3FTY1dBc01VeS1LT3ljOU04MV9sTGhtVGFmelk0cXVfTlBibzQxR3RTNThRSG81alVSUXpNQzJNc1dzXzVBb21OekhpRFVvRWRPT3FSM1ZDQnhrRDRiVGNqcHdESVVaX2g?oc=5",
+        "date": "16 Jun 2026",
         "impact": "Positive",
         "relevance": "India FMCG consumption rural demand inflation"
       },
       {
-        "title": "SAPLING Dialogue 2026 Concludes with Call for concrete action plan for holistic development of the food processing Sector",
+        "title": "India’s Presidency delivers ‘BRICS Indore Declaration’, a new charter for global agricultural cooperation; Union Minister Shri Shivraj Singh Chouhan addresses press conference",
         "source": "PIB",
-        "link": "https://news.google.com/rss/articles/CBMie0FVX3lxTE9KT0FodzZKcUxlZVcwb1FiQzJMYkE1NFRfMXpDb3JkNFNIZkR3Wkg3WE42YjdDUjFGbl9HZkx3cDZtODJ4X3dKYzRjM1FtS09HTmdjb3d0TFpnd1dQeTA4MUFLWllZX05IeG5JUVI5REFCMWd1OXhuZUF0RQ?oc=5",
-        "date": "10 Jun 2026",
+        "link": "https://news.google.com/rss/articles/CBMie0FVX3lxTE1NZnh4SWVzZ1JGNXJnUEQzR0psMjdMSHhNZ0M2Y0k4SFgyendRZ1NhVWVJUjNwRlV0MlJ6TC1acTVLd0dubGRvSV9fNGNta1E5ZzJNMXB0UXZJN1poeDJZamJWcXNJNWVfcThCN0tBcGNMZmYtSFVXSEVwdw?oc=5",
+        "date": "13 Jun 2026",
         "impact": "Neutral",
         "relevance": "site:pib.gov.in \"agriculture\" OR \"rural development\" OR \"food processing\""
       },
       {
-        "title": "India’s Presidency delivers ‘BRICS Indore Declaration’, a new charter for global agricultural cooperation; Union Minister Shri Shivraj Singh Chouhan addresses press conference",
+        "title": "Under India’s Chairship, 16th BRICS Agriculture Ministers’ Meeting Concludes in Indore, Madhya Pradesh",
         "source": "PIB",
-        "link": "https://news.google.com/rss/articles/CBMiekFVX3lxTE1kV1htdEExRzdrM0l4OFpKUHdDSGJmVVBqTjd3UThhaXBfckxvdk5ZMEVzWWYyek1GRmhPam1iRGhyclFEMWR0Y2R5NkFjWTZsRURSdFJVNm5UelNtSlA3MC1ROWtSb05DOTFhZ2JtRlg1YmFKdDI5Uk9B?oc=5",
+        "link": "https://news.google.com/rss/articles/CBMiekFVX3lxTFBQYnhNMzRGQjdHa19pSncyazNILWhETnJSMGtRdDlqdmdtUl9xUHhXOWQwR0d0NVp4cXJtYmRBVzhDd0tBNDVnY3Rkb1NwaklrQS1ibmp0Z2ZoOWQ5V0FhVzRkM2xua3BweUdsY2dhQnlfQUJkZ1VVeUhn?oc=5",
         "date": "13 Jun 2026",
         "impact": "Neutral",
         "relevance": "site:pib.gov.in \"agriculture\" OR \"rural development\" OR \"food processing\""
@@ -1459,10 +1942,10 @@
         "relevance": "\"CONCOR\" OR \"BHEL\" OR \"Cummins\" logistics order"
       },
       {
-        "title": "2000 crore logistics project to strengthen Vizhinjam",
-        "source": "Kerala Kaumudi",
-        "link": "https://news.google.com/rss/articles/CBMipwFBVV95cUxOWTNKOXRzZndkcmdlRDJIY2VpRTV3eXQ3WDlFZWc2X29yN0FmSzFrNVU5TklNTURSOVc4ZXdEVHh1dkJic29acGd1cWs2VnpUMmtwYzhsTjF3M2lGRjFUdjB4eHFXRnlkc21EZ3NpZGpfYWtIT3lCTFU1YnBFRWg2clh5Tk81XzNnSU13cndjeFRWWVFKV3htWjBoakMzWFcxTmtUTVRHSQ?oc=5",
-        "date": "12 Jun 2026",
+        "title": "Atkore, Cummins, and MasTec Shares Are Falling, What You Need To Know",
+        "source": "TradingView",
+        "link": "https://news.google.com/rss/articles/CBMixgFBVV95cUxNTkRGaEJ0UHJYRUpOZlVfYXJGcUxzUWItTllpVVE3WS1uaXVIZlQ5bHRsMW10c2JiTC1hOVU5c2JnZ0pLcDhHakVkSnp6ZWl3VmVKZUJVdXNmWUs3WFZoODFBMXZYWnViY0NDRjl0ZGZKYmIxMVRORWQxZlBiSk1aanFwVGtjYU1uTFlwdEZUTzMzcTJCNThmaUtGWUt4RUVid2lRdkxRZFZVQ0Y0OUV1ejlvTVB1OU4tWm8tc05adEFLaTdGRXc?oc=5",
+        "date": "10 Jun 2026",
         "impact": "Positive",
         "relevance": "\"CONCOR\" OR \"BHEL\" OR \"Cummins\" logistics order"
       },
@@ -1501,20 +1984,20 @@
         "relevance": "India manufacturing growth index PMI index"
       },
       {
-        "title": "Top Performing Index Funds: Check Top Performing Index Mutual Funds to invest you money",
-        "source": "The Economic Times",
-        "link": "https://news.google.com/rss/articles/CBMigAFBVV95cUxORGZvNHF1S1IyeXZYRFNGUm56dV8yczdmZjRfOUdVS2FlNWNSYXllR2x3RU9PMGluNUJaanJINVZhNW54d0FwUVRFcnhVVHRDek82bkFKbzdtcEc2WllYUGtmTnBtTTRKMmVFenFhc01pQW1IY1pfWmNpTEYyUFFXUQ?oc=5",
-        "date": "12 Jun 2026",
+        "title": "India's fiscal policy is evolving to support domestic growth: S&P Global",
+        "source": "BFSI News",
+        "link": "https://news.google.com/rss/articles/CBMizgFBVV95cUxOZnJfbE5sUnNVMTlvQUwxY3FtOThVaFhuRl9YTkJlNWtwQWZjWENnSE8teXdRQnkyQ3BwQ0JKX05LWmVXWEo5eldubVl0WnJtc2F4dGRzRkE1cEswNU5ITDRGWFFLeE5uOEx2a0hsc3ZZUzdsb1BYR2N5STdFeko1cThyVk9Udll4ZEJPX1B0M0M1alhrMlF2dk5sMUtlRmNTLWhMWXQ3dF90RzJPakROTXl6Ym5EQXlBS2lXSFd1RE1zZ0NFYTNSZ1NrdEMzUdIB0wFBVV95cUxOdFk2WjZKTVVUR1BCeS0yMUhLQ2VuMVpWZnp0dTVHRzlSbnpXUlpMakFZVUlvaUxWcWN2TnRqUk00NTdILWIxX1NxRXJUSWRlRmkycmtYRDcxX1FURUh2LXFrVW1mZ0xuN2dUcVk3UjBVQjQ5MFFGLXVaRUMySEZudnhtU1Fta2NQSXgxV0tNb19CdGYxT3UySTVFaUxwR2NzbHlkX3QwOFJLemZqTjQ2MHJKa1dRSkFYMElqRzNUd3QzR0VVNWZZd1JRaTNlS0FiNVJz?oc=5",
+        "date": "16 Jun 2026",
         "impact": "Positive",
-        "relevance": "Nifty India Manufacturing ETF shares"
+        "relevance": "India manufacturing growth index PMI index"
       },
       {
-        "title": "Dabur India shares in focus as US FDA issues import alert for Silvassa manufacturing plant",
-        "source": "Upstox",
-        "link": "https://news.google.com/rss/articles/CBMi4wFBVV95cUxNcjgzM3ZoX1phNWlFOWFuXzJLMlRrTGhha0lGUzllUnR0STZ6UEFpMkFlbmdrQVo5dkhBNV81WDRNXzBEeENrN0NWM1dxMkthVDJHYlA1ZWtldXk0TGJNYkxmZ0VoUjRURUZkRy1VOWo0MnZ0S3E5TWdaZ1F5bHZ0QkswckFraGM5LVJhZ21FOEpuVDJTM284dVkwQVpCV21PbHpSdHdvMkk4NXRNS1lyTzYwWF9jY2JVRXpjLTdsZVlKVU9oWlVKNHowMjRVaG1rbXlodlFnaXJ2ZlJjcUVCaE5hRQ?oc=5",
-        "date": "12 Jun 2026",
-        "impact": "Positive",
-        "relevance": "Nifty India Manufacturing ETF shares"
+        "title": "Government revises the base year of All-India Wholesale Price Index (WPI) from 2004-05 to 2011-12",
+        "source": "PIB",
+        "link": "https://news.google.com/rss/articles/CBMifEFVX3lxTE5uNzVsbFBsRVRNLTdRcG5PTV9mT3VCZVNTZGdBd1ZKeTZoNU5GRDk2eFdkSFgzN3UxNU1KRG9pVk1nZzRMOHh2QUc3OTNoYkVTelBOMkN5MVZuQzFMdlVkQVpWTFRHU3JuMDVpTXRvUmR2c2pGQWduWEIxbEM?oc=5",
+        "date": "15 Jun 2026",
+        "impact": "Neutral",
+        "relevance": "site:pib.gov.in \"manufacturing GVA\" OR \"industrial production\""
       }
     ],
     "manufacturing_electronics": [
@@ -1553,18 +2036,18 @@
     ],
     "semiconductors_equipment": [
       {
-        "title": "The great chip bazaar: India's fragmented fight to build a tech empire",
-        "source": "digitimes",
-        "link": "https://news.google.com/rss/articles/CBMivAFBVV95cUxPdFJWNFcxVnFfZGh4QWhMaWxJem4wejdxa1I0czFfRWNNNERRMHdodlBFbXNCMVo4NXdPak54dUkwVVR3ZG5DMXpFVGJ3NWVSclVwRGhTUVJPcWJXQ1FHN3JJOXE5SFlMMTZPMGxTQlFnLXJ1OWkxQ1l2SFM5SkxEVDQ0b2w2UWVHcWd1TmFGelVVd0ZQV0xkaXNYc1RUZWFEQkhza1h2bnRaV1p0OGpwVHdwdV8wbXc3NXI0cQ?oc=5",
-        "date": "15 Jun 2026",
-        "impact": "Positive",
-        "relevance": "India semiconductor fab equipment OSAT packaging plants"
-      },
-      {
         "title": "Spel Semiconductor Ltd is Rated Strong Sell",
-        "source": "MarketsMojo",
+        "source": "Markets Mojo",
         "link": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxNZ1VQMHlMS2U4cE52eS04dzR3WFc0MGlwMFE3bS1Db2szZmVWVkpsd3Q3YjZWTDVic1hGYkgxZFhTRHpEM1AwMmI4aEk2YlpWWXFMM3VsT1NxOGo0a0Y2TDlpVnNCdEwwSWxIb2tXcVhrcl9lVG52MFJHcFowbVdmT3o2anV1S2tQTVo2THBnWW5NbmlOTHNSYWhBREJVZW1EejU4VTg4SUg?oc=5",
         "date": "11 Jun 2026",
+        "impact": "Positive",
+        "relevance": "\"ASM Technologies\" OR \"RIR Power\" OR \"SPEL\" semiconductor"
+      },
+      {
+        "title": "4 Semiconductor Stocks That Performed Well in the Last Quarter; Do You Hold Any?",
+        "source": "Trade Brains",
+        "link": "https://news.google.com/rss/articles/CBMipAFBVV95cUxPaHoxLUg2VHJRWTZJdjFkTldZNzhPLVVUUjFXMTBoRkRwWVl1clE2QURFVllhLW9VaElta0dPeHRXQ3ZuQkR1cmlvM3A4VG9FSnhLbjNwOExBNkt0emZPREVEV2FDR0ZPT3luMC1XTTN2R0FxUkdPRGlNbjFlMEtvWVNNMzRuZTVGcGF4V000ZFN4Yi1sRUgzV2pMRUYxX0QtV1l6Yg?oc=5",
+        "date": "16 Jun 2026",
         "impact": "Positive",
         "relevance": "\"ASM Technologies\" OR \"RIR Power\" OR \"SPEL\" semiconductor"
       },
@@ -1579,8 +2062,8 @@
       {
         "title": "NITI Aayog releases “Future of India’s Semiconductor Industry” Roadmap",
         "source": "PIB",
-        "link": "https://news.google.com/rss/articles/CBMifEFVX3lxTE1Kc2R2ZVZIR2l4UEEwdlFIRl9CNkh2R1I4eGhKeWUyOE90aDFwcnhSWDZCT2tXWVBKNDV3ZFBUS25UUm1iNy1qcGdVM3l4cE1kZExZUmZPSEd1ZGhFU3h3UEpjVzNJMEdHcEFaakpoNjZYYkhBRVBzM0s5QzU?oc=5",
-        "date": "13 Jun 2026",
+        "link": "https://news.google.com/rss/articles/CBMia0FVX3lxTE1BdmJyOEpsd0RnRjBkNFhmNmV2V2JRX3JXWGxCdU1ZRzJpa19HdUtsLVRlMkw5U1Z4OE43UzdRN005WW5RWHFWVGhJbmJyNEVxbVR2UWEtU0ZaTEhwQmYwVk5iTWIwNW1pX1pV?oc=5",
+        "date": "15 Jun 2026",
         "impact": "Neutral",
         "relevance": "site:pib.gov.in \"semiconductor PLI\" OR \"ISM 2.0\" OR \"OSAT\""
       }
@@ -1589,34 +2072,34 @@
       {
         "title": "Empowered Youth, Stronger Nation: India’s Vision for Viksit Bharat @ 2047",
         "source": "PIB",
-        "link": "https://news.google.com/rss/articles/CBMie0FVX3lxTE5mdXFTUlQyeFBjcW1BUmtpZU5zZ0NLWXZ1Z241R0J2cUpQVkdxbWF6MGdRaHFWZUxCOVZhOGFYY3k4ZUFIVEJnODFDRS12b2toaGtLcVdTbTQxRTRSR01lODZFLVJGQ2NPMU5JdjVDaEc5N1hqQTFEeVZsdw?oc=5",
+        "link": "https://news.google.com/rss/articles/CBMiekFVX3lxTFA0RDBkT0V5Ykd2a01sQm52QlpEdkczWEdkYkJfSjJqSGZtVHNKY19NN2RBTUtic3Npel9HRWFJeVM3R0gwRm9pWkJjd0NsbjhJbHdWUkJuVU5jN0dtRExiVl85eHJTNThBY3RhQXdwa0FROXdLTV93dktn?oc=5",
         "date": "13 Jun 2026",
         "impact": "Positive",
         "relevance": "site:pib.gov.in \"sports\" OR \"Khelo India\" OR \"footwear PLI\""
       },
       {
-        "title": "Cabinet approves Ahmedabad Metro Rail project Phase 2A (Koteshwar Road to Airport corridor)",
+        "title": "The National Level of the Viksit Bharat Youth Parliament 2026 begins with ideas and perspectives of selected young representatives on the vision of Viksit Bharat@2047",
         "source": "PIB",
-        "link": "https://news.google.com/rss/articles/CBMie0FVX3lxTE1YaFpkQUxxTUFhbmMyMnVKSGY2OEtyNjhxSm5PSUwzTjdzNjgxQWFyalZQM0RHUWZaa1Q4RDQ4NWgzakEyLXpYdndqWE9VZ1ltRTBnZ0pyNlBFTlJDMWJ4Ui1Nelhham9yYnFELWt6WGxSdzdXSjRTS3EtMA?oc=5",
-        "date": "10 Jun 2026",
+        "link": "https://news.google.com/rss/articles/CBMie0FVX3lxTE1XdFJOU0hzcFBTN1V4OG9hT2VIdnRzcjI5cks3ZnNta3lxdElONXNJODVPSDM2NmlfX1pWamJqWE13cUZoQk04UG9YU1Z5bHEzR0VCZWVFaHlRNVZhUlp0c3huYkwyTy16cjI5RTkzbnh3b0hjeHZyeTBFUQ?oc=5",
+        "date": "16 Jun 2026",
         "impact": "Positive",
         "relevance": "site:pib.gov.in \"sports\" OR \"Khelo India\" OR \"footwear PLI\""
       },
       {
-        "title": "Union Government Constitutes Search-cum-Selection Committee for National Sports Board Under NSG Act, 2025",
-        "source": "PIB",
-        "link": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE5EbmVnZmRGZ2lXcEVxQ0NDVkptYURncGxJcklqM3c5YXd5NldrQUhGYUM3aV9vVkhQUm5OUEMzOTl2Y3dVR181ZmRDREhqRDY0Yl9xNHZ6Q2VyWHUzc3ptakFhTjBPX3M4?oc=5",
-        "date": "15 Jun 2026",
-        "impact": "Neutral",
-        "relevance": "site:pib.gov.in \"sports\" OR \"Khelo India\" OR \"footwear PLI\""
+        "title": "Campus Activewear Launches Élan Neo Casual Footwear",
+        "source": "Passionate In Marketing",
+        "link": "https://news.google.com/rss/articles/CBMiggJBVV95cUxOdFlLZU1qVER5SkxYOWo5b1djM1NSc1YzZExnYXljLXlldGZ2X1djX3VWX1JNODBmXzd3YUxRU0xfRGcxWGZ2R3pDQnhNMi1rTFJHbk8teXo5Z05vSTByNlFEUVhYV3hZcTdNN3pGeFltd0tfTUcwM0wxXzhIUWsweG1xR1pOWm9MQWd0ODJmZVYwY25hY2FPN0R3cnBZakI1OE9DaFpMYXBaYmJObGxPWGZHdkFsOV9TbEF5UEEwb3NuX000Q0hEaUJaNGVjcWJkWFZwdUdSdV9TRVN3UTVqcC1FZmRaZFRNdVBDR3ZDT3IxUHN3REFUUnRxY3RQU3hENUE?oc=5",
+        "date": "16 Jun 2026",
+        "impact": "Positive",
+        "relevance": "India sports brand athleisure market growth campus footwear"
       },
       {
-        "title": "Campus Activewear accepts resignation of CFO Sanjay Chhabra",
-        "source": "scanx.trade",
-        "link": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxQa25IbGRvUFBVRVhnbXZnYUxzZEIzX2oyb1dvdmZaeGhrb01XOXYyV09jNDE3QUVNN2xnZjBaNWFKZFZia3NJM2pHLVE0aWM0bmdORjZPS29YazVoV1hsaHhsNVh1WEliVllEU1laTlMzNWp5V3B4bXRzMzhVa3ZIY2VKb1c5TThMTF9sLW9fc0ZZYlJvVjR6NnlXM0dSMjVudnYyYUI3U0hpVlloR3BBV1hENE1kUFNjRDhLc0hpTWw?oc=5",
-        "date": "12 Jun 2026",
-        "impact": "Neutral",
-        "relevance": "Metro Brands Campus Activewear shares"
+        "title": "Ten x You, hits INR 50 crore ARR in eight months, eyes 2.5x growth by December 2026",
+        "source": "Adgully.com",
+        "link": "https://news.google.com/rss/articles/CBMitgFBVV95cUxPQ25fMHU5U0JqWnlPdTBBSU8yQVExTDZyQmI5YW5wR1BPcFltUXBDaDFjdmhxY2JidmxZSi1VZDNKeHd6NFY4czAtVFFIWHVWX19aUXEweUlFY2lzSk5oZ0p4eEtMcldVV1N6cjIzVmpUTnV2UGxOSDUyZ0J1N1RrNHowdVhVdWdJWURWX1VjTmZwcWVlSzBla0ZidE9sWHk5UUNLd2ZNYzdfMVhGR1RVazlmbkVJQQ?oc=5",
+        "date": "16 Jun 2026",
+        "impact": "Positive",
+        "relevance": "India sports brand athleisure market growth campus footwear"
       }
     ],
     "surveillance_security": [
@@ -1629,28 +2112,28 @@
         "relevance": "site:pib.gov.in \"CCTV\" OR \"safe city\" OR \"surveillance\""
       },
       {
-        "title": "Rajkot drone startup to represent India at France innovation summit",
-        "source": "The Times of India",
-        "link": "https://news.google.com/rss/articles/CBMi2AFBVV95cUxPZkpNOGphSUR0S1BJV3BiRUxCYlB0a2M1Tjhuc1dtRmtwUzFUN1Z5RnVyY2V3Z0t2dnd1SFFqdnRsOVNfYzk0THdfaUs5NXJWZWd3ZXhDbFR5SHUyT2JVcXdOVFY2YkF4ZWdBUktER2lzRTJTOXpTdndnR1RnVjZZYXNfbTQ5OWx5VnVFRjJ2dFNsSjcwVTQ0M1lCWDkxUkhabFBuWVk2UTRQdFRyZndmOW1UWkFIR0tNSTRtSjJRQ3laTUtITHY5dGNzTDhaZWN1OXhOOEhWR07SAd4BQVVfeXFMTlhHSjNBbUhWOW1BUnFSX1JoRGs0aC1CaUF0SklERkRYVnQ1S3F1RWFheVU3N1NIM1RBM1JpX2laUlNWaFZ5REhQaVhCNHJYNGoyN3huc3I3SE8wOGZkTVJiSWlSWkF1MHJtdGRtMWRaaUpJNmw4TnlPLXl3akdMcG1LTldmeVg5cnlMaFU0dHpBLTdZUkZ6NVNicnRvZWdyTlFPT3VoTVcyLUJVZkdNZjdMRjd0dlZKZ3hVMHJSelU2QTJpN0t5VFctaVpRemhkMjg1MDA0ak5rNWtoMlBB?oc=5",
-        "date": "09 Jun 2026",
+        "title": "Government on Highest Alert to Safeguard Indian Seafarers Amid Evolving Maritime Security Situation in Gulf Region",
+        "source": "PIB",
+        "link": "https://news.google.com/rss/articles/CBMiekFVX3lxTE1VbXNyVEFDMFNUUXI4QnFCbmNBd1ZRMndxN2Zad0o0aHlwUThvYmlqVnpsc0p3SUt1QkF3ZzBpekRIcktHdHE0d2xXSGlhbXBhQjhUODZ5RWFvcDZFMlZJVUM1XzhKaExVT2xBaVZjYThRc0JZcDJ5Z1dR?oc=5",
+        "date": "11 Jun 2026",
+        "impact": "Positive",
+        "relevance": "site:pib.gov.in \"CCTV\" OR \"safe city\" OR \"surveillance\""
+      },
+      {
+        "title": "Homeland Security Market Size, Share | Growth Forecast [2034]",
+        "source": "Fortune Business Insights",
+        "link": "https://news.google.com/rss/articles/CBMie0FVX3lxTE9yLWRGUzQycXFxN1dmdmFJMnluOGlTTkMwRDVVNFh1SzlvaHp6TGFxZTFCdFBQSTFxYVpuMzdYTFNhVEE3NENVQnZsSmUzNUw5VjV4YmdZZ3gzVkVpRFdXeTluV004Tmh5MWh0V0FJb3RqUkJkSlBzTVRiRQ?oc=5",
+        "date": "16 Jun 2026",
         "impact": "Positive",
         "relevance": "India smart city CCTV cameras border defense drones"
       },
       {
-        "title": "US Joins India, UK, Germany, France, Japan, Singapore, Australia and Others to Drive Global Security Travel as the 11th International Police Expo & Drone International Expo in New Delhi Ignites Convention Tourism and International Business Mobility",
-        "source": "Travel And Tour World",
-        "link": "https://news.google.com/rss/articles/CBMibkFVX3lxTE10dmo3bE5XR0hORVMyaWxaWUpGUVQxVHBBbGtQUFJHS0J4dHMzNnZSSjU0NElWZDdZLVFrQUJDUk9xcmUyYmFuVHFYNW9JNXk1RkhocXBjYlF1Mlk2bW9UTmpGRE4zSzR5TFh5R1BB?oc=5",
-        "date": "12 Jun 2026",
+        "title": "Police and Law Enforcement Equipment Market Growth Driven by 9.74% CAGR by 2035",
+        "source": "Global Growth Insights",
+        "link": "https://news.google.com/rss/articles/CBMipAFBVV95cUxQRzQ0Q0M4RTNmaTJBclJpSXZmSXZJWE9QdHBkRzlnaUhqSEh5X2ZRdGdELWlIVjhoc01mTEN0TVJIT21iVmctV2YwT1dqWFJwemhTaTAwTmMyTHBfa3huU0hiajVTSGo0bW1rbGFxeWQzc2o3UUpZUGE3eHFQUks0dXQ5UkV4VVBoWURQaXhKdEhrSU1SZWdtYUVtS21iaGdlQmNXNw?oc=5",
+        "date": "16 Jun 2026",
         "impact": "Positive",
         "relevance": "India smart city CCTV cameras border defense drones"
-      },
-      {
-        "title": "ideaForge’s FLYGHT Platform Expands Into New Industry Applications",
-        "source": "Electronics For You BUSINESS",
-        "link": "https://news.google.com/rss/articles/CBMitAFBVV95cUxNakZhS3RCY0ZlR2JRWG9JMHA0TXFtbHBRalM5XzJ6cFlHbVNIQmlQUE1NelhZMFN3RnBCcHVoaEd3ZE53YWpDd0U3Vjh0Z25Ldzd0RUlKQlFJTEpKOHJuWjhKZXRRZkc2ZHM1ZGJWLUZwT2pacUxORm1RZUhfY0VnaXpDWHpkSGNtUTZPVFBOeHFZVTlqZTFLWjFLbVlkaDNmc2t0QVFZckRaNHdXYm51MEdNU0E?oc=5",
-        "date": "12 Jun 2026",
-        "impact": "Positive",
-        "relevance": "\"CP Plus\" OR \"Aditya Infotech\" OR \"Allied Digital\" OR \"IdeaForge\" surveillance"
       }
     ],
     "textiles_apparel": [
@@ -1663,9 +2146,9 @@
         "relevance": "site:pib.gov.in \"textile PLI\" OR \"apparel manufacturing\""
       },
       {
-        "title": "CCI approves acquisition of certain shareholding in PUMA SE by Ancat Holding GmbH",
+        "title": "Ministry of Culture provides financial assistance for digitization of museum collections under Digitization of Museum component of Museum Grant Scheme (MGS): Shri G. Kishan Reddy",
         "source": "PIB",
-        "link": "https://news.google.com/rss/articles/CBMifkFVX3lxTE1YcVVFdTYtWXRkLVNNSnRnUm03enhxNkExellzZDY3YmtLeHNKOTFCSGQ4dlY5cnRQOUU1aGpYWlRCRkhvTkdQUVpVRWRTV0p1QmlqXzdiSENYM2V6cXd4WUhVZllIMXRsWnZTYlBtSjJQSmppVkYyRzNqeV9QQQ?oc=5",
+        "link": "https://news.google.com/rss/articles/CBMifEFVX3lxTE1HcF9KdmxKc3N2SFdaTWwzek5MNThjOFUzT0dVTmpOYlNjb3IwVVl1N3VhaldGY1d0blVRaEpvUzFWWmxLM1dSM2JYOXA1WVlnUi02MnducEFBelFUYnU5OWtNWHhoTWxCZVI5ZlNBN3BhemtDdTBVTGNBdXE?oc=5",
         "date": "10 Jun 2026",
         "impact": "Positive",
         "relevance": "site:pib.gov.in \"textile PLI\" OR \"apparel manufacturing\""
@@ -1694,12 +2177,6 @@
           "ticker": null,
           "status": "Unresolved",
           "reason": "Could not map company name to a BSE/NSE ticker."
-        },
-        {
-          "name": "Zen Technologies Limited",
-          "ticker": "ZENTEC",
-          "status": "Growth Divergence",
-          "reason": "Negative target potential"
         }
       ],
       "big_cap_industries": [],
@@ -1718,64 +2195,64 @@
     "emerging_competitors": [],
     "corporate_agreements": [
       {
-        "title": "12.06.2026: Benefit of Section 16(5) is available only where ITC was denied on account of the limitation prescribed under Section 16(4) and not where the credit itself was otherwise ineligible: West Bengal, AAR",
-        "link": "https://news.google.com/rss/articles/CBMiywJBVV95cUxQbmhFZmxyR0JIU2UxRVE3T04zSGxkRzEtZy1Nanc5VnVxYUtmSFhZdnJILTlUeHFucGU2X19rZmpOTEQ5YUhzLXM2X0M4NW9hTzUydWRKQWk0X2RFSUFvcWlqckNKQzRINFE4OXV5cVlBYlVGanFaTjRXTVB5MTVuQXFKTURSQkxKSkNocFkzMGF0Y09kNXNYalZLREtRLTVUeUp0d3Iwd2RuMThaR00ybzhFWkp2bklRdzVjZGxKX09tcktxWjc5RzFKVVp6VEh2bDVjTjNSd0Z6TDlnbW9EanlWM1lsYkxnd3V6ZWc0RGJFLUZXa0tydy04UF9Zay1ZdEpLLWlMUlpacS11eWRBb0R0WHc2MV9kVEkwRTJiZU5rclVzVmo0NEk4UXBDLUQwYnl0ZXUxeWEzNG5qeFdfaDlzUm12eDlHS05N?oc=5",
-        "date": "Fri, 12 Jun 2026 05:27:08 GMT",
-        "source": "taxo.online"
+        "title": "TCS and Anthropic launch Global Premier Partnership to drive Enterprise AI scaling",
+        "link": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxOOHNkYWdNVUtBc3lEOHFLd2RwQ1FoeE0xZXRIWTFYTzd5bFdjQ3kycXVWQ3Q4ZExGSE5zT2t5MUFFMmJ3enBJVnQ3VlhpX3NrNlM3Sldyb1V4SVVVcWhhaVU1aUNwSmVjdnI0Wi1YQ2ZWRFJJQkR4WG1LNUJYVGg4RkdhZkktZ3hQeS1EYTdDdHZjZGtnVTNnWGxtZ052V2FNajFuQlNQMXlwc0lTaFc2TTJpNTJIaEx5RnNvQ3FNLXFkUkFLREpDRA?oc=5",
+        "date": "Thu, 11 Jun 2026 10:22:58 GMT",
+        "source": "Tata Consultancy Services"
       },
       {
-        "title": "ITC’s largest stakeholder plans to liquidate part of its holdings",
-        "link": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxOb2U3cWtrMDBUNzc5QWtMVVlRS3A2TWJUaDdUMFRrMV9lWVRhbGxjMUNfckhPTFJpOGtmN2p6djlBVGJpT0hVYXFXZVBuZEpvUnZjajYxMVB4bmQ0UjVRN283eWlXMHFnS00waVByU1R4djVfYUZiTC1UQ0liTnpFMG9ic3Mxc2M2eTVDVEpJSjNFMnhxSmZwYXB4MFh6ajJCTXQxdHFjcFpsNW44NS1HLVRnOHFwbWY1YmQ3NWFYQ2I?oc=5",
-        "date": "Thu, 11 Jun 2026 07:00:00 GMT",
-        "source": "Upstox"
+        "title": "TCS, Anthropic partner to expand enterprise AI adoption",
+        "link": "https://news.google.com/rss/articles/CBMirAFBVV95cUxQR3h2SGJJVER5cWxKM29CVGRUclhrSVEtTU93blVnWFdoWWNDcVl6TXM5aGdQcmVBYXYwQjFBX2ZfLUtEVlBFWmRXNUE4dVJuTkhUSDRfQWVqNVRpSkxyTGN4UW4xaG44NUpRVjNCZG1RNUpncVlzSkJEZVM5WlR4SmVjQ3J4TWZTM2M0d09WOU1jUzNjY1VoSUt2cTRrNmZDRXhpaURPM2FQR1VC0gG6AUFVX3lxTFB2cWNqOE5TYVlwTUVVREtLNWwtUWk1LVVmYnZkcVVRZGo5WHFGNjg3SVE5UkczOVlFX1ViVk5NejlqUVlSWW80LVNyN193MExUUUxoMmZJY0hvaE1pT3hwRUNkQmoyTkg2WjNTcXF1MTdJM2FLVTFnTklRcl9ybGhzeEMtWV82cW9PR3J5d2N1Z1dVdjRrQW1ZRWN0dlM5ZW1qRmJVbjBPb3dKc0JhVDJfNjRxaGJoNjNQZw?oc=5",
+        "date": "Thu, 11 Jun 2026 18:28:30 GMT",
+        "source": "The New Indian Express"
       },
       {
-        "title": "From catering to 40-plus cohort to short shelf-life products—ITC’s strategy of micro-segmenting consumers",
-        "link": "https://news.google.com/rss/articles/CBMi6AFBVV95cUxPS252V21FSlNqQkRxMFRNUmFPWXM1YjhEMldaQ0dQRUJGRXZXMC1QUTNQVmZBUXdlT0s3MHpfSTF0a05zcDdJdTJlMW5LSTBrd3ZwTWF0S1dIcHlLbUltZ0l4ODZDZjZCc1VnMEJTRk50c1FwMG1DdkpuTXJjYjV4ekNfOXV4SThEcGlvSWxMRVVKUGtBUTViVGRzdmpYWWp1b2NpLWZZYUw3TEd1ejF1TVN0WksyRldlaVBjZ29CaTRTUk1nN3Ayd3daMl9qbHg2akh2RWo3c1hXMmJrcVp1M1ppSTJqNVpw0gH2AUFVX3lxTE1KcmFPRDE1ZUhnX2RZUHRkWnl3RXZUWXdJNzRZNUpUX3JpVTllalZRTEQzRWtla255emRYSUxlZXNzc29sdEFoT1p3QnlZYlp0VGlKS0lzdXpqN0NwMjFhQU5YVU5wQWtSYmFzYWVfQU5ya2VxOEo4SDBZRWp5SF90aGxyc0dyMnJZejBXUklHYWxLbVF4TGtwRGY4Z3lhSjQtYWNfSGhXZllnZE5LRzYyNlRQQXAtRU92X2drb0pvS3lpTUM4VVNPNTYxRlJrNUktRWJiTjZHVVVKMHpuSU55dHVFeHNBNWZ2Y3ZDT09yNGpEM1BOUQ?oc=5",
-        "date": "Sat, 13 Jun 2026 03:05:00 GMT",
-        "source": "Fortune India"
+        "title": "Canada Life taps Tata Consultancy Services for UK and Europe tech transformation",
+        "link": "https://news.google.com/rss/articles/CBMivwFBVV95cUxOZWtkekw0NlpOTnBlTWUxeUpaYnVMRlV5OFpCQ2kxV0kyd0h0NEZiLXNNal9BZnhSV1doRzVHUHhNRmtPUXNLUWxlUktlS19TRzVONjRzYzMzV3JRcnk3Vmp1clpMRnpYLTNWdnlGZ1FnQmxfYkViUENWTEZ6LVBTcXI1S1UtSVdfREJMNXVDdmpzX19lR1Q2cnczMi1MQ3RzcmpQUGJ3SWM3U1RuVjFDdExTTml1VXM4OW91ekRFb9IBvwFBVV95cUxOZWtkekw0NlpOTnBlTWUxeUpaYnVMRlV5OFpCQ2kxV0kyd0h0NEZiLXNNal9BZnhSV1doRzVHUHhNRmtPUXNLUWxlUktlS19TRzVONjRzYzMzV3JRcnk3Vmp1clpMRnpYLTNWdnlGZ1FnQmxfYkViUENWTEZ6LVBTcXI1S1UtSVdfREJMNXVDdmpzX19lR1Q2cnczMi1MQ3RzcmpQUGJ3SWM3U1RuVjFDdExTTml1VXM4OW91ekRFbw?oc=5",
+        "date": "Tue, 16 Jun 2026 07:05:32 GMT",
+        "source": "Consultancy.uk"
       },
       {
-        "title": "Dixon Technologies signs agreement with Gemtek to make data centre equipment in India",
-        "link": "https://news.google.com/rss/articles/CBMirgFBVV95cUxNdU5qWFhNVGozQ2JlcEZ5ZEFEQ2ZKaFI0TFNsREVhal9RQ24xRDZJeERGWGZOdFEzS0dBcnY4TzE5UUpvNXhXTUpuSXdlWi1hMGxkRnJTTjJKSWsxVDlGc1JaSkRGeG1sbG04TkdNaERORWpscFcwLUtuV2RlcXBUSmU2SkhNSVJCYl9CTUtpSERhYm5VTTd1cWZSRVFyUHBoRzhvWW1aOVZQQzdGa3c?oc=5",
-        "date": "Thu, 11 Jun 2026 18:40:23 GMT",
-        "source": "BigInfo.in"
-      },
-      {
-        "title": "Dixon Technologies and Gemtek form optical transceiver joint venture",
-        "link": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxNQ1pQX0daTjhyYzJhQ2lldWdaY29tOU5hRXF2OTZMbGhjbFRBUW5RYzQ1bDNWeG80SWl1c2RwRUFCLWdDNjJXek5DQzhRT3FucW1NYWNwajBuYWQtTUMtSVU4YjRQdEszbGxwLXlkS1hKZ25MMHlxeHlTZ3hTUGZqbm1Ja2dwU2wzZ01pNnQ4RlpMMHY0cFo5MS1kWC1VdENIQ0ZYN1lESXVNWmRwRE5QWHk0cXprYTloMmFWak9vbFRxN1U?oc=5",
-        "date": "Tue, 09 Jun 2026 21:35:04 GMT",
-        "source": "scanx.trade"
-      },
-      {
-        "title": "Dixon, Taiwan-based Gemtek form 60:40 JV to manufacture telecom components in India",
-        "link": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxPWGFRWlBMMk9FcWpRdzAwaHBVWWdOYngwVzZhR2tIVTlzRlhBNTNmbXo3QXhEdzJLelRjQ1J2b0xXOXVKcGVLTGdDUm4wSl9idU1tQ3d1MHMtM29ncGhweHhWb0Fla3k4bGJqOUs0cll3ZU5xVGVTcHhSR0VwaGc1Y1U3VWhpVzBjU2xoZnlHdk9TbWpDRlY2MU8tV3NsclZGTHc3RFBjY0YxV0FUTWs3cHJHQzRKdExnZkdMMkJHbWN5RTdOTW1iYks2NHRDTlZFaVJWVUZVWkFJTUtXNTlXcUlGUTA4cFBMTkNN0gHwAUFVX3lxTE1rZkxVN0UxcDZ6WmhPaFVtSkdTakh5aGJIVkhBRzdxalZqdEw1OTVldVREd1UyRU1Bc1lfV1VERFNkbkwzVnB5VnhKV05ZNEFjTHh0d29NS09OaFRBZGdyamIwQjZId2kzZ0pBVXMyYnA0bk5LclhEbVEyZEJVUW80UnMyNVpWSHlWLWxDc19EYXpyazNXZG9RSWg2NzlyZGZjd1ZkWTJ5TmhXYTI1Ukw1aV9UaFVoenpVZmgyS19wMTlESmZHWk4telJBRk8xX0hHcVg2SmxSR0kteUg5VkcxVU5oaFlKYzNTN0x0ajdyWA?oc=5",
-        "date": "Tue, 09 Jun 2026 12:00:17 GMT",
-        "source": "ET Manufacturing"
-      },
-      {
-        "title": "BEL, DGQA sign MoU for long-term provisioning of electronic fuzes",
-        "link": "https://news.google.com/rss/articles/CBMipAFBVV95cUxQZU8tNndBZGtNb1RoQmVpQUtEakNqazJRYnBaRThHbmxPQWRfM3d4QXpXUnNMUHVfenJtNFQwWDF1NGtDWnYzZ2dFdTk4RlNZUGNqMGN0RlZGWHpHSkJER1AzMFJVZjZTZXF4S0lkZEdLRnpEbE9OV2VDMlYwb196X21adVAxSFNxcjZycmNORkhtYjJwRm5Wb0Noakd0dG5nVWxydw?oc=5",
-        "date": "Wed, 10 Jun 2026 05:01:14 GMT",
-        "source": "Evertiq"
-      },
-      {
-        "title": "Defence Ministry Signs ₹1,220 Cr Deal with BEL for Advanced Radios for Indian Coast Guard",
-        "link": "https://news.google.com/rss/articles/CBMivwFBVV95cUxNUU1KdE5TYlRWTks1LTBlRUJaeG9RRVVjV2tpSGNURnhyeHA1YVk3ZEdvTHk2eVpWZEFjWjA5aHJhakZRTEdRdWhtTW5ZOV8zd01BaXBQelByQjl3RVhLSTF5cmFIODhQbWxTaFBUTmcwV0diWUsyOGN4eDNxdlFuamVjNFBoUUVIazZFVHF6OTVWU1JJR293YkxnbWhOd3FrWkxVSlRwTTB4NzdVbHYwWWp6bm1lekRZbG1rZl9ZUQ?oc=5",
-        "date": "Fri, 12 Jun 2026 07:32:45 GMT",
+        "title": "Defence Ministry Signs ₹26,000 Crore Contract with HAL for 240 AL-31FP Aero Engines",
+        "link": "https://news.google.com/rss/articles/CBMitwFBVV95cUxOeUhXR0VXZU1EekdmN3RYSW5ucDBYTmNWVFZBb3BZVTNRQjdDc1pBcnNNTXB4bWVZN1ZrWlozSzhIU3pIRG9FZEpWWTNIUHlFYVhhZ2duX01vRU1jVkFtRHhZU0RSUkt4X3oxaG1qbFpmNnZWdmJrZlVpc2l6SC1lZnFWVzg3UjVRQWQ1Tl8wTjJwY2pwakVMQWdhQ1g3S09taUJ6a2tvZkNNdm44Y3ZKejdqTVJVZzg?oc=5",
+        "date": "Tue, 16 Jun 2026 08:27:33 GMT",
         "source": "Newsonair"
       },
       {
-        "title": "BEL, Metamind and Kristellar sign MoU for developing futuristic technologies (UPDATED)",
-        "link": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxNVndfZXFYMXR4SWE5VzdGdW1VSnNwSXBGTkl4TzNzMWl1M0hfdkhTUFBoRU9JWE9NWmxsMEZtUFRLalNMZFpuLU1wU1pxay0yeURhZGswMUxGTFA3MVVRZ2JuN0NIS0JSRjJJTVdoQ2Q0aUd0TTg1cnJ5RFNlS1c0RTVaZWFsdzRnNFVkUlJXYi03N0o0X045czc2UWtNYlRSaTBKWktHV04wT1lqdUdHRGNTWGtXRF91WWxkdjFnT0VfYUNleTR6cw?oc=5",
-        "date": "Wed, 10 Jun 2026 12:37:46 GMT",
-        "source": "Whispers In The Corridors"
+        "title": "BHEL secures order worth ₹90 crore from Damodar Valley Corporation; shares trade in the red",
+        "link": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxPcTE1NERGWkwtcWxQdHFKaTdIRGdLN3dfaVMtZDlxVDNQbGtsSVlaQTdHeUVKRVczSWZjUGZud0F4YlpTMTNzdklPMVVfeHl2Sl9BLThxNlZyZUdpbFpNcTVxT2FCZDdSRWw0NkV2YXpMX2hxcjU1akliblF3QW9HRUgzcXd4blE4WTg1RUxHOXlGWDI4aGVHdjRRYUx4bHRLQThJUjEyVmo0WUY5VUY5VDRsVkJ6aGxfMm1UNXFuRW9RamlhMm9uZUdHdWxIYkpFY0NpM0w0ZWkwblpZUFZTb1dn?oc=5",
+        "date": "Thu, 11 Jun 2026 09:37:37 GMT",
+        "source": "Upstox"
       },
       {
         "title": "BHEL receives LNTP contract worth Rs 90 cr",
         "link": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxNREpfNHE3WjBhbWhJTlZTaFZpbm8wTFRBdjVpaUJPRzZlb0dmNzhwRUF3QTNHV2hVenlJUmRaWkRMY2NSTVl2cVlMZDcxMjhLV3gtWGNRWDZMNUdyQ3pRVTduZmt1LVZ2UmpyOC1Ed1pKQmdtUi1rUG55V1o1WEFlOVVPQV9JS3ZlZmZ1MkNWc1BnQmRoV2ViWm42XzMxRk1lMXVwenFvejVQU0dpaGZTNm1NNC01SjhhSGx5QzYyaDU2d9IBxwFBVV95cUxPVHFXcTJQdzlVZEd5dm5QNWdSb3ZhckFNd1R3VGo4QVZQRXZyWE1fTU5ET3l3NEZSNW5RQi03ck1oR0dHaFFkclBOcEEwU09VOUFrVE1XaUVzLTMycXRaVWFQYVZYQVc1SjVPR093RkRwMnVnaXRGNndNb0Q1ak0wYnktMFNlUkdfLTVhdEdaRmZnNnR4VlBaOWgtWUNPbFoxUmQ2MmZ6NXFSODNXekk5VXBwVVRzZWQ5NnB6dmltYXRPSWVSRUVR?oc=5",
         "date": "Thu, 11 Jun 2026 11:01:14 GMT",
         "source": "Business Standard"
+      },
+      {
+        "title": "Suzlon 2.0: Brokerages remain bullish, bet big on renewable energy giant’s execution-led growth",
+        "link": "https://news.google.com/rss/articles/CBMi7gFBVV95cUxNZlNVLV8xR2ZCU1hhVnc0Y0p0dDUzckpTY09CUFpaamREZElfNHoyNFp5c1VQZXlCWFFka1d3S08zMUJ5TUhESG1DS2tnQk42a1k2MVRyd0dON2RXT3pLOVRON3hZSURLMWZhRjZ5YUhnT09pTmQ4bXhJZlZBOGRaWUJxU1p2Skc5emhTeF8yZTYxLVlOMkpraktseVF1ZldmMUxINEFpX0FDMWk1eWkxX1QwX2FmU0lhd3haVGFoM0J4ejJzZlBhSFVOSGZYckxjdG4xRUF6RkhuWllCT2V1ZURVRkF4OE5aT3FpTlBR0gHzAUFVX3lxTE9yVElyVjJtZUJXUFNtdGFwdFdPV1BVQ0U4SGd4WUtLcUdOZkVETUJRTll1UkZBaVVBbWV0dVZoaml1Mm9GaWxudF9tM0NiRTZ5OXh3V2VYcnF1WXJpalRqVTFKZHZvV1VfUDlpdUxYdDdua01MWHlLeVhHMmZpbUVTSl91bjVHV2lWVFFKaldna1JLTGk3SUlxZjdiSzhrVlU5cFduYTZBUC1yd2NSbzRLazFyMnpQSDM5dHBheWhjX21kSmp0eFNqdDZwTVhRMHU0clBRbC1rSWZUXzN0QThuM015S1NzMlFSbjBBNWU4a3Y4NA?oc=5",
+        "date": "Mon, 15 Jun 2026 13:28:09 GMT",
+        "source": "Mint"
+      },
+      {
+        "title": "Suzlon 2.0 Strategy Targets 25% Revenue Growth; UBS Maintains Buy at ₹72",
+        "link": "https://news.google.com/rss/articles/CBMipgFBVV95cUxQX3RCQ183eXBnR3ZnSEZ0REZuaUtubEQ5cTdERk5zZE5zTXVHRGZJN1daMlZ2Mks3UGM2bDF1LXhqSG9jaFJvNExVb2c1M3pwYlFsQkNROVpEZlJRSmFCVm52RkFpSjkxbENVa1hiaENNRlNvRE1rQnZlMHUxaURBcnNGeXNieE9uUlJfUmhpS2lkNUVPYm5pNmptQ01VYkk0VkxkbkZ3?oc=5",
+        "date": "Sun, 14 Jun 2026 07:00:00 GMT",
+        "source": "scanx.trade"
+      },
+      {
+        "title": "Schneider Electric and Kraken Target Grid Flexibility for Faster Load Connections",
+        "link": "https://news.google.com/rss/articles/CBMiowFBVV95cUxQN2Zld2lRQjM3ZXRTN0l2Q25ZNDFIN0tNbk1uTTlrT0Z0YlhMaUp4bGJVQ25hcmdSUDJuTlJldHdHTVVHMjNmZnBqeWk4cUxxM2xWcHNMUEtXX2lHMlRLUHgzeWV3TjZnbE9yWW9xRjB5dWg1amJENlRWWkZ2MTE2UkdJZ3BjeEN3dXY0b3pJUzdWRUptTk50VTRyMi1NbHF1ckxn?oc=5",
+        "date": "Fri, 12 Jun 2026 12:00:00 GMT",
+        "source": "ARC Advisory Group"
+      },
+      {
+        "title": "Govt likely to clear Dixon-Vivo joint venture deal this month",
+        "link": "https://news.google.com/rss/articles/CBMivwFBVV95cUxPZlRoVmdITG9WSmYyeEc1U1lDUGpjUXpaTlFaZDRoX1R4cEw5MU5wSUtycVhSc2tIRjQ4V0RkM2VZSm9uQkdaSlBBbFEtS25iWXBieG5NeDBLLUN6Z21uRXdfN3RWaTNYcFhsZzhsWHlqYk1HdV84MmxxSHBndjhPSDQzSEt2S0dhVHZDOVd3WWxPeWFuUDBGcDg3d0dQMEtkdGtmTlgwZGNOMUFCbkRGNElHYnMzYnBURjBiRlJ6NNIBvwFBVV95cUxPZlRoVmdITG9WSmYyeEc1U1lDUGpjUXpaTlFaZDRoX1R4cEw5MU5wSUtycVhSc2tIRjQ4V0RkM2VZSm9uQkdaSlBBbFEtS25iWXBieG5NeDBLLUN6Z21uRXdfN3RWaTNYcFhsZzhsWHlqYk1HdV84MmxxSHBndjhPSDQzSEt2S0dhVHZDOVd3WWxPeWFuUDBGcDg3d0dQMEtkdGtmTlgwZGNOMUFCbkRGNElHYnMzYnBURjBiRlJ6NA?oc=5",
+        "date": "Tue, 16 Jun 2026 17:01:27 GMT",
+        "source": "Moneycontrol.com"
       }
     ],
     "product_launches": [
@@ -1786,22 +2263,40 @@
         "source": "NEXT.io"
       },
       {
-        "title": "ITC Fabelle unveils 64% Ghana-origin dark chocolate range",
-        "link": "https://news.google.com/rss/articles/CBMimgFBVV95cUxNUFVPOG5LVVRRVWxTdmh3VXdHdDdjYl9zV0tmeGJYd2Fjdm92OXVCVk1idERXM08wVjJxZ2xaTGRoYmRVbWFLOWlGYk5ZS3JVMXN0MGxvanpMSWxvX2lhYWdnMW41Sll3OEN4a1NVeTlCZHdOaWdBWG5zTkYtR2d3SzFTbVRteGZBeFpCRUh3RHpyTUtaWWRERDhR?oc=5",
-        "date": "Tue, 16 Jun 2026 02:30:18 GMT",
-        "source": "Food & Beverage News"
+        "title": "TCS unveils India's first Oracle AI Data platform lab in Kolkata, eyes AI-led enterprise growth",
+        "link": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxNdmJpSDdXZFozbm5yQmZ6ZjdXSGQ2QlVhcWVmR1l5ZDQzUDVubVgtNnhWalBsUXhhOVdsWVo5dngtQjJFLVZCam93UGEwMjUwM2ZQZWpZM1RGZTU0NHJJRHJKcWZkcXpQLUpPd3NmdDF1dWdWcTJuTlFfNFFlU3pMRXY3aWlxSWVIMTUxZTgwbkIwOVVhU1N0UHNMWXg3emFnVEtsX3FKR0Ffb0ZfU3YwdmVZRzNCVzY2bzMtTVB4T1VUSW1QZXBXcEljWTJZRGJJY0xlc0sxcXpWZmdvU2QyYmZB0gHnAUFVX3lxTFA5dmQzbXRfUTNuNEwtLUxQLVphVlBiVGdmTEZ6eFJUUmZfQ1M3M0U0YWpLdDZqTWRraTlHTXRldUROMHdyTTZ1amxxT0ZTTGUyV3RBSWUwSlVjdk10YkNxbXFXeThiMXlSbHhFTWU3SUVpcnhUVjltcW1OZEZ4Y3JoelJUZ2MyaG1TdUFSTTJFR3RyY0tkQ0NvRk5WN0JHUjJVQUtEanVsdG1ObFBEUExaVVM5ZGU5UEt0b3hlR0JfUUg2V0h4d3FwZ0lheFlleFVMODFUbkNQSVZ4eV9OVUU2U2JTejFsdw?oc=5",
+        "date": "Fri, 12 Jun 2026 08:25:25 GMT",
+        "source": "Moneycontrol.com"
       },
       {
-        "title": "Fabelle unveils 64 per cent dark chocolate range with Ghana cocoa",
-        "link": "https://news.google.com/rss/articles/CBMioAFBVV95cUxPYmh6UXJSZkRIT3VSbnlDWmZEWTV2YnRPbVdncXZpN0I4ZDZtampIWGhLREhaaUFtUzlwS2tQM3ppTE9vX29jVE9oVDVRZm01RWc5Q3pfNnlFYW10Ry1UNVk1TG15NFM4bEdkNzg0dy1pRnNLQnhKTXFoWXpmWVdOZjd0b0FEUWZYSFJnYkEyTElZdVVrOTFWbzlDNUJBeFFr?oc=5",
-        "date": "Mon, 15 Jun 2026 09:25:02 GMT",
-        "source": "Indian Television Dot Com"
+        "title": "LTM Unveils Outcome-Based Pricing Model as AI Agents Reshape IT Services Contracts",
+        "link": "https://news.google.com/rss/articles/CBMivAFBVV95cUxPRHVNVXpOR3dXeE5wR05aVWlCaXZDbmZIRXhhVkRPV1JLRWlpZG9ieGJ4TG4zVUI0R0RuVDJwZDNwT2pzOUZjb1JzUjN6RFdQZHA2cEdTbmtuNTNYcXAzeTdOckRnUzVPYjRtY01kR0x4VHo4TG5YNGtIMUJiQzZPS0hNb2xrTElQSDNEdGxfcnFmajdjaHlvNE9PWC1NRk1UaDlrRGlhdE91REZUU0puVlhBa1RfWjRvcUROTw?oc=5",
+        "date": "Wed, 10 Jun 2026 09:14:21 GMT",
+        "source": "Analytics India Magazine"
       },
       {
-        "title": "Campaigns We Like | This week’s standout campaigns from Amazon Now, ITC Mangaldeep, XYXX, and more",
-        "link": "https://news.google.com/rss/articles/CBMigwFBVV95cUxOT2VLU1RLTURybFNYZVNqYmIwYm5DTFRrMkJMbHlyRjNGQWdmbk12LV92ekUyVTNkSTVmeXB2QUI2T055Y3d5UjU1QjZrRWJDNndaT0NQbXd1T0lLdDRmb3B5OHNQMDBrQlVIS1BYdmp0TGNDNi1KRmNLSDYteUg5Z212Yw?oc=5",
-        "date": "Fri, 12 Jun 2026 06:32:37 GMT",
-        "source": "Mediabrief.com"
+        "title": "Andhra unveils power roadmap to attract hyperscale data centres in Vizag",
+        "link": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxPV1EyYUlJdm1CT2ZNSDk1QWVabWczbXFPWnhRYTZ5dVgwTDl0NERuckJwcjh1T04xVmtnNHRaWUxMZUxLNDlqZVFvX1g4bURCRURPS2xBVnZhaGxkU1MyOGNoMmtuMFVDY2tkdDBjbEVRd1RfZzRidzlKMndReGlrUTNtcmItb25iVnczR09Kd3FIaEJOVFItQ3paaHQzWjR0eEpaWkg1aTNwYXpIV3pxY3JlaWJJeXNIMjZpR1huOHBZbEQ0UzNOMnNzWmZ2Z1lfZWpoQjZR0gHjAUFVX3lxTE83dFRZdnI0RjZDZ0NCTnNsdDhwM0xqUE14R2JtTXRvVVdGQWNFc2xhWXI3SXJhNDU4NTZadXdHVGpPMjBNYURhM2xhY3FMdnkxak0xSmFqTW1FRGpmc05TMXA5b2M4NDhVS0hNMEpzNng3d2JUejFmeTBoR2RPNF9LdWVraVJsVERERnpwQmt6TkEzUnZqU3pXRWtITlVaQy14UTAweHVRQWZ4dk9aTFlFWG0yb1pMNkNRbHozSkc2N0p4VkQ2c0tObkVUMUZtZ1dqZ24tTXBBZ0tib2JXV0YtMkk4?oc=5",
+        "date": "Thu, 11 Jun 2026 03:42:12 GMT",
+        "source": "The New Indian Express"
+      },
+      {
+        "title": "Prestige unveils convention centre in Bengaluru Airport City",
+        "link": "https://news.google.com/rss/articles/CBMi2gFBVV95cUxOTGpURUNTVTdIeEY0VXZIWHBkS3oyWURMZ2NxaTNfdDJHc1dkcUJaV3AtdGp5anRnR2R0ZFlyaDYxTURodUdTNVhRbHNDYWdMVno3dy1aUWZrTVpxUHlLWWNtR042NmYwd05hSENjbGtEMmYyeFVPTFBJY19xRHZydFRMb0hEY2RrbDZITjUzVTlkUlJ5WU01V1h2eTlnMVBhMlB6REVPZmZBekI4dERGYnhXVnVCazNsV2ZrMVdLZkdpSVhETGxneVJGSm5VYjQ1emk5MkdmdWs0UdIB3wFBVV95cUxQMHU2SHo4NVBuZnRod0xwd2JaZTNEVUwzV1VSeTRET3pkMGd2Y3hBMUVSUXBlU3ZNeU5LYnZCbDktLTE5dy1oVjlxNUlWR3BqX09QWnBsRkdBZ2JSTG5lVnc2aTY2WEF1SzhqWUctYlRLMkZsSFpSVnNyY2VRS3BnTGI5b2FVa2prNHJMNDdoSzBmcU9PdE1xNGlhTHdPU2hYUlF1cWhnT0FFWkhUY1pxZ1NEa21leU9IVjFiRE4zeWd5RlEteDE5ZnlIM3NXcE5YTjgtTlp6b1VKWi1UR3ZR?oc=5",
+        "date": "Thu, 11 Jun 2026 11:01:21 GMT",
+        "source": "Business Standard"
+      },
+      {
+        "title": "IIT Madras Unveils Indigenous E-Waste Recycling Pilot Plant",
+        "link": "https://news.google.com/rss/articles/CBMirAFBVV95cUxQX1I1ampJUVlGSnlHMTN5dENZc3pzb2FZTWZ3VDZGbHlpd3BPVVE4WGU3NFJDSHVpSFpYY293NkR2bTJfVEJYamEtUzcya3lnUUNPdDJJTFR5MHpUZk5xNXJVenN0aGV4WG5aRkVuZVNoNTJEUjBFR0xrQUJFR2RyMFhJNVlJZHVEcjRoM0tKWjJ1dXAyc2x0SWZRaE1MNXUzNENDMFY2N0JUODdV?oc=5",
+        "date": "Mon, 15 Jun 2026 08:13:11 GMT",
+        "source": "Electronics For You BUSINESS"
+      },
+      {
+        "title": "BHEL bags bnew order worth Rs 90 crores from Damodar Valley Corporation",
+        "link": "https://news.google.com/rss/articles/CBMimwFBVV95cUxNcm92eHdHSWxVSVk3cUxReC1uNGl5aWlpcmZQN3U3VHp3eWIxY3JTR2FwX214SlBDdFZab3hVT1h0a0tBTGtDbzQtSkw5dFZaY2pMOUZJU1hYNFd3dGNDNy1NZjBKakNKdDY3a2wzdFZzRFFvS3NGQWREeUxfbzhsc2JlQW8xMHRzVEVVM0tCdm8xYzVnT0hzZ2hQVQ?oc=5",
+        "date": "Fri, 12 Jun 2026 20:32:55 GMT",
+        "source": "BigInfo.in"
       },
       {
         "title": "Women’s Hockey Unveils 2026-27 Schedule",
@@ -1812,7 +2307,7 @@
       {
         "title": "Sandbox Festival 2026 Unveils Multi-Stage Lineup for Three-Day Return to El Gouna",
         "link": "https://news.google.com/rss/articles/CBMikAFBVV95cUxQVUF6UjRGRjVuSG5vSWhQSlRicjdKUkktdTdLMGJOZ3A2RTRpYzdqN2ljRVFrODNEY21QYXdHMTRHWXdXbG5YWEp0dmxXbWRFYmRuU2VZZHZFRnF1QkpYckFFZ2kxMXVaZ1ZsZ2Rxc0ZabVQ2LXQ3a0VkSkRwYlBnTVg0NHIwbXd2U3VrMHRGQUo?oc=5",
-        "date": "Fri, 12 Jun 2026 20:55:16 GMT",
+        "date": "Mon, 15 Jun 2026 21:20:12 GMT",
         "source": "TicketNews"
       },
       {
@@ -1820,24 +2315,6 @@
         "link": "https://news.google.com/rss/articles/CBMia0FVX3lxTE5HT2pSZzBUT09VWVctNVhQZjJ3RGJnVnZPVDZJT29RdndFckpaWWNsQXpkTDhRemZ1ZHpiQ2FBMG0zUmMwcTBCM0lwT21rMzFmRDJvaUNSYkNqSjN4QVlzd2RjcTdUSTk0Qmxj?oc=5",
         "date": "Fri, 12 Jun 2026 14:06:16 GMT",
         "source": "OperaWire"
-      },
-      {
-        "title": "Edinburgh International Film Festival unveils closing night film",
-        "link": "https://news.google.com/rss/articles/CBMibkFVX3lxTFB6RjV2OXVMWm40MFBPNF85ci10X0lNZlFEU0dzUTRSaGpMbV8yeVFzM0RDVWNmRW14c1cwaEdtNGhfNXE1Z1ItcjJEcHVwLUxPLXFGYjhVTThoNERFLVFXUUVkaFZOQllPSFVGWUR3?oc=5",
-        "date": "Fri, 12 Jun 2026 12:17:27 GMT",
-        "source": "IMDb"
-      },
-      {
-        "title": "Precision and dominance: Navy unveils crest of Project 17A frigate Dunagiri",
-        "link": "https://news.google.com/rss/articles/CBMi3AFBVV95cUxQTFpIMkk5UG5tMjZjXzdVTFZraHAwV0VMR1ZTYWhvWGdHQWNad3QyWVZHSFkzRGJMck9wZy0tb3NSTTJYaEluQ20wbGlFcmRfOXNnYm5YMEliT3EyUU9pTVgwdmIxNEdOaW14RDM0UmNJNTV5UDN1VXlsWTZiWDNmY29uc2tJWlBkWXVxOGxET0hSU2RSLTd5OE1PWm5ZdzZNbDdqaFl1V0QySHVYV18yR2xIOU54ZHJfM0RKREFqNS1RNmE4cGxEaDBiUHJlZjJhRkdtWkZMcnJmSjJR0gHiAUFVX3lxTE9uTUgzaUZscGhVSWtKWDhZQ245eWp3bmt5bG0zWnNBZWNJVG9tZkx5cVBIZVZHMlNRNGVZbEgwTUF2OGg2MHRJQVk2VUV6emV6REdtYjhVMVB6a3RKc0ZUcFZRVHgwcHp5cjYwbWl3dnYzVkY2X1hNSEc2eGc4MHJRUzRWQ0MzbXo0dUtvZC1DMEFWSTBoaENGNEV3aGRJRkdZd2JSRThpNy15am8yajdnT2lNcnhIVlpVNHdRclJVQnluZGhKaFB5QXViRUtlcTBPcURWVVQ4VHc1Mm9Ycm1TVFE?oc=5",
-        "date": "Thu, 11 Jun 2026 10:59:00 GMT",
-        "source": "The Times of India"
-      },
-      {
-        "title": "Semicon 2.0 to focus on chip design, manufacturing equipment and materials ecosystem: Ashwini Vaishnaw",
-        "link": "https://news.google.com/rss/articles/CBMihAJBVV95cUxQVEdiSzBQajJaRjFkTnMweDVEdWtwU24tVzdQRWt2NlVvY2ptZmZYbnF2NWNZVDBSbk9MVnNGSV9RVzF4bnJoUVhPbmxYUVNiSkhORXBkQlV0SUNfUHlUaHRHUzJ1X1lFVTVtU3VoMXloWldjY003ZEpUWlZzaHhxMUtVa0o0V2cwQ0p3YWswUW1JNXlEOVY5TnlXVnJad3p6NUtHUktFT1lOR2t5YmlzR3lVVXRzOENKYTdBZ3VTVFY0eUVoZEZJNFpTVjQ1WUVjWDRFZ2pkMERPOVhpSkhWOG5sR2lGU0NjQlpVNUg3NUt2TnlPUnBYekFHQnFOZWhRYzhyaNIBigJBVV95cUxNQXUzMVMzTzVCXzB2NmU4bUVYRkVIcnV6X1A3cHVYbHJIMnd6RGRSRUdqSE9QT28tVW9GNFdBZHk0Mm1CTTJZb2pGSEYtYWNzN3R0M0RSZDN1Um1tOTR2WlJFYVk5aGVHbkRwMUh2OWd1MUpOUHVkUnRGbGhuVk1VUURNbWpKYW1Yc2l0UWhXbUViSGJiVVBvc1A1SlFPRGpsTnpiY0Z3VkFzU1FmcHVGWjNORW0ySnNzNTJfaFd2TUJUdHRTSkpVQi1IX3BpNWR0b0lwYmFTdTdqVkoyMi1jRm00YndzUXdWcDlST0d4VWdfSGYwTVNfb3hsVGRlM0VOSEROUDk0SlY3QQ?oc=5",
-        "date": "Tue, 09 Jun 2026 09:40:10 GMT",
-        "source": "ET Manufacturing"
       }
     ],
     "sebi_filings": [],
@@ -1873,26 +2350,6 @@
         "details": "Block Deal"
       },
       {
-        "headline": "Market Preview, June 12, 2026: Lenskart Block Deal, Vedanta Demerger Listings, Dabur FDA Notice, Happiest Minds AI Launch, Adani Data Centre Acquisition to Keep Indian Investors Busy on Friday",
-        "link": "https://news.google.com/rss/articles/CBMitAJBVV95cUxNRm9pUGpCUG4wdVluUkdKYTUtQ0w3NjBFSHowQzFXRGJiUkoxZXBVaFpoVEI0X2duTDU1OTFYNWFQT2t5T1AtVXd1Qmc4MmI0c0ROS3dDb0czSDU5cDFGOXNudUIwejQ5Vm01UC1fUzRiRjZzcktLZDN0aG1SN0NybjFXWWJkdjlOeGlWRnhTV054LTJpdHRUZDlhVms3eW00NlcxZVc5THVzbFVEa1NnNUsxSG9TQjJxZXcyM1NzVElBSmRWU3IyZkpKelQzN29OOWpkdGR1cEczX2dhdXAtcUE2T3lwS0NWaE14NF9ZSUx5djY4bWNUQ0ZLWGZqODdJeEZFNFI2aTF4bE5rTG15b0JRYkNIRWhMNVBqVkFFXzhyNTRqMXpuQWR3Yl9oZi1RdUFNaQ?oc=5",
-        "source": "HDFC Sky",
-        "date": "Fri, 12 Jun 2026 04:11:10 GMT",
-        "buyer": "Institutional Investor",
-        "action": "Buy",
-        "company": "Listed Company",
-        "details": "Block Deal"
-      },
-      {
-        "headline": "Meesho shares gain 2% as Fidelity Investments sells stake via block deal; all details here",
-        "link": "https://news.google.com/rss/articles/CBMi4AFBVV95cUxPalhYbGl4cnB4aVpxVHZKZWh3QV9vQ21naGsxMlZpN2lvWTVMdVZiMmJ6eS1MRHNBZU9HUDhzSXRKcmlEWHJYNXZWU1JWOGk2aTQzdkdYUWtjX3ktek9leE40UkVPQTdVSENJOWpJNmVkMTJjWDRyVEtpcnZra2h3UkhpelFBSVY0SC1xME84cjNTYm91My12akNwZ0NRZFpXSGpHc3lubkp5XzMwV1dEQUxFREV1RHQ0RGlnWjVVTHZpR2JEb2NpeFlxZDVsNFRZOU80WVJrckNxMnNfRDJXTA?oc=5",
-        "source": "Upstox",
-        "date": "Thu, 11 Jun 2026 08:18:53 GMT",
-        "buyer": "Meesho",
-        "action": "Sell",
-        "company": "Listed Company",
-        "details": "Block Deal"
-      },
-      {
         "headline": "BlueStone Early Investors Offload Stake In Rs 300 Cr Block Deal",
         "link": "https://news.google.com/rss/articles/CBMipwFBVV95cUxPUFhMOE1wcUdwdUNZcEJ4anB3enhyaExaQlBBTkFxTkltZFM5WlJ5NG9uemdmOFBEVE8tdTJRWG43QlFpNHFpMEh3bHdZQmJIOXhOVl9hc01OQVN2QUN0S0xHaXB5STl1RjdxdmhwVDJ0STFDYmZXQ2IzQUJManlTVkFRQ2h3ZElPTFlIMHJlRm1MT2dSRE1xSzVBT01xTzA4TnUxUkRCdw?oc=5",
         "source": "BW Disrupt",
@@ -1903,21 +2360,41 @@
         "details": "Block Deal"
       },
       {
-        "headline": "ADIA arm plans ₹1,944 crore block deal to trim 2.3% stake in Lenskart",
-        "link": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxNSElsQkc3OGVhOXVJazU4blNkNnNPcm9ob1Zrc29zalQ5Z19MM3l5TWpvYkhUREZfcXVGcHM1ZnNBeHhOQUI4bzE3YUVyWWhIMnM0VFBmanpOa2xTejFyWTNQV1pMTjQ4RnRHcXFhTmk1ZVRwdURXMmdIaFhpNWE3R09md0hGbC14SHowSzFUV1JBYTN2dlZYRU5zOE42NTNCYnNLX1hJdzBOeWQwX2xLNDgxbVpZekJpREVLRGdKREhpc09JSkZ6VHo0eE56TjBlRFHSAdcBQVVfeXFMUGxiTHd5WUlEc3lNZUZvcUY5TzZPb3JqWkRCZTRKQkRXVTNwdjFfeS00M2hEQ3pWb2VVZ3BwNjRTZ09QcFVFWERiM2xLWVh1R1lpbVR2N3ZuSFUyM2dyeFNKSUZ5ZktKOFUtVVItWnhXWlhZSkZmTGlHVlZWckUxU0J6TEVaMndKbWs0SnVBVHczcHB5dUlncDhRYVJGZGVtM0E5SzJBTUZBY1cwMDNFVFVsSWRHbVZxRkpySWNRdWJuak81SUp4RGR6N2tfdERKaUEtTzI0ZzQ?oc=5",
+        "headline": "Benchmarks extend winning streak to third day on FII buying, easing geopolitical tensions",
+        "link": "https://news.google.com/rss/articles/CBMi_wFBVV95cUxNbFk4TlJ6WXpNODB4VE4waldMdGpnOGFKZHNqTUZ2dzRySHk4RmhhMDczSTU5Y1NudTllaXNWaldxNlBwc2xmeGNkMWwyM3YtUmo3ekJmb3lSOHRYcU5XMnd6RWdBSDdfcFB1SkRBZkhQeVlfaGtjSnNFb21KVlJpQjFQTmZDR3cyX1Utc0xFU2ttNWRucnlNMVdZeGo3OHRJazlFWGNIVUF2QzZIUDZtOFpxdXR5czliMWZHTk4zdTg2dGNxT0ZZenZwbi1LRTJ5c3BscGh0SEhJLVo0V2NkWGFhVU54XzRlTEljQUlVb3h6QnZCMmh5YWZmS2tzRDTSAYQCQVVfeXFMTUdJSnVCNldTS0xUc2Z6Q01wTlpPRjk5Zlg5ZERsby1LWnRCTy13NEhrcTRKdFBldDFQaFhRd1ZtNHlOUG10SE1RMjZqRzJweVpUMmJuVnlTMDVKSmlOQnRHdlNDSXB1UkFhd3JhZ0V4Q0FqQWFxWkR0OVVYM0hhTlIxYllpX1ZUbTFSWHVFUjFJSk1IZmNJTjVreEFlR2t0UGE0SmIxZEt3M01ucEM2djY2Rk5DUGlSZWJtSlBXRkZRc29IQWxFV0YyQ1c2OEZXRDYyakZpaXlYVnRva01mWTN2UHV2UmUxR3oySE5XSG5ENmNIN3dWUFFUdDBUVFItLWxyWXY?oc=5",
         "source": "Business Standard",
-        "date": "Wed, 10 Jun 2026 14:31:50 GMT",
+        "date": "Tue, 16 Jun 2026 12:01:51 GMT",
         "buyer": "Institutional Investor",
         "action": "Buy",
-        "company": "Lenskart",
-        "details": "2.3% stake"
+        "company": "Listed Company",
+        "details": "Block Deal"
       },
       {
-        "headline": "Storm in Stocks: Vedanta Demerger Impact, RIL Expansion Talk & Infosys Drag Create Expectation Gap",
-        "link": "https://news.google.com/rss/articles/CBMiggFBVV95cUxOMFBTZUVMa0lJWVdHd1Q4aDY3QWhyYzl3aHFxUFY3d3NXWDh6OUs5VGpHNmJIWXQyaGhfV3lXNmxzNGRla1VDSU0yc2R4WHFYVDZuVlNCWHlIQVN2Zm9HaXIyeTlMVDhmcjBQZ21DRnNHcEt3VmlqdFF4Mk9KWmpJZklB?oc=5",
+        "headline": "Sensex Jumps 544 Points, Nifty Near 24,000 as US-Iran Deal Boosts FII Buying",
+        "link": "https://news.google.com/rss/articles/CBMiggFBVV95cUxQV2M1OGdETjdyYkZNX2V5azM1SHJHVnM5TmkzOHQ3cVFWc0lxa2ZWcEZKQngxQW1ubE1yVDBnWHZMbU1fMmplTk0zWXFCVGFCellJaG9iUDNHOHQ3dTFLbGJRekxqOEVjajIwRFFhbVJtLUs3YzdCcE5CekdDamNkcmhB?oc=5",
         "source": "NiftyTrader",
-        "date": "Fri, 12 Jun 2026 03:43:03 GMT",
+        "date": "Tue, 16 Jun 2026 11:53:48 GMT",
         "buyer": "Institutional Investor",
+        "action": "Buy",
+        "company": "Listed Company",
+        "details": "Block Deal"
+      },
+      {
+        "headline": "Market Preview, June 10, 2026: Bharti Airtel’s ₹10,500-Cr OTSC Relief, Hinduja Global Project GANGA Launch, Dixon-Gemtek JV, IndiGo’s ATF Pressure, Emcure Block Deal to Keep Indian Investors Busy on Wednesday",
+        "link": "https://news.google.com/rss/articles/CBMilAFBVV95cUxNdmVrXzhyYTN0OWRqOGNQZWQzc0xwOWxHY0lybVU0SkxqUkU2OEl5ZzNkYUFSaHRZeTUyWVhtbG4tZmlpOXhhSEtXQU5ZVEktY1kwRkVzLUtmUEgxOHpybkt4dDRkOW5TY050RjBNVzgxdHBTWGF2aXQ1RUNUc1dkV0xINUNfQWRHc1ItM3NmR01sOGhX?oc=5",
+        "source": "HDFC Sky",
+        "date": "Wed, 10 Jun 2026 03:56:48 GMT",
+        "buyer": "Institutional Investor",
+        "action": "Buy",
+        "company": "Dixon Technologies (DIXON)",
+        "details": "Block Deal"
+      },
+      {
+        "headline": "Lenskart block deal; Meesho's kirana push",
+        "link": "https://news.google.com/rss/articles/CBMizAFBVV95cUxNR3lQeW0wb0VVei1ITXJvRFRJeXdaWVVDbmpuTHlXT1JQR0JuQTRfWHFXYTFuX0drWFAzRnNYc3hRQ0MxdjJxaEVtV3dyWnVMV2x2TWtibDJ1MzRNYzZlRjg4aW9zQzhsNHVka1pOZEpFbUx3V1ZkLVlhSnVqQmNZUnVRbUwzYklNNzBfYmU3cVh6VDdqWE5wdDZTbWpMUTFELVc0eGRCNDZfblRqZ3VEdUoyaVphR3pETTB3ZExHVlZIYUlqWWdYWV83S03SAdIBQVVfeXFMTWJCSW1kRU9ScmtHaVZ1SXJMUnZIWldsT2lMSzI5WkVmYXFVS3NQQzVhaktIMkh5VGYwMm9NNldQa2pxV3FSamkyVGVUS09BLXhERk01OThUNUtRYkR0TEhSWU5xZWpYZ19rNkEzQThGTlJKUjdYU0Q3dXlGVkJVZjhydFNkSWw1NDI1RlUxdUgzaXlTMHNmb2o3UW9LaE96RUNoZXFPOXB3VWZta3psZjFocjVwVkQ1elJwaEJ6TkdHM1R4Qm5oU09XLUg4dlBTRXJB?oc=5",
+        "source": "The Economic Times",
+        "date": "Fri, 12 Jun 2026 13:38:00 GMT",
+        "buyer": "Lenskart",
         "action": "Buy",
         "company": "Listed Company",
         "details": "Block Deal"
@@ -1925,74 +2402,86 @@
     ],
     "margin_of_safety": [
       {
+        "ticker": "TATAPOWER",
+        "name": "Tata Power",
+        "price": "402.25",
+        "pe_ratio": "33.8",
+        "current_ratio": 0.95,
+        "graham_value": 275.8,
+        "is_defensive_pass": false,
+        "is_bargain": false,
+        "alerts": [
+          "Fails Current Ratio (< 2.0)",
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Fails P/E Screen (P/E 33.8 > 15 & Price > Intrinsic)",
+          "Weak/No Economic Moat"
+        ]
+      },
+      {
+        "ticker": "SUZLON",
+        "name": "Suzlon Energy",
+        "price": "58.00",
+        "pe_ratio": "25.0",
+        "current_ratio": 1.83,
+        "graham_value": 191.9,
+        "is_defensive_pass": false,
+        "is_bargain": false,
+        "alerts": [
+          "Fails Current Ratio (< 2.0)",
+          "No Dividend Yield"
+        ]
+      },
+      {
         "ticker": "ADANIGREEN",
         "name": "Adani Green Energy",
-        "price": "1486.50",
-        "pe_ratio": "134",
+        "price": "1482.50",
+        "pe_ratio": "133",
         "current_ratio": 0.97,
         "graham_value": 563.9,
         "is_defensive_pass": false,
         "is_bargain": false,
         "alerts": [
           "Weak/No Economic Moat",
+          "Fails P/E Screen (P/E 133.0 > 15 & Price > Intrinsic)",
+          "Fails Current Ratio (< 2.0)",
           "No Dividend Yield",
-          "Fails P/E Screen (P/E 134.0 > 15 & Price > Intrinsic)",
-          "Fails Debt Limit (Debt > Net Assets)",
-          "Fails Current Ratio (< 2.0)"
+          "Fails Debt Limit (Debt > Net Assets)"
         ]
       },
       {
         "ticker": "SCHNEIDER",
         "name": "Schneider Electric Infra",
-        "price": "1190.60",
+        "price": "1181.40",
         "pe_ratio": null,
         "current_ratio": 2.0,
         "graham_value": 0.0,
         "is_defensive_pass": true,
         "is_bargain": false,
         "alerts": [
-          "Weak/No Economic Moat",
-          "No Dividend Yield"
-        ]
-      },
-      {
-        "ticker": "STLTECH",
-        "name": "Sterlite Technologies (STL)",
-        "price": "604.00",
-        "pe_ratio": "621",
-        "current_ratio": 1.35,
-        "graham_value": 182.5,
-        "is_defensive_pass": false,
-        "is_bargain": false,
-        "alerts": [
-          "Weak/No Economic Moat",
           "No Dividend Yield",
-          "Hyper-Growth Warning: Slowing QoQ sales at P/E > 30",
-          "Fails P/E Screen (P/E 621.0 > 15 & Price > Intrinsic)",
-          "Fails Debt Limit (Debt > Net Assets)",
-          "Fails Current Ratio (< 2.0)"
+          "Weak/No Economic Moat"
         ]
       },
       {
         "ticker": "ANANTRAJ",
         "name": "Anant Raj Ltd",
-        "price": "539.50",
-        "pe_ratio": "35.0",
+        "price": "540.70",
+        "pe_ratio": "35.1",
         "current_ratio": 12.16,
         "graham_value": 301.2,
         "is_defensive_pass": false,
         "is_bargain": false,
         "alerts": [
           "Hyper-Growth Warning: Slowing QoQ sales at P/E > 30",
-          "Fails P/E Screen (P/E 35.0 > 15 & Price > Intrinsic)",
-          "Weak/No Economic Moat"
+          "Weak/No Economic Moat",
+          "Fails P/E Screen (P/E 35.1 > 15 & Price > Intrinsic)"
         ]
       },
       {
         "ticker": "TCS",
         "name": "Tata Consultancy Services",
-        "price": "2189.00",
-        "pe_ratio": "15.0",
+        "price": "2199.00",
+        "pe_ratio": "15.2",
         "current_ratio": 1.81,
         "graham_value": 2927.4,
         "is_defensive_pass": false,
@@ -2002,93 +2491,273 @@
         ]
       },
       {
+        "ticker": "QUICKHEAL",
+        "name": "Quick Heal Technologies",
+        "price": "174.22",
+        "pe_ratio": "80.5",
+        "current_ratio": 1.93,
+        "graham_value": -272.3,
+        "is_defensive_pass": false,
+        "is_bargain": false,
+        "alerts": [
+          "Weak/No Economic Moat",
+          "Fails P/E Screen (P/E 80.5 > 15 & Price > Intrinsic)",
+          "Hyper-Growth Warning: Slowing QoQ sales at P/E > 30",
+          "Fails Current Ratio (< 2.0)",
+          "No Dividend Yield"
+        ]
+      },
+      {
+        "ticker": "CPPLUS",
+        "name": "Aditya Infotech (CP PLUS)",
+        "price": "3376.90",
+        "pe_ratio": "108",
+        "current_ratio": 1.6,
+        "graham_value": 3337.3,
+        "is_defensive_pass": false,
+        "is_bargain": false,
+        "alerts": [
+          "Fails Current Ratio (< 2.0)",
+          "No Dividend Yield"
+        ]
+      },
+      {
         "ticker": "ADSL",
         "name": "Allied Digital Services",
-        "price": "120.31",
-        "pe_ratio": "19.0",
+        "price": "121.66",
+        "pe_ratio": "19.1",
         "current_ratio": 2.56,
         "graham_value": -59.8,
         "is_defensive_pass": false,
         "is_bargain": false,
         "alerts": [
-          "Fails P/E Screen (P/E 19.0 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 19.1 > 15 & Price > Intrinsic)",
           "Weak/No Economic Moat"
         ]
       },
       {
-        "ticker": "VBL",
-        "name": "Varun Beverages (PepsiCo)",
-        "price": "539.55",
-        "pe_ratio": "57.4",
-        "current_ratio": 2.41,
-        "graham_value": 603.7,
+        "ticker": "IDEAFORGE",
+        "name": "IdeaForge Technology",
+        "price": "908.05",
+        "pe_ratio": "138",
+        "current_ratio": 3.84,
+        "graham_value": 3243.2,
         "is_defensive_pass": true,
         "is_bargain": false,
-        "alerts": []
+        "alerts": [
+          "No Dividend Yield",
+          "Weak/No Economic Moat"
+        ]
+      },
+      {
+        "ticker": "DIXON",
+        "name": "Dixon Technologies",
+        "price": "12235.00",
+        "pe_ratio": "52.0",
+        "current_ratio": 0.99,
+        "graham_value": 3120.6,
+        "is_defensive_pass": false,
+        "is_bargain": false,
+        "alerts": [
+          "Fails Current Ratio (< 2.0)",
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Fails P/E Screen (P/E 52.0 > 15 & Price > Intrinsic)"
+        ]
+      },
+      {
+        "ticker": "KAYNES",
+        "name": "Kaynes Technology",
+        "price": "3177.60",
+        "pe_ratio": "58.2",
+        "current_ratio": 3.68,
+        "graham_value": 3184.7,
+        "is_defensive_pass": true,
+        "is_bargain": false,
+        "alerts": [
+          "No Dividend Yield",
+          "Weak/No Economic Moat"
+        ]
+      },
+      {
+        "ticker": "CGPOWER",
+        "name": "CG Power & Industrial",
+        "price": "940.70",
+        "pe_ratio": "120",
+        "current_ratio": 2.07,
+        "graham_value": 234.8,
+        "is_defensive_pass": false,
+        "is_bargain": false,
+        "alerts": [
+          "Hyper-Growth Warning: Slowing QoQ sales at P/E > 30",
+          "Fails P/E Screen (P/E 120.0 > 15 & Price > Intrinsic)"
+        ]
+      },
+      {
+        "ticker": "TATACONSUM",
+        "name": "Tata Consumer Products",
+        "price": "1130.90",
+        "pe_ratio": "72.9",
+        "current_ratio": 1.07,
+        "graham_value": 357.9,
+        "is_defensive_pass": false,
+        "is_bargain": false,
+        "alerts": [
+          "Fails P/E Screen (P/E 72.9 > 15 & Price > Intrinsic)",
+          "Fails Current Ratio (< 2.0)",
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Weak/No Economic Moat"
+        ]
+      },
+      {
+        "ticker": "ITC",
+        "name": "ITC Ltd",
+        "price": "291.65",
+        "pe_ratio": "17.5",
+        "current_ratio": 1.67,
+        "graham_value": 318.2,
+        "is_defensive_pass": false,
+        "is_bargain": false,
+        "alerts": [
+          "Fails Current Ratio (< 2.0)"
+        ]
       },
       {
         "ticker": "METROBRAND",
         "name": "Metro Brands Ltd",
-        "price": "1002.10",
-        "pe_ratio": "66.5",
+        "price": "1004.40",
+        "pe_ratio": "66.6",
         "current_ratio": 2.96,
         "graham_value": 316.7,
         "is_defensive_pass": false,
         "is_bargain": false,
         "alerts": [
+          "Fails P/E Screen (P/E 66.6 > 15 & Price > Intrinsic)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Hyper-Growth Warning: Slowing QoQ sales at P/E > 30",
-          "Fails P/E Screen (P/E 66.5 > 15 & Price > Intrinsic)"
+          "Hyper-Growth Warning: Slowing QoQ sales at P/E > 30"
+        ]
+      },
+      {
+        "ticker": "CAMPUS",
+        "name": "Campus Activewear",
+        "price": "233.15",
+        "pe_ratio": "52.4",
+        "current_ratio": 2.59,
+        "graham_value": 69.6,
+        "is_defensive_pass": false,
+        "is_bargain": false,
+        "alerts": [
+          "Fails P/E Screen (P/E 52.4 > 15 & Price > Intrinsic)"
         ]
       },
       {
         "ticker": "PAGEIND",
         "name": "Page Industries",
-        "price": "38975.00",
+        "price": "39065.00",
         "pe_ratio": null,
         "current_ratio": 2.0,
         "graham_value": 0.0,
         "is_defensive_pass": true,
         "is_bargain": false,
         "alerts": [
-          "Weak/No Economic Moat",
-          "No Dividend Yield"
+          "No Dividend Yield",
+          "Weak/No Economic Moat"
         ]
       },
       {
         "ticker": "RELAXO",
         "name": "Relaxo Footwears Limited",
-        "price": "348.90",
+        "price": "350.85",
         "pe_ratio": null,
         "current_ratio": 2.0,
         "graham_value": 0.0,
         "is_defensive_pass": true,
         "is_bargain": false,
         "alerts": [
-          "Weak/No Economic Moat",
-          "No Dividend Yield"
+          "No Dividend Yield",
+          "Weak/No Economic Moat"
         ]
       },
       {
         "ticker": "RELIANCE",
         "name": "Reliance Industries",
-        "price": "1330.20",
+        "price": "1328.80",
         "pe_ratio": "23.1",
         "current_ratio": 0.65,
         "graham_value": 1529.9,
         "is_defensive_pass": false,
         "is_bargain": false,
         "alerts": [
-          "Fails Debt Limit (Debt > Net Assets)",
           "Fails Current Ratio (< 2.0)",
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Weak/No Economic Moat"
+        ]
+      },
+      {
+        "ticker": "WELSPUNLIV",
+        "name": "Welspun Living",
+        "price": "145.78",
+        "pe_ratio": "64.2",
+        "current_ratio": 1.5,
+        "graham_value": 102.4,
+        "is_defensive_pass": false,
+        "is_bargain": false,
+        "alerts": [
+          "Fails Current Ratio (< 2.0)",
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Weak/No Economic Moat",
+          "Fails P/E Screen (P/E 64.2 > 15 & Price > Intrinsic)"
+        ]
+      },
+      {
+        "ticker": "GOKEX",
+        "name": "Gokaldas Exports",
+        "price": "710.30",
+        "pe_ratio": "52.0",
+        "current_ratio": 2.29,
+        "graham_value": 528.3,
+        "is_defensive_pass": false,
+        "is_bargain": false,
+        "alerts": [
+          "No Dividend Yield",
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Weak/No Economic Moat",
+          "Fails P/E Screen (P/E 52.0 > 15 & Price > Intrinsic)"
+        ]
+      },
+      {
+        "ticker": "ARVIND",
+        "name": "Arvind Ltd",
+        "price": "496.40",
+        "pe_ratio": "30.6",
+        "current_ratio": 1.42,
+        "graham_value": 577.3,
+        "is_defensive_pass": false,
+        "is_bargain": false,
+        "alerts": [
+          "Fails Current Ratio (< 2.0)",
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Weak/No Economic Moat"
+        ]
+      },
+      {
+        "ticker": "CONCOR",
+        "name": "Container Corporation of India",
+        "price": "463.35",
+        "pe_ratio": "28.4",
+        "current_ratio": 4.75,
+        "graham_value": 255.3,
+        "is_defensive_pass": false,
+        "is_bargain": false,
+        "alerts": [
+          "Fails P/E Screen (P/E 28.4 > 15 & Price > Intrinsic)",
           "Weak/No Economic Moat"
         ]
       },
       {
         "ticker": "BHEL",
         "name": "Bharat Heavy Electricals",
-        "price": "383.80",
-        "pe_ratio": "83.5",
+        "price": "384.20",
+        "pe_ratio": "83.6",
         "current_ratio": 1.73,
         "graham_value": 868.1,
         "is_defensive_pass": false,
@@ -2101,20 +2770,20 @@
       {
         "ticker": "CUMMINSIND",
         "name": "Cummins India",
-        "price": "5733.50",
-        "pe_ratio": "65.5",
+        "price": "5723.50",
+        "pe_ratio": "65.4",
         "current_ratio": 2.39,
         "graham_value": 1733.8,
         "is_defensive_pass": false,
         "is_bargain": false,
         "alerts": [
-          "Fails P/E Screen (P/E 65.5 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 65.4 > 15 & Price > Intrinsic)"
         ]
       },
       {
         "ticker": "HAL",
         "name": "Hindustan Aeronautics",
-        "price": "4266.70",
+        "price": "4255.80",
         "pe_ratio": "31.2",
         "current_ratio": 1.31,
         "graham_value": 14681.2,
@@ -2125,10 +2794,23 @@
         ]
       },
       {
+        "ticker": "BEL",
+        "name": "Bharat Electronics",
+        "price": "407.55",
+        "pe_ratio": "49.1",
+        "current_ratio": 1.9,
+        "graham_value": 711.4,
+        "is_defensive_pass": false,
+        "is_bargain": false,
+        "alerts": [
+          "Fails Current Ratio (< 2.0)"
+        ]
+      },
+      {
         "ticker": "ASTRAMICRO",
         "name": "Astra Microwave",
-        "price": "1457.50",
-        "pe_ratio": "71.5",
+        "price": "1480.10",
+        "pe_ratio": "72.8",
         "current_ratio": 4.31,
         "graham_value": 2611.4,
         "is_defensive_pass": true,
@@ -2160,69 +2842,80 @@
     ],
     "buffett_valuation": [
       {
+        "ticker": "TATAPOWER",
+        "name": "Tata Power",
+        "price": "402.25",
+        "owner_earnings": 8775.3,
+        "retained_ratio": 2.86,
+        "moat_status": "Weak/None",
+        "passed_retained_test": true,
+        "alerts": [
+          "Fails Current Ratio (< 2.0)",
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Fails P/E Screen (P/E 33.8 > 15 & Price > Intrinsic)",
+          "Weak/No Economic Moat"
+        ]
+      },
+      {
+        "ticker": "SUZLON",
+        "name": "Suzlon Energy",
+        "price": "58.00",
+        "owner_earnings": 3401.9,
+        "retained_ratio": 2.86,
+        "moat_status": "Strong (Wide Moat)",
+        "passed_retained_test": true,
+        "alerts": [
+          "Fails Current Ratio (< 2.0)",
+          "No Dividend Yield"
+        ]
+      },
+      {
         "ticker": "ADANIGREEN",
         "name": "Adani Green Energy",
-        "price": "1486.50",
+        "price": "1482.50",
         "owner_earnings": 9639.2,
         "retained_ratio": 2.86,
         "moat_status": "Weak/None",
         "passed_retained_test": true,
         "alerts": [
           "Weak/No Economic Moat",
+          "Fails P/E Screen (P/E 133.0 > 15 & Price > Intrinsic)",
+          "Fails Current Ratio (< 2.0)",
           "No Dividend Yield",
-          "Fails P/E Screen (P/E 134.0 > 15 & Price > Intrinsic)",
-          "Fails Debt Limit (Debt > Net Assets)",
-          "Fails Current Ratio (< 2.0)"
+          "Fails Debt Limit (Debt > Net Assets)"
         ]
       },
       {
         "ticker": "SCHNEIDER",
         "name": "Schneider Electric Infra",
-        "price": "1190.60",
+        "price": "1181.40",
         "owner_earnings": 0.0,
         "retained_ratio": 1.2,
         "moat_status": "Weak/None",
         "passed_retained_test": true,
         "alerts": [
-          "Weak/No Economic Moat",
-          "No Dividend Yield"
-        ]
-      },
-      {
-        "ticker": "STLTECH",
-        "name": "Sterlite Technologies (STL)",
-        "price": "604.00",
-        "owner_earnings": 103.2,
-        "retained_ratio": 2.86,
-        "moat_status": "Weak/None",
-        "passed_retained_test": true,
-        "alerts": [
-          "Weak/No Economic Moat",
           "No Dividend Yield",
-          "Hyper-Growth Warning: Slowing QoQ sales at P/E > 30",
-          "Fails P/E Screen (P/E 621.0 > 15 & Price > Intrinsic)",
-          "Fails Debt Limit (Debt > Net Assets)",
-          "Fails Current Ratio (< 2.0)"
+          "Weak/No Economic Moat"
         ]
       },
       {
         "ticker": "ANANTRAJ",
         "name": "Anant Raj Ltd",
-        "price": "539.50",
+        "price": "540.70",
         "owner_earnings": 521.1,
         "retained_ratio": 2.86,
         "moat_status": "Weak/None",
         "passed_retained_test": true,
         "alerts": [
           "Hyper-Growth Warning: Slowing QoQ sales at P/E > 30",
-          "Fails P/E Screen (P/E 35.0 > 15 & Price > Intrinsic)",
-          "Weak/No Economic Moat"
+          "Weak/No Economic Moat",
+          "Fails P/E Screen (P/E 35.1 > 15 & Price > Intrinsic)"
         ]
       },
       {
         "ticker": "TCS",
         "name": "Tata Consultancy Services",
-        "price": "2189.00",
+        "price": "2199.00",
         "owner_earnings": 41899.0,
         "retained_ratio": 2.86,
         "moat_status": "Strong (Wide Moat)",
@@ -2232,86 +2925,254 @@
         ]
       },
       {
+        "ticker": "QUICKHEAL",
+        "name": "Quick Heal Technologies",
+        "price": "174.22",
+        "owner_earnings": -89.8,
+        "retained_ratio": 1.2,
+        "moat_status": "Weak/None",
+        "passed_retained_test": true,
+        "alerts": [
+          "Weak/No Economic Moat",
+          "Fails P/E Screen (P/E 80.5 > 15 & Price > Intrinsic)",
+          "Hyper-Growth Warning: Slowing QoQ sales at P/E > 30",
+          "Fails Current Ratio (< 2.0)",
+          "No Dividend Yield"
+        ]
+      },
+      {
+        "ticker": "CPPLUS",
+        "name": "Aditya Infotech (CP PLUS)",
+        "price": "3376.90",
+        "owner_earnings": 406.0,
+        "retained_ratio": 2.86,
+        "moat_status": "Strong (Wide Moat)",
+        "passed_retained_test": true,
+        "alerts": [
+          "Fails Current Ratio (< 2.0)",
+          "No Dividend Yield"
+        ]
+      },
+      {
         "ticker": "ADSL",
         "name": "Allied Digital Services",
-        "price": "120.31",
+        "price": "121.66",
         "owner_earnings": -56.3,
         "retained_ratio": 1.2,
         "moat_status": "Weak/None",
         "passed_retained_test": true,
         "alerts": [
-          "Fails P/E Screen (P/E 19.0 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 19.1 > 15 & Price > Intrinsic)",
           "Weak/No Economic Moat"
         ]
       },
       {
-        "ticker": "VBL",
-        "name": "Varun Beverages (PepsiCo)",
-        "price": "539.55",
-        "owner_earnings": 2401.8,
+        "ticker": "IDEAFORGE",
+        "name": "IdeaForge Technology",
+        "price": "908.05",
+        "owner_earnings": 218.5,
+        "retained_ratio": 2.86,
+        "moat_status": "Weak/None",
+        "passed_retained_test": true,
+        "alerts": [
+          "No Dividend Yield",
+          "Weak/No Economic Moat"
+        ]
+      },
+      {
+        "ticker": "DIXON",
+        "name": "Dixon Technologies",
+        "price": "12235.00",
+        "owner_earnings": -830.7,
         "retained_ratio": 2.86,
         "moat_status": "Strong (Wide Moat)",
         "passed_retained_test": true,
-        "alerts": []
+        "alerts": [
+          "Fails Current Ratio (< 2.0)",
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Fails P/E Screen (P/E 52.0 > 15 & Price > Intrinsic)"
+        ]
+      },
+      {
+        "ticker": "KAYNES",
+        "name": "Kaynes Technology",
+        "price": "3177.60",
+        "owner_earnings": 188.4,
+        "retained_ratio": 2.86,
+        "moat_status": "Weak/None",
+        "passed_retained_test": true,
+        "alerts": [
+          "No Dividend Yield",
+          "Weak/No Economic Moat"
+        ]
+      },
+      {
+        "ticker": "CGPOWER",
+        "name": "CG Power & Industrial",
+        "price": "940.70",
+        "owner_earnings": 773.0,
+        "retained_ratio": 2.86,
+        "moat_status": "Strong (Wide Moat)",
+        "passed_retained_test": true,
+        "alerts": [
+          "Hyper-Growth Warning: Slowing QoQ sales at P/E > 30",
+          "Fails P/E Screen (P/E 120.0 > 15 & Price > Intrinsic)"
+        ]
+      },
+      {
+        "ticker": "TATACONSUM",
+        "name": "Tata Consumer Products",
+        "price": "1130.90",
+        "owner_earnings": 834.8,
+        "retained_ratio": 2.86,
+        "moat_status": "Weak/None",
+        "passed_retained_test": true,
+        "alerts": [
+          "Fails P/E Screen (P/E 72.9 > 15 & Price > Intrinsic)",
+          "Fails Current Ratio (< 2.0)",
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Weak/No Economic Moat"
+        ]
+      },
+      {
+        "ticker": "ITC",
+        "name": "ITC Ltd",
+        "price": "291.65",
+        "owner_earnings": 18506.9,
+        "retained_ratio": 2.86,
+        "moat_status": "Strong (Wide Moat)",
+        "passed_retained_test": true,
+        "alerts": [
+          "Fails Current Ratio (< 2.0)"
+        ]
       },
       {
         "ticker": "METROBRAND",
         "name": "Metro Brands Ltd",
-        "price": "1002.10",
+        "price": "1004.40",
         "owner_earnings": 443.0,
         "retained_ratio": 2.86,
         "moat_status": "Strong (Wide Moat)",
         "passed_retained_test": true,
         "alerts": [
+          "Fails P/E Screen (P/E 66.6 > 15 & Price > Intrinsic)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Hyper-Growth Warning: Slowing QoQ sales at P/E > 30",
-          "Fails P/E Screen (P/E 66.5 > 15 & Price > Intrinsic)"
+          "Hyper-Growth Warning: Slowing QoQ sales at P/E > 30"
+        ]
+      },
+      {
+        "ticker": "CAMPUS",
+        "name": "Campus Activewear",
+        "price": "233.15",
+        "owner_earnings": 71.5,
+        "retained_ratio": 2.86,
+        "moat_status": "Strong (Wide Moat)",
+        "passed_retained_test": true,
+        "alerts": [
+          "Fails P/E Screen (P/E 52.4 > 15 & Price > Intrinsic)"
         ]
       },
       {
         "ticker": "PAGEIND",
         "name": "Page Industries",
-        "price": "38975.00",
+        "price": "39065.00",
         "owner_earnings": 0.0,
         "retained_ratio": 1.2,
         "moat_status": "Weak/None",
         "passed_retained_test": true,
         "alerts": [
-          "Weak/No Economic Moat",
-          "No Dividend Yield"
+          "No Dividend Yield",
+          "Weak/No Economic Moat"
         ]
       },
       {
         "ticker": "RELAXO",
         "name": "Relaxo Footwears Limited",
-        "price": "348.90",
+        "price": "350.85",
         "owner_earnings": 0.0,
         "retained_ratio": 1.2,
         "moat_status": "Weak/None",
         "passed_retained_test": true,
         "alerts": [
-          "Weak/No Economic Moat",
-          "No Dividend Yield"
+          "No Dividend Yield",
+          "Weak/No Economic Moat"
         ]
       },
       {
         "ticker": "RELIANCE",
         "name": "Reliance Industries",
-        "price": "1330.20",
+        "price": "1328.80",
         "owner_earnings": 55781.2,
         "retained_ratio": 2.86,
         "moat_status": "Weak/None",
         "passed_retained_test": true,
         "alerts": [
-          "Fails Debt Limit (Debt > Net Assets)",
           "Fails Current Ratio (< 2.0)",
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Weak/No Economic Moat"
+        ]
+      },
+      {
+        "ticker": "WELSPUNLIV",
+        "name": "Welspun Living",
+        "price": "145.78",
+        "owner_earnings": 122.2,
+        "retained_ratio": 2.86,
+        "moat_status": "Weak/None",
+        "passed_retained_test": true,
+        "alerts": [
+          "Fails Current Ratio (< 2.0)",
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Weak/No Economic Moat",
+          "Fails P/E Screen (P/E 64.2 > 15 & Price > Intrinsic)"
+        ]
+      },
+      {
+        "ticker": "GOKEX",
+        "name": "Gokaldas Exports",
+        "price": "710.30",
+        "owner_earnings": 32.0,
+        "retained_ratio": 2.86,
+        "moat_status": "Weak/None",
+        "passed_retained_test": true,
+        "alerts": [
+          "No Dividend Yield",
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Weak/No Economic Moat",
+          "Fails P/E Screen (P/E 52.0 > 15 & Price > Intrinsic)"
+        ]
+      },
+      {
+        "ticker": "ARVIND",
+        "name": "Arvind Ltd",
+        "price": "496.40",
+        "owner_earnings": 282.2,
+        "retained_ratio": 2.86,
+        "moat_status": "Weak/None",
+        "passed_retained_test": true,
+        "alerts": [
+          "Fails Current Ratio (< 2.0)",
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Weak/No Economic Moat"
+        ]
+      },
+      {
+        "ticker": "CONCOR",
+        "name": "Container Corporation of India",
+        "price": "463.35",
+        "owner_earnings": 680.6,
+        "retained_ratio": 2.86,
+        "moat_status": "Weak/None",
+        "passed_retained_test": true,
+        "alerts": [
+          "Fails P/E Screen (P/E 28.4 > 15 & Price > Intrinsic)",
           "Weak/No Economic Moat"
         ]
       },
       {
         "ticker": "BHEL",
         "name": "Bharat Heavy Electricals",
-        "price": "383.80",
+        "price": "384.20",
         "owner_earnings": 3353.0,
         "retained_ratio": 2.86,
         "moat_status": "Weak/None",
@@ -2324,20 +3185,32 @@
       {
         "ticker": "CUMMINSIND",
         "name": "Cummins India",
-        "price": "5733.50",
+        "price": "5723.50",
         "owner_earnings": 1996.8,
         "retained_ratio": 2.86,
         "moat_status": "Strong (Wide Moat)",
         "passed_retained_test": true,
         "alerts": [
-          "Fails P/E Screen (P/E 65.5 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 65.4 > 15 & Price > Intrinsic)"
         ]
       },
       {
         "ticker": "HAL",
         "name": "Hindustan Aeronautics",
-        "price": "4266.70",
+        "price": "4255.80",
         "owner_earnings": 13996.5,
+        "retained_ratio": 2.86,
+        "moat_status": "Strong (Wide Moat)",
+        "passed_retained_test": true,
+        "alerts": [
+          "Fails Current Ratio (< 2.0)"
+        ]
+      },
+      {
+        "ticker": "BEL",
+        "name": "Bharat Electronics",
+        "price": "407.55",
+        "owner_earnings": 6864.4,
         "retained_ratio": 2.86,
         "moat_status": "Strong (Wide Moat)",
         "passed_retained_test": true,
@@ -2348,7 +3221,7 @@
       {
         "ticker": "ASTRAMICRO",
         "name": "Astra Microwave",
-        "price": "1457.50",
+        "price": "1480.10",
         "owner_earnings": 349.4,
         "retained_ratio": 2.86,
         "moat_status": "Strong (Wide Moat)",
