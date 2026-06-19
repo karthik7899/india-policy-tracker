@@ -545,13 +545,16 @@ def detect_emerging_players(brief_data, watchlist):
     return emerging_players
 
 
-def resolve_ticker_from_name(company_name):
+def resolve_ticker_from_name(company_name, session=None):
     import requests
 
     url = f"https://query2.finance.yahoo.com/v1/finance/search?q={urllib.parse.quote(company_name)}&quotesCount=5"
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
     try:
-        r = requests.get(url, headers=headers, timeout=10)
+        if session:
+            r = session.get(url, headers=headers, timeout=10)
+        else:
+            r = requests.get(url, headers=headers, timeout=10)
         if r.status_code == 200:
             data = r.json()
             quotes = data.get("quotes", [])
@@ -586,13 +589,14 @@ def auto_curate_watchlist(brief_data, watchlist):
     # We will construct a structured emerging_players dictionary
     structured_emerging = {s: [] for s in SECTOR_METADATA}
 
-    for sector, companies in emerging_sectors.items():
-        if sector not in watchlist:
-            continue
+    with requests.Session() as session:
+        for sector, companies in emerging_sectors.items():
+            if sector not in watchlist:
+                continue
 
-        for name in companies:
-            log.info(f"Evaluating candidate company: {name} in {sector}")
-            ticker, full_name = resolve_ticker_from_name(name)
+            for name in companies:
+                log.info(f"Evaluating candidate company: {name} in {sector}")
+                ticker, full_name = resolve_ticker_from_name(name, session=session)
             if not ticker:
                 log.info(f"Could not resolve ticker for: {name}. Skipping.")
                 structured_emerging[sector].append(
@@ -661,12 +665,12 @@ def auto_curate_watchlist(brief_data, watchlist):
                 candidate_qoq_growth = 0.0
                 try:
                     url = f"https://www.screener.in/company/{ticker}/consolidated/"
-                    r = requests.get(
+                    r = session.get(
                         url, headers={"User-Agent": "Mozilla/5.0"}, timeout=10
                     )
                     if r.status_code != 200:
                         url = f"https://www.screener.in/company/{ticker}/"
-                        r = requests.get(
+                        r = session.get(
                             url, headers={"User-Agent": "Mozilla/5.0"}, timeout=10
                         )
                     if r.status_code == 200:
