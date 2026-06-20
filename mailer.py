@@ -240,8 +240,8 @@ def build_html_email(brief_data, watchlist):
     if launches:
         items = "".join(
             [
-                f"<li><strong>{l['source']}</strong>: {l['title']}</li>"
-                for l in launches[:5]
+                f"<li><strong>{launch['source']}</strong>: {launch['title']}</li>"
+                for launch in launches[:5]
             ]
         )
         launches_html = f"""

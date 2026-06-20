@@ -166,27 +166,27 @@ function setupTabToggles() {
                 pageSubtitle.textContent = "Real-time mapping of government policies to market indicators.";
                 if (appData) renderCharts(appData);
             } else if (targetTab === "sectors") {
-                pageTitle.textContent = "Sector Detailed Intelligence";
+                pageTitle.textContent = "Government Policy Logs";
                 pageSubtitle.textContent = "Deep dive sector analysis, announcements history, and watchlists.";
                 if (appData) initSectorsTab();
             } else if (targetTab === "agreements") {
-                pageTitle.textContent = "Corporate Agreements & Partnerships";
+                pageTitle.textContent = "Corporate News & Agreements";
                 pageSubtitle.textContent = "Scanned news alerts regarding joint ventures, strategic partnerships, and MoUs.";
                 if (appData) renderAgreementsTable();
             } else if (targetTab === "launches") {
-                pageTitle.textContent = "Product Launches & Capacity Expansion";
+                pageTitle.textContent = "Product Launches";
                 pageSubtitle.textContent = "Real-time alerts on product launches, new manufacturing capacities, and rollouts.";
                 if (appData) renderLaunchesTable();
             } else if (targetTab === "institutional") {
-                pageTitle.textContent = "Institutional Capital Flow Tracker";
+                pageTitle.textContent = "Institutional Activity";
                 pageSubtitle.textContent = "Scheme Information Documents (SIDs) filed by mutual funds and institutional block deal news.";
                 if (appData) renderInstitutionalFlows();
             } else if (targetTab === "graham") {
-                pageTitle.textContent = "Benjamin Graham Valuation Screens";
+                pageTitle.textContent = "Margin of Safety (Deep Value)";
                 pageSubtitle.textContent = "Defensive investor criteria checks and growth intrinsic value calculations.";
                 if (appData) renderGrahamTable();
             } else if (targetTab === "buffett") {
-                pageTitle.textContent = "Warren Buffett Allocation & Moat Screens";
+                pageTitle.textContent = "Owner Earnings & Moats";
                 pageSubtitle.textContent = "Owner earnings, economic moats, and retained value creation metrics.";
                 if (appData) renderBuffettTable();
             } else if (targetTab === "caution") {
@@ -352,17 +352,55 @@ function renderPolicyFeed(data) {
         const sectorLabel = data.sectors[item.sectorKey].label;
         const sectorIcon = data.sectors[item.sectorKey].icon;
         
-        el.innerHTML = `
-            <div class="feed-item-header">
-                <span class="source-badge">${item.source}</span>
-                <span class="badge ${badgeClass}">${item.impact} Impact</span>
-            </div>
-            <a href="${item.link}" class="feed-item-title" target="_blank">${item.title}</a>
-            <div class="feed-item-meta">
-                <span class="sector-tag">${sectorIcon} ${sectorLabel}</span>
-                <span>${item.date}</span>
-            </div>
-        `;
+        let safeLink = "#";
+        try {
+            if (item.link) {
+                const parsedUrl = new URL(item.link, window.location.origin);
+                if (parsedUrl.protocol === "http:" || parsedUrl.protocol === "https:") {
+                    safeLink = parsedUrl.href;
+                }
+            }
+        } catch (e) {
+            // Invalid URL format
+        }
+
+        const headerDiv = document.createElement("div");
+        headerDiv.className = "feed-item-header";
+
+        const sourceBadge = document.createElement("span");
+        sourceBadge.className = "source-badge";
+        sourceBadge.textContent = item.source;
+
+        const impactBadge = document.createElement("span");
+        impactBadge.className = `badge ${badgeClass}`;
+        impactBadge.textContent = `${item.impact} Impact`;
+
+        headerDiv.appendChild(sourceBadge);
+        headerDiv.appendChild(impactBadge);
+
+        const titleLink = document.createElement("a");
+        titleLink.href = safeLink;
+        titleLink.className = "feed-item-title";
+        titleLink.target = "_blank";
+        titleLink.textContent = item.title;
+
+        const metaDiv = document.createElement("div");
+        metaDiv.className = "feed-item-meta";
+
+        const sectorTag = document.createElement("span");
+        sectorTag.className = "sector-tag";
+        sectorTag.textContent = `${sectorIcon} ${sectorLabel}`;
+
+        const dateSpan = document.createElement("span");
+        dateSpan.textContent = item.date;
+
+        metaDiv.appendChild(sectorTag);
+        metaDiv.appendChild(dateSpan);
+
+        el.appendChild(headerDiv);
+        el.appendChild(titleLink);
+        el.appendChild(metaDiv);
+
         container.appendChild(el);
     });
 }

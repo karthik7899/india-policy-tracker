@@ -284,7 +284,7 @@ async def fetch_advanced_rss_feeds_async(session, watchlist):
     await asyncio.gather(*[process_chunk(chunk) for chunk in ticker_chunks])
 
     unique_agreements = {a["title"]: a for a in agreements}.values()
-    unique_launches = {l["title"]: l for l in launches}.values()
+    unique_launches = {launch["title"]: launch for launch in launches}.values()
 
     return list(unique_agreements)[:10], list(unique_launches)[:10]
 
