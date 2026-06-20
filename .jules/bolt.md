@@ -1,3 +1,6 @@
+## 2024-10-24 - Sync HTTP Connection Pooling
+**Learning:** Making multiple synchronous HTTP requests (e.g., in `metrics.py`) without a `requests.Session` causes redundant TCP/SSL handshake overhead.
+**Action:** Always use a `requests.Session()` for connection pooling when making multiple synchronous requests to the same domains, especially in loops like `auto_curate_watchlist`.
 ## 2026-06-13 - Rate Limits with yfinance batching and concurrency
 **Learning:** `yf.download` is much faster for a batch of tickers than calling `yf.Ticker(t).history(period="1d")` in a `ThreadPoolExecutor` and avoids rate limits. But getting `info` requires individual requests which takes time and can hit limits. The problem in the review was using `fast_info` in `try/except Exception`, but `info` was still being accessed immediately after. `ticker.info` requires an API call that rate limits us.
 Actually, the reviewer pointed out that changing `ticker_obj.history(period="1d")` to `ticker_obj.fast_info.last_price` CAUSED the performance drop. That is likely because `fast_info` gets rate limited and takes long time when done concurrently, whereas `history()` is optimized better or uses a different endpoint that didn't rate limit in their environment.

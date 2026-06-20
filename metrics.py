@@ -673,10 +673,10 @@ def auto_curate_watchlist(brief_data, watchlist):
                     log.info(f"No market data for {yahoo_ticker}. Skipping candidate.")
                     structured_emerging[sector].append(
                         {
-                            "name": full_name or name,
-                            "ticker": ticker,
+                            "name": name,
+                            "ticker": None,
                             "status": "Unresolved",
-                            "reason": "BSE/NSE ticker resolved, but no market trading history found.",
+                            "reason": "Could not map company name to a BSE/NSE ticker.",
                         }
                     )
                     continue
@@ -760,43 +760,49 @@ def auto_curate_watchlist(brief_data, watchlist):
                         {
                             "name": full_name or name,
                             "ticker": ticker,
-                            "status": "Growth Divergence",
-                            "reason": reason_str,
+                            "status": "Watchlisted",
+                            "reason": f"Already present in the {sector} watchlist.",
                         }
                     )
                     continue
 
-                related_headline = f"Policy tailwinds in the {sector} segment."
-                for item in brief_data.get(sector, []):
-                    if name.lower() in item["title"].lower():
-                        related_headline = item["title"]
-                        break
+                yahoo_ticker = f"{ticker}.NS"
+                try:
+                    ticker_obj = yf.Ticker(yahoo_ticker)
+                    hist = ticker_obj.history(period="1d")
+                    if hist.empty:
+                        log.info(
+                            f"No market data for {yahoo_ticker}. Skipping candidate."
+                        )
+                        structured_emerging[sector].append(
+                            {
+                                "name": full_name or name,
+                                "ticker": ticker,
+                                "status": "Unresolved",
+                                "reason": "BSE/NSE ticker resolved, but no market trading history found.",
+                            }
+                        )
+                        continue
 
-                candidate_stock = {
-                    "ticker": ticker,
-                    "name": full_name,
-                    "price": f"{live_price:.2f}",
-                    "target": f"{target_price:.2f}",
-                    "growth_pct": f"{growth_pct_val:.1f}%",
-                    "catalyst": f"Auto-discovered via media radar. Catalyst: {related_headline}",
-                    "rating": rating,
-                    "revenue_growth": revenue_growth,
-                }
+                    live_price = float(hist["Close"].iloc[-1])
+                    info = ticker_obj.info or {}
 
-                current_watchlist = watchlist[sector]
-                if len(current_watchlist) < 5:
-                    current_watchlist.append(candidate_stock)
-                    log.info(
-                        f"ADDED: {ticker} to {sector} (Space available: {len(current_watchlist)}/5)"
+                    consensus_target = info.get("targetMeanPrice")
+                    if consensus_target and float(consensus_target) > 0:
+                        target_price = float(consensus_target)
+                    else:
+                        target_price = live_price * 1.25
+
+                    growth_pct_val = ((target_price - live_price) / live_price) * 100
+                    rating = (
+                        info.get("recommendationKey", "N/A").replace("_", " ").title()
                     )
-                    rotations_log.append(f"Added {full_name} ({ticker}) to {sector}")
-                    structured_emerging[sector].append(
-                        {
-                            "name": full_name,
-                            "ticker": ticker,
-                            "status": "Watchlisted",
-                            "reason": "Added to watchlist (new high-growth pick).",
-                        }
+
+                    rev_growth_raw = info.get("revenueGrowth")
+                    revenue_growth = (
+                        f"{float(rev_growth_raw) * 100:.1f}%"
+                        if rev_growth_raw is not None
+                        else None
                     )
                 else:
 
@@ -812,10 +818,16 @@ def auto_curate_watchlist(brief_data, watchlist):
                         ]
                         watchlist[sector].append(candidate_stock)
                         log.info(
-                            f"ROTATED: Replaced {weakest_stock['ticker']} with {ticker}"
+                            f"Candidate {ticker} did not meet positive growth criteria. Skipping."
                         )
-                        rotations_log.append(
-                            f"Rotated {weakest_stock['name']} out for {full_name} in {sector}"
+                        reason_str = (
+                            "Negative target potential"
+                            if growth_pct_val <= 0
+                            else (
+                                f"Failed growth criteria (YoY revenue {revenue_growth})"
+                                if rev_growth_raw is not None and rev_growth_raw < 0
+                                else f"Failed QoQ growth threshold ({candidate_qoq_growth:.1f}% < 15%)"
+                            )
                         )
                         continue
 
@@ -1026,6 +1038,7 @@ def auto_curate_watchlist(brief_data, watchlist):
                                 "reason": f"Error parsing Yahoo Finance info: {str(e)}",
                             }
                         )
+                    else:
 
     if rotations_log:
         save_watchlist(watchlist)
