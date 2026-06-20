@@ -8,8 +8,11 @@ from config import save_watchlist
 import urllib.parse
 
 
-def update_single_stock(stock):
+def update_single_stock(stock, prefetched_prices=None):
     """Worker function to fetch Yahoo Finance metrics for a single stock."""
+    if prefetched_prices is None:
+        prefetched_prices = {}
+
     ticker = stock["ticker"]
     yahoo_ticker = f"{ticker}.NS"
 
@@ -26,13 +29,17 @@ def update_single_stock(stock):
     try:
         ticker_obj = yf.Ticker(yahoo_ticker)
 
-        hist = ticker_obj.history(period="1d")
-        if not hist.empty:
-            live_price = float(hist["Close"].iloc[-1])
+        if yahoo_ticker in prefetched_prices and prefetched_prices[yahoo_ticker] is not None:
+            live_price = float(prefetched_prices[yahoo_ticker])
             stock["price"] = f"{live_price:.2f}"
         else:
-            live_price = float(stock["price"])
-            log.warning(f"No close history for {yahoo_ticker}. Using static price.")
+            hist = ticker_obj.history(period="1d")
+            if not hist.empty:
+                live_price = float(hist["Close"].iloc[-1])
+                stock["price"] = f"{live_price:.2f}"
+            else:
+                live_price = float(stock["price"])
+                log.warning(f"No close history for {yahoo_ticker}. Using static price.")
 
         info = ticker_obj.info
         if info:
@@ -102,11 +109,34 @@ def update_live_stock_prices(watchlist):
         "Fetching live stock prices and metrics from Yahoo Finance (Parallelized)..."
     )
     all_stocks = []
+    yahoo_tickers = []
     for sector, stocks in watchlist.items():
-        all_stocks.extend(stocks)
+        for stock in stocks:
+            all_stocks.append(stock)
+            yahoo_tickers.append(f"{stock['ticker']}.NS")
+
+    prefetched_prices = {}
+    if yahoo_tickers:
+        try:
+            log.info("Batch downloading live prices...")
+            # ⚡ Bolt Optimization: Batch fetch history for all tickers at once using yf.download.
+            # This significantly reduces network overhead compared to individual requests
+            # and helps prevent hitting rate limits while updating the entire watchlist.
+            data = yf.download(
+                yahoo_tickers, period="1d", group_by="ticker", threads=True, progress=False
+            )
+            if len(yahoo_tickers) == 1:
+                if not data.empty and "Close" in data and not data["Close"].isna().all():
+                    prefetched_prices[yahoo_tickers[0]] = data["Close"].iloc[-1]
+            else:
+                for ticker in yahoo_tickers:
+                    if ticker in data and not data[ticker].empty and "Close" in data[ticker] and not data[ticker]["Close"].isna().all():
+                        prefetched_prices[ticker] = data[ticker]["Close"].iloc[-1]
+        except Exception as e:
+            log.error(f"Error during batch price download: {e}")
 
     with ThreadPoolExecutor(max_workers=8) as executor:
-        futures = [executor.submit(update_single_stock, stock) for stock in all_stocks]
+        futures = [executor.submit(update_single_stock, stock, prefetched_prices) for stock in all_stocks]
         for future in as_completed(futures):
             try:
                 future.result()
@@ -635,11 +665,12 @@ def auto_curate_watchlist(brief_data, watchlist):
                 )
                 continue
 
-            for name in companies:
-                log.info(f"Evaluating candidate company: {name} in {sector}")
-                ticker, full_name = resolve_ticker_from_name(name, session=session)
-                if not ticker:
-                    log.info(f"Could not resolve ticker for: {name}. Skipping.")
+            yahoo_ticker = f"{ticker}.NS"
+            try:
+                ticker_obj = yf.Ticker(yahoo_ticker, session=session)
+                hist = ticker_obj.history(period="1d")
+                if hist.empty:
+                    log.info(f"No market data for {yahoo_ticker}. Skipping candidate.")
                     structured_emerging[sector].append(
                         {
                             "name": name,
