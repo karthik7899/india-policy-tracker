@@ -1,12 +1,24 @@
 {
-  "name": "bharat-policy-tracker",
+  "name": "app",
   "version": "1.0.0",
-  "description": "Automated, cloud-based platform that tracks Indian government policy announcements",
+  "description": "An automated, cloud-based platform that tracks Indian government policy announcements, evaluates their sector-wise impact, and maps them to a watchlist of high-growth beneficiary stocks.",
+  "main": "app.js",
   "scripts": {
     "test": "jest"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/karthik7899/india-policy-tracker.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/karthik7899/india-policy-tracker/issues"
+  },
+  "homepage": "https://github.com/karthik7899/india-policy-tracker#readme",
   "devDependencies": {
-    "jest": "^30.4.2",
-    "jest-environment-jsdom": "^30.4.1"
+    "jest": "^30.4.2"
   }
 }

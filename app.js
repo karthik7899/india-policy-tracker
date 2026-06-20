@@ -114,6 +114,17 @@ function formatGrowthBadge(growthStr, style = 'inline') {
     }
 }
 
+// Helper: Escape HTML to prevent XSS
+function escapeHTML(str) {
+    if (!str) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
 // Helper: Format potential growth with proper sign and color
 function formatPotential(pctStr) {
     if ((!pctStr && pctStr !== 0) || pctStr === "N/A") return `<span class="badge badge-neutral">N/A</span>`;
@@ -360,17 +371,55 @@ function renderPolicyFeed(data) {
         const sectorLabel = data.sectors[item.sectorKey].label;
         const sectorIcon = data.sectors[item.sectorKey].icon;
         
-        el.innerHTML = `
-            <div class="feed-item-header">
-                <span class="source-badge">${item.source}</span>
-                <span class="badge ${badgeClass}">${item.impact} Impact</span>
-            </div>
-            <a href="${item.link}" class="feed-item-title" target="_blank">${item.title}</a>
-            <div class="feed-item-meta">
-                <span class="sector-tag">${sectorIcon} ${sectorLabel}</span>
-                <span>${item.date}</span>
-            </div>
-        `;
+        let safeLink = "#";
+        try {
+            if (item.link) {
+                const parsedUrl = new URL(item.link, window.location.origin);
+                if (parsedUrl.protocol === "http:" || parsedUrl.protocol === "https:") {
+                    safeLink = parsedUrl.href;
+                }
+            }
+        } catch (e) {
+            // Invalid URL format
+        }
+
+        const headerDiv = document.createElement("div");
+        headerDiv.className = "feed-item-header";
+
+        const sourceBadge = document.createElement("span");
+        sourceBadge.className = "source-badge";
+        sourceBadge.textContent = item.source;
+
+        const impactBadge = document.createElement("span");
+        impactBadge.className = `badge ${badgeClass}`;
+        impactBadge.textContent = `${item.impact} Impact`;
+
+        headerDiv.appendChild(sourceBadge);
+        headerDiv.appendChild(impactBadge);
+
+        const titleLink = document.createElement("a");
+        titleLink.href = safeLink;
+        titleLink.className = "feed-item-title";
+        titleLink.target = "_blank";
+        titleLink.textContent = item.title;
+
+        const metaDiv = document.createElement("div");
+        metaDiv.className = "feed-item-meta";
+
+        const sectorTag = document.createElement("span");
+        sectorTag.className = "sector-tag";
+        sectorTag.textContent = `${sectorIcon} ${sectorLabel}`;
+
+        const dateSpan = document.createElement("span");
+        dateSpan.textContent = item.date;
+
+        metaDiv.appendChild(sectorTag);
+        metaDiv.appendChild(dateSpan);
+
+        el.appendChild(headerDiv);
+        el.appendChild(titleLink);
+        el.appendChild(metaDiv);
+
         container.appendChild(el);
     });
 }
@@ -401,8 +450,8 @@ function renderTopPicks(data) {
         item.className = "highlight-item";
         item.innerHTML = `
             <div class="hl-left">
-                <span class="hl-ticker">${s.ticker}</span>
-                <span class="hl-name">${s.name}</span>
+                <span class="hl-ticker">${escapeHTML(s.ticker)}</span>
+                <span class="hl-name">${escapeHTML(s.name)}</span>
             </div>
             <div class="hl-right">
                 <span class="hl-price">CMP: ₹${s.price}</span>
