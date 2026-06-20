@@ -95,6 +95,14 @@ let appData = null;
 let activeSectorFilter = "all";
 let growthChartInstance = null;
 
+// Helper: Sanitize text using safe DOM manipulation
+function escapeHTML(str) {
+    if (str === null || str === undefined) return '';
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+}
+
 // Helper: Format YoY growth with contextual icon/color
 // Helper to prevent XSS
 function escapeHTML(str) {
@@ -525,7 +533,7 @@ function renderEmergingRadar(data) {
                         <span class="hl-ticker" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); font-size: 8px; padding: 2px 4px; border-radius: 4px; font-weight: 800; width: fit-content;">RADAR</span>
                         ${tickerBadge}
                     </div>
-                    <span class="hl-name" style="color: #f8fafc; font-weight: 500; font-size: 13px; margin-top: 4px;">${displayName}</span>
+                    <span class="hl-name" style="color: #f8fafc; font-weight: 500; font-size: 13px; margin-top: 4px;">${escapeHTML(displayName)}</span>
                     ${reasonText}
                 </div>
                 <div class="hl-right" style="text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
@@ -760,8 +768,8 @@ function renderSectorDetail(sectorKey) {
                 <div class="dsc-header">
                     <div class="dsc-ticker-group">
                         <h4 style="display: flex; align-items: center; flex-wrap: wrap; gap: 8px;">
-                            ${s.name} 
-                            <span style="background-color: rgba(59, 130, 246, 0.1); color: var(--primary); padding: 2px 6px; border-radius: 4px; font-weight: 700; font-size: 11px;">${s.ticker}</span>
+                            ${escapeHTML(s.name)}
+                            <span style="background-color: rgba(59, 130, 246, 0.1); color: var(--primary); padding: 2px 6px; border-radius: 4px; font-weight: 700; font-size: 11px;">${escapeHTML(s.ticker)}</span>
                             ${analystBadge}
                             ${growthBadge}
                             ${earningsBadge}
@@ -952,7 +960,7 @@ function renderStocksTable(filterQuery = "") {
             <td>${instChangeHtml}</td>
             <td style="max-width: 150px; white-space: normal;">${valAlertsHtml}</td>
             <td>${formatAnalystBadge(s)}</td>
-            <td style="max-width: 280px; white-space: normal; font-size: 11px;">${s.catalyst}</td>
+            <td style="max-width: 280px; white-space: normal; font-size: 11px;">${escapeHTML(s.catalyst)}</td>
         `;
         tbody.appendChild(tr);
     });
