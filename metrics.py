@@ -577,6 +577,13 @@ def resolve_ticker_from_name(company_name, session=None):
     return None, None
 
 
+def _get_potential(stock):
+    try:
+        return float(stock["growth_pct"].replace("%", ""))
+    except Exception:
+        return 0.0
+
+
 def auto_curate_watchlist(brief_data, watchlist):
     """Discovers emerging competitors and rotates underperforming stocks."""
     log.info("Starting automated watchlist curation and rotation cycle...")
@@ -592,13 +599,14 @@ def auto_curate_watchlist(brief_data, watchlist):
     # We will construct a structured emerging_players dictionary
     structured_emerging = {s: [] for s in SECTOR_METADATA}
 
-    for sector, companies in emerging_sectors.items():
-        if sector not in watchlist:
-            continue
+    with requests.Session() as session:
+        for sector, companies in emerging_sectors.items():
+            if sector not in watchlist:
+                continue
 
-        for name in companies:
-            log.info(f"Evaluating candidate company: {name} in {sector}")
-            ticker, full_name = resolve_ticker_from_name(name, session=session)
+            for name in companies:
+                log.info(f"Evaluating candidate company: {name} in {sector}")
+                ticker, full_name = resolve_ticker_from_name(name, session=session)
             if not ticker:
                 log.info(f"Could not resolve ticker for: {name}. Skipping.")
                 structured_emerging[sector].append(
@@ -763,15 +771,9 @@ def auto_curate_watchlist(brief_data, watchlist):
                     )
                 else:
 
-                    def get_potential(stock):
-                        try:
-                            return float(stock["growth_pct"].replace("%", ""))
-                        except Exception:
-                            return 0.0
-
-                    sorted_watchlist = sorted(current_watchlist, key=get_potential)
+                    sorted_watchlist = sorted(current_watchlist, key=_get_potential)
                     weakest_stock = sorted_watchlist[0]
-                    weakest_potential = get_potential(weakest_stock)
+                    weakest_potential = _get_potential(weakest_stock)
 
                     if growth_pct_val > weakest_potential:
                         watchlist[sector] = [
