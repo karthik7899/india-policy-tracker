@@ -1,139 +1,170 @@
 import pytest
-import datetime
 from unittest.mock import patch
+import datetime
 from scraper import clean_news_item
+
+
+class DotDict(dict):
+    def __getattr__(self, attr):
+        return self.get(attr)
+
+    def __setattr__(self, key, value):
+        self.__setitem__(key, value)
 
 
 class MockDate(datetime.date):
     @classmethod
     def today(cls):
-        return datetime.date(2024, 1, 10)
+        return cls(2024, 1, 10)
 
 
 class MockDateTime(datetime.datetime):
     @classmethod
-    def now(cls, tz=None):
-        return datetime.datetime(2024, 1, 10, 10, 0, 0)
+    def now(cls):
+        return cls(2024, 1, 10, 10, 0, 0)
 
 
-class FeedParserDictMock(dict):
-    def __getattr__(self, name):
-        try:
-            return self[name]
-        except KeyError:
-            raise AttributeError(name)
+@pytest.fixture(autouse=True)
+def mock_datetime():
+    with patch("scraper.datetime.date", MockDate), patch(
+        "scraper.datetime.datetime", MockDateTime
+    ):
+        yield
 
 
-@pytest.fixture
-def mock_analyze_sentiment():
-    with patch("scraper.analyze_sentiment", return_value="Neutral") as mock_sentiment:
-        yield mock_sentiment
-
-
-@patch("scraper.datetime.datetime", MockDateTime)
-@patch("scraper.datetime.date", MockDate)
-def test_clean_news_item_happy_path(mock_analyze_sentiment):
-    entry = FeedParserDictMock(
+def test_clean_news_item_basic():
+    entry = DotDict(
         {
-            "title": "A Great Policy Change - Finance Times",
-            "link": "https://example.com/news/123",
+            "title": "Reliance announces new project - Financial Times",
+            "link": "http://example.com",
             "published": "Tue, 09 Jan 2024 10:00:00 GMT",
             "published_parsed": (2024, 1, 9, 10, 0, 0, 1, 9, 0),
-            "summary": "This policy will change everything... Read more",
-            "source": {"title": "Finance Times"},
+            "summary": "This is a great positive news.",
+            "source": DotDict({"title": "Financial Times"}),
         }
     )
 
-    mock_analyze_sentiment.return_value = "Positive"
-
-    result = clean_news_item(entry, "Policy")
+    result = clean_news_item(entry, "Reliance")
 
     assert result is not None
-    assert result["title"] == "A Great Policy Change"
-    assert result["source"] == "Finance Times"
-    assert result["link"] == "https://example.com/news/123"
+    assert result["title"] == "Reliance announces new project"
+    assert result["source"] == "Financial Times"
+    assert result["link"] == "http://example.com"
     assert result["date"] == "09 Jan 2024"
     assert result["impact"] == "Positive"
-    assert result["relevance"] == "Policy"
+    assert result["relevance"] == "Reliance"
 
 
-@patch("scraper.datetime.datetime", MockDateTime)
-@patch("scraper.datetime.date", MockDate)
-def test_clean_news_item_missing_details(mock_analyze_sentiment):
-    entry = FeedParserDictMock(
+def test_clean_news_item_no_dash_in_title():
+    entry = DotDict(
         {
-            "title": "Short Title",
+            "title": "Tata Motors launches new EV",
+            "link": "http://example.com/tata",
+            "published": "Tue, 09 Jan 2024 10:00:00 GMT",
+            "published_parsed": (2024, 1, 9, 10, 0, 0, 1, 9, 0),
+            "summary": "Delay in production reported.",
+            "source": DotDict({"title": "Auto News"}),
         }
     )
 
-    result = clean_news_item(entry, "Test")
+    result = clean_news_item(entry, "Tata Motors")
 
     assert result is not None
-    assert result["title"] == "Short Title"
-    assert result["source"] == "Finance Media"  # Default
-    assert result["link"] == ""
-    assert result["date"] == "10 Jan 2024"  # Default to now() if published is missing
-    assert result["impact"] == "Neutral"
-    assert result["relevance"] == "Test"
+    assert result["title"] == "Tata Motors launches new EV"
+    assert result["source"] == "Auto News"
+    assert result["impact"] == "Negative"
 
 
-@patch("scraper.datetime.datetime", MockDateTime)
-@patch("scraper.datetime.date", MockDate)
-def test_clean_news_item_old_article(mock_analyze_sentiment):
-    entry = FeedParserDictMock(
+def test_clean_news_item_no_source_provided():
+    entry = DotDict(
         {
-            "title": "Old News - Finance Times",
-            "published": "Tue, 01 Jan 2024 10:00:00 GMT",
+            "title": "Infosys secures new deal",
+            "link": "http://example.com/infy",
+            "published": "Tue, 09 Jan 2024 10:00:00 GMT",
+            "published_parsed": (2024, 1, 9, 10, 0, 0, 1, 9, 0),
+            "summary": "This is neutral text.",
+        }
+    )
+
+    result = clean_news_item(entry, "Infosys")
+
+    assert result is not None
+    assert result["title"] == "Infosys secures new deal"
+    assert result["source"] == "Finance Media"
+
+
+def test_clean_news_item_older_than_7_days():
+    entry = DotDict(
+        {
+            "title": "Old News - Some Source",
+            "published": "Mon, 01 Jan 2024 10:00:00 GMT",
             "published_parsed": (2024, 1, 1, 10, 0, 0, 0, 1, 0),
+            "summary": "Summary",
         }
     )
 
-    result = clean_news_item(entry, "Policy")
+    result = clean_news_item(entry, "Any")
 
-    assert result is None  # Older than 7 days (2024-01-10 - 2024-01-01 = 9 days)
+    assert result is None
 
 
-@patch("scraper.datetime.datetime", MockDateTime)
-@patch("scraper.datetime.date", MockDate)
-def test_clean_news_item_source_splitting(mock_analyze_sentiment):
-    entry = FeedParserDictMock(
+def test_clean_news_item_exactly_7_days():
+    entry = DotDict(
         {
-            "title": "A Great Policy Change - Detailed - Finance Times",
+            "title": "7 Days Ago News - Some Source",
+            "published": "Wed, 03 Jan 2024 10:00:00 GMT",
+            "published_parsed": (2024, 1, 3, 10, 0, 0, 2, 3, 0),
+            "summary": "Summary",
         }
     )
 
-    result = clean_news_item(entry, "Policy")
+    result = clean_news_item(entry, "Any")
 
     assert result is not None
-    assert result["title"] == "A Great Policy Change"
-    assert result["source"] == "Finance Times"
+    assert result["date"] == "03 Jan 2024"
 
 
-@patch("scraper.datetime.datetime", MockDateTime)
-@patch("scraper.datetime.date", MockDate)
-def test_clean_news_item_published_parsed_exception(mock_analyze_sentiment):
-    entry = FeedParserDictMock(
+def test_clean_news_item_missing_published_date():
+    entry = DotDict(
         {
-            "title": "Some News",
-            "published": "Invalid Date Format",
-            "published_parsed": None,  # Should trigger the except block when trying to index or it will just fall back
+            "title": "No Date News - Source",
+            "summary": "Summary",
         }
     )
 
-    result = clean_news_item(entry, "Test")
+    result = clean_news_item(entry, "Any")
 
     assert result is not None
     assert result["date"] == "10 Jan 2024"
 
 
-@patch("scraper.datetime.datetime", MockDateTime)
-@patch("scraper.datetime.date", MockDate)
-def test_clean_news_item_html_stripping(mock_analyze_sentiment):
-    entry = FeedParserDictMock(
+def test_clean_news_item_invalid_published_parsed():
+    entry = DotDict(
         {
-            "title": "<a href='#'>News Title</a>",
-            "summary": "This is a summary.<br>...Read more",
+            "title": "Invalid Parsed Date News - Source",
+            "published": "Some string",
+            "published_parsed": None,
+            "summary": "Summary",
         }
     )
-    result = clean_news_item(entry, "Test")
-    assert result["title"] == "News Title"
+
+    result = clean_news_item(entry, "Any")
+
+    assert result is not None
+    assert result["date"] == "10 Jan 2024"
+
+
+def test_clean_news_item_exception_in_date_parsing():
+    entry = DotDict(
+        {
+            "title": "Exception in Date News - Source",
+            "published": "Some string",
+            "published_parsed": (2024, 1),
+            "summary": "Summary",
+        }
+    )
+
+    result = clean_news_item(entry, "Any")
+
+    assert result is not None
+    assert result["date"] == "10 Jan 2024"

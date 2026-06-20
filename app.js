@@ -95,10 +95,37 @@ let appData = null;
 let activeSectorFilter = "all";
 let growthChartInstance = null;
 
+// Helper: Sanitize text using safe DOM manipulation
+function escapeHTML(str) {
+    if (str === null || str === undefined) return '';
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+}
+
 // Helper: Format YoY growth with contextual icon/color
+// Helper to prevent XSS
+function escapeHTML(str) {
+    if (typeof str !== "string") return str;
+    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
+
 function formatGrowthBadge(growthStr, style = 'inline') {
-    if (!growthStr) return style === 'table' ? `<span style="color: var(--text-muted);">—</span>` : '';
-    const val = parseFloat(growthStr.replace('%', ''));
+    if (!growthStr || growthStr === "N/A") return `<span class="badge badge-neutral">N/A</span>`;
+
+    let isPositive = false;
+    let text = growthStr;
+
+    // Check if it starts with + or is a positive number
+    if (typeof growthStr === 'string') {
+        if (growthStr.startsWith('+')) isPositive = true;
+        else if (growthStr.startsWith('-')) isPositive = false;
+        else if (parseFloat(growthStr) > 0) isPositive = true;
+    } else if (typeof growthStr === 'number') {
+        isPositive = growthStr > 0;
+    }
+
+    const val = parseFloat(growthStr.toString().replace('%', ''));
     if (isNaN(val)) return style === 'table' ? `<span style="color: var(--text-muted);">—</span>` : '';
     
     const absValStr = Math.abs(val).toFixed(1) + '%';
@@ -114,13 +141,32 @@ function formatGrowthBadge(growthStr, style = 'inline') {
     }
 }
 
+// Helper: Escape HTML to prevent XSS
+function escapeHTML(str) {
+    if (!str) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
 // Helper: Format potential growth with proper sign and color
 function formatPotential(pctStr) {
-    if (!pctStr) return '—';
-    const val = parseFloat(pctStr.replace('%', ''));
+    if ((!pctStr && pctStr !== 0) || pctStr === "N/A") return `<span class="badge badge-neutral">N/A</span>`;
+
+    let isPositive = false;
+    if (typeof pctStr === 'string' && pctStr.startsWith('+')) {
+        isPositive = true;
+    } else if (typeof pctStr === 'number' && pctStr > 0) {
+        isPositive = true;
+    }
+
+    const val = parseFloat(String(pctStr).replace('%', '').replace('+', ''));
     if (isNaN(val)) return pctStr;
     const absValStr = Math.abs(val).toFixed(1) + '%';
-    if (val > 0) return `<span style="font-weight:700; color:#34d399;">+${absValStr}</span>`;
+    if (isPositive || val > 0) return `<span style="font-weight:700; color:#34d399;">+${absValStr}</span>`;
     if (val < 0) return `<span style="font-weight:700; color:#f87171;">-${absValStr}</span>`;
     return `<span style="font-weight:700; color:#cbd5e1;">0.0%</span>`;
 }
@@ -352,17 +398,55 @@ function renderPolicyFeed(data) {
         const sectorLabel = data.sectors[item.sectorKey].label;
         const sectorIcon = data.sectors[item.sectorKey].icon;
         
-        el.innerHTML = `
-            <div class="feed-item-header">
-                <span class="source-badge">${item.source}</span>
-                <span class="badge ${badgeClass}">${item.impact} Impact</span>
-            </div>
-            <a href="${item.link}" class="feed-item-title" target="_blank">${item.title}</a>
-            <div class="feed-item-meta">
-                <span class="sector-tag">${sectorIcon} ${sectorLabel}</span>
-                <span>${item.date}</span>
-            </div>
-        `;
+        let safeLink = "#";
+        try {
+            if (item.link) {
+                const parsedUrl = new URL(item.link, window.location.origin);
+                if (parsedUrl.protocol === "http:" || parsedUrl.protocol === "https:") {
+                    safeLink = parsedUrl.href;
+                }
+            }
+        } catch (e) {
+            // Invalid URL format
+        }
+
+        const headerDiv = document.createElement("div");
+        headerDiv.className = "feed-item-header";
+
+        const sourceBadge = document.createElement("span");
+        sourceBadge.className = "source-badge";
+        sourceBadge.textContent = item.source;
+
+        const impactBadge = document.createElement("span");
+        impactBadge.className = `badge ${badgeClass}`;
+        impactBadge.textContent = `${item.impact} Impact`;
+
+        headerDiv.appendChild(sourceBadge);
+        headerDiv.appendChild(impactBadge);
+
+        const titleLink = document.createElement("a");
+        titleLink.href = safeLink;
+        titleLink.className = "feed-item-title";
+        titleLink.target = "_blank";
+        titleLink.textContent = item.title;
+
+        const metaDiv = document.createElement("div");
+        metaDiv.className = "feed-item-meta";
+
+        const sectorTag = document.createElement("span");
+        sectorTag.className = "sector-tag";
+        sectorTag.textContent = `${sectorIcon} ${sectorLabel}`;
+
+        const dateSpan = document.createElement("span");
+        dateSpan.textContent = item.date;
+
+        metaDiv.appendChild(sectorTag);
+        metaDiv.appendChild(dateSpan);
+
+        el.appendChild(headerDiv);
+        el.appendChild(titleLink);
+        el.appendChild(metaDiv);
+
         container.appendChild(el);
     });
 }
@@ -393,8 +477,8 @@ function renderTopPicks(data) {
         item.className = "highlight-item";
         item.innerHTML = `
             <div class="hl-left">
-                <span class="hl-ticker">${s.ticker}</span>
-                <span class="hl-name">${s.name}</span>
+                <span class="hl-ticker">${escapeHTML(s.ticker)}</span>
+                <span class="hl-name">${escapeHTML(s.name)}</span>
             </div>
             <div class="hl-right">
                 <span class="hl-price">CMP: ₹${s.price}</span>
@@ -429,11 +513,11 @@ function renderEmergingRadar(data) {
             let reasonText = "";
             
             if (p && typeof p === 'object') {
-                displayName = p.name || "Unknown Company";
-                const ticker = p.ticker;
+                displayName = escapeHTML(p.name) || "Unknown Company";
+                const ticker = escapeHTML(p.ticker);
                 tickerBadge = ticker ? `<span class="hl-ticker" style="margin-left: 6px; font-size: 10px; background: rgba(59, 130, 246, 0.1); color: var(--primary); padding: 1px 4px; border-radius: 3px;">${ticker}</span>` : '';
                 statusText = p.status || "Scanned";
-                reasonText = p.reason ? `<div style="font-size: 10px; color: #64748b; margin-top: 4px; max-width: 220px; line-height: 1.2;">${p.reason}</div>` : '';
+                reasonText = p.reason ? `<div style="font-size: 10px; color: #64748b; margin-top: 4px; max-width: 220px; line-height: 1.2;">${escapeHTML(p.reason)}</div>` : '';
                 
                 // Color status dynamically
                 if (statusText === 'Watchlisted') {
@@ -462,7 +546,7 @@ function renderEmergingRadar(data) {
                         <span class="hl-ticker" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); font-size: 8px; padding: 2px 4px; border-radius: 4px; font-weight: 800; width: fit-content;">RADAR</span>
                         ${tickerBadge}
                     </div>
-                    <span class="hl-name" style="color: #f8fafc; font-weight: 500; font-size: 13px; margin-top: 4px;">${displayName}</span>
+                    <span class="hl-name" style="color: #f8fafc; font-weight: 500; font-size: 13px; margin-top: 4px;">${escapeHTML(displayName)}</span>
                     ${reasonText}
                 </div>
                 <div class="hl-right" style="text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
@@ -613,10 +697,10 @@ function renderSectorDetail(sectorKey) {
             newsHtml += `
                 <div class="feed-item mt-12">
                     <div class="feed-item-header">
-                        <span class="source-badge">${n.source}</span>
+                        <span class="source-badge">${escapeHTML(n.source)}</span>
                         <span class="badge ${badgeClass}">${n.impact} Impact</span>
                     </div>
-                    <a href="${n.link}" class="feed-item-title" target="_blank">${n.title}</a>
+                    <a href="${n.link}" class="feed-item-title" target="_blank">${escapeHTML(n.title)}</a>
                     <span style="font-size:11px; color: var(--text-muted);">${n.date}</span>
                 </div>
             `;
@@ -697,8 +781,8 @@ function renderSectorDetail(sectorKey) {
                 <div class="dsc-header">
                     <div class="dsc-ticker-group">
                         <h4 style="display: flex; align-items: center; flex-wrap: wrap; gap: 8px;">
-                            ${s.name} 
-                            <span style="background-color: rgba(59, 130, 246, 0.1); color: var(--primary); padding: 2px 6px; border-radius: 4px; font-weight: 700; font-size: 11px;">${s.ticker}</span>
+                            ${escapeHTML(s.name)}
+                            <span style="background-color: rgba(59, 130, 246, 0.1); color: var(--primary); padding: 2px 6px; border-radius: 4px; font-weight: 700; font-size: 11px;">${escapeHTML(s.ticker)}</span>
                             ${analystBadge}
                             ${growthBadge}
                             ${earningsBadge}
@@ -872,8 +956,8 @@ function renderStocksTable(filterQuery = "") {
 
         const tr = document.createElement("tr");
         tr.innerHTML = `
-            <td class="t-ticker">${s.ticker}</td>
-            <td><strong>${s.name}</strong></td>
+            <td class="t-ticker">${escapeHTML(s.ticker)}</td>
+            <td><strong>${escapeHTML(s.name)}</strong></td>
             <td><span class="chip" style="display:inline-block; border-color:transparent; background-color:rgba(255,255,255,0.03);">${sectorLabel}</span></td>
             <td>₹${s.price}</td>
             <td><strong>${peVal}</strong></td>
@@ -889,7 +973,7 @@ function renderStocksTable(filterQuery = "") {
             <td>${instChangeHtml}</td>
             <td style="max-width: 150px; white-space: normal;">${valAlertsHtml}</td>
             <td>${formatAnalystBadge(s)}</td>
-            <td style="max-width: 280px; white-space: normal; font-size: 11px;">${s.catalyst}</td>
+            <td style="max-width: 280px; white-space: normal; font-size: 11px;">${escapeHTML(s.catalyst)}</td>
         `;
         tbody.appendChild(tr);
     });
@@ -978,8 +1062,8 @@ function renderAgreementsTable() {
     agreements.forEach(a => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-            <td><span class="source-badge">${a.source}</span></td>
-            <td><strong>${a.title}</strong></td>
+            <td><span class="source-badge">${escapeHTML(a.source)}</span></td>
+            <td><strong>${escapeHTML(a.title)}</strong></td>
             <td>${a.date}</td>
             <td><a href="${a.link}" class="badge-rating" style="text-decoration:none;" target="_blank">View Article</a></td>
         `;
@@ -1002,8 +1086,8 @@ function renderLaunchesTable() {
     launches.forEach(l => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-            <td><span class="source-badge">${l.source}</span></td>
-            <td><strong>${l.title}</strong></td>
+            <td><span class="source-badge">${escapeHTML(l.source)}</span></td>
+            <td><strong>${escapeHTML(l.title)}</strong></td>
             <td>${l.date}</td>
             <td><a href="${l.link}" class="badge-rating" style="text-decoration:none;" target="_blank">View Article</a></td>
         `;
@@ -1024,7 +1108,7 @@ function renderInstitutionalFlows() {
             filings.forEach(f => {
                 const tr = document.createElement("tr");
                 tr.innerHTML = `
-                    <td><strong>${f.fund_name}</strong></td>
+                    <td><strong>${escapeHTML(f.fund_name)}</strong></td>
                     <td><span class="chip" style="display:inline-block; border-color:transparent; background-color:rgba(255,255,255,0.03);">${f.theme}</span></td>
                     <td><span class="badge-success-alert">${f.status}</span></td>
                     <td>${f.date}</td>
@@ -1050,11 +1134,11 @@ function renderInstitutionalFlows() {
                     
                 const tr = document.createElement("tr");
                 tr.innerHTML = `
-                    <td><span class="source-badge">${act.source}</span></td>
-                    <td><strong>${act.buyer}</strong></td>
+                    <td><span class="source-badge">${escapeHTML(act.source)}</span></td>
+                    <td><strong>${escapeHTML(act.buyer)}</strong></td>
                     <td>${actionBadge}</td>
-                    <td><strong>${act.company}</strong></td>
-                    <td>${act.details}</td>
+                    <td><strong>${escapeHTML(act.company)}</strong></td>
+                    <td>${escapeHTML(act.details)}</td>
                     <td>${act.date}</td>
                     <td><a href="${act.link}" class="badge-rating" style="text-decoration:none;" target="_blank">View</a></td>
                 `;
@@ -1104,8 +1188,8 @@ function renderGrahamTable() {
         
         const tr = document.createElement("tr");
         tr.innerHTML = `
-            <td class="t-ticker">${s.ticker}</td>
-            <td><strong>${s.name}</strong></td>
+            <td class="t-ticker">${escapeHTML(s.ticker)}</td>
+            <td><strong>${escapeHTML(s.name)}</strong></td>
             <td>₹${s.price}</td>
             <td><strong>${pe}</strong></td>
             <td>${cr}</td>
@@ -1161,8 +1245,8 @@ function renderBuffettTable() {
         
         const tr = document.createElement("tr");
         tr.innerHTML = `
-            <td class="t-ticker">${s.ticker}</td>
-            <td><strong>${s.name}</strong></td>
+            <td class="t-ticker">${escapeHTML(s.ticker)}</td>
+            <td><strong>${escapeHTML(s.name)}</strong></td>
             <td>₹${s.price}</td>
             <td><strong>${oe}</strong></td>
             <td><strong>${retainedRatio}</strong></td>
@@ -1199,8 +1283,8 @@ function renderCautionTable() {
             
             const tr = document.createElement("tr");
             tr.innerHTML = `
-                <td class="t-ticker">${s.ticker}</td>
-                <td><strong>${s.name}</strong></td>
+                <td class="t-ticker">${escapeHTML(s.ticker)}</td>
+                <td><strong>${escapeHTML(s.name)}</strong></td>
                 <td><span class="chip" style="display:inline-block; border-color:transparent; background-color:rgba(255,255,255,0.03);">${sectorLabel}</span></td>
                 <td>₹${s.price}</td>
                 <td style="max-width: 450px; white-space: normal;">${alertBadges}</td>
@@ -1227,3 +1311,7 @@ function getStockList() {
     return list;
 }
 
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { formatPotential };
+}
