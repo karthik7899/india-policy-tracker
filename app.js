@@ -114,6 +114,17 @@ function formatGrowthBadge(growthStr, style = 'inline') {
     }
 }
 
+// Helper: Escape HTML to prevent XSS
+function escapeHTML(str) {
+    if (!str) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
 // Helper: Format potential growth with proper sign and color
 function formatPotential(pctStr) {
     if (!pctStr) return '—';
@@ -431,8 +442,8 @@ function renderTopPicks(data) {
         item.className = "highlight-item";
         item.innerHTML = `
             <div class="hl-left">
-                <span class="hl-ticker">${s.ticker}</span>
-                <span class="hl-name">${s.name}</span>
+                <span class="hl-ticker">${escapeHTML(s.ticker)}</span>
+                <span class="hl-name">${escapeHTML(s.name)}</span>
             </div>
             <div class="hl-right">
                 <span class="hl-price">CMP: ₹${s.price}</span>
