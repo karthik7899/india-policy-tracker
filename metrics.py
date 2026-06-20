@@ -590,6 +590,9 @@ def auto_curate_watchlist(brief_data, watchlist):
     from config import SECTOR_METADATA
     import requests
 
+    # Initialize a session for connection pooling
+    session = requests.Session()
+
     emerging_sectors = detect_emerging_players(brief_data, watchlist)
     rotations_log = []
 
