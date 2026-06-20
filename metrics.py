@@ -316,7 +316,6 @@ async def fetch_screener_async(session, ticker, sector=None, price=0.0):
 
     borrowings = float(extract_bs_last("Borrowings") or 0)
     other_liabilities = float(extract_bs_last("Other Liabilities") or 0)
-    # fixed_assets = float(extract_bs_last("Fixed Assets") or 0)
     other_assets = float(extract_bs_last("Other Assets") or 0)
 
     # R&D intensity mapping
