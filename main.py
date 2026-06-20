@@ -44,7 +44,7 @@ async def run_pipeline():
     data = await fetch_all_feeds_async()
 
     # Auto-curate the watchlist (discovers emerging players and rotates stocks)
-    emerging = auto_curate_watchlist(data, watchlist)
+    emerging = await auto_curate_watchlist(data, watchlist)
     data["emerging_players"] = emerging
 
     # Fetch live Yahoo Finance prices
