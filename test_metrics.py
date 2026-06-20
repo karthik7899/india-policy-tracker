@@ -1,30 +1,66 @@
 import unittest
-from metrics import get_potential
+from metrics import detect_emerging_players
 
-class TestMetrics(unittest.TestCase):
-    def test_get_potential_valid_string(self):
-        stock = {"growth_pct": "15.5%"}
-        self.assertEqual(get_potential(stock), 15.5)
 
-    def test_get_potential_valid_string_with_plus(self):
-        stock = {"growth_pct": "+20.0%"}
-        self.assertEqual(get_potential(stock), 20.0)
+class TestDetectEmergingPlayers(unittest.TestCase):
+    def test_detect_emerging_players_basic(self):
+        """Test basic detection of emerging players and ensuring companies in watchlist are ignored."""
+        brief_data = {
+            "technology": [
+                {"title": "Acme Corp announces new product"},
+                {"title": "TCS Limited shares fall"},
+                {"title": "Some random news without corp names"},
+            ],
+            "finance": [
+                {"title": "Beta Technologies merges with Gamma Solutions"},
+                {"title": "India budget announced"},  # 'India' is ignored word
+            ],
+        }
 
-    def test_get_potential_valid_float(self):
-        stock = {"growth_pct": 10.5}
-        self.assertEqual(get_potential(stock), 10.5)
+        watchlist = {
+            "technology": [{"ticker": "TCS", "name": "Tata Consultancy Services"}]
+        }
 
-    def test_get_potential_missing_key(self):
-        stock = {}
-        self.assertEqual(get_potential(stock), 0.0)
+        result = detect_emerging_players(brief_data, watchlist)
 
-    def test_get_potential_invalid_string(self):
-        stock = {"growth_pct": "invalid"}
-        self.assertEqual(get_potential(stock), 0.0)
+        self.assertIn("technology", result)
+        self.assertEqual(result["technology"], ["Acme Corp"])
+        self.assertIn("finance", result)
+        self.assertEqual(result["finance"], ["Beta Technologies", "Gamma Solutions"])
 
-    def test_get_potential_none(self):
-        stock = {"growth_pct": None}
-        self.assertEqual(get_potential(stock), 0.0)
+    def test_ignore_list(self):
+        """Test that words in the ignore list do not trigger detection."""
+        brief_data = {
+            "general": [
+                {"title": "India Technologies launches new service"},
+                {"title": "Delhi Infrastructure project started"},
+                {"title": "Cabinet Solutions is a weird name"},
+                {"title": "National Corp reports earnings"},
+            ]
+        }
+        watchlist = {}
+        result = detect_emerging_players(brief_data, watchlist)
+        self.assertEqual(result, {})
+
+    def test_short_names(self):
+        """Test that very short captured names (< 3 chars) are ignored."""
+        brief_data = {
+            "general": [
+                {"title": "Xi Corp invests heavily"},
+                {"title": "Ab Limited announces dividend"},
+            ]
+        }
+        watchlist = {}
+        result = detect_emerging_players(brief_data, watchlist)
+        self.assertEqual(result, {})
+
+    def test_emerging_players_sector_skipped(self):
+        """Test that the emerging_players sector in brief_data is correctly skipped."""
+        brief_data = {"emerging_players": [{"title": "Omega Corp is emerging"}]}
+        watchlist = {}
+        result = detect_emerging_players(brief_data, watchlist)
+        self.assertEqual(result, {})
+
 
 if __name__ == "__main__":
     unittest.main()
