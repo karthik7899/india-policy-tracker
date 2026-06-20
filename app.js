@@ -104,6 +104,12 @@ function escapeHTML(str) {
 }
 
 // Helper: Format YoY growth with contextual icon/color
+// Helper to prevent XSS
+function escapeHTML(str) {
+    if (typeof str !== "string") return str;
+    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
+
 function formatGrowthBadge(growthStr, style = 'inline') {
     if (!growthStr) return style === 'table' ? `<span style="color: var(--text-muted);">—</span>` : '';
     const val = parseFloat(growthStr.replace('%', ''));
@@ -122,13 +128,32 @@ function formatGrowthBadge(growthStr, style = 'inline') {
     }
 }
 
+// Helper: Escape HTML to prevent XSS
+function escapeHTML(str) {
+    if (!str) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
 // Helper: Format potential growth with proper sign and color
 function formatPotential(pctStr) {
-    if (!pctStr) return '—';
-    const val = parseFloat(pctStr.replace('%', ''));
+    if ((!pctStr && pctStr !== 0) || pctStr === "N/A") return `<span class="badge badge-neutral">N/A</span>`;
+
+    let isPositive = false;
+    if (typeof pctStr === 'string' && pctStr.startsWith('+')) {
+        isPositive = true;
+    } else if (typeof pctStr === 'number' && pctStr > 0) {
+        isPositive = true;
+    }
+
+    const val = parseFloat(String(pctStr).replace('%', '').replace('+', ''));
     if (isNaN(val)) return pctStr;
     const absValStr = Math.abs(val).toFixed(1) + '%';
-    if (val > 0) return `<span style="font-weight:700; color:#34d399;">+${absValStr}</span>`;
+    if (isPositive || val > 0) return `<span style="font-weight:700; color:#34d399;">+${absValStr}</span>`;
     if (val < 0) return `<span style="font-weight:700; color:#f87171;">-${absValStr}</span>`;
     return `<span style="font-weight:700; color:#cbd5e1;">0.0%</span>`;
 }
@@ -360,17 +385,55 @@ function renderPolicyFeed(data) {
         const sectorLabel = data.sectors[item.sectorKey].label;
         const sectorIcon = data.sectors[item.sectorKey].icon;
         
-        el.innerHTML = `
-            <div class="feed-item-header">
-                <span class="source-badge">${escapeHTML(item.source)}</span>
-                <span class="badge ${badgeClass}">${item.impact} Impact</span>
-            </div>
-            <a href="${item.link}" class="feed-item-title" target="_blank">${escapeHTML(item.title)}</a>
-            <div class="feed-item-meta">
-                <span class="sector-tag">${sectorIcon} ${sectorLabel}</span>
-                <span>${item.date}</span>
-            </div>
-        `;
+        let safeLink = "#";
+        try {
+            if (item.link) {
+                const parsedUrl = new URL(item.link, window.location.origin);
+                if (parsedUrl.protocol === "http:" || parsedUrl.protocol === "https:") {
+                    safeLink = parsedUrl.href;
+                }
+            }
+        } catch (e) {
+            // Invalid URL format
+        }
+
+        const headerDiv = document.createElement("div");
+        headerDiv.className = "feed-item-header";
+
+        const sourceBadge = document.createElement("span");
+        sourceBadge.className = "source-badge";
+        sourceBadge.textContent = item.source;
+
+        const impactBadge = document.createElement("span");
+        impactBadge.className = `badge ${badgeClass}`;
+        impactBadge.textContent = `${item.impact} Impact`;
+
+        headerDiv.appendChild(sourceBadge);
+        headerDiv.appendChild(impactBadge);
+
+        const titleLink = document.createElement("a");
+        titleLink.href = safeLink;
+        titleLink.className = "feed-item-title";
+        titleLink.target = "_blank";
+        titleLink.textContent = item.title;
+
+        const metaDiv = document.createElement("div");
+        metaDiv.className = "feed-item-meta";
+
+        const sectorTag = document.createElement("span");
+        sectorTag.className = "sector-tag";
+        sectorTag.textContent = `${sectorIcon} ${sectorLabel}`;
+
+        const dateSpan = document.createElement("span");
+        dateSpan.textContent = item.date;
+
+        metaDiv.appendChild(sectorTag);
+        metaDiv.appendChild(dateSpan);
+
+        el.appendChild(headerDiv);
+        el.appendChild(titleLink);
+        el.appendChild(metaDiv);
+
         container.appendChild(el);
     });
 }
@@ -437,11 +500,11 @@ function renderEmergingRadar(data) {
             let reasonText = "";
             
             if (p && typeof p === 'object') {
-                displayName = p.name || "Unknown Company";
-                const ticker = p.ticker;
-                tickerBadge = ticker ? `<span class="hl-ticker" style="margin-left: 6px; font-size: 10px; background: rgba(59, 130, 246, 0.1); color: var(--primary); padding: 1px 4px; border-radius: 3px;">${escapeHTML(ticker)}</span>` : '';
+                displayName = escapeHTML(p.name) || "Unknown Company";
+                const ticker = escapeHTML(p.ticker);
+                tickerBadge = ticker ? `<span class="hl-ticker" style="margin-left: 6px; font-size: 10px; background: rgba(59, 130, 246, 0.1); color: var(--primary); padding: 1px 4px; border-radius: 3px;">${ticker}</span>` : '';
                 statusText = p.status || "Scanned";
-                reasonText = p.reason ? `<div style="font-size: 10px; color: #64748b; margin-top: 4px; max-width: 220px; line-height: 1.2;">${p.reason}</div>` : '';
+                reasonText = p.reason ? `<div style="font-size: 10px; color: #64748b; margin-top: 4px; max-width: 220px; line-height: 1.2;">${escapeHTML(p.reason)}</div>` : '';
                 
                 // Color status dynamically
                 if (statusText === 'Watchlisted') {
@@ -1033,7 +1096,7 @@ function renderInstitutionalFlows() {
                 const tr = document.createElement("tr");
                 tr.innerHTML = `
                     <td><strong>${escapeHTML(f.fund_name)}</strong></td>
-                    <td><span class="chip" style="display:inline-block; border-color:transparent; background-color:rgba(255,255,255,0.03);">${escapeHTML(f.theme)}</span></td>
+                    <td><span class="chip" style="display:inline-block; border-color:transparent; background-color:rgba(255,255,255,0.03);">${f.theme}</span></td>
                     <td><span class="badge-success-alert">${f.status}</span></td>
                     <td>${f.date}</td>
                     <td><a href="${f.link}" class="badge-rating" style="text-decoration:none;" target="_blank">View Document</a></td>
@@ -1235,3 +1298,7 @@ function getStockList() {
     return list;
 }
 
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { formatPotential };
+}
