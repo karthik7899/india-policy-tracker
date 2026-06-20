@@ -1,3 +1,6 @@
+## 2026-06-14 - Python Connection Pooling
+**Learning:** Found an anti-pattern where multiple synchronous HTTP requests were being made sequentially without using connection pooling, incurring significant TCP/SSL handshake overhead for domains like `finance.yahoo.com` and `screener.in`.
+**Action:** When working with multiple synchronous HTTP requests in Python scripts, specifically when repeatedly hitting the same APIs in loops, create a module-level or global `requests.Session()` to enable connection reuse.
 ## 2024-10-24 - Sync HTTP Connection Pooling
 **Learning:** Making multiple synchronous HTTP requests (e.g., in `metrics.py`) without a `requests.Session` causes redundant TCP/SSL handshake overhead.
 **Action:** Always use a `requests.Session()` for connection pooling when making multiple synchronous requests to the same domains, especially in loops like `auto_curate_watchlist`.
