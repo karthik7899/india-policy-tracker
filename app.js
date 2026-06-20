@@ -127,11 +127,19 @@ function escapeHTML(str) {
 
 // Helper: Format potential growth with proper sign and color
 function formatPotential(pctStr) {
-    if (!pctStr) return '—';
-    const val = parseFloat(pctStr.replace('%', ''));
+    if ((!pctStr && pctStr !== 0) || pctStr === "N/A") return `<span class="badge badge-neutral">N/A</span>`;
+
+    let isPositive = false;
+    if (typeof pctStr === 'string' && pctStr.startsWith('+')) {
+        isPositive = true;
+    } else if (typeof pctStr === 'number' && pctStr > 0) {
+        isPositive = true;
+    }
+
+    const val = parseFloat(String(pctStr).replace('%', '').replace('+', ''));
     if (isNaN(val)) return pctStr;
     const absValStr = Math.abs(val).toFixed(1) + '%';
-    if (val > 0) return `<span style="font-weight:700; color:#34d399;">+${absValStr}</span>`;
+    if (isPositive || val > 0) return `<span style="font-weight:700; color:#34d399;">+${absValStr}</span>`;
     if (val < 0) return `<span style="font-weight:700; color:#f87171;">-${absValStr}</span>`;
     return `<span style="font-weight:700; color:#cbd5e1;">0.0%</span>`;
 }
@@ -1276,3 +1284,7 @@ function getStockList() {
     return list;
 }
 
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { formatPotential };
+}
