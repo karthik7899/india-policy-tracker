@@ -1,3 +1,4 @@
+import requests
 import re
 import asyncio
 import aiohttp
@@ -772,12 +773,17 @@ def auto_curate_watchlist(brief_data, watchlist):
                 # 1. Candidate must have positive potential growth upside
                 # 2. Candidate must have positive revenue growth (> 0%) or Buy rating
                 # 3. MUST cross 15% QoQ revenue growth threshold (from Prompt 3)
-                is_eligible = growth_pct_val > 0
-                if rev_growth_raw is not None and rev_growth_raw < 0:
-                    is_eligible = False
-                if candidate_qoq_growth < 15.0:
-                    is_eligible = False
-
+                is_eligible = _evaluate_candidate_eligibility(
+                    growth_pct_val,
+                    rev_growth_raw,
+                    candidate_qoq_growth,
+                    ticker,
+                    revenue_growth,
+                    sector,
+                    full_name,
+                    name,
+                    structured_emerging,
+                )
                 if not is_eligible:
                     log.info(
                         f"Candidate {ticker} did not meet positive growth criteria. Skipping."
