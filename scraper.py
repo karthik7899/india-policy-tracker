@@ -197,7 +197,9 @@ async def scrape_pib_pli_approvals_async(session, watchlist):
                             seen.add(name_key)
                             from metrics import resolve_ticker_from_name
 
-                            ticker, _ = resolve_ticker_from_name(company_name)
+                            ticker, _ = await resolve_ticker_from_name(
+                                session, company_name
+                            )
                             status = "Unlisted" if not ticker else "Listed Peer"
                             emerging_pli_competitors.append(
                                 {
@@ -327,6 +329,78 @@ async def check_sebi_sid_filings_async(session):
     return filings
 
 
+def _parse_block_deal_headline(headline, watchlist):
+    buyer = "Institutional Investor"
+    action = "Buy"
+    company = "Listed Company"
+    details = "Block Deal"
+
+    if any(
+        w in headline.lower()
+        for w in [
+            "sells",
+            "dumped",
+            "exits",
+            "offloads",
+            "reduces stake",
+        ]
+    ):
+        action = "Sell"
+    elif any(
+        w in headline.lower()
+        for w in [
+            "buys",
+            "acquires",
+            "purchases",
+            "picks up",
+            "increases stake",
+        ]
+    ):
+        action = "Buy"
+
+    buyer_match = re.search(
+        r"^([A-Z0-9][A-Za-z0-9\s\.\&]+?)\s+(?:buys|acquires|sells|purchases|picks up|offloads|exits|increases|decreases|shares|block|bulk|mutual)",
+        headline,
+    )
+    if buyer_match:
+        buyer = buyer_match.group(1).strip()
+
+    details_match = re.search(
+        r"(\d+(?:\.\d+)?%\s*stake|\d+\s*(?:lakh|million|crore)?\s*shares|worth\s*(?:Rs\s*)?\d+\s*(?:cr|crore|crores)?)",
+        headline,
+        re.IGNORECASE,
+    )
+    if details_match:
+        details = details_match.group(1).strip()
+
+    company_match = re.search(
+        r"(?:in|of|shares of|stake in|shares in)\s+([A-Z][A-Za-z0-9\s\&]+?)(?:\s+via|\s+worth|\s+for|\s+at|\s+through|\s+block|\s+bulk|$)",
+        headline,
+    )
+    if company_match:
+        company = company_match.group(1).strip()
+
+    # Match against watchlist stocks
+    matched_company = None
+    matched_ticker = None
+    for sector, stocks in watchlist.items():
+        for s in stocks:
+            if (
+                s["ticker"].lower() in headline.lower()
+                or s["name"].lower() in headline.lower()
+            ):
+                matched_company = s["name"]
+                matched_ticker = s["ticker"]
+                break
+        if matched_company:
+            break
+
+    if matched_company:
+        company = f"{matched_company} ({matched_ticker})"
+
+    return buyer, action, company, details
+
+
 async def fetch_institutional_activity_async(session, watchlist):
     log.info(
         "Fetching institutional activity block deals and mutual fund buying trends (Async)..."
@@ -344,74 +418,9 @@ async def fetch_institutional_activity_async(session, watchlist):
                 for entry in feed.entries[:8]:  # Get top 8 entries
                     headline = entry.get("title", "").split(" - ")[0].strip()
 
-                    # Parse block deal headline
-                    buyer = "Institutional Investor"
-                    action = "Buy"
-                    company = "Listed Company"
-                    details = "Block Deal"
-
-                    if any(
-                        w in headline.lower()
-                        for w in [
-                            "sells",
-                            "dumped",
-                            "exits",
-                            "offloads",
-                            "reduces stake",
-                        ]
-                    ):
-                        action = "Sell"
-                    elif any(
-                        w in headline.lower()
-                        for w in [
-                            "buys",
-                            "acquires",
-                            "purchases",
-                            "picks up",
-                            "increases stake",
-                        ]
-                    ):
-                        action = "Buy"
-
-                    buyer_match = re.search(
-                        r"^([A-Z0-9][A-Za-z0-9\s\.\&]+?)\s+(?:buys|acquires|sells|purchases|picks up|offloads|exits|increases|decreases|shares|block|bulk|mutual)",
-                        headline,
+                    buyer, action, company, details = _parse_block_deal_headline(
+                        headline, watchlist
                     )
-                    if buyer_match:
-                        buyer = buyer_match.group(1).strip()
-
-                    details_match = re.search(
-                        r"(\d+(?:\.\d+)?%\s*stake|\d+\s*(?:lakh|million|crore)?\s*shares|worth\s*(?:Rs\s*)?\d+\s*(?:cr|crore|crores)?)",
-                        headline,
-                        re.IGNORECASE,
-                    )
-                    if details_match:
-                        details = details_match.group(1).strip()
-
-                    company_match = re.search(
-                        r"(?:in|of|shares of|stake in|shares in)\s+([A-Z][A-Za-z0-9\s\&]+?)(?:\s+via|\s+worth|\s+for|\s+at|\s+through|\s+block|\s+bulk|$)",
-                        headline,
-                    )
-                    if company_match:
-                        company = company_match.group(1).strip()
-
-                    # Match against watchlist stocks
-                    matched_company = None
-                    matched_ticker = None
-                    for sector, stocks in watchlist.items():
-                        for s in stocks:
-                            if (
-                                s["ticker"].lower() in headline.lower()
-                                or s["name"].lower() in headline.lower()
-                            ):
-                                matched_company = s["name"]
-                                matched_ticker = s["ticker"]
-                                break
-                        if matched_company:
-                            break
-
-                    if matched_company:
-                        company = f"{matched_company} ({matched_ticker})"
 
                     activity.append(
                         {
