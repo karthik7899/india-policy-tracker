@@ -31,6 +31,85 @@ def update_single_stock(stock, prefetched_prices=None):
     stock["target_low"] = None
     stock["rec_score"] = None
 
+
+def _fetch_live_price(stock, ticker_obj, yahoo_ticker):
+    hist = ticker_obj.history(period="1d")
+    if not hist.empty:
+        live_price = float(hist["Close"].iloc[-1])
+        stock["price"] = f"{live_price:.2f}"
+    else:
+        live_price = float(stock["price"])
+        log.warning(f"No close history for {yahoo_ticker}. Using static price.")
+    return live_price
+
+
+def _parse_targets(stock, info):
+    median_target = info.get("targetMedianPrice")
+    mean_target = info.get("targetMeanPrice")
+    high_target = info.get("targetHighPrice")
+    low_target = info.get("targetLowPrice")
+    analyst_count = info.get("numberOfAnalystOpinions")
+
+    if analyst_count and int(analyst_count) > 0:
+        stock["analyst_count"] = int(analyst_count)
+
+    chosen_target = None
+    if median_target and float(median_target) > 0:
+        chosen_target = float(median_target)
+        stock["target_median"] = f"{chosen_target:.2f}"
+    if mean_target and float(mean_target) > 0:
+        if chosen_target is None:
+            chosen_target = float(mean_target)
+        stock["target"] = f"{float(mean_target):.2f}"
+    if chosen_target:
+        stock["target"] = f"{chosen_target:.2f}"
+
+    if high_target and float(high_target) > 0:
+        stock["target_high"] = f"{float(high_target):.2f}"
+    if low_target and float(low_target) > 0:
+        stock["target_low"] = f"{float(low_target):.2f}"
+
+
+def _parse_recommendations(stock, info):
+    rating = info.get("recommendationKey")
+    if rating:
+        stock["rating"] = rating.replace("_", " ").title()
+    rec_mean = info.get("recommendationMean")
+    if rec_mean is not None:
+        stock["rec_score"] = round(float(rec_mean), 1)
+
+
+def _parse_growth_metrics(stock, info):
+    rev_growth = info.get("revenueGrowth")
+    if rev_growth is not None:
+        growth_pct = float(rev_growth) * 100
+        sign = "+" if growth_pct > 0 else ""
+        stock["revenue_growth"] = f"{sign}{growth_pct:.1f}%"
+
+    earn_growth = info.get("earningsGrowth")
+    if earn_growth is not None:
+        eg_pct = float(earn_growth) * 100
+        sign = "+" if eg_pct > 0 else ""
+        stock["earnings_growth"] = f"{sign}{eg_pct:.1f}%"
+
+
+def _calculate_growth_pct(stock, live_price, ticker):
+    target_price = float(stock.get("target", 0))
+    if target_price > 0 and live_price > 0:
+        growth_val = ((target_price - live_price) / live_price) * 100
+        sign = "+" if growth_val > 0 else ""
+        stock["growth_pct"] = f"{sign}{growth_val:.1f}%"
+        log.info(
+            f"Updated {ticker}: Price={live_price:.2f}, Target={target_price:.2f} ({sign}{growth_val:.1f}%)"
+        )
+
+
+def update_single_stock(stock):
+    """Worker function to fetch Yahoo Finance metrics for a single stock."""
+    ticker = stock["ticker"]
+    yahoo_ticker = f"{ticker}.NS"
+    _init_stock_defaults(stock)
+
     try:
         ticker_obj = yf.Ticker(yahoo_ticker)
 
@@ -48,59 +127,12 @@ def update_single_stock(stock, prefetched_prices=None):
 
         info = ticker_obj.info
         if info:
-            median_target = info.get("targetMedianPrice")
-            mean_target = info.get("targetMeanPrice")
-            high_target = info.get("targetHighPrice")
-            low_target = info.get("targetLowPrice")
-            analyst_count = info.get("numberOfAnalystOpinions")
+            _parse_targets(stock, info)
+            _parse_recommendations(stock, info)
+            _parse_growth_metrics(stock, info)
 
-            if analyst_count and int(analyst_count) > 0:
-                stock["analyst_count"] = int(analyst_count)
-
-            chosen_target = None
-            if median_target and float(median_target) > 0:
-                chosen_target = float(median_target)
-                stock["target_median"] = f"{chosen_target:.2f}"
-            if mean_target and float(mean_target) > 0:
-                if chosen_target is None:
-                    chosen_target = float(mean_target)
-                stock["target"] = f"{float(mean_target):.2f}"
-            if chosen_target:
-                stock["target"] = f"{chosen_target:.2f}"
-
-            if high_target and float(high_target) > 0:
-                stock["target_high"] = f"{float(high_target):.2f}"
-            if low_target and float(low_target) > 0:
-                stock["target_low"] = f"{float(low_target):.2f}"
-
-            rating = info.get("recommendationKey")
-            if rating:
-                stock["rating"] = rating.replace("_", " ").title()
-            rec_mean = info.get("recommendationMean")
-            if rec_mean is not None:
-                stock["rec_score"] = round(float(rec_mean), 1)
-
-            rev_growth = info.get("revenueGrowth")
-            if rev_growth is not None:
-                growth_pct = float(rev_growth) * 100
-                sign = "+" if growth_pct > 0 else ""
-                stock["revenue_growth"] = f"{sign}{growth_pct:.1f}%"
-
-            earn_growth = info.get("earningsGrowth")
-            if earn_growth is not None:
-                eg_pct = float(earn_growth) * 100
-                sign = "+" if eg_pct > 0 else ""
-                stock["earnings_growth"] = f"{sign}{eg_pct:.1f}%"
-
-        target_price = float(stock["target"])
-        if live_price > 0:
-            growth_val = ((target_price - live_price) / live_price) * 100
-            sign = "+" if growth_val > 0 else ""
-            stock["growth_pct"] = f"{sign}{growth_val:.1f}%"
-
-            log.info(
-                f"Updated {ticker}: Price={live_price:.2f}, Target={target_price:.2f} ({sign}{growth_val:.1f}%)"
-            )
+        if "target" in stock and stock["target"]:
+            _calculate_growth_pct(stock, live_price, ticker)
 
     except Exception as e:
         log.error(
