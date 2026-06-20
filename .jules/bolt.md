@@ -1,3 +1,6 @@
+## 2026-06-17 - Asynchronous Ticker Resolution Optimization
+ **Learning:** Sequential synchronous network calls (`requests.get`) inside loops, even when wrapped in a larger async function, cause significant event-loop blocking and performance degradation. Converting these calls to use `aiohttp.ClientSession` and gathering them concurrently via `asyncio.gather` yields massive speedups (from ~1.9s to ~0.27s for 10 sequential calls).
+ **Action:** When refactoring functions that perform HTTP requests inside loops to be asynchronous, pre-gather a unique list of targets and execute all requests concurrently using `asyncio.gather` rather than awaiting them one-by-one inside a loop.
 ## 2026-06-14 - Python Connection Pooling
 **Learning:** Found an anti-pattern where multiple synchronous HTTP requests were being made sequentially without using connection pooling, incurring significant TCP/SSL handshake overhead for domains like `finance.yahoo.com` and `screener.in`.
 **Action:** When working with multiple synchronous HTTP requests in Python scripts, specifically when repeatedly hitting the same APIs in loops, create a module-level or global `requests.Session()` to enable connection reuse.
