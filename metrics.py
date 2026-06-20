@@ -551,11 +551,10 @@ def resolve_ticker_from_name(company_name, session=None):
     url = f"https://query2.finance.yahoo.com/v1/finance/search?q={urllib.parse.quote(company_name)}&quotesCount=5"
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
     try:
-        r = (
-            session.get(url, headers=headers, timeout=10)
-            if session
-            else requests.get(url, headers=headers, timeout=10)
-        )
+        if session:
+            r = session.get(url, headers=headers, timeout=10)
+        else:
+            r = requests.get(url, headers=headers, timeout=10)
         if r.status_code == 200:
             data = r.json()
             quotes = data.get("quotes", [])
@@ -578,6 +577,13 @@ def resolve_ticker_from_name(company_name, session=None):
     return None, None
 
 
+def _get_potential(stock):
+    try:
+        return float(stock["growth_pct"].replace("%", ""))
+    except Exception:
+        return 0.0
+
+
 def auto_curate_watchlist(brief_data, watchlist):
     """Discovers emerging competitors and rotates underperforming stocks."""
     log.info("Starting automated watchlist curation and rotation cycle...")
@@ -590,15 +596,14 @@ def auto_curate_watchlist(brief_data, watchlist):
     # We will construct a structured emerging_players dictionary
     structured_emerging = {s: [] for s in SECTOR_METADATA}
 
-    session = requests.Session()
+    with requests.Session() as session:
+        for sector, companies in emerging_sectors.items():
+            if sector not in watchlist:
+                continue
 
-    for sector, companies in emerging_sectors.items():
-        if sector not in watchlist:
-            continue
-
-        for name in companies:
-            log.info(f"Evaluating candidate company: {name} in {sector}")
-            ticker, full_name = resolve_ticker_from_name(name, session=session)
+            for name in companies:
+                log.info(f"Evaluating candidate company: {name} in {sector}")
+                ticker, full_name = resolve_ticker_from_name(name, session=session)
             if not ticker:
                 log.info(f"Could not resolve ticker for: {name}. Skipping.")
                 structured_emerging[sector].append(
@@ -763,15 +768,9 @@ def auto_curate_watchlist(brief_data, watchlist):
                     )
                 else:
 
-                    def get_potential(stock):
-                        try:
-                            return float(stock["growth_pct"].replace("%", ""))
-                        except Exception:
-                            return 0.0
-
-                    sorted_watchlist = sorted(current_watchlist, key=get_potential)
+                    sorted_watchlist = sorted(current_watchlist, key=_get_potential)
                     weakest_stock = sorted_watchlist[0]
-                    weakest_potential = get_potential(weakest_stock)
+                    weakest_potential = _get_potential(weakest_stock)
 
                     if growth_pct_val > weakest_potential:
                         watchlist[sector] = [
