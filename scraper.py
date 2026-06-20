@@ -409,6 +409,13 @@ async def fetch_institutional_activity_async(session, watchlist):
     encoded_query = urllib.parse.quote(f"{query} when:7d")
     rss_url = f"https://news.google.com/rss/search?q={encoded_query}&hl=en-IN&gl=IN&ceid=IN:en"
 
+    # Flatten watchlist for faster lookup
+    flat_watchlist = [
+        (s["ticker"].lower(), s["name"].lower(), s["name"], s["ticker"])
+        for stocks in watchlist.values()
+        for s in stocks
+    ]
+
     activity = []
     try:
         async with session.get(rss_url, timeout=15) as response:
@@ -417,6 +424,7 @@ async def fetch_institutional_activity_async(session, watchlist):
                 feed = feedparser.parse(xml_data)
                 for entry in feed.entries[:8]:  # Get top 8 entries
                     headline = entry.get("title", "").split(" - ")[0].strip()
+                    headline_lower = headline.lower()
 
                     buyer, action, company, details = _parse_block_deal_headline(
                         headline, watchlist
