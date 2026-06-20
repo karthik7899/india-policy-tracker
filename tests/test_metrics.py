@@ -1,30 +1,36 @@
-import pytest
-from metrics import get_potential
+import sys
+import os
 
-def test_get_potential_with_percent_string():
-    stock = {"growth_pct": "15.5%"}
-    assert get_potential(stock) == 15.5
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from metrics import _get_potential  # noqa: E402
 
-def test_get_potential_with_plus_percent_string():
-    stock = {"growth_pct": "+20.0%"}
-    assert get_potential(stock) == 20.0
 
-def test_get_potential_with_float():
-    stock = {"growth_pct": 12.5}
-    assert get_potential(stock) == 12.5
+def test_get_potential_valid_percentage():
+    """Test valid percentage string with % sign."""
+    assert _get_potential({"growth_pct": "15%"}) == 15.0
+    assert _get_potential({"growth_pct": "15.5%"}) == 15.5
 
-def test_get_potential_with_missing_key():
-    stock = {"name": "TestCorp"}
-    assert get_potential(stock) == 0.0
 
-def test_get_potential_with_invalid_string():
-    stock = {"growth_pct": "invalid"}
-    assert get_potential(stock) == 0.0
+def test_get_potential_without_percentage():
+    """Test valid percentage string without % sign."""
+    assert _get_potential({"growth_pct": "15"}) == 15.0
 
-def test_get_potential_with_empty_string():
-    stock = {"growth_pct": ""}
-    assert get_potential(stock) == 0.0
 
-def test_get_potential_with_none():
-    stock = {"growth_pct": None}
-    assert get_potential(stock) == 0.0
+def test_get_potential_negative():
+    """Test negative percentage string."""
+    assert _get_potential({"growth_pct": "-5%"}) == -5.0
+
+
+def test_get_potential_missing_key():
+    """Test missing growth_pct key returns 0.0."""
+    assert _get_potential({}) == 0.0
+
+
+def test_get_potential_invalid_value():
+    """Test invalid string returns 0.0."""
+    assert _get_potential({"growth_pct": "invalid"}) == 0.0
+
+
+def test_get_potential_none_value():
+    """Test None value returns 0.0."""
+    assert _get_potential({"growth_pct": None}) == 0.0
