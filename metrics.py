@@ -838,51 +838,51 @@ def auto_curate_watchlist(brief_data, watchlist):
                         if rev_growth_raw is not None
                         else None
                     )
-                else:
-
-                    sorted_watchlist = sorted(current_watchlist, key=_get_potential)
-                    weakest_stock = sorted_watchlist[0]
-                    weakest_potential = _get_potential(weakest_stock)
-
-                    if growth_pct_val > weakest_potential:
-                        watchlist[sector] = [
-                            x
-                            for x in current_watchlist
-                            if x["ticker"] != weakest_stock["ticker"]
-                        ]
-                        watchlist[sector].append(candidate_stock)
-                        log.info(
-                            f"Candidate {ticker} did not meet positive growth criteria. Skipping."
-                        )
-                        reason_str = (
-                            "Negative target potential"
-                            if growth_pct_val <= 0
-                            else (
-                                f"Failed growth criteria (YoY revenue {revenue_growth})"
-                                if rev_growth_raw is not None and rev_growth_raw < 0
-                                else f"Failed QoQ growth threshold ({candidate_qoq_growth:.1f}% < 15%)"
+                    else:
+    
+                        sorted_watchlist = sorted(current_watchlist, key=_get_potential)
+                        weakest_stock = sorted_watchlist[0]
+                        weakest_potential = _get_potential(weakest_stock)
+    
+                        if growth_pct_val > weakest_potential:
+                            watchlist[sector] = [
+                                x
+                                for x in current_watchlist
+                                if x["ticker"] != weakest_stock["ticker"]
+                            ]
+                            watchlist[sector].append(candidate_stock)
+                            log.info(
+                                f"Candidate {ticker} did not meet positive growth criteria. Skipping."
                             )
-                        )
-                        continue
-
-                    already_watchlisted = False
-                    for s_key, s_list in watchlist.items():
-                        if any(x["ticker"] == ticker for x in s_list):
-                            already_watchlisted = True
-                            break
-                    if already_watchlisted:
-                        log.info(f"Ticker {ticker} is already in watchlist. Skipping.")
-                        structured_emerging[sector].append(
-                            {
-                                "name": full_name or name,
-                                "ticker": ticker,
-                                "status": "Watchlisted",
-                                "reason": f"Already present in the {sector} watchlist.",
-                            }
-                        )
-                        continue
-
-                    yahoo_ticker = f"{ticker}.NS"
+                            reason_str = (
+                                "Negative target potential"
+                                if growth_pct_val <= 0
+                                else (
+                                    f"Failed growth criteria (YoY revenue {revenue_growth})"
+                                    if rev_growth_raw is not None and rev_growth_raw < 0
+                                    else f"Failed QoQ growth threshold ({candidate_qoq_growth:.1f}% < 15%)"
+                                )
+                            )
+                            continue
+    
+                        already_watchlisted = False
+                        for s_key, s_list in watchlist.items():
+                            if any(x["ticker"] == ticker for x in s_list):
+                                already_watchlisted = True
+                                break
+                        if already_watchlisted:
+                            log.info(f"Ticker {ticker} is already in watchlist. Skipping.")
+                            structured_emerging[sector].append(
+                                {
+                                    "name": full_name or name,
+                                    "ticker": ticker,
+                                    "status": "Watchlisted",
+                                    "reason": f"Already present in the {sector} watchlist.",
+                                }
+                            )
+                            continue
+    
+                        yahoo_ticker = f"{ticker}.NS"
                     try:
                         ticker_obj = yf.Ticker(yahoo_ticker)
                         hist = ticker_obj.history(period="1d")
