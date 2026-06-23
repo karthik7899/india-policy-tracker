@@ -838,8 +838,7 @@ def auto_curate_watchlist(brief_data, watchlist):
                         if rev_growth_raw is not None
                         else None
                     )
-                    else:
-    
+                except:
                         sorted_watchlist = sorted(current_watchlist, key=_get_potential)
                         weakest_stock = sorted_watchlist[0]
                         weakest_potential = _get_potential(weakest_stock)
