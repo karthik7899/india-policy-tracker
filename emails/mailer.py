@@ -368,8 +368,24 @@ def build_html_email(brief_data, watchlist):
     inst_html = ""
     inst_activity = brief_data.get("institutional_activity", [])
     sebi_filings = brief_data.get("sebi_filings", [])
+    inst_baseline = brief_data.get("institutional_baseline", [])
 
-    if inst_activity or sebi_filings:
+    baseline_items = ""
+    for b in inst_baseline[:5]:
+        trend = b.get("accumulation_trend", "Steady")
+        trend_color = (
+            "#34d399"
+            if trend == "Accelerating"
+            else ("#f87171" if trend == "Decelerating" else "#94a3b8")
+        )
+        r1y = b.get("return_1y")
+        r1y_str = f"{'+' if (r1y or 0) > 0 else ''}{r1y}%" if r1y is not None else "—"
+        baseline_items += (
+            f"<li><strong>{b.get('theme', 'Theme')}</strong>: {b.get('fund_name', 'Scheme')} "
+            f"<span style='color: {trend_color}; font-size: 11px;'>(1Y {r1y_str} · {trend})</span></li>"
+        )
+
+    if inst_activity or sebi_filings or baseline_items:
         inst_items = "".join(
             [
                 f"<li><strong>{i['source']}</strong>: {i['headline']}</li>"
@@ -387,6 +403,7 @@ def build_html_email(brief_data, watchlist):
             <h3 style="color: #a78bfa; margin-bottom: 10px; font-size: 16px;">🏛️ Institutional Capital & Fund Flow Tracker</h3>
             {f'<h4 style="margin: 5px 0; color: #94a3b8; font-size: 12px; text-transform: uppercase;">SEBI SID Filings (Leading Indicator):</h4><ul style="font-size: 13px; padding-left: 20px; color: #cbd5e1; margin-bottom: 10px;">{sebi_items}</ul>' if sebi_items else ''}
             {f'<h4 style="margin: 5px 0; color: #94a3b8; font-size: 12px; text-transform: uppercase;">Institutional Activity Feed (Lagging):</h4><ul style="font-size: 13px; padding-left: 20px; color: #cbd5e1;">{inst_items}</ul>' if inst_items else ''}
+            {f'<h4 style="margin: 5px 0; color: #94a3b8; font-size: 12px; text-transform: uppercase;">Accumulation Baseline (Historical MF NAV):</h4><ul style="font-size: 13px; padding-left: 20px; color: #cbd5e1;">{baseline_items}</ul>' if baseline_items else ''}
         </div>
         """
 

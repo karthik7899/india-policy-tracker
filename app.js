@@ -1339,6 +1339,37 @@ function renderInstitutionalFlows() {
             });
         }
     }
+
+    // Institutional Accumulation Baseline (historical MF NAV backtesting)
+    const baselineBody = document.getElementById("mf-baseline-body");
+    if (baselineBody) {
+        baselineBody.innerHTML = "";
+        const baseline = appData.briefing.institutional_baseline || [];
+        if (baseline.length === 0) {
+            setTableEmpty(baselineBody, 7, "No baseline data", "Historical mutual-fund NAV data was not available in the latest cycle.");
+        } else {
+            baseline.forEach(b => {
+                const trend = b.accumulation_trend || "Steady";
+                const trendBadge = trend === "Accelerating"
+                    ? `<span class="badge-success-alert">▲ ${escapeHtml(trend)}</span>`
+                    : trend === "Decelerating"
+                        ? `<span class="badge-danger-alert">▼ ${escapeHtml(trend)}</span>`
+                        : `<span class="badge-warning-alert">▬ ${escapeHtml(trend)}</span>`;
+                const fmt = v => (v === null || v === undefined) ? "—" : `${v > 0 ? "+" : ""}${v}%`;
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td><span class="chip" style="display:inline-block; border-color:transparent;">${escapeHtml(b.theme || "Other")}</span></td>
+                    <td><strong>${escapeHtml(b.fund_name || "Unnamed scheme")}</strong></td>
+                    <td>${escapeHtml(String(b.latest_nav ?? "—"))}</td>
+                    <td>${fmt(b.return_1m)}</td>
+                    <td>${fmt(b.return_3m)}</td>
+                    <td><strong>${fmt(b.return_1y)}</strong></td>
+                    <td>${trendBadge}</td>
+                `;
+                baselineBody.appendChild(tr);
+            });
+        }
+    }
 }
 
 // Render Graham Valuation Table

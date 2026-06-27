@@ -34,6 +34,7 @@ This platform runs entirely in the cloud for free using **GitHub Actions** and *
   * **Holding Pattern Changes:** Scrapes Screener.in to extract promoter, domestic (DII/Mutual Fund), and foreign (FII) quarterly holding shifts.
   * **Block & Bulk Deals Parser:** Scrapes and structures recent market transactions, identifying the buyer, action (BUY/SELL), target stock, transaction details, and direct media link.
   * **Thematic Fund Filings:** Scrapes SEBI mutual fund filings (Scheme Information Documents) to watch for upcoming thematic fund launches.
+  * **Institutional Accumulation Baseline (Backtesting):** Ingests historical mutual-fund NAV data (AMFI / `captn3m0`-style dataset, free) and computes a backtesting baseline of trailing NAV returns and an Accelerating/Steady/Decelerating accumulation trend per policy theme — a proxy for institutional capital compounding into manufacturing, semiconductors, defence, and logistics. The data source is overridable via the `MF_DATA_BASE_URL` environment variable.
 * **Automated Watchlist Rotation:** 
   * Checks emerging competitors discovered in news feeds.
   * Filters candidates through a strict **15% QoQ revenue growth threshold** (via Screener) and rotates weaker-performing watchlist tickers with stronger ones.
