@@ -1,6 +1,7 @@
 # config.py
 import os
 import json
+from logger import log
 
 STOCK_WATCHLIST = {
     "aerospace_defence": [
@@ -2054,8 +2055,6 @@ SECTOR_QUERIES = {
 }
 
 
-from logger import log
-
 def load_watchlist():
     watchlist_path = os.path.join(
         os.path.dirname(os.path.abspath(__file__)), "watchlist.json"
@@ -2064,10 +2063,14 @@ def load_watchlist():
         with open(watchlist_path, "r", encoding="utf-8") as f:
             return json.load(f)
     except FileNotFoundError:
-        log.warning("watchlist.json not found, using default STOCK_WATCHLIST dictionary.")
+        log.warning(
+            "watchlist.json not found, using default STOCK_WATCHLIST dictionary."
+        )
         return STOCK_WATCHLIST
     except json.JSONDecodeError:
-        log.error("Error decoding watchlist.json. Using default STOCK_WATCHLIST dictionary.")
+        log.error(
+            "Error decoding watchlist.json. Using default STOCK_WATCHLIST dictionary."
+        )
         return STOCK_WATCHLIST
     except Exception as e:
         log.error(f"Unexpected error loading watchlist.json: {e}")

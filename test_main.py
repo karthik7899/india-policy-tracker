@@ -1,23 +1,22 @@
 import unittest
-from unittest.mock import patch, mock_open, ANY
-import datetime
-import json
+from unittest.mock import patch, mock_open
 import main
 
+
 class TestSaveDataForDashboard(unittest.TestCase):
-    @patch('main.json.dump')
-    @patch('builtins.open', new_callable=mock_open)
+    @patch("main.json.dump")
+    @patch("builtins.open", new_callable=mock_open)
     def test_save_data_for_dashboard(self, mock_file, mock_json_dump):
         brief_data = {
             "policy_news": ["policy"],
             "market_news": ["market"],
             "emerging_players": ["player"],
-            "curation_log": ["log"]
+            "curation_log": ["log"],
         }
         watchlist = {"AAPL": {"name": "Apple"}}
 
-        if hasattr(main, 'log'):
-            with patch('main.log.info') as mock_log:
+        if hasattr(main, "log"):
+            with patch("main.log.info") as mock_log:
                 main.save_data_for_dashboard(brief_data, watchlist)
         else:
             main.save_data_for_dashboard(brief_data, watchlist)
@@ -47,5 +46,6 @@ class TestSaveDataForDashboard(unittest.TestCase):
             self.assertEqual(kwargs.get("indent"), 2)
             self.assertEqual(kwargs.get("ensure_ascii"), False)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

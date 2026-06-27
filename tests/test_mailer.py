@@ -3,8 +3,9 @@ import os
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from mailer import build_html_email
-import datetime
+from mailer import build_html_email  # noqa: E402
+import datetime  # noqa: E402
+
 
 def test_build_html_email_success():
     """Test building HTML email with fully populated valid data."""
@@ -30,7 +31,7 @@ def test_build_html_email_success():
                 "name": "Defensive Corp",
                 "price": "50",
                 "is_defensive_pass": True,
-                "is_bargain": False
+                "is_bargain": False,
             }
         ],
         "buffett_valuation": [
@@ -38,15 +39,15 @@ def test_build_html_email_success():
                 "ticker": "MOAT",
                 "moat_status": "Wide",
                 "owner_earnings": 100,
-                "passed_retained_test": True
+                "passed_retained_test": True,
             }
         ],
         "emerging_players": {
             "cybersecurity": [
                 {"name": "New Cyber Startup", "ticker": "NCS", "status": "Scanned"},
-                "Unknown Player"
+                "Unknown Player",
             ]
-        }
+        },
     }
 
     watchlist = {
@@ -62,9 +63,7 @@ def test_build_html_email_success():
                 "revenue_growth": "+20%",
                 "earnings_growth": "+15%",
                 "catalyst": "New government contract.",
-                "screener": {
-                    "valuation_alerts": ["High P/E"]
-                }
+                "screener": {"valuation_alerts": ["High P/E"]},
             }
         ]
     }
@@ -113,6 +112,7 @@ def test_build_html_email_success():
 
     assert "Valuation Caution List & Warnings" in html
     assert "High P/E" in html
+
 
 def test_build_html_email_empty():
     """Test building HTML email with empty dictionaries."""
