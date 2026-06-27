@@ -298,8 +298,7 @@ def build_html_email(brief_data, watchlist):
         buffett_items = "".join(
             [
                 f"<tr><td class='stock-ticker'>{b['ticker']}</td><td>{b['moat_status']}</td><td>₹{b['owner_earnings']} Cr</td><td style='color: "
-                + ("#34d399" if b["passed_retained_test"] else "#f87171")
-                + ";'>{'Pass' if b['passed_retained_test'] else 'Fail'}</td></tr>"
+                f"{'#34d399' if b['passed_retained_test'] else '#f87171'};'>{'Pass' if b['passed_retained_test'] else 'Fail'}</td></tr>"
                 for b in buffett[:5]
             ]
         )
