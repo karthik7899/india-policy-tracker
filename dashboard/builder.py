@@ -1,6 +1,6 @@
 from typing import Dict, Any
 from analysis.graham import check_enterprising_bargain
-from analysis.buffett import calculate_owner_earnings, test_retained_earnings
+from analysis.buffett import calculate_owner_earnings
 from analysis.moat import score_economic_moat
 from analysis.scoring import calculate_aggregate_score
 from models.core import Company, CompanyFinancials, CompanyValuation

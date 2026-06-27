@@ -1,10 +1,7 @@
 import re
-import asyncio
-import urllib.parse
-from concurrent.futures import ThreadPoolExecutor, as_completed
 from logger import log
 import requests
-from config import save_watchlist, SECTOR_METADATA
+from config import save_watchlist
 from providers.yahoo import get_cached_ticker
 from .parsing import resolve_ticker_from_name
 
