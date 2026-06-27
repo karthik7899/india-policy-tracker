@@ -14,6 +14,7 @@ class CompanyValuation(BaseModel):
 
 class CompanyFinancials(BaseModel):
     market_cap: Optional[float] = None
+    pe_ratio: Optional[float] = None
     current_price: Optional[float] = None
     roce: Optional[float] = None
     roe: Optional[float] = None
@@ -49,6 +50,13 @@ class CompanyFinancials(BaseModel):
     dii_pct: Optional[float] = None
     dii_change: Optional[float] = None
 
+class CompanyScore(BaseModel):
+    overall_score: int = 0
+    confidence: str = "Low"
+    reasons: List[str] = Field(default_factory=list)
+    risks: List[str] = Field(default_factory=list)
+    recommendations: List[str] = Field(default_factory=list)
+
 class Company(BaseModel):
     ticker: str
     name: str
@@ -61,6 +69,8 @@ class Company(BaseModel):
     
     screener: Optional[Union[Dict[str, Any], CompanyFinancials]] = Field(default_factory=dict)
     valuation: Optional[CompanyValuation] = None
+    score: Optional[CompanyScore] = None
+    policy_events: List[Any] = Field(default_factory=list)
     
 class NewsEvent(BaseModel):
     company: str

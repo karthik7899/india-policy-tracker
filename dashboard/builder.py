@@ -12,6 +12,29 @@ def build_dashboard_views(data: Dict[str, Any], watchlist: Dict[str, Any]):
     margin_of_safety = []
     buffett_valuation = []
     
+    # Pre-compute policy events mapped by ticker/name
+    policy_map = {}
+    for ev in data.get("emerging_competitors", []):
+        name = ev.get("name", ev.get("company", ""))
+        policy_map.setdefault(name.upper(), []).append({"event_type": "pli", "scheme": ev.get("scheme")})
+        
+    for ev in data.get("corporate_agreements", []):
+        name = ev.get("company", "")
+        policy_map.setdefault(name.upper(), []).append({"event_type": "agreement", "title": ev.get("title")})
+        
+    for ev in data.get("product_launches", []):
+        name = ev.get("company", "")
+        policy_map.setdefault(name.upper(), []).append({"event_type": "launch", "product": ev.get("product")})
+        
+    for ev in data.get("corporate_filings", []):
+        name = ev.get("company", "")
+        policy_map.setdefault(name.upper(), []).append({"event_type": "filing", "title": ev.get("filing")})
+        
+    for ev in data.get("sebi_filings", []):
+        name = ev.get("company", "")
+        policy_map.setdefault(name.upper(), []).append({"event_type": "sebi", "title": ev.get("title")})
+
+    
     for sector, stocks in watchlist.items():
         if sector == "macro_indicators":
             continue
@@ -40,6 +63,10 @@ def build_dashboard_views(data: Dict[str, Any], watchlist: Dict[str, Any]):
                 price=price
             )
             
+            # Attach policy events
+            comp_events = policy_map.get(comp.name.upper(), []) + policy_map.get(comp.ticker.upper(), [])
+            comp.policy_events = comp_events
+            
             # Analyze
             is_bargain, ncav = check_enterprising_bargain(fin, price)
             owner_earnings = calculate_owner_earnings(fin)
@@ -57,7 +84,9 @@ def build_dashboard_views(data: Dict[str, Any], watchlist: Dict[str, Any]):
             comp.valuation = val
             
             # Calculate aggregate score
-            score = calculate_aggregate_score(comp)
+            score_obj = calculate_aggregate_score(comp)
+            comp.score = score_obj
+            score_dict = score_obj.model_dump() if hasattr(score_obj, "model_dump") else score_obj.dict()
             
             # Add to Margin of Safety list if it's a bargain or PE < 15
             pe_ratio = fin.pe_ratio or 0
@@ -69,7 +98,7 @@ def build_dashboard_views(data: Dict[str, Any], watchlist: Dict[str, Any]):
                     "pe_ratio": pe_ratio,
                     "ncav": ncav,
                     "is_bargain": is_bargain,
-                    "score": score
+                    "score": score_dict
                 })
                 
             # Add to Buffett Valuation list
@@ -78,9 +107,9 @@ def build_dashboard_views(data: Dict[str, Any], watchlist: Dict[str, Any]):
                 "name": comp.name,
                 "owner_earnings": owner_earnings,
                 "moat": moat,
-                "score": score
+                "score": score_dict
             })
             
     # Sort and add to data dictionary
-    data["margin_of_safety"] = sorted(margin_of_safety, key=lambda x: x["score"], reverse=True)
-    data["buffett_valuation"] = sorted(buffett_valuation, key=lambda x: x["score"], reverse=True)
+    data["margin_of_safety"] = sorted(margin_of_safety, key=lambda x: x["score"]["overall_score"], reverse=True)
+    data["buffett_valuation"] = sorted(buffett_valuation, key=lambda x: x["score"]["overall_score"], reverse=True)

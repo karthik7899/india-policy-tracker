@@ -20,7 +20,7 @@ async def fetch_screener_async(session, ticker, sector, price):
     url = f"https://www.screener.in/company/{ticker}/consolidated/"
     sc = {}
     try:
-        text = await fetch_text_async(session, url)
+        status, text = await fetch_text_async(session, url)
         if not text:
             log.error(f"{ticker}: Screener.in empty response")
             return ticker, None

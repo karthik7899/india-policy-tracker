@@ -59,7 +59,10 @@
                     <span class="btn-icon">🛡️</span> Margin of Safety (Deep Value)
                 </button>
                 <button type="button" class="nav-btn" data-tab="buffett" aria-controls="tab-buffett" aria-selected="false">
-                    <span class="btn-icon">🏰</span> Owner Earnings & Moats
+                    <span class="nav-icon">🏰</span> Buffett Valuation
+                </button>
+                <button type="button" class="nav-btn" data-tab="scoring" aria-controls="tab-scoring" aria-selected="false">
+                    <span class="nav-icon">🎯</span> Scoring Engine
                 </button>
                 <button type="button" class="nav-btn" data-tab="caution" aria-controls="tab-caution" aria-selected="false">
                     <span class="btn-icon">⚠️</span> Caution List
@@ -515,6 +518,33 @@
                                 </tr>
                             </thead>
                             <tbody id="buffett-table-body">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Scoring Engine Tab -->
+            <section id="tab-scoring" class="tab-pane">
+                <div class="glass-card">
+                    <div class="table-header-bar">
+                        <h3>ðŸŽ¯ AI Scoring Engine</h3>
+                        <p class="subtitle">Comprehensive evaluation across 7 dimensions (Policy, Financials, Moat, Valuation, etc).</p>
+                    </div>
+                    <div class="table-scroll-container">
+                        <table class="premium-table">
+                            <thead>
+                                <tr>
+                                    <th>Company</th>
+                                    <th>Overall Score</th>
+                                    <th>Confidence</th>
+                                    <th>Recommendations</th>
+                                    <th>Positive Reasons (Tailwinds)</th>
+                                    <th>Identified Risks</th>
+                                </tr>
+                            </thead>
+                            <tbody id="scoring-table-body">
                                 <!-- Populated dynamically -->
                             </tbody>
                         </table>

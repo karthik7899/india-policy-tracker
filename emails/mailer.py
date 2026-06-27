@@ -327,21 +327,21 @@ def build_html_email(brief_data, watchlist):
 
     if mos or buffett:
         # Margin of safety items (Graham value screen)
-        passed_mos = [m for m in mos if m["is_defensive_pass"] or m["is_bargain"]]
+        passed_mos = [m for m in mos if m.get("is_defensive_pass") or m.get("is_bargain")]
         mos_items = ""
         for m in passed_mos[:5]:
             screens = []
-            if m["is_defensive_pass"]:
+            if m.get("is_defensive_pass"):
                 screens.append("Defensive")
-            if m["is_bargain"]:
+            if m.get("is_bargain"):
                 screens.append("Bargain (NCAV)")
             screens_str = " & ".join(screens)
             mos_items += f"<tr><td class='stock-ticker'>{m['ticker']}</td><td>{m['name']}</td><td>₹{m['price']}</td><td style='color: #34d399;'>{screens_str}</td></tr>"
 
         buffett_items = "".join(
             [
-                f"<tr><td class='stock-ticker'>{b['ticker']}</td><td>{b['moat_status']}</td><td>₹{b['owner_earnings']} Cr</td><td style='color: "
-                f"{'#34d399' if b['passed_retained_test'] else '#f87171'};'>{'Pass' if b['passed_retained_test'] else 'Fail'}</td></tr>"
+                f"<tr><td class='stock-ticker'>{b['ticker']}</td><td>{b.get('moat_status', 'Unknown')}</td><td>₹{b.get('owner_earnings', 0)} Cr</td><td style='color: "
+                f"{'#34d399' if b.get('passed_retained_test') else '#f87171'};'>{'Pass' if b.get('passed_retained_test') else 'Fail'}</td></tr>"
                 for b in buffett[:5]
             ]
         )
@@ -372,9 +372,36 @@ def build_html_email(brief_data, watchlist):
         else:
             caution_items = "<tr><td colspan='4' style='text-align: center; color: #cbd5e1;'>All watchlist stocks passed core filters.</td></tr>"
 
+        scoring_list = []
+        for sector, stocks in watchlist.items():
+            for s in stocks:
+                if "score" in s and s["score"]:
+                    scoring_list.append({
+                        "ticker": s["ticker"],
+                        "score": s["score"]["overall_score"],
+                        "confidence": s["score"]["confidence"],
+                        "recommendations": "<br>".join(s["score"]["recommendations"] or []),
+                        "reasons": "<br>".join(s["score"]["reasons"] or ["None"]),
+                        "risks": "<br>".join(s["score"]["risks"] or ["None"])
+                    })
+        
+        scoring_list = sorted(scoring_list, key=lambda x: x["score"], reverse=True)
+        scoring_items = "".join(
+            [
+                f"<tr><td class='stock-ticker'>{c['ticker']}</td><td>{c['score']} ({c['confidence']})</td><td style='color: #34d399; font-size: 11px;'>{c['reasons']}</td><td style='color: #f87171; font-size: 11px;'>{c['risks']}</td></tr>"
+                for c in scoring_list[:5]
+            ]
+        )
+
         valuation_html = f"""
         <div class="section-card">
             <h3 style="color: #f59e0b; margin-bottom: 15px; font-size: 16px;">📊 Core Value Investing Matrix</h3>
+            
+            <h4 style="margin: 0 0 8px 0; color: #34d399; font-size: 12px; text-transform: uppercase;">🎯 Top Ranked AI Scores</h4>
+            <table class="stock-table" style="margin-bottom: 15px;">
+                <thead><tr><th>Ticker</th><th>Score</th><th>Tailwinds / Reasons</th><th>Identified Risks</th></tr></thead>
+                <tbody>{scoring_items}</tbody>
+            </table>
             
             <h4 style="margin: 0 0 8px 0; color: #34d399; font-size: 12px; text-transform: uppercase;">🛡️ Graham Margin of Safety Pass List</h4>
             <table class="stock-table" style="margin-bottom: 15px;">

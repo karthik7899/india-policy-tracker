@@ -273,8 +273,10 @@ function activateTab(targetTab) {
             launches: renderLaunchesTable,
             filings: renderFilingsTable,
             institutional: renderInstitutionalFlows,
+            overview: () => { /* Rendered by initDashboard */ },
             graham: renderGrahamTable,
             buffett: renderBuffettTable,
+            scoring: renderScoringTable,
             caution: renderCautionTable,
             stocks: () => renderStocksTable(document.getElementById("stock-search")?.value || "")
         };
@@ -1458,6 +1460,55 @@ function renderBuffettTable() {
             <td>${passedRetained}</td>
             <td>${moatBadge}</td>
             <td style="max-width: 250px; white-space: normal;">${alertBadges}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+// Render AI Scoring Engine Table
+function renderScoringTable() {
+    const tbody = document.getElementById("scoring-table-body");
+    if (!tbody) return;
+    tbody.innerHTML = "";
+    
+    const stocks = getStockList();
+    
+    stocks.forEach(s => {
+        // Skip macro indicators
+        if (s.sectorKey === "macro_indicators") return;
+        
+        const sc = s.screener || {};
+        const scoreData = s.score || {};
+        const overallScore = scoreData.overall_score || 0;
+        const confidence = scoreData.confidence || "Unknown";
+        
+        let confBadge = '';
+        if (confidence === "High") confBadge = `<span class="badge-success-alert">High</span>`;
+        else if (confidence === "Medium") confBadge = `<span class="badge-warning-alert">Medium</span>`;
+        else confBadge = `<span class="badge-danger-alert">${escapeHtml(confidence)}</span>`;
+        
+        let recommendations = (scoreData.recommendations || []).map(r => {
+            const cssClass = r.includes("Strong Buy") ? "badge-success-alert" : r.includes("Buy") ? "badge-success-alert" : r.includes("Monitor") ? "badge-danger-alert" : "badge-warning-alert";
+            return `<span class="${cssClass}" style="margin-right: 4px; margin-bottom: 4px; display: inline-block;">${escapeHtml(r)}</span>`;
+        }).join('');
+        
+        let reasonsHtml = (scoreData.reasons || []).map(r => `<div style="font-size: 11px; margin-bottom:2px;">ðŸ‘ ${escapeHtml(r)}</div>`).join('');
+        if (!reasonsHtml) reasonsHtml = '<span style="color: var(--text-muted);">None</span>';
+        
+        let risksHtml = (scoreData.risks || []).map(r => `<div style="font-size: 11px; margin-bottom:2px; color: var(--danger-color);">âš ï¸  ${escapeHtml(r)}</div>`).join('');
+        if (!risksHtml) risksHtml = '<span style="color: var(--text-muted);">None</span>';
+        
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td>
+                <div class="t-ticker">${escapeHtml(s.ticker)}</div>
+                <div style="font-size: 11px; font-weight: normal; margin-top:2px; color: var(--text-muted);">${escapeHtml(s.name)}</div>
+            </td>
+            <td><strong>${overallScore}</strong></td>
+            <td>${confBadge}</td>
+            <td style="max-width: 150px; white-space: normal;">${recommendations}</td>
+            <td style="max-width: 250px; white-space: normal;">${reasonsHtml}</td>
+            <td style="max-width: 250px; white-space: normal;">${risksHtml}</td>
         `;
         tbody.appendChild(tr);
     });
