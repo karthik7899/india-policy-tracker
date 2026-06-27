@@ -49,6 +49,9 @@
                 <button type="button" class="nav-btn" data-tab="launches" aria-controls="tab-launches" aria-selected="false">
                     <span class="btn-icon">🚀</span> Product Launches
                 </button>
+                <button type="button" class="nav-btn" data-tab="filings" aria-controls="tab-filings" aria-selected="false">
+                    <span class="btn-icon">📄</span> Corporate Filings
+                </button>
                 <button type="button" class="nav-btn" data-tab="institutional" aria-controls="tab-institutional" aria-selected="false">
                     <span class="btn-icon">🏛️</span> Institutional Activity
                 </button>
@@ -156,6 +159,14 @@
                         <span class="signal-copy">
                             <strong id="launches-count">0</strong>
                             <small>Product launches</small>
+                        </span>
+                        <span class="signal-arrow" aria-hidden="true">→</span>
+                    </button>
+                    <button type="button" class="signal-card" data-tab-target="filings">
+                        <span class="signal-icon signal-indigo" style="background: rgba(99, 102, 241, 0.2); color: #818cf8;">📄</span>
+                        <span class="signal-copy">
+                            <strong id="filings-count">0</strong>
+                            <small>Exchange filings</small>
                         </span>
                         <span class="signal-arrow" aria-hidden="true">→</span>
                     </button>
@@ -353,13 +364,42 @@
                         <table class="premium-table">
                             <thead>
                                 <tr>
-                                    <th>Source</th>
-                                    <th>Title / Launch Details</th>
+                                    <th>Company</th>
+                                    <th>Product</th>
+                                    <th>Industry</th>
                                     <th>Date</th>
+                                    <th>Source</th>
                                     <th>Link</th>
                                 </tr>
                             </thead>
                             <tbody id="launches-table-body">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Corporate Filings Tab -->
+            <section id="tab-filings" class="tab-pane">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Corporate Exchange Filings</h2>
+                        <span class="badge badge-indigo">Latest</span>
+                    </div>
+                    <div class="table-scroll-container">
+                        <table class="premium-table">
+                            <thead>
+                                <tr>
+                                    <th>Company</th>
+                                    <th>Filing Detail</th>
+                                    <th>Industry</th>
+                                    <th>Date</th>
+                                    <th>Exchange</th>
+                                    <th>Link</th>
+                                </tr>
+                            </thead>
+                            <tbody id="filings-table-body">
                                 <!-- Populated dynamically -->
                             </tbody>
                         </table>

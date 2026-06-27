@@ -2,7 +2,7 @@ import sys
 import os
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from metrics import _get_potential  # noqa: E402
+from analysis.rotation import _get_potential  # noqa: E402
 
 
 def test_get_potential_valid_percentage():

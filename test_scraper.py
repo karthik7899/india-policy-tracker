@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import patch
 import datetime
-from scraper import clean_news_item
+from providers.rss import clean_news_item
 
 
 class DotDict(dict):

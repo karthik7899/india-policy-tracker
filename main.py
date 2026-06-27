@@ -1,6 +1,7 @@
 import asyncio
 import datetime
 import json
+import os
 import aiohttp
 from config import load_watchlist, save_watchlist, SECTOR_METADATA
 from logger import log
@@ -10,14 +11,13 @@ from scraper import (
     fetch_advanced_rss_feeds_async,
     check_sebi_sid_filings_async,
     fetch_institutional_activity_async,
+    fetch_exchange_filings_async,
 )
-from metrics import (
-    update_live_stock_prices,
-    fetch_all_screener_fundamentals,
-    auto_curate_watchlist,
-    compile_valuation_and_institutional_data,
-)
-from mailer import build_html_email, send_email
+from analysis.growth import update_live_stock_prices
+from analysis.rotation import auto_curate_watchlist
+from dashboard.builder import build_dashboard_views
+from providers.screener import fetch_all_screener_fundamentals
+from emails.mailer import build_html_email, send_email
 
 
 def save_data_for_dashboard(brief_data, watchlist):
@@ -29,8 +29,8 @@ def save_data_for_dashboard(brief_data, watchlist):
         "briefing": brief_data,
     }
 
-    with open("dashboard_data.json", "w", encoding="utf-8") as f:
-        json.dump(output, f, indent=2, ensure_ascii=False)
+    from utils import atomic_write_json
+    atomic_write_json(output, "dashboard_data.json")
 
     log.info(
         "SUCCESS: Updated data saved to 'dashboard_data.json' for web dashboard display."
@@ -60,19 +60,31 @@ async def run_pipeline():
         adv_rss_task = fetch_advanced_rss_feeds_async(session, watchlist)
         sebi_task = check_sebi_sid_filings_async(session)
         inst_task = fetch_institutional_activity_async(session, watchlist)
+        filings_task = fetch_exchange_filings_async(session, watchlist)
 
-        pli_competitors, (agreements, launches), sebi_filings, inst_activity = (
-            await asyncio.gather(pli_task, adv_rss_task, sebi_task, inst_task)
+        pli_competitors, (agreements, launches), sebi_filings, inst_activity, corp_filings = (
+            await asyncio.gather(pli_task, adv_rss_task, sebi_task, inst_task, filings_task)
         )
 
-        data["emerging_competitors"] = pli_competitors
-        data["corporate_agreements"] = agreements
-        data["product_launches"] = launches
-        data["sebi_filings"] = sebi_filings
-        data["institutional_activity"] = inst_activity
+        from history.store import HistoryStore
+        store = HistoryStore()
+        
+        merged_competitors = store.deduplicate_and_merge('emerging_competitors', pli_competitors, ['name', 'scheme'])
+        merged_agreements = store.deduplicate_and_merge('corporate_agreements', agreements, ['company', 'title'])
+        merged_launches = store.deduplicate_and_merge('product_launches', launches, ['company', 'product'])
+        merged_filings = store.deduplicate_and_merge('corporate_filings', corp_filings, ['company', 'filing'])
+        merged_sebi = store.deduplicate_and_merge('sebi_filings', sebi_filings, ['company', 'link'])
+        merged_inst = store.deduplicate_and_merge('institutional_activity', inst_activity, ['company', 'title'])
+
+        data["emerging_competitors"] = merged_competitors
+        data["corporate_agreements"] = merged_agreements
+        data["product_launches"] = merged_launches
+        data["sebi_filings"] = merged_sebi
+        data["institutional_activity"] = merged_inst
+        data["corporate_filings"] = merged_filings
 
     # Compile margin of safety and moat analytics
-    compile_valuation_and_institutional_data(data, watchlist)
+    build_dashboard_views(data, watchlist)
 
     # Save watchlist changes
     save_watchlist(watchlist)

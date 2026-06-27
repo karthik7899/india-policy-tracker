@@ -1,0 +1,86 @@
+from typing import Dict, Any
+from analysis.graham import check_enterprising_bargain
+from analysis.buffett import calculate_owner_earnings, test_retained_earnings
+from analysis.moat import score_economic_moat
+from analysis.scoring import calculate_aggregate_score
+from models.core import Company, CompanyFinancials, CompanyValuation
+
+def build_dashboard_views(data: Dict[str, Any], watchlist: Dict[str, Any]):
+    """
+    Compiles valuation and moat metrics into specialized views for the dashboard.
+    """
+    margin_of_safety = []
+    buffett_valuation = []
+    
+    for sector, stocks in watchlist.items():
+        if sector == "macro_indicators":
+            continue
+            
+        for stock in stocks:
+            sc_data = stock.get("screener")
+            if not sc_data:
+                continue
+                
+            # Coerce into Pydantic model for analysis
+            if isinstance(sc_data, dict):
+                try:
+                    fin = CompanyFinancials(**sc_data)
+                except Exception as e:
+                    # Ignore validation errors for missing fields on empty responses
+                    continue
+            else:
+                fin = sc_data
+                
+            price = float(stock.get("price") or 0.0)
+            
+            # Create full Company model
+            comp = Company(
+                ticker=stock.get("ticker", ""),
+                name=stock.get("name", ""),
+                price=price
+            )
+            
+            # Analyze
+            is_bargain, ncav = check_enterprising_bargain(fin, price)
+            owner_earnings = calculate_owner_earnings(fin)
+            moat = score_economic_moat(fin)
+            
+            # Build Valuation Model
+            val = CompanyValuation(
+                is_bargain=is_bargain,
+                ncav_per_share=ncav,
+                owner_earnings=owner_earnings,
+                moat_status=moat
+            )
+            
+            comp.screener = fin
+            comp.valuation = val
+            
+            # Calculate aggregate score
+            score = calculate_aggregate_score(comp)
+            
+            # Add to Margin of Safety list if it's a bargain or PE < 15
+            pe_ratio = fin.pe_ratio or 0
+            if is_bargain or (pe_ratio > 0 and pe_ratio < 15):
+                margin_of_safety.append({
+                    "ticker": comp.ticker,
+                    "name": comp.name,
+                    "price": comp.price,
+                    "pe_ratio": pe_ratio,
+                    "ncav": ncav,
+                    "is_bargain": is_bargain,
+                    "score": score
+                })
+                
+            # Add to Buffett Valuation list
+            buffett_valuation.append({
+                "ticker": comp.ticker,
+                "name": comp.name,
+                "owner_earnings": owner_earnings,
+                "moat": moat,
+                "score": score
+            })
+            
+    # Sort and add to data dictionary
+    data["margin_of_safety"] = sorted(margin_of_safety, key=lambda x: x["score"], reverse=True)
+    data["buffett_valuation"] = sorted(buffett_valuation, key=lambda x: x["score"], reverse=True)

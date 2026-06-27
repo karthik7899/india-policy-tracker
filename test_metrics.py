@@ -1,5 +1,5 @@
 import unittest
-from metrics import detect_emerging_players
+from analysis.rotation import detect_emerging_players
 
 
 class TestDetectEmergingPlayers(unittest.TestCase):

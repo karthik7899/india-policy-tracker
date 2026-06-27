@@ -1,7 +1,8 @@
-feedparser
-requests
+feedparser~=6.0
+requests~=2.34
 yfinance
-aiohttp
-vaderSentiment
-mftool
-lxml
+aiohttp~=3.14
+vaderSentiment~=3.3
+mftool~=3.3
+lxml~=6.1
+pydantic

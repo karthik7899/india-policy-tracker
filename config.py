@@ -2082,8 +2082,8 @@ def save_watchlist(watchlist):
         os.path.dirname(os.path.abspath(__file__)), "watchlist.json"
     )
     try:
-        with open(watchlist_path, "w", encoding="utf-8") as f:
-            json.dump(watchlist, f, indent=2, ensure_ascii=False)
+        from utils import atomic_write_json
+        atomic_write_json(watchlist, watchlist_path)
         return True
-    except Exception:
+    except OSError:
         return False

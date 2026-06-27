@@ -64,6 +64,7 @@ def build_html_email(brief_data, watchlist):
             "emerging_competitors",
             "corporate_agreements",
             "product_launches",
+            "corporate_filings",
             "sebi_filings",
             "institutional_activity",
             "margin_of_safety",
@@ -240,7 +241,7 @@ def build_html_email(brief_data, watchlist):
     if launches:
         items = "".join(
             [
-                f"<li><strong>{launch['source']}</strong>: {launch['title']}</li>"
+                f"<li><strong>{launch.get('company', 'Unknown')}</strong> ({launch.get('industry', 'Manufacturing')}): {launch.get('product', launch.get('title', ''))} <em style='font-size: 11px; color: #94a3b8;'>[{launch.get('source', 'News')}]</em></li>"
                 for launch in launches[:5]
             ]
         )
@@ -248,6 +249,48 @@ def build_html_email(brief_data, watchlist):
         <div class="section-card">
             <h3 style="color: #34d399; margin-bottom: 10px; font-size: 16px;">🚀 Product Launches & Innovations</h3>
             <ul style="font-size: 13px; line-height: 1.6; padding-left: 20px; color: #cbd5e1;">{items}</ul>
+        </div>
+        """
+
+    filings_html = ""
+    filings = brief_data.get("corporate_filings", [])
+    if filings:
+        items = "".join(
+            [
+                f"<li><strong>{f.get('company', 'Unknown')}</strong> ({f.get('industry', 'Corporate')}): {f.get('filing', '')} <em style='font-size: 11px; color: #94a3b8;'>[{f.get('source', 'Exchange')}]</em></li>"
+                for f in filings[:5]
+            ]
+        )
+        filings_html = f"""
+        <div class="section-card">
+            <h3 style="color: #6366f1; margin-bottom: 10px; font-size: 16px;">📄 Corporate Exchange Filings</h3>
+            <ul style="font-size: 13px; line-height: 1.6; padding-left: 20px; color: #cbd5e1;">{items}</ul>
+        </div>
+        """
+
+    # Global Emerging Competitors from PLI
+    emerging_competitors = brief_data.get("emerging_competitors", [])
+    emerging_html_global = ""
+    if emerging_competitors:
+        grouped = {}
+        for c in emerging_competitors:
+            name = c.get("name", "Unknown")
+            if name not in grouped:
+                grouped[name] = {"ticker": c.get("ticker", ""), "status": c.get("status", ""), "schemes": []}
+            if c.get("announcement"):
+                grouped[name]["schemes"].append(c.get("announcement"))
+                
+        emerging_items = ""
+        for name, data in grouped.items():
+            ticker_str = f" ({data['ticker']})" if data['ticker'] else ""
+            status_html = f"<span class='badge badge-success-alert' style='font-size: 8px;'>{data['status']}</span>"
+            schemes_html = "".join([f"<li>{s}</li>" for s in data["schemes"]])
+            emerging_items += f"<li><strong>{name}</strong>{ticker_str} {status_html}<ul style='padding-left: 20px; font-size: 11px; color: #94a3b8;'>{schemes_html}</ul></li>"
+            
+        emerging_html_global = f"""
+        <div class="section-card">
+            <h3 style="color: #60a5fa; margin-bottom: 10px; font-size: 16px;"> Emerging Competitors (PLI Approvals)</h3>
+            <ul style="font-size: 13px; padding-left: 20px; color: #cbd5e1;">{emerging_items}</ul>
         </div>
         """
 
@@ -353,7 +396,7 @@ def build_html_email(brief_data, watchlist):
         </div>
         """
 
-    body_html += agreements_html + launches_html + inst_html + valuation_html
+    body_html += agreements_html + launches_html + filings_html + emerging_html_global + inst_html + valuation_html
 
     body_html += """
             <div class="footer">
@@ -410,6 +453,6 @@ def send_email(html_content):
         server.quit()
         log.info(f"SUCCESS: Daily briefing email sent to {receiver_email}!")
         return True
-    except Exception as e:
+    except (smtplib.SMTPException, OSError) as e:
         log.error(f"FAILED: SMTP connection error: {e}")
         return False

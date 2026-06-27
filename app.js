@@ -271,6 +271,7 @@ function activateTab(targetTab) {
             sectors: initSectorsTab,
             agreements: renderAgreementsTable,
             launches: renderLaunchesTable,
+            filings: renderFilingsTable,
             institutional: renderInstitutionalFlows,
             graham: renderGrahamTable,
             buffett: renderBuffettTable,
@@ -355,6 +356,7 @@ function initDashboard(data, isFallback = false) {
     const briefing = data.briefing || {};
     setText("agreements-count", (briefing.corporate_agreements || []).length);
     setText("launches-count", (briefing.product_launches || []).length);
+    setText("filings-count", (briefing.corporate_filings || []).length);
     setText(
         "institutional-count",
         (briefing.institutional_activity || []).length + (briefing.sebi_filings || []).length
@@ -598,14 +600,25 @@ function renderEmergingRadar(data) {
     container.innerHTML = "";
     
     const entries = [];
+    const groupedCompetitors = {};
     (data.briefing.emerging_competitors || []).forEach(player => {
-        entries.push({
-            ...player,
-            sectorLabel: "PLI approvals",
-            sectorIcon: "🏭",
-            reason: player.announcement || "Detected in a recent PLI approval announcement."
+        const key = `${player.ticker || ""}|${player.name || ""}`.toLowerCase();
+        if (!groupedCompetitors[key]) {
+            groupedCompetitors[key] = {
+                ...player,
+                sectorLabel: "PLI approvals",
+                sectorIcon: "🏭",
+                schemes: new Set([player.announcement || "Detected in a recent PLI approval announcement."])
+            };
+        } else {
+            groupedCompetitors[key].schemes.add(player.announcement || "Detected in a recent PLI approval announcement.");
+        }
+    });
 
-        });
+    Object.values(groupedCompetitors).forEach(comp => {
+        const schemeList = Array.from(comp.schemes).map(s => `<li>${escapeHtml(s)}</li>`).join("");
+        comp.reason = `<ul style="margin-left: 20px; margin-top: 5px;">${schemeList}</ul>`;
+        entries.push(comp);
     });
 
     Object.entries(data.briefing.emerging_players || {}).forEach(([sectorKey, players]) => {
@@ -661,7 +674,7 @@ function renderEmergingRadar(data) {
                     ${player.ticker ? `<span class="hl-ticker radar-ticker">${escapeHtml(player.ticker)}</span>` : ""}
                 </div>
                 <span class="radar-name">${escapeHtml(player.name || player.ticker || "Unknown company")}</span>
-                ${player.reason ? `<span class="radar-reason">${escapeHtml(player.reason)}</span>` : ""}
+                ${player.reason ? `<span class="radar-reason">${player.reason}</span>` : ""}
             </div>
             <div class="radar-meta">
                 <span class="radar-sector">${escapeHtml(player.sectorIcon)} ${escapeHtml(player.sectorLabel)}</span>
@@ -1244,10 +1257,37 @@ function renderLaunchesTable() {
     launches.forEach(l => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-            <td><span class="source-badge">${escapeHtml(l.source || "News")}</span></td>
-            <td><strong>${escapeHtml(l.title || "Untitled update")}</strong></td>
+            <td><strong>${escapeHtml(l.company || "Unknown")}</strong></td>
+            <td><strong>${escapeHtml(l.product || l.title || "Untitled update")}</strong></td>
+            <td><span class="badge badge-neutral">${escapeHtml(l.industry || "Manufacturing")}</span></td>
             <td>${escapeHtml(l.date || "Date unavailable")}</td>
+            <td><span class="source-badge">${escapeHtml(l.source || "News")}</span></td>
             <td><a href="${safeExternalUrl(l.link)}" class="article-link" target="_blank" rel="noopener noreferrer">View article</a></td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+function renderFilingsTable() {
+    const tbody = document.getElementById("filings-table-body");
+    if (!tbody) return;
+    tbody.innerHTML = "";
+
+    const filings = appData.briefing.corporate_filings || [];
+    if (filings.length === 0) {
+        setTableEmpty(tbody, 6, "No recent filings", "No matching corporate exchange filings were found in this cycle.");
+        return;
+    }
+
+    filings.forEach(f => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td><strong>${escapeHtml(f.company || "Unknown")}</strong></td>
+            <td><strong>${escapeHtml(f.filing || "Untitled filing")}</strong></td>
+            <td><span class="badge badge-neutral">${escapeHtml(f.industry || "Corporate")}</span></td>
+            <td>${escapeHtml(f.date || "Date unavailable")}</td>
+            <td><span class="source-badge">${escapeHtml(f.source || "Exchange")}</span></td>
+            <td><a href="${safeExternalUrl(f.link)}" class="article-link" target="_blank" rel="noopener noreferrer">View filing</a></td>
         `;
         tbody.appendChild(tr);
     });

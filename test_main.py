@@ -4,9 +4,8 @@ import main
 
 
 class TestSaveDataForDashboard(unittest.TestCase):
-    @patch("main.json.dump")
-    @patch("builtins.open", new_callable=mock_open)
-    def test_save_data_for_dashboard(self, mock_file, mock_json_dump):
+    @patch("utils.atomic_write_json")
+    def test_save_data_for_dashboard(self, mock_atomic_write):
         brief_data = {
             "policy_news": ["policy"],
             "market_news": ["market"],
@@ -21,13 +20,11 @@ class TestSaveDataForDashboard(unittest.TestCase):
         else:
             main.save_data_for_dashboard(brief_data, watchlist)
 
-        self.assertTrue(mock_file.called)
-        self.assertEqual(mock_file.call_args[0][0], "dashboard_data.json")
-        self.assertEqual(mock_file.call_args[0][1], "w")
+        self.assertTrue(mock_atomic_write.called)
+        self.assertEqual(mock_atomic_write.call_args[0][1], "dashboard_data.json")
 
-        self.assertTrue(mock_json_dump.called)
 
-        args, kwargs = mock_json_dump.call_args
+        args, kwargs = mock_atomic_write.call_args
         output_data = args[0]
 
         self.assertIn("last_updated", output_data)
@@ -39,12 +36,9 @@ class TestSaveDataForDashboard(unittest.TestCase):
             self.assertEqual(output_data["news"], ["policy", "market"])
             self.assertEqual(output_data["emerging_players"], ["player"])
             self.assertEqual(output_data["curation_log"], ["log"])
-            self.assertEqual(kwargs.get("indent"), 4)
         else:
             self.assertEqual(output_data["briefing"], brief_data)
             self.assertIn("sectors", output_data)
-            self.assertEqual(kwargs.get("indent"), 2)
-            self.assertEqual(kwargs.get("ensure_ascii"), False)
 
 
 if __name__ == "__main__":

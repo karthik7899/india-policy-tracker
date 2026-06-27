@@ -23,7 +23,7 @@ This platform runs entirely in the cloud for free using **GitHub Actions** and *
   * **Logistics & Heavy Capital:** Cargo handling, corridor connectivity, and freight transit infrastructure (Container Corporation, BHEL, Cummins India).
   * **Aerospace & Defence:** Precision avionics, indigenous manufacture, and military launch platforms (HAL, BEL, Astra Microwave).
   * **Semiconductors & Equipment:** Cleanroom tooling, design fabs, and machinery (SPEL Semiconductor, RIR Power, ASMPT).
-  * **Macro Indicators:** Broad manufacturing benchmark index funds and sector ETFs (MANUETF, HDFCMANETF).
+  * **Macro Indicators:** Broad manufacturing benchmark index funds and sector ETFs (MANUETF, HDFCMANETF, MAKEINDIA).
 * **Value Investing Screeners (Graham & Buffett):**
   * **Benjamin Graham Screens:** Dynamically calculates expected growth intrinsic value, enterprising bargain NCAV net-assets status, and flags P/E screen deviations.
   * **Warren Buffett Screens:** Evaluates owner earnings (net profit + depreciation - capex), computes the $1 retained earnings test ratio, and tracks qualitative moat strength.
