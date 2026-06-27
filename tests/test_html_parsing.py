@@ -1,4 +1,3 @@
-import pytest
 from bs4 import BeautifulSoup
 from analysis.parsing import extract_row_values, calculate_trend, calculate_growth
 

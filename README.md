@@ -27,10 +27,14 @@ This platform runs entirely in the cloud for free using **GitHub Actions** and *
 * **Value Investing Screeners (Graham & Buffett):**
   * **Benjamin Graham Screens:** Dynamically calculates expected growth intrinsic value, enterprising bargain NCAV net-assets status, and flags P/E screen deviations.
   * **Warren Buffett Screens:** Evaluates owner earnings (net profit + depreciation - capex), computes the $1 retained earnings test ratio, and tracks qualitative moat strength.
+* **Early Warning System:**
+  * **Prioritized Signal Feed:** Synthesizes signals already collected across the pipeline (promoter/FII/DII holding shifts, revenue contraction, liquidity & leverage stress, margin compression, valuation flags, and intraday price breakdowns) into a single severity-ranked feed (Critical → Low).
+  * **Risk & Opportunity Detection:** Flags deteriorating positions (e.g. promoter exits, FII outflows) alongside emerging opportunities (institutional accumulation, active policy catalysts, momentum breakouts), surfaced both at the top of the daily email and in a dedicated dashboard tab.
 * **Institutional Flow Tracker:**
   * **Holding Pattern Changes:** Scrapes Screener.in to extract promoter, domestic (DII/Mutual Fund), and foreign (FII) quarterly holding shifts.
   * **Block & Bulk Deals Parser:** Scrapes and structures recent market transactions, identifying the buyer, action (BUY/SELL), target stock, transaction details, and direct media link.
   * **Thematic Fund Filings:** Scrapes SEBI mutual fund filings (Scheme Information Documents) to watch for upcoming thematic fund launches.
+  * **Institutional Accumulation Baseline (Backtesting):** Ingests historical mutual-fund NAV data (AMFI / `captn3m0`-style dataset, free) and computes a backtesting baseline of trailing NAV returns and an Accelerating/Steady/Decelerating accumulation trend per policy theme — a proxy for institutional capital compounding into manufacturing, semiconductors, defence, and logistics. The data source is overridable via the `MF_DATA_BASE_URL` environment variable.
 * **Automated Watchlist Rotation:** 
   * Checks emerging competitors discovered in news feeds.
   * Filters candidates through a strict **15% QoQ revenue growth threshold** (via Screener) and rotates weaker-performing watchlist tickers with stronger ones.

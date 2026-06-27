@@ -1,10 +1,6 @@
-import re
-import asyncio
-import urllib.parse
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from logger import log
 import yfinance as yf
-from config import save_watchlist
 
 
 def update_single_stock(stock, prefetched_prices=None):

@@ -1,5 +1,4 @@
 import yfinance as yf
-from logger import log
 
 _TICKER_CACHE = {}
 

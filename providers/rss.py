@@ -1,14 +1,11 @@
-from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-
-analyzer = SentimentIntensityAnalyzer()
 import datetime
-from bs4 import BeautifulSoup
-
 import feedparser
 import urllib.parse
+from bs4 import BeautifulSoup
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from logger import log
-from utils import fetch_text_async
-import re
+
+analyzer = SentimentIntensityAnalyzer()
 
 
 def clean_news_item(entry, query_term):

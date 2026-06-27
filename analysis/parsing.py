@@ -1,9 +1,5 @@
-import re
-import asyncio
 import urllib.parse
-from concurrent.futures import ThreadPoolExecutor, as_completed
 from logger import log
-import requests
 
 
 def resolve_ticker_from_name(company_name, session=None):

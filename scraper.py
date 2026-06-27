@@ -1,7 +1,7 @@
 import asyncio
 import aiohttp
 import feedparser
-import datetime
+import datetime  # noqa: F401  (referenced via patch("scraper.datetime...") in tests)
 from bs4 import BeautifulSoup
 import urllib.parse
 import re
@@ -52,10 +52,6 @@ async def fetch_all_feeds_async():
         )
 
     return today_brief
-
-
-import re
-from bs4 import BeautifulSoup
 
 
 def _extract_pli_data_from_html(html, title, published_date=""):
