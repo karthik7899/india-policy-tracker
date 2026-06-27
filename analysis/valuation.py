@@ -3,6 +3,28 @@ from models.core import CompanyFinancials
 from .graham import calculate_graham_intrinsic_value
 
 
+def check_hyper_growth_risk(fin: CompanyFinancials) -> bool:
+    """Hyper-Growth Reality Check (Prompt 8).
+
+    Flags an expensive stock (P/E > 30) whose top-line growth is decelerating,
+    warning of a potential valuation collapse. Deceleration is detected either
+    from a sequential drop in the recent quarterly revenue trend or from a
+    quarter-on-quarter growth rate that has cooled below the high-growth bar.
+    """
+    pe_ratio = fin.pe_ratio or 0
+    if pe_ratio <= 30:
+        return False
+
+    trend = fin.quarterly_revenue_growth or []
+    if len(trend) >= 2 and trend[-1] < trend[-2]:
+        return True
+
+    if fin.qoq_sales_growth is not None and fin.qoq_sales_growth < 15.0:
+        return True
+
+    return False
+
+
 def generate_valuation_alerts(fin: CompanyFinancials, price: float) -> List[str]:
     alerts = []
 
@@ -25,5 +47,10 @@ def generate_valuation_alerts(fin: CompanyFinancials, price: float) -> List[str]
     div_yield = fin.dividend_yield or 0
     if div_yield == 0:
         alerts.append("No Dividend Yield")
+
+    if check_hyper_growth_risk(fin):
+        alerts.append(
+            "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
+        )
 
     return alerts
