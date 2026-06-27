@@ -15,39 +15,7 @@
       "target_high": "525.00",
       "target_low": "300.00",
       "rec_score": 2.6,
-      "screener": {
-        "market_cap": 124283.0,
-        "current_price": 389.0,
-        "pe_ratio": 32.3,
-        "dividend_yield": 0.64,
-        "roce": 10.5,
-        "roe": 10.2,
-        "q_opm": 17.0,
-        "quarterly_ebitda_margin": [
-          20.0,
-          21.0,
-          22.0,
-          17.0
-        ],
-        "opm_expansion": -5.0,
-        "q_eps": 3.12,
-        "operating_margin_trend": [
-          16.0,
-          14.0,
-          17.0,
-          19.0,
-          21.0
-        ],
-        "capex": 0.0,
-        "rd_pct": 3.0,
-        "roce_trend": [
-          9.0,
-          12.0,
-          11.0,
-          11.0,
-          11.0
-        ]
-      }
+      "screener": {}
     },
     {
       "ticker": "SUZLON",
@@ -95,6 +63,36 @@
           25.0,
           33.0,
           35.0
+        ],
+        "graham_intrinsic_value": 106.6,
+        "owner_earnings": 0.0,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Strong (Wide Moat)",
+        "is_bargain": false,
+        "net_current_assets": null,
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "No Dividend Yield"
+        ]
+      },
+      "score": {
+        "overall_score": 19,
+        "confidence": "Medium",
+        "reasons": [
+          "Policy Notification: Waaree Energies, Suzlon Energy, NTPC Green: How renewable energy stocks are performing on March 10",
+          "Policy Notification: Suzlon bags 306 MW wind turbine orders from Yanara in Rajasthan",
+          "Policy Notification: Suzlon Energy share price rises over 3% after securing 100 MW wind energy project from GAIL",
+          "High Return on Capital (ROCE: 35.1%)",
+          "High Return on Equity (ROE: 40.6%)",
+          "Wide Economic Moat (Sustained Margin Expansion)",
+          "Undervalued vs Graham Intrinsic Value (106.6)"
+        ],
+        "risks": [
+          "No Dividend Yield"
+        ],
+        "recommendations": [
+          "Strong Buy Candidate",
+          "Ensure risks are hedged or sizing is adjusted appropriately."
         ]
       }
     },
@@ -144,6 +142,33 @@
           10.0,
           9.0,
           7.0
+        ],
+        "graham_intrinsic_value": 313.3,
+        "owner_earnings": 0.0,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Weak/None",
+        "is_bargain": false,
+        "net_current_assets": null,
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "Fails P/E Screen (P/E 137.0 > 15 & Price > Intrinsic)",
+          "No Dividend Yield"
+        ]
+      },
+      "score": {
+        "overall_score": 1,
+        "confidence": "Medium",
+        "reasons": [
+          "Sector benefits from macro policy tailwinds (Fallback)"
+        ],
+        "risks": [
+          "Overvalued vs Graham Intrinsic Value (313.3)",
+          "Fails P/E Screen (P/E 137.0 > 15 & Price > Intrinsic)",
+          "No Dividend Yield"
+        ],
+        "recommendations": [
+          "Monitor / Underweight",
+          "Ensure risks are hedged or sizing is adjusted appropriately."
         ]
       }
     }
@@ -166,7 +191,31 @@
       "rec_score": 1.0,
       "screener": {
         "capex": 0.0,
-        "rd_pct": 1.5
+        "rd_pct": 1.5,
+        "graham_intrinsic_value": 0.0,
+        "owner_earnings": 0.0,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Weak/None",
+        "is_bargain": false,
+        "net_current_assets": null,
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "No Dividend Yield"
+        ]
+      },
+      "score": {
+        "overall_score": 1,
+        "confidence": "Low",
+        "reasons": [
+          "Sector benefits from macro policy tailwinds (Fallback)"
+        ],
+        "risks": [
+          "No Dividend Yield"
+        ],
+        "recommendations": [
+          "Monitor / Underweight",
+          "Ensure risks are hedged or sizing is adjusted appropriately."
+        ]
       }
     },
     {
@@ -184,39 +233,7 @@
       "target_high": "655.00",
       "target_low": "440.00",
       "rec_score": null,
-      "screener": {
-        "market_cap": 29942.0,
-        "current_price": 613.0,
-        "pe_ratio": 629.0,
-        "dividend_yield": 0.0,
-        "roce": 7.75,
-        "roe": 2.24,
-        "q_opm": 14.0,
-        "quarterly_ebitda_margin": [
-          13.0,
-          12.0,
-          10.0,
-          14.0
-        ],
-        "opm_expansion": 4.0,
-        "q_eps": 1.21,
-        "operating_margin_trend": [
-          12.0,
-          13.0,
-          12.0,
-          10.0,
-          12.0
-        ],
-        "capex": 0.0,
-        "rd_pct": 1.5,
-        "roce_trend": [
-          8.0,
-          11.0,
-          3.0,
-          3.0,
-          8.0
-        ]
-      }
+      "screener": {}
     },
     {
       "ticker": "ANANTRAJ",
@@ -264,6 +281,26 @@
           9.0,
           11.0,
           12.0
+        ],
+        "graham_intrinsic_value": 529.1,
+        "owner_earnings": 0.0,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Weak/None",
+        "is_bargain": false,
+        "net_current_assets": null,
+        "hyper_growth_warning": false,
+        "valuation_alerts": []
+      },
+      "score": {
+        "overall_score": 3,
+        "confidence": "Medium",
+        "reasons": [
+          "Sector benefits from macro policy tailwinds (Fallback)",
+          "Undervalued vs Graham Intrinsic Value (529.1)"
+        ],
+        "risks": [],
+        "recommendations": [
+          "Monitor / Underweight"
         ]
       }
     }
@@ -315,6 +352,32 @@
           64.0,
           65.0,
           63.0
+        ],
+        "graham_intrinsic_value": 4929.6,
+        "owner_earnings": 0.0,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Strong (Wide Moat)",
+        "is_bargain": false,
+        "net_current_assets": null,
+        "hyper_growth_warning": false,
+        "valuation_alerts": []
+      },
+      "score": {
+        "overall_score": 22,
+        "confidence": "Medium",
+        "reasons": [
+          "Capacity/Product Launch: TCS Unveils 2026 Edition of TCS InQuizitive; Entries Now Open for Ahmedabad Students",
+          "Policy Notification: TCS Acquires Coastal Cloud, a Leading US Salesforce Consulting Firm",
+          "Policy Notification: Stocks to Watch Today: TCS, NTPC, Shanthi Gears, Gillette, Bharti Airtel, Shree Ram Twistex, IndiQube...",
+          "Policy Notification: Stocks to watch, April 9: Bosch, TCS, GM Breweries, BEML, ITC Hotels, KEC International, Lupin",
+          "High Return on Capital (ROCE: 63.0%)",
+          "High Return on Equity (ROE: 51.8%)",
+          "Wide Economic Moat (Sustained Margin Expansion)",
+          "Undervalued vs Graham Intrinsic Value (4929.6)"
+        ],
+        "risks": [],
+        "recommendations": [
+          "Strong Buy Candidate"
         ]
       }
     },
@@ -363,6 +426,31 @@
           6.0,
           -0.0,
           -5.0
+        ],
+        "graham_intrinsic_value": -478.4,
+        "owner_earnings": 0.0,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Weak/None",
+        "is_bargain": false,
+        "net_current_assets": null,
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "No Dividend Yield"
+        ]
+      },
+      "score": {
+        "overall_score": 1,
+        "confidence": "Medium",
+        "reasons": [
+          "Sector benefits from macro policy tailwinds (Fallback)"
+        ],
+        "risks": [
+          "Overvalued vs Graham Intrinsic Value (-478.4)",
+          "No Dividend Yield"
+        ],
+        "recommendations": [
+          "Monitor / Underweight",
+          "Ensure risks are hedged or sizing is adjusted appropriately."
         ]
       }
     }
@@ -414,6 +502,37 @@
           28.0,
           19.0,
           30.0
+        ],
+        "graham_intrinsic_value": 1866.8,
+        "owner_earnings": 0.0,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Strong (Wide Moat)",
+        "is_bargain": false,
+        "net_current_assets": null,
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "Fails P/E Screen (P/E 114.0 > 15 & Price > Intrinsic)",
+          "No Dividend Yield"
+        ]
+      },
+      "score": {
+        "overall_score": 7,
+        "confidence": "Medium",
+        "reasons": [
+          "Sector benefits from macro policy tailwinds (Fallback)",
+          "Operating Margin Expansion (+6.0%)",
+          "High Return on Capital (ROCE: 29.6%)",
+          "High Return on Equity (ROE: 25.4%)",
+          "Wide Economic Moat (Sustained Margin Expansion)"
+        ],
+        "risks": [
+          "Overvalued vs Graham Intrinsic Value (1866.8)",
+          "Fails P/E Screen (P/E 114.0 > 15 & Price > Intrinsic)",
+          "No Dividend Yield"
+        ],
+        "recommendations": [
+          "Hold / Neutral",
+          "Ensure risks are hedged or sizing is adjusted appropriately."
         ]
       }
     },
@@ -480,6 +599,31 @@
           10.0,
           11.0,
           7.0
+        ],
+        "graham_intrinsic_value": -78.0,
+        "owner_earnings": 0.0,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Weak/None",
+        "is_bargain": false,
+        "net_current_assets": null,
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "Fails P/E Screen (P/E 20.2 > 15 & Price > Intrinsic)"
+        ]
+      },
+      "score": {
+        "overall_score": 1,
+        "confidence": "Medium",
+        "reasons": [
+          "Sector benefits from macro policy tailwinds (Fallback)"
+        ],
+        "risks": [
+          "Overvalued vs Graham Intrinsic Value (-78.0)",
+          "Fails P/E Screen (P/E 20.2 > 15 & Price > Intrinsic)"
+        ],
+        "recommendations": [
+          "Monitor / Underweight",
+          "Ensure risks are hedged or sizing is adjusted appropriately."
         ]
       }
     },
@@ -528,6 +672,32 @@
           11.0,
           -10.0,
           -2.0
+        ],
+        "graham_intrinsic_value": 1801.8,
+        "owner_earnings": 0.0,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Weak/None",
+        "is_bargain": false,
+        "net_current_assets": null,
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "No Dividend Yield"
+        ]
+      },
+      "score": {
+        "overall_score": 7,
+        "confidence": "Medium",
+        "reasons": [
+          "Policy Notification: Zen Technologies jumps 9%, ideaForge hits upper circuit as India eyes Rs 20,000 crore drone buy",
+          "Operating Margin Expansion (+128.0%)",
+          "Undervalued vs Graham Intrinsic Value (1801.8)"
+        ],
+        "risks": [
+          "No Dividend Yield"
+        ],
+        "recommendations": [
+          "Hold / Neutral",
+          "Ensure risks are hedged or sizing is adjusted appropriately."
         ]
       }
     },
@@ -546,39 +716,7 @@
       "target_high": "695.00",
       "target_low": "488.00",
       "rec_score": 2.0,
-      "screener": {
-        "market_cap": 10134.0,
-        "current_price": 445.0,
-        "pe_ratio": 12.8,
-        "dividend_yield": 2.92,
-        "roce": 23.5,
-        "roe": 18.1,
-        "q_opm": 16.0,
-        "quarterly_ebitda_margin": [
-          15.0,
-          15.0,
-          17.0,
-          16.0
-        ],
-        "opm_expansion": -1.0,
-        "q_eps": 9.26,
-        "operating_margin_trend": [
-          15.0,
-          11.0,
-          18.0,
-          15.0,
-          16.0
-        ],
-        "capex": 0.0,
-        "rd_pct": 1.5,
-        "roce_trend": [
-          21.0,
-          15.0,
-          25.0,
-          21.0,
-          24.0
-        ]
-      }
+      "screener": {}
     }
   ],
   "manufacturing_electronics": [
@@ -628,6 +766,36 @@
           29.0,
           40.0,
           42.0
+        ],
+        "graham_intrinsic_value": 5482.1,
+        "owner_earnings": 0.0,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Strong (Wide Moat)",
+        "is_bargain": false,
+        "net_current_assets": null,
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "Fails P/E Screen (P/E 51.0 > 15 & Price > Intrinsic)"
+        ]
+      },
+      "score": {
+        "overall_score": 17,
+        "confidence": "Medium",
+        "reasons": [
+          "Policy Notification: Dixon to BEL",
+          "Policy Notification: Trade Spotlight: How should you trade BHEL, Dixon Technologies, Waaree Energies, Sona BLW Precision, Ather...",
+          "Policy Notification: Dixon Tech Completes ₹553 Cr Q Tech Deal; Stock Falls 4%",
+          "High Return on Capital (ROCE: 42.0%)",
+          "High Return on Equity (ROE: 37.4%)",
+          "Wide Economic Moat (Sustained Margin Expansion)"
+        ],
+        "risks": [
+          "Overvalued vs Graham Intrinsic Value (5482.1)",
+          "Fails P/E Screen (P/E 51.0 > 15 & Price > Intrinsic)"
+        ],
+        "recommendations": [
+          "Strong Buy Candidate",
+          "Ensure risks are hedged or sizing is adjusted appropriately."
         ]
       }
     },
@@ -677,6 +845,33 @@
           15.0,
           14.0,
           13.0
+        ],
+        "graham_intrinsic_value": 1769.3,
+        "owner_earnings": 0.0,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Weak/None",
+        "is_bargain": false,
+        "net_current_assets": null,
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "Fails P/E Screen (P/E 59.8 > 15 & Price > Intrinsic)",
+          "No Dividend Yield"
+        ]
+      },
+      "score": {
+        "overall_score": 4,
+        "confidence": "Medium",
+        "reasons": [
+          "Policy Notification: Kaynes Technology Q3 Results: Revenue Up 22% to ₹8.04B, Files Investor Presentation"
+        ],
+        "risks": [
+          "Overvalued vs Graham Intrinsic Value (1769.3)",
+          "Fails P/E Screen (P/E 59.8 > 15 & Price > Intrinsic)",
+          "No Dividend Yield"
+        ],
+        "recommendations": [
+          "Monitor / Underweight",
+          "Ensure risks are hedged or sizing is adjusted appropriately."
         ]
       }
     },
@@ -726,6 +921,34 @@
           47.0,
           37.0,
           27.0
+        ],
+        "graham_intrinsic_value": 301.6,
+        "owner_earnings": 0.0,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Strong (Wide Moat)",
+        "is_bargain": false,
+        "net_current_assets": null,
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "Fails P/E Screen (P/E 121.0 > 15 & Price > Intrinsic)"
+        ]
+      },
+      "score": {
+        "overall_score": 6,
+        "confidence": "Medium",
+        "reasons": [
+          "Sector benefits from macro policy tailwinds (Fallback)",
+          "High Return on Capital (ROCE: 27.0%)",
+          "High Return on Equity (ROE: 20.8%)",
+          "Wide Economic Moat (Sustained Margin Expansion)"
+        ],
+        "risks": [
+          "Overvalued vs Graham Intrinsic Value (301.6)",
+          "Fails P/E Screen (P/E 121.0 > 15 & Price > Intrinsic)"
+        ],
+        "recommendations": [
+          "Hold / Neutral",
+          "Ensure risks are hedged or sizing is adjusted appropriately."
         ]
       }
     }
@@ -777,6 +1000,34 @@
           29.0,
           25.0,
           20.0
+        ],
+        "graham_intrinsic_value": 335.4,
+        "owner_earnings": 0.0,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Strong (Wide Moat)",
+        "is_bargain": false,
+        "net_current_assets": null,
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "Fails P/E Screen (P/E 54.0 > 15 & Price > Intrinsic)"
+        ]
+      },
+      "score": {
+        "overall_score": 6,
+        "confidence": "Medium",
+        "reasons": [
+          "Sector benefits from macro policy tailwinds (Fallback)",
+          "Operating Margin Expansion (+8.0%)",
+          "High Return on Equity (ROE: 16.2%)",
+          "Wide Economic Moat (Sustained Margin Expansion)"
+        ],
+        "risks": [
+          "Overvalued vs Graham Intrinsic Value (335.4)",
+          "Fails P/E Screen (P/E 54.0 > 15 & Price > Intrinsic)"
+        ],
+        "recommendations": [
+          "Hold / Neutral",
+          "Ensure risks are hedged or sizing is adjusted appropriately."
         ]
       }
     },
@@ -826,6 +1077,31 @@
           11.0,
           9.0,
           9.0
+        ],
+        "graham_intrinsic_value": 551.2,
+        "owner_earnings": 0.0,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Weak/None",
+        "is_bargain": false,
+        "net_current_assets": null,
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "Fails P/E Screen (P/E 72.9 > 15 & Price > Intrinsic)"
+        ]
+      },
+      "score": {
+        "overall_score": 1,
+        "confidence": "Medium",
+        "reasons": [
+          "Sector benefits from macro policy tailwinds (Fallback)"
+        ],
+        "risks": [
+          "Overvalued vs Graham Intrinsic Value (551.2)",
+          "Fails P/E Screen (P/E 72.9 > 15 & Price > Intrinsic)"
+        ],
+        "recommendations": [
+          "Monitor / Underweight",
+          "Ensure risks are hedged or sizing is adjusted appropriately."
         ]
       }
     },
@@ -875,6 +1151,31 @@
           36.0,
           37.0,
           39.0
+        ],
+        "graham_intrinsic_value": 559.0,
+        "owner_earnings": 0.0,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Strong (Wide Moat)",
+        "is_bargain": false,
+        "net_current_assets": null,
+        "hyper_growth_warning": false,
+        "valuation_alerts": []
+      },
+      "score": {
+        "overall_score": 15,
+        "confidence": "Medium",
+        "reasons": [
+          "Capacity/Product Launch: ITC Sunfeast Baked Creations launches Father’s Day campaign ‘A Briefcase of Love’",
+          "Policy Notification: ITC Hotels Q4 profit up 23% at ₹317 cr; to acquire Zuri Hotels and Resorts",
+          "Operating Margin Expansion (+5.0%)",
+          "High Return on Capital (ROCE: 38.9%)",
+          "High Return on Equity (ROE: 29.3%)",
+          "Wide Economic Moat (Sustained Margin Expansion)",
+          "Undervalued vs Graham Intrinsic Value (559.0)"
+        ],
+        "risks": [],
+        "recommendations": [
+          "Strong Buy Candidate"
         ]
       }
     }
@@ -926,6 +1227,34 @@
           20.0,
           19.0,
           20.0
+        ],
+        "graham_intrinsic_value": 556.4,
+        "owner_earnings": 0.0,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Strong (Wide Moat)",
+        "is_bargain": false,
+        "net_current_assets": null,
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "Fails P/E Screen (P/E 68.4 > 15 & Price > Intrinsic)"
+        ]
+      },
+      "score": {
+        "overall_score": 6,
+        "confidence": "Medium",
+        "reasons": [
+          "Sector benefits from macro policy tailwinds (Fallback)",
+          "High Return on Capital (ROCE: 20.2%)",
+          "High Return on Equity (ROE: 22.2%)",
+          "Wide Economic Moat (Sustained Margin Expansion)"
+        ],
+        "risks": [
+          "Overvalued vs Graham Intrinsic Value (556.4)",
+          "Fails P/E Screen (P/E 68.4 > 15 & Price > Intrinsic)"
+        ],
+        "recommendations": [
+          "Hold / Neutral",
+          "Ensure risks are hedged or sizing is adjusted appropriately."
         ]
       }
     },
@@ -975,6 +1304,34 @@
           24.0,
           17.0,
           32.0
+        ],
+        "graham_intrinsic_value": 122.2,
+        "owner_earnings": 0.0,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Strong (Wide Moat)",
+        "is_bargain": false,
+        "net_current_assets": null,
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "Fails P/E Screen (P/E 53.5 > 15 & Price > Intrinsic)"
+        ]
+      },
+      "score": {
+        "overall_score": 6,
+        "confidence": "Medium",
+        "reasons": [
+          "Sector benefits from macro policy tailwinds (Fallback)",
+          "High Return on Capital (ROCE: 31.8%)",
+          "High Return on Equity (ROE: 29.5%)",
+          "Wide Economic Moat (Sustained Margin Expansion)"
+        ],
+        "risks": [
+          "Overvalued vs Graham Intrinsic Value (122.2)",
+          "Fails P/E Screen (P/E 53.5 > 15 & Price > Intrinsic)"
+        ],
+        "recommendations": [
+          "Hold / Neutral",
+          "Ensure risks are hedged or sizing is adjusted appropriately."
         ]
       }
     },
@@ -995,7 +1352,31 @@
       "rec_score": 2.7,
       "screener": {
         "capex": 0.0,
-        "rd_pct": 1.5
+        "rd_pct": 1.5,
+        "graham_intrinsic_value": 0.0,
+        "owner_earnings": 0.0,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Weak/None",
+        "is_bargain": false,
+        "net_current_assets": null,
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "No Dividend Yield"
+        ]
+      },
+      "score": {
+        "overall_score": 1,
+        "confidence": "Low",
+        "reasons": [
+          "Sector benefits from macro policy tailwinds (Fallback)"
+        ],
+        "risks": [
+          "No Dividend Yield"
+        ],
+        "recommendations": [
+          "Monitor / Underweight",
+          "Ensure risks are hedged or sizing is adjusted appropriately."
+        ]
       }
     },
     {
@@ -1015,7 +1396,31 @@
       "rec_score": null,
       "screener": {
         "capex": 0.0,
-        "rd_pct": 1.5
+        "rd_pct": 1.5,
+        "graham_intrinsic_value": 0.0,
+        "owner_earnings": 0.0,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Weak/None",
+        "is_bargain": false,
+        "net_current_assets": null,
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "No Dividend Yield"
+        ]
+      },
+      "score": {
+        "overall_score": 4,
+        "confidence": "Low",
+        "reasons": [
+          "Policy Notification: Stocks to Watch Today: Wipro, Omnitech, KEC International, Motherson, Vascon Engineers, Borosil, Relaxo..."
+        ],
+        "risks": [
+          "No Dividend Yield"
+        ],
+        "recommendations": [
+          "Monitor / Underweight",
+          "Ensure risks are hedged or sizing is adjusted appropriately."
+        ]
       }
     }
   ],
@@ -1066,6 +1471,30 @@
           13.0,
           15.0,
           15.0
+        ],
+        "graham_intrinsic_value": 5032.3,
+        "owner_earnings": 0.0,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Medium (Narrow Moat)",
+        "is_bargain": false,
+        "net_current_assets": null,
+        "hyper_growth_warning": false,
+        "valuation_alerts": []
+      },
+      "score": {
+        "overall_score": 16,
+        "confidence": "Medium",
+        "reasons": [
+          "Policy Notification: Semiconductor solutions provider Microchip Technology Inc. India Pvt Ltd has acquired 1.72 lakh sq ft of office space in EPIP Zone, Phase 2, Whitefield, for ₹176 crore, according to documents accessed from Propstack. The purchase from Ascendum Solutions",
+          "Policy Notification: Defence stock jumps over 30% in 2026 so far, up 9% today – Order win from BEL, Q4 results and more",
+          "Policy Notification: Insiders are the top stockholders in LT Foods Limited (NSE:LTFOODS), and the recent 4.4% drop might have disappointed them",
+          "High Return on Equity (ROE: 15.9%)",
+          "Narrow Economic Moat",
+          "Undervalued vs Graham Intrinsic Value (5032.3)"
+        ],
+        "risks": [],
+        "recommendations": [
+          "Strong Buy Candidate"
         ]
       }
     },
@@ -1115,6 +1544,26 @@
           10.0,
           10.0,
           10.0
+        ],
+        "graham_intrinsic_value": 1630.2,
+        "owner_earnings": 0.0,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Weak/None",
+        "is_bargain": false,
+        "net_current_assets": null,
+        "hyper_growth_warning": false,
+        "valuation_alerts": []
+      },
+      "score": {
+        "overall_score": 5,
+        "confidence": "Medium",
+        "reasons": [
+          "Capacity/Product Launch: Reliance Unveils Comprehensive Clean Energy Strategy Amid India’s Energy 'Supercycle'",
+          "Undervalued vs Graham Intrinsic Value (1630.2)"
+        ],
+        "risks": [],
+        "recommendations": [
+          "Hold / Neutral"
         ]
       }
     }
@@ -1166,6 +1615,26 @@
           16.0,
           14.0,
           6.0
+        ],
+        "graham_intrinsic_value": 140.4,
+        "owner_earnings": 0.0,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Weak/None",
+        "is_bargain": false,
+        "net_current_assets": null,
+        "hyper_growth_warning": false,
+        "valuation_alerts": []
+      },
+      "score": {
+        "overall_score": 2,
+        "confidence": "Medium",
+        "reasons": [
+          "Sector benefits from macro policy tailwinds (Fallback)",
+          "Operating Margin Expansion (+3.0%)"
+        ],
+        "risks": [],
+        "recommendations": [
+          "Monitor / Underweight"
         ]
       }
     },
@@ -1184,39 +1653,7 @@
       "target_high": "1110.00",
       "target_low": "799.00",
       "rec_score": 1.4,
-      "screener": {
-        "market_cap": 6263.0,
-        "current_price": 855.0,
-        "pe_ratio": 62.6,
-        "dividend_yield": 0.0,
-        "roce": 8.39,
-        "roe": 4.72,
-        "q_opm": 11.0,
-        "quarterly_ebitda_margin": [
-          10.0,
-          7.0,
-          8.0,
-          11.0
-        ],
-        "opm_expansion": 3.0,
-        "q_eps": 4.91,
-        "operating_margin_trend": [
-          11.0,
-          12.0,
-          11.0,
-          10.0,
-          9.0
-        ],
-        "capex": 0.0,
-        "rd_pct": 1.5,
-        "roce_trend": [
-          18.0,
-          21.0,
-          11.0,
-          11.0,
-          8.0
-        ]
-      }
+      "screener": {}
     },
     {
       "ticker": "ARVIND",
@@ -1264,6 +1701,26 @@
           13.0,
           13.0,
           14.0
+        ],
+        "graham_intrinsic_value": 791.7,
+        "owner_earnings": 0.0,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Weak/None",
+        "is_bargain": false,
+        "net_current_assets": null,
+        "hyper_growth_warning": false,
+        "valuation_alerts": []
+      },
+      "score": {
+        "overall_score": 6,
+        "confidence": "Medium",
+        "reasons": [
+          "Policy Notification: Arvind shares zoom 13% to hit 52-week high; check what's powering the move",
+          "Undervalued vs Graham Intrinsic Value (791.7)"
+        ],
+        "risks": [],
+        "recommendations": [
+          "Hold / Neutral"
         ]
       }
     }
@@ -1284,39 +1741,7 @@
       "target_high": "625.00",
       "target_low": "456.00",
       "rec_score": 2.6,
-      "screener": {
-        "market_cap": 35781.0,
-        "current_price": 470.0,
-        "pe_ratio": 28.8,
-        "dividend_yield": 1.96,
-        "roce": 12.4,
-        "roe": 9.81,
-        "q_opm": 19.0,
-        "quarterly_ebitda_margin": [
-          20.0,
-          24.0,
-          22.0,
-          19.0
-        ],
-        "opm_expansion": -3.0,
-        "q_eps": 3.45,
-        "operating_margin_trend": [
-          23.0,
-          23.0,
-          23.0,
-          22.0,
-          21.0
-        ],
-        "capex": 0.0,
-        "rd_pct": 1.5,
-        "roce_trend": [
-          13.0,
-          14.0,
-          14.0,
-          14.0,
-          12.0
-        ]
-      }
+      "screener": {}
     },
     {
       "ticker": "BHEL",
@@ -1364,6 +1789,29 @@
           3.0,
           5.0,
           9.0
+        ],
+        "graham_intrinsic_value": 482.3,
+        "owner_earnings": 0.0,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Weak/None",
+        "is_bargain": false,
+        "net_current_assets": null,
+        "hyper_growth_warning": false,
+        "valuation_alerts": []
+      },
+      "score": {
+        "overall_score": 15,
+        "confidence": "Medium",
+        "reasons": [
+          "Policy Notification: Bharat Dynamics, BHEL, BSE: Defence, power, capital market stocks dominate flexicap buying in May 2026",
+          "Policy Notification: BSE Capital Goods index hits new high; BHEL, Polycab, Thermax soar up to 7%",
+          "Policy Notification: Stocks to Watch Today: BHEL, Bajaj Finserv, Bharat Forge, Rail Vikas Nigam, Bharat Electronics, Power...",
+          "Operating Margin Expansion (+8.0%)",
+          "Undervalued vs Graham Intrinsic Value (482.3)"
+        ],
+        "risks": [],
+        "recommendations": [
+          "Strong Buy Candidate"
         ]
       }
     },
@@ -1413,6 +1861,34 @@
           35.0,
           36.0,
           40.0
+        ],
+        "graham_intrinsic_value": 3045.9,
+        "owner_earnings": 0.0,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Strong (Wide Moat)",
+        "is_bargain": false,
+        "net_current_assets": null,
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "Fails P/E Screen (P/E 64.5 > 15 & Price > Intrinsic)"
+        ]
+      },
+      "score": {
+        "overall_score": 6,
+        "confidence": "Medium",
+        "reasons": [
+          "Sector benefits from macro policy tailwinds (Fallback)",
+          "High Return on Capital (ROCE: 39.5%)",
+          "High Return on Equity (ROE: 30.2%)",
+          "Wide Economic Moat (Sustained Margin Expansion)"
+        ],
+        "risks": [
+          "Overvalued vs Graham Intrinsic Value (3045.9)",
+          "Fails P/E Screen (P/E 64.5 > 15 & Price > Intrinsic)"
+        ],
+        "recommendations": [
+          "Hold / Neutral",
+          "Ensure risks are hedged or sizing is adjusted appropriately."
         ]
       }
     }
@@ -1464,6 +1940,30 @@
           39.0,
           34.0,
           32.0
+        ],
+        "graham_intrinsic_value": 8156.2,
+        "owner_earnings": 0.0,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Strong (Wide Moat)",
+        "is_bargain": false,
+        "net_current_assets": null,
+        "hyper_growth_warning": false,
+        "valuation_alerts": []
+      },
+      "score": {
+        "overall_score": 11,
+        "confidence": "Medium",
+        "reasons": [
+          "Capacity/Product Launch: 'Sanctions still in place...': Iran's top negotiator Ghalibaf unveils new Hormuz transit strategy",
+          "Operating Margin Expansion (+12.0%)",
+          "High Return on Capital (ROCE: 32.0%)",
+          "High Return on Equity (ROE: 24.0%)",
+          "Wide Economic Moat (Sustained Margin Expansion)",
+          "Undervalued vs Graham Intrinsic Value (8156.2)"
+        ],
+        "risks": [],
+        "recommendations": [
+          "Buy / Accumulate Candidate"
         ]
       }
     },
@@ -1482,39 +1982,7 @@
       "target_high": "585.00",
       "target_low": "346.00",
       "rec_score": null,
-      "screener": {
-        "market_cap": 297654.0,
-        "current_price": 407.0,
-        "pe_ratio": 49.1,
-        "dividend_yield": 0.59,
-        "roce": 36.5,
-        "roe": 27.6,
-        "q_opm": 29.0,
-        "quarterly_ebitda_margin": [
-          28.0,
-          29.0,
-          30.0,
-          29.0
-        ],
-        "opm_expansion": -1.0,
-        "q_eps": 3.04,
-        "operating_margin_trend": [
-          22.0,
-          23.0,
-          25.0,
-          29.0,
-          29.0
-        ],
-        "capex": 0.0,
-        "rd_pct": 6.2,
-        "roce_trend": [
-          27.0,
-          30.0,
-          35.0,
-          39.0,
-          37.0
-        ]
-      }
+      "screener": {}
     },
     {
       "ticker": "ASTRAMICRO",
@@ -1562,6 +2030,28 @@
           19.0,
           19.0,
           20.0
+        ],
+        "graham_intrinsic_value": 1450.8,
+        "owner_earnings": 0.0,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Strong (Wide Moat)",
+        "is_bargain": false,
+        "net_current_assets": null,
+        "hyper_growth_warning": false,
+        "valuation_alerts": []
+      },
+      "score": {
+        "overall_score": 6,
+        "confidence": "Medium",
+        "reasons": [
+          "Sector benefits from macro policy tailwinds (Fallback)",
+          "High Return on Capital (ROCE: 20.2%)",
+          "High Return on Equity (ROE: 16.0%)",
+          "Wide Economic Moat (Sustained Margin Expansion)"
+        ],
+        "risks": [],
+        "recommendations": [
+          "Hold / Neutral"
         ]
       }
     }
@@ -1582,10 +2072,7 @@
       "target_high": null,
       "target_low": null,
       "rec_score": null,
-      "screener": {
-        "capex": 0.0,
-        "rd_pct": 8.5
-      }
+      "screener": {}
     },
     {
       "ticker": "RIRPOWER",
@@ -1602,10 +2089,7 @@
       "target_high": null,
       "target_low": null,
       "rec_score": null,
-      "screener": {
-        "capex": 0.0,
-        "rd_pct": 8.5
-      }
+      "screener": {}
     },
     {
       "ticker": "SPEL",
@@ -1624,7 +2108,31 @@
       "rec_score": null,
       "screener": {
         "capex": 0.0,
-        "rd_pct": 8.5
+        "rd_pct": 8.5,
+        "graham_intrinsic_value": 0.0,
+        "owner_earnings": 0.0,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Weak/None",
+        "is_bargain": false,
+        "net_current_assets": null,
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "No Dividend Yield"
+        ]
+      },
+      "score": {
+        "overall_score": 3,
+        "confidence": "Low",
+        "reasons": [
+          "Capacity/Product Launch: ATG unveils Svenska Spel’s Anna Romboli as new CEO"
+        ],
+        "risks": [
+          "No Dividend Yield"
+        ],
+        "recommendations": [
+          "Monitor / Underweight",
+          "Ensure risks are hedged or sizing is adjusted appropriately."
+        ]
       }
     }
   ],
