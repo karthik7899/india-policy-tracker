@@ -30,6 +30,7 @@ def save_data_for_dashboard(brief_data, watchlist):
     }
 
     from utils import atomic_write_json
+
     atomic_write_json(output, "dashboard_data.json")
 
     log.info(
@@ -62,19 +63,38 @@ async def run_pipeline():
         inst_task = fetch_institutional_activity_async(session, watchlist)
         filings_task = fetch_exchange_filings_async(session, watchlist)
 
-        pli_competitors, (agreements, launches), sebi_filings, inst_activity, corp_filings = (
-            await asyncio.gather(pli_task, adv_rss_task, sebi_task, inst_task, filings_task)
+        (
+            pli_competitors,
+            (agreements, launches),
+            sebi_filings,
+            inst_activity,
+            corp_filings,
+        ) = await asyncio.gather(
+            pli_task, adv_rss_task, sebi_task, inst_task, filings_task
         )
 
         from history.store import HistoryStore
+
         store = HistoryStore()
-        
-        merged_competitors = store.deduplicate_and_merge('emerging_competitors', pli_competitors, ['name', 'scheme'])
-        merged_agreements = store.deduplicate_and_merge('corporate_agreements', agreements, ['company', 'title'])
-        merged_launches = store.deduplicate_and_merge('product_launches', launches, ['company', 'product'])
-        merged_filings = store.deduplicate_and_merge('corporate_filings', corp_filings, ['company', 'filing'])
-        merged_sebi = store.deduplicate_and_merge('sebi_filings', sebi_filings, ['company', 'link'])
-        merged_inst = store.deduplicate_and_merge('institutional_activity', inst_activity, ['company', 'title'])
+
+        merged_competitors = store.deduplicate_and_merge(
+            "emerging_competitors", pli_competitors, ["name", "scheme"]
+        )
+        merged_agreements = store.deduplicate_and_merge(
+            "corporate_agreements", agreements, ["company", "title"]
+        )
+        merged_launches = store.deduplicate_and_merge(
+            "product_launches", launches, ["company", "product"]
+        )
+        merged_filings = store.deduplicate_and_merge(
+            "corporate_filings", corp_filings, ["company", "filing"]
+        )
+        merged_sebi = store.deduplicate_and_merge(
+            "sebi_filings", sebi_filings, ["company", "link"]
+        )
+        merged_inst = store.deduplicate_and_merge(
+            "institutional_activity", inst_activity, ["company", "title"]
+        )
 
         data["emerging_competitors"] = merged_competitors
         data["corporate_agreements"] = merged_agreements

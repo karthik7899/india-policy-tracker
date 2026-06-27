@@ -1,11 +1,15 @@
 from typing import Optional, Union
 
+
 def _clean_str(val: Union[str, int, float, None]) -> str:
     if val is None:
         return ""
     return str(val).strip()
 
-def safe_float(val: Union[str, int, float, None], default: Optional[float] = None) -> Optional[float]:
+
+def safe_float(
+    val: Union[str, int, float, None], default: Optional[float] = None
+) -> Optional[float]:
     """Safely converts a value to float, handling common string artifacts."""
     s = _clean_str(val)
     if not s or s in ("-", "N/A", "NA", "None"):
@@ -16,7 +20,10 @@ def safe_float(val: Union[str, int, float, None], default: Optional[float] = Non
     except ValueError:
         return default
 
-def safe_int(val: Union[str, int, float, None], default: Optional[int] = None) -> Optional[int]:
+
+def safe_int(
+    val: Union[str, int, float, None], default: Optional[int] = None
+) -> Optional[int]:
     """Safely converts a value to int, handling common string artifacts."""
     s = _clean_str(val)
     if not s or s in ("-", "N/A", "NA", "None"):
@@ -27,7 +34,10 @@ def safe_int(val: Union[str, int, float, None], default: Optional[int] = None) -
     except ValueError:
         return default
 
-def safe_percentage(val: Union[str, int, float, None], default: Optional[float] = None) -> Optional[float]:
+
+def safe_percentage(
+    val: Union[str, int, float, None], default: Optional[float] = None
+) -> Optional[float]:
     """Safely converts a percentage string (e.g. '12.5%') to a float."""
     s = _clean_str(val)
     if not s or s in ("-", "N/A", "NA", "None"):
@@ -38,9 +48,11 @@ def safe_percentage(val: Union[str, int, float, None], default: Optional[float] 
     except ValueError:
         return default
 
+
 import os
 import json
 import tempfile
+
 
 def atomic_write_json(data, filepath, indent=2):
     """
@@ -52,7 +64,7 @@ def atomic_write_json(data, filepath, indent=2):
     directory = os.path.dirname(os.path.abspath(filepath))
     fd, temp_path = tempfile.mkstemp(dir=directory, prefix=".tmp_")
     try:
-        with os.fdopen(fd, 'w', encoding='utf-8') as f:
+        with os.fdopen(fd, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=indent, ensure_ascii=False)
             f.flush()
             os.fsync(f.fileno())
@@ -72,21 +84,27 @@ import time
 
 log = logging.getLogger(__name__)
 
+
 class TransientNetworkError(Exception):
     """Exception raised when a network operation fails temporarily (e.g. HTTP 502/503/504)."""
+
     pass
+
 
 def retry_network(max_retries=3, base_delay=1.0):
     """
     Decorator for retrying network operations with exponential backoff.
     Retries only on transient network failures, not on parsing/logic errors.
     """
+
     def decorator(func):
         if asyncio.iscoroutinefunction(func):
+
             @functools.wraps(func)
             async def async_wrapper(*args, **kwargs):
                 import aiohttp
                 import requests
+
                 transient_exceptions = (
                     TransientNetworkError,
                     aiohttp.ClientConnectionError,
@@ -95,7 +113,7 @@ def retry_network(max_retries=3, base_delay=1.0):
                     asyncio.TimeoutError,
                     requests.exceptions.ConnectionError,
                     requests.exceptions.Timeout,
-                    requests.exceptions.ChunkedEncodingError
+                    requests.exceptions.ChunkedEncodingError,
                 )
                 retries = 0
                 while True:
@@ -104,23 +122,30 @@ def retry_network(max_retries=3, base_delay=1.0):
                     except transient_exceptions as e:
                         retries += 1
                         if retries > max_retries:
-                            log.error(f"Async network operation failed after {max_retries} retries: {e}")
+                            log.error(
+                                f"Async network operation failed after {max_retries} retries: {e}"
+                            )
                             raise
                         delay = base_delay * (2 ** (retries - 1))
-                        log.warning(f"Transient network error in {func.__name__}: {e}. Retrying in {delay}s (Attempt {retries}/{max_retries})")
+                        log.warning(
+                            f"Transient network error in {func.__name__}: {e}. Retrying in {delay}s (Attempt {retries}/{max_retries})"
+                        )
                         await asyncio.sleep(delay)
+
             return async_wrapper
         else:
+
             @functools.wraps(func)
             def sync_wrapper(*args, **kwargs):
                 import requests
                 import urllib3
+
                 transient_exceptions = (
                     TransientNetworkError,
                     requests.exceptions.ConnectionError,
                     requests.exceptions.Timeout,
                     requests.exceptions.ChunkedEncodingError,
-                    urllib3.exceptions.ProtocolError
+                    urllib3.exceptions.ProtocolError,
                 )
                 retries = 0
                 while True:
@@ -129,12 +154,18 @@ def retry_network(max_retries=3, base_delay=1.0):
                     except transient_exceptions as e:
                         retries += 1
                         if retries > max_retries:
-                            log.error(f"Sync network operation failed after {max_retries} retries: {e}")
+                            log.error(
+                                f"Sync network operation failed after {max_retries} retries: {e}"
+                            )
                             raise
                         delay = base_delay * (2 ** (retries - 1))
-                        log.warning(f"Transient network error in {func.__name__}: {e}. Retrying in {delay}s (Attempt {retries}/{max_retries})")
+                        log.warning(
+                            f"Transient network error in {func.__name__}: {e}. Retrying in {delay}s (Attempt {retries}/{max_retries})"
+                        )
                         time.sleep(delay)
+
             return sync_wrapper
+
     return decorator
 
 
@@ -144,6 +175,7 @@ async def fetch_text_async(session, url, headers=None, timeout=15):
         if response.status in (408, 429, 500, 502, 503, 504):
             raise TransientNetworkError(f"HTTP {response.status} for {url}")
         return response.status, await response.text()
+
 
 @retry_network(max_retries=3, base_delay=2.0)
 def fetch_text_sync(session_or_module, url, headers=None, timeout=15):

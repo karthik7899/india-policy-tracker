@@ -5,10 +5,13 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from logger import log
 import yfinance as yf
 from config import save_watchlist
+
+
 def update_single_stock(stock, prefetched_prices=None):
     """Worker function to fetch Yahoo Finance metrics for a single stock."""
     from providers.yahoo import fetch_stock_data
     from logger import log
+
     if prefetched_prices is None:
         prefetched_prices = {}
 
@@ -17,27 +20,33 @@ def update_single_stock(stock, prefetched_prices=None):
 
     try:
         data = fetch_stock_data(yahoo_ticker)
-        
+
         # Override price if prefetched
-        if yahoo_ticker in prefetched_prices and prefetched_prices[yahoo_ticker] is not None:
-            data['price'] = float(prefetched_prices[yahoo_ticker])
-            
-        if data.get('price') is not None:
-            stock['price'] = f"{data['price']:.2f}"
-        
+        if (
+            yahoo_ticker in prefetched_prices
+            and prefetched_prices[yahoo_ticker] is not None
+        ):
+            data["price"] = float(prefetched_prices[yahoo_ticker])
+
+        if data.get("price") is not None:
+            stock["price"] = f"{data['price']:.2f}"
+
         for k, v in data.items():
-            if k != 'price' and v is not None:
+            if k != "price" and v is not None:
                 stock[k] = v
-                
-        if 'target' in stock and stock['target'] and 'price' in stock and stock['price']:
-            _calculate_growth_pct(stock, float(stock['price']), ticker)
-            
+
+        if (
+            "target" in stock
+            and stock["target"]
+            and "price" in stock
+            and stock["price"]
+        ):
+            _calculate_growth_pct(stock, float(stock["price"]), ticker)
+
     except Exception as e:
         log.error(
             f"Error updating price/metrics for {yahoo_ticker}: {e}. Using static price."
         )
-
-
 
 
 def _calculate_growth_pct(stock, live_price, ticker):
@@ -49,7 +58,6 @@ def _calculate_growth_pct(stock, live_price, ticker):
         log.info(
             f"Updated {ticker}: Price={live_price:.2f}, Target={target_price:.2f} ({sign}{growth_val:.1f}%)"
         )
-
 
 
 def update_live_stock_prices(watchlist):
@@ -108,5 +116,3 @@ def update_live_stock_prices(watchlist):
                 future.result()
             except Exception as e:
                 log.error(f"Error in parallel stock update task: {e}")
-
-

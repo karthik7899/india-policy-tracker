@@ -276,17 +276,21 @@ def build_html_email(brief_data, watchlist):
         for c in emerging_competitors:
             name = c.get("name", "Unknown")
             if name not in grouped:
-                grouped[name] = {"ticker": c.get("ticker", ""), "status": c.get("status", ""), "schemes": []}
+                grouped[name] = {
+                    "ticker": c.get("ticker", ""),
+                    "status": c.get("status", ""),
+                    "schemes": [],
+                }
             if c.get("announcement"):
                 grouped[name]["schemes"].append(c.get("announcement"))
-                
+
         emerging_items = ""
         for name, data in grouped.items():
-            ticker_str = f" ({data['ticker']})" if data['ticker'] else ""
+            ticker_str = f" ({data['ticker']})" if data["ticker"] else ""
             status_html = f"<span class='badge badge-success-alert' style='font-size: 8px;'>{data['status']}</span>"
             schemes_html = "".join([f"<li>{s}</li>" for s in data["schemes"]])
             emerging_items += f"<li><strong>{name}</strong>{ticker_str} {status_html}<ul style='padding-left: 20px; font-size: 11px; color: #94a3b8;'>{schemes_html}</ul></li>"
-            
+
         emerging_html_global = f"""
         <div class="section-card">
             <h3 style="color: #60a5fa; margin-bottom: 10px; font-size: 16px;"> Emerging Competitors (PLI Approvals)</h3>
@@ -327,7 +331,9 @@ def build_html_email(brief_data, watchlist):
 
     if mos or buffett:
         # Margin of safety items (Graham value screen)
-        passed_mos = [m for m in mos if m.get("is_defensive_pass") or m.get("is_bargain")]
+        passed_mos = [
+            m for m in mos if m.get("is_defensive_pass") or m.get("is_bargain")
+        ]
         mos_items = ""
         for m in passed_mos[:5]:
             screens = []
@@ -376,15 +382,19 @@ def build_html_email(brief_data, watchlist):
         for sector, stocks in watchlist.items():
             for s in stocks:
                 if "score" in s and s["score"]:
-                    scoring_list.append({
-                        "ticker": s["ticker"],
-                        "score": s["score"]["overall_score"],
-                        "confidence": s["score"]["confidence"],
-                        "recommendations": "<br>".join(s["score"]["recommendations"] or []),
-                        "reasons": "<br>".join(s["score"]["reasons"] or ["None"]),
-                        "risks": "<br>".join(s["score"]["risks"] or ["None"])
-                    })
-        
+                    scoring_list.append(
+                        {
+                            "ticker": s["ticker"],
+                            "score": s["score"]["overall_score"],
+                            "confidence": s["score"]["confidence"],
+                            "recommendations": "<br>".join(
+                                s["score"]["recommendations"] or []
+                            ),
+                            "reasons": "<br>".join(s["score"]["reasons"] or ["None"]),
+                            "risks": "<br>".join(s["score"]["risks"] or ["None"]),
+                        }
+                    )
+
         scoring_list = sorted(scoring_list, key=lambda x: x["score"], reverse=True)
         scoring_items = "".join(
             [
@@ -423,7 +433,14 @@ def build_html_email(brief_data, watchlist):
         </div>
         """
 
-    body_html += agreements_html + launches_html + filings_html + emerging_html_global + inst_html + valuation_html
+    body_html += (
+        agreements_html
+        + launches_html
+        + filings_html
+        + emerging_html_global
+        + inst_html
+        + valuation_html
+    )
 
     body_html += """
             <div class="footer">

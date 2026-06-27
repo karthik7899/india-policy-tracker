@@ -7,6 +7,8 @@ import requests
 from config import save_watchlist, SECTOR_METADATA
 from providers.yahoo import get_cached_ticker
 from .parsing import resolve_ticker_from_name
+
+
 def detect_emerging_players(brief_data, watchlist):
     """Scans aggregated news titles for corporate names not currently in the watchlist."""
     log.info("Scanning headlines for emerging players...")
@@ -65,13 +67,11 @@ def detect_emerging_players(brief_data, watchlist):
     return emerging_players
 
 
-
 def _get_potential(stock):
     try:
         return float(stock["growth_pct"].replace("%", ""))
     except Exception:
         return 0.0
-
 
 
 def auto_curate_watchlist(brief_data, watchlist):
@@ -326,5 +326,3 @@ def auto_curate_watchlist(brief_data, watchlist):
         save_watchlist(watchlist)
 
     return structured_emerging
-
-

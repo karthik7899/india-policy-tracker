@@ -4,6 +4,8 @@ import urllib.parse
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from logger import log
 import requests
+
+
 def resolve_ticker_from_name(company_name, session=None):
     import requests
 
@@ -36,28 +38,39 @@ def resolve_ticker_from_name(company_name, session=None):
     return None, None
 
 
-
 def extract_row_values(soup, section_id, row_label_pattern):
     sec = soup.find("section", id=section_id)
-    if not sec: return []
+    if not sec:
+        return []
     import re
+
     td_label = sec.find("td", string=re.compile(row_label_pattern))
     if td_label:
         tr = td_label.find_parent("tr")
         if tr:
             tds = tr.find_all("td")
-            vals = [td.get_text(strip=True).replace(",", "").replace("%", "") for td in tds[1:] if td.get_text(strip=True)]
+            vals = [
+                td.get_text(strip=True).replace(",", "").replace("%", "")
+                for td in tds[1:]
+                if td.get_text(strip=True)
+            ]
             numeric_vals = []
             for v in vals:
-                try: numeric_vals.append(float(v))
-                except ValueError: pass
+                try:
+                    numeric_vals.append(float(v))
+                except ValueError:
+                    pass
             return numeric_vals
     return []
 
+
 def calculate_trend(values, periods=4):
-    if not values: return [0] * periods
+    if not values:
+        return [0] * periods
     return values[-periods:]
 
+
 def calculate_growth(val1, val2):
-    if not val1 or val1 == 0: return 0.0
+    if not val1 or val1 == 0:
+        return 0.0
     return round(((val2 - val1) / abs(val1)) * 100, 2)

@@ -2,12 +2,14 @@ import pytest
 from bs4 import BeautifulSoup
 import sys
 import os
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from scraper import _extract_pli_data_from_html
 
+
 def test_extract_companies_from_pib_html():
-    sample_html = '''
+    sample_html = """
     <html>
     <head><title>75 companies approved under PLI Scheme for Automobile</title></head>
     <body>
@@ -23,15 +25,19 @@ def test_extract_companies_from_pib_html():
         </ul>
     </body>
     </html>
-    '''
-    companies = _extract_pli_data_from_html(sample_html, '75 companies approved under PLI Scheme for Automobile', '2023-10-10')
+    """
+    companies = _extract_pli_data_from_html(
+        sample_html,
+        "75 companies approved under PLI Scheme for Automobile",
+        "2023-10-10",
+    )
     assert len(companies) >= 4
-    names = [c['name'] for c in companies]
-    assert 'Tata Motors Ltd' in names
-    assert 'Mahindra & Mahindra' in names
-    assert 'TVS Motor Company Limited' in names
-    assert 'Hero MotoCorp' in names
-    
-    assert companies[0]['sector'] == 'Automobile'
-    assert companies[0]['scheme'] == 'PLI Scheme'
-    assert companies[0]['date'] == '2023-10-10'
+    names = [c["name"] for c in companies]
+    assert "Tata Motors Ltd" in names
+    assert "Mahindra & Mahindra" in names
+    assert "TVS Motor Company Limited" in names
+    assert "Hero MotoCorp" in names
+
+    assert companies[0]["sector"] == "Automobile"
+    assert companies[0]["scheme"] == "PLI Scheme"
+    assert companies[0]["date"] == "2023-10-10"

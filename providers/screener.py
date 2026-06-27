@@ -1,4 +1,3 @@
-
 import re
 import aiohttp
 import asyncio
@@ -6,6 +5,7 @@ from bs4 import BeautifulSoup
 from logger import log
 from analysis.parsing import extract_row_values, calculate_trend, calculate_growth
 from utils import fetch_text_async
+
 
 async def fetch_screener_async(session, ticker, sector, price):
     # ETFs / index funds do not have individual fundamentals
@@ -40,13 +40,20 @@ async def fetch_screener_async(session, ticker, sector, price):
                 val = val_span.get_text(strip=True).replace(",", "")
                 try:
                     num = float(val)
-                    if "market cap" in name: sc["market_cap"] = num
-                    elif "current price" in name: sc["current_price"] = num
-                    elif "stock p/e" in name: sc["pe_ratio"] = num
-                    elif "roce" in name: sc["roce"] = num
-                    elif "roe" in name: sc["roe"] = num
-                    elif "debt to equity" in name: sc["debt_to_equity"] = num
-                    elif "dividend yield" in name: sc["dividend_yield"] = num
+                    if "market cap" in name:
+                        sc["market_cap"] = num
+                    elif "current price" in name:
+                        sc["current_price"] = num
+                    elif "stock p/e" in name:
+                        sc["pe_ratio"] = num
+                    elif "roce" in name:
+                        sc["roce"] = num
+                    elif "roe" in name:
+                        sc["roe"] = num
+                    elif "debt to equity" in name:
+                        sc["debt_to_equity"] = num
+                    elif "dividend yield" in name:
+                        sc["dividend_yield"] = num
                 except ValueError:
                     pass
 
@@ -66,10 +73,12 @@ async def fetch_screener_async(session, ticker, sector, price):
             sc["opm_expansion"] = round(q_opm[-1] - q_opm[-2], 1)
 
     q_eps = extract_row_values(soup, "quarters", "EPS")
-    if q_eps: sc["q_eps"] = q_eps[-1]
+    if q_eps:
+        sc["q_eps"] = q_eps[-1]
 
     q_net_profit = extract_row_values(soup, "quarters", "Net Profit")
-    if q_net_profit: sc["q_net_profit"] = q_net_profit[-1]
+    if q_net_profit:
+        sc["q_net_profit"] = q_net_profit[-1]
 
     # 3. Profit & Loss (Annual OPM Trend)
     a_opm = extract_row_values(soup, "profit-loss", "OPM")
@@ -84,15 +93,18 @@ async def fetch_screener_async(session, ticker, sector, price):
     else:
         current_borrowings = 0
 
-    other_liabilities_list = extract_row_values(soup, "balance-sheet", "Other Liabilities")
+    other_liabilities_list = extract_row_values(
+        soup, "balance-sheet", "Other Liabilities"
+    )
     other_liabilities = other_liabilities_list[-1] if other_liabilities_list else 0
-    
+
     other_assets_list = extract_row_values(soup, "balance-sheet", "Other Assets")
     other_assets = other_assets_list[-1] if other_assets_list else 0
 
     # 5. Cash Flow (Capex & Operating Cash Flow Trend)
     cfo = extract_row_values(soup, "cash-flow", "Cash from Operating Activity")
-    if cfo: sc["cash_flow_trend"] = calculate_trend(cfo, 5)
+    if cfo:
+        sc["cash_flow_trend"] = calculate_trend(cfo, 5)
 
     capex = extract_row_values(soup, "cash-flow", "Fixed assets purchased")
     if capex:
@@ -104,16 +116,22 @@ async def fetch_screener_async(session, ticker, sector, price):
 
     # R&D Expenditure (from P&L if present)
     # Usually Screener lists this as "R&D" or inside expenses schedule, but it's rarely a top-level row.
-    rd_vals = extract_row_values(soup, "profit-loss", "R&D") or extract_row_values(soup, "profit-loss", "Research")
+    rd_vals = extract_row_values(soup, "profit-loss", "R&D") or extract_row_values(
+        soup, "profit-loss", "Research"
+    )
     if rd_vals:
         sc["rd_expenditure"] = rd_vals[-1]
     else:
         # Fallback R&D intensity mapping
         rd_pct = 1.5
-        if sector == "semiconductors_equipment": rd_pct = 8.5
-        elif sector == "aerospace_defence": rd_pct = 6.2
-        elif sector == "cybersecurity": rd_pct = 10.5
-        elif sector == "clean_energy": rd_pct = 3.0
+        if sector == "semiconductors_equipment":
+            rd_pct = 8.5
+        elif sector == "aerospace_defence":
+            rd_pct = 6.2
+        elif sector == "cybersecurity":
+            rd_pct = 10.5
+        elif sector == "clean_energy":
+            rd_pct = 3.0
         sc["rd_pct"] = rd_pct
 
     # 6. Ratios (ROCE Trend)
@@ -125,21 +143,24 @@ async def fetch_screener_async(session, ticker, sector, price):
     promoters = extract_row_values(soup, "shareholding", "Promoters")
     if promoters:
         sc["promoter_pct"] = promoters[-1]
-        if len(promoters) >= 2: sc["promoter_change"] = round(promoters[-1] - promoters[-2], 2)
+        if len(promoters) >= 2:
+            sc["promoter_change"] = round(promoters[-1] - promoters[-2], 2)
 
     fiis = extract_row_values(soup, "shareholding", "FIIs")
     if fiis:
         sc["fii_pct"] = fiis[-1]
-        if len(fiis) >= 2: sc["fii_change"] = round(fiis[-1] - fiis[-2], 2)
+        if len(fiis) >= 2:
+            sc["fii_change"] = round(fiis[-1] - fiis[-2], 2)
 
     diis = extract_row_values(soup, "shareholding", "DIIs")
     if diis:
         sc["dii_pct"] = diis[-1]
-        if len(diis) >= 2: sc["dii_change"] = round(diis[-1] - diis[-2], 2)
-
+        if len(diis) >= 2:
+            sc["dii_change"] = round(diis[-1] - diis[-2], 2)
 
     sc = {k: v for k, v in sc.items() if v is not None}
     return ticker, sc
+
 
 async def fetch_all_screener_fundamentals(watchlist):
     log.info("Fetching actual filed fundamentals from Screener.in (Async)...")
@@ -162,4 +183,6 @@ async def fetch_all_screener_fundamentals(watchlist):
     for ticker, sc_data in results:
         if sc_data:
             ticker_to_stock[ticker]["screener"] = sc_data
-            log.info(f"{ticker}: Screener data loaded (PE={sc_data.get('pe_ratio', 'N/A')})")
+            log.info(
+                f"{ticker}: Screener data loaded (PE={sc_data.get('pe_ratio', 'N/A')})"
+            )

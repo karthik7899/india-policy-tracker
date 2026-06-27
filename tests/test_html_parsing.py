@@ -38,13 +38,14 @@ MOCK_HTML = """
 </section>
 """
 
+
 def test_extract_row_values():
     soup = BeautifulSoup(MOCK_HTML, "html.parser")
-    
+
     # Test normal extraction with commas
     sales = extract_row_values(soup, "quarters", "Sales")
     assert sales == [1000.0, 1200.5, 1150.0, 1500.0]
-    
+
     # Test percentage extraction with negatives
     opm = extract_row_values(soup, "quarters", "OPM")
     assert opm == [10.0, 12.0, -5.0, 15.0]
@@ -52,15 +53,17 @@ def test_extract_row_values():
     # Test missing section
     missing_sec = extract_row_values(soup, "invalid", "Sales")
     assert missing_sec == []
-    
+
     # Test missing row
     missing_row = extract_row_values(soup, "quarters", "R&D")
     assert missing_row == []
+
 
 def test_calculate_trend():
     assert calculate_trend([1, 2, 3, 4, 5], 3) == [3, 4, 5]
     assert calculate_trend([10], 4) == [10]
     assert calculate_trend([], 2) == [0, 0]
+
 
 def test_calculate_growth():
     assert calculate_growth(100, 150) == 50.0

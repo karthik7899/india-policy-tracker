@@ -1,4 +1,5 @@
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+
 analyzer = SentimentIntensityAnalyzer()
 import datetime
 from bs4 import BeautifulSoup
@@ -8,6 +9,7 @@ import urllib.parse
 from logger import log
 from utils import fetch_text_async
 import re
+
 
 def clean_news_item(entry, query_term):
     """Formats and cleans an RSS entry. Returns None if the article is older than 7 days."""
@@ -68,7 +70,6 @@ def clean_news_item(entry, query_term):
     }
 
 
-
 async def fetch_query_feed_async(session, sector, query):
     """Asynchronously fetches news for a single query."""
     query_with_time = f"{query} when:7d"
@@ -88,7 +89,6 @@ async def fetch_query_feed_async(session, sector, query):
     except Exception as e:
         log.error(f"Error parsing feed for query '{query}': {e}")
     return sector, sector_news
-
 
 
 def analyze_sentiment(title, summary):
@@ -138,5 +138,3 @@ def analyze_sentiment(title, summary):
         ):
             return "Negative"
         return "Neutral"
-
-

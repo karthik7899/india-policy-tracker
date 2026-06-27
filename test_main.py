@@ -23,7 +23,6 @@ class TestSaveDataForDashboard(unittest.TestCase):
         self.assertTrue(mock_atomic_write.called)
         self.assertEqual(mock_atomic_write.call_args[0][1], "dashboard_data.json")
 
-
         args, kwargs = mock_atomic_write.call_args
         output_data = args[0]
 

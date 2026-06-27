@@ -1,6 +1,7 @@
 from typing import List, Optional, Dict, Any, Union
 from pydantic import BaseModel, Field
 
+
 class CompanyValuation(BaseModel):
     pe_ratio: Optional[float] = None
     graham_intrinsic_value: Optional[float] = None
@@ -12,6 +13,7 @@ class CompanyValuation(BaseModel):
     hyper_growth_warning: Optional[bool] = None
     valuation_alerts: List[str] = Field(default_factory=list)
 
+
 class CompanyFinancials(BaseModel):
     market_cap: Optional[float] = None
     pe_ratio: Optional[float] = None
@@ -22,27 +24,27 @@ class CompanyFinancials(BaseModel):
     dividend_yield: Optional[float] = None
     current_ratio: Optional[float] = None
     net_current_assets: Optional[float] = None
-    
+
     q_sales: Optional[float] = None
     qoq_sales_growth: Optional[float] = None
     quarterly_revenue_growth: List[float] = Field(default_factory=list)
-    
+
     q_opm: Optional[float] = None
     opm_expansion: Optional[float] = None
     quarterly_ebitda_margin: List[float] = Field(default_factory=list)
     operating_margin_trend: List[float] = Field(default_factory=list)
-    
+
     q_eps: Optional[float] = None
     q_net_profit: Optional[float] = None
-    
+
     debt_trend: List[float] = Field(default_factory=list)
     cash_flow_trend: List[float] = Field(default_factory=list)
     roce_trend: List[float] = Field(default_factory=list)
-    
+
     capex: Optional[float] = None
     rd_expenditure: Optional[float] = None
     rd_pct: Optional[float] = None
-    
+
     promoter_pct: Optional[float] = None
     promoter_change: Optional[float] = None
     fii_pct: Optional[float] = None
@@ -50,12 +52,14 @@ class CompanyFinancials(BaseModel):
     dii_pct: Optional[float] = None
     dii_change: Optional[float] = None
 
+
 class CompanyScore(BaseModel):
     overall_score: int = 0
     confidence: str = "Low"
     reasons: List[str] = Field(default_factory=list)
     risks: List[str] = Field(default_factory=list)
     recommendations: List[str] = Field(default_factory=list)
+
 
 class Company(BaseModel):
     ticker: str
@@ -66,12 +70,15 @@ class Company(BaseModel):
     relative_volume: Optional[float] = 0.0
     price_to_ma: Optional[float] = 0.0
     momentum_score: Optional[float] = 0.0
-    
-    screener: Optional[Union[Dict[str, Any], CompanyFinancials]] = Field(default_factory=dict)
+
+    screener: Optional[Union[Dict[str, Any], CompanyFinancials]] = Field(
+        default_factory=dict
+    )
     valuation: Optional[CompanyValuation] = None
     score: Optional[CompanyScore] = None
     policy_events: List[Any] = Field(default_factory=list)
-    
+
+
 class NewsEvent(BaseModel):
     company: str
     industry: str
@@ -82,6 +89,7 @@ class NewsEvent(BaseModel):
     source: str
     link: str
 
+
 class FilingEvent(BaseModel):
     company: str
     industry: str
@@ -89,6 +97,7 @@ class FilingEvent(BaseModel):
     date: str
     source: str
     link: str
+
 
 class EmergingCompetitor(BaseModel):
     company: str

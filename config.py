@@ -2083,6 +2083,7 @@ def save_watchlist(watchlist):
     )
     try:
         from utils import atomic_write_json
+
         atomic_write_json(watchlist, watchlist_path)
         return True
     except OSError:

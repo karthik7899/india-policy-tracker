@@ -3,11 +3,13 @@ from logger import log
 
 _TICKER_CACHE = {}
 
+
 def get_cached_ticker(yahoo_ticker, session=None):
     """Retrieves a cached yf.Ticker object for the pipeline run."""
     if yahoo_ticker not in _TICKER_CACHE:
         _TICKER_CACHE[yahoo_ticker] = yf.Ticker(yahoo_ticker, session=session)
     return _TICKER_CACHE[yahoo_ticker]
+
 
 def fetch_stock_data(yahoo_ticker, session=None, timeout=10):
     """
@@ -25,21 +27,22 @@ def fetch_stock_data(yahoo_ticker, session=None, timeout=10):
         "target_high": None,
         "target_low": None,
         "target": None,
-        "rec_score": None
+        "rec_score": None,
     }
-    
+
     # Fetch price
     hist = ticker_obj.history(period="1d", timeout=timeout)
     if not hist.empty:
         data["price"] = float(hist["Close"].iloc[-1])
-        
+
     info = ticker_obj.info
     if info:
         _parse_targets(data, info)
         _parse_recommendations(data, info)
         _parse_growth_metrics(data, info)
-        
+
     return data
+
 
 def _parse_targets(data, info):
     median_target = info.get("targetMedianPrice")
@@ -67,6 +70,7 @@ def _parse_targets(data, info):
     if low_target and float(low_target) > 0:
         data["target_low"] = f"{float(low_target):.2f}"
 
+
 def _parse_recommendations(data, info):
     rating = info.get("recommendationKey")
     if rating:
@@ -74,6 +78,7 @@ def _parse_recommendations(data, info):
     rec_mean = info.get("recommendationMean")
     if rec_mean is not None:
         data["rec_score"] = round(float(rec_mean), 1)
+
 
 def _parse_growth_metrics(data, info):
     rev_growth = info.get("revenueGrowth")

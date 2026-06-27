@@ -10,7 +10,6 @@ from config import SECTOR_QUERIES
 from providers.rss import fetch_query_feed_async
 
 
-
 async def fetch_all_feeds_async():
     """Fetches news from Google News RSS for all sectors asynchronously."""
     log.info("Initializing RSS Aggregation engine (Async)...")
@@ -58,66 +57,95 @@ async def fetch_all_feeds_async():
 import re
 from bs4 import BeautifulSoup
 
+
 def _extract_pli_data_from_html(html, title, published_date=""):
     companies = []
-    soup = BeautifulSoup(html, 'html.parser')
-    text = soup.get_text(separator=' ')
-    
+    soup = BeautifulSoup(html, "html.parser")
+    text = soup.get_text(separator=" ")
+
     # 1. Sector extraction
     sector = "Manufacturing"
     title_lower = title.lower()
-    for s in ["automobile", "auto components", "white goods", "it hardware", "textile", "telecom", "solar", "drone", "pharmaceutical", "medical devices", "food processing", "specialty steel"]:
+    for s in [
+        "automobile",
+        "auto components",
+        "white goods",
+        "it hardware",
+        "textile",
+        "telecom",
+        "solar",
+        "drone",
+        "pharmaceutical",
+        "medical devices",
+        "food processing",
+        "specialty steel",
+    ]:
         if s in title_lower or s in text.lower()[:500]:
             sector = s.title()
             break
-            
+
     # 2. Scheme extraction
     scheme = "PLI Scheme"
     if "2.0" in title_lower or "2.0" in text[:500]:
         scheme = "PLI 2.0"
-        
+
     # 3. Extract companies from tables
-    for table in soup.find_all('table'):
-        for row in table.find_all('tr'):
-            cols = row.find_all(['td', 'th'])
+    for table in soup.find_all("table"):
+        for row in table.find_all("tr"):
+            cols = row.find_all(["td", "th"])
             if cols:
                 cell_text = cols[0].get_text(strip=True)
                 # Filter out headers and junk
-                if len(cell_text) > 3 and len(cell_text) < 100 and not cell_text.lower() in ["company", "company name", "s. no.", "s.no", "name", "applicant"]:
+                if (
+                    len(cell_text) > 3
+                    and len(cell_text) < 100
+                    and not cell_text.lower()
+                    in [
+                        "company",
+                        "company name",
+                        "s. no.",
+                        "s.no",
+                        "name",
+                        "applicant",
+                    ]
+                ):
                     # Ensure it's not a multi-line chunk that regex failed on earlier
-                    if '\n' not in cell_text:
+                    if "\n" not in cell_text:
                         companies.append(cell_text)
-                    
+
     # 4. Extract companies from lists
-    for ul in soup.find_all('ul'):
-        for li in ul.find_all('li'):
+    for ul in soup.find_all("ul"):
+        for li in ul.find_all("li"):
             li_text = li.get_text(strip=True)
-            if len(li_text) > 3 and len(li_text) < 100 and '\n' not in li_text:
+            if len(li_text) > 3 and len(li_text) < 100 and "\n" not in li_text:
                 companies.append(li_text)
-                
+
     # 5. Regex fallback on text
     corp_pattern = re.compile(
         r"\b([A-Z][a-zA-Z0-9&]+(?:\s+[A-Z][a-zA-Z0-9&]+)*)\s+(?:Ltd|Limited|Corp|Corporation|Enterprises|Solutions|Electronics|Industries|Apparels|Defence|Semiconductors|Company)\b"
     )
     for m in corp_pattern.finditer(text):
         companies.append(m.group(0))
-        
+
     # Clean and deduplicate
     unique_companies = []
     seen_lower = set()
     for c in companies:
-        c_clean = re.sub(r'^\d+[\.\)]\s*', '', c).strip()
+        c_clean = re.sub(r"^\d+[\.\)]\s*", "", c).strip()
         cl = c_clean.lower()
         if cl not in seen_lower and len(c_clean) > 3 and len(c_clean) < 80:
             seen_lower.add(cl)
-            unique_companies.append({
-                "name": c_clean,
-                "sector": sector,
-                "scheme": scheme,
-                "date": published_date
-            })
-            
+            unique_companies.append(
+                {
+                    "name": c_clean,
+                    "sector": sector,
+                    "scheme": scheme,
+                    "date": published_date,
+                }
+            )
+
     return unique_companies
+
 
 async def scrape_pib_pli_approvals_async(session, watchlist):
     log.info("Scraping PIB for PLI approval announcements (Async)...")
@@ -128,6 +156,7 @@ async def scrape_pib_pli_approvals_async(session, watchlist):
     emerging_pli_competitors = []
 
     from utils import fetch_text_async
+
     try:
         status, xml_data = await fetch_text_async(session, rss_url, timeout=15)
         if status == 200:
@@ -138,13 +167,17 @@ async def scrape_pib_pli_approvals_async(session, watchlist):
                 title = entry.get("title", "")
                 link = entry.get("link", "")
                 published = entry.get("published", "")
-                
-                # Fetch actual article HTML (assuming session handles redirects if possible, 
+
+                # Fetch actual article HTML (assuming session handles redirects if possible,
                 # or if Google News RSS returns direct HTML fallback)
                 try:
-                    art_status, art_html = await fetch_text_async(session, link, timeout=15)
+                    art_status, art_html = await fetch_text_async(
+                        session, link, timeout=15
+                    )
                     if art_status == 200:
-                        extracted = _extract_pli_data_from_html(art_html, title, published)
+                        extracted = _extract_pli_data_from_html(
+                            art_html, title, published
+                        )
                         for comp in extracted:
                             comp["announcement"] = title.split(" - ")[0]
                             comp["link"] = link
@@ -152,12 +185,14 @@ async def scrape_pib_pli_approvals_async(session, watchlist):
                 except Exception as ex:
                     log.error(f"Failed to fetch article for PLI extraction: {ex}")
                     # Fallback to extracting from RSS title/summary
-                    extracted = _extract_pli_data_from_html(title + " " + entry.get("summary", ""), title, published)
+                    extracted = _extract_pli_data_from_html(
+                        title + " " + entry.get("summary", ""), title, published
+                    )
                     for comp in extracted:
                         comp["announcement"] = title.split(" - ")[0]
                         comp["link"] = link
                         emerging_pli_competitors.append(comp)
-                        
+
     except Exception as e:
         log.error(f"Error scraping PIB PLI approvals: {e}")
 
@@ -165,7 +200,7 @@ async def scrape_pib_pli_approvals_async(session, watchlist):
     deduped = []
     seen = set()
     from analysis.parsing import resolve_ticker_from_name
-    
+
     # Existing names in watchlist to ignore
     existing_names = set()
     for sector, stocks in watchlist.items():
@@ -173,7 +208,7 @@ async def scrape_pib_pli_approvals_async(session, watchlist):
             existing_names.add(s["name"].lower())
             if s.get("ticker"):
                 existing_names.add(s["ticker"].lower())
-                
+
     for comp in emerging_pli_competitors:
         name_lower = comp["name"].lower()
         if name_lower not in seen and name_lower not in existing_names:
@@ -182,7 +217,9 @@ async def scrape_pib_pli_approvals_async(session, watchlist):
             comp["ticker"] = ticker
             comp["status"] = "Listed Peer" if ticker else "Unlisted"
             deduped.append(comp)
-            log.info(f"PIB PLI approval competitor detected: {comp['name']} ({comp['status']})")
+            log.info(
+                f"PIB PLI approval competitor detected: {comp['name']} ({comp['status']})"
+            )
 
     return deduped
 
@@ -211,20 +248,23 @@ async def fetch_advanced_rss_feeds_async(session, watchlist):
         rss_agree_url = f"https://news.google.com/rss/search?q={encoded_agree}&hl=en-IN&gl=IN&ceid=IN:en"
 
         from utils import fetch_text_async
+
         try:
-            status, xml_data = await fetch_text_async(session, rss_agree_url, timeout=15)
+            status, xml_data = await fetch_text_async(
+                session, rss_agree_url, timeout=15
+            )
             if status == 200:
-                    feed = feedparser.parse(xml_data)
-                    for entry in feed.entries[:3]:
-                        title = entry.get("title", "")
-                        agreements.append(
-                            {
-                                "title": title.split(" - ")[0],
-                                "link": entry.get("link", ""),
-                                "date": entry.get("published", ""),
-                                "source": entry.get("source", {}).get("title", "News"),
-                            }
-                        )
+                feed = feedparser.parse(xml_data)
+                for entry in feed.entries[:3]:
+                    title = entry.get("title", "")
+                    agreements.append(
+                        {
+                            "title": title.split(" - ")[0],
+                            "link": entry.get("link", ""),
+                            "date": entry.get("published", ""),
+                            "source": entry.get("source", {}).get("title", "News"),
+                        }
+                    )
         except Exception as e:
             log.error(f"Error fetching agreements chunk: {e}")
 
@@ -240,18 +280,21 @@ async def fetch_advanced_rss_feeds_async(session, watchlist):
                     feed = feedparser.parse(xml_data)
                     for entry in feed.entries[:3]:
                         title = entry.get("title", "")
-                        
+
                         matched_company = "Unknown"
                         matched_industry = "Manufacturing"
                         for sector_name, stocks in watchlist.items():
                             for s in stocks:
-                                if s["ticker"].lower() in title.lower() or s["name"].lower() in title.lower():
+                                if (
+                                    s["ticker"].lower() in title.lower()
+                                    or s["name"].lower() in title.lower()
+                                ):
                                     matched_company = s["name"]
                                     matched_industry = sector_name
                                     break
                             if matched_company != "Unknown":
                                 break
-                                
+
                         launches.append(
                             {
                                 "company": matched_company,
@@ -259,7 +302,7 @@ async def fetch_advanced_rss_feeds_async(session, watchlist):
                                 "industry": matched_industry,
                                 "date": entry.get("published", ""),
                                 "source": entry.get("source", {}).get("title", "News"),
-                                "link": entry.get("link", "")
+                                "link": entry.get("link", ""),
                             }
                         )
         except Exception as e:
@@ -297,26 +340,31 @@ async def fetch_exchange_filings_async(session, watchlist):
                     feed = feedparser.parse(xml_data)
                     for entry in feed.entries[:3]:
                         title = entry.get("title", "")
-                        
+
                         matched_company = "Unknown"
                         matched_industry = "Corporate"
                         for sector_name, stocks in watchlist.items():
                             for s in stocks:
-                                if s["ticker"].lower() in title.lower() or s["name"].lower() in title.lower():
+                                if (
+                                    s["ticker"].lower() in title.lower()
+                                    or s["name"].lower() in title.lower()
+                                ):
                                     matched_company = s["name"]
                                     matched_industry = sector_name
                                     break
                             if matched_company != "Unknown":
                                 break
-                                
+
                         filings.append(
                             {
                                 "company": matched_company,
                                 "filing": title.split(" - ")[0],
                                 "industry": matched_industry,
                                 "date": entry.get("published", ""),
-                                "source": entry.get("source", {}).get("title", "Exchange"),
-                                "link": entry.get("link", "")
+                                "source": entry.get("source", {}).get(
+                                    "title", "Exchange"
+                                ),
+                                "link": entry.get("link", ""),
                             }
                         )
         except Exception as e:
@@ -326,6 +374,7 @@ async def fetch_exchange_filings_async(session, watchlist):
 
     unique_filings = {f["filing"]: f for f in filings}.values()
     return list(unique_filings)[:10]
+
 
 async def check_sebi_sid_filings_async(session):
     log.info("Checking SEBI filings for thematic funds (Incoming Capital) (Async)...")
