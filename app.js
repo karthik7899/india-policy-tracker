@@ -95,12 +95,81 @@ let appData = null;
 let activeSectorFilter = "all";
 let growthChartInstance = null;
 
-// Helper: Sanitize text using safe DOM manipulation
-function escapeHTML(str) {
-    if (str === null || str === undefined) return '';
-    const div = document.createElement('div');
-    div.textContent = str;
-    return div.innerHTML;
+const TAB_COPY = {
+    dashboard: ["Policy & Sector Overview", "Real-time mapping of government policies to market indicators."],
+    sectors: ["Government Policy Logs", "Deep dive sector analysis, announcements history, and watchlists."],
+    agreements: ["Corporate News & Agreements", "Scanned news alerts regarding joint ventures, strategic partnerships, and MoUs."],
+    launches: ["Product Launches", "Real-time alerts on product launches, new manufacturing capacities, and rollouts."],
+    institutional: ["Institutional Activity", "Scheme filings, block deals, and institutional buying signals."],
+    graham: ["Margin of Safety (Deep Value)", "Defensive investor criteria checks and growth intrinsic value calculations."],
+    buffett: ["Owner Earnings & Moats", "Owner earnings estimates, quality signals, and retained value creation metrics."],
+    caution: ["Risk Alerts & Valuation Warnings", "Stocks that are not meeting the configured value and growth filters."],
+    stocks: ["Integrated Stocks Screener", "Curated companies, policy catalysts, and financial screening signals."]
+};
+
+function escapeHtml(value) {
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+const escapeHTML = escapeHtml;
+
+function safeExternalUrl(value) {
+    if (!value || typeof value !== "string" || !/^https?:\/\//i.test(value.trim())) {
+        return "#";
+    }
+    try {
+        const url = new URL(value);
+        return ["http:", "https:"].includes(url.protocol) ? url.href : "#";
+    } catch {
+        return "#";
+    }
+}
+
+function parsePercent(value) {
+    const parsed = parseFloat(String(value ?? "").replace("%", ""));
+    return Number.isFinite(parsed) ? parsed : null;
+}
+
+function getPolicySectorKeys(data) {
+    return Object.keys(data?.sectors || {}).filter(
+        key => Array.isArray(data?.briefing?.[key])
+    );
+}
+
+function countEmergingCompetitors(data) {
+    const structured = data?.briefing?.emerging_players || {};
+    const structuredCount = Object.values(structured).reduce(
+        (total, players) => total + (Array.isArray(players) ? players.length : 0),
+        0
+    );
+    const pliCount = Array.isArray(data?.briefing?.emerging_competitors)
+        ? data.briefing.emerging_competitors.length
+        : 0;
+    return structuredCount + pliCount;
+}
+
+function setText(id, value) {
+    const element = document.getElementById(id);
+    if (element) element.textContent = value;
+}
+
+function setTableEmpty(tbody, colspan, title, detail = "") {
+    tbody.innerHTML = `
+        <tr>
+            <td colspan="${colspan}">
+                <div class="empty-state">
+                    <strong>${escapeHtml(title)}</strong>
+                    ${detail ? `<span>${escapeHtml(detail)}</span>` : ""}
+                </div>
+            </td>
+        </tr>
+    `;
+
 }
 
 // Helper: Format YoY growth with contextual icon/color
@@ -111,21 +180,8 @@ function escapeHTML(str) {
 }
 
 function formatGrowthBadge(growthStr, style = 'inline') {
-    if (!growthStr || growthStr === "N/A") return `<span class="badge badge-neutral">N/A</span>`;
-
-    let isPositive = false;
-    let text = growthStr;
-
-    // Check if it starts with + or is a positive number
-    if (typeof growthStr === 'string') {
-        if (growthStr.startsWith('+')) isPositive = true;
-        else if (growthStr.startsWith('-')) isPositive = false;
-        else if (parseFloat(growthStr) > 0) isPositive = true;
-    } else if (typeof growthStr === 'number') {
-        isPositive = growthStr > 0;
-    }
-
-    const val = parseFloat(growthStr.toString().replace('%', ''));
+    if (!growthStr) return style === 'table' ? `<span style="color: var(--text-muted);">—</span>` : '';
+    const val = parseFloat(String(growthStr).replace('%', ''));
     if (isNaN(val)) return style === 'table' ? `<span style="color: var(--text-muted);">—</span>` : '';
     
     const absValStr = Math.abs(val).toFixed(1) + '%';
@@ -154,17 +210,10 @@ function escapeHTML(str) {
 
 // Helper: Format potential growth with proper sign and color
 function formatPotential(pctStr) {
-    if ((!pctStr && pctStr !== 0) || pctStr === "N/A") return `<span class="badge badge-neutral">N/A</span>`;
-
-    let isPositive = false;
-    if (typeof pctStr === 'string' && pctStr.startsWith('+')) {
-        isPositive = true;
-    } else if (typeof pctStr === 'number' && pctStr > 0) {
-        isPositive = true;
-    }
-
-    const val = parseFloat(String(pctStr).replace('%', '').replace('+', ''));
-    if (isNaN(val)) return pctStr;
+    if (!pctStr) return '—';
+    const val = parseFloat(String(pctStr).replace('%', ''));
+    if (isNaN(val)) return escapeHtml(pctStr);
+    const isPositive = typeof pctStr === 'string' ? pctStr.startsWith('+') : val > 0;
     const absValStr = Math.abs(val).toFixed(1) + '%';
     if (isPositive || val > 0) return `<span style="font-weight:700; color:#34d399;">+${absValStr}</span>`;
     if (val < 0) return `<span style="font-weight:700; color:#f87171;">-${absValStr}</span>`;
@@ -176,74 +225,80 @@ function formatAnalystBadge(stock) {
     const rating = stock.rating;
     const count = stock.analyst_count;
     if (!rating || rating === 'N/A') return `<span style="color: var(--text-muted);">—</span>`;
-    const countStr = count ? ` (${count})` : '';
-    return `<span class="badge badge-rating">${rating}${countStr}</span>`;
+    const countStr = count ? ` (${escapeHtml(count)})` : '';
+    return `<span class="badge badge-rating">${escapeHtml(rating)}${countStr}</span>`;
 }
 
 // Initialize App
 document.addEventListener("DOMContentLoaded", () => {
     setupThemeToggle();
     setupTabToggles();
+    setupQuickActions();
     loadDashboardData();
     setupStockSearch();
 });
 
 // Tab Toggling Logic
 function setupTabToggles() {
-    const navButtons = document.querySelectorAll(".nav-btn");
-    const tabPanes = document.querySelectorAll(".tab-pane");
-
+    const navButtons = document.querySelectorAll(".nav-btn[data-tab]");
     navButtons.forEach(btn => {
         btn.addEventListener("click", () => {
-            const targetTab = btn.getAttribute("data-tab");
-            
-            navButtons.forEach(b => b.classList.remove("active"));
-            tabPanes.forEach(t => t.classList.remove("active"));
+            activateTab(btn.getAttribute("data-tab"));
+        });
+    });
+}
 
-            btn.classList.add("active");
-            document.getElementById(`tab-${targetTab}`).classList.add("active");
-            
-            // Adjust title text based on tab
-            const pageTitle = document.getElementById("page-title");
-            const pageSubtitle = document.getElementById("page-subtitle");
-            
-            if (targetTab === "dashboard") {
-                pageTitle.textContent = "Policy & Sector Overview";
-                pageSubtitle.textContent = "Real-time mapping of government policies to market indicators.";
-                if (appData) renderCharts(appData);
-            } else if (targetTab === "sectors") {
-                pageTitle.textContent = "Government Policy Logs";
-                pageSubtitle.textContent = "Deep dive sector analysis, announcements history, and watchlists.";
-                if (appData) initSectorsTab();
-            } else if (targetTab === "agreements") {
-                pageTitle.textContent = "Corporate News & Agreements";
-                pageSubtitle.textContent = "Scanned news alerts regarding joint ventures, strategic partnerships, and MoUs.";
-                if (appData) renderAgreementsTable();
-            } else if (targetTab === "launches") {
-                pageTitle.textContent = "Product Launches";
-                pageSubtitle.textContent = "Real-time alerts on product launches, new manufacturing capacities, and rollouts.";
-                if (appData) renderLaunchesTable();
-            } else if (targetTab === "institutional") {
-                pageTitle.textContent = "Institutional Activity";
-                pageSubtitle.textContent = "Scheme Information Documents (SIDs) filed by mutual funds and institutional block deal news.";
-                if (appData) renderInstitutionalFlows();
-            } else if (targetTab === "graham") {
-                pageTitle.textContent = "Margin of Safety (Deep Value)";
-                pageSubtitle.textContent = "Defensive investor criteria checks and growth intrinsic value calculations.";
-                if (appData) renderGrahamTable();
-            } else if (targetTab === "buffett") {
-                pageTitle.textContent = "Owner Earnings & Moats";
-                pageSubtitle.textContent = "Owner earnings, economic moats, and retained value creation metrics.";
-                if (appData) renderBuffettTable();
-            } else if (targetTab === "caution") {
-                pageTitle.textContent = "Risk Alerts & Valuation Warnings (Caution List)";
-                pageSubtitle.textContent = "Stocks that are not meeting standard value/growth investing filters or showing warning signs.";
-                if (appData) renderCautionTable();
-            } else if (targetTab === "stocks") {
-                pageTitle.textContent = "Integrated Stocks Screener";
-                pageSubtitle.textContent = "Curated list of companies and their policy-related growth drivers.";
-                if (appData) renderStocksTable();
-            }
+function activateTab(targetTab) {
+    const targetPane = document.getElementById(`tab-${targetTab}`);
+    if (!targetPane || !TAB_COPY[targetTab]) return;
+
+    document.querySelectorAll(".nav-btn[data-tab]").forEach(button => {
+        const isActive = button.getAttribute("data-tab") === targetTab;
+        button.classList.toggle("active", isActive);
+        button.setAttribute("aria-selected", String(isActive));
+    });
+    document.querySelectorAll(".tab-pane").forEach(pane => {
+        pane.classList.toggle("active", pane === targetPane);
+    });
+
+    const [title, subtitle] = TAB_COPY[targetTab];
+    setText("page-title", title);
+    setText("page-subtitle", subtitle);
+
+    if (appData) {
+        const renderers = {
+            dashboard: () => renderCharts(appData),
+            sectors: initSectorsTab,
+            agreements: renderAgreementsTable,
+            launches: renderLaunchesTable,
+            institutional: renderInstitutionalFlows,
+            graham: renderGrahamTable,
+            buffett: renderBuffettTable,
+            caution: renderCautionTable,
+            stocks: () => renderStocksTable(document.getElementById("stock-search")?.value || "")
+        };
+        renderers[targetTab]?.();
+    }
+
+    const main = document.getElementById("main-content");
+    if (main) main.scrollTo({ top: 0, behavior: "smooth" });
+    document.querySelector(`.nav-btn[data-tab="${targetTab}"]`)?.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "nearest"
+    });
+}
+
+function setupQuickActions() {
+    document.querySelectorAll("[data-tab-target]").forEach(button => {
+        button.addEventListener("click", () => activateTab(button.dataset.tabTarget));
+    });
+    document.querySelectorAll("[data-scroll-target]").forEach(button => {
+        button.addEventListener("click", () => {
+            document.getElementById(button.dataset.scrollTarget)?.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
         });
     });
 }
@@ -256,40 +311,59 @@ function loadDashboardData() {
             return response.json();
         })
         .then(data => {
-            console.log("Live dashboard data loaded successfully.");
             appData = data;
-            initDashboard(data);
+            initDashboard(data, false);
         })
         .catch(err => {
             console.warn("Failed to load live data, fallback to static mock seed database:", err);
             appData = MOCK_DATA;
-            initDashboard(MOCK_DATA);
+            initDashboard(MOCK_DATA, true);
         });
 }
 
 // Dashboard Page Setup
-function initDashboard(data) {
-    document.getElementById("update-time").textContent = `Last Refreshed: ${data.last_updated}`;
+function initDashboard(data, isFallback = false) {
+    setText("update-time", `Last Refreshed: ${data.last_updated || "Unknown"}`);
+    setText("data-mode-text", isFallback ? "Demo dataset" : "Live dataset");
+    document.getElementById("data-mode-badge")?.classList.toggle("is-fallback", isFallback);
     
     // Hide loading overlay
     const overlay = document.getElementById("loading-overlay");
-    if (overlay) overlay.style.display = "none";
+    if (overlay) overlay.classList.add("is-hidden");
     
     // Calculate total policy announcements
-    let totalAnnouncements = 0;
-    Object.keys(data.briefing).forEach(key => {
-        if (key !== "emerging_players" && Array.isArray(data.briefing[key])) {
-            totalAnnouncements += data.briefing[key].length;
-        }
-    });
-    document.getElementById("active-signals-val").textContent = totalAnnouncements;
+    const sectorKeys = getPolicySectorKeys(data);
+    const totalAnnouncements = sectorKeys.reduce(
+        (total, key) => total + data.briefing[key].length,
+        0
+    );
+    setText("active-signals-val", totalAnnouncements);
+    setText("tracked-sectors-val", sectorKeys.length);
     
     // Calculate total stocks
-    let totalStocks = 0;
-    Object.values(data.watchlist).forEach(items => {
-        totalStocks += items.length;
-    });
-    document.getElementById("total-stocks-val").textContent = totalStocks;
+    const allStocks = Object.values(data.watchlist || {}).flat();
+    setText("total-stocks-val", allStocks.length);
+
+    const potentials = allStocks
+        .map(stock => parsePercent(stock.growth_pct))
+        .filter(value => value !== null);
+    const averagePotential = potentials.length
+        ? potentials.reduce((total, value) => total + value, 0) / potentials.length
+        : null;
+    setText("average-potential-val", averagePotential === null ? "-" : `${averagePotential.toFixed(1)}%`);
+
+    const briefing = data.briefing || {};
+    setText("agreements-count", (briefing.corporate_agreements || []).length);
+    setText("launches-count", (briefing.product_launches || []).length);
+    setText(
+        "institutional-count",
+        (briefing.institutional_activity || []).length + (briefing.sebi_filings || []).length
+    );
+    setText(
+        "deep-value-count",
+        (briefing.margin_of_safety || []).filter(item => item.is_defensive_pass).length
+    );
+    setText("competitors-count", countEmergingCompetitors(data));
 
     // Render components
     renderSectorChips(data);
@@ -311,13 +385,11 @@ function initDashboard(data) {
     selector.addEventListener("change", (e) => {
         activeSectorFilter = e.target.value;
         // Synchronize active chips with dropdown
-        const chips = document.querySelectorAll(".chip");
+        const chips = document.querySelectorAll(".sector-chips .chip");
         chips.forEach(chip => {
-            if (chip.getAttribute("data-sector") === activeSectorFilter) {
-                chip.classList.add("active");
-            } else {
-                chip.classList.remove("active");
-            }
+            const isActive = chip.getAttribute("data-sector") === activeSectorFilter;
+            chip.classList.toggle("active", isActive);
+            chip.setAttribute("aria-pressed", String(isActive));
         });
         renderPolicyFeed(data);
     });
@@ -329,28 +401,35 @@ function renderSectorChips(data) {
     container.innerHTML = "";
     
     // Create an 'All' chip
-    const allChip = document.createElement("div");
+    const allChip = document.createElement("button");
+    allChip.type = "button";
     allChip.className = "chip active";
     allChip.setAttribute("data-sector", "all");
-    allChip.innerHTML = `🌐 All Sectors`;
+    allChip.setAttribute("aria-pressed", "true");
+    allChip.textContent = "🌐 All Sectors";
     allChip.addEventListener("click", () => handleChipClick("all", allChip));
     container.appendChild(allChip);
     
     // Create individual chips
     Object.keys(data.sectors).forEach(key => {
         const sect = data.sectors[key];
-        const chip = document.createElement("div");
+        const chip = document.createElement("button");
+        chip.type = "button";
         chip.className = "chip";
         chip.setAttribute("data-sector", key);
-        chip.innerHTML = `${sect.icon} ${sect.label}`;
+        chip.setAttribute("aria-pressed", "false");
+        chip.textContent = `${sect.icon} ${sect.label}`;
         chip.addEventListener("click", () => handleChipClick(key, chip));
         container.appendChild(chip);
     });
 }
 
 function handleChipClick(sectorKey, chipElement) {
-    document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
-    chipElement.classList.add("active");
+    document.querySelectorAll(".sector-chips .chip").forEach(chip => {
+        const isActive = chip === chipElement;
+        chip.classList.toggle("active", isActive);
+        chip.setAttribute("aria-pressed", String(isActive));
+    });
     activeSectorFilter = sectorKey;
     
     // Sync with dropdown filter
@@ -365,17 +444,16 @@ function renderPolicyFeed(data) {
     container.innerHTML = "";
     
     let feedItems = [];
+    const policySectorKeys = getPolicySectorKeys(data);
     
     if (activeSectorFilter === "all") {
-        Object.keys(data.briefing).forEach(sectorKey => {
-            if (sectorKey !== "emerging_players" && Array.isArray(data.briefing[sectorKey])) {
-                data.briefing[sectorKey].forEach(item => {
-                    feedItems.push({ ...item, sectorKey: sectorKey });
-                });
-            }
+        policySectorKeys.forEach(sectorKey => {
+            data.briefing[sectorKey].forEach(item => {
+                feedItems.push({ ...item, sectorKey });
+            });
         });
     } else {
-        if (activeSectorFilter !== "emerging_players" && data.briefing[activeSectorFilter]) {
+        if (policySectorKeys.includes(activeSectorFilter)) {
             data.briefing[activeSectorFilter].forEach(item => {
                 feedItems.push({ ...item, sectorKey: activeSectorFilter });
             });
@@ -383,7 +461,14 @@ function renderPolicyFeed(data) {
     }
     
     if (feedItems.length === 0) {
-        container.innerHTML = `<div class="feed-item"><p style="color: var(--text-secondary); text-align: center; padding: 20px 0;">No policy bulletins tracked for this sector in the recent cycle.</p></div>`;
+        container.innerHTML = `
+            <div class="feed-item">
+                <div class="empty-state">
+                    <strong>No policy bulletins found</strong>
+                    <span>Try another sector or check the next scheduled data refresh.</span>
+                </div>
+            </div>
+        `;
         return;
     }
     
@@ -395,8 +480,14 @@ function renderPolicyFeed(data) {
         el.className = "feed-item";
         
         const badgeClass = item.impact === "Positive" ? "badge-positive" : (item.impact === "Negative" ? "badge-negative" : "badge-neutral");
-        const sectorLabel = data.sectors[item.sectorKey].label;
-        const sectorIcon = data.sectors[item.sectorKey].icon;
+        const sector = data.sectors[item.sectorKey] || {};
+        const sectorLabel = escapeHtml(sector.label || item.sectorKey);
+        const sectorIcon = escapeHtml(sector.icon || "•");
+        const source = escapeHtml(item.source || "News");
+        const impact = escapeHtml(item.impact || "Neutral");
+        const title = escapeHtml(item.title || "Untitled update");
+        const date = escapeHtml(item.date || "Date unavailable");
+        const link = safeExternalUrl(item.link);
         
         let safeLink = "#";
         try {
@@ -415,20 +506,21 @@ function renderPolicyFeed(data) {
 
         const sourceBadge = document.createElement("span");
         sourceBadge.className = "source-badge";
-        sourceBadge.textContent = item.source;
+        sourceBadge.textContent = source;
 
         const impactBadge = document.createElement("span");
         impactBadge.className = `badge ${badgeClass}`;
-        impactBadge.textContent = `${item.impact} Impact`;
+        impactBadge.textContent = `${impact} Impact`;
 
         headerDiv.appendChild(sourceBadge);
         headerDiv.appendChild(impactBadge);
 
         const titleLink = document.createElement("a");
-        titleLink.href = safeLink;
+        titleLink.href = link;
         titleLink.className = "feed-item-title";
         titleLink.target = "_blank";
-        titleLink.textContent = item.title;
+        titleLink.rel = "noopener noreferrer";
+        titleLink.textContent = title;
 
         const metaDiv = document.createElement("div");
         metaDiv.className = "feed-item-meta";
@@ -438,7 +530,7 @@ function renderPolicyFeed(data) {
         sectorTag.textContent = `${sectorIcon} ${sectorLabel}`;
 
         const dateSpan = document.createElement("span");
-        dateSpan.textContent = item.date;
+        dateSpan.textContent = date;
 
         metaDiv.appendChild(sectorTag);
         metaDiv.appendChild(dateSpan);
@@ -446,7 +538,6 @@ function renderPolicyFeed(data) {
         el.appendChild(headerDiv);
         el.appendChild(titleLink);
         el.appendChild(metaDiv);
-
         container.appendChild(el);
     });
 }
@@ -472,16 +563,27 @@ function renderTopPicks(data) {
         .filter(s => s.rawPctValue >= 28)
         .sort((a,b) => b.rawPctValue - a.rawPctValue);
         
-    topPicks.slice(0, 6).forEach(s => {
+    const visiblePicks = topPicks.slice(0, 6);
+    if (visiblePicks.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <strong>No high-upside picks</strong>
+                <span>No watchlist company currently clears the 28% target threshold.</span>
+            </div>
+        `;
+        return;
+    }
+
+    visiblePicks.forEach(s => {
         const item = document.createElement("div");
         item.className = "highlight-item";
         item.innerHTML = `
             <div class="hl-left">
-                <span class="hl-ticker">${escapeHTML(s.ticker)}</span>
-                <span class="hl-name">${escapeHTML(s.name)}</span>
+                <span class="hl-ticker">${escapeHtml(s.ticker)}</span>
+                <span class="hl-name">${escapeHtml(s.name)}</span>
             </div>
             <div class="hl-right">
-                <span class="hl-price">CMP: ₹${s.price}</span>
+                <span class="hl-price">CMP: ₹${escapeHtml(s.price)}</span>
                 <div class="hl-pct">${s.growth_pct ? formatPotential(s.growth_pct) : '—'} Target</div>
             </div>
         `;
@@ -495,77 +597,91 @@ function renderEmergingRadar(data) {
     if (!container) return;
     container.innerHTML = "";
     
-    const emerging = data.briefing.emerging_players || {};
-    let hasPlayers = false;
-    
-    Object.keys(emerging).forEach(sectorKey => {
-        const sectorLabel = data.sectors[sectorKey]?.label || sectorKey;
-        const sectorIcon = data.sectors[sectorKey]?.icon || "🏢";
-        const players = emerging[sectorKey];
-        
-        players.forEach(p => {
-            hasPlayers = true;
-            
-            let displayName = "";
-            let tickerBadge = "";
-            let statusText = "Analyzing Listing...";
-            let statusStyle = "color: #fbbf24; font-size: 9px; font-weight: 600;";
-            let reasonText = "";
-            
-            if (p && typeof p === 'object') {
-                displayName = escapeHTML(p.name) || "Unknown Company";
-                const ticker = escapeHTML(p.ticker);
-                tickerBadge = ticker ? `<span class="hl-ticker" style="margin-left: 6px; font-size: 10px; background: rgba(59, 130, 246, 0.1); color: var(--primary); padding: 1px 4px; border-radius: 3px;">${ticker}</span>` : '';
-                statusText = p.status || "Scanned";
-                reasonText = p.reason ? `<div style="font-size: 10px; color: #64748b; margin-top: 4px; max-width: 220px; line-height: 1.2;">${escapeHTML(p.reason)}</div>` : '';
-                
-                // Color status dynamically
-                if (statusText === 'Watchlisted') {
-                    statusStyle = 'background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); padding: 2px 6px; border-radius: 4px; font-size: 8px; font-weight: 700;';
-                } else if (statusText === 'Pipeline') {
-                    statusStyle = 'background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); padding: 2px 6px; border-radius: 4px; font-size: 8px; font-weight: 700;';
-                } else if (statusText === 'Growth Divergence') {
-                    statusStyle = 'background: rgba(239, 68, 68, 0.12); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); padding: 2px 6px; border-radius: 4px; font-size: 8px; font-weight: 700;';
-                } else {
-                    statusStyle = 'background: rgba(255, 255, 255, 0.05); color: #94a3b8; border: 1px solid rgba(255, 255, 255, 0.1); padding: 2px 6px; border-radius: 4px; font-size: 8px; font-weight: 700;';
-                }
-            } else {
-                displayName = p || "Unknown Company";
-            }
-            
-            const item = document.createElement("div");
-            item.className = "highlight-item";
-            item.style.display = "flex";
-            item.style.justifyContent = "space-between";
-            item.style.alignItems = "flex-start";
-            item.style.padding = "12px 16px";
-            
-            item.innerHTML = `
-                <div class="hl-left" style="display: flex; flex-direction: column; gap: 2px;">
-                    <div style="display: flex; align-items: center;">
-                        <span class="hl-ticker" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); font-size: 8px; padding: 2px 4px; border-radius: 4px; font-weight: 800; width: fit-content;">RADAR</span>
-                        ${tickerBadge}
-                    </div>
-                    <span class="hl-name" style="color: #f8fafc; font-weight: 500; font-size: 13px; margin-top: 4px;">${escapeHTML(displayName)}</span>
-                    ${reasonText}
-                </div>
-                <div class="hl-right" style="text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
-                    <span class="hl-price" style="font-size: 11px; color: #94a3b8;">${sectorIcon} ${sectorLabel}</span>
-                    <div style="${statusStyle}">${statusText}</div>
-                </div>
-            `;
-            container.appendChild(item);
+    const entries = [];
+    (data.briefing.emerging_competitors || []).forEach(player => {
+        entries.push({
+            ...player,
+            sectorLabel: "PLI approvals",
+            sectorIcon: "🏭",
+            reason: player.announcement || "Detected in a recent PLI approval announcement."
+
         });
     });
-    
-    if (!hasPlayers) {
-        container.innerHTML = `<div style="color: var(--text-muted); font-size: 12px; font-style: italic; text-align: center; padding: 15px 0;">No new competitors detected in recent feed. Watchlist stable.</div>`;
+
+    Object.entries(data.briefing.emerging_players || {}).forEach(([sectorKey, players]) => {
+        if (!Array.isArray(players)) return;
+        players.forEach(player => {
+            const normalized = player && typeof player === "object"
+                ? player
+                : { name: player };
+            entries.push({
+                ...normalized,
+                sectorLabel: data.sectors[sectorKey]?.label || sectorKey,
+                sectorIcon: data.sectors[sectorKey]?.icon || "🏢"
+            });
+        });
+    });
+
+    const seen = new Set();
+    const uniqueEntries = entries.filter(player => {
+        const key = `${player.ticker || ""}|${player.name || ""}`.toLowerCase();
+        if (!key || seen.has(key)) return false;
+        seen.add(key);
+        return true;
+    });
+
+    if (uniqueEntries.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <strong>Watchlist stable</strong>
+                <span>No new competitors were detected in the latest feed.</span>
+            </div>
+        `;
+        return;
     }
+
+    uniqueEntries.slice(0, 10).forEach(player => {
+        const status = player.status || "Radar";
+        const statusClass = status === "Watchlisted" || status === "Added"
+            ? "badge-success-alert"
+            : status === "Growth Divergence" || status === "Rejected" || status === "Unresolved"
+                ? "badge-danger-alert"
+                : "badge-warning-alert";
+        const link = safeExternalUrl(player.link);
+        const articleLink = link === "#"
+            ? ""
+            : `<a class="article-link" href="${link}" target="_blank" rel="noopener noreferrer">Source</a>`;
+
+        const item = document.createElement("div");
+        item.className = "highlight-item radar-item";
+        item.innerHTML = `
+            <div class="radar-main">
+                <div class="radar-labels">
+                    <span class="radar-kicker">RADAR</span>
+                    ${player.ticker ? `<span class="hl-ticker radar-ticker">${escapeHtml(player.ticker)}</span>` : ""}
+                </div>
+                <span class="radar-name">${escapeHtml(player.name || player.ticker || "Unknown company")}</span>
+                ${player.reason ? `<span class="radar-reason">${escapeHtml(player.reason)}</span>` : ""}
+            </div>
+            <div class="radar-meta">
+                <span class="radar-sector">${escapeHtml(player.sectorIcon)} ${escapeHtml(player.sectorLabel)}</span>
+                <span class="${statusClass}">${escapeHtml(status)}</span>
+                ${articleLink}
+            </div>
+        `;
+        container.appendChild(item);
+    });
 }
 
 // Render Comparison Chart using Chart.js
 function renderCharts(data) {
-    const ctx = document.getElementById("growthChart").getContext("2d");
+    const canvas = document.getElementById("growthChart");
+    if (!canvas || typeof Chart === "undefined") {
+        canvas?.parentElement?.classList.add("chart-unavailable");
+        return;
+    }
+    canvas.parentElement?.classList.remove("chart-unavailable");
+    const ctx = canvas.getContext("2d");
     
     // Calculate average growth potential per sector
     const labels = [];
@@ -578,12 +694,17 @@ function renderCharts(data) {
         "rgba(239, 68, 68, 0.6)",    // Red
         "rgba(6, 182, 212, 0.6)",    // Cyan
         "rgba(236, 72, 153, 0.6)",   // Pink
-        "rgba(107, 114, 128, 0.6)"   // Grey
+        "rgba(107, 114, 128, 0.6)",  // Grey
+        "rgba(234, 179, 8, 0.6)",    // Yellow
+        "rgba(20, 184, 166, 0.6)",   // Teal
+        "rgba(168, 85, 247, 0.6)",   // Violet
+        "rgba(249, 115, 22, 0.6)",   // Deep orange
+        "rgba(14, 165, 233, 0.6)"    // Sky
     ];
     const borderColors = colors.map(c => c.replace("0.6", "1"));
     
     Object.keys(data.watchlist).forEach(sectorKey => {
-        const sectorLabel = data.sectors[sectorKey].label;
+        const sectorLabel = data.sectors[sectorKey]?.label || sectorKey;
         const stocks = data.watchlist[sectorKey];
         
         let sum = 0;
@@ -603,6 +724,11 @@ function renderCharts(data) {
     if (growthChartInstance) {
         growthChartInstance.destroy();
     }
+
+    const themeStyles = getComputedStyle(document.documentElement);
+    const chartTextColor = themeStyles.getPropertyValue("--text-secondary").trim();
+    const chartSurfaceColor = themeStyles.getPropertyValue("--bg-surface").trim();
+    const chartBorderColor = themeStyles.getPropertyValue("--border-color").trim();
     
     growthChartInstance = new Chart(ctx, {
         type: 'bar',
@@ -618,6 +744,7 @@ function renderCharts(data) {
             }]
         },
         options: {
+            indexAxis: 'y',
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
@@ -625,31 +752,31 @@ function renderCharts(data) {
                     display: false
                 },
                 tooltip: {
-                    backgroundColor: '#1f2937',
-                    titleColor: '#f8fafc',
-                    bodyColor: '#cbd5e1',
-                    borderColor: '#374151',
+                    backgroundColor: chartSurfaceColor,
+                    titleColor: themeStyles.getPropertyValue("--text-primary").trim(),
+                    bodyColor: chartTextColor,
+                    borderColor: chartBorderColor,
                     borderWidth: 1
                 }
             },
             scales: {
-                y: {
+                x: {
                     grid: {
-                        color: 'rgba(255, 255, 255, 0.05)'
+                        color: chartBorderColor
                     },
                     ticks: {
-                        color: '#94a3b8',
+                        color: chartTextColor,
                         callback: function(value) { return value + '%'; }
                     }
                 },
-                x: {
+                y: {
                     grid: {
                         display: false
                     },
                     ticks: {
-                        color: '#94a3b8',
+                        color: chartTextColor,
                         font: {
-                            size: 10
+                            size: 9
                         }
                     }
                 }
@@ -668,11 +795,18 @@ function initSectorsTab() {
     sectorKeys.forEach((key, idx) => {
         const sect = appData.sectors[key];
         const btn = document.createElement("button");
+        btn.type = "button";
         btn.className = `sector-nav-item ${idx === 0 ? 'active' : ''}`;
-        btn.innerHTML = `<span>${sect.icon}</span> ${sect.label}`;
+        btn.setAttribute("aria-pressed", String(idx === 0));
+        const icon = document.createElement("span");
+        icon.textContent = sect.icon;
+        btn.append(icon, document.createTextNode(` ${sect.label}`));
         btn.addEventListener("click", () => {
-            document.querySelectorAll(".sector-nav-item").forEach(b => b.classList.remove("active"));
-            btn.classList.add("active");
+            document.querySelectorAll(".sector-nav-item").forEach(button => {
+                const isActive = button === btn;
+                button.classList.toggle("active", isActive);
+                button.setAttribute("aria-pressed", String(isActive));
+            });
             renderSectorDetail(key);
         });
         listContainer.appendChild(btn);
@@ -697,11 +831,11 @@ function renderSectorDetail(sectorKey) {
             newsHtml += `
                 <div class="feed-item mt-12">
                     <div class="feed-item-header">
-                        <span class="source-badge">${escapeHTML(n.source)}</span>
-                        <span class="badge ${badgeClass}">${n.impact} Impact</span>
+                        <span class="source-badge">${escapeHtml(n.source || "News")}</span>
+                        <span class="badge ${badgeClass}">${escapeHtml(n.impact || "Neutral")} Impact</span>
                     </div>
-                    <a href="${n.link}" class="feed-item-title" target="_blank">${escapeHTML(n.title)}</a>
-                    <span style="font-size:11px; color: var(--text-muted);">${n.date}</span>
+                    <a href="${safeExternalUrl(n.link)}" class="feed-item-title" target="_blank" rel="noopener noreferrer">${escapeHtml(n.title || "Untitled update")}</a>
+                    <span style="font-size:11px; color: var(--text-muted);">${escapeHtml(n.date || "Date unavailable")}</span>
                 </div>
             `;
         });
@@ -781,8 +915,8 @@ function renderSectorDetail(sectorKey) {
                 <div class="dsc-header">
                     <div class="dsc-ticker-group">
                         <h4 style="display: flex; align-items: center; flex-wrap: wrap; gap: 8px;">
-                            ${escapeHTML(s.name)}
-                            <span style="background-color: rgba(59, 130, 246, 0.1); color: var(--primary); padding: 2px 6px; border-radius: 4px; font-weight: 700; font-size: 11px;">${escapeHTML(s.ticker)}</span>
+                            ${escapeHtml(s.name)}
+                            <span style="background-color: rgba(59, 130, 246, 0.1); color: var(--primary); padding: 2px 6px; border-radius: 4px; font-weight: 700; font-size: 11px;">${escapeHtml(s.ticker)}</span>
                             ${analystBadge}
                             ${growthBadge}
                             ${earningsBadge}
@@ -791,11 +925,11 @@ function renderSectorDetail(sectorKey) {
                     <span class="dsc-pot">${formatPotential(s.growth_pct)}</span>
                 </div>
                 <div class="dsc-metrics" style="margin-top: 12px;">
-                    <span>CMP: <strong>₹${s.price}</strong></span>
+                    <span>CMP: <strong>₹${escapeHtml(s.price)}</strong></span>
                     ${analystDisplay}
-                    <span>Analysts: <strong>${s.analyst_count || '—'}</strong></span>
+                    <span>Analysts: <strong>${escapeHtml(s.analyst_count || '—')}</strong></span>
                 </div>
-                <p class="dsc-catalyst"><strong>Watchlist Catalyst:</strong> ${s.catalyst}</p>
+                <p class="dsc-catalyst"><strong>Watchlist Catalyst:</strong> ${escapeHtml(s.catalyst)}</p>
                 ${screenerHtml}
             </div>
         `;
@@ -804,10 +938,10 @@ function renderSectorDetail(sectorKey) {
     container.innerHTML = `
         <div class="detail-header">
             <div class="detail-header-top">
-                <span>${sect.icon}</span>
-                <h3>${sect.label}</h3>
+                <span>${escapeHtml(sect.icon)}</span>
+                <h3>${escapeHtml(sect.label)}</h3>
             </div>
-            <p>${sect.desc}</p>
+            <p>${escapeHtml(sect.desc)}</p>
         </div>
         
         <div class="detail-body-grid">
@@ -847,9 +981,9 @@ function renderStocksTable(filterQuery = "") {
         
         stocks.forEach(s => {
             const matchesSearch = !query || 
-                s.ticker.toLowerCase().includes(query) ||
-                s.name.toLowerCase().includes(query) ||
-                s.catalyst.toLowerCase().includes(query) ||
+                String(s.ticker || "").toLowerCase().includes(query) ||
+                String(s.name || "").toLowerCase().includes(query) ||
+                String(s.catalyst || "").toLowerCase().includes(query) ||
                 sectorLabel.toLowerCase().includes(query);
                 
             if (matchesSearch) {
@@ -928,7 +1062,7 @@ function renderStocksTable(filterQuery = "") {
         if (sectorKey === "macro_indicators") {
             valAlertsHtml = '<span style="color: var(--text-muted);">ETF (N/A)</span>';
         } else if (sc.valuation_alerts && sc.valuation_alerts.length > 0) {
-            valAlertsHtml = sc.valuation_alerts.map(a => `<span class="badge-danger-alert" style="margin-right: 4px; margin-bottom: 4px; font-size: 8px;">${a}</span>`).join('');
+            valAlertsHtml = sc.valuation_alerts.map(a => `<span class="badge-danger-alert" style="margin-right: 4px; margin-bottom: 4px; font-size: 8px;">${escapeHtml(a)}</span>`).join('');
         } else {
             valAlertsHtml = '<span class="badge-success-alert" style="font-size: 8px;">PASSED</span>';
         }
@@ -956,10 +1090,10 @@ function renderStocksTable(filterQuery = "") {
 
         const tr = document.createElement("tr");
         tr.innerHTML = `
-            <td class="t-ticker">${escapeHTML(s.ticker)}</td>
-            <td><strong>${escapeHTML(s.name)}</strong></td>
-            <td><span class="chip" style="display:inline-block; border-color:transparent; background-color:rgba(255,255,255,0.03);">${sectorLabel}</span></td>
-            <td>₹${s.price}</td>
+            <td class="t-ticker">${escapeHtml(s.ticker)}</td>
+            <td><strong>${escapeHtml(s.name)}</strong></td>
+            <td><span class="chip" style="display:inline-block; border-color:transparent;">${escapeHtml(sectorLabel)}</span></td>
+            <td>₹${escapeHtml(s.price)}</td>
             <td><strong>${peVal}</strong></td>
             <td>${qoqSalesVal}</td>
             <td><strong>${roceVal}</strong></td>
@@ -967,19 +1101,19 @@ function renderStocksTable(filterQuery = "") {
             <td>${capexVal}</td>
             <td><strong>${oeVal}</strong></td>
             <td><strong>${grahamVal}</strong></td>
-            <td>${s.target ? `₹${s.target}` : '<span style="color: var(--text-muted);">—</span>'}</td>
+            <td>${s.target ? `₹${escapeHtml(s.target)}` : '<span style="color: var(--text-muted);">—</span>'}</td>
             <td class="t-potential">${formatPotential(s.growth_pct)}</td>
             <td>${formatGrowthBadge(s.revenue_growth, 'table')}</td>
             <td>${instChangeHtml}</td>
             <td style="max-width: 150px; white-space: normal;">${valAlertsHtml}</td>
             <td>${formatAnalystBadge(s)}</td>
-            <td style="max-width: 280px; white-space: normal; font-size: 11px;">${escapeHTML(s.catalyst)}</td>
+            <td style="max-width: 280px; white-space: normal; font-size: 11px;">${escapeHtml(s.catalyst)}</td>
         `;
         tbody.appendChild(tr);
     });
 
     if (allStocksList.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="18" style="text-align: center; padding: 30px; color: var(--text-secondary);">No companies found matching your search.</td></tr>`;
+        setTableEmpty(tbody, 18, "No matching companies", "Try a ticker, company, sector, or catalyst keyword.");
     }
 
     updateSortHeaders();
@@ -1000,7 +1134,9 @@ function setupStockSearch() {
 function setupTableSorting() {
     const headers = document.querySelectorAll("th.sortable");
     headers.forEach(header => {
-        header.addEventListener("click", () => {
+        header.tabIndex = 0;
+        header.setAttribute("role", "button");
+        const applySort = () => {
             const column = header.getAttribute("data-sort");
             if (currentSortColumn === column) {
                 currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
@@ -1009,6 +1145,13 @@ function setupTableSorting() {
                 currentSortDirection = 'desc'; // Default to desc for new column
             }
             renderStocksTable(document.getElementById("stock-search").value);
+        };
+        header.addEventListener("click", applySort);
+        header.addEventListener("keydown", event => {
+            if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                applySort();
+            }
         });
     });
 }
@@ -1017,8 +1160,13 @@ function updateSortHeaders() {
     const headers = document.querySelectorAll("th.sortable");
     headers.forEach(header => {
         header.classList.remove("asc", "desc");
+        header.setAttribute("aria-sort", "none");
         if (header.getAttribute("data-sort") === currentSortColumn) {
             header.classList.add(currentSortDirection);
+            header.setAttribute(
+                "aria-sort",
+                currentSortDirection === "asc" ? "ascending" : "descending"
+            );
         }
     });
 }
@@ -1028,23 +1176,33 @@ function setupThemeToggle() {
     const toggleBtn = document.getElementById("theme-toggle");
     if (!toggleBtn) return;
 
-    // Check saved theme or system preference
     const savedTheme = localStorage.getItem('bharat-policy-theme');
     const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
-
-    if (savedTheme === 'light' || (!savedTheme && prefersLight)) {
-        document.documentElement.setAttribute('data-theme', 'light');
-    }
+    applyTheme(savedTheme || (prefersLight ? "light" : "dark"));
 
     toggleBtn.addEventListener("click", () => {
-        const currentTheme = document.documentElement.getAttribute('data-theme');
-        let newTheme = 'dark';
-        if (currentTheme !== 'light') {
-            newTheme = 'light';
-        }
-        document.documentElement.setAttribute('data-theme', newTheme);
+        const currentTheme = document.documentElement.getAttribute('data-theme') || "dark";
+        const newTheme = currentTheme === "light" ? "dark" : "light";
+        applyTheme(newTheme);
         localStorage.setItem('bharat-policy-theme', newTheme);
+        if (appData) renderCharts(appData);
     });
+}
+
+function applyTheme(theme) {
+    const normalizedTheme = theme === "light" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", normalizedTheme);
+
+    const isLight = normalizedTheme === "light";
+    setText("theme-toggle-text", isLight ? "Dark theme" : "Light theme");
+    setText("theme-toggle-icon", isLight ? "🌙" : "☀️");
+
+    const toggleBtn = document.getElementById("theme-toggle");
+    toggleBtn?.setAttribute("aria-label", isLight ? "Switch to dark theme" : "Switch to light theme");
+    document.querySelector('meta[name="theme-color"]')?.setAttribute(
+        "content",
+        isLight ? "#f8fafc" : "#070a13"
+    );
 }
 
 // Render Corporate Agreements List
@@ -1055,17 +1213,17 @@ function renderAgreementsTable() {
     
     const agreements = appData.briefing.corporate_agreements || [];
     if (agreements.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; padding: 20px; color: var(--text-secondary);">No corporate agreements tracked in this cycle.</td></tr>`;
+        setTableEmpty(tbody, 4, "No corporate agreements", "No matching signals were found in this cycle.");
         return;
     }
     
     agreements.forEach(a => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-            <td><span class="source-badge">${escapeHTML(a.source)}</span></td>
-            <td><strong>${escapeHTML(a.title)}</strong></td>
-            <td>${a.date}</td>
-            <td><a href="${a.link}" class="badge-rating" style="text-decoration:none;" target="_blank">View Article</a></td>
+            <td><span class="source-badge">${escapeHtml(a.source || "News")}</span></td>
+            <td><strong>${escapeHtml(a.title || "Untitled update")}</strong></td>
+            <td>${escapeHtml(a.date || "Date unavailable")}</td>
+            <td><a href="${safeExternalUrl(a.link)}" class="article-link" target="_blank" rel="noopener noreferrer">View article</a></td>
         `;
         tbody.appendChild(tr);
     });
@@ -1079,17 +1237,17 @@ function renderLaunchesTable() {
     
     const launches = appData.briefing.product_launches || [];
     if (launches.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; padding: 20px; color: var(--text-secondary);">No product launches tracked in this cycle.</td></tr>`;
+        setTableEmpty(tbody, 4, "No product launches", "No matching launch signals were found in this cycle.");
         return;
     }
     
     launches.forEach(l => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-            <td><span class="source-badge">${escapeHTML(l.source)}</span></td>
-            <td><strong>${escapeHTML(l.title)}</strong></td>
-            <td>${l.date}</td>
-            <td><a href="${l.link}" class="badge-rating" style="text-decoration:none;" target="_blank">View Article</a></td>
+            <td><span class="source-badge">${escapeHtml(l.source || "News")}</span></td>
+            <td><strong>${escapeHtml(l.title || "Untitled update")}</strong></td>
+            <td>${escapeHtml(l.date || "Date unavailable")}</td>
+            <td><a href="${safeExternalUrl(l.link)}" class="article-link" target="_blank" rel="noopener noreferrer">View article</a></td>
         `;
         tbody.appendChild(tr);
     });
@@ -1103,16 +1261,16 @@ function renderInstitutionalFlows() {
         sebiBody.innerHTML = "";
         const filings = appData.briefing.sebi_filings || [];
         if (filings.length === 0) {
-            sebiBody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 20px; color: var(--text-secondary);">No thematic fund filings scanned.</td></tr>`;
+            setTableEmpty(sebiBody, 5, "No thematic fund filings", "No relevant SEBI SID filing was detected.");
         } else {
             filings.forEach(f => {
                 const tr = document.createElement("tr");
                 tr.innerHTML = `
-                    <td><strong>${escapeHTML(f.fund_name)}</strong></td>
-                    <td><span class="chip" style="display:inline-block; border-color:transparent; background-color:rgba(255,255,255,0.03);">${f.theme}</span></td>
-                    <td><span class="badge-success-alert">${f.status}</span></td>
-                    <td>${f.date}</td>
-                    <td><a href="${f.link}" class="badge-rating" style="text-decoration:none;" target="_blank">View Document</a></td>
+                    <td><strong>${escapeHtml(f.fund_name || "Unnamed scheme")}</strong></td>
+                    <td><span class="chip" style="display:inline-block; border-color:transparent;">${escapeHtml(f.theme || "Other")}</span></td>
+                    <td><span class="badge-success-alert">${escapeHtml(f.status || "Filed")}</span></td>
+                    <td>${escapeHtml(f.date || "Date unavailable")}</td>
+                    <td><a href="${safeExternalUrl(f.link)}" class="article-link" target="_blank" rel="noopener noreferrer">View document</a></td>
                 `;
                 sebiBody.appendChild(tr);
             });
@@ -1125,7 +1283,7 @@ function renderInstitutionalFlows() {
         instBody.innerHTML = "";
         const activity = appData.briefing.institutional_activity || [];
         if (activity.length === 0) {
-            instBody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 20px; color: var(--text-secondary);">No institutional block deals scanned.</td></tr>`;
+            setTableEmpty(instBody, 7, "No institutional deals", "No matching block or bulk deal was detected.");
         } else {
             activity.forEach(act => {
                 const actionBadge = act.action === "Buy" ? 
@@ -1134,13 +1292,13 @@ function renderInstitutionalFlows() {
                     
                 const tr = document.createElement("tr");
                 tr.innerHTML = `
-                    <td><span class="source-badge">${escapeHTML(act.source)}</span></td>
-                    <td><strong>${escapeHTML(act.buyer)}</strong></td>
+                    <td><span class="source-badge">${escapeHtml(act.source || "News")}</span></td>
+                    <td><strong>${escapeHtml(act.buyer || "Institutional investor")}</strong></td>
                     <td>${actionBadge}</td>
-                    <td><strong>${escapeHTML(act.company)}</strong></td>
-                    <td>${escapeHTML(act.details)}</td>
-                    <td>${act.date}</td>
-                    <td><a href="${act.link}" class="badge-rating" style="text-decoration:none;" target="_blank">View</a></td>
+                    <td><strong>${escapeHtml(act.company || "Listed company")}</strong></td>
+                    <td>${escapeHtml(act.details || "Deal details unavailable")}</td>
+                    <td>${escapeHtml(act.date || "Date unavailable")}</td>
+                    <td><a href="${safeExternalUrl(act.link)}" class="article-link" target="_blank" rel="noopener noreferrer">View</a></td>
                 `;
                 instBody.appendChild(tr);
             });
@@ -1174,23 +1332,28 @@ function renderGrahamTable() {
         // Passed defensive if no "Current Ratio", "Debt Limit", or "P/E Screen" failures
         const alerts = sc.valuation_alerts || [];
         const hasGrahamFailures = alerts.some(a => a.includes("Current Ratio") || a.includes("Debt Limit") || a.includes("P/E Screen"));
-        const isDefensiveBadge = !hasGrahamFailures ? 
-            `<span class="badge-success-alert">PASS</span>` : 
-            `<span class="badge-danger-alert">FAIL</span>`;
+        const hasGrahamData = sc.current_ratio !== undefined
+            && sc.pe_ratio !== undefined
+            && sc.graham_intrinsic_value !== undefined;
+        const isDefensiveBadge = !hasGrahamData
+            ? `<span class="badge-warning-alert">NOT SCORED</span>`
+            : hasGrahamFailures
+                ? `<span class="badge-danger-alert">FAIL</span>`
+                : `<span class="badge-success-alert">PASS</span>`;
             
         let alertBadges = '';
         const grahamAlerts = alerts.filter(a => a.includes("Current Ratio") || a.includes("Debt Limit") || a.includes("P/E Screen") || a.includes("Dividend"));
         if (grahamAlerts.length > 0) {
-            alertBadges = grahamAlerts.map(a => `<span class="badge-danger-alert" style="margin-right: 4px; margin-bottom: 4px; font-size: 9px;">${a}</span>`).join('');
+            alertBadges = grahamAlerts.map(a => `<span class="badge-danger-alert" style="margin-right: 4px; margin-bottom: 4px; font-size: 9px;">${escapeHtml(a)}</span>`).join('');
         } else {
             alertBadges = `<span style="color: var(--text-muted);">None</span>`;
         }
         
         const tr = document.createElement("tr");
         tr.innerHTML = `
-            <td class="t-ticker">${escapeHTML(s.ticker)}</td>
-            <td><strong>${escapeHTML(s.name)}</strong></td>
-            <td>₹${s.price}</td>
+            <td class="t-ticker">${escapeHtml(s.ticker)}</td>
+            <td><strong>${escapeHtml(s.name)}</strong></td>
+            <td>₹${escapeHtml(s.price)}</td>
             <td><strong>${pe}</strong></td>
             <td>${cr}</td>
             <td>${ncav}</td>
@@ -1220,34 +1383,36 @@ function renderBuffettTable() {
         const oe = sc.owner_earnings !== undefined ? `₹${Number(sc.owner_earnings).toLocaleString('en-IN')}` : '—';
         const retainedRatio = sc.retained_earnings_ratio !== undefined ? sc.retained_earnings_ratio : '—';
         
-        const passedRetained = sc.retained_earnings_ratio >= 1.0 ? 
-            `<span class="badge-success-alert">PASS (>= 1.0)</span>` : 
-            `<span class="badge-danger-alert">FAIL (< 1.0)</span>`;
+        const passedRetained = sc.retained_earnings_ratio === undefined
+            ? `<span class="badge-warning-alert">NOT SCORED</span>`
+            : sc.retained_earnings_ratio >= 1.0
+                ? `<span class="badge-success-alert">PASS (>= 1.0)</span>`
+                : `<span class="badge-danger-alert">FAIL (< 1.0)</span>`;
             
         const moat = sc.moat_status || 'Weak/None';
         let moatBadge = '';
         if (moat.includes("Strong")) {
-            moatBadge = `<span class="badge-success-alert">${moat}</span>`;
+            moatBadge = `<span class="badge-success-alert">${escapeHtml(moat)}</span>`;
         } else if (moat.includes("Medium")) {
-            moatBadge = `<span class="badge-warning-alert">${moat}</span>`;
+            moatBadge = `<span class="badge-warning-alert">${escapeHtml(moat)}</span>`;
         } else {
-            moatBadge = `<span class="badge-danger-alert">${moat}</span>`;
+            moatBadge = `<span class="badge-danger-alert">${escapeHtml(moat)}</span>`;
         }
         
         const alerts = sc.valuation_alerts || [];
         const buffettAlerts = alerts.filter(a => a.includes("Retained Earnings") || a.includes("Moat"));
         let alertBadges = '';
         if (buffettAlerts.length > 0) {
-            alertBadges = buffettAlerts.map(a => `<span class="badge-danger-alert" style="margin-right: 4px; margin-bottom: 4px; font-size: 9px;">${a}</span>`).join('');
+            alertBadges = buffettAlerts.map(a => `<span class="badge-danger-alert" style="margin-right: 4px; margin-bottom: 4px; font-size: 9px;">${escapeHtml(a)}</span>`).join('');
         } else {
             alertBadges = `<span style="color: var(--text-muted);">None</span>`;
         }
         
         const tr = document.createElement("tr");
         tr.innerHTML = `
-            <td class="t-ticker">${escapeHTML(s.ticker)}</td>
-            <td><strong>${escapeHTML(s.name)}</strong></td>
-            <td>₹${s.price}</td>
+            <td class="t-ticker">${escapeHtml(s.ticker)}</td>
+            <td><strong>${escapeHtml(s.name)}</strong></td>
+            <td>₹${escapeHtml(s.price)}</td>
             <td><strong>${oe}</strong></td>
             <td><strong>${retainedRatio}</strong></td>
             <td>${passedRetained}</td>
@@ -1278,15 +1443,15 @@ function renderCautionTable() {
             const sectorLabel = appData.sectors[s.sectorKey]?.label || s.sectorKey;
             const alertBadges = alerts.map(a => {
                 const badgeClass = a.includes("Warning") ? "badge-danger-alert" : "badge-warning-alert";
-                return `<span class="${badgeClass}" style="margin-right: 6px; margin-bottom: 6px; display: inline-block; font-size: 9px;">${a}</span>`;
+                return `<span class="${badgeClass}" style="margin-right: 6px; margin-bottom: 6px; display: inline-block; font-size: 9px;">${escapeHtml(a)}</span>`;
             }).join('');
             
             const tr = document.createElement("tr");
             tr.innerHTML = `
-                <td class="t-ticker">${escapeHTML(s.ticker)}</td>
-                <td><strong>${escapeHTML(s.name)}</strong></td>
-                <td><span class="chip" style="display:inline-block; border-color:transparent; background-color:rgba(255,255,255,0.03);">${sectorLabel}</span></td>
-                <td>₹${s.price}</td>
+                <td class="t-ticker">${escapeHtml(s.ticker)}</td>
+                <td><strong>${escapeHtml(s.name)}</strong></td>
+                <td><span class="chip" style="display:inline-block; border-color:transparent;">${escapeHtml(sectorLabel)}</span></td>
+                <td>₹${escapeHtml(s.price)}</td>
                 <td style="max-width: 450px; white-space: normal;">${alertBadges}</td>
             `;
             tbody.appendChild(tr);
@@ -1295,7 +1460,7 @@ function renderCautionTable() {
     });
     
     if (cautionCount === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 30px; color: var(--text-secondary); font-style: italic;">All watchlist companies have passed core value and growth checks. No caution flags.</td></tr>`;
+        setTableEmpty(tbody, 5, "No caution flags", "All scored watchlist companies passed the configured checks.");
     }
 }
 

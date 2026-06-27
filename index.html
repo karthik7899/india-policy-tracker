@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#070a13">
     <title>India Policy & Growth Sector Impact Dashboard</title>
     
     <!-- Google Fonts -->
@@ -14,11 +15,11 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="styles.css?v=1.2.3">
+    <link rel="stylesheet" href="styles.css?v=1.3.0">
 </head>
 <body>
     <!-- Loading Overlay -->
-    <div id="loading-overlay" class="loading-overlay">
+    <div id="loading-overlay" class="loading-overlay" role="status" aria-live="polite">
         <div class="spinner"></div>
         <p>Loading Dashboard Data...</p>
     </div>
@@ -26,7 +27,7 @@
     <div class="app-container">
         
         <!-- Sidebar Navigation -->
-        <aside class="sidebar">
+        <aside class="sidebar" aria-label="Dashboard navigation">
             <div class="logo-area">
                 <span class="logo-icon">🇮🇳</span>
                 <div class="logo-text">
@@ -35,32 +36,32 @@
                 </div>
             </div>
             
-            <nav class="nav-menu">
-                <button class="nav-btn active" data-tab="dashboard">
+            <nav class="nav-menu" aria-label="Primary">
+                <button type="button" class="nav-btn active" data-tab="dashboard" aria-controls="tab-dashboard" aria-selected="true">
                     <span class="btn-icon">📊</span> Dashboard
                 </button>
-                <button class="nav-btn" data-tab="sectors">
+                <button type="button" class="nav-btn" data-tab="sectors" aria-controls="tab-sectors" aria-selected="false">
                     <span class="btn-icon">📁</span> Government Policy Logs
                 </button>
-                <button class="nav-btn" data-tab="agreements">
+                <button type="button" class="nav-btn" data-tab="agreements" aria-controls="tab-agreements" aria-selected="false">
                     <span class="btn-icon">🤝</span> Corporate News & Agreements
                 </button>
-                <button class="nav-btn" data-tab="launches">
+                <button type="button" class="nav-btn" data-tab="launches" aria-controls="tab-launches" aria-selected="false">
                     <span class="btn-icon">🚀</span> Product Launches
                 </button>
-                <button class="nav-btn" data-tab="institutional">
+                <button type="button" class="nav-btn" data-tab="institutional" aria-controls="tab-institutional" aria-selected="false">
                     <span class="btn-icon">🏛️</span> Institutional Activity
                 </button>
-                <button class="nav-btn" data-tab="graham">
+                <button type="button" class="nav-btn" data-tab="graham" aria-controls="tab-graham" aria-selected="false">
                     <span class="btn-icon">🛡️</span> Margin of Safety (Deep Value)
                 </button>
-                <button class="nav-btn" data-tab="buffett">
+                <button type="button" class="nav-btn" data-tab="buffett" aria-controls="tab-buffett" aria-selected="false">
                     <span class="btn-icon">🏰</span> Owner Earnings & Moats
                 </button>
-                <button class="nav-btn" data-tab="caution">
+                <button type="button" class="nav-btn" data-tab="caution" aria-controls="tab-caution" aria-selected="false">
                     <span class="btn-icon">⚠️</span> Caution List
                 </button>
-                <button class="nav-btn" data-tab="stocks">
+                <button type="button" class="nav-btn" data-tab="stocks" aria-controls="tab-stocks" aria-selected="false">
                     <span class="btn-icon">📈</span> Stocks Screener
                 </button>
             </nav>
@@ -70,19 +71,19 @@
                     <span class="dot"></span>
                     <span>System Active</span>
                 </div>
-                <p class="version-text">v1.2.0 • 2026 Edition</p>
+                <p class="version-text">v1.3.0 • 2026 Edition</p>
 
-                <div style="margin-top: 15px;">
-                    <button id="theme-toggle" class="nav-btn" style="width: 100%; justify-content: center; gap: 8px;">
-                        <span class="btn-icon">🌓</span>
-                        <span id="theme-toggle-text">Toggle Theme</span>
+                <div class="theme-toggle-wrap">
+                    <button type="button" id="theme-toggle" class="theme-toggle-btn" aria-label="Switch to light theme">
+                        <span class="btn-icon" id="theme-toggle-icon" aria-hidden="true">☀️</span>
+                        <span id="theme-toggle-text">Light theme</span>
                     </button>
                 </div>
             </div>
         </aside>
         
         <!-- Main Content Area -->
-        <main class="main-content">
+        <main class="main-content" id="main-content" tabindex="-1">
             
             <!-- App Header -->
             <header class="app-header">
@@ -90,9 +91,15 @@
                     <h2 id="page-title">Policy & Sector Overview</h2>
                     <p id="page-subtitle">Real-time mapping of government policies to market indicators.</p>
                 </div>
-                <div class="last-updated-badge">
-                    <span class="clock-icon">🕒</span>
-                    <span id="update-time">Last Refreshed: Loading...</span>
+                <div class="header-status">
+                    <div class="data-mode-badge" id="data-mode-badge">
+                        <span class="data-mode-dot"></span>
+                        <span id="data-mode-text">Live dataset</span>
+                    </div>
+                    <div class="last-updated-badge">
+                        <span class="clock-icon">🕒</span>
+                        <span id="update-time">Last Refreshed: Loading...</span>
+                    </div>
                 </div>
             </header>
             
@@ -106,7 +113,7 @@
                             <span class="stat-title">Tracked Sectors</span>
                             <span class="stat-icon-bg bg-blue">⚡</span>
                         </div>
-                        <h3 class="stat-value">8</h3>
+                        <h3 class="stat-value" id="tracked-sectors-val" aria-live="polite">-</h3>
                         <p class="stat-sub">High-growth focus areas</p>
                     </div>
                     <div class="stat-card">
@@ -114,7 +121,7 @@
                             <span class="stat-title">Watchlist Companies</span>
                             <span class="stat-icon-bg bg-green">🏢</span>
                         </div>
-                        <h3 class="stat-value" id="total-stocks-val">23</h3>
+                        <h3 class="stat-value" id="total-stocks-val" aria-live="polite">-</h3>
                         <p class="stat-sub">Across mid & large cap</p>
                     </div>
                     <div class="stat-card">
@@ -122,7 +129,7 @@
                             <span class="stat-title">Active Policy Signals</span>
                             <span class="stat-icon-bg bg-purple">📜</span>
                         </div>
-                        <h3 class="stat-value" id="active-signals-val">Loading...</h3>
+                        <h3 class="stat-value" id="active-signals-val" aria-live="polite">-</h3>
                         <p class="stat-sub">PIB & media updates parsed</p>
                     </div>
                     <div class="stat-card">
@@ -130,10 +137,57 @@
                             <span class="stat-title">Average Potential</span>
                             <span class="stat-icon-bg bg-orange">🔥</span>
                         </div>
-                        <h3 class="stat-value">27.3%</h3>
-                        <p class="stat-sub">Medium term target growth</p>
+                        <h3 class="stat-value" id="average-potential-val" aria-live="polite">-</h3>
+                        <p class="stat-sub">Average watchlist target upside</p>
                     </div>
                 </div>
+
+                <div class="signal-strip" aria-label="Intelligence summary">
+                    <button type="button" class="signal-card" data-tab-target="agreements">
+                        <span class="signal-icon signal-blue">🤝</span>
+                        <span class="signal-copy">
+                            <strong id="agreements-count">0</strong>
+                            <small>Corporate signals</small>
+                        </span>
+                        <span class="signal-arrow" aria-hidden="true">→</span>
+                    </button>
+                    <button type="button" class="signal-card" data-tab-target="launches">
+                        <span class="signal-icon signal-purple">🚀</span>
+                        <span class="signal-copy">
+                            <strong id="launches-count">0</strong>
+                            <small>Product launches</small>
+                        </span>
+                        <span class="signal-arrow" aria-hidden="true">→</span>
+                    </button>
+                    <button type="button" class="signal-card" data-tab-target="institutional">
+                        <span class="signal-icon signal-green">🏛️</span>
+                        <span class="signal-copy">
+                            <strong id="institutional-count">0</strong>
+                            <small>Institutional signals</small>
+                        </span>
+                        <span class="signal-arrow" aria-hidden="true">→</span>
+                    </button>
+                    <button type="button" class="signal-card" data-tab-target="graham">
+                        <span class="signal-icon signal-amber">🛡️</span>
+                        <span class="signal-copy">
+                            <strong id="deep-value-count">0</strong>
+                            <small>Defensive passes</small>
+                        </span>
+                        <span class="signal-arrow" aria-hidden="true">→</span>
+                    </button>
+                    <button type="button" class="signal-card" data-scroll-target="radar-picks-list">
+                        <span class="signal-icon signal-red">📡</span>
+                        <span class="signal-copy">
+                            <strong id="competitors-count">0</strong>
+                            <small>Emerging competitors</small>
+                        </span>
+                        <span class="signal-arrow" aria-hidden="true">↓</span>
+                    </button>
+                </div>
+
+                <p class="data-disclaimer">
+                    Automated policy and market screening signals. Valuation outputs are analytical estimates, not investment advice.
+                </p>
                 
                 <!-- Dashboard Workspace (Grid) -->
                 <div class="dashboard-grid">
@@ -226,7 +280,8 @@
                         <h3>📈 Integrated Stock Catalysts Database</h3>
                         <div class="search-bar-container">
                             <span class="search-icon">🔍</span>
-                            <input type="text" id="stock-search" placeholder="Search by name, ticker, or catalyst...">
+                            <label class="sr-only" for="stock-search">Search stocks</label>
+                            <input type="search" id="stock-search" placeholder="Search by name, ticker, or catalyst..." autocomplete="off">
                         </div>
                     </div>
                     
@@ -457,6 +512,6 @@
     </div>
     
     <!-- Custom Logic Script -->
-    <script src="app.js?v=1.2.3"></script>
+    <script src="app.js?v=1.3.0"></script>
 </body>
 </html>
