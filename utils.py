@@ -1,4 +1,4 @@
-from typing import Optional, Union
+from typing import Optional, Union  # noqa: E402
 
 
 def _clean_str(val: Union[str, int, float, None]) -> str:
@@ -49,9 +49,9 @@ def safe_percentage(
         return default
 
 
-import os
-import json
-import tempfile
+import json  # noqa: E402
+import os  # noqa: E402
+import tempfile  # noqa: E402
 
 
 def atomic_write_json(data, filepath, indent=2):
@@ -77,10 +77,10 @@ def atomic_write_json(data, filepath, indent=2):
         raise
 
 
-import asyncio
-import functools
-import logging
-import time
+import asyncio  # noqa: E402
+import functools  # noqa: E402
+import logging  # noqa: E402
+import time  # noqa: E402
 
 log = logging.getLogger(__name__)
 

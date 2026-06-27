@@ -2,7 +2,7 @@ import pytest
 import asyncio
 from unittest.mock import MagicMock, AsyncMock
 
-from utils import fetch_text_async, fetch_text_sync, TransientNetworkError
+from utils import fetch_text_async, fetch_text_sync
 
 
 @pytest.mark.anyio

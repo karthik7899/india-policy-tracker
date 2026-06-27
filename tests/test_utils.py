@@ -1,5 +1,4 @@
-import pytest
-from utils import safe_float, safe_int, safe_percentage
+from utils import safe_float, safe_int, safe_percentage  # noqa: E402
 
 
 def test_safe_float():
@@ -44,10 +43,11 @@ def test_safe_percentage():
     assert safe_percentage("", default=0.0) == 0.0
 
 
-import tempfile
-import json
-import os
-from utils import atomic_write_json
+import json  # noqa: E402
+import os  # noqa: E402
+import tempfile  # noqa: E402
+
+from utils import atomic_write_json  # noqa: E402
 
 
 def test_atomic_write_json():

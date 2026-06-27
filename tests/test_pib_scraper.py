@@ -1,11 +1,9 @@
-import pytest
-from bs4 import BeautifulSoup
-import sys
-import os
+import os  # noqa: E402
+import sys  # noqa: E402
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from scraper import _extract_pli_data_from_html
+from scraper import _extract_pli_data_from_html  # noqa: E402
 
 
 def test_extract_companies_from_pib_html():
