@@ -86,6 +86,13 @@ const MOCK_DATA = {
         "big_cap_industries": [
             {"title": "Union Budget targets record Infrastructure CAPEX allocation of ₹11.11 Lakh Crore", "source": "PIB Delhi", "link": "https://pib.gov.in", "date": "24 May 2026", "impact": "Positive"},
             {"title": "Larsen & Toubro emerges as lowest bidder for massive High-Speed Rail Project package", "source": "BSE Filings", "link": "https://bseindia.com", "date": "29 May 2026", "impact": "Positive"}
+        ],
+        "early_warnings": [
+            {"ticker": "SUZLON", "name": "Suzlon Energy", "sector": "Clean Energy", "severity": "High", "direction": "risk", "category": "FII Selling", "signal": "Foreign institutions reduced holdings (-1.40%)."},
+            {"ticker": "STERLITE", "name": "Sterlite Technologies (STL)", "sector": "Data Center Support", "severity": "High", "direction": "risk", "category": "High Leverage", "signal": "Debt-to-equity of 1.35 exceeds 1.0."},
+            {"ticker": "QUICKHEAL", "name": "Quick Heal Technologies", "sector": "Cybersecurity", "severity": "Medium", "direction": "risk", "category": "Revenue Contraction", "signal": "Quarter-on-quarter sales fell 6.2%."},
+            {"ticker": "TATAPOWER", "name": "Tata Power", "sector": "Clean Energy", "severity": "High", "direction": "opportunity", "category": "Institutional Accumulation", "signal": "Both FIIs (+0.80%) and DIIs (+1.10%) are accumulating."},
+            {"ticker": "DIXON", "name": "Dixon Technologies", "sector": "Manufacturing & Electronics", "severity": "Medium", "direction": "opportunity", "category": "Policy Catalyst", "signal": "Active policy tailwind — PLI / scheme: IT Hardware approval."}
         ]
     }
 };
@@ -103,6 +110,7 @@ const TAB_COPY = {
     institutional: ["Institutional Activity", "Scheme filings, block deals, and institutional buying signals."],
     graham: ["Margin of Safety (Deep Value)", "Defensive investor criteria checks and growth intrinsic value calculations."],
     buffett: ["Owner Earnings & Moats", "Owner earnings estimates, quality signals, and retained value creation metrics."],
+    earlywarning: ["Early Warning System", "Prioritized risk & opportunity signals synthesized across the watchlist."],
     caution: ["Risk Alerts & Valuation Warnings", "Stocks that are not meeting the configured value and growth filters."],
     stocks: ["Integrated Stocks Screener", "Curated companies, policy catalysts, and financial screening signals."]
 };
@@ -173,12 +181,6 @@ function setTableEmpty(tbody, colspan, title, detail = "") {
 }
 
 // Helper: Format YoY growth with contextual icon/color
-// Helper to prevent XSS
-function escapeHTML(str) {
-    if (typeof str !== "string") return str;
-    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
-}
-
 function formatGrowthBadge(growthStr, style = 'inline') {
     if (!growthStr) return style === 'table' ? `<span style="color: var(--text-muted);">—</span>` : '';
     const val = parseFloat(String(growthStr).replace('%', ''));
@@ -197,16 +199,6 @@ function formatGrowthBadge(growthStr, style = 'inline') {
     }
 }
 
-// Helper: Escape HTML to prevent XSS
-function escapeHTML(str) {
-    if (!str) return '';
-    return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
-}
 
 // Helper: Format potential growth with proper sign and color
 function formatPotential(pctStr) {
@@ -277,6 +269,7 @@ function activateTab(targetTab) {
             graham: renderGrahamTable,
             buffett: renderBuffettTable,
             scoring: renderScoringTable,
+            earlywarning: renderEarlyWarnings,
             caution: renderCautionTable,
             stocks: () => renderStocksTable(document.getElementById("stock-search")?.value || "")
         };
@@ -1553,6 +1546,46 @@ function renderCautionTable() {
     if (cautionCount === 0) {
         setTableEmpty(tbody, 5, "No caution flags", "All scored watchlist companies passed the configured checks.");
     }
+}
+
+// Early Warning System: prioritized risk & opportunity feed
+const SEVERITY_BADGE_CLASS = {
+    Critical: "badge-danger-alert",
+    High: "badge-danger-alert",
+    Medium: "badge-warning-alert",
+    Low: "badge-neutral-alert"
+};
+
+function renderEarlyWarnings() {
+    const tbody = document.getElementById("early-warning-table-body");
+    if (!tbody) return;
+    tbody.innerHTML = "";
+
+    const warnings = (appData && appData.briefing && appData.briefing.early_warnings) || [];
+
+    if (warnings.length === 0) {
+        setTableEmpty(tbody, 6, "No active warnings", "No risk or opportunity signals were triggered in the latest cycle.");
+        return;
+    }
+
+    warnings.forEach(w => {
+        const severity = w.severity || "Low";
+        const badgeClass = SEVERITY_BADGE_CLASS[severity] || "badge-neutral-alert";
+        const isRisk = w.direction === "risk";
+        const dirIcon = isRisk ? "🔻" : "🔼";
+        const dirColor = isRisk ? "var(--danger, #f87171)" : "var(--success, #34d399)";
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td class="t-ticker">${escapeHtml(w.ticker)}</td>
+            <td><strong>${escapeHtml(w.name)}</strong></td>
+            <td><span class="chip" style="display:inline-block; border-color:transparent;">${escapeHtml(w.sector)}</span></td>
+            <td><span class="${badgeClass}" style="font-size: 9px;">${escapeHtml(severity)}</span></td>
+            <td style="color: ${dirColor}; white-space: nowrap;">${dirIcon} ${escapeHtml(w.category)}</td>
+            <td style="max-width: 420px; white-space: normal;">${escapeHtml(w.signal)}</td>
+        `;
+        tbody.appendChild(tr);
+    });
 }
 
 // Helper: Get list of all stocks across all sectors

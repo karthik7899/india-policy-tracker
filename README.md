@@ -27,6 +27,9 @@ This platform runs entirely in the cloud for free using **GitHub Actions** and *
 * **Value Investing Screeners (Graham & Buffett):**
   * **Benjamin Graham Screens:** Dynamically calculates expected growth intrinsic value, enterprising bargain NCAV net-assets status, and flags P/E screen deviations.
   * **Warren Buffett Screens:** Evaluates owner earnings (net profit + depreciation - capex), computes the $1 retained earnings test ratio, and tracks qualitative moat strength.
+* **Early Warning System:**
+  * **Prioritized Signal Feed:** Synthesizes signals already collected across the pipeline (promoter/FII/DII holding shifts, revenue contraction, liquidity & leverage stress, margin compression, valuation flags, and intraday price breakdowns) into a single severity-ranked feed (Critical → Low).
+  * **Risk & Opportunity Detection:** Flags deteriorating positions (e.g. promoter exits, FII outflows) alongside emerging opportunities (institutional accumulation, active policy catalysts, momentum breakouts), surfaced both at the top of the daily email and in a dedicated dashboard tab.
 * **Institutional Flow Tracker:**
   * **Holding Pattern Changes:** Scrapes Screener.in to extract promoter, domestic (DII/Mutual Fund), and foreign (FII) quarterly holding shifts.
   * **Block & Bulk Deals Parser:** Scrapes and structures recent market transactions, identifying the buyer, action (BUY/SELL), target stock, transaction details, and direct media link.

@@ -64,6 +64,9 @@
                 <button type="button" class="nav-btn" data-tab="scoring" aria-controls="tab-scoring" aria-selected="false">
                     <span class="nav-icon">🎯</span> Scoring Engine
                 </button>
+                <button type="button" class="nav-btn" data-tab="earlywarning" aria-controls="tab-earlywarning" aria-selected="false">
+                    <span class="btn-icon">🚨</span> Early Warnings
+                </button>
                 <button type="button" class="nav-btn" data-tab="caution" aria-controls="tab-caution" aria-selected="false">
                     <span class="btn-icon">⚠️</span> Caution List
                 </button>
@@ -545,6 +548,33 @@
                                 </tr>
                             </thead>
                             <tbody id="scoring-table-body">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Early Warning System Tab -->
+            <section id="tab-earlywarning" class="tab-pane">
+                <div class="glass-card alert-card-border">
+                    <div class="table-header-bar">
+                        <h3 class="danger-text">🚨 Early Warning System</h3>
+                        <p class="subtitle">Prioritized risk &amp; opportunity signals synthesized across holdings, fundamentals, institutional flows, and price action.</p>
+                    </div>
+                    <div class="table-scroll-container">
+                        <table class="premium-table">
+                            <thead>
+                                <tr>
+                                    <th>Ticker</th>
+                                    <th>Company</th>
+                                    <th>Sector</th>
+                                    <th>Severity</th>
+                                    <th>Signal</th>
+                                    <th>Detail</th>
+                                </tr>
+                            </thead>
+                            <tbody id="early-warning-table-body">
                                 <!-- Populated dynamically -->
                             </tbody>
                         </table>

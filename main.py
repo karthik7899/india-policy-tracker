@@ -1,7 +1,5 @@
 import asyncio
 import datetime
-import json
-import os
 import aiohttp
 from config import load_watchlist, save_watchlist, SECTOR_METADATA
 from logger import log
@@ -105,6 +103,11 @@ async def run_pipeline():
 
     # Compile margin of safety and moat analytics
     build_dashboard_views(data, watchlist)
+
+    # Synthesize a prioritized early-warning feed from the collected signals
+    from analysis.early_warning import generate_early_warnings
+
+    data["early_warnings"] = generate_early_warnings(data, watchlist)
 
     # Save watchlist changes
     save_watchlist(watchlist)

@@ -1375,6 +1375,17 @@ a:focus-visible {
     display: inline-block;
 }
 
+.badge-neutral-alert {
+    background: rgba(148, 163, 184, 0.15);
+    color: #cbd5e1;
+    border: 1px solid rgba(148, 163, 184, 0.3);
+    border-radius: 4px;
+    font-size: 10px;
+    padding: 2px 6px;
+    font-weight: 600;
+    display: inline-block;
+}
+
 /* Sortable Table Styles */
 .premium-table th.sortable {
     cursor: pointer;

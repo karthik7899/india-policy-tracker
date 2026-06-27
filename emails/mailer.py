@@ -6,6 +6,69 @@ from email.mime.text import MIMEText
 from logger import log
 from config import SECTOR_METADATA
 
+_SEVERITY_BADGE = {
+    "Critical": ("#7f1d1d", "#fca5a5"),
+    "High": ("#7c2d12", "#fdba74"),
+    "Medium": ("#374151", "#cbd5e1"),
+    "Low": ("#1f2937", "#9ca3af"),
+}
+
+
+def _build_early_warning_html(warnings):
+    """Renders the prioritized Early Warning card. Returns '' when there is nothing to flag."""
+    if not warnings:
+        return ""
+
+    rows = ""
+    for w in warnings[:12]:
+        bg, fg = _SEVERITY_BADGE.get(w.get("severity", "Low"), _SEVERITY_BADGE["Low"])
+        is_risk = w.get("direction") == "risk"
+        dir_icon = "🔻" if is_risk else "🔼"
+        dir_color = "#f87171" if is_risk else "#34d399"
+        sev_badge = (
+            f"<span class='badge' style='background-color: {bg}; color: {fg};'>"
+            f"{w.get('severity', '')}</span>"
+        )
+        rows += f"""
+        <tr>
+            <td style="padding: 8px; font-size: 12px; border-bottom: 1px solid #1f2937;">
+                <span class="stock-ticker">{w.get('ticker', '')}</span>
+                <span style="color: #94a3b8; font-size: 11px;"> · {w.get('sector', '')}</span>
+            </td>
+            <td style="padding: 8px; font-size: 12px; border-bottom: 1px solid #1f2937;">{sev_badge}</td>
+            <td style="padding: 8px; font-size: 12px; border-bottom: 1px solid #1f2937; color: {dir_color};">
+                {dir_icon} {w.get('category', '')}
+            </td>
+            <td style="padding: 8px; font-size: 11px; border-bottom: 1px solid #1f2937; color: #cbd5e1;">
+                {w.get('signal', '')}
+            </td>
+        </tr>
+        """
+
+    risk_count = sum(1 for w in warnings if w.get("direction") == "risk")
+    opp_count = len(warnings) - risk_count
+
+    return f"""
+    <div class="section-card">
+        <h3 style="color: #f87171; margin-bottom: 6px; font-size: 16px;">🚨 Early Warning System</h3>
+        <p style="font-size: 12px; color: #94a3b8; margin: 0 0 12px 0;">
+            {risk_count} risk signal(s) and {opp_count} opportunity signal(s) detected across the watchlist,
+            ranked by severity.
+        </p>
+        <table class="stock-table">
+            <thead>
+                <tr>
+                    <th>Stock</th>
+                    <th>Severity</th>
+                    <th>Signal</th>
+                    <th>Detail</th>
+                </tr>
+            </thead>
+            <tbody>{rows}</tbody>
+        </table>
+    </div>
+    """
+
 
 def build_html_email(brief_data, watchlist):
     """Renders the HTML structure for the email notification."""
@@ -57,6 +120,9 @@ def build_html_email(brief_data, watchlist):
                 <p>Daily Intelligence Report | {today_str}</p>
             </div>
     """
+
+    # Early Warning System — the first actionable thing the reader should see
+    body_html += _build_early_warning_html(brief_data.get("early_warnings", []))
 
     for sector, news_items in brief_data.items():
         if sector in (
