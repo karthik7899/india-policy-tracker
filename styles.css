@@ -1386,6 +1386,30 @@ a:focus-visible {
     display: inline-block;
 }
 
+/* Estimate-method badges (analyst consensus vs Graham model fallback) */
+.method-badge {
+    font-size: 8.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    padding: 2px 7px;
+    border-radius: 4px;
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.method-analyst {
+    background: rgba(59, 130, 246, 0.15);
+    color: #60a5fa;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.method-fundamental {
+    background: rgba(245, 158, 11, 0.12);
+    color: #fbbf24;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
 /* Sortable Table Styles */
 .premium-table th.sortable {
     cursor: pointer;

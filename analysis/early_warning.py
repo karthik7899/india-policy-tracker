@@ -270,6 +270,93 @@ def _evaluate_stock(
     return alerts
 
 
+# Statuses of a discovered emerging player that constitute a credible challenger.
+_CHALLENGER_STATUSES = {"Pipeline", "Watchlisted"}
+
+# A challenger must clear the high-growth bar to be treated as a real threat.
+_CHALLENGER_GROWTH_BAR = 15.0
+
+
+def _competitive_threats(
+    data: Dict[str, Any], watchlist: Dict[str, Any]
+) -> List[Dict[str, Any]]:
+    """Flag incumbents being out-grown by a high-growth challenger in their sector.
+
+    Uses the emerging-player radar (``data["emerging_players"]``) — which now
+    carries each candidate's quarterly growth — and compares the strongest
+    challenger in a sector against the QoQ growth of the holdings we already own.
+    A holding growing slower than an emerging rival gets a competitive-threat
+    alert so the rotation engine's discovery doubles as a risk signal.
+    """
+    alerts: List[Dict[str, Any]] = []
+    emerging = data.get("emerging_players", {})
+    if not isinstance(emerging, dict):
+        return alerts
+
+    for sector, stocks in (watchlist or {}).items():
+        if sector == "macro_indicators":
+            continue
+
+        candidates = emerging.get(sector, [])
+        challengers = []
+        for c in candidates or []:
+            if not isinstance(c, dict):
+                continue
+            if c.get("status") not in _CHALLENGER_STATUSES:
+                continue
+            growth = _to_float(c.get("qoq_growth"))
+            if growth is not None and growth >= _CHALLENGER_GROWTH_BAR:
+                challengers.append(
+                    (c.get("name") or c.get("ticker") or "A new entrant", growth)
+                )
+
+        if not challengers:
+            continue
+
+        # Compare the single strongest challenger against each lagging holding.
+        challenger_name, challenger_growth = max(challengers, key=lambda x: x[1])
+        sector_label = SECTOR_METADATA.get(sector, {}).get("label", sector)
+
+        held_tickers = {
+            str(c[0]).upper() for c in challengers
+        }  # challenger names (avoid self-flagging)
+
+        for stock in stocks or []:
+            if not isinstance(stock, dict):
+                continue
+            ticker = str(stock.get("ticker", "")).strip()
+            name = str(stock.get("name", "")).strip()
+            if name.upper() in held_tickers or ticker.upper() in held_tickers:
+                continue
+            sc = stock.get("screener")
+            incumbent_growth = _to_float(
+                sc.get("qoq_sales_growth") if isinstance(sc, dict) else None
+            )
+            if incumbent_growth is None:
+                continue
+            if (
+                incumbent_growth < _CHALLENGER_GROWTH_BAR
+                and incumbent_growth < challenger_growth
+            ):
+                alerts.append(
+                    {
+                        "ticker": ticker,
+                        "name": name,
+                        "sector": sector_label,
+                        "severity": "Medium",
+                        "direction": "risk",
+                        "category": "Competitive Threat",
+                        "signal": (
+                            f"{challenger_name} is growing faster "
+                            f"(QoQ +{challenger_growth:.1f}% vs +{incumbent_growth:.1f}%) "
+                            f"and could pressure market share."
+                        ),
+                    }
+                )
+
+    return alerts
+
+
 def generate_early_warnings(
     data: Dict[str, Any], watchlist: Dict[str, Any]
 ) -> List[Dict[str, Any]]:
@@ -290,6 +377,9 @@ def generate_early_warnings(
             if not isinstance(stock, dict):
                 continue
             warnings.extend(_evaluate_stock(stock, sector_label, policy_map))
+
+    # Sector-level competitive-threat pass (cross-references the rotation radar).
+    warnings.extend(_competitive_threats(data, watchlist))
 
     warnings.sort(
         key=lambda a: (

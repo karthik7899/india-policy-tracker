@@ -8,7 +8,7 @@ This platform runs entirely in the cloud for free using **GitHub Actions** and *
 
 ## 🚀 Key Features
 
-* **Daily & Weekly Email Digests:** Delivers beautifully formatted HTML emails highlighting positive, negative, and neutral policy impacts.
+* **Daily & Weekly Email Digests:** Delivers professionally formatted HTML emails — complete with an at-a-glance summary strip (risk/opportunity/sector counts) and a prominent **"View Live Dashboard"** call-to-action button linking to the GitHub Pages archive — highlighting positive, negative, and neutral policy impacts. The dashboard link is overridable via the `DASHBOARD_URL` environment variable.
 * **Official Data Aggregator:** Scrapes the Press Information Bureau (PIB) of India daily releases and financial news feeds via Google News RSS indexes concurrently.
 * **Pre-Seeded Portfolios:** Curated stocks mapped to specific policies across 13 high-growth sectors:
   * **Clean Energy:** Solar, wind, and green hydrogen plays (Tata Power, Suzlon, Adani Green).
@@ -27,9 +27,12 @@ This platform runs entirely in the cloud for free using **GitHub Actions** and *
 * **Value Investing Screeners (Graham & Buffett):**
   * **Benjamin Graham Screens:** Dynamically calculates expected growth intrinsic value, enterprising bargain NCAV net-assets status, and flags P/E screen deviations.
   * **Warren Buffett Screens:** Evaluates owner earnings (net profit + depreciation - capex), computes the $1 retained earnings test ratio, and tracks qualitative moat strength.
+* **Transparent Potential Estimates:** Each stock's upside is labelled by how it was derived — **Analyst Consensus** when live broker targets exist, or a **Fundamental Estimate** (Graham intrinsic value) when a name has no analyst coverage — so stale manually-seeded targets are never presented as live consensus.
+* **Sector Valuation (Peer P/E):** Adds the *relative* dimension the single-stock screens lack — computes the median price-to-earnings of each sector's watchlist peer group, annotates every stock with its standing versus that median ("X% below/above peers"), and surfaces a cheapest-first sector ranking in a dedicated dashboard tab and email section.
 * **Early Warning System:**
   * **Prioritized Signal Feed:** Synthesizes signals already collected across the pipeline (promoter/FII/DII holding shifts, revenue contraction, liquidity & leverage stress, margin compression, valuation flags, and intraday price breakdowns) into a single severity-ranked feed (Critical → Low).
   * **Risk & Opportunity Detection:** Flags deteriorating positions (e.g. promoter exits, FII outflows) alongside emerging opportunities (institutional accumulation, active policy catalysts, momentum breakouts), surfaced both at the top of the daily email and in a dedicated dashboard tab.
+  * **Competitive Threat Radar:** Cross-references the watchlist-rotation discovery engine — when a high-growth challenger is detected in a sector, any incumbent holding growing slower than that rival is flagged so emerging competition becomes a tracked risk signal, not just a rotation candidate.
 * **Institutional Flow Tracker:**
   * **Holding Pattern Changes:** Scrapes Screener.in to extract promoter, domestic (DII/Mutual Fund), and foreign (FII) quarterly holding shifts.
   * **Block & Bulk Deals Parser:** Scrapes and structures recent market transactions, identifying the buyer, action (BUY/SELL), target stock, transaction details, and direct media link.

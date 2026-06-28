@@ -13,8 +13,8 @@ const MOCK_DATA = {
     },
     "watchlist": {
         "clean_energy": [
-            {"ticker": "TATAPOWER", "name": "Tata Power", "price": "432.50", "target": "520.00", "growth_pct": "20.2%", "catalyst": "Massive scaling in solar generation, microgrids, and leading India's EV charging network grid."},
-            {"ticker": "SUZLON", "name": "Suzlon Energy", "price": "50.15", "target": "68.00", "growth_pct": "35.6%", "catalyst": "Turnaround story, completely debt-free, dominating wind turbine supply with a record order book."},
+            {"ticker": "TATAPOWER", "name": "Tata Power", "price": "432.50", "target": "520.00", "growth_pct": "20.2%", "estimate_method": "Analyst Consensus", "catalyst": "Massive scaling in solar generation, microgrids, and leading India's EV charging network grid.", "screener": {"pe_ratio": 28.4, "industry_pe": 18.4, "pe_vs_peers": "54% above peers", "roce": 11.2}},
+            {"ticker": "SUZLON", "name": "Suzlon Energy", "price": "50.15", "target": "68.00", "growth_pct": "35.6%", "estimate_method": "Fundamental Estimate", "fundamental_value": 71.5, "catalyst": "Turnaround story, completely debt-free, dominating wind turbine supply with a record order book.", "screener": {"pe_ratio": 12.1, "industry_pe": 18.4, "pe_vs_peers": "34% below peers", "roce": 19.8}},
             {"ticker": "ADANIGREEN", "name": "Adani Green Energy", "price": "1845.00", "target": "2200.00", "growth_pct": "19.2%", "catalyst": "Developing the world's largest renewable energy park in Khavda, Gujarat (30 GW capacity target)."}
         ],
         "data_center_support": [
@@ -92,7 +92,13 @@ const MOCK_DATA = {
             {"ticker": "STERLITE", "name": "Sterlite Technologies (STL)", "sector": "Data Center Support", "severity": "High", "direction": "risk", "category": "High Leverage", "signal": "Debt-to-equity of 1.35 exceeds 1.0."},
             {"ticker": "QUICKHEAL", "name": "Quick Heal Technologies", "sector": "Cybersecurity", "severity": "Medium", "direction": "risk", "category": "Revenue Contraction", "signal": "Quarter-on-quarter sales fell 6.2%."},
             {"ticker": "TATAPOWER", "name": "Tata Power", "sector": "Clean Energy", "severity": "High", "direction": "opportunity", "category": "Institutional Accumulation", "signal": "Both FIIs (+0.80%) and DIIs (+1.10%) are accumulating."},
-            {"ticker": "DIXON", "name": "Dixon Technologies", "sector": "Manufacturing & Electronics", "severity": "Medium", "direction": "opportunity", "category": "Policy Catalyst", "signal": "Active policy tailwind — PLI / scheme: IT Hardware approval."}
+            {"ticker": "DIXON", "name": "Dixon Technologies", "sector": "Manufacturing & Electronics", "severity": "Medium", "direction": "opportunity", "category": "Policy Catalyst", "signal": "Active policy tailwind — PLI / scheme: IT Hardware approval."},
+            {"ticker": "ITC", "name": "ITC Ltd", "sector": "FMCG & Consumption", "severity": "Medium", "direction": "risk", "category": "Competitive Threat", "signal": "Patanjali Foods is growing faster (QoQ +22.0% vs +8.0%) and could pressure market share."}
+        ],
+        "sector_valuation": [
+            {"sector": "clean_energy", "label": "Clean Energy", "icon": "⚡", "median_pe": 18.4, "stock_count": 3, "cheapest_ticker": "SUZLON", "cheapest_pe": 12.1, "most_expensive_ticker": "ADANIGREEN", "most_expensive_pe": 41.0},
+            {"sector": "fmcg", "label": "FMCG & Consumption", "icon": "🛒", "median_pe": 32.5, "stock_count": 3, "cheapest_ticker": "ITC", "cheapest_pe": 24.8, "most_expensive_ticker": "VBL", "most_expensive_pe": 58.2},
+            {"sector": "manufacturing_electronics", "label": "Manufacturing & Electronics", "icon": "🏭", "median_pe": 45.6, "stock_count": 3, "cheapest_ticker": "CGPOWER", "cheapest_pe": 38.0, "most_expensive_ticker": "DIXON", "most_expensive_pe": 72.4}
         ]
     }
 };
@@ -111,6 +117,7 @@ const TAB_COPY = {
     graham: ["Margin of Safety (Deep Value)", "Defensive investor criteria checks and growth intrinsic value calculations."],
     buffett: ["Owner Earnings & Moats", "Owner earnings estimates, quality signals, and retained value creation metrics."],
     earlywarning: ["Early Warning System", "Prioritized risk & opportunity signals synthesized across the watchlist."],
+    valuation: ["Sector Valuation (Peer P/E)", "Median price-to-earnings per sector peer group — which themes are richly vs cheaply priced."],
     caution: ["Risk Alerts & Valuation Warnings", "Stocks that are not meeting the configured value and growth filters."],
     stocks: ["Integrated Stocks Screener", "Curated companies, policy catalysts, and financial screening signals."]
 };
@@ -270,6 +277,7 @@ function activateTab(targetTab) {
             buffett: renderBuffettTable,
             scoring: renderScoringTable,
             earlywarning: renderEarlyWarnings,
+            valuation: renderSectorValuation,
             caution: renderCautionTable,
             stocks: () => renderStocksTable(document.getElementById("stock-search")?.value || "")
         };
@@ -862,7 +870,8 @@ function renderSectorDetail(sectorKey) {
         let screenerHtml = '';
         if (Object.keys(sc).length > 0) {
             const mcapHtml = sc.market_cap ? `<span class="sc-chip" title="Market Cap">MCAP: <strong>₹${Number(sc.market_cap).toLocaleString('en-IN')} Cr</strong></span>` : '';
-            const peHtml = sc.pe_ratio ? `<span class="sc-chip" title="Price to Earnings">P/E: <strong>${sc.pe_ratio}</strong>${sc.industry_pe ? ` <small style="opacity:0.6">vs Ind:${sc.industry_pe}</small>` : ''}</span>` : '';
+            const peerLabel = sc.pe_vs_peers ? ` · ${escapeHtml(sc.pe_vs_peers)}` : '';
+            const peHtml = sc.pe_ratio ? `<span class="sc-chip" title="Price to Earnings vs sector peer median">P/E: <strong>${sc.pe_ratio}</strong>${sc.industry_pe ? ` <small style="opacity:0.6">vs Peers:${sc.industry_pe}${peerLabel}</small>` : ''}</span>` : '';
             const roceHtml = sc.roce ? `<span class="sc-chip" title="Return on Capital Employed">ROCE: <strong>${sc.roce}%</strong></span>` : '';
             const roeHtml = sc.roe ? `<span class="sc-chip" title="Return on Equity">ROE: <strong>${sc.roe}%</strong></span>` : '';
             
@@ -918,6 +927,15 @@ function renderSectorDetail(sectorKey) {
         const medianText = s.target_median ? ` (Median: ₹${s.target_median})` : '';
         const analystDisplay = s.target ? `<span>Target: <strong>${targetValText}</strong><small style="color: var(--text-secondary);">${medianText}</small></span>` : `<span>Target: <strong>—</strong></span>`;
 
+        // Disclose how the upside figure was derived (analyst consensus vs model).
+        let methodBadge = '';
+        if (s.estimate_method === 'Analyst Consensus') {
+            methodBadge = `<span class="method-badge method-analyst" title="Upside from analyst consensus target">Analyst</span>`;
+        } else if (s.estimate_method === 'Fundamental Estimate') {
+            const fv = s.fundamental_value ? ` (Graham IV ₹${escapeHtml(s.fundamental_value)})` : '';
+            methodBadge = `<span class="method-badge method-fundamental" title="Upside derived from Graham intrinsic value${fv}">Model Est.</span>`;
+        }
+
         stocksHtml += `
             <div class="detail-stock-card">
                 <div class="dsc-header">
@@ -930,7 +948,10 @@ function renderSectorDetail(sectorKey) {
                             ${earningsBadge}
                         </h4>
                     </div>
-                    <span class="dsc-pot">${formatPotential(s.growth_pct)}</span>
+                    <div style="display:flex; flex-direction:column; align-items:flex-end; gap:4px;">
+                        <span class="dsc-pot">${formatPotential(s.growth_pct)}</span>
+                        ${methodBadge}
+                    </div>
                 </div>
                 <div class="dsc-metrics" style="margin-top: 12px;">
                     <span>CMP: <strong>₹${escapeHtml(s.price)}</strong></span>
@@ -1614,6 +1635,31 @@ function renderEarlyWarnings() {
             <td><span class="${badgeClass}" style="font-size: 9px;">${escapeHtml(severity)}</span></td>
             <td style="color: ${dirColor}; white-space: nowrap;">${dirIcon} ${escapeHtml(w.category)}</td>
             <td style="max-width: 420px; white-space: normal;">${escapeHtml(w.signal)}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+function renderSectorValuation() {
+    const tbody = document.getElementById("sector-valuation-body");
+    if (!tbody) return;
+    tbody.innerHTML = "";
+
+    const rollup = (appData && appData.briefing && appData.briefing.sector_valuation) || [];
+
+    if (rollup.length === 0) {
+        setTableEmpty(tbody, 5, "No valuation data", "No P/E data was available across the watchlist this cycle.");
+        return;
+    }
+
+    rollup.forEach(r => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td><span style="margin-right:6px;">${escapeHtml(r.icon || "📊")}</span>${escapeHtml(r.label)}</td>
+            <td><strong>${escapeHtml(r.median_pe)}</strong></td>
+            <td>${escapeHtml(r.stock_count)}</td>
+            <td style="color: var(--success, #34d399);">${escapeHtml(r.cheapest_ticker)} <small>(${escapeHtml(r.cheapest_pe)})</small></td>
+            <td style="color: var(--danger, #f87171);">${escapeHtml(r.most_expensive_ticker)} <small>(${escapeHtml(r.most_expensive_pe)})</small></td>
         `;
         tbody.appendChild(tr);
     });

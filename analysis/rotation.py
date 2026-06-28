@@ -260,6 +260,7 @@ def auto_curate_watchlist(brief_data, watchlist):
                                 "ticker": ticker,
                                 "status": "Watchlisted",
                                 "reason": "Added to watchlist (new high-growth pick).",
+                                "qoq_growth": round(candidate_qoq_growth, 1),
                             }
                         )
                     else:
@@ -293,6 +294,7 @@ def auto_curate_watchlist(brief_data, watchlist):
                                     "ticker": ticker,
                                     "status": "Watchlisted",
                                     "reason": f"Rotated into watchlist replacing {weakest_stock['ticker']}.",
+                                    "qoq_growth": round(candidate_qoq_growth, 1),
                                 }
                             )
                         else:
@@ -305,6 +307,7 @@ def auto_curate_watchlist(brief_data, watchlist):
                                     "ticker": ticker,
                                     "status": "Pipeline",
                                     "reason": f"Pipeline candidate (Upside {growth_pct_val:.1f}% vs weakest watchlisted {weakest_potential:.1f}%).",
+                                    "qoq_growth": round(candidate_qoq_growth, 1),
                                 }
                             )
 

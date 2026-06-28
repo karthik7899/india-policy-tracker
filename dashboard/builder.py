@@ -12,6 +12,59 @@ from models.core import Company, CompanyFinancials, CompanyValuation
 # Alert substrings that constitute a failure of Graham's Defensive Investor screen.
 _DEFENSIVE_FAIL_MARKERS = ("Current Ratio", "Debt Limit", "P/E Screen", "Dividend")
 
+# Clamp the Graham-derived fallback potential to a sane display band. The Graham
+# formula can produce extreme intrinsic values for high-growth names; this keeps
+# the headline "potential" figure realistic when we have no analyst target.
+_FUNDAMENTAL_UPSIDE_FLOOR = -50.0
+_FUNDAMENTAL_UPSIDE_CAP = 60.0
+
+
+def _to_float(value):
+    """Best-effort numeric coercion tolerant of None/strings/%/N/A."""
+    if value is None or isinstance(value, bool):
+        return None
+    if isinstance(value, (int, float)):
+        return float(value)
+    if isinstance(value, str):
+        cleaned = value.strip().replace("%", "").replace("+", "").replace(",", "")
+        if not cleaned or cleaned.upper() in {"N/A", "NA", "-", "—"}:
+            return None
+        try:
+            return float(cleaned)
+        except ValueError:
+            return None
+    return None
+
+
+def _apply_potential_estimate(stock, price, graham_value):
+    """Tag each stock's upside with how it was derived and refresh stale targets.
+
+    Stocks with live analyst coverage keep their consensus target. Stocks without
+    coverage fall back to a transparent Graham-based fundamental estimate instead
+    of a frozen, manually-seeded target — and are clearly labelled as such so the
+    two are never conflated.
+    """
+    has_analyst_coverage = bool(_to_float(stock.get("analyst_count"))) and bool(
+        stock.get("target")
+    )
+
+    # Always expose the raw intrinsic value for reference.
+    if graham_value and graham_value > 0:
+        stock["fundamental_value"] = round(graham_value, 1)
+
+    if has_analyst_coverage:
+        stock["estimate_method"] = "Analyst Consensus"
+        return
+
+    stock["estimate_method"] = "Fundamental Estimate"
+
+    # Derive a clamped upside from the Graham intrinsic value when we can.
+    if price > 0 and graham_value and graham_value > 0:
+        upside = (graham_value - price) / price * 100
+        upside = max(_FUNDAMENTAL_UPSIDE_FLOOR, min(_FUNDAMENTAL_UPSIDE_CAP, upside))
+        stock["growth_pct"] = f"{'+' if upside >= 0 else ''}{upside:.1f}%"
+        stock["target"] = f"{price * (1 + upside / 100):.2f}"
+
 
 def build_dashboard_views(data: Dict[str, Any], watchlist: Dict[str, Any]):
     """
@@ -147,6 +200,10 @@ def build_dashboard_views(data: Dict[str, Any], watchlist: Dict[str, Any]):
                     }
                 )
             stock["score"] = score_dict
+
+            # Tag the upside source and refresh stale targets where there is no
+            # live analyst coverage to back them.
+            _apply_potential_estimate(stock, price, graham_value)
 
             # Add to Margin of Safety list if it passes the defensive screen,
             # is a deep-value bargain, or is conventionally cheap (PE < 15).

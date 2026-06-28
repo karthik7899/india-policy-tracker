@@ -144,3 +144,56 @@ def test_to_float_handles_varied_inputs():
     assert _to_float("+15.5%") == 15.5
     assert _to_float("1,250") == 1250.0
     assert _to_float(3) == 3.0
+
+
+def test_competitive_threat_flags_lagging_incumbent():
+    # A high-growth challenger discovered in the sector out-grows a slow incumbent.
+    watchlist = {
+        "fmcg": [
+            {
+                "ticker": "SLOW",
+                "name": "Slowpoke Foods",
+                "screener": {"qoq_sales_growth": 6.0},
+            },
+            {
+                "ticker": "FAST",
+                "name": "Fast Foods",
+                "screener": {"qoq_sales_growth": 25.0},
+            },
+        ]
+    }
+    data = {
+        "emerging_players": {
+            "fmcg": [
+                {
+                    "name": "Challenger Corp",
+                    "ticker": "CHAL",
+                    "status": "Pipeline",
+                    "qoq_growth": 40.0,
+                }
+            ]
+        }
+    }
+    warnings = generate_early_warnings(data, watchlist)
+    threats = [w for w in warnings if w["category"] == "Competitive Threat"]
+    # Only the lagging incumbent (below the 15% bar) is flagged, not the fast grower.
+    assert len(threats) == 1
+    assert threats[0]["ticker"] == "SLOW"
+    assert threats[0]["direction"] == "risk"
+    assert "Challenger Corp" in threats[0]["signal"]
+
+
+def test_competitive_threat_ignored_when_challenger_growth_unknown():
+    watchlist = {
+        "fmcg": [
+            {"ticker": "SLOW", "name": "Slow", "screener": {"qoq_sales_growth": 5.0}}
+        ]
+    }
+    # Challenger has no qoq_growth -> cannot establish a credible threat.
+    data = {
+        "emerging_players": {
+            "fmcg": [{"name": "Mystery Co", "ticker": "MYST", "status": "Pipeline"}]
+        }
+    }
+    warnings = generate_early_warnings(data, watchlist)
+    assert "Competitive Threat" not in _categories(warnings)

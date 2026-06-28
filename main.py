@@ -104,6 +104,11 @@ async def run_pipeline():
     # Compile margin of safety and moat analytics
     build_dashboard_views(data, watchlist)
 
+    # Sector-relative valuation: annotate stocks with peer-group P/E context
+    from analysis.sector_valuation import build_sector_valuation
+
+    data["sector_valuation"] = build_sector_valuation(watchlist)
+
     # Establish the historical-MF institutional accumulation baseline (backtesting)
     from analysis.backtesting import build_institutional_baseline
 
