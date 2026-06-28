@@ -54,7 +54,9 @@
         "is_bargain": false,
         "net_current_assets": null,
         "hyper_growth_warning": false,
-        "valuation_alerts": []
+        "valuation_alerts": [],
+        "industry_pe": 32.3,
+        "pe_vs_peers": "In line with peers"
       },
       "score": {
         "overall_score": 3,
@@ -67,7 +69,9 @@
         "recommendations": [
           "Monitor / Underweight"
         ]
-      }
+      },
+      "fundamental_value": 405.6,
+      "estimate_method": "Analyst Consensus"
     },
     {
       "ticker": "SUZLON",
@@ -84,49 +88,7 @@
       "target_high": "75.21",
       "target_low": "52.00",
       "rec_score": 1.4,
-      "screener": {
-        "market_cap": 77896.0,
-        "current_price": 57.1,
-        "pe_ratio": 24.6,
-        "dividend_yield": 0.0,
-        "roce": 35.1,
-        "roe": 40.6,
-        "q_opm": 18.0,
-        "quarterly_ebitda_margin": [
-          19.0,
-          19.0,
-          17.0,
-          18.0
-        ],
-        "opm_expansion": 1.0,
-        "q_eps": 0.82,
-        "operating_margin_trend": [
-          14.0,
-          14.0,
-          16.0,
-          17.0,
-          18.0
-        ],
-        "capex": 0.0,
-        "rd_pct": 3.0,
-        "roce_trend": [
-          21.0,
-          20.0,
-          25.0,
-          33.0,
-          35.0
-        ],
-        "graham_intrinsic_value": 106.6,
-        "owner_earnings": 0.0,
-        "retained_earnings_ratio": 1.2,
-        "moat_status": "Strong (Wide Moat)",
-        "is_bargain": false,
-        "net_current_assets": null,
-        "hyper_growth_warning": false,
-        "valuation_alerts": [
-          "No Dividend Yield"
-        ]
-      },
+      "screener": {},
       "score": {
         "overall_score": 19,
         "confidence": "Medium",
@@ -163,50 +125,7 @@
       "target_high": "1730.00",
       "target_low": "1000.00",
       "rec_score": null,
-      "screener": {
-        "market_cap": 251376.0,
-        "current_price": 1526.0,
-        "pe_ratio": 137.0,
-        "dividend_yield": 0.0,
-        "roce": 7.39,
-        "roe": 11.4,
-        "q_opm": 82.0,
-        "quarterly_ebitda_margin": [
-          80.0,
-          87.0,
-          86.0,
-          82.0
-        ],
-        "opm_expansion": -4.0,
-        "q_eps": 2.41,
-        "operating_margin_trend": [
-          68.0,
-          64.0,
-          80.0,
-          79.0,
-          83.0
-        ],
-        "capex": 0.0,
-        "rd_pct": 3.0,
-        "roce_trend": [
-          8.0,
-          8.0,
-          10.0,
-          9.0,
-          7.0
-        ],
-        "graham_intrinsic_value": 313.3,
-        "owner_earnings": 0.0,
-        "retained_earnings_ratio": 1.2,
-        "moat_status": "Weak/None",
-        "is_bargain": false,
-        "net_current_assets": null,
-        "hyper_growth_warning": false,
-        "valuation_alerts": [
-          "Fails P/E Screen (P/E 137.0 > 15 & Price > Intrinsic)",
-          "No Dividend Yield"
-        ]
-      },
+      "screener": {},
       "score": {
         "overall_score": 1,
         "confidence": "Medium",
@@ -268,7 +187,8 @@
           "Monitor / Underweight",
           "Ensure risks are hedged or sizing is adjusted appropriately."
         ]
-      }
+      },
+      "estimate_method": "Analyst Consensus"
     },
     {
       "ticker": "STLTECH",
@@ -327,7 +247,9 @@
         "valuation_alerts": [
           "Fails P/E Screen (P/E 629.0 > 15 & Price > Intrinsic)",
           "No Dividend Yield"
-        ]
+        ],
+        "industry_pe": 331.4,
+        "pe_vs_peers": "90% above peers"
       },
       "score": {
         "overall_score": 2,
@@ -345,7 +267,9 @@
           "Monitor / Underweight",
           "Ensure risks are hedged or sizing is adjusted appropriately."
         ]
-      }
+      },
+      "fundamental_value": 157.3,
+      "estimate_method": "Analyst Consensus"
     },
     {
       "ticker": "ANANTRAJ",
@@ -362,7 +286,49 @@
       "target_high": "800.00",
       "target_low": "650.00",
       "rec_score": 1.3,
-      "screener": {},
+      "screener": {
+        "market_cap": 18805.0,
+        "current_price": 523.0,
+        "pe_ratio": 33.9,
+        "dividend_yield": 0.14,
+        "roce": 12.1,
+        "roe": 11.2,
+        "q_opm": 26.0,
+        "quarterly_ebitda_margin": [
+          25.0,
+          27.0,
+          26.0,
+          26.0
+        ],
+        "opm_expansion": 0.0,
+        "q_eps": 4.07,
+        "operating_margin_trend": [
+          16.0,
+          21.0,
+          23.0,
+          24.0,
+          26.0
+        ],
+        "capex": 0.0,
+        "rd_pct": 1.5,
+        "roce_trend": [
+          2.0,
+          6.0,
+          9.0,
+          11.0,
+          12.0
+        ],
+        "graham_intrinsic_value": 529.1,
+        "owner_earnings": 0.0,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Weak/None",
+        "is_bargain": false,
+        "net_current_assets": null,
+        "hyper_growth_warning": false,
+        "valuation_alerts": [],
+        "industry_pe": 331.4,
+        "pe_vs_peers": "90% below peers"
+      },
       "score": {
         "overall_score": 3,
         "confidence": "Medium",
@@ -374,7 +340,9 @@
         "recommendations": [
           "Monitor / Underweight"
         ]
-      }
+      },
+      "fundamental_value": 529.1,
+      "estimate_method": "Analyst Consensus"
     }
   ],
   "cybersecurity": [
@@ -393,7 +361,49 @@
       "target_high": "3841.00",
       "target_low": "1965.00",
       "rec_score": 2.0,
-      "screener": {},
+      "screener": {
+        "market_cap": 757881.0,
+        "current_price": 2095.0,
+        "pe_ratio": 14.5,
+        "dividend_yield": 3.06,
+        "roce": 63.0,
+        "roe": 51.8,
+        "q_opm": 27.0,
+        "quarterly_ebitda_margin": [
+          27.0,
+          27.0,
+          27.0,
+          27.0
+        ],
+        "opm_expansion": 0.0,
+        "q_eps": 37.92,
+        "operating_margin_trend": [
+          28.0,
+          26.0,
+          27.0,
+          26.0,
+          27.0
+        ],
+        "capex": 0.0,
+        "rd_pct": 10.5,
+        "roce_trend": [
+          54.0,
+          59.0,
+          64.0,
+          65.0,
+          63.0
+        ],
+        "graham_intrinsic_value": 4929.6,
+        "owner_earnings": 0.0,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Strong (Wide Moat)",
+        "is_bargain": false,
+        "net_current_assets": null,
+        "hyper_growth_warning": false,
+        "valuation_alerts": [],
+        "industry_pe": 14.5,
+        "pe_vs_peers": "In line with peers"
+      },
       "score": {
         "overall_score": 22,
         "confidence": "Medium",
@@ -411,7 +421,9 @@
         "recommendations": [
           "Strong Buy Candidate"
         ]
-      }
+      },
+      "fundamental_value": 4929.6,
+      "estimate_method": "Analyst Consensus"
     },
     {
       "ticker": "QUICKHEAL",
@@ -484,7 +496,8 @@
           "Monitor / Underweight",
           "Ensure risks are hedged or sizing is adjusted appropriately."
         ]
-      }
+      },
+      "estimate_method": "Fundamental Estimate"
     }
   ],
   "surveillance_security": [
@@ -545,7 +558,9 @@
         "valuation_alerts": [
           "Fails P/E Screen (P/E 114.0 > 15 & Price > Intrinsic)",
           "No Dividend Yield"
-        ]
+        ],
+        "industry_pe": 67.1,
+        "pe_vs_peers": "70% above peers"
       },
       "score": {
         "overall_score": 7,
@@ -566,7 +581,9 @@
           "Hold / Neutral",
           "Ensure risks are hedged or sizing is adjusted appropriately."
         ]
-      }
+      },
+      "fundamental_value": 1866.8,
+      "estimate_method": "Analyst Consensus"
     },
     {
       "ticker": "DIXON",
@@ -641,7 +658,9 @@
         "hyper_growth_warning": false,
         "valuation_alerts": [
           "Fails P/E Screen (P/E 20.2 > 15 & Price > Intrinsic)"
-        ]
+        ],
+        "industry_pe": 67.1,
+        "pe_vs_peers": "70% below peers"
       },
       "score": {
         "overall_score": 1,
@@ -657,7 +676,8 @@
           "Monitor / Underweight",
           "Ensure risks are hedged or sizing is adjusted appropriately."
         ]
-      }
+      },
+      "estimate_method": "Analyst Consensus"
     },
     {
       "ticker": "IDEAFORGE",
@@ -674,7 +694,48 @@
       "target_high": "1187.00",
       "target_low": "875.00",
       "rec_score": null,
-      "screener": {},
+      "screener": {
+        "market_cap": 3579.0,
+        "current_price": 825.0,
+        "dividend_yield": 0.0,
+        "roce": -2.44,
+        "roe": -2.82,
+        "q_opm": 44.0,
+        "quarterly_ebitda_margin": [
+          -149.0,
+          -28.0,
+          -84.0,
+          44.0
+        ],
+        "opm_expansion": 128.0,
+        "q_eps": 13.86,
+        "operating_margin_trend": [
+          47.0,
+          26.0,
+          18.0,
+          -32.0,
+          2.0
+        ],
+        "capex": 0.0,
+        "rd_pct": 1.5,
+        "roce_trend": [
+          48.0,
+          15.0,
+          11.0,
+          -10.0,
+          -2.0
+        ],
+        "graham_intrinsic_value": 1801.8,
+        "owner_earnings": 0.0,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Weak/None",
+        "is_bargain": false,
+        "net_current_assets": null,
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "No Dividend Yield"
+        ]
+      },
       "score": {
         "overall_score": 7,
         "confidence": "Medium",
@@ -690,7 +751,9 @@
           "Hold / Neutral",
           "Ensure risks are hedged or sizing is adjusted appropriately."
         ]
-      }
+      },
+      "fundamental_value": 1801.8,
+      "estimate_method": "Analyst Consensus"
     },
     {
       "ticker": "ZENSARTECH",
@@ -767,16 +830,18 @@
         "hyper_growth_warning": false,
         "valuation_alerts": [
           "Fails P/E Screen (P/E 51.0 > 15 & Price > Intrinsic)"
-        ]
+        ],
+        "industry_pe": 59.8,
+        "pe_vs_peers": "15% below peers"
       },
       "score": {
         "overall_score": 21,
         "confidence": "Medium",
         "reasons": [
+          "Policy Notification: Dixon to BEL",
           "Policy Notification: Dixon Tech Completes ₹553 Cr Q Tech Deal; Stock Falls 4%",
           "Policy Notification: Dixon Technologies shares hit a 52-week low, down 34% in 2025: Here’s why",
           "Policy Notification: Trade Spotlight: How should you trade BHEL, Dixon Technologies, Waaree Energies, Sona BLW Precision, Ather...",
-          "Policy Notification: Dixon to BEL",
           "High Return on Capital (ROCE: 42.0%)",
           "High Return on Equity (ROE: 37.4%)",
           "Wide Economic Moat (Sustained Margin Expansion)"
@@ -789,7 +854,9 @@
           "Strong Buy Candidate",
           "Ensure risks are hedged or sizing is adjusted appropriately."
         ]
-      }
+      },
+      "fundamental_value": 5482.1,
+      "estimate_method": "Analyst Consensus"
     },
     {
       "ticker": "KAYNES",
@@ -806,7 +873,52 @@
       "target_high": "4000.00",
       "target_low": "2647.00",
       "rec_score": 3.0,
-      "screener": {},
+      "screener": {
+        "market_cap": 21885.0,
+        "current_price": 3265.0,
+        "pe_ratio": 59.8,
+        "dividend_yield": 0.0,
+        "roce": 13.2,
+        "roe": 9.64,
+        "q_opm": 16.0,
+        "quarterly_ebitda_margin": [
+          17.0,
+          16.0,
+          15.0,
+          16.0
+        ],
+        "opm_expansion": 1.0,
+        "q_eps": 13.61,
+        "operating_margin_trend": [
+          13.0,
+          15.0,
+          14.0,
+          15.0,
+          16.0
+        ],
+        "capex": 0.0,
+        "rd_pct": 1.5,
+        "roce_trend": [
+          25.0,
+          22.0,
+          15.0,
+          14.0,
+          13.0
+        ],
+        "graham_intrinsic_value": 1769.3,
+        "owner_earnings": 0.0,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Weak/None",
+        "is_bargain": false,
+        "net_current_assets": null,
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "Fails P/E Screen (P/E 59.8 > 15 & Price > Intrinsic)",
+          "No Dividend Yield"
+        ],
+        "industry_pe": 59.8,
+        "pe_vs_peers": "In line with peers"
+      },
       "score": {
         "overall_score": 4,
         "confidence": "Medium",
@@ -822,7 +934,9 @@
           "Monitor / Underweight",
           "Ensure risks are hedged or sizing is adjusted appropriately."
         ]
-      }
+      },
+      "fundamental_value": 1769.3,
+      "estimate_method": "Analyst Consensus"
     },
     {
       "ticker": "CGPOWER",
@@ -880,7 +994,9 @@
         "hyper_growth_warning": false,
         "valuation_alerts": [
           "Fails P/E Screen (P/E 121.0 > 15 & Price > Intrinsic)"
-        ]
+        ],
+        "industry_pe": 59.8,
+        "pe_vs_peers": "102% above peers"
       },
       "score": {
         "overall_score": 6,
@@ -899,7 +1015,9 @@
           "Hold / Neutral",
           "Ensure risks are hedged or sizing is adjusted appropriately."
         ]
-      }
+      },
+      "fundamental_value": 301.6,
+      "estimate_method": "Analyst Consensus"
     }
   ],
   "fmcg": [
@@ -959,7 +1077,9 @@
         "hyper_growth_warning": false,
         "valuation_alerts": [
           "Fails P/E Screen (P/E 54.0 > 15 & Price > Intrinsic)"
-        ]
+        ],
+        "industry_pe": 54.0,
+        "pe_vs_peers": "In line with peers"
       },
       "score": {
         "overall_score": 6,
@@ -978,7 +1098,9 @@
           "Hold / Neutral",
           "Ensure risks are hedged or sizing is adjusted appropriately."
         ]
-      }
+      },
+      "fundamental_value": 335.4,
+      "estimate_method": "Analyst Consensus"
     },
     {
       "ticker": "TATACONSUM",
@@ -995,49 +1117,7 @@
       "target_high": "1460.00",
       "target_low": "1124.00",
       "rec_score": 1.8,
-      "screener": {
-        "market_cap": 111959.0,
-        "current_price": 1131.0,
-        "pe_ratio": 72.9,
-        "dividend_yield": 0.88,
-        "roce": 9.24,
-        "roe": 7.35,
-        "q_opm": 15.0,
-        "quarterly_ebitda_margin": [
-          13.0,
-          14.0,
-          14.0,
-          15.0
-        ],
-        "opm_expansion": 1.0,
-        "q_eps": 4.24,
-        "operating_margin_trend": [
-          14.0,
-          13.0,
-          15.0,
-          14.0,
-          14.0
-        ],
-        "capex": 0.0,
-        "rd_pct": 1.5,
-        "roce_trend": [
-          9.0,
-          9.0,
-          11.0,
-          9.0,
-          9.0
-        ],
-        "graham_intrinsic_value": 551.2,
-        "owner_earnings": 0.0,
-        "retained_earnings_ratio": 1.2,
-        "moat_status": "Weak/None",
-        "is_bargain": false,
-        "net_current_assets": null,
-        "hyper_growth_warning": false,
-        "valuation_alerts": [
-          "Fails P/E Screen (P/E 72.9 > 15 & Price > Intrinsic)"
-        ]
-      },
+      "screener": {},
       "score": {
         "overall_score": 1,
         "confidence": "Medium",
@@ -1069,47 +1149,7 @@
       "target_high": "486.00",
       "target_low": "290.00",
       "rec_score": 2.5,
-      "screener": {
-        "market_cap": 363355.0,
-        "current_price": 290.0,
-        "pe_ratio": 17.4,
-        "dividend_yield": 5.0,
-        "roce": 38.9,
-        "roe": 29.3,
-        "q_opm": 39.0,
-        "quarterly_ebitda_margin": [
-          32.0,
-          34.0,
-          34.0,
-          39.0
-        ],
-        "opm_expansion": 5.0,
-        "q_eps": 4.3,
-        "operating_margin_trend": [
-          34.0,
-          36.0,
-          37.0,
-          34.0,
-          35.0
-        ],
-        "capex": 0.0,
-        "rd_pct": 1.5,
-        "roce_trend": [
-          33.0,
-          39.0,
-          36.0,
-          37.0,
-          39.0
-        ],
-        "graham_intrinsic_value": 559.0,
-        "owner_earnings": 0.0,
-        "retained_earnings_ratio": 1.2,
-        "moat_status": "Strong (Wide Moat)",
-        "is_bargain": false,
-        "net_current_assets": null,
-        "hyper_growth_warning": false,
-        "valuation_alerts": []
-      },
+      "screener": {},
       "score": {
         "overall_score": 15,
         "confidence": "Medium",
@@ -1186,7 +1226,9 @@
         "hyper_growth_warning": false,
         "valuation_alerts": [
           "Fails P/E Screen (P/E 68.4 > 15 & Price > Intrinsic)"
-        ]
+        ],
+        "industry_pe": 61.0,
+        "pe_vs_peers": "12% above peers"
       },
       "score": {
         "overall_score": 6,
@@ -1205,7 +1247,9 @@
           "Hold / Neutral",
           "Ensure risks are hedged or sizing is adjusted appropriately."
         ]
-      }
+      },
+      "fundamental_value": 556.4,
+      "estimate_method": "Analyst Consensus"
     },
     {
       "ticker": "CAMPUS",
@@ -1263,7 +1307,9 @@
         "hyper_growth_warning": false,
         "valuation_alerts": [
           "Fails P/E Screen (P/E 53.5 > 15 & Price > Intrinsic)"
-        ]
+        ],
+        "industry_pe": 61.0,
+        "pe_vs_peers": "12% below peers"
       },
       "score": {
         "overall_score": 6,
@@ -1282,7 +1328,9 @@
           "Hold / Neutral",
           "Ensure risks are hedged or sizing is adjusted appropriately."
         ]
-      }
+      },
+      "fundamental_value": 122.2,
+      "estimate_method": "Analyst Consensus"
     },
     {
       "ticker": "PAGEIND",
@@ -1326,7 +1374,8 @@
           "Monitor / Underweight",
           "Ensure risks are hedged or sizing is adjusted appropriately."
         ]
-      }
+      },
+      "estimate_method": "Analyst Consensus"
     },
     {
       "ticker": "RELAXO",
@@ -1370,7 +1419,8 @@
           "Monitor / Underweight",
           "Ensure risks are hedged or sizing is adjusted appropriately."
         ]
-      }
+      },
+      "estimate_method": "Analyst Consensus"
     }
   ],
   "big_cap_industries": [
@@ -1389,47 +1439,7 @@
       "target_high": "5060.00",
       "target_low": "3600.00",
       "rec_score": 1.7,
-      "screener": {
-        "market_cap": 580062.0,
-        "current_price": 4216.0,
-        "pe_ratio": 35.4,
-        "dividend_yield": 0.9,
-        "roce": 14.6,
-        "roe": 15.9,
-        "q_opm": 13.0,
-        "quarterly_ebitda_margin": [
-          13.0,
-          13.0,
-          13.0,
-          13.0
-        ],
-        "opm_expansion": 0.0,
-        "q_eps": 38.71,
-        "operating_margin_trend": [
-          16.0,
-          15.0,
-          13.0,
-          13.0,
-          12.0
-        ],
-        "capex": 0.0,
-        "rd_pct": 1.5,
-        "roce_trend": [
-          10.0,
-          12.0,
-          13.0,
-          15.0,
-          15.0
-        ],
-        "graham_intrinsic_value": 5032.3,
-        "owner_earnings": 0.0,
-        "retained_earnings_ratio": 1.2,
-        "moat_status": "Medium (Narrow Moat)",
-        "is_bargain": false,
-        "net_current_assets": null,
-        "hyper_growth_warning": false,
-        "valuation_alerts": []
-      },
+      "screener": {},
       "score": {
         "overall_score": 16,
         "confidence": "Medium",
@@ -1462,7 +1472,49 @@
       "target_high": "1910.00",
       "target_low": "1510.00",
       "rec_score": 1.3,
-      "screener": {},
+      "screener": {
+        "market_cap": 1783723.0,
+        "current_price": 1318.0,
+        "pe_ratio": 22.9,
+        "dividend_yield": 0.46,
+        "roce": 10.3,
+        "roe": 8.91,
+        "q_opm": 15.0,
+        "quarterly_ebitda_margin": [
+          18.0,
+          18.0,
+          17.0,
+          15.0
+        ],
+        "opm_expansion": -2.0,
+        "q_eps": 12.54,
+        "operating_margin_trend": [
+          16.0,
+          16.0,
+          18.0,
+          17.0,
+          17.0
+        ],
+        "capex": 0.0,
+        "rd_pct": 1.5,
+        "roce_trend": [
+          8.0,
+          9.0,
+          10.0,
+          10.0,
+          10.0
+        ],
+        "graham_intrinsic_value": 1630.2,
+        "owner_earnings": 0.0,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Weak/None",
+        "is_bargain": false,
+        "net_current_assets": null,
+        "hyper_growth_warning": false,
+        "valuation_alerts": [],
+        "industry_pe": 22.9,
+        "pe_vs_peers": "In line with peers"
+      },
       "score": {
         "overall_score": 5,
         "confidence": "Medium",
@@ -1474,7 +1526,9 @@
         "recommendations": [
           "Hold / Neutral"
         ]
-      }
+      },
+      "fundamental_value": 1630.2,
+      "estimate_method": "Analyst Consensus"
     }
   ],
   "textiles_apparel": [
@@ -1493,7 +1547,49 @@
       "target_high": "200.00",
       "target_low": "145.00",
       "rec_score": 1.5,
-      "screener": {},
+      "screener": {
+        "market_cap": 16049.0,
+        "current_price": 167.0,
+        "pe_ratio": 73.7,
+        "dividend_yield": 0.06,
+        "roce": 6.25,
+        "roe": 4.47,
+        "q_opm": 10.0,
+        "quarterly_ebitda_margin": [
+          10.0,
+          6.0,
+          7.0,
+          10.0
+        ],
+        "opm_expansion": 3.0,
+        "q_eps": 1.08,
+        "operating_margin_trend": [
+          15.0,
+          9.0,
+          14.0,
+          12.0,
+          8.0
+        ],
+        "capex": 0.0,
+        "rd_pct": 1.5,
+        "roce_trend": [
+          14.0,
+          6.0,
+          16.0,
+          14.0,
+          6.0
+        ],
+        "graham_intrinsic_value": 140.4,
+        "owner_earnings": 0.0,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Weak/None",
+        "is_bargain": false,
+        "net_current_assets": null,
+        "hyper_growth_warning": false,
+        "valuation_alerts": [],
+        "industry_pe": 62.6,
+        "pe_vs_peers": "18% above peers"
+      },
       "score": {
         "overall_score": 2,
         "confidence": "Medium",
@@ -1505,7 +1601,9 @@
         "recommendations": [
           "Monitor / Underweight"
         ]
-      }
+      },
+      "fundamental_value": 140.4,
+      "estimate_method": "Analyst Consensus"
     },
     {
       "ticker": "GOKEX",
@@ -1564,7 +1662,9 @@
         "valuation_alerts": [
           "Fails P/E Screen (P/E 62.6 > 15 & Price > Intrinsic)",
           "No Dividend Yield"
-        ]
+        ],
+        "industry_pe": 62.6,
+        "pe_vs_peers": "In line with peers"
       },
       "score": {
         "overall_score": 2,
@@ -1581,7 +1681,9 @@
           "Monitor / Underweight",
           "Ensure risks are hedged or sizing is adjusted appropriately."
         ]
-      }
+      },
+      "fundamental_value": 638.3,
+      "estimate_method": "Analyst Consensus"
     },
     {
       "ticker": "ARVIND",
@@ -1637,7 +1739,9 @@
         "is_bargain": false,
         "net_current_assets": null,
         "hyper_growth_warning": false,
-        "valuation_alerts": []
+        "valuation_alerts": [],
+        "industry_pe": 62.6,
+        "pe_vs_peers": "46% below peers"
       },
       "score": {
         "overall_score": 6,
@@ -1650,7 +1754,9 @@
         "recommendations": [
           "Hold / Neutral"
         ]
-      }
+      },
+      "fundamental_value": 791.7,
+      "estimate_method": "Analyst Consensus"
     }
   ],
   "logistics_heavy_capital": [
@@ -1708,7 +1814,9 @@
         "is_bargain": false,
         "net_current_assets": null,
         "hyper_growth_warning": false,
-        "valuation_alerts": []
+        "valuation_alerts": [],
+        "industry_pe": 58.2,
+        "pe_vs_peers": "51% below peers"
       },
       "score": {
         "overall_score": 1,
@@ -1720,7 +1828,9 @@
         "recommendations": [
           "Monitor / Underweight"
         ]
-      }
+      },
+      "fundamental_value": 448.5,
+      "estimate_method": "Analyst Consensus"
     },
     {
       "ticker": "BHEL",
@@ -1776,7 +1886,9 @@
         "is_bargain": false,
         "net_current_assets": null,
         "hyper_growth_warning": false,
-        "valuation_alerts": []
+        "valuation_alerts": [],
+        "industry_pe": 58.2,
+        "pe_vs_peers": "51% above peers"
       },
       "score": {
         "overall_score": 15,
@@ -1792,7 +1904,9 @@
         "recommendations": [
           "Strong Buy Candidate"
         ]
-      }
+      },
+      "fundamental_value": 482.3,
+      "estimate_method": "Analyst Consensus"
     },
     {
       "ticker": "CUMMINSIND",
@@ -1809,49 +1923,7 @@
       "target_high": "7100.00",
       "target_low": "3420.00",
       "rec_score": 2.7,
-      "screener": {
-        "market_cap": 156396.0,
-        "current_price": 5642.0,
-        "pe_ratio": 64.5,
-        "dividend_yield": 1.17,
-        "roce": 39.5,
-        "roe": 30.2,
-        "q_opm": 21.0,
-        "quarterly_ebitda_margin": [
-          21.0,
-          22.0,
-          21.0,
-          21.0
-        ],
-        "opm_expansion": 0.0,
-        "q_eps": 23.43,
-        "operating_margin_trend": [
-          14.0,
-          16.0,
-          20.0,
-          20.0,
-          21.0
-        ],
-        "capex": 0.0,
-        "rd_pct": 1.5,
-        "roce_trend": [
-          21.0,
-          27.0,
-          35.0,
-          36.0,
-          40.0
-        ],
-        "graham_intrinsic_value": 3045.9,
-        "owner_earnings": 0.0,
-        "retained_earnings_ratio": 1.2,
-        "moat_status": "Strong (Wide Moat)",
-        "is_bargain": false,
-        "net_current_assets": null,
-        "hyper_growth_warning": false,
-        "valuation_alerts": [
-          "Fails P/E Screen (P/E 64.5 > 15 & Price > Intrinsic)"
-        ]
-      },
+      "screener": {},
       "score": {
         "overall_score": 6,
         "confidence": "Medium",
@@ -1927,7 +1999,9 @@
         "is_bargain": false,
         "net_current_assets": null,
         "hyper_growth_warning": false,
-        "valuation_alerts": []
+        "valuation_alerts": [],
+        "industry_pe": 49.1,
+        "pe_vs_peers": "35% below peers"
       },
       "score": {
         "overall_score": 11,
@@ -1944,7 +2018,9 @@
         "recommendations": [
           "Buy / Accumulate Candidate"
         ]
-      }
+      },
+      "fundamental_value": 8156.2,
+      "estimate_method": "Analyst Consensus"
     },
     {
       "ticker": "BEL",
@@ -2000,7 +2076,9 @@
         "is_bargain": false,
         "net_current_assets": null,
         "hyper_growth_warning": false,
-        "valuation_alerts": []
+        "valuation_alerts": [],
+        "industry_pe": 49.1,
+        "pe_vs_peers": "In line with peers"
       },
       "score": {
         "overall_score": 20,
@@ -2018,7 +2096,9 @@
         "recommendations": [
           "Strong Buy Candidate"
         ]
-      }
+      },
+      "fundamental_value": 395.2,
+      "estimate_method": "Analyst Consensus"
     },
     {
       "ticker": "ASTRAMICRO",
@@ -2035,7 +2115,49 @@
       "target_high": "1665.00",
       "target_low": "1068.00",
       "rec_score": null,
-      "screener": {},
+      "screener": {
+        "market_cap": 16347.0,
+        "current_price": 1722.0,
+        "pe_ratio": 84.7,
+        "dividend_yield": 0.13,
+        "roce": 20.2,
+        "roe": 16.0,
+        "q_opm": 33.0,
+        "quarterly_ebitda_margin": [
+          20.0,
+          22.0,
+          32.0,
+          33.0
+        ],
+        "opm_expansion": 1.0,
+        "q_eps": 11.16,
+        "operating_margin_trend": [
+          12.0,
+          18.0,
+          21.0,
+          26.0,
+          29.0
+        ],
+        "capex": 0.0,
+        "rd_pct": 6.2,
+        "roce_trend": [
+          11.0,
+          17.0,
+          19.0,
+          19.0,
+          20.0
+        ],
+        "graham_intrinsic_value": 1450.8,
+        "owner_earnings": 0.0,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Strong (Wide Moat)",
+        "is_bargain": false,
+        "net_current_assets": null,
+        "hyper_growth_warning": false,
+        "valuation_alerts": [],
+        "industry_pe": 49.1,
+        "pe_vs_peers": "73% above peers"
+      },
       "score": {
         "overall_score": 6,
         "confidence": "Medium",
@@ -2049,7 +2171,9 @@
         "recommendations": [
           "Hold / Neutral"
         ]
-      }
+      },
+      "fundamental_value": 1450.8,
+      "estimate_method": "Analyst Consensus"
     }
   ],
   "semiconductors_equipment": [
@@ -2068,20 +2192,7 @@
       "target_high": null,
       "target_low": null,
       "rec_score": null,
-      "screener": {
-        "capex": 0.0,
-        "rd_pct": 8.5,
-        "graham_intrinsic_value": 0.0,
-        "owner_earnings": 0.0,
-        "retained_earnings_ratio": 1.2,
-        "moat_status": "Weak/None",
-        "is_bargain": false,
-        "net_current_assets": null,
-        "hyper_growth_warning": false,
-        "valuation_alerts": [
-          "No Dividend Yield"
-        ]
-      },
+      "screener": {},
       "score": {
         "overall_score": 1,
         "confidence": "Low",
@@ -2139,7 +2250,8 @@
           "Monitor / Underweight",
           "Ensure risks are hedged or sizing is adjusted appropriately."
         ]
-      }
+      },
+      "estimate_method": "Fundamental Estimate"
     },
     {
       "ticker": "SPEL",
@@ -2183,7 +2295,8 @@
           "Monitor / Underweight",
           "Ensure risks are hedged or sizing is adjusted appropriately."
         ]
-      }
+      },
+      "estimate_method": "Fundamental Estimate"
     }
   ],
   "macro_indicators": [
