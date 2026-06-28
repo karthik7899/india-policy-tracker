@@ -235,6 +235,13 @@ async def fetch_advanced_rss_feeds_async(session, watchlist):
     # Combine queries in chunks of 4 to be polite to RSS service
     ticker_chunks = [all_tickers[i : i + 4] for i in range(0, len(all_tickers), 4)]
 
+    # ⚡ Bolt Optimization: Pre-flatten watchlist to avoid O(n^2) loop and repeated .lower() calls
+    flat_watchlist = [
+        (s["ticker"].lower(), s["name"].lower(), s["name"], sector_name)
+        for sector_name, stocks in watchlist.items()
+        for s in stocks
+    ]
+
     async def process_chunk(chunk):
         ticker_query = " OR ".join([f'"{t}"' for t in chunk])
 
@@ -279,16 +286,11 @@ async def fetch_advanced_rss_feeds_async(session, watchlist):
 
                         matched_company = "Unknown"
                         matched_industry = "Manufacturing"
-                        for sector_name, stocks in watchlist.items():
-                            for s in stocks:
-                                if (
-                                    s["ticker"].lower() in title.lower()
-                                    or s["name"].lower() in title.lower()
-                                ):
-                                    matched_company = s["name"]
-                                    matched_industry = sector_name
-                                    break
-                            if matched_company != "Unknown":
+                        title_lower = title.lower()
+                        for t_lower, n_lower, s_name, sector_name in flat_watchlist:
+                            if t_lower in title_lower or n_lower in title_lower:
+                                matched_company = s_name
+                                matched_industry = sector_name
                                 break
 
                         launches.append(
@@ -323,6 +325,13 @@ async def fetch_exchange_filings_async(session, watchlist):
 
     ticker_chunks = [all_tickers[i : i + 4] for i in range(0, len(all_tickers), 4)]
 
+    # ⚡ Bolt Optimization: Pre-flatten watchlist to avoid O(n^2) loop and repeated .lower() calls
+    flat_watchlist = [
+        (s["ticker"].lower(), s["name"].lower(), s["name"], sector_name)
+        for sector_name, stocks in watchlist.items()
+        for s in stocks
+    ]
+
     async def process_chunk(chunk):
         ticker_query = " OR ".join([f'"{t}"' for t in chunk])
         filing_q = f'({ticker_query}) AND ("NSE" OR "BSE" OR "Exchange Filing" OR "Regulatory Filing") AND ("Agreement" OR "MoU" OR "Acquisition" OR "Expansion" OR "Capacity" OR "Capex" OR "Joint Venture" OR "Technology Transfer")'
@@ -339,16 +348,11 @@ async def fetch_exchange_filings_async(session, watchlist):
 
                         matched_company = "Unknown"
                         matched_industry = "Corporate"
-                        for sector_name, stocks in watchlist.items():
-                            for s in stocks:
-                                if (
-                                    s["ticker"].lower() in title.lower()
-                                    or s["name"].lower() in title.lower()
-                                ):
-                                    matched_company = s["name"]
-                                    matched_industry = sector_name
-                                    break
-                            if matched_company != "Unknown":
+                        title_lower = title.lower()
+                        for t_lower, n_lower, s_name, sector_name in flat_watchlist:
+                            if t_lower in title_lower or n_lower in title_lower:
+                                matched_company = s_name
+                                matched_industry = sector_name
                                 break
 
                         filings.append(
