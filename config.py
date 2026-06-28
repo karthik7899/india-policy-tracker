@@ -3,6 +3,12 @@ import os
 import json
 from logger import log
 
+# Public GitHub Pages dashboard URL surfaced in the email digest. Overridable so
+# forks can point the "View Live Dashboard" link at their own deployment.
+DASHBOARD_URL = os.environ.get(
+    "DASHBOARD_URL", "https://karthik7899.github.io/india-policy-tracker/"
+)
+
 STOCK_WATCHLIST = {
     "aerospace_defence": [
         {

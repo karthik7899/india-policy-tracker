@@ -4,7 +4,7 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from logger import log
-from config import SECTOR_METADATA
+from config import SECTOR_METADATA, DASHBOARD_URL
 
 _SEVERITY_BADGE = {
     "Critical": ("#7f1d1d", "#fca5a5"),
@@ -70,6 +70,39 @@ def _build_early_warning_html(warnings):
     """
 
 
+def _build_sector_valuation_html(rollup):
+    """Renders the sector-relative valuation table. Returns '' when empty."""
+    if not rollup:
+        return ""
+
+    rows = ""
+    for r in rollup[:14]:
+        rows += f"""
+        <tr>
+            <td><span style="margin-right: 6px;">{r.get('icon', '📊')}</span>{r.get('label', '')}</td>
+            <td style="color: #e2e8f0; font-weight: 600;">{r.get('median_pe', '—')}</td>
+            <td style="color: #34d399; font-size: 11px;">{r.get('cheapest_ticker', '')} ({r.get('cheapest_pe', '')})</td>
+            <td style="color: #f87171; font-size: 11px;">{r.get('most_expensive_ticker', '')} ({r.get('most_expensive_pe', '')})</td>
+        </tr>
+        """
+
+    return f"""
+    <div class="section-card">
+        <h3 style="color: #38bdf8; margin-bottom: 6px; font-size: 16px;">⚖️ Sector Valuation (Peer P/E)</h3>
+        <p style="font-size: 12px; color: #94a3b8; margin: 0 0 12px 0;">
+            Median price-to-earnings across each sector's watchlist peer group, cheapest sectors first.
+            Use it to see which themes are richly vs cheaply priced relative to their peers.
+        </p>
+        <table class="stock-table">
+            <thead>
+                <tr><th>Sector</th><th>Median P/E</th><th>Cheapest</th><th>Priciest</th></tr>
+            </thead>
+            <tbody>{rows}</tbody>
+        </table>
+    </div>
+    """
+
+
 def build_html_email(brief_data, watchlist):
     """Renders the HTML structure for the email notification."""
     today_str = datetime.date.today().strftime("%B %d, %Y")
@@ -77,10 +110,20 @@ def build_html_email(brief_data, watchlist):
     style = """
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0b0f19; color: #cbd5e1; margin: 0; padding: 20px; }
+        .preheader { display: none !important; visibility: hidden; opacity: 0; color: transparent; height: 0; width: 0; overflow: hidden; mso-hide: all; }
         .container { max-width: 650px; margin: 0 auto; background-color: #111827; border-radius: 12px; border: 1px solid #1f2937; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
-        .header { background: linear-gradient(135deg, #1e3a8a, #0f172a); padding: 30px; text-align: center; border-bottom: 2px solid #3b82f6; }
+        .header { background: linear-gradient(135deg, #1e3a8a, #0f172a); padding: 32px 30px; text-align: center; border-bottom: 2px solid #3b82f6; }
         .header h1 { margin: 0; font-size: 24px; color: #ffffff; letter-spacing: 0.5px; }
-        .header p { margin: 5px 0 0 0; font-size: 14px; color: #94a3b8; }
+        .header p { margin: 6px 0 0 0; font-size: 14px; color: #94a3b8; }
+        .cta-button { display: inline-block; margin-top: 18px; padding: 11px 26px; background: linear-gradient(135deg, #3b82f6, #2563eb); color: #ffffff !important; font-size: 13px; font-weight: 600; text-decoration: none; border-radius: 8px; letter-spacing: 0.3px; box-shadow: 0 2px 8px rgba(37,99,235,0.4); }
+        .summary-strip { display: table; width: 100%; border-collapse: collapse; background-color: #0f172a; border-bottom: 1px solid #1f2937; }
+        .stat { display: table-cell; padding: 16px 10px; text-align: center; border-right: 1px solid #1f2937; vertical-align: middle; }
+        .stat:last-child { border-right: none; }
+        .stat-num { font-size: 22px; font-weight: 700; line-height: 1; }
+        .stat-label { font-size: 10px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 6px; }
+        .method-badge { display: inline-block; margin-left: 6px; padding: 1px 6px; font-size: 8px; font-weight: 600; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.3px; vertical-align: middle; }
+        .method-analyst { background-color: #0c2a4d; color: #60a5fa; }
+        .method-fundamental { background-color: #2a230c; color: #fbbf24; }
         .section-card { padding: 25px; border-bottom: 1px solid #1f2937; }
         .section-card:last-child { border-bottom: none; }
         .sector-title { display: flex; align-items: center; font-size: 18px; color: #3b82f6; font-weight: bold; margin-bottom: 15px; }
@@ -105,6 +148,19 @@ def build_html_email(brief_data, watchlist):
     </style>
     """
 
+    # Headline counts for the summary strip / preview text.
+    warnings = brief_data.get("early_warnings", [])
+    risk_count = sum(1 for w in warnings if w.get("direction") == "risk")
+    opp_count = len(warnings) - risk_count
+    sectors_tracked = sum(
+        1 for s in (watchlist or {}) if s in SECTOR_METADATA and s != "macro_indicators"
+    )
+
+    preheader = (
+        f"{risk_count} risk & {opp_count} opportunity signals across "
+        f"{sectors_tracked} sectors — {today_str}"
+    )
+
     body_html = f"""
     <!DOCTYPE html>
     <html>
@@ -114,15 +170,31 @@ def build_html_email(brief_data, watchlist):
         {style}
     </head>
     <body>
+        <span class="preheader">{preheader}</span>
         <div class="container">
             <div class="header">
                 <h1>🇮🇳 India Policy & Growth Sector Brief</h1>
                 <p>Daily Intelligence Report | {today_str}</p>
+                <a href="{DASHBOARD_URL}" class="cta-button" target="_blank">📊 View Live Dashboard</a>
+            </div>
+            <div class="summary-strip">
+                <div class="stat">
+                    <div class="stat-num" style="color: #f87171;">{risk_count}</div>
+                    <div class="stat-label">Risk Signals</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-num" style="color: #34d399;">{opp_count}</div>
+                    <div class="stat-label">Opportunities</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-num" style="color: #60a5fa;">{sectors_tracked}</div>
+                    <div class="stat-label">Sectors Tracked</div>
+                </div>
             </div>
     """
 
     # Early Warning System — the first actionable thing the reader should see
-    body_html += _build_early_warning_html(brief_data.get("early_warnings", []))
+    body_html += _build_early_warning_html(warnings)
 
     for sector, news_items in brief_data.items():
         if sector in (
@@ -203,6 +275,14 @@ def build_html_email(brief_data, watchlist):
             else:
                 potential_str = "—"
 
+            # Disclose how the upside was derived (analyst consensus vs model).
+            method = s.get("estimate_method")
+            method_badge = ""
+            if method == "Analyst Consensus":
+                method_badge = "<div><span class='method-badge method-analyst'>Analyst</span></div>"
+            elif method == "Fundamental Estimate":
+                method_badge = "<div><span class='method-badge method-fundamental'>Model Est.</span></div>"
+
             target_val = s.get("target")
             target_str = f"₹{target_val}" if target_val else "—"
 
@@ -220,7 +300,7 @@ def build_html_email(brief_data, watchlist):
                 <td>{s['name']}{growth_badge}{earnings_badge}</td>
                 <td>₹{s['price']}</td>
                 <td>{target_str}</td>
-                <td class="stock-growth" style="color: {potential_color} !important;">{potential_str}</td>
+                <td class="stock-growth" style="color: {potential_color} !important;">{potential_str}{method_badge}</td>
             </tr>
             <tr>
                 <td colspan="5" class="stock-catalyst">
@@ -516,8 +596,13 @@ def build_html_email(brief_data, watchlist):
         </div>
         """
 
+    sector_valuation_html = _build_sector_valuation_html(
+        brief_data.get("sector_valuation", [])
+    )
+
     body_html += (
-        agreements_html
+        sector_valuation_html
+        + agreements_html
         + launches_html
         + filings_html
         + emerging_html_global
@@ -525,10 +610,10 @@ def build_html_email(brief_data, watchlist):
         + valuation_html
     )
 
-    body_html += """
+    body_html += f"""
             <div class="footer">
-                <p>This briefing is an automated policy analysis generated using PIB & public financial indicators.</p>
-                <p>To view full interactive charts, visit the <a href="#" target="_blank">Policy Tracker Archive Dashboard</a>.</p>
+                <p>This briefing is an automated policy analysis generated using PIB &amp; public financial indicators.</p>
+                <p>To view full interactive charts, visit the <a href="{DASHBOARD_URL}" target="_blank">Policy Tracker Archive Dashboard</a>.</p>
                 <p>&copy; 2026 Policy Tracker. India Growth Investing.</p>
             </div>
         </div>

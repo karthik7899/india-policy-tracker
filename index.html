@@ -67,6 +67,9 @@
                 <button type="button" class="nav-btn" data-tab="earlywarning" aria-controls="tab-earlywarning" aria-selected="false">
                     <span class="btn-icon">🚨</span> Early Warnings
                 </button>
+                <button type="button" class="nav-btn" data-tab="valuation" aria-controls="tab-valuation" aria-selected="false">
+                    <span class="btn-icon">⚖️</span> Sector Valuation
+                </button>
                 <button type="button" class="nav-btn" data-tab="caution" aria-controls="tab-caution" aria-selected="false">
                     <span class="btn-icon">⚠️</span> Caution List
                 </button>
@@ -599,6 +602,32 @@
                                 </tr>
                             </thead>
                             <tbody id="early-warning-table-body">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sector Valuation Tab -->
+            <section id="tab-valuation" class="tab-pane">
+                <div class="glass-card">
+                    <div class="table-header-bar">
+                        <h3>⚖️ Sector Valuation (Peer P/E)</h3>
+                        <p class="subtitle">Median price-to-earnings across each sector's watchlist peer group, cheapest first — a relative read on which themes are richly vs cheaply priced.</p>
+                    </div>
+                    <div class="table-scroll-container">
+                        <table class="premium-table">
+                            <thead>
+                                <tr>
+                                    <th>Sector</th>
+                                    <th>Median P/E</th>
+                                    <th>Stocks</th>
+                                    <th>Cheapest</th>
+                                    <th>Priciest</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sector-valuation-body">
                                 <!-- Populated dynamically -->
                             </tbody>
                         </table>

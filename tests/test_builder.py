@@ -112,3 +112,55 @@ def test_hyper_growth_reality_check():
         qoq_sales_growth=30.0,
     )
     assert check_hyper_growth_risk(accelerating) is False
+
+
+def test_fundamental_estimate_method_tagging():
+    # No analyst coverage -> Graham-based fundamental estimate, target refreshed.
+    watchlist = _make_watchlist(
+        {
+            "pe_ratio": 14.0,
+            "current_ratio": 2.2,
+            "roce": 21.0,
+            "q_eps": 6.0,
+            "qoq_sales_growth": 18.0,
+            "dividend_yield": 1.0,
+            "debt_trend": [10.0],
+            "net_current_assets": 400.0,
+            "market_cap": 1000.0,
+        }
+    )
+    stock = watchlist["clean_energy"][0]
+    # No analyst_count / target on this stock.
+    data = {}
+    build_dashboard_views(data, watchlist)
+
+    assert stock["estimate_method"] == "Fundamental Estimate"
+    assert "fundamental_value" in stock
+    # Target/growth were (re)derived rather than left blank.
+    assert stock.get("target")
+    assert stock.get("growth_pct")
+
+
+def test_analyst_coverage_keeps_consensus_method():
+    watchlist = _make_watchlist(
+        {
+            "pe_ratio": 14.0,
+            "q_eps": 6.0,
+            "qoq_sales_growth": 18.0,
+            "dividend_yield": 1.0,
+            "current_ratio": 2.2,
+            "net_current_assets": 400.0,
+            "market_cap": 1000.0,
+        }
+    )
+    stock = watchlist["clean_energy"][0]
+    stock["analyst_count"] = 12
+    stock["target"] = "150.00"
+    stock["growth_pct"] = "+50.0%"
+
+    build_dashboard_views({}, watchlist)
+
+    assert stock["estimate_method"] == "Analyst Consensus"
+    # Analyst-backed target is preserved, not overwritten by the model.
+    assert stock["target"] == "150.00"
+    assert stock["growth_pct"] == "+50.0%"
