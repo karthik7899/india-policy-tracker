@@ -626,7 +626,8 @@ def build_html_email(brief_data, watchlist):
 
 def send_email(html_content):
     """Sends the briefing email using environment variable configurations."""
-    receiver_email = os.environ.get("RECEIVER_EMAIL")
+    raw_emails = os.environ.get("RECEIVER_EMAIL", "")
+    receiver_emails = [email.strip() for email in raw_emails.split(",") if email.strip()]
     smtp_server = os.environ.get("SMTP_SERVER")
     smtp_port = os.environ.get("SMTP_PORT")
     smtp_username = os.environ.get("SMTP_USERNAME")
@@ -647,7 +648,7 @@ def send_email(html_content):
         f"🇮🇳 Daily India Policy Briefing: {datetime.date.today().strftime('%d %b %Y')}"
     )
     msg["From"] = smtp_username
-    msg["To"] = receiver_email
+    msg["To"] = ", ".join(receiver_emails)
 
     part = MIMEText(html_content, "html")
     msg.attach(part)
