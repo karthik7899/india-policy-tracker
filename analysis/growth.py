@@ -1,9 +1,10 @@
 from concurrent.futures import ThreadPoolExecutor, as_completed
+import requests
 from logger import log
 import yfinance as yf
 
 
-def update_single_stock(stock, prefetched_prices=None):
+def update_single_stock(stock, prefetched_prices=None, session=None):
     """Worker function to fetch Yahoo Finance metrics for a single stock."""
     from providers.yahoo import fetch_stock_data
     from logger import log
@@ -15,7 +16,7 @@ def update_single_stock(stock, prefetched_prices=None):
     yahoo_ticker = f"{ticker}.NS"
 
     try:
-        data = fetch_stock_data(yahoo_ticker)
+        data = fetch_stock_data(yahoo_ticker, session=session)
 
         # Override price if prefetched
         if (
@@ -69,46 +70,49 @@ def update_live_stock_prices(watchlist):
             yahoo_tickers.append(f"{stock['ticker']}.NS")
 
     prefetched_prices = {}
-    if yahoo_tickers:
-        try:
-            log.info("Batch downloading live prices...")
-            # ⚡ Bolt Optimization: Batch fetch history for all tickers at once using yf.download.
-            # This significantly reduces network overhead compared to individual requests
-            # and helps prevent hitting rate limits while updating the entire watchlist.
-            data = yf.download(
-                yahoo_tickers,
-                period="1d",
-                group_by="ticker",
-                threads=True,
-                timeout=10,
-                progress=False,
-            )
-            if len(yahoo_tickers) == 1:
-                if (
-                    not data.empty
-                    and "Close" in data
-                    and not data["Close"].isna().all()
-                ):
-                    prefetched_prices[yahoo_tickers[0]] = data["Close"].iloc[-1]
-            else:
-                for ticker in yahoo_tickers:
-                    if (
-                        ticker in data
-                        and not data[ticker].empty
-                        and "Close" in data[ticker]
-                        and not data[ticker]["Close"].isna().all()
-                    ):
-                        prefetched_prices[ticker] = data[ticker]["Close"].iloc[-1]
-        except Exception as e:
-            log.error(f"Error during batch price download: {e}")
-
-    with ThreadPoolExecutor(max_workers=8) as executor:
-        futures = [
-            executor.submit(update_single_stock, stock, prefetched_prices)
-            for stock in all_stocks
-        ]
-        for future in as_completed(futures):
+    # ⚡ Bolt Optimization: Use a shared requests.Session for concurrent yfinance info fetches
+    # to avoid repeating TCP/SSL handshakes for every stock in the thread pool.
+    with requests.Session() as session:
+        if yahoo_tickers:
             try:
-                future.result()
+                log.info("Batch downloading live prices...")
+                # ⚡ Bolt Optimization: Batch fetch history for all tickers at once using yf.download.
+                # This significantly reduces network overhead compared to individual requests
+                # and helps prevent hitting rate limits while updating the entire watchlist.
+                data = yf.download(
+                    yahoo_tickers,
+                    period="1d",
+                    group_by="ticker",
+                    threads=True,
+                    timeout=10,
+                    progress=False,
+                )
+                if len(yahoo_tickers) == 1:
+                    if (
+                        not data.empty
+                        and "Close" in data
+                        and not data["Close"].isna().all()
+                    ):
+                        prefetched_prices[yahoo_tickers[0]] = data["Close"].iloc[-1]
+                else:
+                    for ticker in yahoo_tickers:
+                        if (
+                            ticker in data
+                            and not data[ticker].empty
+                            and "Close" in data[ticker]
+                            and not data[ticker]["Close"].isna().all()
+                        ):
+                            prefetched_prices[ticker] = data[ticker]["Close"].iloc[-1]
             except Exception as e:
-                log.error(f"Error in parallel stock update task: {e}")
+                log.error(f"Error during batch price download: {e}")
+
+        with ThreadPoolExecutor(max_workers=8) as executor:
+            futures = [
+                executor.submit(update_single_stock, stock, prefetched_prices, session)
+                for stock in all_stocks
+            ]
+            for future in as_completed(futures):
+                try:
+                    future.result()
+                except Exception as e:
+                    log.error(f"Error in parallel stock update task: {e}")
