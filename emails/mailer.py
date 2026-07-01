@@ -627,13 +627,15 @@ def build_html_email(brief_data, watchlist):
 def send_email(html_content):
     """Sends the briefing email using environment variable configurations."""
     raw_emails = os.environ.get("RECEIVER_EMAIL", "")
-    receiver_emails = [email.strip() for email in raw_emails.split(",") if email.strip()]
+    receiver_emails = [
+        email.strip() for email in raw_emails.split(",") if email.strip()
+    ]
     smtp_server = os.environ.get("SMTP_SERVER")
     smtp_port = os.environ.get("SMTP_PORT")
     smtp_username = os.environ.get("SMTP_USERNAME")
     smtp_password = os.environ.get("SMTP_PASSWORD")
 
-    if not all([receiver_email, smtp_server, smtp_port, smtp_username, smtp_password]):
+    if not all([receiver_emails, smtp_server, smtp_port, smtp_username, smtp_password]):
         log.warning(
             "Email credentials not fully configured. Skipping sending. Writing preview to 'email_preview.html'."
         )
@@ -662,9 +664,9 @@ def send_email(html_content):
             server.starttls()
 
         server.login(smtp_username, smtp_password)
-        server.sendmail(smtp_username, receiver_email, msg.as_string())
+        server.sendmail(smtp_username, receiver_emails, msg.as_string())
         server.quit()
-        log.info(f"SUCCESS: Daily briefing email sent to {receiver_email}!")
+        log.info(f"SUCCESS: Daily briefing email sent to {', '.join(receiver_emails)}!")
         return True
     except (smtplib.SMTPException, OSError) as e:
         log.error(f"FAILED: SMTP connection error: {e}")

@@ -3,7 +3,7 @@ from logger import log
 import yfinance as yf
 
 
-def update_single_stock(stock, prefetched_prices=None):
+def update_single_stock(stock, prefetched_prices=None, session=None):
     """Worker function to fetch Yahoo Finance metrics for a single stock."""
     from providers.yahoo import fetch_stock_data
     from logger import log
@@ -15,7 +15,7 @@ def update_single_stock(stock, prefetched_prices=None):
     yahoo_ticker = f"{ticker}.NS"
 
     try:
-        data = fetch_stock_data(yahoo_ticker)
+        data = fetch_stock_data(yahoo_ticker, session=session)
 
         # Override price if prefetched
         if (
@@ -102,13 +102,19 @@ def update_live_stock_prices(watchlist):
         except Exception as e:
             log.error(f"Error during batch price download: {e}")
 
-    with ThreadPoolExecutor(max_workers=8) as executor:
-        futures = [
-            executor.submit(update_single_stock, stock, prefetched_prices)
-            for stock in all_stocks
-        ]
-        for future in as_completed(futures):
-            try:
-                future.result()
-            except Exception as e:
-                log.error(f"Error in parallel stock update task: {e}")
+    import requests
+
+    # ⚡ Bolt Optimization: Instantiate a shared requests.Session() to be passed to worker threads.
+    # This prevents redundant TCP/SSL handshake overhead per thread when calling Yahoo Finance APIs,
+    # significantly reducing the latency for the `info` endpoint fallback inside `fetch_stock_data`.
+    with requests.Session() as session:
+        with ThreadPoolExecutor(max_workers=8) as executor:
+            futures = [
+                executor.submit(update_single_stock, stock, prefetched_prices, session)
+                for stock in all_stocks
+            ]
+            for future in as_completed(futures):
+                try:
+                    future.result()
+                except Exception as e:
+                    log.error(f"Error in parallel stock update task: {e}")
