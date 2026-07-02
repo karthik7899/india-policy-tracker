@@ -12,6 +12,35 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
+  # Quality checks run alongside the briefing but deliberately do NOT block
+  # it: a formatting nit must never stop the daily email (it did once, for
+  # three days). Failures still surface as a red X on the run.
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install flake8 black pytest pytest-anyio
+
+      - name: Lint and Format
+        run: |
+          black --check .
+          flake8 .
+
+      - name: Run tests
+        run: python -m pytest tests/
+
   run-briefing:
     runs-on: ubuntu-latest
     permissions:
@@ -31,12 +60,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Lint and Format
-        run: |
-          pip install flake8 black
-          black --check .
-          flake8 .
-
       - name: Execute Aggregation & Mailer Script
         env:
           RECEIVER_EMAIL: ${{ secrets.RECEIVER_EMAIL }}
@@ -52,5 +75,12 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add dashboard_data.json watchlist.json
-          git commit -m "chore: auto-update daily briefing archive and watchlist database [skip ci]" || echo "No changes to commit"
-          git push || echo "No changes to push"
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore: auto-update daily briefing archive and watchlist database [skip ci]"
+            # Rebase in case another run pushed first; a real push failure
+            # must fail the job, not be swallowed.
+            git pull --rebase origin main
+            git push
+          fi

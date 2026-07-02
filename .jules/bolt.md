@@ -30,3 +30,11 @@ Actually, the reviewer pointed out that changing `ticker_obj.history(period="1d"
 ## 2026-06-19 - Synchronous HTTP Request Bottleneck in Watchlist Curation
 **Learning:** Found a performance bottleneck in `metrics.py` where `auto_curate_watchlist` was making multiple sequential `requests.get()` calls to Screener.in and Yahoo Finance during loop iterations, causing severe TCP/SSL handshake overhead.
 **Action:** When performing multiple synchronous HTTP requests in a loop, always utilize `requests.Session()` to enable connection pooling.
+
+## 2026-06-20 - Thread-safe Connection Pooling for Concurrent yfinance Info Fetches
+**Learning:** When using `ThreadPoolExecutor` to fetch Yahoo Finance `info` concurrently for multiple tickers (e.g., in `analysis/growth.py`), creating a new underlying HTTP connection per thread incurs high TCP/SSL handshake overhead and increases the likelihood of hitting rate limits. `requests.Session` is thread-safe and pooling works across threads.
+**Action:** Instantiate a single `requests.Session()` before launching the thread pool, and pass this shared session to the worker threads (and ultimately to `yfinance`) to pool connections across concurrent fetches.
+
+## 2026-07-02 - Correction: do not pass a custom session into yf.Ticker
+**Learning:** The 2026-06-13 and 2026-06-20 entries above are wrong for `yfinance.Ticker` specifically (flagged by Codex review on PRs #41/#42). `yfinance`'s `YfData` is already a process-wide singleton holding one pooled, curl_cffi-backed session reused across all threads, so passing a custom `requests.Session()` adds no extra pooling. Worse, concurrent threads calling `yf.Ticker(session=...)` each reassign the shared singleton's session (a race), and a plain `requests.Session` lacks yfinance's browser-impersonation headers, which can cause ticker fetches to silently fail (the exception gets swallowed per-stock, leaving stale prices).
+**Action:** Never pass a custom `requests.Session` into `yf.Ticker`/`fetch_stock_data`; let yfinance manage its own session. The `yf.download()` batch-fetch pattern (unaffected by this issue) remains the right way to reduce per-ticker overhead.

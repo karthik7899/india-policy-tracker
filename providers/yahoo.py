@@ -3,19 +3,26 @@ import yfinance as yf
 _TICKER_CACHE = {}
 
 
-def get_cached_ticker(yahoo_ticker, session=None):
-    """Retrieves a cached yf.Ticker object for the pipeline run."""
+def get_cached_ticker(yahoo_ticker):
+    """Retrieves a cached yf.Ticker object for the pipeline run.
+
+    Deliberately takes no session argument: yfinance's YfData is a
+    process-wide singleton with its own pooled, curl_cffi-backed session.
+    Passing a plain requests.Session reassigns that shared session (racy
+    under threads) and drops browser-impersonation headers, causing silent
+    fetch failures. Let yfinance manage its own session.
+    """
     if yahoo_ticker not in _TICKER_CACHE:
-        _TICKER_CACHE[yahoo_ticker] = yf.Ticker(yahoo_ticker, session=session)
+        _TICKER_CACHE[yahoo_ticker] = yf.Ticker(yahoo_ticker)
     return _TICKER_CACHE[yahoo_ticker]
 
 
-def fetch_stock_data(yahoo_ticker, session=None, timeout=10):
+def fetch_stock_data(yahoo_ticker, timeout=10):
     """
     Fetches stock data from Yahoo Finance and normalizes the fields.
     Returns a dictionary of normalized metrics.
     """
-    ticker_obj = get_cached_ticker(yahoo_ticker, session=session)
+    ticker_obj = get_cached_ticker(yahoo_ticker)
     data = {
         "price": None,
         "rating": "N/A",
