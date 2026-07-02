@@ -72,5 +72,14 @@ class EarlyWarningThresholds(BaseModel):
     # Momentum breakout — relative volume multiple that confirms a move
     volume_surge_breakout: float = 2.0
 
+    # Peer-group market share shifts (percentage points over the lookback)
+    share_loss_pp: float = -0.75
+    share_loss_critical_pp: float = -2.0
+    share_gain_pp: float = 0.75
+
+    # Growth-laggard fallback (QoQ percentage points below sector median),
+    # used only for stocks without peer-share data
+    growth_laggard_gap: float = 10.0
+
 
 EARLY_WARNING_CONFIG = EarlyWarningThresholds()

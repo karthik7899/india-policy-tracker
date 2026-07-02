@@ -86,7 +86,9 @@ def test_malformed_screener_html(monkeypatch):
 
     monkeypatch.setattr("utils.fetch_text_async", mock_fetch)
 
-    ticker, sc = asyncio.run(fetch_screener_async(None, "RELIANCE", "energy", 1000.0))
+    ticker, sc, _wid = asyncio.run(
+        fetch_screener_async(None, "RELIANCE", "energy", 1000.0)
+    )
     assert ticker == "RELIANCE"
     assert sc is None
 
@@ -98,7 +100,9 @@ def test_http_failures(monkeypatch):
 
     monkeypatch.setattr("utils.fetch_text_async", mock_fetch)
 
-    ticker, sc = asyncio.run(fetch_screener_async(None, "RELIANCE", "energy", 1000.0))
+    ticker, sc, _wid = asyncio.run(
+        fetch_screener_async(None, "RELIANCE", "energy", 1000.0)
+    )
     assert sc is None
 
 

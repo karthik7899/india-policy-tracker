@@ -35,9 +35,28 @@ def detect_emerging_players(brief_data, watchlist):
         "budget",
         "digital",
         "system",
+        "centre",
+        "center",
+        "sebi",
+        "rbi",
+        "nse",
+        "bse",
+        "parliament",
+        "supreme",
+        "court",
+        "railways",
     }
     corp_pattern = re.compile(
         r"\b([A-Z][a-zA-Z0-9]+(?:\s+[A-Z][a-zA-Z0-9]+)*)\s+(?:Ltd|Limited|Corp|Corporation|Technologies|Enterprises|Solutions|Infrastructure)\b"
+    )
+    # Headlines rarely spell out corporate suffixes ("Dixon wins order", not
+    # "Dixon Technologies Ltd wins order"), so also catch capitalized names
+    # followed by a competitive verb. Precision is preserved downstream: every
+    # candidate still has to survive ticker resolution and the growth gate.
+    corp_verb_pattern = re.compile(
+        r"\b([A-Z][A-Za-z0-9&]+(?:\s+[A-Z][A-Za-z0-9&]+){0,2})\s+"
+        r"(?:[Ww]ins|[Bb]ags|[Ss]ecures|[Ll]aunches|[Uu]nveils|[Aa]cquires|"
+        r"[Pp]artners|[Cc]ommissions|[Ee]xpands)\b"
     )
 
     for sector, news_items in brief_data.items():
@@ -46,14 +65,20 @@ def detect_emerging_players(brief_data, watchlist):
         detected = []
         for item in news_items:
             title = item["title"]
-            for m in corp_pattern.finditer(title):
-                captured = m.group(1)
-                full = m.group(0)
+            candidates = [
+                (m.group(1), m.group(0)) for m in corp_pattern.finditer(title)
+            ]
+            # The verb itself is not part of the company name.
+            candidates += [
+                (m.group(1), m.group(1)) for m in corp_verb_pattern.finditer(title)
+            ]
+            for captured, full in candidates:
                 captured_lower = captured.lower()
+                tokens = captured_lower.split()
                 if (
                     captured_lower not in existing_ids
-                    and captured_lower not in ignored
                     and len(captured) >= 3
+                    and all(tok not in ignored for tok in tokens)
                 ):
                     if full not in detected:
                         detected.append(full)

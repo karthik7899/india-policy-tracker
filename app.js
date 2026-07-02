@@ -896,6 +896,12 @@ function renderSectorDetail(sectorKey) {
             const promoterHtml = sc.promoter_pct ? `<span class="sc-chip" title="Promoter Shareholding">Promoter: <strong>${sc.promoter_pct}%</strong></span>` : '';
             const fiiHtml = sc.fii_pct ? `<span class="sc-chip" title="Foreign Institutional Investors">FII: <strong>${sc.fii_pct}%</strong></span>` : '';
             const diiHtml = sc.dii_pct ? `<span class="sc-chip" title="Domestic Institutional Investors">DII: <strong>${sc.dii_pct}%</strong></span>` : '';
+            let shareHtml = '';
+            if (sc.peer_share_pct) {
+                const shareChange = Number(sc.peer_share_change_pp) || 0;
+                const shareDelta = shareChange ? ` <span style="color: ${shareChange > 0 ? '#34d399' : '#f87171'};">(${shareChange > 0 ? '+' : ''}${shareChange}pp)</span>` : '';
+                shareHtml = `<span class="sc-chip" title="Share of tracked sector peer revenue, change over ${sc.peer_share_lookback || 1} quarter(s)">Peer Share: <strong>${sc.peer_share_pct}%</strong>${shareDelta}</span>`;
+            }
             const qtrLabel = sc.latest_quarter ? `<small style="color: #f59e0b; font-size: 9px; font-weight: 700; text-transform: uppercase;">(${sc.latest_quarter})</small>` : '';
             
             screenerHtml = `
@@ -907,7 +913,7 @@ function renderSectorDetail(sectorKey) {
                             <span style="font-size: 7.5px; opacity: 0.6;">Source: Screener.in</span>
                         </div>
                         <div style="display: flex; flex-wrap: wrap; gap: 4px;">
-                            ${mcapHtml}${peHtml}${roceHtml}${roeHtml}${promoterHtml}${fiiHtml}${diiHtml}
+                            ${mcapHtml}${peHtml}${roceHtml}${roeHtml}${promoterHtml}${fiiHtml}${diiHtml}${shareHtml}
                         </div>
                     </div>
                     <!-- Quarterly Earnings Sub-Section -->

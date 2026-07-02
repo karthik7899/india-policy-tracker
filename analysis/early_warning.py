@@ -277,29 +277,150 @@ _CHALLENGER_STATUSES = {"Pipeline", "Watchlisted"}
 _CHALLENGER_GROWTH_BAR = 15.0
 
 
+def _market_share_shifts(watchlist: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """Flag holdings whose share of tracked peer-group revenue is shifting.
+
+    Reads the annotations written by ``analysis.market_share`` — an actual
+    revenue-share measurement, so unlike growth-rate comparisons it is
+    weighted by base size and needs no news coverage to fire.
+    """
+    alerts: List[Dict[str, Any]] = []
+    for sector, stocks in (watchlist or {}).items():
+        if sector == "macro_indicators":
+            continue
+        sector_label = SECTOR_METADATA.get(sector, {}).get("label", sector)
+        for stock in stocks or []:
+            if not isinstance(stock, dict):
+                continue
+            sc = stock.get("screener")
+            if not isinstance(sc, dict) or "peer_share_pct" not in sc:
+                continue
+            change = _to_float(sc.get("peer_share_change_pp"))
+            share = _to_float(sc.get("peer_share_pct"))
+            if change is None or share is None:
+                continue
+            lookback = sc.get("peer_share_lookback", 1)
+            peers = sc.get("peer_group_size", 0)
+            prev = share - change
+
+            if change <= EARLY_WARNING_CONFIG.share_loss_pp:
+                severity = (
+                    "High"
+                    if change <= EARLY_WARNING_CONFIG.share_loss_critical_pp
+                    else "Medium"
+                )
+                alerts.append(
+                    {
+                        "ticker": stock.get("ticker"),
+                        "name": stock.get("name"),
+                        "sector": sector_label,
+                        "severity": severity,
+                        "direction": "risk",
+                        "category": "Market Share",
+                        "signal": (
+                            f"Losing revenue share of its {peers}-stock peer group: "
+                            f"{prev:.1f}% → {share:.1f}% over {lookback} quarter(s)."
+                        ),
+                    }
+                )
+            elif change >= EARLY_WARNING_CONFIG.share_gain_pp:
+                alerts.append(
+                    {
+                        "ticker": stock.get("ticker"),
+                        "name": stock.get("name"),
+                        "sector": sector_label,
+                        "severity": "Medium",
+                        "direction": "opportunity",
+                        "category": "Market Share",
+                        "signal": (
+                            f"Gaining revenue share of its {peers}-stock peer group: "
+                            f"{prev:.1f}% → {share:.1f}% over {lookback} quarter(s)."
+                        ),
+                    }
+                )
+    return alerts
+
+
+def _growth_laggards(watchlist: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """Fallback share-erosion proxy for stocks without peer-share data.
+
+    When a sector's peer group is too thin to compute revenue share, compare
+    each holding's QoQ sales growth against the sector median; trailing it by
+    ``growth_laggard_gap`` points suggests the holding is ceding ground.
+    """
+    alerts: List[Dict[str, Any]] = []
+    for sector, stocks in (watchlist or {}).items():
+        if sector == "macro_indicators":
+            continue
+        sector_label = SECTOR_METADATA.get(sector, {}).get("label", sector)
+
+        rows = []
+        for stock in stocks or []:
+            if not isinstance(stock, dict):
+                continue
+            sc = stock.get("screener")
+            if not isinstance(sc, dict):
+                continue
+            growth = _to_float(sc.get("qoq_sales_growth"))
+            if growth is not None:
+                rows.append((stock, sc, growth))
+
+        if len(rows) < 3:
+            continue
+
+        growths = sorted(g for _, _, g in rows)
+        mid = len(growths) // 2
+        median = (
+            growths[mid] if len(growths) % 2 else (growths[mid - 1] + growths[mid]) / 2
+        )
+
+        for stock, sc, growth in rows:
+            if "peer_share_pct" in sc:
+                continue  # the direct share signal already covers this stock
+            if growth <= median - EARLY_WARNING_CONFIG.growth_laggard_gap:
+                alerts.append(
+                    {
+                        "ticker": stock.get("ticker"),
+                        "name": stock.get("name"),
+                        "sector": sector_label,
+                        "severity": "Medium",
+                        "direction": "risk",
+                        "category": "Growth Laggard",
+                        "signal": (
+                            f"QoQ sales growth of {growth:+.1f}% trails the "
+                            f"{sector_label} median of {median:+.1f}% — "
+                            f"likely ceding ground to sector peers."
+                        ),
+                    }
+                )
+    return alerts
+
+
 def _competitive_threats(
     data: Dict[str, Any], watchlist: Dict[str, Any]
 ) -> List[Dict[str, Any]]:
     """Flag incumbents being out-grown by a high-growth challenger in their sector.
 
-    Uses the emerging-player radar (``data["emerging_players"]``) — which now
-    carries each candidate's quarterly growth — and compares the strongest
-    challenger in a sector against the QoQ growth of the holdings we already own.
-    A holding growing slower than an emerging rival gets a competitive-threat
-    alert so the rotation engine's discovery doubles as a risk signal.
+    Challengers come from two radars: the news-driven emerging-player scan
+    (``data["emerging_players"]``) and Screener's structured industry peer
+    tables (``data["peer_competitors"]``), which need no news coverage.
+    The strongest challenger in a sector is compared against the QoQ growth
+    of the holdings we already own.
     """
     alerts: List[Dict[str, Any]] = []
     emerging = data.get("emerging_players", {})
     if not isinstance(emerging, dict):
-        return alerts
+        emerging = {}
+    peer_radar = data.get("peer_competitors", {})
+    if not isinstance(peer_radar, dict):
+        peer_radar = {}
 
     for sector, stocks in (watchlist or {}).items():
         if sector == "macro_indicators":
             continue
 
-        candidates = emerging.get(sector, [])
         challengers = []
-        for c in candidates or []:
+        for c in emerging.get(sector, []) or []:
             if not isinstance(c, dict):
                 continue
             if c.get("status") not in _CHALLENGER_STATUSES:
@@ -308,6 +429,15 @@ def _competitive_threats(
             if growth is not None and growth >= _CHALLENGER_GROWTH_BAR:
                 challengers.append(
                     (c.get("name") or c.get("ticker") or "A new entrant", growth)
+                )
+
+        for c in peer_radar.get(sector, []) or []:
+            if not isinstance(c, dict):
+                continue
+            growth = _to_float(c.get("sales_var_pct"))
+            if growth is not None and growth >= _CHALLENGER_GROWTH_BAR:
+                challengers.append(
+                    (c.get("name") or c.get("ticker") or "A listed peer", growth)
                 )
 
         if not challengers:
@@ -378,8 +508,13 @@ def generate_early_warnings(
                 continue
             warnings.extend(_evaluate_stock(stock, sector_label, policy_map))
 
-    # Sector-level competitive-threat pass (cross-references the rotation radar).
+    # Sector-level competitive-threat pass (news radar + Screener peer radar).
     warnings.extend(_competitive_threats(data, watchlist))
+
+    # Direct market-share measurement, with a growth-laggard fallback for
+    # stocks the share computation couldn't cover.
+    warnings.extend(_market_share_shifts(watchlist))
+    warnings.extend(_growth_laggards(watchlist))
 
     warnings.sort(
         key=lambda a: (

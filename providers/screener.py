@@ -9,12 +9,16 @@ from utils import fetch_text_async
 async def fetch_screener_async(session, ticker, sector, price):
     # ETFs / index funds do not have individual fundamentals
     if sector == "macro_indicators":
-        return ticker, {
-            "market_cap": "N/A",
-            "pe_ratio": "N/A",
-            "roce": "N/A",
-            "roe": "N/A",
-        }
+        return (
+            ticker,
+            {
+                "market_cap": "N/A",
+                "pe_ratio": "N/A",
+                "roce": "N/A",
+                "roe": "N/A",
+            },
+            None,
+        )
 
     url = f"https://www.screener.in/company/{ticker}/consolidated/"
     sc = {}
@@ -22,11 +26,15 @@ async def fetch_screener_async(session, ticker, sector, price):
         status, text = await fetch_text_async(session, url)
         if not text:
             log.error(f"{ticker}: Screener.in empty response")
-            return ticker, None
+            return ticker, None, None
     except Exception as e:
         log.error(f"{ticker}: Screener.in exception: {e}")
-        return ticker, None
+        return ticker, None, None
     soup = BeautifulSoup(text, "html.parser")
+
+    # Screener's warehouse id enables the peers API (structured competitor list).
+    warehouse_el = soup.find(attrs={"data-warehouse-id": True})
+    warehouse_id = warehouse_el.get("data-warehouse-id") if warehouse_el else None
 
     # 1. Top Ratios Extract
     ratios_div = soup.find("div", class_="company-ratios")
@@ -63,6 +71,9 @@ async def fetch_screener_async(session, ticker, sector, price):
         if len(q_sales) >= 2:
             sc["qoq_sales_growth"] = calculate_growth(q_sales[-2], q_sales[-1])
         sc["quarterly_revenue_growth"] = calculate_trend(q_sales, 4)
+        # Full trailing series (up to 8 quarters) for peer-group market
+        # share estimation in analysis/market_share.py.
+        sc["sales_trend"] = q_sales[-8:]
 
     q_opm = extract_row_values(soup, "quarters", "OPM")
     if q_opm:
@@ -158,30 +169,147 @@ async def fetch_screener_async(session, ticker, sector, price):
             sc["dii_change"] = round(diis[-1] - diis[-2], 2)
 
     sc = {k: v for k, v in sc.items() if v is not None}
-    return ticker, sc
+    return ticker, sc, warehouse_id
+
+
+def parse_peer_table(html, exclude_tickers):
+    """Parses Screener's peers-API HTML fragment into competitor candidates.
+
+    The fragment is a table whose header names the columns; we locate the
+    Name, Mar Cap and quarterly Sales-variation columns by header text so a
+    column being added or reordered upstream doesn't silently corrupt values.
+    Returns a list of {name, ticker, sales_var_pct, market_cap} dicts for
+    companies not already tracked.
+    """
+    candidates = []
+    soup = BeautifulSoup(html, "html.parser")
+    table = soup.find("table")
+    if not table:
+        return candidates
+
+    headers = [th.get_text(strip=True).lower() for th in table.find_all("th")]
+    name_idx = sales_var_idx = mcap_idx = None
+    for i, h in enumerate(headers):
+        if h.startswith("name"):
+            name_idx = i
+        elif "sales var" in h:
+            sales_var_idx = i
+        elif "mar cap" in h or "market cap" in h:
+            mcap_idx = i
+    if name_idx is None:
+        return candidates
+
+    def _cell_float(cells, idx):
+        if idx is None or idx >= len(cells):
+            return None
+        raw = cells[idx].get_text(strip=True).replace(",", "").replace("%", "")
+        try:
+            return float(raw)
+        except ValueError:
+            return None
+
+    for row in table.find_all("tr"):
+        cells = row.find_all("td")
+        if len(cells) <= name_idx:
+            continue
+        link = cells[name_idx].find("a")
+        if not link:
+            continue
+        name = link.get_text(strip=True)
+        href = link.get("href", "")
+        parts = [p for p in href.split("/") if p]
+        peer_ticker = parts[1] if len(parts) >= 2 and parts[0] == "company" else None
+        if not name or not peer_ticker:
+            continue
+        if peer_ticker.upper() in exclude_tickers:
+            continue
+        candidates.append(
+            {
+                "name": name,
+                "ticker": peer_ticker.upper(),
+                "sales_var_pct": _cell_float(cells, sales_var_idx),
+                "market_cap": _cell_float(cells, mcap_idx),
+            }
+        )
+    return candidates
+
+
+async def fetch_peers_async(session, ticker, warehouse_id, exclude_tickers):
+    """Fetches Screener's peer-comparison table for one company.
+
+    This is a structured competitor-discovery channel that does not depend on
+    news headlines: Screener maintains the industry peer set itself, and each
+    row arrives with quarterly sales variation attached, so candidates can be
+    growth-screened immediately. Degrades to an empty list on any failure.
+    """
+    url = f"https://www.screener.in/api/company/{warehouse_id}/peers/"
+    try:
+        status, text = await fetch_text_async(session, url)
+        if not text:
+            return ticker, []
+        return ticker, parse_peer_table(text, exclude_tickers)
+    except Exception as e:
+        log.error(f"{ticker}: Screener peers fetch failed: {e}")
+        return ticker, []
 
 
 async def fetch_all_screener_fundamentals(watchlist):
+    """Loads Screener fundamentals into each stock and discovers peer competitors.
+
+    Returns {sector: [candidate, ...]} of Screener-listed industry peers that
+    are not in the watchlist — a competitor-discovery channel independent of
+    news headlines. Empty dict when peer data is unavailable.
+    """
     log.info("Fetching actual filed fundamentals from Screener.in (Async)...")
-    tickers = []
     ticker_to_stock = {}
+    ticker_to_sector = {}
     tasks = []
+
+    watchlist_tickers = {
+        str(stock["ticker"]).upper()
+        for stocks in watchlist.values()
+        for stock in stocks
+    }
 
     async with aiohttp.ClientSession() as session:
         for sector, stocks in watchlist.items():
             for stock in stocks:
                 ticker = stock["ticker"]
                 price = float(stock.get("price") or 0.0)
-                tickers.append(ticker)
                 ticker_to_stock[ticker] = stock
+                ticker_to_sector[ticker] = sector
                 stock["screener"] = {}
                 tasks.append(fetch_screener_async(session, ticker, sector, price))
 
         results = await asyncio.gather(*tasks)
 
-    for ticker, sc_data in results:
-        if sc_data:
-            ticker_to_stock[ticker]["screener"] = sc_data
-            log.info(
-                f"{ticker}: Screener data loaded (PE={sc_data.get('pe_ratio', 'N/A')})"
-            )
+        peer_tasks = []
+        for ticker, sc_data, warehouse_id in results:
+            if sc_data:
+                ticker_to_stock[ticker]["screener"] = sc_data
+                log.info(
+                    f"{ticker}: Screener data loaded (PE={sc_data.get('pe_ratio', 'N/A')})"
+                )
+            if warehouse_id:
+                peer_tasks.append(
+                    fetch_peers_async(session, ticker, warehouse_id, watchlist_tickers)
+                )
+
+        peer_results = await asyncio.gather(*peer_tasks) if peer_tasks else []
+
+    peer_competitors = {}
+    for ticker, candidates in peer_results:
+        sector = ticker_to_sector.get(ticker)
+        if not sector or not candidates:
+            continue
+        bucket = peer_competitors.setdefault(sector, [])
+        seen = {c["ticker"] for c in bucket}
+        for cand in candidates:
+            if cand["ticker"] not in seen:
+                seen.add(cand["ticker"])
+                bucket.append(cand)
+
+    if peer_competitors:
+        found = sum(len(v) for v in peer_competitors.values())
+        log.info(f"Peer radar: {found} non-watchlist competitors discovered.")
+    return peer_competitors
