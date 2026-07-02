@@ -240,17 +240,30 @@ async def fetch_peers_async(session, ticker, warehouse_id, exclude_tickers):
     This is a structured competitor-discovery channel that does not depend on
     news headlines: Screener maintains the industry peer set itself, and each
     row arrives with quarterly sales variation attached, so candidates can be
-    growth-screened immediately. Degrades to an empty list on any failure.
+    growth-screened immediately.
+
+    Enhancement data only, so it fails fast: a single attempt with a short
+    timeout and no retries — a retry storm here must never slow the briefing.
+    Degrades to an empty list on any failure.
     """
     url = f"https://www.screener.in/api/company/{warehouse_id}/peers/"
+    headers = {"X-Requested-With": "XMLHttpRequest"}
     try:
-        status, text = await fetch_text_async(session, url)
-        if not text:
-            return ticker, []
+        async with session.get(url, headers=headers, timeout=10) as response:
+            if response.status != 200:
+                log.warning(f"{ticker}: Screener peers API returned {response.status}")
+                return ticker, []
+            text = await response.text()
         return ticker, parse_peer_table(text, exclude_tickers)
     except Exception as e:
-        log.error(f"{ticker}: Screener peers fetch failed: {e}")
+        log.warning(f"{ticker}: Screener peers fetch failed: {e!r}")
         return ticker, []
+
+
+# Screener.in rate-limits aggressive parallelism with HTTP 429; firing the
+# whole watchlist at once triggers a synchronized retry storm that is slower
+# than just queueing. Keep a modest number of requests in flight instead.
+_SCREENER_CONCURRENCY = 5
 
 
 async def fetch_all_screener_fundamentals(watchlist):
@@ -271,6 +284,12 @@ async def fetch_all_screener_fundamentals(watchlist):
         for stock in stocks
     }
 
+    semaphore = asyncio.Semaphore(_SCREENER_CONCURRENCY)
+
+    async def throttled(coro):
+        async with semaphore:
+            return await coro
+
     async with aiohttp.ClientSession() as session:
         for sector, stocks in watchlist.items():
             for stock in stocks:
@@ -279,22 +298,32 @@ async def fetch_all_screener_fundamentals(watchlist):
                 ticker_to_stock[ticker] = stock
                 ticker_to_sector[ticker] = sector
                 stock["screener"] = {}
-                tasks.append(fetch_screener_async(session, ticker, sector, price))
+                tasks.append(
+                    throttled(fetch_screener_async(session, ticker, sector, price))
+                )
 
         results = await asyncio.gather(*tasks)
 
-        peer_tasks = []
+        # Peer tables are industry-level, so within a sector they overlap
+        # almost entirely — one lookup per sector is enough and keeps the
+        # extra load on Screener to ~a dozen requests per run.
+        sector_representative = {}
         for ticker, sc_data, warehouse_id in results:
             if sc_data:
                 ticker_to_stock[ticker]["screener"] = sc_data
                 log.info(
                     f"{ticker}: Screener data loaded (PE={sc_data.get('pe_ratio', 'N/A')})"
                 )
-            if warehouse_id:
-                peer_tasks.append(
-                    fetch_peers_async(session, ticker, warehouse_id, watchlist_tickers)
-                )
+            sector = ticker_to_sector.get(ticker)
+            if warehouse_id and sector and sector not in sector_representative:
+                sector_representative[sector] = (ticker, warehouse_id)
 
+        peer_tasks = [
+            throttled(
+                fetch_peers_async(session, ticker, warehouse_id, watchlist_tickers)
+            )
+            for ticker, warehouse_id in sector_representative.values()
+        ]
         peer_results = await asyncio.gather(*peer_tasks) if peer_tasks else []
 
     peer_competitors = {}

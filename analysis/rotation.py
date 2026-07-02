@@ -45,6 +45,14 @@ def detect_emerging_players(brief_data, watchlist):
         "supreme",
         "court",
         "railways",
+        # Honorifics — headlines about officials ("Shri Amit Shah launches…")
+        # must not reach ticker resolution as company candidates.
+        "shri",
+        "smt",
+        "sri",
+        "dr",
+        "pm",
+        "cm",
     }
     corp_pattern = re.compile(
         r"\b([A-Z][a-zA-Z0-9]+(?:\s+[A-Z][a-zA-Z0-9]+)*)\s+(?:Ltd|Limited|Corp|Corporation|Technologies|Enterprises|Solutions|Infrastructure)\b"
