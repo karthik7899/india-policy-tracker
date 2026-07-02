@@ -249,10 +249,11 @@ def build_html_email(brief_data, watchlist):
         meta = _escape_deep(SECTOR_METADATA[sector])
         stocks = watchlist.get(sector, [])
 
-        # Format news HTML
+        # Format news HTML. The email carries the top items per sector to
+        # stay under Gmail's ~102 KB clip limit; the dashboard has them all.
         news_html = ""
         if news_items:
-            for item in news_items:
+            for item in news_items[:3]:
                 badge_class = (
                     "badge-positive"
                     if item["impact"] == "Positive"
@@ -266,11 +267,19 @@ def build_html_email(brief_data, watchlist):
                 <div class="news-item">
                     <a href="{item['link']}" class="news-title" target="_blank">{item['title']}</a>
                     <div class="meta-line">
-                        <span class="badge {badge_class}">{item['impact']} Impact</span> | 
+                        <span class="badge {badge_class}">{item['impact']} Impact</span> |
                         <span>{item['source']}</span> | <span>{item['date']}</span>
                     </div>
                 </div>
                 """
+            overflow = len(news_items) - 3
+            if overflow > 0:
+                news_html += (
+                    f"<p style='font-size: 11px; color: #6b7280; margin: 6px 0 0 0;'>"
+                    f"+ {overflow} more on the "
+                    f"<a href='{DASHBOARD_URL}' style='color: #60a5fa;' target='_blank'>live dashboard</a>."
+                    f"</p>"
+                )
         else:
             news_html = "<p style='font-size: 13px; color: #4b5563; font-style: italic;'>No policy updates tracked in this cycle.</p>"
 
@@ -473,11 +482,16 @@ def build_html_email(brief_data, watchlist):
                 grouped[name]["schemes"].append(c.get("announcement"))
 
         emerging_items = ""
-        for name, data in grouped.items():
+        for name, data in list(grouped.items())[:8]:
             ticker_str = f" ({data['ticker']})" if data["ticker"] else ""
             status_html = f"<span class='badge badge-success-alert' style='font-size: 8px;'>{data['status']}</span>"
-            schemes_html = "".join([f"<li>{s}</li>" for s in data["schemes"]])
+            schemes_html = "".join([f"<li>{s}</li>" for s in data["schemes"][:3]])
             emerging_items += f"<li><strong>{name}</strong>{ticker_str} {status_html}<ul style='padding-left: 20px; font-size: 11px; color: #94a3b8;'>{schemes_html}</ul></li>"
+        if len(grouped) > 8:
+            emerging_items += (
+                f"<li style='color: #6b7280; font-size: 11px;'>"
+                f"+ {len(grouped) - 8} more on the dashboard.</li>"
+            )
 
         emerging_html_global = f"""
         <div class="section-card">
