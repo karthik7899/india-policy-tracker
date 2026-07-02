@@ -195,11 +195,11 @@ function formatGrowthBadge(growthStr, style = 'inline') {
     
     const absValStr = Math.abs(val).toFixed(1) + '%';
     if (val > 0) {
-        if (style === 'table') return `<span style="font-weight: 700; color: #34d399;">🔥 +${absValStr} YoY</span>`;
-        return `<span style="font-size: 9px; padding: 2px 6px; background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 4px; display: inline-block; font-weight: 600;">🔥 +${absValStr} YoY</span>`;
+        if (style === 'table') return `<span style="font-weight: 700; color: #34d399;">+${absValStr} YoY</span>`;
+        return `<span style="font-size: 9px; padding: 2px 6px; background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 4px; display: inline-block; font-weight: 600;">+${absValStr} YoY</span>`;
     } else if (val < 0) {
-        if (style === 'table') return `<span style="font-weight: 700; color: #f87171;">📉 -${absValStr} YoY</span>`;
-        return `<span style="font-size: 9px; padding: 2px 6px; background: rgba(239, 68, 68, 0.12); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 4px; display: inline-block; font-weight: 600;">📉 -${absValStr} YoY</span>`;
+        if (style === 'table') return `<span style="font-weight: 700; color: #f87171;">-${absValStr} YoY</span>`;
+        return `<span style="font-size: 9px; padding: 2px 6px; background: rgba(239, 68, 68, 0.12); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 4px; display: inline-block; font-weight: 600;">-${absValStr} YoY</span>`;
     } else {
         if (style === 'table') return `<span style="font-weight: 700; color: #cbd5e1;">0.0% YoY</span>`;
         return `<span style="font-size: 9px; padding: 2px 6px; background: rgba(203, 213, 225, 0.12); color: #cbd5e1; border: 1px solid rgba(203, 213, 225, 0.3); border-radius: 4px; display: inline-block; font-weight: 600;">0.0% YoY</span>`;
@@ -411,7 +411,7 @@ function renderSectorChips(data) {
     allChip.className = "chip active";
     allChip.setAttribute("data-sector", "all");
     allChip.setAttribute("aria-pressed", "true");
-    allChip.textContent = "🌐 All Sectors";
+    allChip.textContent = "All Sectors";
     allChip.addEventListener("click", () => handleChipClick("all", allChip));
     container.appendChild(allChip);
     
@@ -702,22 +702,6 @@ function renderCharts(data) {
     // Calculate average growth potential per sector
     const labels = [];
     const averages = [];
-    const colors = [
-        "rgba(59, 130, 246, 0.6)",   // Blue
-        "rgba(16, 185, 129, 0.6)",  // Green
-        "rgba(139, 92, 246, 0.6)",  // Purple
-        "rgba(245, 158, 11, 0.6)",   // Orange
-        "rgba(239, 68, 68, 0.6)",    // Red
-        "rgba(6, 182, 212, 0.6)",    // Cyan
-        "rgba(236, 72, 153, 0.6)",   // Pink
-        "rgba(107, 114, 128, 0.6)",  // Grey
-        "rgba(234, 179, 8, 0.6)",    // Yellow
-        "rgba(20, 184, 166, 0.6)",   // Teal
-        "rgba(168, 85, 247, 0.6)",   // Violet
-        "rgba(249, 115, 22, 0.6)",   // Deep orange
-        "rgba(14, 165, 233, 0.6)"    // Sky
-    ];
-    const borderColors = colors.map(c => c.replace("0.6", "1"));
     
     Object.keys(data.watchlist).forEach(sectorKey => {
         const sectorLabel = data.sectors[sectorKey]?.label || sectorKey;
@@ -745,6 +729,8 @@ function renderCharts(data) {
     const chartTextColor = themeStyles.getPropertyValue("--text-secondary").trim();
     const chartSurfaceColor = themeStyles.getPropertyValue("--bg-surface").trim();
     const chartBorderColor = themeStyles.getPropertyValue("--border-color").trim();
+    // One measure across labeled categories -> one hue; the axis carries identity.
+    const chartAccent = themeStyles.getPropertyValue("--primary").trim() || "#2a78d6";
     
     growthChartInstance = new Chart(ctx, {
         type: 'bar',
@@ -753,10 +739,10 @@ function renderCharts(data) {
             datasets: [{
                 label: 'Avg Watchlist Growth Target (%)',
                 data: averages,
-                backgroundColor: colors,
-                borderColor: borderColors,
-                borderWidth: 1.5,
-                borderRadius: 6
+                backgroundColor: chartAccent,
+                borderWidth: 0,
+                borderRadius: 4,
+                maxBarThickness: 14
             }]
         },
         options: {
@@ -909,7 +895,7 @@ function renderSectorDetail(sectorKey) {
                     <!-- Ratios & Shareholding Sub-Section -->
                     <div style="margin-bottom: 8px;">
                         <div style="font-size: 8.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #94a3b8; margin-bottom: 6px; display: flex; justify-content: space-between;">
-                            <span>📊 Filed Ratios & Holdings</span>
+                            <span>Filed Ratios & Holdings</span>
                             <span style="font-size: 7.5px; opacity: 0.6;">Source: Screener.in</span>
                         </div>
                         <div style="display: flex; flex-wrap: wrap; gap: 4px;">
@@ -919,7 +905,7 @@ function renderSectorDetail(sectorKey) {
                     <!-- Quarterly Earnings Sub-Section -->
                     <div>
                         <div style="font-size: 8.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #94a3b8; margin-bottom: 6px; display: flex; gap: 6px; align-items: center;">
-                            <span>📈 Quarterly Performance</span>
+                            <span>Quarterly Performance</span>
                             ${qtrLabel}
                         </div>
                         <div style="display: flex; flex-wrap: wrap; gap: 4px;">
@@ -1111,14 +1097,14 @@ function renderStocksTable(filterQuery = "") {
             let diiBadge = '';
             let fiiBadge = '';
             if (diiChg > 0) {
-                diiBadge = `<span class="badge-success-alert" style="margin-right: 4px; font-size: 9px;">🔥 MFs +${diiChg}%</span>`;
+                diiBadge = `<span class="badge-success-alert" style="margin-right: 4px; font-size: 9px;">MFs +${diiChg}%</span>`;
             } else if (diiChg < 0) {
-                diiBadge = `<span class="badge-danger-alert" style="margin-right: 4px; font-size: 9px;">📉 MFs ${diiChg}%</span>`;
+                diiBadge = `<span class="badge-danger-alert" style="margin-right: 4px; font-size: 9px;">MFs ${diiChg}%</span>`;
             }
             if (fiiChg > 0) {
-                fiiBadge = `<span class="badge-success-alert" style="font-size: 9px;">✈️ FIIs +${fiiChg}%</span>`;
+                fiiBadge = `<span class="badge-success-alert" style="font-size: 9px;">FIIs +${fiiChg}%</span>`;
             } else if (fiiChg < 0) {
-                fiiBadge = `<span class="badge-danger-alert" style="font-size: 9px;">📉 FIIs ${fiiChg}%</span>`;
+                fiiBadge = `<span class="badge-danger-alert" style="font-size: 9px;">FIIs ${fiiChg}%</span>`;
             }
             instChangeHtml = (diiBadge || fiiBadge) ? `${diiBadge}${fiiBadge}` : '<span style="color: var(--text-muted);">0.0%</span>';
         }
@@ -1128,16 +1114,16 @@ function renderStocksTable(filterQuery = "") {
             <td class="t-ticker">${escapeHtml(s.ticker)}</td>
             <td><strong>${escapeHtml(s.name)}</strong></td>
             <td><span class="chip" style="display:inline-block; border-color:transparent;">${escapeHtml(sectorLabel)}</span></td>
-            <td>₹${escapeHtml(s.price)}</td>
-            <td><strong>${peVal}</strong></td>
-            <td>${qoqSalesVal}</td>
-            <td><strong>${roceVal}</strong></td>
-            <td><strong>${roeVal}</strong></td>
-            <td>${capexVal}</td>
-            <td><strong>${oeVal}</strong></td>
-            <td><strong>${grahamVal}</strong></td>
-            <td>${s.target ? `₹${escapeHtml(s.target)}` : '<span style="color: var(--text-muted);">—</span>'}</td>
-            <td class="t-potential">${formatPotential(s.growth_pct)}</td>
+            <td class="num">₹${escapeHtml(s.price)}</td>
+            <td class="num">${peVal}</td>
+            <td class="num">${qoqSalesVal}</td>
+            <td class="num">${roceVal}</td>
+            <td class="num">${roeVal}</td>
+            <td class="num">${capexVal}</td>
+            <td class="num">${oeVal}</td>
+            <td class="num">${grahamVal}</td>
+            <td class="num">${s.target ? `₹${escapeHtml(s.target)}` : '<span style="color: var(--text-muted);">—</span>'}</td>
+            <td class="t-potential num">${formatPotential(s.growth_pct)}</td>
             <td>${formatGrowthBadge(s.revenue_growth, 'table')}</td>
             <td>${instChangeHtml}</td>
             <td style="max-width: 150px; white-space: normal;">${valAlertsHtml}</td>
@@ -1230,7 +1216,6 @@ function applyTheme(theme) {
 
     const isLight = normalizedTheme === "light";
     setText("theme-toggle-text", isLight ? "Dark theme" : "Light theme");
-    setText("theme-toggle-icon", isLight ? "🌙" : "☀️");
 
     const toggleBtn = document.getElementById("theme-toggle");
     toggleBtn?.setAttribute("aria-label", isLight ? "Switch to dark theme" : "Switch to light theme");
@@ -1630,7 +1615,7 @@ function renderEarlyWarnings() {
         const severity = w.severity || "Low";
         const badgeClass = SEVERITY_BADGE_CLASS[severity] || "badge-neutral-alert";
         const isRisk = w.direction === "risk";
-        const dirIcon = isRisk ? "🔻" : "🔼";
+        const dirIcon = isRisk ? "▼" : "▲";
         const dirColor = isRisk ? "var(--danger, #f87171)" : "var(--success, #34d399)";
 
         const tr = document.createElement("tr");
@@ -1661,7 +1646,7 @@ function renderSectorValuation() {
     rollup.forEach(r => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-            <td><span style="margin-right:6px;">${escapeHtml(r.icon || "📊")}</span>${escapeHtml(r.label)}</td>
+            <td>${escapeHtml(r.label)}</td>
             <td><strong>${escapeHtml(r.median_pe)}</strong></td>
             <td>${escapeHtml(r.stock_count)}</td>
             <td style="color: var(--success, #34d399);">${escapeHtml(r.cheapest_ticker)} <small>(${escapeHtml(r.cheapest_pe)})</small></td>

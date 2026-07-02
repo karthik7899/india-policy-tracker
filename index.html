@@ -9,13 +9,13 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="styles.css?v=1.3.0">
+    <link rel="stylesheet" href="styles.css?v=2.0.0">
 </head>
 <body>
     <!-- Loading Overlay -->
@@ -29,7 +29,7 @@
         <!-- Sidebar Navigation -->
         <aside class="sidebar" aria-label="Dashboard navigation">
             <div class="logo-area">
-                <span class="logo-icon">🇮🇳</span>
+                <span class="logo-icon"><svg class="icon icon-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4.5"/><line x1="8" y1="16.5" x2="8" y2="12.5"/><line x1="12" y1="16.5" x2="12" y2="7.5"/><line x1="16" y1="16.5" x2="16" y2="10.5"/></svg></span>
                 <div class="logo-text">
                     <h1>BharatPolicy</h1>
                     <p>Intelligence Platform</p>
@@ -37,44 +37,49 @@
             </div>
             
             <nav class="nav-menu" aria-label="Primary">
+                <p class="nav-group-label">Overview</p>
                 <button type="button" class="nav-btn active" data-tab="dashboard" aria-controls="tab-dashboard" aria-selected="true">
-                    <span class="btn-icon">📊</span> Dashboard
+                    <span class="btn-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg></span> Dashboard
                 </button>
                 <button type="button" class="nav-btn" data-tab="sectors" aria-controls="tab-sectors" aria-selected="false">
-                    <span class="btn-icon">📁</span> Government Policy Logs
+                    <span class="btn-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span> Policy Logs
                 </button>
+                <p class="nav-group-label">Intelligence</p>
                 <button type="button" class="nav-btn" data-tab="agreements" aria-controls="tab-agreements" aria-selected="false">
-                    <span class="btn-icon">🤝</span> Corporate News & Agreements
+                    <span class="btn-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 7h3a5 5 0 0 1 0 10h-3"/><path d="M9 17H6a5 5 0 0 1 0-10h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></span> News & Agreements
                 </button>
                 <button type="button" class="nav-btn" data-tab="launches" aria-controls="tab-launches" aria-selected="false">
-                    <span class="btn-icon">🚀</span> Product Launches
+                    <span class="btn-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></span> Product Launches
                 </button>
                 <button type="button" class="nav-btn" data-tab="filings" aria-controls="tab-filings" aria-selected="false">
-                    <span class="btn-icon">📄</span> Corporate Filings
+                    <span class="btn-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg></span> Corporate Filings
                 </button>
                 <button type="button" class="nav-btn" data-tab="institutional" aria-controls="tab-institutional" aria-selected="false">
-                    <span class="btn-icon">🏛️</span> Institutional Activity
+                    <span class="btn-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="21" x2="21" y2="21"/><line x1="5" y1="17" x2="5" y2="10"/><line x1="9.5" y1="17" x2="9.5" y2="10"/><line x1="14.5" y1="17" x2="14.5" y2="10"/><line x1="19" y1="17" x2="19" y2="10"/><path d="M4 7l8-4.5L20 7z"/></svg></span> Institutional Activity
                 </button>
+                <p class="nav-group-label">Valuation & Scoring</p>
                 <button type="button" class="nav-btn" data-tab="graham" aria-controls="tab-graham" aria-selected="false">
-                    <span class="btn-icon">🛡️</span> Margin of Safety (Deep Value)
+                    <span class="btn-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span> Margin of Safety
                 </button>
                 <button type="button" class="nav-btn" data-tab="buffett" aria-controls="tab-buffett" aria-selected="false">
-                    <span class="nav-icon">🏰</span> Buffett Valuation
+                    <span class="btn-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="6"/><polyline points="8.5 13.5 7 22 12 19.5 17 22 15.5 13.5"/></svg></span> Buffett Valuation
                 </button>
                 <button type="button" class="nav-btn" data-tab="scoring" aria-controls="tab-scoring" aria-selected="false">
-                    <span class="nav-icon">🎯</span> Scoring Engine
-                </button>
-                <button type="button" class="nav-btn" data-tab="earlywarning" aria-controls="tab-earlywarning" aria-selected="false">
-                    <span class="btn-icon">🚨</span> Early Warnings
+                    <span class="btn-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></span> Scoring Engine
                 </button>
                 <button type="button" class="nav-btn" data-tab="valuation" aria-controls="tab-valuation" aria-selected="false">
-                    <span class="btn-icon">⚖️</span> Sector Valuation
+                    <span class="btn-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="3" x2="12" y2="21"/><path d="M8 21h8"/><path d="M5 7l14-2"/><path d="M5 7l-2.5 6a2.8 2.8 0 0 0 5 0z"/><path d="M19 5l-2.5 6a2.8 2.8 0 0 0 5 0z"/></svg></span> Sector Valuation
+                </button>
+                <p class="nav-group-label">Risk Monitor</p>
+                <button type="button" class="nav-btn" data-tab="earlywarning" aria-controls="tab-earlywarning" aria-selected="false">
+                    <span class="btn-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span> Early Warnings
                 </button>
                 <button type="button" class="nav-btn" data-tab="caution" aria-controls="tab-caution" aria-selected="false">
-                    <span class="btn-icon">⚠️</span> Caution List
+                    <span class="btn-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></span> Caution List
                 </button>
+                <p class="nav-group-label">Data Explorer</p>
                 <button type="button" class="nav-btn" data-tab="stocks" aria-controls="tab-stocks" aria-selected="false">
-                    <span class="btn-icon">📈</span> Stocks Screener
+                    <span class="btn-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></span> Stocks Screener
                 </button>
             </nav>
             
@@ -87,7 +92,7 @@
 
                 <div class="theme-toggle-wrap">
                     <button type="button" id="theme-toggle" class="theme-toggle-btn" aria-label="Switch to light theme">
-                        <span class="btn-icon" id="theme-toggle-icon" aria-hidden="true">☀️</span>
+                        <span class="btn-icon" id="theme-toggle-icon" aria-hidden="true"><svg class="icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg><svg class="icon icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span>
                         <span id="theme-toggle-text">Light theme</span>
                     </button>
                 </div>
@@ -109,7 +114,7 @@
                         <span id="data-mode-text">Live dataset</span>
                     </div>
                     <div class="last-updated-badge">
-                        <span class="clock-icon">🕒</span>
+                        <span class="clock-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
                         <span id="update-time">Last Refreshed: Loading...</span>
                     </div>
                 </div>
@@ -123,7 +128,7 @@
                     <div class="stat-card">
                         <div class="stat-header">
                             <span class="stat-title">Tracked Sectors</span>
-                            <span class="stat-icon-bg bg-blue">⚡</span>
+                            <span class="stat-icon-bg bg-blue"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>
                         </div>
                         <h3 class="stat-value" id="tracked-sectors-val" aria-live="polite">-</h3>
                         <p class="stat-sub">High-growth focus areas</p>
@@ -131,7 +136,7 @@
                     <div class="stat-card">
                         <div class="stat-header">
                             <span class="stat-title">Watchlist Companies</span>
-                            <span class="stat-icon-bg bg-green">🏢</span>
+                            <span class="stat-icon-bg bg-green"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span>
                         </div>
                         <h3 class="stat-value" id="total-stocks-val" aria-live="polite">-</h3>
                         <p class="stat-sub">Across mid & large cap</p>
@@ -139,7 +144,7 @@
                     <div class="stat-card">
                         <div class="stat-header">
                             <span class="stat-title">Active Policy Signals</span>
-                            <span class="stat-icon-bg bg-purple">📜</span>
+                            <span class="stat-icon-bg bg-purple"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span>
                         </div>
                         <h3 class="stat-value" id="active-signals-val" aria-live="polite">-</h3>
                         <p class="stat-sub">PIB & media updates parsed</p>
@@ -147,7 +152,7 @@
                     <div class="stat-card">
                         <div class="stat-header">
                             <span class="stat-title">Average Potential</span>
-                            <span class="stat-icon-bg bg-orange">🔥</span>
+                            <span class="stat-icon-bg bg-orange"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></span>
                         </div>
                         <h3 class="stat-value" id="average-potential-val" aria-live="polite">-</h3>
                         <p class="stat-sub">Average watchlist target upside</p>
@@ -156,7 +161,7 @@
 
                 <div class="signal-strip" aria-label="Intelligence summary">
                     <button type="button" class="signal-card" data-tab-target="agreements">
-                        <span class="signal-icon signal-blue">🤝</span>
+                        <span class="signal-icon signal-blue"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 7h3a5 5 0 0 1 0 10h-3"/><path d="M9 17H6a5 5 0 0 1 0-10h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></span>
                         <span class="signal-copy">
                             <strong id="agreements-count">0</strong>
                             <small>Corporate signals</small>
@@ -164,7 +169,7 @@
                         <span class="signal-arrow" aria-hidden="true">→</span>
                     </button>
                     <button type="button" class="signal-card" data-tab-target="launches">
-                        <span class="signal-icon signal-purple">🚀</span>
+                        <span class="signal-icon signal-purple"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></span>
                         <span class="signal-copy">
                             <strong id="launches-count">0</strong>
                             <small>Product launches</small>
@@ -172,7 +177,7 @@
                         <span class="signal-arrow" aria-hidden="true">→</span>
                     </button>
                     <button type="button" class="signal-card" data-tab-target="filings">
-                        <span class="signal-icon signal-indigo" style="background: rgba(99, 102, 241, 0.2); color: #818cf8;">📄</span>
+                        <span class="signal-icon signal-indigo"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg></span>
                         <span class="signal-copy">
                             <strong id="filings-count">0</strong>
                             <small>Exchange filings</small>
@@ -180,7 +185,7 @@
                         <span class="signal-arrow" aria-hidden="true">→</span>
                     </button>
                     <button type="button" class="signal-card" data-tab-target="institutional">
-                        <span class="signal-icon signal-green">🏛️</span>
+                        <span class="signal-icon signal-green"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="21" x2="21" y2="21"/><line x1="5" y1="17" x2="5" y2="10"/><line x1="9.5" y1="17" x2="9.5" y2="10"/><line x1="14.5" y1="17" x2="14.5" y2="10"/><line x1="19" y1="17" x2="19" y2="10"/><path d="M4 7l8-4.5L20 7z"/></svg></span>
                         <span class="signal-copy">
                             <strong id="institutional-count">0</strong>
                             <small>Institutional signals</small>
@@ -188,7 +193,7 @@
                         <span class="signal-arrow" aria-hidden="true">→</span>
                     </button>
                     <button type="button" class="signal-card" data-tab-target="graham">
-                        <span class="signal-icon signal-amber">🛡️</span>
+                        <span class="signal-icon signal-amber"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
                         <span class="signal-copy">
                             <strong id="deep-value-count">0</strong>
                             <small>Defensive passes</small>
@@ -196,7 +201,7 @@
                         <span class="signal-arrow" aria-hidden="true">→</span>
                     </button>
                     <button type="button" class="signal-card" data-scroll-target="radar-picks-list">
-                        <span class="signal-icon signal-red">📡</span>
+                        <span class="signal-icon signal-red"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49"/><path d="M7.76 16.24a6 6 0 0 1 0-8.49"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M4.93 19.07a10 10 0 0 1 0-14.14"/></svg></span>
                         <span class="signal-copy">
                             <strong id="competitors-count">0</strong>
                             <small>Emerging competitors</small>
@@ -216,7 +221,7 @@
                     <div class="grid-col-left">
                         <div class="glass-card">
                             <div class="card-header">
-                                <h3>📊 Growth Potential By Sector</h3>
+                                <h3>Growth Potential By Sector</h3>
                                 <p>Comparison of target growth potential in Curated Portfolios</p>
                             </div>
                             <div class="chart-container">
@@ -227,7 +232,7 @@
                         <!-- Watchlist Stock Highlights -->
                         <div class="glass-card mt-24">
                             <div class="card-header">
-                                <h3>🚀 Top High-Growth Picks</h3>
+                                <h3>Top High-Growth Picks</h3>
                                 <p>Stocks showing strongest alignment with recent guidelines</p>
                             </div>
                             <div class="highlights-list" id="top-picks-list">
@@ -238,7 +243,7 @@
                         <!-- Emerging Competitor Radar -->
                         <div class="glass-card mt-24">
                             <div class="card-header">
-                                <h3>📡 Emerging Competitors</h3>
+                                <h3>Emerging Competitors</h3>
                                 <p>Spotted companies in recent news feeds (analyzing listings)</p>
                             </div>
                             <div class="highlights-list" id="radar-picks-list">
@@ -252,7 +257,7 @@
                         <div class="glass-card flex-grow">
                             <div class="feed-header">
                                 <div>
-                                    <h3>📰 Government Policy Logs</h3>
+                                    <h3>Government Policy Logs</h3>
                                     <p>Filter announcements by selecting a sector category</p>
                                 </div>
                                 <div class="filter-controls">
@@ -297,9 +302,9 @@
             <section id="tab-stocks" class="tab-pane">
                 <div class="glass-card">
                     <div class="table-header-bar">
-                        <h3>📈 Integrated Stock Catalysts Database</h3>
+                        <h3>Integrated Stock Catalysts Database</h3>
                         <div class="search-bar-container">
-                            <span class="search-icon">🔍</span>
+                            <span class="search-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
                             <label class="sr-only" for="stock-search">Search stocks</label>
                             <input type="search" id="stock-search" placeholder="Search by name, ticker, or catalyst..." autocomplete="off">
                         </div>
@@ -312,16 +317,16 @@
                                     <th class="sortable" data-sort="ticker">Ticker <span class="sort-icon">↕</span></th>
                                     <th class="sortable" data-sort="company">Company <span class="sort-icon">↕</span></th>
                                     <th class="sortable" data-sort="sector">Sector <span class="sort-icon">↕</span></th>
-                                    <th class="sortable" data-sort="cmp">CMP <span class="sort-icon">↕</span></th>
-                                    <th class="sortable" data-sort="pe">P/E <span class="sort-icon">↕</span></th>
-                                    <th class="sortable" data-sort="qoq">QoQ Growth <span class="sort-icon">↕</span></th>
-                                    <th class="sortable" data-sort="roce">ROCE <span class="sort-icon">↕</span></th>
-                                    <th class="sortable" data-sort="roe">ROE <span class="sort-icon">↕</span></th>
-                                    <th class="sortable" data-sort="capex">CapEx (Cr) <span class="sort-icon">↕</span></th>
-                                    <th class="sortable" data-sort="oe">Owner Earnings (Cr) <span class="sort-icon">↕</span></th>
-                                    <th class="sortable" data-sort="graham">Graham Intrinsic <span class="sort-icon">↕</span></th>
-                                    <th class="sortable" data-sort="target">Target Price <span class="sort-icon">↕</span></th>
-                                    <th class="sortable" data-sort="potential">Potential <span class="sort-icon">↕</span></th>
+                                    <th class="sortable num" data-sort="cmp">CMP <span class="sort-icon">↕</span></th>
+                                    <th class="sortable num" data-sort="pe">P/E <span class="sort-icon">↕</span></th>
+                                    <th class="sortable num" data-sort="qoq">QoQ Growth <span class="sort-icon">↕</span></th>
+                                    <th class="sortable num" data-sort="roce">ROCE <span class="sort-icon">↕</span></th>
+                                    <th class="sortable num" data-sort="roe">ROE <span class="sort-icon">↕</span></th>
+                                    <th class="sortable num" data-sort="capex">CapEx (Cr) <span class="sort-icon">↕</span></th>
+                                    <th class="sortable num" data-sort="oe">Owner Earnings (Cr) <span class="sort-icon">↕</span></th>
+                                    <th class="sortable num" data-sort="graham">Graham Intrinsic <span class="sort-icon">↕</span></th>
+                                    <th class="sortable num" data-sort="target">Target Price <span class="sort-icon">↕</span></th>
+                                    <th class="sortable num" data-sort="potential">Potential <span class="sort-icon">↕</span></th>
                                     <th class="sortable" data-sort="growth">YoY Growth <span class="sort-icon">↕</span></th>
                                     <th class="sortable" data-sort="inst">Inst. Change <span class="sort-icon">↕</span></th>
                                     <th>Valuation Alerts</th>
@@ -341,7 +346,7 @@
             <section id="tab-agreements" class="tab-pane">
                 <div class="glass-card">
                     <div class="table-header-bar">
-                        <h3>🤝 Corporate News & Agreements</h3>
+                        <h3>Corporate News & Agreements</h3>
                         <p class="subtitle">Scanned news alerts regarding joint ventures, strategic partnerships, and MoUs.</p>
                     </div>
                     <div class="table-scroll-container">
@@ -366,7 +371,7 @@
             <section id="tab-launches" class="tab-pane">
                 <div class="glass-card">
                     <div class="table-header-bar">
-                        <h3>🚀 Product Launches</h3>
+                        <h3>Product Launches</h3>
                         <p class="subtitle">Real-time alerts on product launches, new manufacturing capacities, and rollouts.</p>
                     </div>
                     <div class="table-scroll-container">
@@ -422,7 +427,7 @@
                     <!-- Left: SEBI MF SID Filings -->
                     <div class="glass-card">
                         <div class="card-header">
-                            <h3>🏛️ Institutional Activity</h3>
+                            <h3>Institutional Activity</h3>
                             <p>Mutual funds filing Scheme Information Documents (SIDs) for manufacturing/defence themes</p>
                         </div>
                         <div class="table-scroll-container">
@@ -446,7 +451,7 @@
                     <!-- Right: Block Deals & Buying Activity -->
                     <div class="glass-card">
                         <div class="card-header">
-                            <h3>📊 Institutional Activity Feed</h3>
+                            <h3>Institutional Activity Feed</h3>
                             <p>Latest block deals, bulk deals, and mutual fund purchasing news</p>
                         </div>
                         <div class="table-scroll-container">
@@ -471,7 +476,7 @@
                 </div>
                 <div class="glass-card" style="margin-top: 18px;">
                     <div class="card-header">
-                        <h3>📈 Institutional Accumulation Baseline</h3>
+                        <h3>Institutional Accumulation Baseline</h3>
                         <p>Historical mutual-fund NAV trends (AMFI / captn3m0 dataset) as a backtesting proxy for institutional capital compounding into each policy theme</p>
                     </div>
                     <div class="table-scroll-container">
@@ -499,7 +504,7 @@
             <section id="tab-graham" class="tab-pane">
                 <div class="glass-card">
                     <div class="table-header-bar">
-                        <h3>🛡️ Margin of Safety (Deep Value)</h3>
+                        <h3>Margin of Safety (Deep Value)</h3>
                         <p class="subtitle">Applying defensive investor criteria and calculating growth intrinsic values.</p>
                     </div>
                     <div class="table-scroll-container">
@@ -530,7 +535,7 @@
             <section id="tab-buffett" class="tab-pane">
                 <div class="glass-card">
                     <div class="table-header-bar">
-                        <h3>🏰 Owner Earnings & Moats</h3>
+                        <h3>Owner Earnings & Moats</h3>
                         <p class="subtitle">Checking Economic Moat metrics, Owner Earnings, and Retained Value creation.</p>
                     </div>
                     <div class="table-scroll-container">
@@ -586,7 +591,7 @@
             <section id="tab-earlywarning" class="tab-pane">
                 <div class="glass-card alert-card-border">
                     <div class="table-header-bar">
-                        <h3 class="danger-text">🚨 Early Warning System</h3>
+                        <h3>Early Warning System</h3>
                         <p class="subtitle">Prioritized risk &amp; opportunity signals synthesized across holdings, fundamentals, institutional flows, and price action.</p>
                     </div>
                     <div class="table-scroll-container">
@@ -613,7 +618,7 @@
             <section id="tab-valuation" class="tab-pane">
                 <div class="glass-card">
                     <div class="table-header-bar">
-                        <h3>⚖️ Sector Valuation (Peer P/E)</h3>
+                        <h3>Sector Valuation (Peer P/E)</h3>
                         <p class="subtitle">Median price-to-earnings across each sector's watchlist peer group, cheapest first — a relative read on which themes are richly vs cheaply priced.</p>
                     </div>
                     <div class="table-scroll-container">
@@ -639,7 +644,7 @@
             <section id="tab-caution" class="tab-pane">
                 <div class="glass-card alert-card-border">
                     <div class="table-header-bar">
-                        <h3 class="danger-text">⚠️ Risk Alerts & Valuation Warnings (Caution List)</h3>
+                        <h3>Risk Alerts & Valuation Warnings (Caution List)</h3>
                         <p class="subtitle">Watchlist stocks that are not meeting standard value/growth investing filters.</p>
                     </div>
                     <div class="table-scroll-container">

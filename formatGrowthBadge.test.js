@@ -62,14 +62,12 @@ describe('formatGrowthBadge', () => {
     test('should format positive growth correctly inline', () => {
         const result = formatGrowthBadge('+15.5%', 'inline');
         expect(result).toContain('+15.5% YoY');
-        expect(result).toContain('🔥');
         expect(result).toContain('#34d399'); // Green color
     });
 
     test('should format positive growth correctly in table', () => {
         const result = formatGrowthBadge('15.5%', 'table');
         expect(result).toContain('+15.5% YoY');
-        expect(result).toContain('🔥');
         expect(result).toContain('#34d399');
         expect(result).toContain('font-weight: 700');
     });
@@ -77,14 +75,12 @@ describe('formatGrowthBadge', () => {
     test('should format negative growth correctly inline', () => {
         const result = formatGrowthBadge('-10.2%', 'inline');
         expect(result).toContain('-10.2% YoY');
-        expect(result).toContain('📉');
         expect(result).toContain('#f87171'); // Red color
     });
 
     test('should format negative growth correctly in table', () => {
         const result = formatGrowthBadge('-10.2%', 'table');
         expect(result).toContain('-10.2% YoY');
-        expect(result).toContain('📉');
         expect(result).toContain('#f87171');
     });
 
