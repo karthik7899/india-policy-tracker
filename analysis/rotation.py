@@ -76,9 +76,6 @@ def auto_curate_watchlist(brief_data, watchlist):
     log.info("Starting automated watchlist curation and rotation cycle...")
     from config import SECTOR_METADATA
 
-    # Initialize a session for connection pooling
-    session = requests.Session()
-
     emerging_sectors = detect_emerging_players(brief_data, watchlist)
     rotations_log = []
 
@@ -124,7 +121,9 @@ def auto_curate_watchlist(brief_data, watchlist):
 
                 yahoo_ticker = f"{ticker}.NS"
                 try:
-                    ticker_obj = get_cached_ticker(yahoo_ticker, session=session)
+                    # The pooled session is only for Screener/resolution calls;
+                    # yfinance manages its own session (see providers/yahoo.py).
+                    ticker_obj = get_cached_ticker(yahoo_ticker)
                     hist = ticker_obj.history(period="1d", timeout=10)
                     if hist.empty:
                         log.info(
