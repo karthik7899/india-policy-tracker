@@ -30,3 +30,7 @@ Actually, the reviewer pointed out that changing `ticker_obj.history(period="1d"
 ## 2026-06-19 - Synchronous HTTP Request Bottleneck in Watchlist Curation
 **Learning:** Found a performance bottleneck in `metrics.py` where `auto_curate_watchlist` was making multiple sequential `requests.get()` calls to Screener.in and Yahoo Finance during loop iterations, causing severe TCP/SSL handshake overhead.
 **Action:** When performing multiple synchronous HTTP requests in a loop, always utilize `requests.Session()` to enable connection pooling.
+
+## 2026-06-20 - Thread-safe Connection Pooling for Concurrent yfinance Info Fetches
+**Learning:** When using `ThreadPoolExecutor` to fetch Yahoo Finance `info` concurrently for multiple tickers (e.g., in `analysis/growth.py`), creating a new underlying HTTP connection per thread incurs high TCP/SSL handshake overhead and increases the likelihood of hitting rate limits. `requests.Session` is thread-safe and pooling works across threads.
+**Action:** Instantiate a single `requests.Session()` before launching the thread pool, and pass this shared session to the worker threads (and ultimately to `yfinance`) to pool connections across concurrent fetches.
