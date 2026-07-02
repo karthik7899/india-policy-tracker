@@ -193,6 +193,19 @@ def build_html_email(brief_data, watchlist):
             </div>
     """
 
+    # Data-freshness banner: warn prominently when the live price refresh
+    # largely failed, so stale numbers are never silently presented as current.
+    freshness = brief_data.get("freshness", {}).get("live_prices")
+    if freshness and freshness.get("total"):
+        updated, total = freshness["updated"], freshness["total"]
+        if updated < total * 0.8:
+            body_html += f"""
+            <div style="padding: 10px 25px; background-color: #2a230c; color: #fbbf24; font-size: 12px; border-bottom: 1px solid #1f2937;">
+                ⚠️ Live price refresh degraded: only {updated}/{total} stocks updated this run.
+                Prices for the remainder are from a previous briefing.
+            </div>
+    """
+
     # Early Warning System — the first actionable thing the reader should see
     body_html += _build_early_warning_html(warnings)
 
@@ -294,11 +307,14 @@ def build_html_email(brief_data, watchlist):
                 else ""
             )
 
+            price_val = s.get("price")
+            price_str = f"₹{price_val}" if price_val else "—"
+
             stock_rows += f"""
             <tr>
                 <td class="stock-ticker">{s['ticker']}{rating_badge}</td>
                 <td>{s['name']}{growth_badge}{earnings_badge}</td>
-                <td>₹{s['price']}</td>
+                <td>{price_str}</td>
                 <td>{target_str}</td>
                 <td class="stock-growth" style="color: {potential_color} !important;">{potential_str}{method_badge}</td>
             </tr>
@@ -528,7 +544,7 @@ def build_html_email(brief_data, watchlist):
                         {
                             "ticker": s["ticker"],
                             "name": s["name"],
-                            "price": s["price"],
+                            "price": s.get("price", "N/A"),
                             "alerts": list(set(alerts)),
                         }
                     )
@@ -613,6 +629,7 @@ def build_html_email(brief_data, watchlist):
     body_html += f"""
             <div class="footer">
                 <p>This briefing is an automated policy analysis generated using PIB &amp; public financial indicators.</p>
+                {f'<p>Data freshness: live prices refreshed for {freshness["updated"]}/{freshness["total"]} stocks.</p>' if freshness and freshness.get("total") else ''}
                 <p>To view full interactive charts, visit the <a href="{DASHBOARD_URL}" target="_blank">Policy Tracker Archive Dashboard</a>.</p>
                 <p>&copy; 2026 Policy Tracker. India Growth Investing.</p>
             </div>

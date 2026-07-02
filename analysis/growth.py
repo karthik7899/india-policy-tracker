@@ -39,10 +39,13 @@ def update_single_stock(stock, prefetched_prices=None):
         ):
             _calculate_growth_pct(stock, float(stock["price"]), ticker)
 
+        return data.get("price") is not None
+
     except Exception as e:
         log.error(
             f"Error updating price/metrics for {yahoo_ticker}: {e}. Using static price."
         )
+        return False
 
 
 def _calculate_growth_pct(stock, live_price, ticker):
@@ -57,7 +60,12 @@ def _calculate_growth_pct(stock, live_price, ticker):
 
 
 def update_live_stock_prices(watchlist):
-    """Updates watchlist with live prices from Yahoo Finance."""
+    """Updates watchlist with live prices from Yahoo Finance.
+
+    Returns a freshness dict {"updated": n, "total": m} so downstream
+    consumers (email, dashboard) can surface how much of the watchlist
+    actually got live data instead of silently presenting stale prices.
+    """
     log.info(
         "Fetching live stock prices and metrics from Yahoo Finance (Parallelized)..."
     )
@@ -102,13 +110,9 @@ def update_live_stock_prices(watchlist):
         except Exception as e:
             log.error(f"Error during batch price download: {e}")
 
-    # NOTE: intentionally not passing a shared requests.Session() into yf.Ticker here.
-    # yfinance's YfData is already a process-wide singleton with its own pooled,
-    # curl_cffi-backed session reused across all threads, so a custom plain
-    # requests.Session buys no extra pooling. Worse, passing one in from multiple
-    # threads concurrently reassigns that shared singleton's session on every call
-    # (a race) and drops yfinance's browser-impersonation headers, which can cause
-    # ticker fetches to silently fail (flagged in PR #41/#42 review by Codex).
+    # No custom session for yf.Ticker calls — see get_cached_ticker in
+    # providers/yahoo.py for why that would be harmful.
+    updated = 0
     with ThreadPoolExecutor(max_workers=8) as executor:
         futures = [
             executor.submit(update_single_stock, stock, prefetched_prices)
@@ -116,6 +120,11 @@ def update_live_stock_prices(watchlist):
         ]
         for future in as_completed(futures):
             try:
-                future.result()
+                if future.result():
+                    updated += 1
             except Exception as e:
                 log.error(f"Error in parallel stock update task: {e}")
+
+    total = len(all_stocks)
+    log.info(f"Live price update complete: {updated}/{total} stocks refreshed.")
+    return {"updated": updated, "total": total}

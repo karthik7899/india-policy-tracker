@@ -37,6 +37,11 @@ def save_data_for_dashboard(brief_data, watchlist):
 
 
 async def run_pipeline():
+    # NOTE: this pipeline intentionally mixes two concurrency models:
+    # asyncio/aiohttp for the scrapers and Screener, and
+    # ThreadPoolExecutor/requests for yfinance (which is sync-only).
+    # Don't refactor one into the other — yfinance can't be awaited, and the
+    # scrapers gain nothing from threads.
     watchlist = load_watchlist()
 
     # Gather news data async
@@ -47,7 +52,7 @@ async def run_pipeline():
     data["emerging_players"] = emerging
 
     # Fetch live Yahoo Finance prices
-    update_live_stock_prices(watchlist)
+    data["freshness"] = {"live_prices": update_live_stock_prices(watchlist)}
 
     # Fetch Screener.in fundamentals async
     await fetch_all_screener_fundamentals(watchlist)
