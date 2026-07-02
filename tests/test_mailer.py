@@ -73,7 +73,7 @@ def test_build_html_email_success():
     today_str = datetime.date.today().strftime("%B %d, %Y")
 
     # Header check
-    assert "India Policy & Growth Sector Brief" in html
+    assert "India Policy &amp; Growth Sector Brief" in html
     assert today_str in html
 
     # News checks
@@ -96,21 +96,21 @@ def test_build_html_email_success():
     assert "New Cyber Startup" in html
 
     # Special sections checks
-    assert "Corporate Agreements & Partnerships" in html
+    assert "Corporate Agreements &amp; Partnerships" in html
     assert "Tech Corp Acquires Startup" in html
 
-    assert "Product Launches & Innovations" in html
+    assert "Product Launches &amp; Innovations" in html
     assert "New AI Tool Released" in html
 
     # Valuation Checks
     assert "Graham Margin of Safety Pass List" in html
     assert "Defensive Corp" in html
 
-    assert "Warren Buffett Allocation & Moat Screens" in html
+    assert "Warren Buffett Allocation &amp; Moat Screens" in html
     assert "MOAT" in html
     assert "Wide" in html
 
-    assert "Valuation Caution List & Warnings" in html
+    assert "Valuation Caution List &amp; Warnings" in html
     assert "High P/E" in html
 
 
@@ -124,12 +124,12 @@ def test_build_html_email_empty():
     today_str = datetime.date.today().strftime("%B %d, %Y")
 
     # Ensure headers and footers are still there
-    assert "India Policy & Growth Sector Brief" in html
+    assert "India Policy &amp; Growth Sector Brief" in html
     assert today_str in html
     assert "Policy Tracker Archive Dashboard" in html
 
     # Ensure none of the optional sections broke or appear unexpectedly
-    assert "Corporate Agreements & Partnerships" not in html
-    assert "Product Launches & Innovations" not in html
-    assert "Institutional Capital & Fund Flow Tracker" not in html
+    assert "Corporate Agreements &amp; Partnerships" not in html
+    assert "Product Launches &amp; Innovations" not in html
+    assert "Institutional Capital &amp; Fund Flow Tracker" not in html
     assert "Core Value Investing Matrix" not in html
