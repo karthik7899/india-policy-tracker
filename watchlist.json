@@ -1882,8 +1882,8 @@
         "net_current_assets": null,
         "hyper_growth_warning": false,
         "valuation_alerts": [],
-        "industry_pe": 64.2,
-        "pe_vs_peers": "14% above peers"
+        "industry_pe": 54.5,
+        "pe_vs_peers": "35% above peers"
       },
       "score": {
         "overall_score": 2,
@@ -1958,8 +1958,8 @@
           "Fails P/E Screen (P/E 64.2 > 15 & Price > Intrinsic)",
           "No Dividend Yield"
         ],
-        "industry_pe": 64.2,
-        "pe_vs_peers": "In line with peers"
+        "industry_pe": 54.5,
+        "pe_vs_peers": "18% above peers"
       },
       "score": {
         "overall_score": 2,
@@ -1995,7 +1995,49 @@
       "target_high": "700.00",
       "target_low": "400.00",
       "rec_score": 1.0,
-      "screener": {},
+      "screener": {
+        "market_cap": 14890.0,
+        "current_price": 568.0,
+        "pe_ratio": 35.0,
+        "dividend_yield": 0.66,
+        "roce": 13.8,
+        "roe": 10.9,
+        "q_opm": 12.0,
+        "quarterly_ebitda_margin": [
+          9.0,
+          10.0,
+          11.0,
+          12.0
+        ],
+        "opm_expansion": 1.0,
+        "q_eps": 6.09,
+        "operating_margin_trend": [
+          10.0,
+          10.0,
+          11.0,
+          11.0,
+          11.0
+        ],
+        "capex": 0.0,
+        "rd_pct": 1.5,
+        "roce_trend": [
+          13.0,
+          13.0,
+          13.0,
+          13.0,
+          14.0
+        ],
+        "graham_intrinsic_value": 791.7,
+        "owner_earnings": 0.0,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Weak/None",
+        "is_bargain": false,
+        "net_current_assets": null,
+        "hyper_growth_warning": false,
+        "valuation_alerts": [],
+        "industry_pe": 54.5,
+        "pe_vs_peers": "36% below peers"
+      },
       "score": {
         "overall_score": 6,
         "confidence": "Medium",
@@ -2063,8 +2105,8 @@
         "valuation_alerts": [
           "No Dividend Yield"
         ],
-        "industry_pe": 64.2,
-        "pe_vs_peers": "30% below peers"
+        "industry_pe": 54.5,
+        "pe_vs_peers": "18% below peers"
       },
       "score": {
         "overall_score": 4,
@@ -2239,14 +2281,14 @@
       "ticker": "CUMMINSIND",
       "name": "Cummins India",
       "price": "5578.50",
-      "target": "5850.00",
-      "growth_pct": "+4.9%",
+      "target": "5800.00",
+      "growth_pct": "+4.0%",
       "catalyst": "Leading heavy engine maker, supplying power backups and engines for logistics and railway expansion.",
       "rating": "Hold",
       "revenue_growth": "+21.9%",
       "earnings_growth": "+22.7%",
       "analyst_count": 23,
-      "target_median": "5850.00",
+      "target_median": "5800.00",
       "target_high": "7100.00",
       "target_low": "3420.00",
       "rec_score": 2.7,
@@ -2455,11 +2497,13 @@
         "pe_vs_peers": "In line with peers"
       },
       "score": {
-        "overall_score": 20,
+        "overall_score": 28,
         "confidence": "Medium",
         "reasons": [
           "Capacity/Product Launch: BEL bags additional orders worth Rs 1,081 crore",
           "Policy Notification: Astra Microwave, BEL Sign MoU for Defence Electronics",
+          "Policy Notification: BEL Signs MoU with SASMOS; Shares Drop 3%",
+          "Policy Notification: BEL approves JV with French company Safran for HAMMER Weapon System",
           "Policy Notification: BEL shares jump 2% amid weak market; latest buzz you need to know",
           "Policy Notification: Motilal Oswal bullish on defence sector; BEL top pick for 20% upside",
           "High Return on Capital (ROCE: 36.5%)",
@@ -2559,13 +2603,13 @@
     {
       "ticker": "ASMTEC",
       "name": "ASM Technologies",
-      "price": "1250.00",
+      "price": "4132.15",
       "target": null,
       "growth_pct": null,
       "catalyst": "Engineering design services for semiconductor equipment makers under India Semiconductor Mission (ISM) 2.0.",
-      "rating": "N/A",
-      "revenue_growth": null,
-      "earnings_growth": null,
+      "rating": "None",
+      "revenue_growth": "+25.7%",
+      "earnings_growth": "+2.3%",
       "analyst_count": null,
       "target_median": null,
       "target_high": null,

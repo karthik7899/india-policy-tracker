@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-07-03 00:53:15",
+  "last_updated": "2026-07-03 01:13:21",
   "watchlist": {
     "clean_energy": [
       {
@@ -1884,8 +1884,8 @@
           "net_current_assets": null,
           "hyper_growth_warning": false,
           "valuation_alerts": [],
-          "industry_pe": 64.2,
-          "pe_vs_peers": "14% above peers"
+          "industry_pe": 54.5,
+          "pe_vs_peers": "35% above peers"
         },
         "score": {
           "overall_score": 2,
@@ -1960,8 +1960,8 @@
             "Fails P/E Screen (P/E 64.2 > 15 & Price > Intrinsic)",
             "No Dividend Yield"
           ],
-          "industry_pe": 64.2,
-          "pe_vs_peers": "In line with peers"
+          "industry_pe": 54.5,
+          "pe_vs_peers": "18% above peers"
         },
         "score": {
           "overall_score": 2,
@@ -1997,7 +1997,49 @@
         "target_high": "700.00",
         "target_low": "400.00",
         "rec_score": 1.0,
-        "screener": {},
+        "screener": {
+          "market_cap": 14890.0,
+          "current_price": 568.0,
+          "pe_ratio": 35.0,
+          "dividend_yield": 0.66,
+          "roce": 13.8,
+          "roe": 10.9,
+          "q_opm": 12.0,
+          "quarterly_ebitda_margin": [
+            9.0,
+            10.0,
+            11.0,
+            12.0
+          ],
+          "opm_expansion": 1.0,
+          "q_eps": 6.09,
+          "operating_margin_trend": [
+            10.0,
+            10.0,
+            11.0,
+            11.0,
+            11.0
+          ],
+          "capex": 0.0,
+          "rd_pct": 1.5,
+          "roce_trend": [
+            13.0,
+            13.0,
+            13.0,
+            13.0,
+            14.0
+          ],
+          "graham_intrinsic_value": 791.7,
+          "owner_earnings": 0.0,
+          "retained_earnings_ratio": 1.2,
+          "moat_status": "Weak/None",
+          "is_bargain": false,
+          "net_current_assets": null,
+          "hyper_growth_warning": false,
+          "valuation_alerts": [],
+          "industry_pe": 54.5,
+          "pe_vs_peers": "36% below peers"
+        },
         "score": {
           "overall_score": 6,
           "confidence": "Medium",
@@ -2065,8 +2107,8 @@
           "valuation_alerts": [
             "No Dividend Yield"
           ],
-          "industry_pe": 64.2,
-          "pe_vs_peers": "30% below peers"
+          "industry_pe": 54.5,
+          "pe_vs_peers": "18% below peers"
         },
         "score": {
           "overall_score": 4,
@@ -2241,14 +2283,14 @@
         "ticker": "CUMMINSIND",
         "name": "Cummins India",
         "price": "5578.50",
-        "target": "5850.00",
-        "growth_pct": "+4.9%",
+        "target": "5800.00",
+        "growth_pct": "+4.0%",
         "catalyst": "Leading heavy engine maker, supplying power backups and engines for logistics and railway expansion.",
         "rating": "Hold",
         "revenue_growth": "+21.9%",
         "earnings_growth": "+22.7%",
         "analyst_count": 23,
-        "target_median": "5850.00",
+        "target_median": "5800.00",
         "target_high": "7100.00",
         "target_low": "3420.00",
         "rec_score": 2.7,
@@ -2457,11 +2499,13 @@
           "pe_vs_peers": "In line with peers"
         },
         "score": {
-          "overall_score": 20,
+          "overall_score": 28,
           "confidence": "Medium",
           "reasons": [
             "Capacity/Product Launch: BEL bags additional orders worth Rs 1,081 crore",
             "Policy Notification: Astra Microwave, BEL Sign MoU for Defence Electronics",
+            "Policy Notification: BEL Signs MoU with SASMOS; Shares Drop 3%",
+            "Policy Notification: BEL approves JV with French company Safran for HAMMER Weapon System",
             "Policy Notification: BEL shares jump 2% amid weak market; latest buzz you need to know",
             "Policy Notification: Motilal Oswal bullish on defence sector; BEL top pick for 20% upside",
             "High Return on Capital (ROCE: 36.5%)",
@@ -2561,13 +2605,13 @@
       {
         "ticker": "ASMTEC",
         "name": "ASM Technologies",
-        "price": "1250.00",
+        "price": "4132.15",
         "target": null,
         "growth_pct": null,
         "catalyst": "Engineering design services for semiconductor equipment makers under India Semiconductor Mission (ISM) 2.0.",
-        "rating": "N/A",
-        "revenue_growth": null,
-        "earnings_growth": null,
+        "rating": "None",
+        "revenue_growth": "+25.7%",
+        "earnings_growth": "+2.3%",
         "analyst_count": null,
         "target_median": null,
         "target_high": null,
@@ -2944,10 +2988,10 @@
         "relevance": "site:pib.gov.in \"cyber security\" OR \"cybersecurity\" OR \"CERT-In\""
       },
       {
-        "title": "Human Intelligence Must Lead Artificial Intelligence in Governance, Says Dr Jitendra Singh; Calls AI an Essential Tool for Viksit Bharat 2047",
+        "title": "Regional industries must become partners in Viksit Bharat journey: Raksha Mantri at Vibrant Gujarat Regional Conference",
         "source": "PIB",
-        "link": "https://news.google.com/rss/articles/CBMiekFVX3lxTE5OcUMwaW8weUJYS0VtN19Fa3BING1kUlo4c2JNSS1nUkhlZ0VLX2Z2c1c5NHdrOW9XcEJrd2R1ZVNybTJ6bjIzMTFVX0FaMjBNdW5DZnNOSnRLQ2ExYmJGcEo4eC1UODRlSFE5ZWJhV2lIVmF4N2FOUFdR?oc=5",
-        "date": "02 Jul 2026",
+        "link": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE1FTGc5bmlNMWhBZWthbzJ3WWR2Z0JhWDVVWlFVZ0Q2YzBCbHAxbW5hQW1zQ0pHbDBHSzM1bFNhNmJ0RzVQbldxNjVTOGRMZExhbnBNY2ppdDN5T2xVOUdZS1hFem5Od3ZO?oc=5",
+        "date": "30 Jun 2026",
         "impact": "Positive",
         "relevance": "site:pib.gov.in \"cyber security\" OR \"cybersecurity\" OR \"CERT-In\""
       },
@@ -3132,6 +3176,14 @@
     ],
     "semiconductors_equipment": [
       {
+        "title": "Cabinet approves two more semiconductor manufacturing units with cumulative investment of more than Rs. 3,900 crore",
+        "source": "PIB",
+        "link": "https://news.google.com/rss/articles/CBMifkFVX3lxTFB3OHVmYVJOeDBNMEdrU25LSE5mMXlDY0F3TE5FVmtvTUl1SENwcnJkQnRRMEgtUV83TzlfdzhVMnNMMmsyRmVjd2RvUXZyMnNKODk1dVVFWmhweldCN1d5YTR0QXZUMDQ4OGF3ZUFWRVdJdHVuR3QzeTMtN0FYQQ?oc=5",
+        "date": "29 Jun 2026",
+        "impact": "Positive",
+        "relevance": "site:pib.gov.in \"semiconductor PLI\" OR \"ISM 2.0\" OR \"OSAT\""
+      },
+      {
         "title": "Jobs Created By Semiconductor Boom In India",
         "source": "Youth Incorporated Magazine",
         "link": "https://news.google.com/rss/articles/CBMickFVX3lxTE9QUUk5d0Y5LVpTQnNDR3o2aklyZmQ0YkdrYkJmTlNBeV9SaXVmaXk5b0lLbllfNi1xQkpjYmdzVGF4ZnNfdk9hMU5sNHpVZGFNMzBUdklWdzVDN0pIdlNFUm5NbkVFVlJpUmh1R3JITXNiZw?oc=5",
@@ -3154,14 +3206,6 @@
         "date": "28 Jun 2026",
         "impact": "Positive",
         "relevance": "\"ASM Technologies\" OR \"RIR Power\" OR \"SPEL\" semiconductor"
-      },
-      {
-        "title": "Rajasthan gets its first Semiconductor Plant",
-        "source": "PIB",
-        "link": "https://news.google.com/rss/articles/CBMifEFVX3lxTE9PRW15bjJrLURDd3NTdVZiX2FUdTlnWUZSbWFDZ0VXYU5HWGRKRURJLTlFS2tZOWF3YjUyQmI5MU1RUFRocjZub0pqVW5zS1BpR3g3MVd4UVhoY0xaWlJqUERaYjlrdU5nWXU3RmJLaEJqMGN3RTNQbHRCVGE?oc=5",
-        "date": "01 Jul 2026",
-        "impact": "Neutral",
-        "relevance": "site:pib.gov.in \"semiconductor PLI\" OR \"ISM 2.0\" OR \"OSAT\""
       }
     ],
     "sports_athleisure": [
@@ -3216,10 +3260,10 @@
         "relevance": "\"CP Plus\" OR \"Aditya Infotech\" OR \"Allied Digital\" OR \"IdeaForge\" surveillance"
       },
       {
-        "title": "CP PLUS Strengthens Its Leadership across India's Most Influential Industry Platforms in June",
-        "source": "varindia.com",
-        "link": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxNRk8ydG1TNHNyYnB1SVFVX0dZVjFYRklicG9vSHNPQ3BycG15ZFVYdFZVeWwxZmg1UmQ2NEloTnNXV1RBS0VZbkdiSWo4WlF1OVhNQkVHZF8xZ2hYZ3p5NGpkWWZOTGlDSWpZcy01d0hrNEV4ejYwRklCMkVuTjVtdGFXZ3paZFozZHE0TUx1VjFaNldWS1dVR0RmX1NUR00wSlVuM29ITFRfMFJNSmxFNUpBSHZnc0hzc2NCT1pfbVU?oc=5",
-        "date": "01 Jul 2026",
+        "title": "Aditya Infotech Q4 FY26 results: CP Plus profit triples as Taiwan R&D subsidiary is formed",
+        "source": "Goodreturns",
+        "link": "https://news.google.com/rss/articles/CBMiswFBVV95cUxOU0ptd2xJNVlmdlJvN1l6ZmVRY01WUlhRZlRZS19qU05Eb04xbHFucnVpb0duZUhKdi1KOFNWcE1LRFdLTEI2anF3MFN0b0M1OEtKR0E0OWxkTlZIeC1iSnJpaGdPbmFQbFd4UU43Tk5RSVlhbjlwUko3emN0MEdKcFVabGhhU0RZbnVHWFBjWnNNM3hsQXdBVkhPVTUzLVJveTA2MUR4ZG1aUG9YQ1pvVTFnaw?oc=5",
+        "date": "30 Jun 2026",
         "impact": "Positive",
         "relevance": "\"CP Plus\" OR \"Aditya Infotech\" OR \"Allied Digital\" OR \"IdeaForge\" surveillance"
       }
@@ -3234,18 +3278,18 @@
         "relevance": "India textiles export incentives technical textiles"
       },
       {
-        "title": "India’s textile industry poised to achieve $350 billion target by 2030: Giriraj Singh",
-        "source": "DD News",
-        "link": "https://news.google.com/rss/articles/CBMirAFBVV95cUxOUi1WX2hhMFptTzEzWVkzMW1OSVpvQ3BTVEJLeHkwQkU0SW4xMm9wbEJrMUhWZVQ1UEZFU2VUNW1wTHRreEVuQjRPWEVCdnZHZWd2YWdiRHRPUHdRNFB4dzdTN0xJVUJTcGlkeU1nV1RqcEJnbFIzSGp5Ykk1cXZXVVZmRU9lNFJHaURfaWNHeTh0VmV2X3paOUg3Y2p3NS1CaDNGek1kVmd1TTQ3?oc=5",
-        "date": "30 Jun 2026",
-        "impact": "Positive",
-        "relevance": "India textiles export incentives technical textiles"
-      },
-      {
         "title": "Borana Weaves Bags Textiles PLI Round 3 Approval With 15% Incentive Tier Potential",
         "source": "Sahi",
         "link": "https://news.google.com/rss/articles/CBMivAFBVV95cUxPeWpUWHY1eUJMdDF0UEZHMTdfWnNoUEpESXZxclplaEtKTi1BRkJZcThUNFJEbHo3MzFXSV9fZ0VBWS12b01ncTdxMHhobzVBdXZHQW1WcDlGdzZfa0YxQ3U0bjJuTGpWSHJILWotaFZwXzh6OWJRS2o3QlYtOHRYeTRnWHRGRjlGY3AwWF9nSld4OUVCUHd2NlhDZWZPMEdBWjUwcE9aRDM4VkdUaW1oM0ZhNGRnM0RPQ0RsbA?oc=5",
         "date": "02 Jul 2026",
+        "impact": "Positive",
+        "relevance": "India textiles export incentives technical textiles"
+      },
+      {
+        "title": "Textiles Summit 2026 Charts National Roadmap To Achieve US$100 Billion Textile Exports By 2030",
+        "source": "Textile Excellence",
+        "link": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxQempTb1pSNHRNOWZIeGUyVVlCRXZZdC1lamhBWGNmdVpCQkVKN3paYUFGVFdqU1BETTY2ek15dnlmWjEtVk1RNVA0bFJFbVZuVWNpNWJFWi1hUHBidWkxWFFYWVY2TFdDam8xZElvWnk1WnpLZmFDNDVMZzFGSmFjT1ZoeFdOWk5PZEZfcnFmUGR3V1BMbURGUDBBLU4xdWxvY2xSRThsOGNaM08tOEhaTXgtVDBHRV9Ba2sxWWtPV2Z1YXFuX3EwY1NDd01MRl9KWHZiRi1iNWlCdEMySFE?oc=5",
+        "date": "26 Jun 2026",
         "impact": "Positive",
         "relevance": "India textiles export incentives technical textiles"
       },
@@ -3289,7 +3333,7 @@
     },
     "freshness": {
       "live_prices": {
-        "updated": 36,
+        "updated": 37,
         "total": 41
       }
     },
@@ -3433,11 +3477,253 @@
           "sales_var_pct": -1.74,
           "market_cap": 12550.08
         }
+      ],
+      "manufacturing_electronics": [
+        {
+          "name": "Havells India",
+          "ticker": "HAVELLS",
+          "sales_var_pct": 2.47,
+          "market_cap": 74472.74
+        },
+        {
+          "name": "PG Electroplast",
+          "ticker": "PGEL",
+          "sales_var_pct": -10.11,
+          "market_cap": 16024.28
+        },
+        {
+          "name": "Onida Electronics",
+          "ticker": "ONIDA",
+          "sales_var_pct": -28.35,
+          "market_cap": 1598.73
+        },
+        {
+          "name": "IKIO Tech",
+          "ticker": "IKIO",
+          "sales_var_pct": 47.25,
+          "market_cap": 1315.63
+        },
+        {
+          "name": "Cellecor Gadgets",
+          "ticker": "CELLECOR",
+          "sales_var_pct": 8.35,
+          "market_cap": 793.34
+        },
+        {
+          "name": "CWD",
+          "ticker": "543378",
+          "sales_var_pct": 293.56,
+          "market_cap": 725.71
+        }
+      ],
+      "fmcg": [
+        {
+          "name": "Valencia Nutrit.",
+          "ticker": "542910",
+          "sales_var_pct": -39.54,
+          "market_cap": 120.23
+        },
+        {
+          "name": "Orient Beverages",
+          "ticker": "507690",
+          "sales_var_pct": 8.91,
+          "market_cap": 38.58
+        },
+        {
+          "name": "ANS Industries",
+          "ticker": "531406",
+          "sales_var_pct": null,
+          "market_cap": 11.11
+        },
+        {
+          "name": "Transglobe Foods",
+          "ticker": "519367",
+          "sales_var_pct": 0.0,
+          "market_cap": 7.24
+        }
+      ],
+      "sports_athleisure": [
+        {
+          "name": "Bata India",
+          "ticker": "BATAINDIA",
+          "sales_var_pct": 5.0,
+          "market_cap": 8978.29
+        },
+        {
+          "name": "Redtape",
+          "ticker": "REDTAPE",
+          "sales_var_pct": 33.51,
+          "market_cap": 7596.68
+        },
+        {
+          "name": "Sreeleathers",
+          "ticker": "SREEL",
+          "sales_var_pct": 17.95,
+          "market_cap": 485.47
+        },
+        {
+          "name": "Liberty Shoes",
+          "ticker": "LIBERTSHOE",
+          "sales_var_pct": 13.0,
+          "market_cap": 449.77
+        }
+      ],
+      "big_cap_industries": [
+        {
+          "name": "Rail Vikas",
+          "ticker": "RVNL",
+          "sales_var_pct": 4.18,
+          "market_cap": 49383.7
+        },
+        {
+          "name": "NBCC",
+          "ticker": "NBCC",
+          "sales_var_pct": -1.81,
+          "market_cap": 27826.2
+        },
+        {
+          "name": "IRB Infra.Devl.",
+          "ticker": "IRB",
+          "sales_var_pct": -10.34,
+          "market_cap": 25871.08
+        },
+        {
+          "name": "Cemindia Project",
+          "ticker": "CEMPRO",
+          "sales_var_pct": 17.42,
+          "market_cap": 24589.67
+        },
+        {
+          "name": "Kalpataru Proj.",
+          "ticker": "KPIL",
+          "sales_var_pct": 10.06,
+          "market_cap": 23399.25
+        },
+        {
+          "name": "Central Mine Pla",
+          "ticker": "CMPDI",
+          "sales_var_pct": 11.69,
+          "market_cap": 19102.36
+        }
+      ],
+      "textiles_apparel": [
+        {
+          "name": "K P R Mill Ltd",
+          "ticker": "KPRMILL",
+          "sales_var_pct": 0.89,
+          "market_cap": 40361.4
+        },
+        {
+          "name": "Vardhman Textile",
+          "ticker": "VTL",
+          "sales_var_pct": -0.42,
+          "market_cap": 19037.38
+        },
+        {
+          "name": "Trident",
+          "ticker": "TRIDENT",
+          "sales_var_pct": -12.43,
+          "market_cap": 13657.16
+        },
+        {
+          "name": "Indo Count Inds.",
+          "ticker": "ICIL",
+          "sales_var_pct": 3.43,
+          "market_cap": 8735.19
+        },
+        {
+          "name": "Garware Tech.",
+          "ticker": "GARFIBRES",
+          "sales_var_pct": -1.42,
+          "market_cap": 7173.45
+        },
+        {
+          "name": "Alok Industries",
+          "ticker": "ALOKINDS",
+          "sales_var_pct": 3.15,
+          "market_cap": 6588.87
+        }
+      ],
+      "logistics_heavy_capital": [
+        {
+          "name": "Delhivery",
+          "ticker": "DELHIVERY",
+          "sales_var_pct": 30.04,
+          "market_cap": 38138.83
+        },
+        {
+          "name": "Shadowfax Technologies",
+          "ticker": "SHADOWFAX",
+          "sales_var_pct": 73.62,
+          "market_cap": 13485.03
+        },
+        {
+          "name": "Blue Dart Expres",
+          "ticker": "BLUEDART",
+          "sales_var_pct": 8.2,
+          "market_cap": 11624.14
+        },
+        {
+          "name": "Transport Corp.",
+          "ticker": "TCI",
+          "sales_var_pct": 12.3,
+          "market_cap": 7199.85
+        },
+        {
+          "name": "TVS Supply",
+          "ticker": "TVSSCS",
+          "sales_var_pct": 21.35,
+          "market_cap": 6053.43
+        },
+        {
+          "name": "VRL Logistics",
+          "ticker": "VRLLOG",
+          "sales_var_pct": 5.42,
+          "market_cap": 4175.05
+        }
+      ],
+      "aerospace_defence": [
+        {
+          "name": "Bharat Dynamics",
+          "ticker": "BDL",
+          "sales_var_pct": -72.98,
+          "market_cap": 50765.24
+        },
+        {
+          "name": "Garden Reach Sh.",
+          "ticker": "GRSE",
+          "sales_var_pct": 29.06,
+          "market_cap": 31745.8
+        },
+        {
+          "name": "Data Pattern",
+          "ticker": "DATAPATTNS",
+          "sales_var_pct": -12.96,
+          "market_cap": 26070.05
+        },
+        {
+          "name": "Apollo Micro Sys",
+          "ticker": "APOLLO",
+          "sales_var_pct": 81.28,
+          "market_cap": 16333.66
+        }
       ]
     },
     "market_share": {},
     "emerging_competitors": [],
     "corporate_agreements": [
+      {
+        "title": "Dixon Tech shares surge sharply as government likely to approve Vivo JV",
+        "link": "https://news.google.com/rss/articles/CBMi3AFBVV95cUxQMGR2NGtCWDFRYi15YXhmMVJNNlEwT2Z0UFYwSXA5NWx3ajBWSGVna2JBdUVzWGVBUkpXRFY2S3dqVW5RMVhMTWc4RVZSTHZVUXVMY2tBeFQwNGlqaUlMTlAzeEJXV1hNZGlSWGVSR0NSZDFmZjdGaDBXSkFCd21LQ2w1THY4T1YyWlhtenBQcVdMMF9LV0w1dGFGWkN0NEN1a2lVaktXUXpObTlCWUFicE5rWTFwbTBWZ0UtSVhWYWN5YnA3VC0tdXowLVZXX1hJS1FyZy13TkxtTEx4?oc=5",
+        "date": "Thu, 02 Jul 2026 01:01:38 GMT",
+        "source": "MSN"
+      },
+      {
+        "title": "TVS Motor, Dixon Tech in, Reliance, M&M out: Which stocks made it into Macquarie's new India portfolio?",
+        "link": "https://news.google.com/rss/articles/CBMi8AFBVV95cUxQVDRQU0hnUGRqYS1hblFablZ4XzNkeWRjd3c5eHFFaW5wRS1qSl9rNGl4SjgtRmpxNFFxM0p1bzk0QUNPYkM0a2gxcEVxS1RWSFlFYUFqTjEtUUNkUWNsWmNJVEd3THg2M09yTkRrTXAwTkMyeHdBZHhZbVdfcDV1bkdtSTh4VTctdTJtbUdaTnJ1RUtlZWRQdXBGTWp2aFlQNHZxVmNZVmx3ckQ4Qk92b3JueVBKdGhHeXBmUS04U184VmJ5NWFmLTNjSjIyQ1VsNThLNzk5amNWS0E4dTVTcTB2UWR0WmZ5QW84QzZ1ZGI?oc=5",
+        "date": "Wed, 01 Jul 2026 06:02:17 GMT",
+        "source": "MSN"
+      },
       {
         "title": "The Swedish Ski Association and Svenska Spel extend their collaboration",
         "link": "https://news.google.com/rss/articles/CBMixwFBVV95cUxQWnNKdjJXbVhuMGNxZFdELUhFendXelZQVjliVVpVV3dYeVVFYnNJc0kwS0tDRHRuYWV6Q3V2TjduLV92d2d2bWdmRlJTaVkyNU90Z3NzQWliTTB2S3ctT3NBVFlFT1ktRzNzR3VBLW9Fd0laYjVPUkg2MWswT21SVFFabE4yTE55QVZ2VlFqejJNRGtwMWJjMDZyenZkYWdMak5XSE5zbHljenFaZU9OQnd4ZVU5RTlhWmxPcjQ5enhhMUwxcmIw?oc=5",
@@ -3445,22 +3731,22 @@
         "source": "Snow Industry News"
       },
       {
-        "title": "NTPC signs MoU with NHPC, PTC and TCS",
-        "link": "https://news.google.com/rss/articles/CBMiekFVX3lxTE1LbHNocjd5anBNM0F2SDl6MGhLbUhYUW9vdjJGYkh3MGcxRkUwZDBtaFcxRDZabHhQWlBzeC1rZjY2ZW1hU3RiREt6RVdENlp2SElBTExmd2MyUWlad3Z2YkdpQU84Y0tIaUNXckZNUFJuNjI1QV9GS1ZB?oc=5",
-        "date": "Sun, 28 Jun 2026 19:41:29 GMT",
-        "source": "Projects Today"
+        "title": "ITC Hotels signs management agreement for 101-Key Welcomhotel In Gandhinagar",
+        "link": "https://news.google.com/rss/articles/CBMi2wFBVV95cUxQb1RUSF82MlcwME5MbnF0czlJRmhWMXBkZU0zbnVDMGJPc3BCcmpacktwMDNCbHhGUFhSS1hqX2ozcXNIMHhfY3RIY3JJMVFLUS1sZ2hPQUtjYkdLNldWc0ZXQWZVcHU5SGRmUkwxc3RfT0p2c0Q2enVYSS1YbnBZblpMai1NSGtiUFRlSWFHa3VlaFBIclV1VHZPUEFnSTZYM0lIUlBITEJLRGk3TnJfUXVoTC1YUTM5TFVOTndQLUoyZ0ZlU2JNeS1MbE5ud0xkeWgxNkM4TnpHa2fSAeIBQVVfeXFMT2s4UDY4aGtLUlJsUlFaaURLSEw3S1ZPSzRuWWZXU0Znd0g4Uy14S1FENVZoZ3dtZnpyYTFza0VlNmZqbHdWQnkyaE11NHVHeU9fQnRYVDV0ZWxROXJMbTNHSmdVZHE0eEJvc09kMzRuUmhmU2NyU0UxM01rYVFFbVBEeVl3WFVwTWJ2MS04cTJ0Q2tQTF95Z3ZiX3R4R0VTTUxoVWJLOG1OaDRoRlo2X1Iwa2VtVzgxakthU05mR2pZckVJMkZnbVhQaFMtcDRDTlhqU3JOTzV3VUdGLUFEd2R3UQ?oc=5",
+        "date": "Fri, 26 Jun 2026 13:18:11 GMT",
+        "source": "BusinessLine"
       },
       {
-        "title": "TCS Bags Multiyear Canada Life Contract",
-        "link": "https://news.google.com/rss/articles/CBMiggFBVV95cUxOb1kyWXRrNE5uaTF5Y05wOE1FVTlWOWRqb1AwZnVZZy1Hb1JYN21kcU9qMlVIYWxOejVnVWZILU1wTmc0ZkRFX1lHN1JITFk5QmdpeWlRcy0tSF9tS2d6YjFHWk5xX1Jud3dBaDVuZml6Wk1mTmFmVUQ5MFNvT0c1d3Bn?oc=5",
-        "date": "Tue, 30 Jun 2026 14:13:56 GMT",
-        "source": "Nearshore Americas"
+        "title": "New categories, India growth to drive Varun Beverages' revenue trajectory",
+        "link": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxOT2RkZE54TTBEUWFHcWlOVjIxT1BWaEFVUnFtWUQ1TzZMM3RGaE4wT3Fwc1lFRms5eXE2cDlDR1FhYV9QTE1MeTFsal9aV3FtX180TkpXV3dwVWhTQnpjeGpIaXpsblBoVmY4aG9wZDFXSmI4MlRnV2ZSZFBNQ3gtWHFoQ0QyYmg1NWF5Z2xzRVpia3k0QW5sNDBMbWIybzdBdkxzcVY2VndTNTNQdGtzcDVMb1VjYnRJU0JUV1hmSERIRlZXakNpeDFNMGFGRXVJZUZnMNIB2gFBVV95cUxQQkxQcEFjVmZnc0hWN2tyaHUwNlZGbkg1VXliUjNWTjVOa2xWTG5TWnd4cXZGWkVXTHpoRjVEQW9JVlNGSWpiLWhoSVZPRGZVY2xTWGxVd3QwLTlmTmZOZzB1MUpBWlo2ckhtcmpQSXVnYm9qek4yVFhyMURLaWV4Y2tBaHZYRTRpSWQzMGlVZ1JSQk8za2ptbG83bUctM01CVGFaVGtSRlF3MUV3T2lwVF9yYXpaUGZoc1pJRC1Qamt6aTRLVVZZczNYc2c0TW9GVzgya1YxYklOdw?oc=5",
+        "date": "Fri, 26 Jun 2026 14:22:08 GMT",
+        "source": "Business Standard"
       },
       {
-        "title": "Dixon Tech Up Almost 1% Intraday on Reports of Govt Approval Likely to Vivo Joint Venture",
-        "link": "https://news.google.com/rss/articles/CBMifkFVX3lxTE9sSEdDeUZ5NUt0NzI3YUE3QnlYbFRnQjlTMFBvT1lIZnc2bjNZWVRsSzRGOWlzWEgwWnhGaDJqaWYzd1BpeDdNcEhIRDducklpc1JkNHNRN2hBckZ1SEFEc0NtQjRmTzNNTVV3Y3NKYm0xS05PTW00NlZRMkNBQQ?oc=5",
-        "date": "Tue, 30 Jun 2026 09:10:04 GMT",
-        "source": "HDFC Sky"
+        "title": "ITC Hotels Signs Welcomhotel Karai Gandhinagar, Strengthens Presence in Gujarat",
+        "link": "https://news.google.com/rss/articles/CBMiywFBVV95cUxPa0VXbW9lRlFFLUlWQnc1eGhCUDQ4TFprcC1GZnFuRUszRTRFMVN3TUFzc3kyY2p6TWJJUmFNNUo1eTRKVUZ6SXRfUWlCS1Y5N1c5SFY3OGJhbl8zc000LWMxU2Q4NlhlWGFkSkxuRTFQR0hOSUpURXBuVnlSN1lsUklLU3BqTUUzcHBEUVFtUkdOU0FkZGVhQUhDaWtNMVljVXdMMUZNcTZ3MGo1VkszN0o3eWdCVHVhQWpTNDdyV2xvcjRiWlZjdnl5cw?oc=5",
+        "date": "Mon, 29 Jun 2026 07:53:00 GMT",
+        "source": "Hospitality Net"
       },
       {
         "title": "RITES, CONCOR sign MoU for logistics infrastructure consultancy",
@@ -3481,22 +3767,22 @@
         "source": "Maritime Gateway"
       },
       {
-        "title": "ITC Hotels signs management agreement for 101-Key Welcomhotel In Gandhinagar",
-        "link": "https://news.google.com/rss/articles/CBMi2wFBVV95cUxQb1RUSF82MlcwME5MbnF0czlJRmhWMXBkZU0zbnVDMGJPc3BCcmpacktwMDNCbHhGUFhSS1hqX2ozcXNIMHhfY3RIY3JJMVFLUS1sZ2hPQUtjYkdLNldWc0ZXQWZVcHU5SGRmUkwxc3RfT0p2c0Q2enVYSS1YbnBZblpMai1NSGtiUFRlSWFHa3VlaFBIclV1VHZPUEFnSTZYM0lIUlBITEJLRGk3TnJfUXVoTC1YUTM5TFVOTndQLUoyZ0ZlU2JNeS1MbE5ud0xkeWgxNkM4TnpHa2fSAeIBQVVfeXFMT2s4UDY4aGtLUlJsUlFaaURLSEw3S1ZPSzRuWWZXU0Znd0g4Uy14S1FENVZoZ3dtZnpyYTFza0VlNmZqbHdWQnkyaE11NHVHeU9fQnRYVDV0ZWxROXJMbTNHSmdVZHE0eEJvc09kMzRuUmhmU2NyU0UxM01rYVFFbVBEeVl3WFVwTWJ2MS04cTJ0Q2tQTF95Z3ZiX3R4R0VTTUxoVWJLOG1OaDRoRlo2X1Iwa2VtVzgxakthU05mR2pZckVJMkZnbVhQaFMtcDRDTlhqU3JOTzV3VUdGLUFEd2R3UQ?oc=5",
-        "date": "Fri, 26 Jun 2026 13:18:11 GMT",
-        "source": "BusinessLine"
+        "title": "NTPC signs MoU with NHPC, PTC and TCS",
+        "link": "https://news.google.com/rss/articles/CBMiekFVX3lxTE1LbHNocjd5anBNM0F2SDl6MGhLbUhYUW9vdjJGYkh3MGcxRkUwZDBtaFcxRDZabHhQWlBzeC1rZjY2ZW1hU3RiREt6RVdENlp2SElBTExmd2MyUWlad3Z2YkdpQU84Y0tIaUNXckZNUFJuNjI1QV9GS1ZB?oc=5",
+        "date": "Sun, 28 Jun 2026 19:41:29 GMT",
+        "source": "Projects Today"
       },
       {
-        "title": "New categories, India growth to drive Varun Beverages' revenue trajectory",
-        "link": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxOT2RkZE54TTBEUWFHcWlOVjIxT1BWaEFVUnFtWUQ1TzZMM3RGaE4wT3Fwc1lFRms5eXE2cDlDR1FhYV9QTE1MeTFsal9aV3FtX180TkpXV3dwVWhTQnpjeGpIaXpsblBoVmY4aG9wZDFXSmI4MlRnV2ZSZFBNQ3gtWHFoQ0QyYmg1NWF5Z2xzRVpia3k0QW5sNDBMbWIybzdBdkxzcVY2VndTNTNQdGtzcDVMb1VjYnRJU0JUV1hmSERIRlZXakNpeDFNMGFGRXVJZUZnMNIB2gFBVV95cUxQQkxQcEFjVmZnc0hWN2tyaHUwNlZGbkg1VXliUjNWTjVOa2xWTG5TWnd4cXZGWkVXTHpoRjVEQW9JVlNGSWpiLWhoSVZPRGZVY2xTWGxVd3QwLTlmTmZOZzB1MUpBWlo2ckhtcmpQSXVnYm9qek4yVFhyMURLaWV4Y2tBaHZYRTRpSWQzMGlVZ1JSQk8za2ptbG83bUctM01CVGFaVGtSRlF3MUV3T2lwVF9yYXpaUGZoc1pJRC1Qamt6aTRLVVZZczNYc2c0TW9GVzgya1YxYklOdw?oc=5",
-        "date": "Fri, 26 Jun 2026 14:22:08 GMT",
-        "source": "Business Standard"
+        "title": "TCS Bags Multiyear Canada Life Contract",
+        "link": "https://news.google.com/rss/articles/CBMiggFBVV95cUxOb1kyWXRrNE5uaTF5Y05wOE1FVTlWOWRqb1AwZnVZZy1Hb1JYN21kcU9qMlVIYWxOejVnVWZILU1wTmc0ZkRFX1lHN1JITFk5QmdpeWlRcy0tSF9tS2d6YjFHWk5xX1Jud3dBaDVuZml6Wk1mTmFmVUQ5MFNvT0c1d3Bn?oc=5",
+        "date": "Tue, 30 Jun 2026 14:13:56 GMT",
+        "source": "Nearshore Americas"
       },
       {
-        "title": "ITC Hotels Signs Welcomhotel Karai Gandhinagar, Strengthens Presence in Gujarat",
-        "link": "https://news.google.com/rss/articles/CBMiywFBVV95cUxPa0VXbW9lRlFFLUlWQnc1eGhCUDQ4TFprcC1GZnFuRUszRTRFMVN3TUFzc3kyY2p6TWJJUmFNNUo1eTRKVUZ6SXRfUWlCS1Y5N1c5SFY3OGJhbl8zc000LWMxU2Q4NlhlWGFkSkxuRTFQR0hOSUpURXBuVnlSN1lsUklLU3BqTUUzcHBEUVFtUkdOU0FkZGVhQUhDaWtNMVljVXdMMUZNcTZ3MGo1VkszN0o3eWdCVHVhQWpTNDdyV2xvcjRiWlZjdnl5cw?oc=5",
-        "date": "Mon, 29 Jun 2026 07:53:00 GMT",
-        "source": "Hospitality Net"
+        "title": "Dixon Tech Up Almost 1% Intraday on Reports of Govt Approval Likely to Vivo Joint Venture",
+        "link": "https://news.google.com/rss/articles/CBMifkFVX3lxTE9sSEdDeUZ5NUt0NzI3YUE3QnlYbFRnQjlTMFBvT1lIZnc2bjNZWVRsSzRGOWlzWEgwWnhGaDJqaWYzd1BpeDdNcEhIRDducklpc1JkNHNRN2hBckZ1SEFEc0NtQjRmTzNNTVV3Y3NKYm0xS05PTW00NlZRMkNBQQ?oc=5",
+        "date": "Tue, 30 Jun 2026 09:10:04 GMT",
+        "source": "HDFC Sky"
       },
       {
         "title": "RITES and CONCOR Sign MOU for Logistics Infrastructure Support to Optimize 60+ Terminal Operations",
@@ -3681,6 +3967,54 @@
     ],
     "product_launches": [
       {
+        "company": "Larsen & Toubro (L&T)",
+        "product": "LBank Unveils Q2 2026 Report, Featuring 25 Million Users and Advances in Prediction Markets and Cultural IP",
+        "industry": "big_cap_industries",
+        "date": "Thu, 02 Jul 2026 07:00:00 GMT",
+        "source": "Carroll County Mirror-Democrat",
+        "link": "https://news.google.com/rss/articles/CBMitwFBVV95cUxNcndZX3VraGR5U3VMc1dpdnhNRzBQa0pLTmdYTGdMUnpNamhmYmUzUVFHVmxYX213YWQwSlA0THRNUjhubnp3MkNwVFdTdmZYTVRlelRhNERwYlpTMTd4SFUtYlc5eXVoTl9fN0Zqcm9qYTJkUE5OYU1XN1dOYlE2UTVCN0RkbGVxbmxyUXJJZFY2WnFjWDRvSi1EanYxZlJIcTl0d1ZKdXFac21SczlOU2tKV0N2dGc?oc=5"
+      },
+      {
+        "company": "Dixon Technologies",
+        "product": "Dixon Technologies shares: Four factors why JM Financial upgraded the EMS stock",
+        "industry": "surveillance_security",
+        "date": "Wed, 01 Jul 2026 22:52:18 GMT",
+        "source": "MSN",
+        "link": "https://news.google.com/rss/articles/CBMi5AJBVV95cUxNelhKVU9oclRoVVI3ZlV4NFlEaXB2SXNXdjFQMm9aYzZCTUtuc056OHB6bWwtZ1Q3TF9vbGRUWHFKYzhGeVc3SWtpUFg0b0hTdEszZUt2cklTendMWVNFcXhKVFg5UGw5ODI4dnVSdWl1M0doSTZ6X2psS3ZsRktlREZlaDZTNU9Jenk4NUNEUW00VGRKanpCdzVSblB5R2U2a0tlbDhQM25aYlFMdDFMeWdMM3hyeUtsZUYzaHhub2lTTE90YlVDd2Jaay1wWnBNazgzcXhHUk1hbEE2MFZ1Tkh6N2ZLZ0pjcVE2MHllYUllMUNnLXZ0aUh0a2c3MkQ5dGtYcU9HMW5iRDE1UTE1dXg0ZjBHZ3IwMXJLamdfMC0xTF90WV9Da3ctZUpzTUxwRjdXb1VMMG8yaUtXVUZLcmxjUVNTQWNhcF9YMkpHQ0tvcTg1M0Fwd0tpTFJkNDdWT3UzVw?oc=5"
+      },
+      {
+        "company": "Unknown",
+        "product": "PMI Kids World unveils ‘Super Goal’ collectible line ahead of FIFA World Cup",
+        "industry": "Manufacturing",
+        "date": "Thu, 02 Jul 2026 21:09:14 GMT",
+        "source": "Vegas Sports Today |",
+        "link": "https://news.google.com/rss/articles/CBMipwFBVV95cUxPZW5ESkYwSXNNa0llVVRIWkMzb0pZTEdPcWlrRXVfcjB1c3BsVGNHakMtREV4UUJUeWFqcG1uZUlNRFVtVExSUzc0RWJfRDVXRUdJNHNFR0VDSDlfSFF4VnE4MUJPcC1pV2VOdlRobnJHUklqVkhSaVFPV3ppYmg5dzMyZ1U2cTUxVjZTNDQ3M3JKbE5FbEdMaXNfV3JnS3FBTEFqakpHVQ?oc=5"
+      },
+      {
+        "company": "ITC Ltd",
+        "product": "ITC Hotels unveils 63-key Fortune Lakeview Bhimtal in Uttarakhand",
+        "industry": "fmcg",
+        "date": "Thu, 02 Jul 2026 05:30:00 GMT",
+        "source": "ET Hospitality",
+        "link": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxQdzVJcFFuX1AtQVZqQ1RsOTdEVlRZOGhFQm1nVnlvRWJRQzB1T2FwYWNhd1JpSUlQVUpkNmV6aW9pVVRkUjJQcm1tWU03NDgwVHNMUDhKNmdyQW80OXBCNko0am5tbnFhYjNzcVU5X04tUjRReXJjem5BdXkzUmpTa05IOGNZRXhnZUpsOHcxY29CcThGVjd3dGRMdUppeENOQnJwcEFtRWZIOHp1VW5yQTdjLWVKbkJaYjJ1aDVYQWt3WVFMa1hTeHVmRWNNLU9GcVHSAdcBQVVfeXFMUFNub2VlaV9nc3ZOZ05GcWZyVkNzVzMzN1k4OFlia0VnNTZBUXNKSTIzYk1FQm5Gd1kwS3liR25fRmh6MC1mMnBUc0kxSFJlTGhWUXhpekd0U00zNFcwZ0RXdlFtRFZtdlY5SWpBVWtBeC16aDAtcFlYeTltaHlpZ1NIT0FlNWRGODhIQnRTUGsxdUYyeFJuUThZSXNyalY0SWJXYmMyM05Wa0pxQ3kxbXVSczFZblk5YkQ1ZXlnTDY5RUtVTzBpNmVMb0k4alB2V19zS3pBZ1U?oc=5"
+      },
+      {
+        "company": "ITC Ltd",
+        "product": "ITC Hotels launches Welcomhotel in Gandhinagar",
+        "industry": "fmcg",
+        "date": "Fri, 26 Jun 2026 18:42:49 GMT",
+        "source": "BigInfo.in",
+        "link": "https://news.google.com/rss/articles/CBMiekFVX3lxTE9kVXNVeXFJZmhDSWszN29WRjZZZzRSSDRDcnNvTGV2VVJmcTMtSE40VFZGaktNMUhMVW5SVW03TUdDZnFSMm1uMlpxQVgtMzVaYW1XUzFFdlNNSVZWOFlYXzU3Z1Zaay00eEJJRmEydjhjWHM0Tzlwa2hB?oc=5"
+      },
+      {
+        "company": "Unknown",
+        "product": "130 Infantry Battalion (TA) undertakes Plantation Drive in Deval Village",
+        "industry": "Manufacturing",
+        "date": "Wed, 01 Jul 2026 18:29:57 GMT",
+        "source": "Garhwal Post",
+        "link": "https://news.google.com/rss/articles/CBMimgFBVV95cUxOME9kc0JSYjFMTk1RMzRKM1ozd0hJVWZfaEZDN19BTndEUlJaVXJBWjNvMDBBWXlISV9MV294UXdTa3hiSTVmaTdQcEJUZExuMFVVNGhxTmRYVjhEVFJCWm5zT0ZmeHZtSklOZzZnOG16Z0JiRTFsY0o1M2diN2NCVVlNbVhrMnY2aUtmVjdadU0yTHl2MlRkbTJn?oc=5"
+      },
+      {
         "company": "Container Corporation of India",
         "product": "Top stocks in news: HDFC Bank, RITES, YES Bank, Concor, Axis Bank, SW Solar, Afcons Infra",
         "industry": "logistics_heavy_capital",
@@ -3711,54 +4045,6 @@
         "date": "Sun, 28 Jun 2026 03:29:12 GMT",
         "source": "The Economic Times",
         "link": "https://news.google.com/rss/articles/CBMi6AFBVV95cUxOd3I0S2VaS2dGTndWUnM3YlJjWUVSTy1zcFYzYkNjdG8xRHBKX1RxOHQ2NUZ5WEtxbU9ObU9CcU9IRng3MVlla0tobEVaWU9hM0NEMEhMcUNsTzVoYk4tQTdmb3hyTzRBT2FqLWh2eWZHUnhNSjBLX1JfN2ZZc09tVVotUWE5Uzk3cEJEQkY1M0ZWZXdDZW5BdFJuRUhualJ1SFVINndpZGJnMklVRHRwb3JfZUJ4WWpXWGZ4XzVPSG5Tb3NEUHJfcWZyS1dsZk5jX1hjMUJNQlI0a2F1dEUtS3phQTU5MGVl0gHuAUFVX3lxTFAtbllrSjBTZkJxa2dCVU9XZW8zTjhQTHhSVUtZVnJJd2k2SnpLRjZ1TUE2V0RCdVVBRXFnR2hXbkxMRC1wNThLeExrak5pSEp5cTVuYjRsdGktSWxQVi12TlUtZVkzdV9TREZtYkx0Z0pDN0VNVEcweXR3MlNqRXZES01sNTEyZkg2aExSWUV1ZnhPTlZQT19OdkpoV1RYbXpkQXZaOUFDRk1wdXotX29LeGcwdzhzMnBhU0xFY3N5azFaejZOMTNaSC1tV2dZVXdnV1R4RTA1UXU0NUQxelJfNkpZUUVaaFFSSDFRWHc?oc=5"
-      },
-      {
-        "company": "ITC Ltd",
-        "product": "ITC Hotels unveils 63-key Fortune Lakeview Bhimtal in Uttarakhand",
-        "industry": "fmcg",
-        "date": "Thu, 02 Jul 2026 05:30:00 GMT",
-        "source": "ET Hospitality",
-        "link": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxQdzVJcFFuX1AtQVZqQ1RsOTdEVlRZOGhFQm1nVnlvRWJRQzB1T2FwYWNhd1JpSUlQVUpkNmV6aW9pVVRkUjJQcm1tWU03NDgwVHNMUDhKNmdyQW80OXBCNko0am5tbnFhYjNzcVU5X04tUjRReXJjem5BdXkzUmpTa05IOGNZRXhnZUpsOHcxY29CcThGVjd3dGRMdUppeENOQnJwcEFtRWZIOHp1VW5yQTdjLWVKbkJaYjJ1aDVYQWt3WVFMa1hTeHVmRWNNLU9GcVHSAdcBQVVfeXFMUFNub2VlaV9nc3ZOZ05GcWZyVkNzVzMzN1k4OFlia0VnNTZBUXNKSTIzYk1FQm5Gd1kwS3liR25fRmh6MC1mMnBUc0kxSFJlTGhWUXhpekd0U00zNFcwZ0RXdlFtRFZtdlY5SWpBVWtBeC16aDAtcFlYeTltaHlpZ1NIT0FlNWRGODhIQnRTUGsxdUYyeFJuUThZSXNyalY0SWJXYmMyM05Wa0pxQ3kxbXVSczFZblk5YkQ1ZXlnTDY5RUtVTzBpNmVMb0k4alB2V19zS3pBZ1U?oc=5"
-      },
-      {
-        "company": "ITC Ltd",
-        "product": "ITC Hotels launches Welcomhotel in Gandhinagar",
-        "industry": "fmcg",
-        "date": "Fri, 26 Jun 2026 18:42:49 GMT",
-        "source": "BigInfo.in",
-        "link": "https://news.google.com/rss/articles/CBMiekFVX3lxTE9kVXNVeXFJZmhDSWszN29WRjZZZzRSSDRDcnNvTGV2VVJmcTMtSE40VFZGaktNMUhMVW5SVW03TUdDZnFSMm1uMlpxQVgtMzVaYW1XUzFFdlNNSVZWOFlYXzU3Z1Zaay00eEJJRmEydjhjWHM0Tzlwa2hB?oc=5"
-      },
-      {
-        "company": "Unknown",
-        "product": "130 Infantry Battalion (TA) undertakes Plantation Drive in Deval Village",
-        "industry": "Manufacturing",
-        "date": "Wed, 01 Jul 2026 18:29:57 GMT",
-        "source": "Garhwal Post",
-        "link": "https://news.google.com/rss/articles/CBMimgFBVV95cUxOME9kc0JSYjFMTk1RMzRKM1ozd0hJVWZfaEZDN19BTndEUlJaVXJBWjNvMDBBWXlISV9MV294UXdTa3hiSTVmaTdQcEJUZExuMFVVNGhxTmRYVjhEVFJCWm5zT0ZmeHZtSklOZzZnOG16Z0JiRTFsY0o1M2diN2NCVVlNbVhrMnY2aUtmVjdadU0yTHl2MlRkbTJn?oc=5"
-      },
-      {
-        "company": "Larsen & Toubro (L&T)",
-        "product": "LBank Unveils Q2 2026 Report, Featuring 25 Million Users and Advances in Prediction Markets and Cultural IP",
-        "industry": "big_cap_industries",
-        "date": "Thu, 02 Jul 2026 07:00:00 GMT",
-        "source": "Carroll County Mirror-Democrat",
-        "link": "https://news.google.com/rss/articles/CBMitwFBVV95cUxNcndZX3VraGR5U3VMc1dpdnhNRzBQa0pLTmdYTGdMUnpNamhmYmUzUVFHVmxYX213YWQwSlA0THRNUjhubnp3MkNwVFdTdmZYTVRlelRhNERwYlpTMTd4SFUtYlc5eXVoTl9fN0Zqcm9qYTJkUE5OYU1XN1dOYlE2UTVCN0RkbGVxbmxyUXJJZFY2WnFjWDRvSi1EanYxZlJIcTl0d1ZKdXFac21SczlOU2tKV0N2dGc?oc=5"
-      },
-      {
-        "company": "Dixon Technologies",
-        "product": "Dixon Technologies shares: Four factors why JM Financial upgraded the EMS stock",
-        "industry": "surveillance_security",
-        "date": "Wed, 01 Jul 2026 22:52:18 GMT",
-        "source": "MSN",
-        "link": "https://news.google.com/rss/articles/CBMi5AJBVV95cUxNelhKVU9oclRoVVI3ZlV4NFlEaXB2SXNXdjFQMm9aYzZCTUtuc056OHB6bWwtZ1Q3TF9vbGRUWHFKYzhGeVc3SWtpUFg0b0hTdEszZUt2cklTendMWVNFcXhKVFg5UGw5ODI4dnVSdWl1M0doSTZ6X2psS3ZsRktlREZlaDZTNU9Jenk4NUNEUW00VGRKanpCdzVSblB5R2U2a0tlbDhQM25aYlFMdDFMeWdMM3hyeUtsZUYzaHhub2lTTE90YlVDd2Jaay1wWnBNazgzcXhHUk1hbEE2MFZ1Tkh6N2ZLZ0pjcVE2MHllYUllMUNnLXZ0aUh0a2c3MkQ5dGtYcU9HMW5iRDE1UTE1dXg0ZjBHZ3IwMXJLamdfMC0xTF90WV9Da3ctZUpzTUxwRjdXb1VMMG8yaUtXVUZLcmxjUVNTQWNhcF9YMkpHQ0tvcTg1M0Fwd0tpTFJkNDdWT3UzVw?oc=5"
-      },
-      {
-        "company": "Unknown",
-        "product": "PMI Kids World unveils ‘Super Goal’ collectible line ahead of FIFA World Cup",
-        "industry": "Manufacturing",
-        "date": "Thu, 02 Jul 2026 21:09:14 GMT",
-        "source": "Vegas Sports Today |",
-        "link": "https://news.google.com/rss/articles/CBMipwFBVV95cUxPZW5ESkYwSXNNa0llVVRIWkMzb0pZTEdPcWlrRXVfcjB1c3BsVGNHakMtREV4UUJUeWFqcG1uZUlNRFVtVExSUzc0RWJfRDVXRUdJNHNFR0VDSDlfSFF4VnE4MUJPcC1pV2VOdlRobnJHUklqVkhSaVFPV3ppYmg5dzMyZ1U2cTUxVjZTNDQ3M3JKbE5FbEdMaXNfV3JnS3FBTEFqakpHVQ?oc=5"
       },
       {
         "company": "Unknown",
@@ -4064,6 +4350,62 @@
         "link": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxQQklnZm1lMGFmTFF5NFRKekNjYnFQVkE2VXdPMUxiUXozdXVldXB3Q1IyX0J2X043VWxRelRicjNJMmZvRVVsUFpvMVBVekhlSnRWQk9ZRWJMeVlTS240NkctVkRpWG5rTzNnQ0JKMzQ2WTlBcTVSVVR0YzgxRGVwZ1E0MVRvS2hkb3AzLW5XT1FaS3JjZDNBVDF0QUh3VUxLODFpcTNTdUd3bzBDT2NOOW5jTEI3bmk4WnVqbWNZV2F6YXc5STZGc3VONlkxRndJUkJSOTBPa1J1NDltRmJJ?oc=5"
       },
       {
+        "company": "Unknown",
+        "filing": "What does extension of PepsiCo's agreement mean for Varun Beverages?",
+        "industry": "Corporate",
+        "date": "Fri, 22 May 2026 07:00:00 GMT",
+        "source": "Upstox",
+        "link": "https://news.google.com/rss/articles/CBMitAFBVV95cUxObEZqZllKa1d0RHF4NG5TbERjT0d4XzVkNnRpYmQwcHhYVHFqQU1RMURQUmtqQk9vcTlWVjVTZEI3WnA2bXZzaDBkM0xYZTJYN0U2bFVPY2M2eVM3blJlMVl4TmExbVpjUDRLYTRDYWdCUTFlY2liZnplU24xOFp2cDNlOUhwMzVuQXBxay1tOXIwQ0Z3ZWFKN1I3Z0p1RjMzT3VZUDVkRlFIcHhEeEJzLTNjNTQ?oc=5"
+      },
+      {
+        "company": "ITC Ltd",
+        "filing": "ITC Hotels Q4 profit up 23% at ₹317 cr; to acquire Zuri Hotels and Resorts",
+        "industry": "fmcg",
+        "date": "Fri, 15 May 2026 07:00:00 GMT",
+        "source": "Business Standard",
+        "link": "https://news.google.com/rss/articles/CBMi6AFBVV95cUxNNXljYjNjR241QjhtUjhyTEtmd1FUU2M2SW1QTDVqbE03RFpyNnFqaG1qX0trYlpSQ29MNGRSYXVpY1drelRvZlJ6U2hiOWZ5eTJlN2tsR19ySzdpanFpZXBHc0pMV3F6a1lBMVZqdzU5ZWxoUWI4UHVYelhMYTRScmFEakJVdDFOc1E1dHZVZVQtNlRPbERNeU5ZOGNkdzVoOERTc1pkeUZ5WVNpWkNnRkxyM3N1V1JYcUg1WDk0bzMxVmg0TjltWEVkLVFPeTZ0THV0NGZNZl9Ya2RXZTFOb0RieFNjcDJX0gHuAUFVX3lxTE9RVEZhZFdfLW5xVTZ4QjhkN1c3am1DemNBcFJHS0kxeGh3WnI5OFZlUWxMSFhuc2hfb182SEFxTlA5VjM3NmZ2UUg1X0M3M3Fma2lyX0wzQmZ0bkI0RGhQeG9POFdhMWZ2UE9NTXlsaEoxbmtlM1B1UlJDZ1BkTXAxcVEta2NNT0M0ZUZlbHNJMlh2VDg5MklYcDdtNDBaOTBwSXJ5djg5cy1FTXZnVHd1ZmZjMk9hT1BPN2dMY1JMSGd6cXg2bGVUa2dkcDhUU28zMk56QmN5b0U3ZUphTkxiSlFDc1RJTEJmSXNSVVE?oc=5"
+      },
+      {
+        "company": "Unknown",
+        "filing": "Happiest Minds Technologies Issues Official Clarification on Acquisition Reports",
+        "industry": "Corporate",
+        "date": "Fri, 20 Mar 2026 07:00:00 GMT",
+        "source": "scanx.trade",
+        "link": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxNOHVUa001QjhnaTJmNUYtcXNtaTBzMTI0aUV6M05DdEpBZjdKenAydjhCd0Y3SE5EZ19QQ3JabGJ2aF9DUWFBV2ppekhxZTZqVERKYUxzOXhWUmZUcWtKdWY4YWNSSFZkT3JHNDZmSDZWcVUwWkE0bjRvQ3NjakFtQmNQRl9CY192V252ZFI1Mk1hUTRSRTJaQmZCSHVlRDA5ajNaQk9xdlA2bExFWjV4d2lfQ0ZoSjF1X3dOWGFEek5QRmxOZ3hJbEtZVGVodkJN?oc=5"
+      },
+      {
+        "company": "Bharat Electronics",
+        "filing": "Astra Microwave, BEL Sign MoU for Defence Electronics",
+        "industry": "aerospace_defence",
+        "date": "Fri, 26 Dec 2025 08:00:00 GMT",
+        "source": "HDFC Sky",
+        "link": "https://news.google.com/rss/articles/CBMihwFBVV95cUxOTXhtR0JBd21xdTVGdm1DQ3NkM1JhYVB3OVR2U3hhd1lYMGdUWXJxb04xUlJGdmxDa094ZGZfaWYzYnhreklBTWVucVNMdF9TaFpaVlRpeFJkaXhpNXB3VUhvYXZHdzl3T1ZITHVuYV9zckh3eXZsRDN4TkR5dU55QWVfVUticGc?oc=5"
+      },
+      {
+        "company": "Bharat Electronics",
+        "filing": "BEL Signs MoU with SASMOS; Shares Drop 3%",
+        "industry": "aerospace_defence",
+        "date": "Mon, 09 Mar 2026 07:00:00 GMT",
+        "source": "Equitypandit",
+        "link": "https://news.google.com/rss/articles/CBMieEFVX3lxTE83WGR6RlMydnc0aFZERVViVzNGS1o0M1NNV3hMdmxIcnFEZkNlMXJRaGpaVkw4UXdTdG0zYjlfaV8wMjd0TTUxTldfTTNQRU9sRDFkal9TM2tJQmRrbU45WWhnZ3VHT0MzX0JGNWRpSnlpMzdDUUtSUQ?oc=5"
+      },
+      {
+        "company": "Bharat Electronics",
+        "filing": "BEL approves JV with French company Safran for HAMMER Weapon System",
+        "industry": "aerospace_defence",
+        "date": "Mon, 16 Feb 2026 08:00:00 GMT",
+        "source": "ANI News",
+        "link": "https://news.google.com/rss/articles/CBMiugFBVV95cUxOOXRNb2g3Q3VZQ2lEVnhHU251U21KTWlFVk94Z3pqd1F6T0swbU11dnIxRER4S08zdlptci1fbmtRbmpGdTlvRGlSYldLbHBPby0yZEpGRnhkaE45WEhzTUMtOWxQb19kclNsYmpLbDYxbzluOFFqMjFVdU5QNjBTZzAtZDRDVGU0NEJEaG5veGlpSmZ0ak5VTVdFZ1ZqamNjQlE1TnpPRlVHRUtEanNXOFZHWl9ldzFHZVE?oc=5"
+      },
+      {
+        "company": "Arvind Ltd",
+        "filing": "Arvind shares zoom 13% to hit 52-week high; check what's powering the move",
+        "industry": "textiles_apparel",
+        "date": "Thu, 07 May 2026 07:00:00 GMT",
+        "source": "Business Standard",
+        "link": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxQaDhGNFhQTkJZS3JiZ04yQ19Uelo4RlNsdktYRW5fZHFwYWl2WVRYeFN0ZzZJTmpXaE9BRXF6WEJIQllGZU9fMjJPQUtRaWh4YU0zUU43YmRETDJtZHJFbkUtY0R3ZXdOcHQ5LU5QZnhEWE45OVg2Znh5UjcxY0VUTXV0VjN5cnRvakUyWVhBVFhrNkFFemdfSWNzREluQnBhMzZYLXpMTjJFTDBGQnZvZWtKU0R0TjJndFFXZTJiN2t3XzAzN3NjY0o3VG5iajdHNEh2bGRn0gHbAUFVX3lxTE5iNE9hYV9NejBONjNTcjdoVmRMUkhReHd0b0RWdlhMNWxJYjVIWG1Tai1sQ0xhUUhEZTVubnB0QmdQV2pjc2RsUTlmU3Y5TkZSVVNIUExEdXhiSUQxSkY0NUh4YURBY1kwSXYxTGRGT2xhNzRjVnBkbENoUHU2NVdfY2VFc1NhdnZWa0M4c0h2djR3eWFqdWFnWDNQdkdTbkZObTZmNGp0bzJ6NDJnSFBDcjdzMGJua05uWjdoNEJYN0kwRFFYYzJKdHF1ZGthTnBvR2xjRnBiTm5HNA?oc=5"
+      },
+      {
         "company": "Dixon Technologies",
         "filing": "Dixon to BEL",
         "industry": "surveillance_security",
@@ -4110,46 +4452,6 @@
         "date": "Tue, 17 Mar 2026 07:00:00 GMT",
         "source": "Business Standard",
         "link": "https://news.google.com/rss/articles/CBMizgFBVV95cUxPc3FidHBjQUFiVXZ4UGEwaUtBeEdtZTVSMW9iSmVjODBQU0QydkhxOXR4dnFwb0ZWaEw0VTRROGIyeVBlMDlGMFFZbmlfMFlfTUl0OE5taWdpRDRnMEE4LXl3VTE4dXpmblhHYUFaZkhkVS1pdlhqbEhOeTg3eUJ0b2h2SENuQXczWkdYZ25pdXRYRlhkc3FSdU85alE2WXNELVpjdlY3YjZ0S2NjRHNocm54c3N0RXFTTGs2Y0tFb2xGZ01hVlV3OFpJS0tWd9IB0wFBVV95cUxORTdWYzhXQnhUYVRYMEdyLUE0Z0p4Y1NsYVdFY1RPLTFWbjAyS2hySFVFOTlYM2Rxb0Y1WXVGNFVwRlFNejhUZDlub0pFcFF6bFUwMEFuaFFwVUJ0VWdFMVZISGNOTzZraGZvam1fUnNLMEx4WWFzVXc1UE1zZG44U0ZUQ0pWUnFKOHJCNTk5TEpTbmh0MWFpV1hIX1dWWURhXzRUcnJHVURMVmhfUkxVTGpuYjFmYkY4V0pTVndqWjh1MmI1SGxpVHdNTzd4TEFpeEZN?oc=5"
-      },
-      {
-        "company": "Bharat Electronics",
-        "filing": "Astra Microwave, BEL Sign MoU for Defence Electronics",
-        "industry": "aerospace_defence",
-        "date": "Fri, 26 Dec 2025 08:00:00 GMT",
-        "source": "HDFC Sky",
-        "link": "https://news.google.com/rss/articles/CBMihwFBVV95cUxOTXhtR0JBd21xdTVGdm1DQ3NkM1JhYVB3OVR2U3hhd1lYMGdUWXJxb04xUlJGdmxDa094ZGZfaWYzYnhreklBTWVucVNMdF9TaFpaVlRpeFJkaXhpNXB3VUhvYXZHdzl3T1ZITHVuYV9zckh3eXZsRDN4TkR5dU55QWVfVUticGc?oc=5"
-      },
-      {
-        "company": "Unknown",
-        "filing": "What does extension of PepsiCo's agreement mean for Varun Beverages?",
-        "industry": "Corporate",
-        "date": "Fri, 22 May 2026 07:00:00 GMT",
-        "source": "Upstox",
-        "link": "https://news.google.com/rss/articles/CBMitAFBVV95cUxObEZqZllKa1d0RHF4NG5TbERjT0d4XzVkNnRpYmQwcHhYVHFqQU1RMURQUmtqQk9vcTlWVjVTZEI3WnA2bXZzaDBkM0xYZTJYN0U2bFVPY2M2eVM3blJlMVl4TmExbVpjUDRLYTRDYWdCUTFlY2liZnplU24xOFp2cDNlOUhwMzVuQXBxay1tOXIwQ0Z3ZWFKN1I3Z0p1RjMzT3VZUDVkRlFIcHhEeEJzLTNjNTQ?oc=5"
-      },
-      {
-        "company": "ITC Ltd",
-        "filing": "ITC Hotels Q4 profit up 23% at ₹317 cr; to acquire Zuri Hotels and Resorts",
-        "industry": "fmcg",
-        "date": "Fri, 15 May 2026 07:00:00 GMT",
-        "source": "Business Standard",
-        "link": "https://news.google.com/rss/articles/CBMi6AFBVV95cUxNNXljYjNjR241QjhtUjhyTEtmd1FUU2M2SW1QTDVqbE03RFpyNnFqaG1qX0trYlpSQ29MNGRSYXVpY1drelRvZlJ6U2hiOWZ5eTJlN2tsR19ySzdpanFpZXBHc0pMV3F6a1lBMVZqdzU5ZWxoUWI4UHVYelhMYTRScmFEakJVdDFOc1E1dHZVZVQtNlRPbERNeU5ZOGNkdzVoOERTc1pkeUZ5WVNpWkNnRkxyM3N1V1JYcUg1WDk0bzMxVmg0TjltWEVkLVFPeTZ0THV0NGZNZl9Ya2RXZTFOb0RieFNjcDJX0gHuAUFVX3lxTE9RVEZhZFdfLW5xVTZ4QjhkN1c3am1DemNBcFJHS0kxeGh3WnI5OFZlUWxMSFhuc2hfb182SEFxTlA5VjM3NmZ2UUg1X0M3M3Fma2lyX0wzQmZ0bkI0RGhQeG9POFdhMWZ2UE9NTXlsaEoxbmtlM1B1UlJDZ1BkTXAxcVEta2NNT0M0ZUZlbHNJMlh2VDg5MklYcDdtNDBaOTBwSXJ5djg5cy1FTXZnVHd1ZmZjMk9hT1BPN2dMY1JMSGd6cXg2bGVUa2dkcDhUU28zMk56QmN5b0U3ZUphTkxiSlFDc1RJTEJmSXNSVVE?oc=5"
-      },
-      {
-        "company": "Unknown",
-        "filing": "Happiest Minds Technologies Issues Official Clarification on Acquisition Reports",
-        "industry": "Corporate",
-        "date": "Fri, 20 Mar 2026 07:00:00 GMT",
-        "source": "scanx.trade",
-        "link": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxNOHVUa001QjhnaTJmNUYtcXNtaTBzMTI0aUV6M05DdEpBZjdKenAydjhCd0Y3SE5EZ19QQ3JabGJ2aF9DUWFBV2ppekhxZTZqVERKYUxzOXhWUmZUcWtKdWY4YWNSSFZkT3JHNDZmSDZWcVUwWkE0bjRvQ3NjakFtQmNQRl9CY192V252ZFI1Mk1hUTRSRTJaQmZCSHVlRDA5ajNaQk9xdlA2bExFWjV4d2lfQ0ZoSjF1X3dOWGFEek5QRmxOZ3hJbEtZVGVodkJN?oc=5"
-      },
-      {
-        "company": "Arvind Ltd",
-        "filing": "Arvind shares zoom 13% to hit 52-week high; check what's powering the move",
-        "industry": "textiles_apparel",
-        "date": "Thu, 07 May 2026 07:00:00 GMT",
-        "source": "Business Standard",
-        "link": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxQaDhGNFhQTkJZS3JiZ04yQ19Uelo4RlNsdktYRW5fZHFwYWl2WVRYeFN0ZzZJTmpXaE9BRXF6WEJIQllGZU9fMjJPQUtRaWh4YU0zUU43YmRETDJtZHJFbkUtY0R3ZXdOcHQ5LU5QZnhEWE45OVg2Znh5UjcxY0VUTXV0VjN5cnRvakUyWVhBVFhrNkFFemdfSWNzREluQnBhMzZYLXpMTjJFTDBGQnZvZWtKU0R0TjJndFFXZTJiN2t3XzAzN3NjY0o3VG5iajdHNEh2bGRn0gHbAUFVX3lxTE5iNE9hYV9NejBONjNTcjdoVmRMUkhReHd0b0RWdlhMNWxJYjVIWG1Tai1sQ0xhUUhEZTVubnB0QmdQV2pjc2RsUTlmU3Y5TkZSVVNIUExEdXhiSUQxSkY0NUh4YURBY1kwSXYxTGRGT2xhNzRjVnBkbENoUHU2NVdfY2VFc1NhdnZWa0M4c0h2djR3eWFqdWFnWDNQdkdTbkZObTZmNGp0bzJ6NDJnSFBDcjdzMGJua05uWjdoNEJYN0kwRFFYYzJKdHF1ZGthTnBvR2xjRnBiTm5HNA?oc=5"
       },
       {
         "company": "Unknown",
@@ -4464,6 +4766,34 @@
         }
       },
       {
+        "ticker": "BEL",
+        "name": "Bharat Electronics",
+        "owner_earnings": 0.0,
+        "moat": "Strong (Wide Moat)",
+        "moat_status": "Strong (Wide Moat)",
+        "retained_earnings_ratio": 1.2,
+        "passed_retained_test": true,
+        "score": {
+          "overall_score": 28,
+          "confidence": "Medium",
+          "reasons": [
+            "Capacity/Product Launch: BEL bags additional orders worth Rs 1,081 crore",
+            "Policy Notification: Astra Microwave, BEL Sign MoU for Defence Electronics",
+            "Policy Notification: BEL Signs MoU with SASMOS; Shares Drop 3%",
+            "Policy Notification: BEL approves JV with French company Safran for HAMMER Weapon System",
+            "Policy Notification: BEL shares jump 2% amid weak market; latest buzz you need to know",
+            "Policy Notification: Motilal Oswal bullish on defence sector; BEL top pick for 20% upside",
+            "High Return on Capital (ROCE: 36.5%)",
+            "High Return on Equity (ROE: 27.6%)",
+            "Wide Economic Moat (Sustained Margin Expansion)"
+          ],
+          "risks": [],
+          "recommendations": [
+            "Strong Buy Candidate"
+          ]
+        }
+      },
+      {
         "ticker": "SUZLON",
         "name": "Suzlon Energy",
         "owner_earnings": 0.0,
@@ -4541,32 +4871,6 @@
             "High Return on Equity (ROE: 29.3%)",
             "Wide Economic Moat (Sustained Margin Expansion)",
             "Undervalued vs Graham Intrinsic Value (559.0)"
-          ],
-          "risks": [],
-          "recommendations": [
-            "Strong Buy Candidate"
-          ]
-        }
-      },
-      {
-        "ticker": "BEL",
-        "name": "Bharat Electronics",
-        "owner_earnings": 0.0,
-        "moat": "Strong (Wide Moat)",
-        "moat_status": "Strong (Wide Moat)",
-        "retained_earnings_ratio": 1.2,
-        "passed_retained_test": true,
-        "score": {
-          "overall_score": 20,
-          "confidence": "Medium",
-          "reasons": [
-            "Capacity/Product Launch: BEL bags additional orders worth Rs 1,081 crore",
-            "Policy Notification: Astra Microwave, BEL Sign MoU for Defence Electronics",
-            "Policy Notification: BEL shares jump 2% amid weak market; latest buzz you need to know",
-            "Policy Notification: Motilal Oswal bullish on defence sector; BEL top pick for 20% upside",
-            "High Return on Capital (ROCE: 36.5%)",
-            "High Return on Equity (ROE: 27.6%)",
-            "Wide Economic Moat (Sustained Margin Expansion)"
           ],
           "risks": [],
           "recommendations": [
@@ -4857,6 +5161,27 @@
           "recommendations": [
             "Hold / Neutral",
             "Ensure risks are hedged or sizing is adjusted appropriately."
+          ]
+        }
+      },
+      {
+        "ticker": "ARVIND",
+        "name": "Arvind Ltd",
+        "owner_earnings": 0.0,
+        "moat": "Weak/None",
+        "moat_status": "Weak/None",
+        "retained_earnings_ratio": 1.2,
+        "passed_retained_test": true,
+        "score": {
+          "overall_score": 6,
+          "confidence": "Medium",
+          "reasons": [
+            "Policy Notification: Arvind shares zoom 13% to hit 52-week high; check what's powering the move",
+            "Undervalued vs Graham Intrinsic Value (791.7)"
+          ],
+          "risks": [],
+          "recommendations": [
+            "Hold / Neutral"
           ]
         }
       },
@@ -5305,17 +5630,7 @@
         }
       }
     ],
-    "estimate_revisions": [
-      {
-        "ticker": "ZENSARTECH",
-        "name": "Zensar Technologies Limited",
-        "sector": "surveillance_security",
-        "target_change_pct": -3.48,
-        "analyst_count_change": 0,
-        "rec_score_change": 0.0,
-        "direction": "down"
-      }
-    ],
+    "estimate_revisions": [],
     "variant_perception": [
       {
         "ticker": "ZENSARTECH",
@@ -5447,9 +5762,9 @@
         "ticker": "CUMMINSIND",
         "name": "Cummins India",
         "sector": "logistics_heavy_capital",
-        "consensus_target": 5850.0,
+        "consensus_target": 5800.0,
         "our_estimate": 3045.9,
-        "divergence_pct": -47.9,
+        "divergence_pct": -47.5,
         "direction": "more_bearish"
       },
       {
@@ -5600,6 +5915,17 @@
         "most_expensive_pe": 71.3
       },
       {
+        "sector": "textiles_apparel",
+        "label": "Textiles & Apparel",
+        "icon": "👕",
+        "median_pe": 54.5,
+        "stock_count": 4,
+        "cheapest_ticker": "ARVIND",
+        "cheapest_pe": 35.0,
+        "most_expensive_ticker": "WELSPUNLIV",
+        "most_expensive_pe": 73.5
+      },
+      {
         "sector": "manufacturing_electronics",
         "label": "Manufacturing & Electronics",
         "icon": "🏭",
@@ -5631,17 +5957,6 @@
         "cheapest_pe": 29.3,
         "most_expensive_ticker": "BHEL",
         "most_expensive_pe": 87.5
-      },
-      {
-        "sector": "textiles_apparel",
-        "label": "Textiles & Apparel",
-        "icon": "👕",
-        "median_pe": 64.2,
-        "stock_count": 3,
-        "cheapest_ticker": "FAZE3Q",
-        "cheapest_pe": 44.7,
-        "most_expensive_ticker": "WELSPUNLIV",
-        "most_expensive_pe": 73.5
       },
       {
         "sector": "data_center_support",
@@ -6050,7 +6365,7 @@
         "severity": "Medium",
         "direction": "opportunity",
         "category": "Policy Catalyst",
-        "signal": "Active policy tailwind — Launch: BEL bags additional orders worth Rs 1,081 crore; Filing: Astra Microwave, BEL Sign MoU for Defence Electronics; Filing: BEL shares jump 2% amid weak market; latest buzz you need to know; Filing: Motilal Oswal bullish on defence sector; BEL top pick for 20% upside"
+        "signal": "Active policy tailwind — Launch: BEL bags additional orders worth Rs 1,081 crore; Filing: Astra Microwave, BEL Sign MoU for Defence Electronics; Filing: BEL Signs MoU with SASMOS; Shares Drop 3%; Filing: BEL approves JV with French company Safran for HAMMER Weapon System; Filing: BEL shares jump 2% amid weak market; latest buzz you need to know; Filing: Motilal Oswal bullish on defence sector; BEL top pick for 20% upside"
       },
       {
         "ticker": "BHEL",
