@@ -100,6 +100,179 @@ def _build_sector_valuation_html(rollup):
     """
 
 
+_THESIS_BADGE = {
+    "Broken": ("#7f1d1d", "#fca5a5"),
+    "Weakening": ("#7c2d12", "#fdba74"),
+    "Intact": ("#065f46", "#34d399"),
+}
+
+
+def _build_research_engine_html(brief_data):
+    """Renders the research-engine card: thesis health, estimate-revision
+    momentum, variant perception, sector curve stage, and the rotation
+    engine's own track record. Each sub-section is independently optional —
+    every input here is already computed by the pipeline, not fetched fresh,
+    so this is purely a synthesis layer. Returns '' when nothing qualifies."""
+    thesis_health = brief_data.get("thesis_health") or {}
+    revisions = brief_data.get("estimate_revisions") or []
+    variant = brief_data.get("variant_perception") or []
+    curve_stage = brief_data.get("curve_stage") or {}
+    hit_rate = brief_data.get("rotation_hit_rate") or {}
+    recent_outcomes = brief_data.get("rotation_recent_outcomes") or []
+
+    if not any([thesis_health, revisions, variant, curve_stage, recent_outcomes]):
+        return ""
+
+    sections = ""
+
+    # --- Thesis health -----------------------------------------------
+    flagged = [r for r in thesis_health.values() if r.get("status") != "Intact"]
+    if thesis_health:
+        flagged.sort(key=lambda r: 0 if r["status"] == "Broken" else 1)
+        intact_count = len(thesis_health) - len(flagged)
+        rows = ""
+        for r in flagged[:6]:
+            bg, fg = _THESIS_BADGE.get(r["status"], _THESIS_BADGE["Weakening"])
+            reason = (r.get("reasons") or [""])[0]
+            rows += f"""
+            <tr>
+                <td class="ew-td"><span class="stock-ticker">{r.get('ticker', '')}</span></td>
+                <td class="ew-td"><span class="badge" style="background-color: {bg}; color: {fg};">{r['status']}</span></td>
+                <td class="ew-td" style="font-size: 11px; color: #cbd5e1;">{reason}</td>
+            </tr>
+            """
+        thesis_block = f"""
+        <h4 style="margin: 0 0 6px 0; color: #e2e8f0; font-size: 13px; text-transform: uppercase;">Thesis Health</h4>
+        <p style="font-size: 11px; color: #94a3b8; margin: 0 0 10px 0;">
+            {intact_count} intact &middot; {len(flagged)} flagged. A thesis moves from Intact only when
+            this cycle's evidence contradicts the original catalyst — not on price noise alone.
+        </p>
+        """
+        if rows:
+            thesis_block += f"""
+            <table class="stock-table" style="margin-bottom: 15px;">
+                <thead><tr><th>Stock</th><th>Status</th><th>Why</th></tr></thead>
+                <tbody>{rows}</tbody>
+            </table>
+            """
+        sections += thesis_block
+
+    # --- Estimate revision momentum -----------------------------------
+    if revisions:
+        rows = ""
+        for r in revisions[:6]:
+            up = r["direction"] == "up"
+            color = "#34d399" if up else "#f87171"
+            arrow = "▲" if up else "▼"
+            rows += f"""
+            <tr>
+                <td class="ew-td"><span class="stock-ticker">{r.get('ticker', '')}</span></td>
+                <td class="ew-td num" style="color: {color}; font-weight: 700;">{arrow} {r['target_change_pct']:+.1f}%</td>
+                <td class="ew-td" style="font-size: 11px; color: #94a3b8;">{r.get('sector', '')}</td>
+            </tr>
+            """
+        sections += f"""
+        <h4 style="margin: 15px 0 6px 0; color: #e2e8f0; font-size: 13px; text-transform: uppercase;">Estimate Revision Momentum</h4>
+        <p style="font-size: 11px; color: #94a3b8; margin: 0 0 10px 0;">
+            Target-price moves since the last run &mdash; the closest free proxy to analyst revision momentum.
+        </p>
+        <table class="stock-table" style="margin-bottom: 15px;">
+            <thead><tr><th>Stock</th><th>Target &Delta;</th><th>Sector</th></tr></thead>
+            <tbody>{rows}</tbody>
+        </table>
+        """
+
+    # --- Variant perception ---------------------------------------------
+    if variant:
+        rows = ""
+        for r in variant[:6]:
+            bullish = r["direction"] == "more_bullish"
+            color = "#34d399" if bullish else "#f87171"
+            rows += f"""
+            <tr>
+                <td class="ew-td"><span class="stock-ticker">{r.get('ticker', '')}</span></td>
+                <td class="ew-td num">₹{r['our_estimate']:.0f}</td>
+                <td class="ew-td num">₹{r['consensus_target']:.0f}</td>
+                <td class="ew-td num" style="color: {color}; font-weight: 700;">{r['divergence_pct']:+.0f}%</td>
+            </tr>
+            """
+        sections += f"""
+        <h4 style="margin: 15px 0 6px 0; color: #e2e8f0; font-size: 13px; text-transform: uppercase;">Variant Perception</h4>
+        <p style="font-size: 11px; color: #94a3b8; margin: 0 0 10px 0;">
+            Where this pipeline's own Graham estimate diverges most from analyst consensus &mdash;
+            the actual bet being made, not just the highest headline upside.
+        </p>
+        <table class="stock-table" style="margin-bottom: 15px;">
+            <thead><tr><th>Stock</th><th>Our Estimate</th><th>Consensus</th><th>Divergence</th></tr></thead>
+            <tbody>{rows}</tbody>
+        </table>
+        """
+
+    # --- Sector curve stage ----------------------------------------------
+    if curve_stage:
+        rows = ""
+        for sector, info in list(curve_stage.items())[:14]:
+            rows += f"""
+            <tr>
+                <td class="ew-td">{sector.replace('_', ' ').title()}</td>
+                <td class="ew-td">{info['stage']}</td>
+                <td class="ew-td num">{info['median_qoq_growth_pct']:+.1f}%</td>
+            </tr>
+            """
+        sections += f"""
+        <h4 style="margin: 15px 0 6px 0; color: #e2e8f0; font-size: 13px; text-transform: uppercase;">Sector Curve Stage</h4>
+        <table class="stock-table" style="margin-bottom: 15px;">
+            <thead><tr><th>Sector</th><th>Stage</th><th>Median QoQ Growth</th></tr></thead>
+            <tbody>{rows}</tbody>
+        </table>
+        """
+
+    # --- Rotation engine track record -------------------------------------
+    if hit_rate.get("total_scored") or recent_outcomes:
+        win_rate = hit_rate.get("win_rate_pct")
+        summary = (
+            f"{hit_rate['wins']}/{hit_rate['total_scored']} decisions "
+            f"({win_rate}%) played out within 45+ days of being made."
+            if hit_rate.get("total_scored")
+            else "No rotation decisions have reached the 45-day scoring window yet."
+        )
+        rows = ""
+        for e in recent_outcomes[:5]:
+            win = e.get("outcome") == "Thesis Playing Out"
+            color = "#34d399" if win else "#f87171"
+            rows += f"""
+            <tr>
+                <td class="ew-td"><span class="stock-ticker">{e.get('ticker', '')}</span></td>
+                <td class="ew-td" style="color: {color}; font-weight: 700;">{e.get('outcome', '')}</td>
+                <td class="ew-td num">{e.get('realized_return_pct', 0):+.1f}%</td>
+            </tr>
+            """
+        sections += f"""
+        <h4 style="margin: 15px 0 6px 0; color: #e2e8f0; font-size: 13px; text-transform: uppercase;">Rotation Engine Track Record</h4>
+        <p style="font-size: 11px; color: #94a3b8; margin: 0 0 10px 0;">{summary}</p>
+        """
+        if rows:
+            sections += f"""
+            <table class="stock-table">
+                <thead><tr><th>Stock</th><th>Outcome</th><th>Realized Return</th></tr></thead>
+                <tbody>{rows}</tbody>
+            </table>
+            """
+
+    if not sections:
+        return ""
+
+    return f"""
+    <div class="section-card">
+        <h3 style="color: #a78bfa; margin-bottom: 4px; font-size: 16px;">Research Engine</h3>
+        <p style="font-size: 12px; color: #94a3b8; margin: 0 0 14px 0;">
+            Synthesis of this cycle's own signals &mdash; no new data, just sharper questions asked of it.
+        </p>
+        {sections}
+    </div>
+    """
+
+
 def _escape_deep(value):
     """Recursively HTML-escapes every string in a nested structure.
 
@@ -230,6 +403,11 @@ def build_html_email(brief_data, watchlist):
 
     # Early Warning System — the first actionable thing the reader should see
     body_html += _build_early_warning_html(warnings)
+
+    # Research Engine: thesis health, revision momentum, variant perception,
+    # curve stage, rotation track record — all synthesized from data already
+    # computed above, no new fetches.
+    body_html += _build_research_engine_html(brief_data)
 
     for sector, news_items in brief_data.items():
         if sector in (

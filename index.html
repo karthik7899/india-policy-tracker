@@ -77,6 +77,10 @@
                 <button type="button" class="nav-btn" data-tab="caution" aria-controls="tab-caution" aria-selected="false">
                     <span class="btn-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></span> Caution List
                 </button>
+                <p class="nav-group-label">Research Engine</p>
+                <button type="button" class="nav-btn" data-tab="research" aria-controls="tab-research" aria-selected="false">
+                    <span class="btn-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg></span> Thesis &amp; Signals
+                </button>
                 <p class="nav-group-label">Data Explorer</p>
                 <button type="button" class="nav-btn" data-tab="stocks" aria-controls="tab-stocks" aria-selected="false">
                     <span class="btn-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></span> Stocks Screener
@@ -665,7 +669,110 @@
                     </div>
                 </div>
             </section>
-            
+
+            <section id="tab-research" class="tab-pane">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">Thesis Intact</span>
+                            <span class="stat-icon-bg bg-green"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg></span>
+                        </div>
+                        <div class="stat-value" id="thesis-intact-count">—</div>
+                        <div class="stat-sub">No kill criteria tripped this cycle</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">Thesis Flagged</span>
+                            <span class="stat-icon-bg bg-orange"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
+                        </div>
+                        <div class="stat-value" id="thesis-flagged-count">—</div>
+                        <div class="stat-sub">Weakening or broken theses</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">Rotation Win Rate</span>
+                            <span class="stat-icon-bg bg-blue"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="6"/><polyline points="8.5 13.5 7 22 12 19.5 17 22 15.5 13.5"/></svg></span>
+                        </div>
+                        <div class="stat-value" id="rotation-win-rate">—</div>
+                        <div class="stat-sub" id="rotation-win-rate-sub">Decisions scored 45+ days after the call</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">Variant Views</span>
+                            <span class="stat-icon-bg bg-purple"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg></span>
+                        </div>
+                        <div class="stat-value" id="variant-count">—</div>
+                        <div class="stat-sub">Stocks where our estimate diverges &ge;15% from consensus</div>
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <div class="table-header-bar">
+                        <h3>Thesis Health</h3>
+                        <p class="subtitle">Every holding's catalyst, scored against this cycle's own risk signals and estimate revisions — flagged entries first.</p>
+                    </div>
+                    <div class="table-scroll-container">
+                        <table class="premium-table">
+                            <thead><tr><th>Ticker</th><th>Company</th><th>Sector</th><th>Status</th><th>Why</th></tr></thead>
+                            <tbody id="thesis-table-body"><!-- Populated dynamically --></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="glass-card mt-24">
+                    <div class="table-header-bar">
+                        <h3>Estimate Revision Momentum</h3>
+                        <p class="subtitle">Target-price and analyst-coverage moves since the previous run.</p>
+                    </div>
+                    <div class="table-scroll-container">
+                        <table class="premium-table">
+                            <thead><tr><th>Ticker</th><th>Sector</th><th class="num">Target &Delta;</th><th class="num">Analyst Count &Delta;</th><th class="num">Rec. Score &Delta;</th></tr></thead>
+                            <tbody id="revisions-table-body"><!-- Populated dynamically --></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="glass-card mt-24">
+                    <div class="table-header-bar">
+                        <h3>Variant Perception</h3>
+                        <p class="subtitle">Where this pipeline's independent Graham estimate disagrees most sharply with analyst consensus.</p>
+                    </div>
+                    <div class="table-scroll-container">
+                        <table class="premium-table">
+                            <thead><tr><th>Ticker</th><th>Sector</th><th class="num">Our Estimate</th><th class="num">Consensus</th><th class="num">Divergence</th></tr></thead>
+                            <tbody id="variant-table-body"><!-- Populated dynamically --></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid mt-24">
+                    <div class="glass-card">
+                        <div class="card-header">
+                            <h3>Sector Curve Stage</h3>
+                            <p>Where each sector sits on its adoption S-curve, from trailing quarterly revenue trends.</p>
+                        </div>
+                        <div class="table-scroll-container">
+                            <table class="premium-table">
+                                <thead><tr><th>Sector</th><th>Stage</th><th class="num">Median QoQ Growth</th></tr></thead>
+                                <tbody id="curve-stage-table-body"><!-- Populated dynamically --></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="glass-card">
+                        <div class="card-header">
+                            <h3>Rotation Engine Track Record</h3>
+                            <p>Recently scored add/rotate decisions, re-priced against the current watchlist.</p>
+                        </div>
+                        <div class="table-scroll-container">
+                            <table class="premium-table">
+                                <thead><tr><th>Ticker</th><th>Outcome</th><th class="num">Realized Return</th></tr></thead>
+                                <tbody id="rotation-outcomes-table-body"><!-- Populated dynamically --></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
         </main>
     </div>
     

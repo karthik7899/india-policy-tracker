@@ -119,6 +119,7 @@ const TAB_COPY = {
     earlywarning: ["Early Warning System", "Prioritized risk & opportunity signals synthesized across the watchlist."],
     valuation: ["Sector Valuation (Peer P/E)", "Median price-to-earnings per sector peer group — which themes are richly vs cheaply priced."],
     caution: ["Risk Alerts & Valuation Warnings", "Stocks that are not meeting the configured value and growth filters."],
+    research: ["Thesis & Signals", "Falsifiable thesis health, estimate-revision momentum, variant perception, sector curve stage, and the rotation engine's own track record."],
     stocks: ["Integrated Stocks Screener", "Curated companies, policy catalysts, and financial screening signals."]
 };
 
@@ -279,6 +280,7 @@ function activateTab(targetTab) {
             earlywarning: renderEarlyWarnings,
             valuation: renderSectorValuation,
             caution: renderCautionTable,
+            research: renderResearchEngine,
             stocks: () => renderStocksTable(document.getElementById("stock-search")?.value || "")
         };
         renderers[targetTab]?.();
@@ -1654,6 +1656,151 @@ function renderSectorValuation() {
         `;
         tbody.appendChild(tr);
     });
+}
+
+const THESIS_BADGE_CLASS = {
+    Broken: "badge-danger-alert",
+    Weakening: "badge-warning-alert",
+    Intact: "badge-success-alert"
+};
+
+function renderResearchEngine() {
+    const briefing = (appData && appData.briefing) || {};
+    const thesisHealth = briefing.thesis_health || {};
+    const revisions = briefing.estimate_revisions || [];
+    const variant = briefing.variant_perception || [];
+    const curveStage = briefing.curve_stage || {};
+    const hitRate = briefing.rotation_hit_rate || {};
+    const recentOutcomes = briefing.rotation_recent_outcomes || [];
+
+    const thesisRows = Object.values(thesisHealth);
+    const flagged = thesisRows.filter(r => r.status !== "Intact")
+        .sort((a, b) => (a.status === "Broken" ? 0 : 1) - (b.status === "Broken" ? 0 : 1));
+    const intactCount = thesisRows.length - flagged.length;
+
+    setText("thesis-intact-count", thesisRows.length ? intactCount : "—");
+    setText("thesis-flagged-count", thesisRows.length ? flagged.length : "—");
+    setText("variant-count", variant.length || (variant.length === 0 ? "0" : "—"));
+
+    if (hitRate.total_scored) {
+        setText("rotation-win-rate", `${hitRate.win_rate_pct}%`);
+        setText("rotation-win-rate-sub", `${hitRate.wins}/${hitRate.total_scored} decisions playing out`);
+    } else {
+        setText("rotation-win-rate", "—");
+        setText("rotation-win-rate-sub", "No decisions have reached the 45-day scoring window yet");
+    }
+
+    // Thesis health table
+    const thesisBody = document.getElementById("thesis-table-body");
+    if (thesisBody) {
+        thesisBody.innerHTML = "";
+        if (flagged.length === 0) {
+            setTableEmpty(thesisBody, 5, "Every thesis is intact", "No holding has a risk signal or negative revision serious enough to flag this cycle.");
+        } else {
+            flagged.forEach(r => {
+                const badgeClass = THESIS_BADGE_CLASS[r.status] || "badge-neutral-alert";
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td class="t-ticker">${escapeHtml(r.ticker)}</td>
+                    <td><strong>${escapeHtml(r.name)}</strong></td>
+                    <td><span class="chip" style="display:inline-block; border-color:transparent;">${escapeHtml(r.sector)}</span></td>
+                    <td><span class="${badgeClass}" style="font-size: 9px;">${escapeHtml(r.status)}</span></td>
+                    <td style="max-width: 380px; white-space: normal; font-size: 12px;">${escapeHtml((r.reasons || []).join(" "))}</td>
+                `;
+                thesisBody.appendChild(tr);
+            });
+        }
+    }
+
+    // Estimate revision momentum table
+    const revBody = document.getElementById("revisions-table-body");
+    if (revBody) {
+        revBody.innerHTML = "";
+        if (revisions.length === 0) {
+            setTableEmpty(revBody, 5, "No material revisions", "No stock's consensus target moved enough versus the prior run to register.");
+        } else {
+            revisions.forEach(r => {
+                const up = r.direction === "up";
+                const color = up ? "var(--success, #34d399)" : "var(--danger, #f87171)";
+                const arrow = up ? "▲" : "▼";
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td class="t-ticker">${escapeHtml(r.ticker)}</td>
+                    <td>${escapeHtml(r.sector)}</td>
+                    <td class="num" style="color: ${color}; font-weight: 700;">${arrow} ${r.target_change_pct > 0 ? "+" : ""}${escapeHtml(r.target_change_pct)}%</td>
+                    <td class="num">${r.analyst_count_change != null ? (r.analyst_count_change > 0 ? "+" : "") + escapeHtml(r.analyst_count_change) : "—"}</td>
+                    <td class="num">${r.rec_score_change != null ? (r.rec_score_change > 0 ? "+" : "") + escapeHtml(r.rec_score_change) : "—"}</td>
+                `;
+                revBody.appendChild(tr);
+            });
+        }
+    }
+
+    // Variant perception table
+    const variantBody = document.getElementById("variant-table-body");
+    if (variantBody) {
+        variantBody.innerHTML = "";
+        if (variant.length === 0) {
+            setTableEmpty(variantBody, 5, "No large divergences", "No analyst-covered stock's independent Graham estimate diverges 15% or more from consensus this cycle.");
+        } else {
+            variant.forEach(r => {
+                const bullish = r.direction === "more_bullish";
+                const color = bullish ? "var(--success, #34d399)" : "var(--danger, #f87171)";
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td class="t-ticker">${escapeHtml(r.ticker)}</td>
+                    <td>${escapeHtml(r.sector)}</td>
+                    <td class="num">&#8377;${escapeHtml(r.our_estimate)}</td>
+                    <td class="num">&#8377;${escapeHtml(r.consensus_target)}</td>
+                    <td class="num" style="color: ${color}; font-weight: 700;">${r.divergence_pct > 0 ? "+" : ""}${escapeHtml(r.divergence_pct)}%</td>
+                `;
+                variantBody.appendChild(tr);
+            });
+        }
+    }
+
+    // Sector curve stage table
+    const curveBody = document.getElementById("curve-stage-table-body");
+    if (curveBody) {
+        curveBody.innerHTML = "";
+        const sectors = Object.keys(curveStage);
+        if (sectors.length === 0) {
+            setTableEmpty(curveBody, 3, "No curve data yet", "Needs at least two peers per sector with trailing quarterly sales history.");
+        } else {
+            sectors.forEach(sectorKey => {
+                const info = curveStage[sectorKey];
+                const label = (appData.sectors && appData.sectors[sectorKey]?.label) || sectorKey.replace(/_/g, " ");
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${escapeHtml(label)}</td>
+                    <td>${escapeHtml(info.stage)}</td>
+                    <td class="num">${info.median_qoq_growth_pct > 0 ? "+" : ""}${escapeHtml(info.median_qoq_growth_pct)}%</td>
+                `;
+                curveBody.appendChild(tr);
+            });
+        }
+    }
+
+    // Rotation engine track record table
+    const outcomesBody = document.getElementById("rotation-outcomes-table-body");
+    if (outcomesBody) {
+        outcomesBody.innerHTML = "";
+        if (recentOutcomes.length === 0) {
+            setTableEmpty(outcomesBody, 3, "No scored decisions yet", "Add/rotate decisions are scored 45+ days after being made.");
+        } else {
+            recentOutcomes.forEach(e => {
+                const win = e.outcome === "Thesis Playing Out";
+                const color = win ? "var(--success, #34d399)" : "var(--danger, #f87171)";
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td class="t-ticker">${escapeHtml(e.ticker)}</td>
+                    <td style="color: ${color}; font-weight: 600;">${escapeHtml(e.outcome)}</td>
+                    <td class="num">${e.realized_return_pct > 0 ? "+" : ""}${escapeHtml(e.realized_return_pct)}%</td>
+                `;
+                outcomesBody.appendChild(tr);
+            });
+        }
+    }
 }
 
 // Helper: Get list of all stocks across all sectors
