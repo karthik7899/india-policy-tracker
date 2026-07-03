@@ -453,3 +453,68 @@ def test_auto_curate_watchlist_returns_decisions_tuple():
     structured, decisions = result
     assert isinstance(structured, dict)
     assert decisions == []
+
+
+# ---------------------------------------------------------------------------
+# Screener request pacing and BSE fallback (data-fetch reliability)
+# ---------------------------------------------------------------------------
+
+
+def test_request_pacer_spaces_starts():
+    import asyncio
+    from providers.screener import _RequestPacer
+
+    async def run():
+        pacer = _RequestPacer(0.05)
+        loop = asyncio.get_event_loop()
+        start = loop.time()
+
+        async def gated():
+            await pacer.wait()
+            return loop.time()
+
+        times = await asyncio.gather(*[gated() for _ in range(4)])
+        return sorted(t - start for t in times)
+
+    offsets = asyncio.run(run())
+    # 4 starts at >= 0.05s apart: last one can't begin before 0.15s in.
+    assert offsets[-1] >= 0.14
+    for earlier, later in zip(offsets, offsets[1:]):
+        assert later - earlier >= 0.04
+
+
+def test_bse_fallback_used_when_nse_has_no_data(monkeypatch):
+    import providers.yahoo as yahoo_mod
+    from analysis.growth import update_single_stock
+
+    calls = []
+
+    def fake_fetch(yahoo_ticker, timeout=10):
+        calls.append(yahoo_ticker)
+        if yahoo_ticker.endswith(".BO"):
+            return {"price": 123.0, "rating": "Buy"}
+        return {"price": None, "rating": "N/A"}
+
+    monkeypatch.setattr(yahoo_mod, "fetch_stock_data", fake_fetch)
+
+    stock = {"ticker": "SPEL", "name": "SPEL Semiconductor"}
+    assert update_single_stock(stock) is True
+    assert stock["price"] == "123.00"
+    assert calls == ["SPEL.NS", "SPEL.BO"]
+
+
+def test_bse_fallback_not_used_when_nse_works(monkeypatch):
+    import providers.yahoo as yahoo_mod
+    from analysis.growth import update_single_stock
+
+    calls = []
+
+    def fake_fetch(yahoo_ticker, timeout=10):
+        calls.append(yahoo_ticker)
+        return {"price": 456.0, "rating": "Buy"}
+
+    monkeypatch.setattr(yahoo_mod, "fetch_stock_data", fake_fetch)
+
+    stock = {"ticker": "TCS", "name": "TCS"}
+    assert update_single_stock(stock) is True
+    assert calls == ["TCS.NS"]

@@ -17,6 +17,14 @@ def update_single_stock(stock, prefetched_prices=None):
     try:
         data = fetch_stock_data(yahoo_ticker)
 
+        # BSE-only listings 404 under the NSE suffix every run; fall back to
+        # the BSE symbol before giving up on the ticker.
+        if data.get("price") is None:
+            bse_data = fetch_stock_data(f"{ticker}.BO")
+            if bse_data.get("price") is not None:
+                log.info(f"{ticker}: no NSE data, using BSE listing instead.")
+                data = bse_data
+
         # Override price if prefetched
         if (
             yahoo_ticker in prefetched_prices

@@ -260,10 +260,30 @@ async def fetch_peers_async(session, ticker, warehouse_id, exclude_tickers):
         return ticker, []
 
 
-# Screener.in rate-limits aggressive parallelism with HTTP 429; firing the
-# whole watchlist at once triggers a synchronized retry storm that is slower
-# than just queueing. Keep a modest number of requests in flight instead.
-_SCREENER_CONCURRENCY = 5
+# Screener.in's limiter is rate-based, not concurrency-based: a live run at
+# 5 concurrent requests still drew 429s once the initial burst allowance was
+# spent, costing one company its data and most sectors their peer lookups.
+# So requests are *paced* — a minimum interval between request starts — with
+# a small concurrency cap kept as a belt-and-braces bound on in-flight work.
+_SCREENER_CONCURRENCY = 4
+_SCREENER_REQUEST_INTERVAL_S = 1.0
+
+
+class _RequestPacer:
+    """Serialises request start times so they are at least ``interval`` apart."""
+
+    def __init__(self, interval):
+        self._interval = interval
+        self._lock = asyncio.Lock()
+        self._next_at = 0.0
+
+    async def wait(self):
+        async with self._lock:
+            now = asyncio.get_event_loop().time()
+            delay = max(0.0, self._next_at - now)
+            self._next_at = max(now, self._next_at) + self._interval
+        if delay:
+            await asyncio.sleep(delay)
 
 
 async def fetch_all_screener_fundamentals(watchlist):
@@ -285,8 +305,10 @@ async def fetch_all_screener_fundamentals(watchlist):
     }
 
     semaphore = asyncio.Semaphore(_SCREENER_CONCURRENCY)
+    pacer = _RequestPacer(_SCREENER_REQUEST_INTERVAL_S)
 
     async def throttled(coro):
+        await pacer.wait()
         async with semaphore:
             return await coro
 
