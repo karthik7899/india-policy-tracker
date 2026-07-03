@@ -24,8 +24,9 @@ def test_empty_rss(monkeypatch):
 # --- 2. Empty Watchlist ---
 def test_empty_watchlist():
     # If the watchlist is empty, auto_curate_watchlist shouldn't crash
-    result = auto_curate_watchlist({}, {})
+    result, decisions = auto_curate_watchlist({}, {})
     assert isinstance(result, dict)
+    assert decisions == []
 
 
 # --- 3. Duplicate News ---
@@ -127,7 +128,7 @@ def test_invalid_stock_entries(monkeypatch):
             }
         ]
     }
-    res = auto_curate_watchlist(brief_data, {sector: []})
+    res, _decisions = auto_curate_watchlist(brief_data, {sector: []})
     # auto_curate_watchlist looks for emerging players. If it can't resolve "Invalid Corp Limited", it makes an unresolved entry.
     assert len(res.get(sector, [])) == 1
     assert res[sector][0].get("status") == "Unresolved"
