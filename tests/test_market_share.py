@@ -320,3 +320,13 @@ def test_watchlist_names_not_rediscovered():
     brief = {"sector": [{"title": "Tata Power wins grid contract"}]}
     emerging = detect_emerging_players(brief, _WATCHLIST)
     assert emerging.get("sector", []) == []
+
+
+def test_honorifics_not_detected_as_companies():
+    brief = {
+        "sector": [
+            {"title": "Shri Amit Shah launches cyber security drive"},
+            {"title": "PM Modi unveils semiconductor mission"},
+        ]
+    }
+    assert detect_emerging_players(brief, _WATCHLIST) == {}

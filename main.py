@@ -16,6 +16,11 @@ from analysis.rotation import auto_curate_watchlist
 from dashboard.builder import build_dashboard_views
 from providers.screener import fetch_all_screener_fundamentals
 from emails.mailer import build_html_email, send_email
+from analysis import revisions as revisions_mod
+from analysis import postmortem
+from analysis.thesis import compute_thesis_health
+from analysis.variant_perception import compute_variant_perception
+from analysis.curve_stage import classify_sector_curve_stage
 
 
 def save_data_for_dashboard(brief_data, watchlist):
@@ -44,12 +49,22 @@ async def run_pipeline():
     # scrapers gain nothing from threads.
     watchlist = load_watchlist()
 
+    # Snapshot targets/coverage before anything mutates the watchlist, so
+    # estimate-revision momentum can diff "before this run" vs "after".
+    prior_estimates = revisions_mod.snapshot_prior_estimates(watchlist)
+
     # Gather news data async
     data = await fetch_all_feeds_async()
 
     # Auto-curate the watchlist (discovers emerging players and rotates stocks)
-    emerging = auto_curate_watchlist(data, watchlist)
+    emerging, rotation_decisions = auto_curate_watchlist(data, watchlist)
     data["emerging_players"] = emerging
+
+    rotation_ledger = postmortem.load_ledger()
+    for decision in rotation_decisions:
+        postmortem.log_decision(
+            rotation_ledger, decision["action"], decision["sector"], decision["stock"]
+        )
 
     # Fetch live Yahoo Finance prices
     data["freshness"] = {"live_prices": update_live_stock_prices(watchlist)}
@@ -115,6 +130,25 @@ async def run_pipeline():
     # Compile margin of safety and moat analytics
     build_dashboard_views(data, watchlist)
 
+    # Estimate-revision momentum: this run's targets/coverage vs the prior run
+    data["estimate_revisions"] = revisions_mod.compute_revision_momentum(
+        watchlist, prior_estimates
+    )
+
+    # Variant perception: where our independent Graham estimate diverges most
+    # sharply from analyst consensus.
+    data["variant_perception"] = compute_variant_perception(watchlist)
+
+    # Sector S-curve stage, from trailing quarterly sales trends already fetched.
+    data["curve_stage"] = classify_sector_curve_stage(watchlist)
+
+    # Score any rotation decisions old enough to judge, and persist the ledger
+    # so the hit-rate accumulates across runs.
+    postmortem.score_pending_decisions(rotation_ledger, watchlist)
+    data["rotation_hit_rate"] = postmortem.compute_hit_rate(rotation_ledger)
+    data["rotation_recent_outcomes"] = postmortem.recent_outcomes(rotation_ledger)
+    postmortem.save_ledger(rotation_ledger)
+
     # Sector-relative valuation: annotate stocks with peer-group P/E context
     from analysis.sector_valuation import build_sector_valuation
 
@@ -129,6 +163,12 @@ async def run_pipeline():
     from analysis.early_warning import generate_early_warnings
 
     data["early_warnings"] = generate_early_warnings(data, watchlist)
+
+    # Thesis health: does the accumulated evidence this cycle still support
+    # each holding's catalyst, or has a kill criterion tripped?
+    data["thesis_health"] = compute_thesis_health(
+        watchlist, data["early_warnings"], data["estimate_revisions"]
+    )
 
     # Save watchlist changes
     save_watchlist(watchlist)

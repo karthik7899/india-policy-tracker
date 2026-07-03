@@ -45,6 +45,14 @@ def detect_emerging_players(brief_data, watchlist):
         "supreme",
         "court",
         "railways",
+        # Honorifics — headlines about officials ("Shri Amit Shah launches…")
+        # must not reach ticker resolution as company candidates.
+        "shri",
+        "smt",
+        "sri",
+        "dr",
+        "pm",
+        "cm",
     }
     corp_pattern = re.compile(
         r"\b([A-Z][a-zA-Z0-9]+(?:\s+[A-Z][a-zA-Z0-9]+)*)\s+(?:Ltd|Limited|Corp|Corporation|Technologies|Enterprises|Solutions|Infrastructure)\b"
@@ -97,12 +105,19 @@ def _get_potential(stock):
 
 
 def auto_curate_watchlist(brief_data, watchlist):
-    """Discovers emerging competitors and rotates underperforming stocks."""
+    """Discovers emerging competitors and rotates underperforming stocks.
+
+    Returns (structured_emerging, decisions): the emerging-player radar dict,
+    and a list of {action, sector, stock} for every add/rotate this run —
+    the raw material for the rotation post-mortem ledger in
+    analysis/postmortem.py.
+    """
     log.info("Starting automated watchlist curation and rotation cycle...")
     from config import SECTOR_METADATA
 
     emerging_sectors = detect_emerging_players(brief_data, watchlist)
     rotations_log = []
+    decisions = []
 
     # We will construct a structured emerging_players dictionary
     structured_emerging = {s: [] for s in SECTOR_METADATA}
@@ -278,6 +293,13 @@ def auto_curate_watchlist(brief_data, watchlist):
                         rotations_log.append(
                             f"Added {full_name} ({ticker}) to {sector}"
                         )
+                        decisions.append(
+                            {
+                                "action": "added",
+                                "sector": sector,
+                                "stock": dict(candidate_stock),
+                            }
+                        )
                         structured_emerging[sector].append(
                             {
                                 "name": full_name,
@@ -311,6 +333,13 @@ def auto_curate_watchlist(brief_data, watchlist):
                             )
                             rotations_log.append(
                                 f"Rotated {weakest_stock['name']} out for {full_name} in {sector}"
+                            )
+                            decisions.append(
+                                {
+                                    "action": "rotated_in",
+                                    "sector": sector,
+                                    "stock": dict(candidate_stock),
+                                }
                             )
                             structured_emerging[sector].append(
                                 {
@@ -349,4 +378,4 @@ def auto_curate_watchlist(brief_data, watchlist):
     if rotations_log:
         save_watchlist(watchlist)
 
-    return structured_emerging
+    return structured_emerging, decisions

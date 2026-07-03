@@ -1,5 +1,6 @@
 import os
 import datetime
+import html as html_lib
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -23,7 +24,7 @@ def _build_early_warning_html(warnings):
     for w in warnings[:12]:
         bg, fg = _SEVERITY_BADGE.get(w.get("severity", "Low"), _SEVERITY_BADGE["Low"])
         is_risk = w.get("direction") == "risk"
-        dir_icon = "🔻" if is_risk else "🔼"
+        dir_icon = "▼" if is_risk else "▲"
         dir_color = "#f87171" if is_risk else "#34d399"
         sev_badge = (
             f"<span class='badge' style='background-color: {bg}; color: {fg};'>"
@@ -31,17 +32,13 @@ def _build_early_warning_html(warnings):
         )
         rows += f"""
         <tr>
-            <td style="padding: 8px; font-size: 12px; border-bottom: 1px solid #1f2937;">
+            <td class="ew-td">
                 <span class="stock-ticker">{w.get('ticker', '')}</span>
                 <span style="color: #94a3b8; font-size: 11px;"> · {w.get('sector', '')}</span>
             </td>
-            <td style="padding: 8px; font-size: 12px; border-bottom: 1px solid #1f2937;">{sev_badge}</td>
-            <td style="padding: 8px; font-size: 12px; border-bottom: 1px solid #1f2937; color: {dir_color};">
-                {dir_icon} {w.get('category', '')}
-            </td>
-            <td style="padding: 8px; font-size: 11px; border-bottom: 1px solid #1f2937; color: #cbd5e1;">
-                {w.get('signal', '')}
-            </td>
+            <td class="ew-td">{sev_badge}</td>
+            <td class="ew-td" style="color: {dir_color};">{dir_icon} {w.get('category', '')}</td>
+            <td class="ew-td" style="font-size: 11px; color: #cbd5e1;">{w.get('signal', '')}</td>
         </tr>
         """
 
@@ -50,7 +47,7 @@ def _build_early_warning_html(warnings):
 
     return f"""
     <div class="section-card">
-        <h3 style="color: #f87171; margin-bottom: 6px; font-size: 16px;">🚨 Early Warning System</h3>
+        <h3 style="color: #f87171; margin-bottom: 6px; font-size: 16px;">Early Warning System</h3>
         <p style="font-size: 12px; color: #94a3b8; margin: 0 0 12px 0;">
             {risk_count} risk signal(s) and {opp_count} opportunity signal(s) detected across the watchlist,
             ranked by severity.
@@ -79,7 +76,7 @@ def _build_sector_valuation_html(rollup):
     for r in rollup[:14]:
         rows += f"""
         <tr>
-            <td><span style="margin-right: 6px;">{r.get('icon', '📊')}</span>{r.get('label', '')}</td>
+            <td>{r.get('label', '')}</td>
             <td style="color: #e2e8f0; font-weight: 600;">{r.get('median_pe', '—')}</td>
             <td style="color: #34d399; font-size: 11px;">{r.get('cheapest_ticker', '')} ({r.get('cheapest_pe', '')})</td>
             <td style="color: #f87171; font-size: 11px;">{r.get('most_expensive_ticker', '')} ({r.get('most_expensive_pe', '')})</td>
@@ -88,7 +85,7 @@ def _build_sector_valuation_html(rollup):
 
     return f"""
     <div class="section-card">
-        <h3 style="color: #38bdf8; margin-bottom: 6px; font-size: 16px;">⚖️ Sector Valuation (Peer P/E)</h3>
+        <h3 style="color: #38bdf8; margin-bottom: 6px; font-size: 16px;">Sector Valuation (Peer P/E)</h3>
         <p style="font-size: 12px; color: #94a3b8; margin: 0 0 12px 0;">
             Median price-to-earnings across each sector's watchlist peer group, cheapest sectors first.
             Use it to see which themes are richly vs cheaply priced relative to their peers.
@@ -103,8 +100,199 @@ def _build_sector_valuation_html(rollup):
     """
 
 
+_THESIS_BADGE = {
+    "Broken": ("#7f1d1d", "#fca5a5"),
+    "Weakening": ("#7c2d12", "#fdba74"),
+    "Intact": ("#065f46", "#34d399"),
+}
+
+
+def _build_research_engine_html(brief_data):
+    """Renders the research-engine card: thesis health, estimate-revision
+    momentum, variant perception, sector curve stage, and the rotation
+    engine's own track record. Each sub-section is independently optional —
+    every input here is already computed by the pipeline, not fetched fresh,
+    so this is purely a synthesis layer. Returns '' when nothing qualifies."""
+    thesis_health = brief_data.get("thesis_health") or {}
+    revisions = brief_data.get("estimate_revisions") or []
+    variant = brief_data.get("variant_perception") or []
+    curve_stage = brief_data.get("curve_stage") or {}
+    hit_rate = brief_data.get("rotation_hit_rate") or {}
+    recent_outcomes = brief_data.get("rotation_recent_outcomes") or []
+
+    if not any([thesis_health, revisions, variant, curve_stage, recent_outcomes]):
+        return ""
+
+    sections = ""
+
+    # --- Thesis health -----------------------------------------------
+    flagged = [r for r in thesis_health.values() if r.get("status") != "Intact"]
+    if thesis_health:
+        flagged.sort(key=lambda r: 0 if r["status"] == "Broken" else 1)
+        intact_count = len(thesis_health) - len(flagged)
+        rows = ""
+        for r in flagged[:6]:
+            bg, fg = _THESIS_BADGE.get(r["status"], _THESIS_BADGE["Weakening"])
+            reason = (r.get("reasons") or [""])[0]
+            rows += f"""
+            <tr>
+                <td class="ew-td"><span class="stock-ticker">{r.get('ticker', '')}</span></td>
+                <td class="ew-td"><span class="badge" style="background-color: {bg}; color: {fg};">{r['status']}</span></td>
+                <td class="ew-td" style="font-size: 11px; color: #cbd5e1;">{reason}</td>
+            </tr>
+            """
+        thesis_block = f"""
+        <h4 style="margin: 0 0 6px 0; color: #e2e8f0; font-size: 13px; text-transform: uppercase;">Thesis Health</h4>
+        <p style="font-size: 11px; color: #94a3b8; margin: 0 0 10px 0;">
+            {intact_count} intact &middot; {len(flagged)} flagged. A thesis moves from Intact only when
+            this cycle's evidence contradicts the original catalyst — not on price noise alone.
+        </p>
+        """
+        if rows:
+            thesis_block += f"""
+            <table class="stock-table" style="margin-bottom: 15px;">
+                <thead><tr><th>Stock</th><th>Status</th><th>Why</th></tr></thead>
+                <tbody>{rows}</tbody>
+            </table>
+            """
+        sections += thesis_block
+
+    # --- Estimate revision momentum -----------------------------------
+    if revisions:
+        rows = ""
+        for r in revisions[:6]:
+            up = r["direction"] == "up"
+            color = "#34d399" if up else "#f87171"
+            arrow = "▲" if up else "▼"
+            rows += f"""
+            <tr>
+                <td class="ew-td"><span class="stock-ticker">{r.get('ticker', '')}</span></td>
+                <td class="ew-td num" style="color: {color}; font-weight: 700;">{arrow} {r['target_change_pct']:+.1f}%</td>
+                <td class="ew-td" style="font-size: 11px; color: #94a3b8;">{r.get('sector', '')}</td>
+            </tr>
+            """
+        sections += f"""
+        <h4 style="margin: 15px 0 6px 0; color: #e2e8f0; font-size: 13px; text-transform: uppercase;">Estimate Revision Momentum</h4>
+        <p style="font-size: 11px; color: #94a3b8; margin: 0 0 10px 0;">
+            Target-price moves since the last run &mdash; the closest free proxy to analyst revision momentum.
+        </p>
+        <table class="stock-table" style="margin-bottom: 15px;">
+            <thead><tr><th>Stock</th><th>Target &Delta;</th><th>Sector</th></tr></thead>
+            <tbody>{rows}</tbody>
+        </table>
+        """
+
+    # --- Variant perception ---------------------------------------------
+    if variant:
+        rows = ""
+        for r in variant[:6]:
+            bullish = r["direction"] == "more_bullish"
+            color = "#34d399" if bullish else "#f87171"
+            rows += f"""
+            <tr>
+                <td class="ew-td"><span class="stock-ticker">{r.get('ticker', '')}</span></td>
+                <td class="ew-td num">₹{r['our_estimate']:.0f}</td>
+                <td class="ew-td num">₹{r['consensus_target']:.0f}</td>
+                <td class="ew-td num" style="color: {color}; font-weight: 700;">{r['divergence_pct']:+.0f}%</td>
+            </tr>
+            """
+        sections += f"""
+        <h4 style="margin: 15px 0 6px 0; color: #e2e8f0; font-size: 13px; text-transform: uppercase;">Variant Perception</h4>
+        <p style="font-size: 11px; color: #94a3b8; margin: 0 0 10px 0;">
+            Where this pipeline's own Graham estimate diverges most from analyst consensus &mdash;
+            the actual bet being made, not just the highest headline upside.
+        </p>
+        <table class="stock-table" style="margin-bottom: 15px;">
+            <thead><tr><th>Stock</th><th>Our Estimate</th><th>Consensus</th><th>Divergence</th></tr></thead>
+            <tbody>{rows}</tbody>
+        </table>
+        """
+
+    # --- Sector curve stage ----------------------------------------------
+    if curve_stage:
+        rows = ""
+        for sector, info in list(curve_stage.items())[:14]:
+            rows += f"""
+            <tr>
+                <td class="ew-td">{sector.replace('_', ' ').title()}</td>
+                <td class="ew-td">{info['stage']}</td>
+                <td class="ew-td num">{info['median_qoq_growth_pct']:+.1f}%</td>
+            </tr>
+            """
+        sections += f"""
+        <h4 style="margin: 15px 0 6px 0; color: #e2e8f0; font-size: 13px; text-transform: uppercase;">Sector Curve Stage</h4>
+        <table class="stock-table" style="margin-bottom: 15px;">
+            <thead><tr><th>Sector</th><th>Stage</th><th>Median QoQ Growth</th></tr></thead>
+            <tbody>{rows}</tbody>
+        </table>
+        """
+
+    # --- Rotation engine track record -------------------------------------
+    if hit_rate.get("total_scored") or recent_outcomes:
+        win_rate = hit_rate.get("win_rate_pct")
+        summary = (
+            f"{hit_rate['wins']}/{hit_rate['total_scored']} decisions "
+            f"({win_rate}%) played out within 45+ days of being made."
+            if hit_rate.get("total_scored")
+            else "No rotation decisions have reached the 45-day scoring window yet."
+        )
+        rows = ""
+        for e in recent_outcomes[:5]:
+            win = e.get("outcome") == "Thesis Playing Out"
+            color = "#34d399" if win else "#f87171"
+            rows += f"""
+            <tr>
+                <td class="ew-td"><span class="stock-ticker">{e.get('ticker', '')}</span></td>
+                <td class="ew-td" style="color: {color}; font-weight: 700;">{e.get('outcome', '')}</td>
+                <td class="ew-td num">{e.get('realized_return_pct', 0):+.1f}%</td>
+            </tr>
+            """
+        sections += f"""
+        <h4 style="margin: 15px 0 6px 0; color: #e2e8f0; font-size: 13px; text-transform: uppercase;">Rotation Engine Track Record</h4>
+        <p style="font-size: 11px; color: #94a3b8; margin: 0 0 10px 0;">{summary}</p>
+        """
+        if rows:
+            sections += f"""
+            <table class="stock-table">
+                <thead><tr><th>Stock</th><th>Outcome</th><th>Realized Return</th></tr></thead>
+                <tbody>{rows}</tbody>
+            </table>
+            """
+
+    if not sections:
+        return ""
+
+    return f"""
+    <div class="section-card">
+        <h3 style="color: #a78bfa; margin-bottom: 4px; font-size: 16px;">Research Engine</h3>
+        <p style="font-size: 12px; color: #94a3b8; margin: 0 0 14px 0;">
+            Synthesis of this cycle's own signals &mdash; no new data, just sharper questions asked of it.
+        </p>
+        {sections}
+    </div>
+    """
+
+
+def _escape_deep(value):
+    """Recursively HTML-escapes every string in a nested structure.
+
+    Feed titles, company names and filing text arrive from external sources
+    and routinely contain '&', '<' or quotes; unescaped they corrupt the
+    email markup mid-document. Escaping once at the boundary keeps every
+    f-string below safe without peppering the template with escape calls."""
+    if isinstance(value, str):
+        return html_lib.escape(value, quote=True)
+    if isinstance(value, dict):
+        return {k: _escape_deep(v) for k, v in value.items()}
+    if isinstance(value, list):
+        return [_escape_deep(v) for v in value]
+    return value
+
+
 def build_html_email(brief_data, watchlist):
     """Renders the HTML structure for the email notification."""
+    brief_data = _escape_deep(brief_data or {})
+    watchlist = _escape_deep(watchlist or {})
     today_str = datetime.date.today().strftime("%B %d, %Y")
 
     style = """
@@ -137,6 +325,13 @@ def build_html_email(brief_data, watchlist):
         .badge-positive { background-color: #065f46; color: #34d399; }
         .badge-neutral { background-color: #374151; color: #9ca3af; }
         .badge-negative { background-color: #7f1d1d; color: #f87171; }
+        .badge-success-alert { background-color: #065f46; color: #34d399; font-size: 9px; padding: 2px 6px; border-radius: 4px; display: inline-block; }
+        .kpi { margin-left: 6px; font-size: 9px; padding: 2px 6px; border-radius: 4px; font-weight: bold; display: inline-block; }
+        .kpi-pos { background-color: #065f46; color: #34d399; }
+        .kpi-neg { background-color: #7f1d1d; color: #f87171; }
+        .kpi-eps-pos { margin-left: 4px; font-size: 8px; padding: 2px 5px; background-color: #1e1b4b; color: #a78bfa; }
+        .kpi-eps-neg { margin-left: 4px; font-size: 8px; padding: 2px 5px; background-color: #2a1215; color: #f87171; }
+        .ew-td { padding: 8px; font-size: 12px; border-bottom: 1px solid #1f2937; }
         .stock-table { width: 100%; border-collapse: collapse; margin-top: 15px; background-color: #0f172a; border-radius: 8px; overflow: hidden; border: 1px solid #1f2937; }
         .stock-table th { background-color: #1e293b; color: #94a3b8; font-size: 11px; padding: 8px; text-align: left; text-transform: uppercase; border-bottom: 1px solid #1f2937; }
         .stock-table td { padding: 8px; font-size: 12px; border-bottom: 1px solid #1f2937; color: #cbd5e1; }
@@ -157,7 +352,7 @@ def build_html_email(brief_data, watchlist):
     )
 
     preheader = (
-        f"{risk_count} risk & {opp_count} opportunity signals across "
+        f"{risk_count} risk &amp; {opp_count} opportunity signals across "
         f"{sectors_tracked} sectors — {today_str}"
     )
 
@@ -173,9 +368,9 @@ def build_html_email(brief_data, watchlist):
         <span class="preheader">{preheader}</span>
         <div class="container">
             <div class="header">
-                <h1>🇮🇳 India Policy & Growth Sector Brief</h1>
+                <h1>🇮🇳 India Policy &amp; Growth Sector Brief</h1>
                 <p>Daily Intelligence Report | {today_str}</p>
-                <a href="{DASHBOARD_URL}" class="cta-button" target="_blank">📊 View Live Dashboard</a>
+                <a href="{DASHBOARD_URL}" class="cta-button" target="_blank">View Live Dashboard</a>
             </div>
             <div class="summary-strip">
                 <div class="stat">
@@ -201,13 +396,18 @@ def build_html_email(brief_data, watchlist):
         if updated < total * 0.8:
             body_html += f"""
             <div style="padding: 10px 25px; background-color: #2a230c; color: #fbbf24; font-size: 12px; border-bottom: 1px solid #1f2937;">
-                ⚠️ Live price refresh degraded: only {updated}/{total} stocks updated this run.
+                ⚠ Live price refresh degraded: only {updated}/{total} stocks updated this run.
                 Prices for the remainder are from a previous briefing.
             </div>
     """
 
     # Early Warning System — the first actionable thing the reader should see
     body_html += _build_early_warning_html(warnings)
+
+    # Research Engine: thesis health, revision momentum, variant perception,
+    # curve stage, rotation track record — all synthesized from data already
+    # computed above, no new fetches.
+    body_html += _build_research_engine_html(brief_data)
 
     for sector, news_items in brief_data.items():
         if sector in (
@@ -224,13 +424,14 @@ def build_html_email(brief_data, watchlist):
             continue
         if sector not in SECTOR_METADATA:
             continue
-        meta = SECTOR_METADATA[sector]
+        meta = _escape_deep(SECTOR_METADATA[sector])
         stocks = watchlist.get(sector, [])
 
-        # Format news HTML
+        # Format news HTML. The email carries the top items per sector to
+        # stay under Gmail's ~102 KB clip limit; the dashboard has them all.
         news_html = ""
         if news_items:
-            for item in news_items:
+            for item in news_items[:3]:
                 badge_class = (
                     "badge-positive"
                     if item["impact"] == "Positive"
@@ -244,11 +445,19 @@ def build_html_email(brief_data, watchlist):
                 <div class="news-item">
                     <a href="{item['link']}" class="news-title" target="_blank">{item['title']}</a>
                     <div class="meta-line">
-                        <span class="badge {badge_class}">{item['impact']} Impact</span> | 
+                        <span class="badge {badge_class}">{item['impact']} Impact</span> |
                         <span>{item['source']}</span> | <span>{item['date']}</span>
                     </div>
                 </div>
                 """
+            overflow = len(news_items) - 3
+            if overflow > 0:
+                news_html += (
+                    f"<p style='font-size: 11px; color: #6b7280; margin: 6px 0 0 0;'>"
+                    f"+ {overflow} more on the "
+                    f"<a href='{DASHBOARD_URL}' style='color: #60a5fa;' target='_blank'>live dashboard</a>."
+                    f"</p>"
+                )
         else:
             news_html = "<p style='font-size: 13px; color: #4b5563; font-style: italic;'>No policy updates tracked in this cycle.</p>"
 
@@ -265,18 +474,22 @@ def build_html_email(brief_data, watchlist):
             if growth_val:
                 is_negative = growth_val.startswith("-")
                 if is_negative:
-                    growth_badge = f"<span style='margin-left: 6px; font-size: 9px; background-color: #7f1d1d; color: #f87171; padding: 2px 6px; border-radius: 4px; font-weight: bold; display: inline-block;'>📉 {growth_val} YoY</span>"
+                    growth_badge = f"<span class='kpi kpi-neg'>{growth_val} YoY</span>"
                 else:
-                    growth_badge = f"<span style='margin-left: 6px; font-size: 9px; background-color: #065f46; color: #34d399; padding: 2px 6px; border-radius: 4px; font-weight: bold; display: inline-block;'>🔥 {growth_val} YoY</span>"
+                    growth_badge = f"<span class='kpi kpi-pos'>{growth_val} YoY</span>"
 
             # Contextual earnings growth badge
             earnings_badge = ""
             if earnings_val:
                 is_negative = earnings_val.startswith("-")
                 if is_negative:
-                    earnings_badge = f"<span style='margin-left: 4px; font-size: 8px; background-color: #2a1215; color: #f87171; padding: 2px 5px; border-radius: 3px; display: inline-block;'>EPS {earnings_val}</span>"
+                    earnings_badge = (
+                        f"<span class='kpi kpi-eps-neg'>EPS {earnings_val}</span>"
+                    )
                 else:
-                    earnings_badge = f"<span style='margin-left: 4px; font-size: 8px; background-color: #1e1b4b; color: #a78bfa; padding: 2px 5px; border-radius: 3px; display: inline-block;'>EPS {earnings_val}</span>"
+                    earnings_badge = (
+                        f"<span class='kpi kpi-eps-pos'>EPS {earnings_val}</span>"
+                    )
 
             potential_str = s.get("growth_pct")
             potential_color = "#cbd5e1"
@@ -346,7 +559,7 @@ def build_html_email(brief_data, watchlist):
                 players_str = ", ".join(players_list)
                 emerging_html = f"""
                 <div style="margin-top: 15px; padding: 12px; background-color: rgba(245, 158, 11, 0.04); border-left: 3px solid #f59e0b; border-radius: 4px; font-size: 11px; color: #94a3b8; line-height: 1.4;">
-                    <strong style="color: #f59e0b; text-transform: uppercase; font-size: 10px; display: block; margin-bottom: 4px;">📡 Emerging Competitor Radar</strong>
+                    <strong style="color: #f59e0b; text-transform: uppercase; font-size: 10px; display: block; margin-bottom: 4px;">Emerging Competitor Radar</strong>
                     Spotted news mentions of: {players_str}. Mapped as potential new entrants or disruptive competitors in the {meta['label']} sector.
                 </div>
                 """
@@ -359,7 +572,7 @@ def build_html_email(brief_data, watchlist):
                 </div>
                 <p style="font-size: 13px; color: #94a3b8; margin-top: -10px; margin-bottom: 15px;">{meta['desc']}</p>
                 
-                <h4 style="margin: 0 0 10px 0; font-size: 13px; text-transform: uppercase; color: #4b5563; letter-spacing: 0.5px;">Latest Bulletins & Policy Signals</h4>
+                <h4 style="margin: 0 0 10px 0; font-size: 13px; text-transform: uppercase; color: #4b5563; letter-spacing: 0.5px;">Latest Bulletins &amp; Policy Signals</h4>
                 {news_html}
                 
                 <h4 style="margin: 15px 0 10px 0; font-size: 13px; text-transform: uppercase; color: #4b5563; letter-spacing: 0.5px;">High-Growth Catalyst Watchlist</h4>
@@ -393,7 +606,7 @@ def build_html_email(brief_data, watchlist):
         )
         agreements_html = f"""
         <div class="section-card">
-            <h3 style="color: #60a5fa; margin-bottom: 10px; font-size: 16px;">🤝 Corporate Agreements & Partnerships</h3>
+            <h3 style="color: #60a5fa; margin-bottom: 10px; font-size: 16px;">Corporate Agreements &amp; Partnerships</h3>
             <ul style="font-size: 13px; line-height: 1.6; padding-left: 20px; color: #cbd5e1;">{items}</ul>
         </div>
         """
@@ -409,7 +622,7 @@ def build_html_email(brief_data, watchlist):
         )
         launches_html = f"""
         <div class="section-card">
-            <h3 style="color: #34d399; margin-bottom: 10px; font-size: 16px;">🚀 Product Launches & Innovations</h3>
+            <h3 style="color: #34d399; margin-bottom: 10px; font-size: 16px;">Product Launches &amp; Innovations</h3>
             <ul style="font-size: 13px; line-height: 1.6; padding-left: 20px; color: #cbd5e1;">{items}</ul>
         </div>
         """
@@ -425,7 +638,7 @@ def build_html_email(brief_data, watchlist):
         )
         filings_html = f"""
         <div class="section-card">
-            <h3 style="color: #6366f1; margin-bottom: 10px; font-size: 16px;">📄 Corporate Exchange Filings</h3>
+            <h3 style="color: #6366f1; margin-bottom: 10px; font-size: 16px;">Corporate Exchange Filings</h3>
             <ul style="font-size: 13px; line-height: 1.6; padding-left: 20px; color: #cbd5e1;">{items}</ul>
         </div>
         """
@@ -447,15 +660,20 @@ def build_html_email(brief_data, watchlist):
                 grouped[name]["schemes"].append(c.get("announcement"))
 
         emerging_items = ""
-        for name, data in grouped.items():
+        for name, data in list(grouped.items())[:8]:
             ticker_str = f" ({data['ticker']})" if data["ticker"] else ""
             status_html = f"<span class='badge badge-success-alert' style='font-size: 8px;'>{data['status']}</span>"
-            schemes_html = "".join([f"<li>{s}</li>" for s in data["schemes"]])
+            schemes_html = "".join([f"<li>{s}</li>" for s in data["schemes"][:3]])
             emerging_items += f"<li><strong>{name}</strong>{ticker_str} {status_html}<ul style='padding-left: 20px; font-size: 11px; color: #94a3b8;'>{schemes_html}</ul></li>"
+        if len(grouped) > 8:
+            emerging_items += (
+                f"<li style='color: #6b7280; font-size: 11px;'>"
+                f"+ {len(grouped) - 8} more on the dashboard.</li>"
+            )
 
         emerging_html_global = f"""
         <div class="section-card">
-            <h3 style="color: #60a5fa; margin-bottom: 10px; font-size: 16px;"> Emerging Competitors (PLI Approvals)</h3>
+            <h3 style="color: #60a5fa; margin-bottom: 10px; font-size: 16px;">Emerging Competitors (PLI Approvals)</h3>
             <ul style="font-size: 13px; padding-left: 20px; color: #cbd5e1;">{emerging_items}</ul>
         </div>
         """
@@ -496,7 +714,7 @@ def build_html_email(brief_data, watchlist):
         )
         inst_html = f"""
         <div class="section-card">
-            <h3 style="color: #a78bfa; margin-bottom: 10px; font-size: 16px;">🏛️ Institutional Capital & Fund Flow Tracker</h3>
+            <h3 style="color: #a78bfa; margin-bottom: 10px; font-size: 16px;"> Institutional Capital &amp; Fund Flow Tracker</h3>
             {f'<h4 style="margin: 5px 0; color: #94a3b8; font-size: 12px; text-transform: uppercase;">SEBI SID Filings (Leading Indicator):</h4><ul style="font-size: 13px; padding-left: 20px; color: #cbd5e1; margin-bottom: 10px;">{sebi_items}</ul>' if sebi_items else ''}
             {f'<h4 style="margin: 5px 0; color: #94a3b8; font-size: 12px; text-transform: uppercase;">Institutional Activity Feed (Lagging):</h4><ul style="font-size: 13px; padding-left: 20px; color: #cbd5e1;">{inst_items}</ul>' if inst_items else ''}
             {f'<h4 style="margin: 5px 0; color: #94a3b8; font-size: 12px; text-transform: uppercase;">Accumulation Baseline (Historical MF NAV):</h4><ul style="font-size: 13px; padding-left: 20px; color: #cbd5e1;">{baseline_items}</ul>' if baseline_items else ''}
@@ -584,27 +802,27 @@ def build_html_email(brief_data, watchlist):
 
         valuation_html = f"""
         <div class="section-card">
-            <h3 style="color: #f59e0b; margin-bottom: 15px; font-size: 16px;">📊 Core Value Investing Matrix</h3>
+            <h3 style="color: #f59e0b; margin-bottom: 15px; font-size: 16px;">Core Value Investing Matrix</h3>
             
-            <h4 style="margin: 0 0 8px 0; color: #34d399; font-size: 12px; text-transform: uppercase;">🎯 Top Ranked AI Scores</h4>
+            <h4 style="margin: 0 0 8px 0; color: #34d399; font-size: 12px; text-transform: uppercase;">Top Ranked AI Scores</h4>
             <table class="stock-table" style="margin-bottom: 15px;">
                 <thead><tr><th>Ticker</th><th>Score</th><th>Tailwinds / Reasons</th><th>Identified Risks</th></tr></thead>
                 <tbody>{scoring_items}</tbody>
             </table>
             
-            <h4 style="margin: 0 0 8px 0; color: #34d399; font-size: 12px; text-transform: uppercase;">🛡️ Graham Margin of Safety Pass List</h4>
+            <h4 style="margin: 0 0 8px 0; color: #34d399; font-size: 12px; text-transform: uppercase;">Graham Margin of Safety Pass List</h4>
             <table class="stock-table" style="margin-bottom: 15px;">
                 <thead><tr><th>Ticker</th><th>Company</th><th>Price</th><th>Screen Passed</th></tr></thead>
                 <tbody>{mos_items}</tbody>
             </table>
             
-            <h4 style="margin: 15px 0 8px 0; color: #a78bfa; font-size: 12px; text-transform: uppercase;">🏰 Warren Buffett Allocation & Moat Screens</h4>
+            <h4 style="margin: 15px 0 8px 0; color: #a78bfa; font-size: 12px; text-transform: uppercase;">Warren Buffett Allocation &amp; Moat Screens</h4>
             <table class="stock-table" style="margin-bottom: 15px;">
                 <thead><tr><th>Ticker</th><th>Moat</th><th>Owner Earnings</th><th>$1 Test</th></tr></thead>
                 <tbody>{buffett_items}</tbody>
             </table>
             
-            <h4 style="margin: 15px 0 8px 0; color: #f87171; font-size: 12px; text-transform: uppercase;">⚠️ Valuation Caution List & Warnings</h4>
+            <h4 style="margin: 15px 0 8px 0; color: #f87171; font-size: 12px; text-transform: uppercase;">⚠ Valuation Caution List &amp; Warnings</h4>
             <table class="stock-table">
                 <thead><tr><th>Ticker</th><th>Company</th><th>Price</th><th>Warnings / Failed Criteria</th></tr></thead>
                 <tbody>{caution_items}</tbody>
@@ -638,7 +856,9 @@ def build_html_email(brief_data, watchlist):
     </html>
     """
 
-    return body_html
+    # Gmail clips messages over ~102 KB; indentation alone was ~20% of the
+    # document. Whitespace is insignificant in HTML, so compact it.
+    return "\n".join(line.strip() for line in body_html.split("\n") if line.strip())
 
 
 def send_email(html_content):
