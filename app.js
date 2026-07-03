@@ -885,7 +885,11 @@ function renderSectorDetail(sectorKey) {
             const fiiHtml = sc.fii_pct ? `<span class="sc-chip" title="Foreign Institutional Investors">FII: <strong>${sc.fii_pct}%</strong></span>` : '';
             const diiHtml = sc.dii_pct ? `<span class="sc-chip" title="Domestic Institutional Investors">DII: <strong>${sc.dii_pct}%</strong></span>` : '';
             let shareHtml = '';
-            if (sc.peer_share_pct) {
+            if (sc.industry_share_pct) {
+                const indChange = Number(sc.industry_share_change_pp) || 0;
+                const indDelta = indChange ? ` <span style="color: ${indChange > 0 ? '#34d399' : '#f87171'};">(${indChange > 0 ? '+' : ''}${indChange}pp)</span>` : '';
+                shareHtml = `<span class="sc-chip" title="Share of the full ${sc.industry_peer_count || ''}-company industry peer group's quarterly revenue (Screener peer table)">Industry Share: <strong>${sc.industry_share_pct}%</strong>${indDelta}</span>`;
+            } else if (sc.peer_share_pct) {
                 const shareChange = Number(sc.peer_share_change_pp) || 0;
                 const shareDelta = shareChange ? ` <span style="color: ${shareChange > 0 ? '#34d399' : '#f87171'};">(${shareChange > 0 ? '+' : ''}${shareChange}pp)</span>` : '';
                 shareHtml = `<span class="sc-chip" title="Share of tracked sector peer revenue, change over ${sc.peer_share_lookback || 1} quarter(s)">Peer Share: <strong>${sc.peer_share_pct}%</strong>${shareDelta}</span>`;
@@ -1304,6 +1308,51 @@ function renderFilingsTable() {
 
 // Render Institutional Flows
 function renderInstitutionalFlows() {
+    // Exchange-disclosed bulk/block deals
+    const dealsBody = document.getElementById("deals-body");
+    if (dealsBody) {
+        dealsBody.innerHTML = "";
+        const deals = appData.briefing.institutional_deals || [];
+        if (deals.length === 0) {
+            setTableEmpty(dealsBody, 5, "No deals on watchlist names", "No bulk or block deal touched a watchlist company in the tracked window.");
+        } else {
+            deals.slice(0, 15).forEach(d => {
+                const isBuy = d.side === "buy";
+                const color = isBuy ? "var(--success, #34d399)" : "var(--danger, #f87171)";
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td class="t-ticker">${escapeHtml(d.ticker)}</td>
+                    <td style="color: ${color}; font-weight: 700; text-transform: uppercase;">${escapeHtml(d.side)} (${escapeHtml(d.deal_type || "bulk")})</td>
+                    <td>${escapeHtml(d.client || "Undisclosed")}</td>
+                    <td class="num">${escapeHtml(d.quantity ?? "—")}</td>
+                    <td>${escapeHtml(d.date || "—")}</td>
+                `;
+                dealsBody.appendChild(tr);
+            });
+        }
+    }
+
+    // Capital-raising disclosures
+    const fundBody = document.getElementById("fundraising-body");
+    if (fundBody) {
+        fundBody.innerHTML = "";
+        const events = appData.briefing.fundraising_events || [];
+        if (events.length === 0) {
+            setTableEmpty(fundBody, 4, "No capital-raising disclosures", "No QIP, rights, preferential or buyback filing was detected in the tracked window.");
+        } else {
+            events.slice(0, 15).forEach(e => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td><strong>${escapeHtml(e.company)}</strong>${e.ticker ? ` <span class="t-ticker">${escapeHtml(e.ticker)}</span>` : ""}</td>
+                    <td><span class="badge-warning-alert" style="font-size: 9px;">${escapeHtml(e.keyword || "fund raising")}</span></td>
+                    <td style="max-width: 320px; white-space: normal; font-size: 12px;">${escapeHtml(e.subject || "")}</td>
+                    <td>${escapeHtml(e.date || "—")}</td>
+                `;
+                fundBody.appendChild(tr);
+            });
+        }
+    }
+
     // SEBI Filings Table
     const sebiBody = document.getElementById("sebi-filings-body");
     if (sebiBody) {

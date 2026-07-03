@@ -21,6 +21,14 @@ from analysis import postmortem
 from analysis.thesis import compute_thesis_health
 from analysis.variant_perception import compute_variant_perception
 from analysis.curve_stage import classify_sector_curve_stage
+from analysis.market_share import (
+    compute_industry_share,
+    snapshot_prior_industry_shares,
+)
+from providers.exchange_events import (
+    fetch_fundraising_events_async,
+    fetch_institutional_deals_async,
+)
 
 
 def save_data_for_dashboard(brief_data, watchlist):
@@ -52,6 +60,7 @@ async def run_pipeline():
     # Snapshot targets/coverage before anything mutates the watchlist, so
     # estimate-revision momentum can diff "before this run" vs "after".
     prior_estimates = revisions_mod.snapshot_prior_estimates(watchlist)
+    prior_industry_shares = snapshot_prior_industry_shares(watchlist)
 
     # Gather news data async
     data = await fetch_all_feeds_async()
@@ -71,7 +80,14 @@ async def run_pipeline():
 
     # Fetch Screener.in fundamentals async; also returns Screener's industry
     # peer tables — a competitor-discovery channel independent of headlines.
-    data["peer_competitors"] = await fetch_all_screener_fundamentals(watchlist) or {}
+    peer_competitors, industry_peers = await fetch_all_screener_fundamentals(watchlist)
+    data["peer_competitors"] = peer_competitors or {}
+
+    # True industry market share: each holding's slice of its FULL Screener
+    # industry peer group's quarterly sales, not just the watchlist subset.
+    data["industry_share"] = compute_industry_share(
+        watchlist, industry_peers, prior_industry_shares
+    )
 
     # Estimate each holding's share of tracked peer-group revenue and its trend
     from analysis.market_share import compute_peer_market_share
@@ -86,6 +102,8 @@ async def run_pipeline():
         sebi_task = check_sebi_sid_filings_async(session)
         inst_task = fetch_institutional_activity_async(session, watchlist)
         filings_task = fetch_exchange_filings_async(session, watchlist)
+        fundraising_task = fetch_fundraising_events_async(session, watchlist)
+        deals_task = fetch_institutional_deals_async(session, watchlist)
 
         (
             pli_competitors,
@@ -93,8 +111,16 @@ async def run_pipeline():
             sebi_filings,
             inst_activity,
             corp_filings,
+            fundraising_events,
+            institutional_deals,
         ) = await asyncio.gather(
-            pli_task, adv_rss_task, sebi_task, inst_task, filings_task
+            pli_task,
+            adv_rss_task,
+            sebi_task,
+            inst_task,
+            filings_task,
+            fundraising_task,
+            deals_task,
         )
 
         from history.store import HistoryStore
@@ -119,6 +145,14 @@ async def run_pipeline():
         merged_inst = store.deduplicate_and_merge(
             "institutional_activity", inst_activity, ["company", "title"]
         )
+        merged_fundraising = store.deduplicate_and_merge(
+            "fundraising_events", fundraising_events, ["company", "subject"]
+        )
+        merged_deals = store.deduplicate_and_merge(
+            "institutional_deals",
+            institutional_deals,
+            ["ticker", "client", "date", "side"],
+        )
 
         data["emerging_competitors"] = merged_competitors
         data["corporate_agreements"] = merged_agreements
@@ -126,6 +160,8 @@ async def run_pipeline():
         data["sebi_filings"] = merged_sebi
         data["institutional_activity"] = merged_inst
         data["corporate_filings"] = merged_filings
+        data["fundraising_events"] = merged_fundraising[:40]
+        data["institutional_deals"] = merged_deals[:40]
 
     # Compile margin of safety and moat analytics
     build_dashboard_views(data, watchlist)

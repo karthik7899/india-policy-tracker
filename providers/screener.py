@@ -172,14 +172,17 @@ async def fetch_screener_async(session, ticker, sector, price):
     return ticker, sc, warehouse_id
 
 
-def parse_peer_table(html, exclude_tickers):
-    """Parses Screener's peers-API HTML fragment into competitor candidates.
+def parse_peer_table(html):
+    """Parses Screener's peers-API HTML fragment into industry peer rows.
 
     The fragment is a table whose header names the columns; we locate the
-    Name, Mar Cap and quarterly Sales-variation columns by header text so a
-    column being added or reordered upstream doesn't silently corrupt values.
-    Returns a list of {name, ticker, sales_var_pct, market_cap} dicts for
-    companies not already tracked.
+    Name, Mar Cap, absolute quarterly Sales and Sales-variation columns by
+    header text so a column being added or reordered upstream doesn't
+    silently corrupt values. Returns ALL rows — watchlist companies
+    included — as {name, ticker, sales_var_pct, market_cap, sales_qtr};
+    callers split candidates from holdings. The absolute quarterly sales
+    column is what makes a true industry-wide market-share denominator
+    possible (analysis/market_share.py).
     """
     candidates = []
     soup = BeautifulSoup(html, "html.parser")
@@ -188,12 +191,14 @@ def parse_peer_table(html, exclude_tickers):
         return candidates
 
     headers = [th.get_text(strip=True).lower() for th in table.find_all("th")]
-    name_idx = sales_var_idx = mcap_idx = None
+    name_idx = sales_var_idx = mcap_idx = sales_qtr_idx = None
     for i, h in enumerate(headers):
         if h.startswith("name"):
             name_idx = i
         elif "sales var" in h:
             sales_var_idx = i
+        elif h.startswith("sales qtr"):
+            sales_qtr_idx = i
         elif "mar cap" in h or "market cap" in h:
             mcap_idx = i
     if name_idx is None:
@@ -221,20 +226,19 @@ def parse_peer_table(html, exclude_tickers):
         peer_ticker = parts[1] if len(parts) >= 2 and parts[0] == "company" else None
         if not name or not peer_ticker:
             continue
-        if peer_ticker.upper() in exclude_tickers:
-            continue
         candidates.append(
             {
                 "name": name,
                 "ticker": peer_ticker.upper(),
                 "sales_var_pct": _cell_float(cells, sales_var_idx),
                 "market_cap": _cell_float(cells, mcap_idx),
+                "sales_qtr": _cell_float(cells, sales_qtr_idx),
             }
         )
     return candidates
 
 
-async def fetch_peers_async(session, ticker, warehouse_id, exclude_tickers):
+async def fetch_peers_async(session, ticker, warehouse_id):
     """Fetches Screener's peer-comparison table for one company.
 
     This is a structured competitor-discovery channel that does not depend on
@@ -254,7 +258,7 @@ async def fetch_peers_async(session, ticker, warehouse_id, exclude_tickers):
                 log.warning(f"{ticker}: Screener peers API returned {response.status}")
                 return ticker, []
             text = await response.text()
-        return ticker, parse_peer_table(text, exclude_tickers)
+        return ticker, parse_peer_table(text)
     except Exception as e:
         log.warning(f"{ticker}: Screener peers fetch failed: {e!r}")
         return ticker, []
@@ -289,9 +293,13 @@ class _RequestPacer:
 async def fetch_all_screener_fundamentals(watchlist):
     """Loads Screener fundamentals into each stock and discovers peer competitors.
 
-    Returns {sector: [candidate, ...]} of Screener-listed industry peers that
-    are not in the watchlist — a competitor-discovery channel independent of
-    news headlines. Empty dict when peer data is unavailable.
+    Returns (peer_competitors, industry_peers):
+      - peer_competitors: {sector: [row, ...]} of Screener industry peers NOT
+        in the watchlist — the competitor-discovery radar.
+      - industry_peers: {sector: [row, ...]} of the FULL peer table including
+        watchlist companies, each row carrying absolute quarterly sales —
+        the denominator for true industry market share.
+    Both empty when peer data is unavailable.
     """
     log.info("Fetching actual filed fundamentals from Screener.in (Async)...")
     ticker_to_stock = {}
@@ -341,26 +349,29 @@ async def fetch_all_screener_fundamentals(watchlist):
                 sector_representative[sector] = (ticker, warehouse_id)
 
         peer_tasks = [
-            throttled(
-                fetch_peers_async(session, ticker, warehouse_id, watchlist_tickers)
-            )
+            throttled(fetch_peers_async(session, ticker, warehouse_id))
             for ticker, warehouse_id in sector_representative.values()
         ]
         peer_results = await asyncio.gather(*peer_tasks) if peer_tasks else []
 
     peer_competitors = {}
-    for ticker, candidates in peer_results:
+    industry_peers = {}
+    for ticker, rows in peer_results:
         sector = ticker_to_sector.get(ticker)
-        if not sector or not candidates:
+        if not sector or not rows:
             continue
-        bucket = peer_competitors.setdefault(sector, [])
-        seen = {c["ticker"] for c in bucket}
-        for cand in candidates:
-            if cand["ticker"] not in seen:
-                seen.add(cand["ticker"])
-                bucket.append(cand)
+        full_bucket = industry_peers.setdefault(sector, [])
+        cand_bucket = peer_competitors.setdefault(sector, [])
+        seen = {r["ticker"] for r in full_bucket}
+        for row in rows:
+            if row["ticker"] in seen:
+                continue
+            seen.add(row["ticker"])
+            full_bucket.append(row)
+            if row["ticker"] not in watchlist_tickers:
+                cand_bucket.append(row)
 
     if peer_competitors:
         found = sum(len(v) for v in peer_competitors.values())
         log.info(f"Peer radar: {found} non-watchlist competitors discovered.")
-    return peer_competitors
+    return peer_competitors, industry_peers

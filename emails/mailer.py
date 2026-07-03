@@ -15,13 +15,39 @@ _SEVERITY_BADGE = {
 }
 
 
-def _build_early_warning_html(warnings):
+# Gmail clips messages over ~102 KB. The email renders at full richness
+# first; if the result exceeds the budget (news-heavy day, growing research
+# sections), it re-renders once with the compact caps — guaranteed delivery
+# beats marginal extra rows.
+_SIZE_BUDGET_BYTES = 95_000
+
+_CAPS_NORMAL = {
+    "news": 3,
+    "warnings": 12,
+    "lists": 5,
+    "research": 6,
+    "curve": 14,
+    "emerging": 8,
+    "caution": 8,
+}
+_CAPS_COMPACT = {
+    "news": 2,
+    "warnings": 8,
+    "lists": 3,
+    "research": 4,
+    "curve": 10,
+    "emerging": 5,
+    "caution": 5,
+}
+
+
+def _build_early_warning_html(warnings, caps=_CAPS_NORMAL):
     """Renders the prioritized Early Warning card. Returns '' when there is nothing to flag."""
     if not warnings:
         return ""
 
     rows = ""
-    for w in warnings[:12]:
+    for w in warnings[: caps["warnings"]]:
         bg, fg = _SEVERITY_BADGE.get(w.get("severity", "Low"), _SEVERITY_BADGE["Low"])
         is_risk = w.get("direction") == "risk"
         dir_icon = "▼" if is_risk else "▲"
@@ -107,7 +133,7 @@ _THESIS_BADGE = {
 }
 
 
-def _build_research_engine_html(brief_data):
+def _build_research_engine_html(brief_data, caps=_CAPS_NORMAL):
     """Renders the research-engine card: thesis health, estimate-revision
     momentum, variant perception, sector curve stage, and the rotation
     engine's own track record. Each sub-section is independently optional —
@@ -131,7 +157,7 @@ def _build_research_engine_html(brief_data):
         flagged.sort(key=lambda r: 0 if r["status"] == "Broken" else 1)
         intact_count = len(thesis_health) - len(flagged)
         rows = ""
-        for r in flagged[:6]:
+        for r in flagged[: caps["research"]]:
             bg, fg = _THESIS_BADGE.get(r["status"], _THESIS_BADGE["Weakening"])
             reason = (r.get("reasons") or [""])[0]
             rows += f"""
@@ -160,7 +186,7 @@ def _build_research_engine_html(brief_data):
     # --- Estimate revision momentum -----------------------------------
     if revisions:
         rows = ""
-        for r in revisions[:6]:
+        for r in revisions[: caps["research"]]:
             up = r["direction"] == "up"
             color = "#34d399" if up else "#f87171"
             arrow = "▲" if up else "▼"
@@ -185,7 +211,7 @@ def _build_research_engine_html(brief_data):
     # --- Variant perception ---------------------------------------------
     if variant:
         rows = ""
-        for r in variant[:6]:
+        for r in variant[: caps["research"]]:
             bullish = r["direction"] == "more_bullish"
             color = "#34d399" if bullish else "#f87171"
             rows += f"""
@@ -211,7 +237,7 @@ def _build_research_engine_html(brief_data):
     # --- Sector curve stage ----------------------------------------------
     if curve_stage:
         rows = ""
-        for sector, info in list(curve_stage.items())[:14]:
+        for sector, info in list(curve_stage.items())[: caps["curve"]]:
             rows += f"""
             <tr>
                 <td class="ew-td">{sector.replace('_', ' ').title()}</td>
@@ -237,7 +263,7 @@ def _build_research_engine_html(brief_data):
             else "No rotation decisions have reached the 45-day scoring window yet."
         )
         rows = ""
-        for e in recent_outcomes[:5]:
+        for e in recent_outcomes[: caps["lists"]]:
             win = e.get("outcome") == "Thesis Playing Out"
             color = "#34d399" if win else "#f87171"
             rows += f"""
@@ -289,8 +315,8 @@ def _escape_deep(value):
     return value
 
 
-def build_html_email(brief_data, watchlist):
-    """Renders the HTML structure for the email notification."""
+def _render_email(brief_data, watchlist, caps):
+    """Renders the HTML document at the row caps given."""
     brief_data = _escape_deep(brief_data or {})
     watchlist = _escape_deep(watchlist or {})
     today_str = datetime.date.today().strftime("%B %d, %Y")
@@ -402,12 +428,12 @@ def build_html_email(brief_data, watchlist):
     """
 
     # Early Warning System — the first actionable thing the reader should see
-    body_html += _build_early_warning_html(warnings)
+    body_html += _build_early_warning_html(warnings, caps)
 
     # Research Engine: thesis health, revision momentum, variant perception,
     # curve stage, rotation track record — all synthesized from data already
     # computed above, no new fetches.
-    body_html += _build_research_engine_html(brief_data)
+    body_html += _build_research_engine_html(brief_data, caps)
 
     for sector, news_items in brief_data.items():
         if sector in (
@@ -431,7 +457,7 @@ def build_html_email(brief_data, watchlist):
         # stay under Gmail's ~102 KB clip limit; the dashboard has them all.
         news_html = ""
         if news_items:
-            for item in news_items[:3]:
+            for item in news_items[: caps["news"]]:
                 badge_class = (
                     "badge-positive"
                     if item["impact"] == "Positive"
@@ -450,7 +476,7 @@ def build_html_email(brief_data, watchlist):
                     </div>
                 </div>
                 """
-            overflow = len(news_items) - 3
+            overflow = len(news_items) - caps["news"]
             if overflow > 0:
                 news_html += (
                     f"<p style='font-size: 11px; color: #6b7280; margin: 6px 0 0 0;'>"
@@ -601,7 +627,7 @@ def build_html_email(brief_data, watchlist):
         items = "".join(
             [
                 f"<li><strong>{a['source']}</strong>: {a['title']}</li>"
-                for a in agreements[:5]
+                for a in agreements[: caps["lists"]]
             ]
         )
         agreements_html = f"""
@@ -617,7 +643,7 @@ def build_html_email(brief_data, watchlist):
         items = "".join(
             [
                 f"<li><strong>{launch.get('company', 'Unknown')}</strong> ({launch.get('industry', 'Manufacturing')}): {launch.get('product', launch.get('title', ''))} <em style='font-size: 11px; color: #94a3b8;'>[{launch.get('source', 'News')}]</em></li>"
-                for launch in launches[:5]
+                for launch in launches[: caps["lists"]]
             ]
         )
         launches_html = f"""
@@ -633,7 +659,7 @@ def build_html_email(brief_data, watchlist):
         items = "".join(
             [
                 f"<li><strong>{f.get('company', 'Unknown')}</strong> ({f.get('industry', 'Corporate')}): {f.get('filing', '')} <em style='font-size: 11px; color: #94a3b8;'>[{f.get('source', 'Exchange')}]</em></li>"
-                for f in filings[:5]
+                for f in filings[: caps["lists"]]
             ]
         )
         filings_html = f"""
@@ -660,15 +686,15 @@ def build_html_email(brief_data, watchlist):
                 grouped[name]["schemes"].append(c.get("announcement"))
 
         emerging_items = ""
-        for name, data in list(grouped.items())[:8]:
+        for name, data in list(grouped.items())[: caps["emerging"]]:
             ticker_str = f" ({data['ticker']})" if data["ticker"] else ""
             status_html = f"<span class='badge badge-success-alert' style='font-size: 8px;'>{data['status']}</span>"
             schemes_html = "".join([f"<li>{s}</li>" for s in data["schemes"][:3]])
             emerging_items += f"<li><strong>{name}</strong>{ticker_str} {status_html}<ul style='padding-left: 20px; font-size: 11px; color: #94a3b8;'>{schemes_html}</ul></li>"
-        if len(grouped) > 8:
+        if len(grouped) > caps["emerging"]:
             emerging_items += (
                 f"<li style='color: #6b7280; font-size: 11px;'>"
-                f"+ {len(grouped) - 8} more on the dashboard.</li>"
+                f"+ {len(grouped) - caps['emerging']} more on the dashboard.</li>"
             )
 
         emerging_html_global = f"""
@@ -683,9 +709,31 @@ def build_html_email(brief_data, watchlist):
     inst_activity = brief_data.get("institutional_activity", [])
     sebi_filings = brief_data.get("sebi_filings", [])
     inst_baseline = brief_data.get("institutional_baseline", [])
+    fundraising_events = brief_data.get("fundraising_events", [])
+    institutional_deals = brief_data.get("institutional_deals", [])
+
+    def _fund_item(e):
+        ticker_str = f" ({e['ticker']})" if e.get("ticker") else ""
+        return (
+            f"<li><strong>{e.get('company', '')}</strong>{ticker_str}: "
+            f"{e.get('subject', '')[:110]} "
+            f"<em style='font-size: 10px; color: #94a3b8;'>[{e.get('date', '')}]</em></li>"
+        )
+
+    fundraising_items = "".join(
+        _fund_item(e) for e in fundraising_events[: caps["lists"]]
+    )
+    deal_items = "".join(
+        f"<li><span class='stock-ticker'>{d.get('ticker', '')}</span> — "
+        f"<span style='color: {'#34d399' if d.get('side') == 'buy' else '#f87171'};'>"
+        f"{d.get('side', '')}</span> {d.get('deal_type', 'bulk')} deal by "
+        f"{d.get('client', 'undisclosed')} "
+        f"<em style='font-size: 10px; color: #94a3b8;'>[{d.get('date', '')}]</em></li>"
+        for d in institutional_deals[: caps["lists"]]
+    )
 
     baseline_items = ""
-    for b in inst_baseline[:5]:
+    for b in inst_baseline[: caps["lists"]]:
         trend = b.get("accumulation_trend", "Steady")
         trend_color = (
             "#34d399"
@@ -699,17 +747,23 @@ def build_html_email(brief_data, watchlist):
             f"<span style='color: {trend_color}; font-size: 11px;'>(1Y {r1y_str} · {trend})</span></li>"
         )
 
-    if inst_activity or sebi_filings or baseline_items:
+    if (
+        inst_activity
+        or sebi_filings
+        or baseline_items
+        or fundraising_items
+        or deal_items
+    ):
         inst_items = "".join(
             [
                 f"<li><strong>{i['source']}</strong>: {i['headline']}</li>"
-                for i in inst_activity[:4]
+                for i in inst_activity[: min(4, caps["lists"])]
             ]
         )
         sebi_items = "".join(
             [
                 f"<li><strong>{s['theme']}</strong>: {s['fund_name']} <span class='badge badge-neutral' style='font-size: 8px;'>SID Filed</span></li>"
-                for s in sebi_filings[:4]
+                for s in sebi_filings[: min(4, caps["lists"])]
             ]
         )
         inst_html = f"""
@@ -717,6 +771,8 @@ def build_html_email(brief_data, watchlist):
             <h3 style="color: #a78bfa; margin-bottom: 10px; font-size: 16px;"> Institutional Capital &amp; Fund Flow Tracker</h3>
             {f'<h4 style="margin: 5px 0; color: #94a3b8; font-size: 12px; text-transform: uppercase;">SEBI SID Filings (Leading Indicator):</h4><ul style="font-size: 13px; padding-left: 20px; color: #cbd5e1; margin-bottom: 10px;">{sebi_items}</ul>' if sebi_items else ''}
             {f'<h4 style="margin: 5px 0; color: #94a3b8; font-size: 12px; text-transform: uppercase;">Institutional Activity Feed (Lagging):</h4><ul style="font-size: 13px; padding-left: 20px; color: #cbd5e1;">{inst_items}</ul>' if inst_items else ''}
+            {f'<h4 style="margin: 5px 0; color: #94a3b8; font-size: 12px; text-transform: uppercase;">Bulk &amp; Block Deals (Exchange-Disclosed):</h4><ul style="font-size: 13px; padding-left: 20px; color: #cbd5e1;">{deal_items}</ul>' if deal_items else ''}
+            {f'<h4 style="margin: 5px 0; color: #94a3b8; font-size: 12px; text-transform: uppercase;">Capital Raising Radar (QIP / Rights / Preferential):</h4><ul style="font-size: 13px; padding-left: 20px; color: #cbd5e1;">{fundraising_items}</ul>' if fundraising_items else ''}
             {f'<h4 style="margin: 5px 0; color: #94a3b8; font-size: 12px; text-transform: uppercase;">Accumulation Baseline (Historical MF NAV):</h4><ul style="font-size: 13px; padding-left: 20px; color: #cbd5e1;">{baseline_items}</ul>' if baseline_items else ''}
         </div>
         """
@@ -732,7 +788,7 @@ def build_html_email(brief_data, watchlist):
             m for m in mos if m.get("is_defensive_pass") or m.get("is_bargain")
         ]
         mos_items = ""
-        for m in passed_mos[:5]:
+        for m in passed_mos[: caps["lists"]]:
             screens = []
             if m.get("is_defensive_pass"):
                 screens.append("Defensive")
@@ -745,7 +801,7 @@ def build_html_email(brief_data, watchlist):
             [
                 f"<tr><td class='stock-ticker'>{b['ticker']}</td><td>{b.get('moat_status', 'Unknown')}</td><td>₹{b.get('owner_earnings', 0)} Cr</td><td style='color: "
                 f"{'#34d399' if b.get('passed_retained_test') else '#f87171'};'>{'Pass' if b.get('passed_retained_test') else 'Fail'}</td></tr>"
-                for b in buffett[:5]
+                for b in buffett[: caps["lists"]]
             ]
         )
 
@@ -769,7 +825,7 @@ def build_html_email(brief_data, watchlist):
 
         caution_items = ""
         if caution_list:
-            for c in caution_list[:8]:
+            for c in caution_list[: caps["caution"]]:
                 alerts_str = ", ".join(c["alerts"])
                 caution_items += f"<tr><td class='stock-ticker'>{c['ticker']}</td><td>{c['name']}</td><td>₹{c['price']}</td><td style='color: #f87171; font-size: 11px;'>{alerts_str}</td></tr>"
         else:
@@ -796,7 +852,7 @@ def build_html_email(brief_data, watchlist):
         scoring_items = "".join(
             [
                 f"<tr><td class='stock-ticker'>{c['ticker']}</td><td>{c['score']} ({c['confidence']})</td><td style='color: #34d399; font-size: 11px;'>{c['reasons']}</td><td style='color: #f87171; font-size: 11px;'>{c['risks']}</td></tr>"
-                for c in scoring_list[:5]
+                for c in scoring_list[: caps["lists"]]
             ]
         )
 
@@ -859,6 +915,24 @@ def build_html_email(brief_data, watchlist):
     # Gmail clips messages over ~102 KB; indentation alone was ~20% of the
     # document. Whitespace is insignificant in HTML, so compact it.
     return "\n".join(line.strip() for line in body_html.split("\n") if line.strip())
+
+
+def build_html_email(brief_data, watchlist):
+    """Renders the briefing email, guaranteed under Gmail's clip limit.
+
+    Renders at full richness first; if the document exceeds the size budget,
+    re-renders once with compact row caps rather than risk the client
+    truncating the message mid-table.
+    """
+    html = _render_email(brief_data, watchlist, _CAPS_NORMAL)
+    size = len(html.encode("utf-8"))
+    if size > _SIZE_BUDGET_BYTES:
+        log.warning(
+            f"Briefing email is {size} bytes (> {_SIZE_BUDGET_BYTES}); "
+            f"re-rendering with compact caps."
+        )
+        html = _render_email(brief_data, watchlist, _CAPS_COMPACT)
+    return html
 
 
 def send_email(html_content):

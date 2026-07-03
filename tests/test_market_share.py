@@ -268,20 +268,21 @@ _PEERS_HTML = """
 """
 
 
-def test_parse_peer_table_extracts_candidates():
-    candidates = parse_peer_table(_PEERS_HTML, exclude_tickers={"TRACKED"})
-    assert len(candidates) == 1
-    cand = candidates[0]
-    assert cand["ticker"] == "RIVAL"
-    assert cand["name"] == "Rising Rival"
-    assert cand["sales_var_pct"] == 42.5
-    assert cand["market_cap"] == 12500.0
+def test_parse_peer_table_extracts_all_rows():
+    rows = parse_peer_table(_PEERS_HTML)
+    assert [r["ticker"] for r in rows] == ["RIVAL", "TRACKED"]
+    rival = rows[0]
+    assert rival["name"] == "Rising Rival"
+    assert rival["sales_var_pct"] == 42.5
+    assert rival["market_cap"] == 12500.0
+    assert rival["sales_qtr"] == 1000.0
+    assert rows[1]["sales_qtr"] == 400.0
 
 
 def test_parse_peer_table_handles_garbage():
-    assert parse_peer_table("", set()) == []
-    assert parse_peer_table("<div>no table here</div>", set()) == []
-    assert parse_peer_table("<table><tr><td>headerless</td></tr></table>", set()) == []
+    assert parse_peer_table("") == []
+    assert parse_peer_table("<div>no table here</div>") == []
+    assert parse_peer_table("<table><tr><td>headerless</td></tr></table>") == []
 
 
 # ---------------------------------------------------------------------------
