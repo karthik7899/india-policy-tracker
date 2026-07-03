@@ -293,14 +293,29 @@ def _market_share_shifts(watchlist: Dict[str, Any]) -> List[Dict[str, Any]]:
             if not isinstance(stock, dict):
                 continue
             sc = stock.get("screener")
-            if not isinstance(sc, dict) or "peer_share_pct" not in sc:
+            if not isinstance(sc, dict):
                 continue
-            change = _to_float(sc.get("peer_share_change_pp"))
-            share = _to_float(sc.get("peer_share_pct"))
+
+            # Prefer the industry-wide share (full Screener peer table, all
+            # listed rivals) over the narrow watchlist peer-group estimate.
+            industry_change = _to_float(sc.get("industry_share_change_pp"))
+            industry_share = _to_float(sc.get("industry_share_pct"))
+            if industry_change is not None and industry_share is not None:
+                change = industry_change
+                share = industry_share
+                lookback = 1
+                peers = sc.get("industry_peer_count", 0)
+                group_label = f"{peers}-company industry group"
+            elif "peer_share_pct" in sc:
+                change = _to_float(sc.get("peer_share_change_pp"))
+                share = _to_float(sc.get("peer_share_pct"))
+                lookback = sc.get("peer_share_lookback", 1)
+                peers = sc.get("peer_group_size", 0)
+                group_label = f"{peers}-stock peer group"
+            else:
+                continue
             if change is None or share is None:
                 continue
-            lookback = sc.get("peer_share_lookback", 1)
-            peers = sc.get("peer_group_size", 0)
             prev = share - change
 
             if change <= EARLY_WARNING_CONFIG.share_loss_pp:
@@ -318,8 +333,8 @@ def _market_share_shifts(watchlist: Dict[str, Any]) -> List[Dict[str, Any]]:
                         "direction": "risk",
                         "category": "Market Share",
                         "signal": (
-                            f"Losing revenue share of its {peers}-stock peer group: "
-                            f"{prev:.1f}% → {share:.1f}% over {lookback} quarter(s)."
+                            f"Losing revenue share of its {group_label}: "
+                            f"{prev:.1f}% → {share:.1f}% over {lookback} period(s)."
                         ),
                     }
                 )
@@ -333,8 +348,8 @@ def _market_share_shifts(watchlist: Dict[str, Any]) -> List[Dict[str, Any]]:
                         "direction": "opportunity",
                         "category": "Market Share",
                         "signal": (
-                            f"Gaining revenue share of its {peers}-stock peer group: "
-                            f"{prev:.1f}% → {share:.1f}% over {lookback} quarter(s)."
+                            f"Gaining revenue share of its {group_label}: "
+                            f"{prev:.1f}% → {share:.1f}% over {lookback} period(s)."
                         ),
                     }
                 )
@@ -487,6 +502,76 @@ def _competitive_threats(
     return alerts
 
 
+def _exchange_event_signals(
+    data: Dict[str, Any], watchlist: Dict[str, Any]
+) -> List[Dict[str, Any]]:
+    """Signals from exchange-disclosed events: capital raises and bulk/block
+    deals — primary-source disclosures, not news echoes.
+
+    A deal buy is institutional conviction (opportunity); a deal sell is a
+    risk flag. A capital raise is surfaced as a low-severity opportunity —
+    expansion capital is usually thesis-consistent for growth names, but the
+    reader should know about the dilution either way.
+    """
+    alerts: List[Dict[str, Any]] = []
+    names_by_ticker = {}
+    for sector, stocks in (watchlist or {}).items():
+        if sector == "macro_indicators":
+            continue
+        label = SECTOR_METADATA.get(sector, {}).get("label", sector)
+        for stock in stocks or []:
+            if isinstance(stock, dict) and stock.get("ticker"):
+                names_by_ticker[stock["ticker"]] = (stock.get("name"), label)
+
+    for event in data.get("fundraising_events", []) or []:
+        ticker = event.get("ticker")
+        if ticker not in names_by_ticker:
+            continue
+        name, sector_label = names_by_ticker[ticker]
+        alerts.append(
+            {
+                "ticker": ticker,
+                "name": name,
+                "sector": sector_label,
+                "severity": "Low",
+                "direction": "opportunity",
+                "category": "Capital Raise",
+                "signal": (
+                    f"Exchange disclosure ({event.get('keyword', 'fund raising')}): "
+                    f"{event.get('subject', '')[:120]}"
+                ),
+            }
+        )
+
+    for deal in data.get("institutional_deals", []) or []:
+        ticker = deal.get("ticker")
+        if ticker not in names_by_ticker:
+            continue
+        name, sector_label = names_by_ticker[ticker]
+        is_buy = deal.get("side") == "buy"
+        alerts.append(
+            {
+                "ticker": ticker,
+                "name": name,
+                "sector": sector_label,
+                "severity": "Medium",
+                "direction": "opportunity" if is_buy else "risk",
+                "category": (
+                    "Institutional Buy (Deal)"
+                    if is_buy
+                    else "Institutional Sell (Deal)"
+                ),
+                "signal": (
+                    f"{deal.get('deal_type', 'bulk').title()} deal: "
+                    f"{deal.get('client', 'undisclosed client')} "
+                    f"{'bought' if is_buy else 'sold'} "
+                    f"{deal.get('quantity', 'n/a')} shares."
+                ),
+            }
+        )
+    return alerts
+
+
 def generate_early_warnings(
     data: Dict[str, Any], watchlist: Dict[str, Any]
 ) -> List[Dict[str, Any]]:
@@ -515,6 +600,9 @@ def generate_early_warnings(
     # stocks the share computation couldn't cover.
     warnings.extend(_market_share_shifts(watchlist))
     warnings.extend(_growth_laggards(watchlist))
+
+    # Exchange-disclosed events: capital raises and bulk/block deals.
+    warnings.extend(_exchange_event_signals(data, watchlist))
 
     warnings.sort(
         key=lambda a: (
