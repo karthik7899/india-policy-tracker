@@ -262,3 +262,34 @@ def test_industry_share_drives_market_share_signal():
     assert warnings[0]["direction"] == "risk"
     assert "12-company industry group" in warnings[0]["signal"]
     assert "29.5% → 28.0%" in warnings[0]["signal"]
+
+
+def test_parse_functions_tolerate_string_payload():
+    """Regression for run #65: BSE returned HTTP 200 whose body json-parses
+    to a *string*, which crashed the whole pipeline via asyncio.gather."""
+    assert parse_announcements("No data found", _WATCHLIST) == []
+    assert parse_announcements(["a", "list"], _WATCHLIST) == []
+    assert parse_announcements(42, _WATCHLIST) == []
+    assert parse_deals("blocked", _WATCHLIST, "bulk") == []
+    assert parse_deals(3.14, _WATCHLIST, "block") == []
+
+
+def test_fetch_wrappers_never_raise(monkeypatch):
+    """Even if a parser somehow raises, the fetch coroutines must swallow it."""
+    import asyncio
+    import providers.exchange_events as ee
+
+    async def bad_fetch(session, url):
+        return {"Table": []}
+
+    def exploding_parser(*args, **kwargs):
+        raise RuntimeError("boom")
+
+    monkeypatch.setattr(ee, "_fetch_json", bad_fetch)
+    monkeypatch.setattr(ee, "parse_announcements", exploding_parser)
+    monkeypatch.setattr(ee, "parse_deals", exploding_parser)
+
+    events = asyncio.run(ee.fetch_fundraising_events_async(None, _WATCHLIST))
+    deals = asyncio.run(ee.fetch_institutional_deals_async(None, _WATCHLIST))
+    assert events == []
+    assert deals == []
