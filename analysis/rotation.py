@@ -123,7 +123,9 @@ def auto_curate_watchlist(brief_data, watchlist):
     structured_emerging = {s: [] for s in SECTOR_METADATA}
 
     # ⚡ Bolt Optimization: Pre-flatten watchlist to avoid O(n^2) loop
-    watchlisted_tickers = {s["ticker"] for s_list in watchlist.values() for s in s_list if s.get("ticker")}
+    watchlisted_tickers = {
+        s["ticker"] for s_list in watchlist.values() for s in s_list if s.get("ticker")
+    }
 
     with requests.Session() as session:
         for sector, companies in emerging_sectors.items():
