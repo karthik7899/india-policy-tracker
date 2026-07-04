@@ -96,7 +96,9 @@ def parse_announcements(payload, watchlist):
     capital is competitive intelligence).
     """
     events = []
-    rows = (payload or {}).get("Table") or []
+    if not isinstance(payload, dict):
+        return events
+    rows = payload.get("Table") or []
     if not isinstance(rows, list):
         return events
     for row in rows:
@@ -127,7 +129,9 @@ def parse_deals(payload, watchlist, deal_type):
     field names vary between the two feeds so lookups are permissive.
     """
     deals = []
-    rows = (payload or {}).get("Table") or []
+    if not isinstance(payload, dict):
+        return deals
+    rows = payload.get("Table") or []
     if not isinstance(rows, list):
         return deals
     for row in rows:
@@ -170,33 +174,63 @@ async def _fetch_json(session, url):
             if response.status != 200:
                 log.warning(f"BSE API returned {response.status} for {url}")
                 return None
-            return await response.json(content_type=None)
+            payload = await response.json(content_type=None)
+            if not isinstance(payload, dict):
+                preview = str(payload)[:120]
+                log.warning(
+                    f"BSE API returned non-dict JSON for {url}: "
+                    f"{type(payload).__name__} {preview!r}"
+                )
+            return payload
     except Exception as e:
         log.warning(f"BSE API fetch failed for {url}: {e!r}")
         return None
 
 
 async def fetch_fundraising_events_async(session, watchlist, lookback_days=3):
-    """Capital-raising disclosures from BSE announcements over the lookback window."""
-    log.info("Fetching BSE capital-raising disclosures (Async)...")
-    today = datetime.date.today()
-    frm = (today - datetime.timedelta(days=lookback_days)).strftime("%Y%m%d")
-    url = _ANNOUNCEMENTS_URL.format(frm=frm, to=today.strftime("%Y%m%d"))
-    payload = await _fetch_json(session, url)
-    events = parse_announcements(payload, watchlist)
-    if events:
-        log.info(f"BSE fundraising radar: {len(events)} capital-raising events.")
-    return events
+    """Capital-raising disclosures from BSE announcements over the lookback window.
+
+    Wrapped whole: this channel is enhancement data, and run #65 proved that
+    letting even a parsing surprise propagate kills the entire briefing via
+    asyncio.gather. Nothing here may ever raise.
+    """
+    try:
+        log.info("Fetching BSE capital-raising disclosures (Async)...")
+        today = datetime.date.today()
+        frm = (today - datetime.timedelta(days=lookback_days)).strftime("%Y%m%d")
+        url = _ANNOUNCEMENTS_URL.format(frm=frm, to=today.strftime("%Y%m%d"))
+        payload = await _fetch_json(session, url)
+        events = parse_announcements(payload, watchlist)
+        if events:
+            log.info(f"BSE fundraising radar: {len(events)} capital-raising events.")
+        else:
+            log.info("BSE fundraising radar: no qualifying disclosures.")
+        return events
+    except Exception as e:
+        log.warning(f"BSE fundraising radar failed safely: {e!r}")
+        return []
 
 
 async def fetch_institutional_deals_async(session, watchlist):
-    """Bulk + block deals from BSE touching watchlist companies."""
-    log.info("Fetching BSE bulk/block deals (Async)...")
-    bulk_payload = await _fetch_json(session, _BULK_DEALS_URL)
-    block_payload = await _fetch_json(session, _BLOCK_DEALS_URL)
-    deals = parse_deals(bulk_payload, watchlist, "bulk") + parse_deals(
-        block_payload, watchlist, "block"
-    )
-    if deals:
-        log.info(f"BSE deals radar: {len(deals)} bulk/block deals on watchlist names.")
-    return deals
+    """Bulk + block deals from BSE touching watchlist companies.
+
+    Wrapped whole for the same reason as the fundraising fetch: enhancement
+    data must never be able to take the briefing down.
+    """
+    try:
+        log.info("Fetching BSE bulk/block deals (Async)...")
+        bulk_payload = await _fetch_json(session, _BULK_DEALS_URL)
+        block_payload = await _fetch_json(session, _BLOCK_DEALS_URL)
+        deals = parse_deals(bulk_payload, watchlist, "bulk") + parse_deals(
+            block_payload, watchlist, "block"
+        )
+        if deals:
+            log.info(
+                f"BSE deals radar: {len(deals)} bulk/block deals on watchlist names."
+            )
+        else:
+            log.info("BSE deals radar: no deals touching watchlist names.")
+        return deals
+    except Exception as e:
+        log.warning(f"BSE deals radar failed safely: {e!r}")
+        return []
