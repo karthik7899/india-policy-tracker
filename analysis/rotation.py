@@ -122,6 +122,8 @@ def auto_curate_watchlist(brief_data, watchlist):
     # We will construct a structured emerging_players dictionary
     structured_emerging = {s: [] for s in SECTOR_METADATA}
 
+    watchlisted_tickers = {x["ticker"] for s_list in watchlist.values() for x in s_list}
+
     with requests.Session() as session:
         for sector, companies in emerging_sectors.items():
             if sector not in watchlist:
@@ -142,11 +144,7 @@ def auto_curate_watchlist(brief_data, watchlist):
                     )
                     continue
 
-                already_watchlisted = False
-                for s_key, s_list in watchlist.items():
-                    if any(x["ticker"] == ticker for x in s_list):
-                        already_watchlisted = True
-                        break
+                already_watchlisted = ticker in watchlisted_tickers
                 if already_watchlisted:
                     log.info(f"Ticker {ticker} is already in watchlist. Skipping.")
                     structured_emerging[sector].append(
@@ -268,8 +266,9 @@ def auto_curate_watchlist(brief_data, watchlist):
                         continue
 
                     related_headline = f"Policy tailwinds in the {sector} segment."
+                    name_lower = name.lower()
                     for item in brief_data.get(sector, []):
-                        if name.lower() in item["title"].lower():
+                        if name_lower in item["title"].lower():
                             related_headline = item["title"]
                             break
 
@@ -287,6 +286,7 @@ def auto_curate_watchlist(brief_data, watchlist):
                     current_watchlist = watchlist[sector]
                     if len(current_watchlist) < 5:
                         current_watchlist.append(candidate_stock)
+                        watchlisted_tickers.add(ticker)
                         log.info(
                             f"ADDED: {ticker} to {sector} (Space available: {len(current_watchlist)}/5)"
                         )
@@ -328,6 +328,8 @@ def auto_curate_watchlist(brief_data, watchlist):
                                 if x["ticker"] != weakest_stock["ticker"]
                             ]
                             watchlist[sector].append(candidate_stock)
+                            watchlisted_tickers.remove(weakest_stock["ticker"])
+                            watchlisted_tickers.add(ticker)
                             log.info(
                                 f"ROTATED: Replaced {weakest_stock['ticker']} with {ticker}"
                             )
