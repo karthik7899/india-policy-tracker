@@ -57,7 +57,7 @@ def _normalise(name):
     return "".join(ch for ch in str(name).lower() if ch.isalnum() or ch == " ")
 
 
-def match_watchlist_company(company_name, watchlist):
+def match_watchlist_company(company_name, flat_watchlist):
     """Best-effort match of an exchange-disclosed company name to a holding.
 
     Conservative: the holding's full name must appear inside the disclosed
@@ -69,13 +69,9 @@ def match_watchlist_company(company_name, watchlist):
     target = _normalise(company_name)
     if not target:
         return None
-    for sector, stocks in (watchlist or {}).items():
-        for stock in stocks or []:
-            if not isinstance(stock, dict):
-                continue
-            hold = _normalise(stock.get("name", ""))
-            if hold and (hold in target or target in hold):
-                return stock.get("ticker")
+    for hold, ticker in flat_watchlist:
+        if hold and (hold in target or target in hold):
+            return ticker
     return None
 
 
@@ -101,6 +97,15 @@ def parse_announcements(payload, watchlist):
     rows = payload.get("Table") or []
     if not isinstance(rows, list):
         return events
+
+    # ⚡ Bolt Optimization: Pre-flatten watchlist to avoid O(n^2) loop and repeated normalise calls
+    flat_watchlist = [
+        (_normalise(s.get("name", "")), s.get("ticker"))
+        for stocks in (watchlist or {}).values()
+        for s in (stocks or [])
+        if isinstance(s, dict)
+    ]
+
     for row in rows:
         if not isinstance(row, dict):
             continue
@@ -112,7 +117,7 @@ def parse_announcements(payload, watchlist):
         events.append(
             {
                 "company": str(company).strip(),
-                "ticker": match_watchlist_company(company, watchlist),
+                "ticker": match_watchlist_company(company, flat_watchlist),
                 "subject": str(subject).strip()[:200],
                 "category": str(row.get("CATEGORYNAME") or "").strip(),
                 "date": str(row.get("NEWS_DT") or "")[:10],
@@ -134,11 +139,20 @@ def parse_deals(payload, watchlist, deal_type):
     rows = payload.get("Table") or []
     if not isinstance(rows, list):
         return deals
+
+    # ⚡ Bolt Optimization: Pre-flatten watchlist to avoid O(n^2) loop and repeated normalise calls
+    flat_watchlist = [
+        (_normalise(s.get("name", "")), s.get("ticker"))
+        for stocks in (watchlist or {}).values()
+        for s in (stocks or [])
+        if isinstance(s, dict)
+    ]
+
     for row in rows:
         if not isinstance(row, dict):
             continue
         company = row.get("SNAME") or row.get("Scripname") or row.get("SLONGNAME") or ""
-        ticker = match_watchlist_company(company, watchlist)
+        ticker = match_watchlist_company(company, flat_watchlist)
         if not ticker:
             continue  # deals feed is market-wide; keep only our companies
         side_raw = str(

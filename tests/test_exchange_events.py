@@ -11,6 +11,7 @@ from providers.exchange_events import (  # noqa: E402
     match_watchlist_company,
     parse_announcements,
     parse_deals,
+    _normalise,
 )
 from analysis.market_share import (  # noqa: E402
     compute_industry_share,
@@ -43,11 +44,19 @@ def test_classify_fundraising_hits_and_misses():
 
 
 def test_match_watchlist_company_containment():
-    assert match_watchlist_company("Tata Power Company Ltd", _WATCHLIST) == "TATAPOWER"
-    assert match_watchlist_company("SUZLON ENERGY LTD.", _WATCHLIST) == "SUZLON"
+    flat_watchlist = [
+        (_normalise(s.get("name", "")), s.get("ticker"))
+        for stocks in (_WATCHLIST or {}).values()
+        for s in (stocks or [])
+        if isinstance(s, dict)
+    ]
+    assert (
+        match_watchlist_company("Tata Power Company Ltd", flat_watchlist) == "TATAPOWER"
+    )
+    assert match_watchlist_company("SUZLON ENERGY LTD.", flat_watchlist) == "SUZLON"
     # Same-group but different company must NOT match.
-    assert match_watchlist_company("Tata Motors Ltd", _WATCHLIST) is None
-    assert match_watchlist_company("", _WATCHLIST) is None
+    assert match_watchlist_company("Tata Motors Ltd", flat_watchlist) is None
+    assert match_watchlist_company("", flat_watchlist) is None
 
 
 # ---------------------------------------------------------------------------
