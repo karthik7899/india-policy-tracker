@@ -168,11 +168,23 @@ def parse_deals(payload, watchlist, deal_type):
 
 async def _fetch_json(session, url):
     """Single attempt, short timeout, None on any failure — this channel is
-    enhancement data and must never slow or block the briefing."""
+    enhancement data and must never slow or block the briefing.
+
+    Redirects are NOT followed: BSE's Akamai edge answers datacenter IPs
+    (like GitHub Actions runners) with a 302 to an error page, and following
+    that produced a TooManyRedirects exception whose repr dumped the entire
+    redirect chain into the log. A 302 is treated as a plain non-200 miss,
+    and any exception message is truncated so this channel can never spam
+    the briefing log again.
+    """
     try:
-        async with session.get(url, headers=_BSE_HEADERS, timeout=15) as response:
+        async with session.get(
+            url, headers=_BSE_HEADERS, timeout=15, allow_redirects=False
+        ) as response:
             if response.status != 200:
-                log.warning(f"BSE API returned {response.status} for {url}")
+                location = response.headers.get("Location", "")
+                hint = " (edge/bot block)" if "error" in location.lower() else ""
+                log.warning(f"BSE API returned {response.status}{hint} for {url}")
                 return None
             payload = await response.json(content_type=None)
             if not isinstance(payload, dict):
@@ -183,7 +195,9 @@ async def _fetch_json(session, url):
                 )
             return payload
     except Exception as e:
-        log.warning(f"BSE API fetch failed for {url}: {e!r}")
+        log.warning(
+            f"BSE API fetch failed for {url}: {type(e).__name__}: {str(e)[:150]}"
+        )
         return None
 
 
