@@ -29,6 +29,7 @@ from providers.exchange_events import (
     fetch_fundraising_events_async,
     fetch_institutional_deals_async,
 )
+from entities import find_duplicate_holdings
 
 
 def save_data_for_dashboard(brief_data, watchlist):
@@ -88,6 +89,17 @@ async def run_pipeline():
     data["industry_share"] = compute_industry_share(
         watchlist, industry_peers, prior_industry_shares
     )
+
+    # Safety net: ISIN now identifies each holding uniquely (populated by the
+    # Screener fetch above), so the same company silently ending up tracked
+    # under two sectors — as DIXON was, until this check existed — surfaces
+    # as a log warning the same run it happens instead of persisting unnoticed.
+    duplicate_holdings = find_duplicate_holdings(watchlist)
+    for dup in duplicate_holdings:
+        holdings_desc = ", ".join(
+            f"{h['ticker']} ({h['sector']})" for h in dup["holdings"]
+        )
+        log.warning(f"Duplicate holding detected (ISIN {dup['isin']}): {holdings_desc}")
 
     # Estimate each holding's share of tracked peer-group revenue and its trend
     from analysis.market_share import compute_peer_market_share

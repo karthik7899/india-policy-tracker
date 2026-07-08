@@ -41,3 +41,7 @@ Actually, the reviewer pointed out that changing `ticker_obj.history(period="1d"
 ## 2026-06-25 - Pre-flattening Nested List Checks
 **Learning:** Checking for ticker existence in a dictionary of lists (like `watchlist`) within a loop causes unnecessary O(N) traversal.
 **Action:** Always pre-flatten the dictionary of lists into a `set` (e.g. `watchlisted_tickers = {x["ticker"] for s_list in watchlist.values() for x in s_list}`) outside the loop for O(1) lookups. Ensure you update the set when mutating the original list.
+
+## 2026-06-25 - Async Ticker Resolution Overhead
+**Learning:** Found an anti-pattern in `scrape_pib_pli_approvals_async` where synchronous `resolve_ticker_from_name` calls were placed inside a loop iterating over candidate competitors, causing event-loop blocking and degrading scraping performance.
+**Action:** When gathering data asynchronously, ensure auxiliary lookups (like ticker resolution) within candidate loops use async HTTP libraries and are gathered concurrently with `asyncio.gather` to preserve the benefits of asynchronous IO.

@@ -62,6 +62,8 @@ def _extract_pli_data_from_html(html, title, published_date=""):
     # 1. Sector extraction
     sector = "Manufacturing"
     title_lower = title.lower()
+    # ⚡ Bolt Optimization: Slice first, then lower, outside the loop to avoid redundant O(N) operations
+    text_prefix_lower = text[:500].lower()
     for s in [
         "automobile",
         "auto components",
@@ -76,7 +78,7 @@ def _extract_pli_data_from_html(html, title, published_date=""):
         "food processing",
         "specialty steel",
     ]:
-        if s in title_lower or s in text.lower()[:500]:
+        if s in title_lower or s in text_prefix_lower:
             sector = s.title()
             break
 
@@ -195,7 +197,7 @@ async def scrape_pib_pli_approvals_async(session, watchlist):
     # Deduplicate before returning (can have same company in different RSS entries)
     deduped = []
     seen = set()
-    from analysis.parsing import resolve_ticker_from_name
+    from analysis.parsing import resolve_ticker_from_name_async
 
     # Existing names in watchlist to ignore
     existing_names = set()
@@ -205,17 +207,28 @@ async def scrape_pib_pli_approvals_async(session, watchlist):
             if s.get("ticker"):
                 existing_names.add(s["ticker"].lower())
 
+    unique_candidates = []
     for comp in emerging_pli_competitors:
         name_lower = comp["name"].lower()
         if name_lower not in seen and name_lower not in existing_names:
             seen.add(name_lower)
-            ticker, _ = resolve_ticker_from_name(comp["name"])
-            comp["ticker"] = ticker
-            comp["status"] = "Listed Peer" if ticker else "Unlisted"
-            deduped.append(comp)
-            log.info(
-                f"PIB PLI approval competitor detected: {comp['name']} ({comp['status']})"
-            )
+            unique_candidates.append(comp)
+
+    # Concurrently resolve tickers using asyncio.gather
+    resolution_tasks = [
+        resolve_ticker_from_name_async(comp["name"], session)
+        for comp in unique_candidates
+    ]
+    resolution_results = await asyncio.gather(*resolution_tasks)
+
+    for comp, result in zip(unique_candidates, resolution_results):
+        ticker, _ = result
+        comp["ticker"] = ticker
+        comp["status"] = "Listed Peer" if ticker else "Unlisted"
+        deduped.append(comp)
+        log.info(
+            f"PIB PLI approval competitor detected: {comp['name']} ({comp['status']})"
+        )
 
     return deduped
 

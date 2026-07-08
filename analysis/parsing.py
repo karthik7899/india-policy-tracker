@@ -2,6 +2,33 @@ import urllib.parse
 from logger import log
 
 
+async def resolve_ticker_from_name_async(company_name, session):
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
+    url = f"https://query2.finance.yahoo.com/v1/finance/search?q={urllib.parse.quote(company_name)}&quotesCount=5"
+    try:
+        async with session.get(url, headers=headers, timeout=10) as response:
+            if response.status == 200:
+                data = await response.json()
+                quotes = data.get("quotes", [])
+                for q in quotes:
+                    symbol = q.get("symbol", "")
+                    if symbol.endswith(".NS"):
+                        return (
+                            symbol.split(".")[0],
+                            q.get("longname") or q.get("shortname") or company_name,
+                        )
+                for q in quotes:
+                    symbol = q.get("symbol", "")
+                    if symbol.endswith(".BO"):
+                        return (
+                            symbol.split(".")[0],
+                            q.get("longname") or q.get("shortname") or company_name,
+                        )
+    except Exception as e:
+        log.error(f"Error resolving ticker for {company_name}: {e}")
+    return None, None
+
+
 def resolve_ticker_from_name(company_name, session=None):
     import requests
 

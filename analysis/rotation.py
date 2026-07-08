@@ -2,6 +2,7 @@ import re
 from logger import log
 import requests
 from config import save_watchlist
+from entities import build_entity_master, extract_isin, resolve_entity_by_isin
 from providers.yahoo import get_cached_ticker
 from .parsing import resolve_ticker_from_name
 
@@ -118,6 +119,10 @@ def auto_curate_watchlist(brief_data, watchlist):
     emerging_sectors = detect_emerging_players(brief_data, watchlist)
     rotations_log = []
     decisions = []
+    # ISIN-keyed index of current holdings — catches a candidate that is
+    # actually an existing holding resurfacing under a different symbol or
+    # name spelling, which the ticker-string check below can't see.
+    entity_master = build_entity_master(watchlist)
 
     # We will construct a structured emerging_players dictionary
     structured_emerging = {s: [] for s in SECTOR_METADATA}
@@ -200,6 +205,7 @@ def auto_curate_watchlist(brief_data, watchlist):
 
                     # Fetch candidate QoQ growth from Screener (using pooled session)
                     candidate_qoq_growth = 0.0
+                    candidate_isin = None
                     try:
                         url = f"https://www.screener.in/company/{ticker}/consolidated/"
                         r = session.get(
@@ -212,6 +218,7 @@ def auto_curate_watchlist(brief_data, watchlist):
                             )
                         if r.status_code == 200:
                             html = r.text
+                            candidate_isin = extract_isin(html)
                             qs_match = re.search(
                                 r'id="quarters"(.*?)(?:</section>)', html, re.DOTALL
                             )
@@ -234,6 +241,29 @@ def auto_curate_watchlist(brief_data, watchlist):
                         log.error(
                             f"Error checking candidate QoQ growth on Screener: {e}"
                         )
+
+                    existing_entity = resolve_entity_by_isin(
+                        candidate_isin, entity_master
+                    )
+                    if existing_entity and existing_entity["ticker"] != ticker:
+                        log.info(
+                            f"Candidate {ticker} shares ISIN {candidate_isin} with "
+                            f"existing holding {existing_entity['ticker']} "
+                            f"({existing_entity['sector']}). Skipping as duplicate."
+                        )
+                        structured_emerging[sector].append(
+                            {
+                                "name": full_name or name,
+                                "ticker": ticker,
+                                "status": "Watchlisted",
+                                "reason": (
+                                    f"Already tracked as {existing_entity['ticker']} "
+                                    f"in {existing_entity['sector']} "
+                                    f"(same ISIN {candidate_isin})."
+                                ),
+                            }
+                        )
+                        continue
 
                     # Eligibility check:
                     is_eligible = growth_pct_val > 0

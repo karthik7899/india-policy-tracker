@@ -25,6 +25,13 @@ from config import SECTOR_METADATA
 # cheap/expensive rather than "in line".
 _INLINE_BAND = 0.10  # ±10%
 
+# A P/E print above this is almost always a near-zero-earnings distortion
+# (e.g. STLTECH printing ~600) rather than a meaningful "expensive" signal.
+# Excluded from the peer-group median/cheapest/priciest so one broken print
+# can't skew the whole sector's comparison; the stock's own screener
+# pe_ratio is left untouched — this only guards the aggregate.
+_PE_OUTLIER_CAP = 200.0
+
 
 def _to_float(value: Any) -> Optional[float]:
     """Best-effort numeric coercion tolerant of ``None``/strings/``N/A``."""
@@ -84,17 +91,28 @@ def build_sector_valuation(watchlist: Dict[str, Any]) -> List[Dict[str, Any]]:
         if not priced:
             continue
 
-        pes = [pe for _, pe in priced]
+        # Guard the aggregate against extreme outliers; if every print in the
+        # sector is extreme (unlikely), fall back to the full set rather than
+        # dropping the sector.
+        for_stats = [(s, pe) for s, pe in priced if pe <= _PE_OUTLIER_CAP]
+        if not for_stats:
+            for_stats = priced
+
+        pes = [pe for _, pe in for_stats]
         peer_median = round(median(pes), 1)
 
-        cheapest = min(priced, key=lambda p: p[1])
-        priciest = max(priced, key=lambda p: p[1])
+        cheapest = min(for_stats, key=lambda p: p[1])
+        priciest = max(for_stats, key=lambda p: p[1])
 
         # Annotate each stock with its standing versus the peer median.
         for stock, pe in priced:
             sc = stock["screener"]
             sc["industry_pe"] = peer_median
-            sc["pe_vs_peers"] = _relative_label(pe, peer_median)
+            sc["pe_vs_peers"] = (
+                "Extreme outlier (excluded from peer stats)"
+                if pe > _PE_OUTLIER_CAP
+                else _relative_label(pe, peer_median)
+            )
 
         rollup.append(
             {

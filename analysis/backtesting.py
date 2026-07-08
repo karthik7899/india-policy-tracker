@@ -150,21 +150,40 @@ def _http_get_json(session: requests.Session, url: str) -> Optional[Any]:
     return None
 
 
+def _base_fund_name(scheme_name: str) -> str:
+    """Strip AMFI plan/option qualifiers (e.g. "- Direct Plan - Growth",
+    "- Regular Plan - IDCW") so different share classes of the same
+    underlying fund normalize to one name for dedup purposes."""
+    return (scheme_name or "").split(" - ")[0].strip().lower()
+
+
 def discover_thematic_schemes(
     session: requests.Session, max_per_theme: int = 2
 ) -> Dict[str, List[Dict[str, Any]]]:
-    """Find a handful of on-theme schemes from the dataset's full scheme list."""
+    """Find a handful of on-theme schemes from the dataset's full scheme list.
+
+    A single fund is typically listed multiple times under separate scheme
+    codes for its Direct/Regular and Growth/IDCW share classes — without
+    dedup those all count separately against ``max_per_theme`` and the same
+    fund name shows up more than once in the baseline.
+    """
     schemes = _http_get_json(session, f"{MF_DATA_BASE_URL}/mf")
     discovered: Dict[str, List[Dict[str, Any]]] = {t: [] for t in THEME_KEYWORDS}
     if not isinstance(schemes, list):
         return discovered
 
+    seen_names: Dict[str, set] = {t: set() for t in THEME_KEYWORDS}
     for entry in schemes:
         name = entry.get("schemeName", "")
         code = entry.get("schemeCode")
         theme = classify_theme(name)
-        if theme and code and len(discovered[theme]) < max_per_theme:
-            discovered[theme].append({"code": code, "name": name})
+        if not theme or not code or len(discovered[theme]) >= max_per_theme:
+            continue
+        base_name = _base_fund_name(name)
+        if base_name in seen_names[theme]:
+            continue
+        seen_names[theme].add(base_name)
+        discovered[theme].append({"code": code, "name": name})
     return discovered
 
 
