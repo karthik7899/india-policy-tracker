@@ -106,6 +106,28 @@ STOCK_WATCHLIST = {
             "catalyst": "Resilient cigarette margins funding rapid expansion of high-margin FMCG brands, direct rural boost play.",
         },
     ],
+    "industrial_manufacturing": [
+        {
+            "ticker": "SIEMENS",
+            "name": "Siemens Ltd",
+            "catalyst": "Diversified capital-goods major, expanding local factory automation and grid equipment manufacturing.",
+        },
+        {
+            "ticker": "THERMAX",
+            "name": "Thermax Ltd",
+            "catalyst": "Industrial energy & environment engineering leader, scaling green hydrogen and boiler manufacturing capacity.",
+        },
+        {
+            "ticker": "KIRLOSENG",
+            "name": "Kirloskar Oil Engines",
+            "catalyst": "Legacy engineering major pivoting to power generation and farm equipment manufacturing under 'Make in India'.",
+        },
+        {
+            "ticker": "ELGIEQUIP",
+            "name": "Elgi Equipments",
+            "catalyst": "Global air compressor manufacturer, expanding export-oriented capacity from Indian plants.",
+        },
+    ],
     "logistics_heavy_capital": [
         {
             "ticker": "CONCOR",
@@ -125,14 +147,9 @@ STOCK_WATCHLIST = {
     ],
     "macro_indicators": [
         {
-            "ticker": "MANUETF",
-            "name": "ICICI Pru Nifty India Manufacturing ETF",
-            "catalyst": "Passive index fund tracking the broader GVA growth of India's manufacturing sector.",
-        },
-        {
-            "ticker": "HDFCMANETF",
-            "name": "HDFC Nifty India Manufacturing ETF",
-            "catalyst": "Passive index fund tracking manufacturing sector performance under PLI schemes.",
+            "ticker": "MAKEINDIA",
+            "name": "Mirae Asset Nifty India Manufacturing ETF",
+            "catalyst": "Passive index fund tracking the Nifty India Manufacturing Index. Captures the Make in India and PLI momentum.",
         },
     ],
     "manufacturing_electronics": [
@@ -152,6 +169,28 @@ STOCK_WATCHLIST = {
             "catalyst": "Partnering on a $1B semiconductor fab, strong order pipeline in railways and power grid equipment.",
         },
     ],
+    "midcap_it": [
+        {
+            "ticker": "PERSISTENT",
+            "name": "Persistent Systems",
+            "catalyst": "High-growth digital engineering and enterprise AI services provider, consistently outpacing large-cap IT growth rates.",
+        },
+        {
+            "ticker": "COFORGE",
+            "name": "Coforge Ltd",
+            "catalyst": "Mid-tier IT services firm with large deal wins in BFSI and travel verticals, expanding margins via GenAI offerings.",
+        },
+        {
+            "ticker": "MPHASIS",
+            "name": "Mphasis Ltd",
+            "catalyst": "Direct-core BFS-focused IT services player, key beneficiary of enterprise cloud and cost-takeout deals.",
+        },
+        {
+            "ticker": "LTTS",
+            "name": "L&T Technology Services",
+            "catalyst": "Engineering R&D services leader, scaling embedded software and semiconductor design-services wins.",
+        },
+    ],
     "semiconductors_equipment": [
         {
             "ticker": "ASMTEC",
@@ -159,12 +198,12 @@ STOCK_WATCHLIST = {
             "catalyst": "Engineering design services for semiconductor equipment makers under India Semiconductor Mission (ISM) 2.0.",
         },
         {
-            "ticker": "RIRPOWER",
+            "ticker": "RIR",
             "name": "RIR Power Electronics",
             "catalyst": "Power semiconductor device supplier, building new SiC fab facility under semiconductor PLI.",
         },
         {
-            "ticker": "SPEL",
+            "ticker": "SPELS",
             "name": "SPEL Semiconductor",
             "catalyst": "First semiconductor OSAT and assembly facility listed, expanding IC testing capabilities.",
         },
@@ -196,11 +235,6 @@ STOCK_WATCHLIST = {
             "ticker": "CPPLUS",
             "name": "Aditya Infotech (CP PLUS)",
             "catalyst": "CCTV market leader (35%+ share) newly listed, scaling domestic camera manufacturing under PLI.",
-        },
-        {
-            "ticker": "DIXON",
-            "name": "Dixon Technologies",
-            "catalyst": "Primary EMS contract manufacturer producing CCTVs and DVRs for CP Plus and others under PLI.",
         },
         {
             "ticker": "ADSL",
@@ -274,6 +308,12 @@ SECTOR_METADATA = {
         "icon": "🛒",
         "label": "FMCG & Consumption",
     },
+    "industrial_manufacturing": {
+        "desc": "Capital goods, factory automation, and "
+        "industrial engineering manufacturers.",
+        "icon": "⚙️",
+        "label": "Industrial Manufacturing",
+    },
     "logistics_heavy_capital": {
         "desc": "Container manufacturing scheme, "
         "heavy machinery, and freight "
@@ -292,6 +332,11 @@ SECTOR_METADATA = {
         "assembly.",
         "icon": "🏭",
         "label": "Manufacturing & Electronics",
+    },
+    "midcap_it": {
+        "desc": "Mid-tier IT services and engineering " "R&D outsourcing firms.",
+        "icon": "💻",
+        "label": "Midcap IT",
     },
     "semiconductors_equipment": {
         "desc": "India Semiconductor Mission (ISM) "
@@ -351,6 +396,12 @@ SECTOR_QUERIES = {
         "India FMCG consumption rural demand inflation",
         "Varun Beverages ITC results shares",
     ],
+    "industrial_manufacturing": [
+        'site:pib.gov.in "capital goods" OR "industrial '
+        'manufacturing" OR "factory automation"',
+        "India industrial manufacturing capital goods engineering order book",
+        '"Siemens" OR "Thermax" OR "Kirloskar" OR "Elgi ' 'Equipments" manufacturing',
+    ],
     "logistics_heavy_capital": [
         'site:pib.gov.in "Container Scheme" OR ' '"heavy logistics"',
         "India container manufacturing capital " "goods railway capex",
@@ -366,10 +417,15 @@ SECTOR_QUERIES = {
         "India electronics manufacturing PLI " "scheme semiconductor fab",
         "Dixon Kaynes semiconductor factory",
     ],
+    "midcap_it": [
+        'site:pib.gov.in "IT services" OR "digital ' 'engineering" OR "GCC"',
+        "India midcap IT services growth deal wins GenAI",
+        '"Persistent Systems" OR "Coforge" OR "Mphasis" OR ' '"LTTS" IT services',
+    ],
     "semiconductors_equipment": [
         'site:pib.gov.in "semiconductor PLI" OR ' '"ISM 2.0" OR "OSAT"',
         "India semiconductor fab equipment OSAT " "packaging plants",
-        '"ASM Technologies" OR "RIR Power" OR ' '"SPEL" semiconductor',
+        '"ASM Technologies" OR "RIR Power" OR ' '"SPEL Semiconductor"',
     ],
     "sports_athleisure": [
         'site:pib.gov.in "sports" OR "Khelo India" OR ' '"footwear PLI"',

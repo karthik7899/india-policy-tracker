@@ -7,8 +7,10 @@ from analysis.backtesting import (  # noqa: E402
     classify_theme,
     _parse_nav_records,
     _to_iso_date,
+    _base_fund_name,
     compute_accumulation_baseline,
     build_institutional_baseline,
+    discover_thematic_schemes,
 )
 
 
@@ -72,6 +74,39 @@ def test_compute_accumulation_baseline_decelerating():
 def test_compute_accumulation_baseline_insufficient_data():
     assert compute_accumulation_baseline([]) is None
     assert compute_accumulation_baseline([("2026-01-01", 10.0)]) is None
+
+
+def test_base_fund_name_strips_plan_and_option_qualifiers():
+    assert (
+        _base_fund_name("DSP BlackRock Technology.com Fund - Direct Plan - Growth")
+        == "dsp blackrock technology.com fund"
+    )
+    assert (
+        _base_fund_name("DSP BlackRock Technology.com Fund - Regular Plan - IDCW")
+        == "dsp blackrock technology.com fund"
+    )
+    assert _base_fund_name("Tata Infrastructure Fund") == "tata infrastructure fund"
+    assert _base_fund_name("") == ""
+
+
+def test_discover_thematic_schemes_dedupes_share_classes(monkeypatch):
+    """Regression: the same fund listed under separate Direct/Regular and
+    Growth/IDCW scheme codes must only count once against max_per_theme,
+    not appear twice in the discovered/baseline output."""
+    import analysis.backtesting as bt
+
+    schemes = [
+        {"schemeCode": 1, "schemeName": "Tata Infrastructure Fund - Direct - Growth"},
+        {"schemeCode": 2, "schemeName": "Tata Infrastructure Fund - Regular - IDCW"},
+        {"schemeCode": 3, "schemeName": "HDFC Logistics Fund - Direct - Growth"},
+    ]
+    monkeypatch.setattr(bt, "_http_get_json", lambda session, url: schemes)
+    discovered = discover_thematic_schemes(None, max_per_theme=2)
+    infra = discovered["Logistics & Infra"]
+    names = [s["name"] for s in infra]
+    assert len(infra) == 2  # Tata Infrastructure counted once, HDFC Logistics once
+    assert names.count("Tata Infrastructure Fund - Direct - Growth") == 1
+    assert "HDFC Logistics Fund - Direct - Growth" in names
 
 
 def test_build_institutional_baseline_is_resilient_offline(monkeypatch):

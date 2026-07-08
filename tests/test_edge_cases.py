@@ -1,8 +1,11 @@
 import asyncio
 from unittest.mock import MagicMock
 
+import requests
+
 from providers.rss import fetch_query_feed_async
 from analysis.growth import update_single_stock
+import analysis.rotation as rotation_mod
 from analysis.rotation import auto_curate_watchlist
 from providers.screener import fetch_screener_async
 
@@ -132,3 +135,72 @@ def test_invalid_stock_entries(monkeypatch):
     # auto_curate_watchlist looks for emerging players. If it can't resolve "Invalid Corp Limited", it makes an unresolved entry.
     assert len(res.get(sector, [])) == 1
     assert res[sector][0].get("status") == "Unresolved"
+
+
+# --- 8. ISIN-keyed duplicate guard ---
+def test_auto_curate_skips_candidate_matching_existing_isin_holding(monkeypatch):
+    """Regression: DIXON was independently tracked in two sectors because
+    ticker/name string matching missed that a "new" candidate was actually
+    an existing holding. A candidate whose Screener page ISIN matches a
+    holding already in the watchlist must be skipped even when its
+    resolved ticker string differs."""
+    watchlist = {
+        "clean_energy": [
+            {
+                "ticker": "TATAPOWER",
+                "name": "Tata Power",
+                "growth_pct": "10.0%",
+                "screener": {"isin": "INE245A01021"},
+            }
+        ]
+    }
+    brief_data = {
+        "clean_energy": [
+            {
+                "title": "Tata Power Renewables Ltd wins solar order",
+                "summary": "...",
+                "published": "Sat, 27 Jun 2026 10:00:00 GMT",
+            }
+        ]
+    }
+
+    monkeypatch.setattr(
+        rotation_mod,
+        "resolve_ticker_from_name",
+        lambda *a, **k: ("TPREL", "Tata Power Renewables Ltd"),
+    )
+
+    class MockHist:
+        empty = False
+
+        def __getitem__(self, key):
+            class Series:
+                @property
+                def iloc(self):
+                    return [-1, 100.0]
+
+            return Series()
+
+    class MockTicker:
+        def history(self, *args, **kwargs):
+            return MockHist()
+
+        @property
+        def info(self):
+            return {"targetMeanPrice": 120.0, "recommendationKey": "buy"}
+
+    monkeypatch.setattr(rotation_mod, "get_cached_ticker", lambda *a, **k: MockTicker())
+
+    class FakeResponse:
+        status_code = 200
+        text = "Tata Power Renewables Ltd ISIN: INE245A01021 details..."
+
+    monkeypatch.setattr(requests.Session, "get", lambda self, *a, **k: FakeResponse())
+
+    structured, decisions = auto_curate_watchlist(brief_data, watchlist)
+    assert decisions == []  # nothing added or rotated
+    entry = structured["clean_energy"][0]
+    assert entry["ticker"] == "TPREL"
+    assert entry["status"] == "Watchlisted"
+    assert "TATAPOWER" in entry["reason"]
+    assert "INE245A01021" in entry["reason"]

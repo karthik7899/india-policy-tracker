@@ -11,12 +11,17 @@ from providers.exchange_events import (  # noqa: E402
     match_watchlist_company,
     parse_announcements,
     parse_deals,
+    parse_nse_announcements,
+    parse_nse_deals,
+    _dedupe_events,
+    _dedupe_deals,
 )
 from analysis.market_share import (  # noqa: E402
     compute_industry_share,
     snapshot_prior_industry_shares,
 )
 from analysis.early_warning import generate_early_warnings  # noqa: E402
+from entities import build_entity_master  # noqa: E402
 
 _WATCHLIST = {
     "clean_energy": [
@@ -274,13 +279,192 @@ def test_parse_functions_tolerate_string_payload():
     assert parse_deals(3.14, _WATCHLIST, "block") == []
 
 
+# ---------------------------------------------------------------------------
+# NSE announcement / deal parsing (mirrors the BSE fixtures, plus ISIN match)
+# ---------------------------------------------------------------------------
+
+_NSE_WATCHLIST = {
+    "clean_energy": [
+        {
+            "ticker": "TATAPOWER",
+            "name": "Tata Power",
+            "screener": {"isin": "INE245A01021"},
+        },
+        {"ticker": "SUZLON", "name": "Suzlon Energy"},
+    ]
+}
+
+_NSE_ANNOUNCEMENTS_PAYLOAD = [
+    {
+        "sm_name": "Tata Power Company Limited",
+        "sm_isin": "INE245A01021",
+        "desc": "Board approves Qualified Institutions Placement",
+        "an_dt": "03-Jul-2026 09:00:00",
+    },
+    {
+        "sm_name": "Unrelated Industries Ltd",
+        "sm_isin": "INE999Z99999",
+        "desc": "Rights Issue record date fixed",
+        "an_dt": "02-Jul-2026 15:00:00",
+    },
+    {
+        "sm_name": "Quiet Corp Ltd",
+        "sm_isin": "INE888Y88888",
+        "desc": "Investor meet intimation",
+        "an_dt": "02-Jul-2026 10:00:00",
+    },
+]
+
+
+def test_parse_nse_announcements_matches_by_isin_first():
+    entity_master = build_entity_master(_NSE_WATCHLIST)
+    events = parse_nse_announcements(
+        _NSE_ANNOUNCEMENTS_PAYLOAD, _NSE_WATCHLIST, entity_master
+    )
+    assert len(events) == 2  # investor meet excluded
+    tata = events[0]
+    assert tata["ticker"] == "TATAPOWER"  # matched via ISIN, not name-containment
+    assert tata["keyword"] == "qualified institution"
+    assert tata["source"] == "NSE"
+    assert events[1]["ticker"] is None  # non-watchlist company kept as intel
+
+
+def test_parse_nse_announcements_falls_back_to_name_match_without_isin():
+    # SUZLON has no ISIN indexed yet in this entity master.
+    entity_master = build_entity_master(_NSE_WATCHLIST)
+    payload = [
+        {
+            "sm_name": "Suzlon Energy Ltd",
+            "sm_isin": None,
+            "desc": "Preferential Allotment of equity shares",
+            "an_dt": "03-Jul-2026",
+        }
+    ]
+    events = parse_nse_announcements(payload, _NSE_WATCHLIST, entity_master)
+    assert events[0]["ticker"] == "SUZLON"
+
+
+def test_parse_nse_announcements_handles_garbage():
+    assert parse_nse_announcements(None, _NSE_WATCHLIST) == []
+    assert parse_nse_announcements("blocked", _NSE_WATCHLIST) == []
+    assert parse_nse_announcements({"data": "not-a-list"}, _NSE_WATCHLIST) == []
+    assert parse_nse_announcements([None, 42], _NSE_WATCHLIST) == []
+    # Accepts either a bare list or {"data": [...]}.
+    wrapped = {"data": _NSE_ANNOUNCEMENTS_PAYLOAD}
+    assert len(parse_nse_announcements(wrapped, _NSE_WATCHLIST)) == 2
+
+
+_NSE_DEALS_PAYLOAD = {
+    "BULK_DEALS_DATA": [
+        {
+            "BD_SCRIP_NAME": "Suzlon Energy Ltd",
+            "BD_CLIENT_NAME": "BIG ALPHA FUND",
+            "BD_BUY_SELL": "BUY",
+            "BD_QTY_TRD": 1000000,
+            "BD_TP_WATP": 57.2,
+            "BD_DT_DATE": "02-Jul-2026",
+        },
+        {
+            "BD_SCRIP_NAME": "Somebody Else Ltd",
+            "BD_CLIENT_NAME": "OTHER FUND",
+            "BD_BUY_SELL": "SELL",
+            "BD_QTY_TRD": 5000,
+            "BD_TP_WATP": 100.0,
+            "BD_DT_DATE": "02-Jul-2026",
+        },
+    ],
+    "BLOCK_DEALS_DATA": [
+        {
+            "BD_ISIN": "INE245A01021",
+            "BD_SCRIP_NAME": "Tata Power",
+            "BD_CLIENT_NAME": "EXIT FUND",
+            "BD_BUY_SELL": "SELL",
+            "BD_QTY_TRD": 200000,
+            "BD_TP_WATP": 410.0,
+            "BD_DT_DATE": "03-Jul-2026",
+        }
+    ],
+}
+
+
+def test_parse_nse_deals_keeps_only_watchlist_maps_side_and_isin():
+    entity_master = build_entity_master(_NSE_WATCHLIST)
+    deals = parse_nse_deals(_NSE_DEALS_PAYLOAD, _NSE_WATCHLIST, entity_master)
+    assert len(deals) == 2
+    bulk = next(d for d in deals if d["deal_type"] == "bulk")
+    assert bulk["ticker"] == "SUZLON"
+    assert bulk["side"] == "buy"
+    assert bulk["source"] == "NSE"
+    block = next(d for d in deals if d["deal_type"] == "block")
+    assert block["ticker"] == "TATAPOWER"  # matched via ISIN
+    assert block["side"] == "sell"
+
+
+def test_parse_nse_deals_handles_garbage():
+    assert parse_nse_deals(None, _NSE_WATCHLIST) == []
+    assert parse_nse_deals({"BULK_DEALS_DATA": [None]}, _NSE_WATCHLIST) == []
+    assert parse_nse_deals("blocked", _NSE_WATCHLIST) == []
+
+
+# ---------------------------------------------------------------------------
+# BSE + NSE merge/dedup
+# ---------------------------------------------------------------------------
+
+
+def test_dedupe_events_drops_cross_source_repeats():
+    bse = [
+        {"ticker": "TATAPOWER", "keyword": "qip", "date": "2026-07-03", "source": "BSE"}
+    ]
+    nse = [
+        {
+            "ticker": "TATAPOWER",
+            "keyword": "qip",
+            "date": "2026-07-03",
+            "source": "NSE",
+        },
+        {
+            "ticker": "SUZLON",
+            "keyword": "buyback",
+            "date": "2026-07-03",
+            "source": "NSE",
+        },
+    ]
+    merged = _dedupe_events(bse + nse)
+    assert len(merged) == 2
+    assert merged[0]["source"] == "BSE"  # first occurrence wins
+
+
+def test_dedupe_deals_drops_cross_source_repeats():
+    bse = [
+        {
+            "ticker": "SUZLON",
+            "deal_type": "bulk",
+            "date": "2026-07-02",
+            "client": "BIG ALPHA FUND",
+            "quantity": 1000000,
+            "source": "BSE",
+        }
+    ]
+    nse = [dict(bse[0], source="NSE")]
+    merged = _dedupe_deals(bse + nse)
+    assert len(merged) == 1
+    assert merged[0]["source"] == "BSE"
+
+
 def test_fetch_wrappers_never_raise(monkeypatch):
-    """Even if a parser somehow raises, the fetch coroutines must swallow it."""
+    """Even if a parser somehow raises, the fetch coroutines must swallow it —
+    for both the BSE and the NSE side of the merged fetch."""
     import asyncio
     import providers.exchange_events as ee
 
     async def bad_fetch(session, url):
         return {"Table": []}
+
+    async def bad_bootstrap(session):
+        return True  # pretend NSE is reachable so its parser path also runs
+
+    async def bad_nse_fetch(session, url):
+        return {"data": []}
 
     def exploding_parser(*args, **kwargs):
         raise RuntimeError("boom")
@@ -288,6 +472,10 @@ def test_fetch_wrappers_never_raise(monkeypatch):
     monkeypatch.setattr(ee, "_fetch_json", bad_fetch)
     monkeypatch.setattr(ee, "parse_announcements", exploding_parser)
     monkeypatch.setattr(ee, "parse_deals", exploding_parser)
+    monkeypatch.setattr(ee, "_bootstrap_nse_session", bad_bootstrap)
+    monkeypatch.setattr(ee, "_fetch_nse_json", bad_nse_fetch)
+    monkeypatch.setattr(ee, "parse_nse_announcements", exploding_parser)
+    monkeypatch.setattr(ee, "parse_nse_deals", exploding_parser)
 
     events = asyncio.run(ee.fetch_fundraising_events_async(None, _WATCHLIST))
     deals = asyncio.run(ee.fetch_institutional_deals_async(None, _WATCHLIST))
