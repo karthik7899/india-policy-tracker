@@ -55,12 +55,49 @@ jobs:
           python-version: '3.12'
           cache: 'pip'
 
+      # The daily cron fires every day including weekends/holidays, when NSE
+      # never opened and prices can't have moved — that run just resends
+      # yesterday's briefing. The weekly Saturday digest and manual dispatch
+      # runs are intentional regardless of trading-day status, so they
+      # bypass this gate. See market_calendar.py for the holiday list.
+      - name: Check market calendar
+        id: gate
+        env:
+          GH_EVENT_NAME: ${{ github.event_name }}
+          GH_EVENT_SCHEDULE: ${{ github.event.schedule }}
+        run: |
+          python3 - <<'PY'
+          import datetime
+          import os
+          import zoneinfo
+
+          from market_calendar import is_trading_day
+
+          event_name = os.environ.get("GH_EVENT_NAME", "")
+          schedule = os.environ.get("GH_EVENT_SCHEDULE", "")
+          today_ist = datetime.datetime.now(zoneinfo.ZoneInfo("Asia/Kolkata")).date()
+
+          if event_name == "workflow_dispatch":
+              should_run, reason = True, "manual dispatch"
+          elif schedule == "30 3 * * 6":
+              should_run, reason = True, "weekly Saturday digest always sends"
+          else:
+              should_run = is_trading_day(today_ist)
+              reason = f"daily cron, {today_ist} is_trading_day={should_run}"
+
+          print(f"::notice::Market calendar gate: {reason}")
+          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+              f.write(f"should_run={'true' if should_run else 'false'}\n")
+          PY
+
       - name: Install dependencies
+        if: steps.gate.outputs.should_run == 'true'
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
       - name: Execute Aggregation & Mailer Script
+        if: steps.gate.outputs.should_run == 'true'
         env:
           RECEIVER_EMAIL: ${{ secrets.RECEIVER_EMAIL }}
           SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
@@ -71,6 +108,7 @@ jobs:
           python main.py
 
       - name: Commit and Push Updated Dashboard Data
+        if: steps.gate.outputs.should_run == 'true'
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"

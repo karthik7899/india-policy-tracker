@@ -77,6 +77,37 @@ def test_empty_and_missing_screener_safe():
     assert build_sector_valuation({"fmcg": [{"ticker": "X", "name": "X"}]}) == []
 
 
+def test_extreme_pe_excluded_from_median_and_picks():
+    watchlist = {
+        "data_center_support": [
+            _stock("A", 18.0),
+            _stock("B", 22.0),
+            _stock("C", 600.0),  # near-zero-earnings distortion, e.g. STLTECH
+        ]
+    }
+    rollup = build_sector_valuation(watchlist)
+    entry = rollup[0]
+    # Median/cheapest/priciest computed only from A and B.
+    assert entry["median_pe"] == 20.0
+    assert entry["most_expensive_ticker"] == "B"
+    assert entry["most_expensive_pe"] == 22.0
+    # The outlier itself is still annotated, just flagged instead of compared.
+    sc_c = watchlist["data_center_support"][2]["screener"]
+    assert sc_c["industry_pe"] == 20.0
+    assert sc_c["pe_vs_peers"] == "Extreme outlier (excluded from peer stats)"
+    # Non-outliers still get a normal comparison label.
+    sc_a = watchlist["data_center_support"][0]["screener"]
+    assert "peers" in sc_a["pe_vs_peers"]
+
+
+def test_all_extreme_pe_falls_back_to_full_set():
+    watchlist = {"fmcg": [_stock("A", 300.0), _stock("B", 400.0)]}
+    rollup = build_sector_valuation(watchlist)
+    entry = rollup[0]
+    assert entry["stock_count"] == 2
+    assert entry["median_pe"] == 350.0
+
+
 def test_to_float_coercion():
     assert _to_float("12.5") == 12.5
     assert _to_float(None) is None
