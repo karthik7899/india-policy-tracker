@@ -62,6 +62,8 @@ def _extract_pli_data_from_html(html, title, published_date=""):
     # 1. Sector extraction
     sector = "Manufacturing"
     title_lower = title.lower()
+    # ⚡ Bolt Optimization: Slice first, then lower, outside the loop to avoid redundant O(N) operations
+    text_prefix_lower = text[:500].lower()
     for s in [
         "automobile",
         "auto components",
@@ -76,7 +78,7 @@ def _extract_pli_data_from_html(html, title, published_date=""):
         "food processing",
         "specialty steel",
     ]:
-        if s in title_lower or s in text.lower()[:500]:
+        if s in title_lower or s in text_prefix_lower:
             sector = s.title()
             break
 
