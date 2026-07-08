@@ -247,9 +247,9 @@ STOCK_WATCHLIST = {
             "catalyst": "Pioneer in tactical and mapping drone systems, primary supplier for Indian Army and police borders.",
         },
         {
-            "ticker": "ZENSARTECH",
-            "name": "Zensar Technologies Limited",
-            "catalyst": "Auto-discovered via media radar. Catalyst: Zen Technologies climbs 4% on launch of anti-drone smart border system",
+            "ticker": "ZENTEC",
+            "name": "Zen Technologies",
+            "catalyst": "Anti-drone systems and combat training simulators, winning repeat Ministry of Defence counter-drone orders.",
         },
     ],
     "textiles_apparel": [
@@ -446,13 +446,40 @@ SECTOR_QUERIES = {
 }
 
 
+def _normalize_watchlist(watchlist):
+    """Canonicalize every stock record's typed fields on load (see
+    models/stock.py). Well-formed records round-trip unchanged; drifted
+    ones ("1,840.00", a float where a string belongs) are repaired here,
+    at the boundary, instead of surprising a parser mid-pipeline. A record
+    that can't be normalized is kept raw — normalization must never be the
+    reason the watchlist fails to load."""
+    from models.stock import normalize_stock_record
+
+    if not isinstance(watchlist, dict):
+        return watchlist
+    for sector, stocks in watchlist.items():
+        if not isinstance(stocks, list):
+            continue
+        for i, stock in enumerate(stocks):
+            if not isinstance(stock, dict):
+                continue
+            try:
+                stocks[i] = normalize_stock_record(stock)
+            except Exception as e:
+                log.warning(
+                    f"Could not normalize stock record in {sector} "
+                    f"(kept raw): {type(e).__name__}: {str(e)[:120]}"
+                )
+    return watchlist
+
+
 def load_watchlist():
     watchlist_path = os.path.join(
         os.path.dirname(os.path.abspath(__file__)), "watchlist.json"
     )
     try:
         with open(watchlist_path, "r", encoding="utf-8") as f:
-            return json.load(f)
+            return _normalize_watchlist(json.load(f))
     except FileNotFoundError:
         log.error(
             "watchlist.json not found — falling back to the minimal seed "

@@ -17,9 +17,10 @@ industry figure; the peer set is the curated holdings in the same sector.
 """
 
 from statistics import median
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 from config import SECTOR_METADATA
+from utils import to_float
 
 # How far a stock's P/E must sit from the peer median before we label it
 # cheap/expensive rather than "in line".
@@ -33,21 +34,8 @@ _INLINE_BAND = 0.10  # ±10%
 _PE_OUTLIER_CAP = 200.0
 
 
-def _to_float(value: Any) -> Optional[float]:
-    """Best-effort numeric coercion tolerant of ``None``/strings/``N/A``."""
-    if value is None or isinstance(value, bool):
-        return None
-    if isinstance(value, (int, float)):
-        return float(value)
-    if isinstance(value, str):
-        cleaned = value.strip().replace(",", "")
-        if not cleaned or cleaned.upper() in {"N/A", "NA", "-", "—"}:
-            return None
-        try:
-            return float(cleaned)
-        except ValueError:
-            return None
-    return None
+# Canonical coercion shared across the codebase (was a private copy here).
+_to_float = to_float
 
 
 def _relative_label(pe: float, peer_median: float) -> str:
