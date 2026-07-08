@@ -3,9 +3,9 @@
     {
       "ticker": "TATAPOWER",
       "name": "Tata Power",
-      "price": "375.80",
+      "price": "372.10",
       "target": "426.50",
-      "growth_pct": "+13.5%",
+      "growth_pct": "+14.6%",
       "catalyst": "Massive scaling in solar generation, microgrids, and leading India's EV charging network grid.",
       "rating": "Hold",
       "revenue_growth": "-12.8%",
@@ -16,10 +16,10 @@
       "target_low": "300.00",
       "rec_score": 2.6,
       "screener": {
-        "market_cap": 119921.0,
-        "current_price": 375.0,
-        "pe_ratio": 31.2,
-        "dividend_yield": 0.66,
+        "market_cap": 118899.0,
+        "current_price": 372.0,
+        "pe_ratio": 30.9,
+        "dividend_yield": 0.67,
         "roce": 10.5,
         "roe": 10.2,
         "q_opm": 17.0,
@@ -58,7 +58,7 @@
         "net_current_assets": null,
         "hyper_growth_warning": false,
         "valuation_alerts": [],
-        "industry_pe": 31.2,
+        "industry_pe": 30.9,
         "pe_vs_peers": "In line with peers"
       },
       "score": {
@@ -74,14 +74,16 @@
         ]
       },
       "fundamental_value": 405.6,
-      "estimate_method": "Analyst Consensus"
+      "estimate_method": "Analyst Consensus",
+      "analyst_actions": [],
+      "institutional_holders": []
     },
     {
       "ticker": "SUZLON",
       "name": "Suzlon Energy",
-      "price": "54.22",
+      "price": "53.13",
       "target": "65.00",
-      "growth_pct": "+19.9%",
+      "growth_pct": "+22.3%",
       "catalyst": "Turnaround story, completely debt-free, dominating wind turbine supply with a record order book.",
       "rating": "Strong Buy",
       "revenue_growth": "+44.9%",
@@ -92,9 +94,9 @@
       "target_low": "52.00",
       "rec_score": 1.4,
       "screener": {
-        "market_cap": 73820.0,
-        "current_price": 54.2,
-        "pe_ratio": 23.4,
+        "market_cap": 72416.0,
+        "current_price": 53.1,
+        "pe_ratio": 22.9,
         "dividend_yield": 0.0,
         "roce": 35.1,
         "roe": 40.6,
@@ -133,13 +135,16 @@
         "valuation_alerts": [
           "No Dividend Yield"
         ],
-        "industry_pe": 31.2,
-        "pe_vs_peers": "25% below peers"
+        "industry_pe": 30.9,
+        "pe_vs_peers": "26% below peers"
       },
       "score": {
-        "overall_score": 23,
+        "overall_score": 32,
         "confidence": "Medium",
         "reasons": [
+          "Capacity/Product Launch: Suzlon unveils new purpose-led identity 'Good Energies That Work' for the energy-intensive world",
+          "Capacity/Product Launch: Suzlon Unveils India’s Tallest and Most Powerful Wind Turbine as Wind Sector Eyes Next Growth Phase",
+          "Capacity/Product Launch: Suzlon unveils new growth map, targets 10GW annual sales by FY31",
           "Policy Notification: Suzlon Energy share price rises over 3% after securing 100 MW wind energy project from GAIL",
           "Policy Notification: Waaree Energies, Suzlon Energy, Adani Green, NTPC Green: How renewable energy stocks are performing on March 25",
           "Policy Notification: Suzlon bags 306 MW wind turbine orders from Yanara in Rajasthan",
@@ -158,27 +163,29 @@
         ]
       },
       "fundamental_value": 106.6,
-      "estimate_method": "Analyst Consensus"
+      "estimate_method": "Analyst Consensus",
+      "analyst_actions": [],
+      "institutional_holders": []
     },
     {
       "ticker": "ADANIGREEN",
       "name": "Adani Green Energy",
-      "price": "1538.60",
+      "price": "1504.60",
       "target": "1417.50",
-      "growth_pct": "-7.9%",
+      "growth_pct": "-5.8%",
       "catalyst": "Developing the world's largest renewable energy park in Khavda, Gujarat (30 GW capacity target).",
-      "rating": "None",
+      "rating": "Strong Buy",
       "revenue_growth": "+14.3%",
       "earnings_growth": "+209.8%",
       "analyst_count": 8,
       "target_median": "1417.50",
       "target_high": "1730.00",
       "target_low": "1000.00",
-      "rec_score": null,
+      "rec_score": 1.5,
       "screener": {
-        "market_cap": 252677.0,
-        "current_price": 1534.0,
-        "pe_ratio": 138.0,
+        "market_cap": 247891.0,
+        "current_price": 1505.0,
+        "pe_ratio": 135.0,
         "dividend_yield": 0.0,
         "roce": 7.39,
         "roe": 11.4,
@@ -215,11 +222,11 @@
         "net_current_assets": null,
         "hyper_growth_warning": false,
         "valuation_alerts": [
-          "Fails P/E Screen (P/E 138.0 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 135.0 > 15 & Price > Intrinsic)",
           "No Dividend Yield"
         ],
-        "industry_pe": 31.2,
-        "pe_vs_peers": "342% above peers"
+        "industry_pe": 30.9,
+        "pe_vs_peers": "337% above peers"
       },
       "score": {
         "overall_score": 1,
@@ -229,7 +236,7 @@
         ],
         "risks": [
           "Overvalued vs Graham Intrinsic Value (313.3)",
-          "Fails P/E Screen (P/E 138.0 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 135.0 > 15 & Price > Intrinsic)",
           "No Dividend Yield"
         ],
         "recommendations": [
@@ -238,16 +245,18 @@
         ]
       },
       "fundamental_value": 313.3,
-      "estimate_method": "Analyst Consensus"
+      "estimate_method": "Analyst Consensus",
+      "analyst_actions": [],
+      "institutional_holders": []
     }
   ],
   "data_center_support": [
     {
       "ticker": "SCHNEIDER",
       "name": "Schneider Electric Infra",
-      "price": "1541.70",
+      "price": "1496.60",
       "target": "1400.00",
-      "growth_pct": "-9.2%",
+      "growth_pct": "-6.5%",
       "catalyst": "Critical supplier of electrical distribution, smart grids, and high-efficiency cooling for data centers.",
       "rating": "Strong Buy",
       "revenue_growth": "+0.5%",
@@ -285,12 +294,14 @@
           "Ensure risks are hedged or sizing is adjusted appropriately."
         ]
       },
-      "estimate_method": "Analyst Consensus"
+      "estimate_method": "Analyst Consensus",
+      "analyst_actions": [],
+      "institutional_holders": []
     },
     {
       "ticker": "STLTECH",
       "name": "Sterlite Technologies (STL)",
-      "price": "528.20",
+      "price": "528.15",
       "target": "547.50",
       "growth_pct": "+3.7%",
       "catalyst": "Expanding optical fiber and cable capacities to meet hyper-scale data center interconnect demands.",
@@ -303,9 +314,9 @@
       "target_low": "440.00",
       "rec_score": null,
       "screener": {
-        "market_cap": 27183.0,
-        "current_price": 529.0,
-        "pe_ratio": 571.0,
+        "market_cap": 27304.0,
+        "current_price": 528.0,
+        "pe_ratio": 573.0,
         "dividend_yield": 0.0,
         "roce": 7.75,
         "roe": 2.24,
@@ -345,10 +356,10 @@
         "net_current_assets": null,
         "hyper_growth_warning": false,
         "valuation_alerts": [
-          "Fails P/E Screen (P/E 571.0 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 573.0 > 15 & Price > Intrinsic)",
           "No Dividend Yield"
         ],
-        "industry_pe": 36.4,
+        "industry_pe": 35.3,
         "pe_vs_peers": "Extreme outlier (excluded from peer stats)"
       },
       "score": {
@@ -360,7 +371,7 @@
         ],
         "risks": [
           "Overvalued vs Graham Intrinsic Value (157.3)",
-          "Fails P/E Screen (P/E 571.0 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 573.0 > 15 & Price > Intrinsic)",
           "No Dividend Yield"
         ],
         "recommendations": [
@@ -369,16 +380,18 @@
         ]
       },
       "fundamental_value": 157.3,
-      "estimate_method": "Analyst Consensus"
+      "estimate_method": "Analyst Consensus",
+      "analyst_actions": [],
+      "institutional_holders": []
     },
     {
       "ticker": "ANANTRAJ",
       "name": "Anant Raj Ltd",
-      "price": "557.00",
+      "price": "544.75",
       "target": "650.00",
-      "growth_pct": "+16.7%",
+      "growth_pct": "+19.3%",
       "catalyst": "Real-estate developer transitioning commercial properties into major data center hubs in NCR.",
-      "rating": "Strong Buy",
+      "rating": "None",
       "revenue_growth": "+19.6%",
       "earnings_growth": "+20.5%",
       "analyst_count": 3,
@@ -387,10 +400,10 @@
       "target_low": "650.00",
       "rec_score": 1.3,
       "screener": {
-        "market_cap": 20171.0,
-        "current_price": 560.0,
-        "pe_ratio": 36.4,
-        "dividend_yield": 0.19,
+        "market_cap": 19588.0,
+        "current_price": 545.0,
+        "pe_ratio": 35.3,
+        "dividend_yield": 0.18,
         "roce": 12.1,
         "roe": 11.2,
         "q_opm": 26.0,
@@ -426,7 +439,7 @@
         "net_current_assets": null,
         "hyper_growth_warning": false,
         "valuation_alerts": [],
-        "industry_pe": 36.4,
+        "industry_pe": 35.3,
         "pe_vs_peers": "In line with peers"
       },
       "score": {
@@ -441,30 +454,32 @@
         ]
       },
       "fundamental_value": 529.1,
-      "estimate_method": "Analyst Consensus"
+      "estimate_method": "Analyst Consensus",
+      "analyst_actions": [],
+      "institutional_holders": []
     }
   ],
   "cybersecurity": [
     {
       "ticker": "TCS",
       "name": "Tata Consultancy Services",
-      "price": "2088.10",
-      "target": "2600.00",
-      "growth_pct": "+24.5%",
+      "price": "2057.50",
+      "target": "2575.00",
+      "growth_pct": "+25.2%",
       "catalyst": "Expanding sovereign cloud and secure cyber command centers globally for enterprise clients.",
       "rating": "Buy",
       "revenue_growth": "+9.6%",
       "earnings_growth": "+12.2%",
       "analyst_count": 41,
-      "target_median": "2600.00",
+      "target_median": "2575.00",
       "target_high": "3841.00",
       "target_low": "1860.00",
       "rec_score": 2.1,
       "screener": {
-        "market_cap": 757356.0,
-        "current_price": 2093.0,
-        "pe_ratio": 14.5,
-        "dividend_yield": 3.06,
+        "market_cap": 744510.0,
+        "current_price": 2058.0,
+        "pe_ratio": 14.2,
+        "dividend_yield": 3.11,
         "roce": 63.0,
         "roe": 51.8,
         "q_opm": 27.0,
@@ -503,15 +518,15 @@
         "net_current_assets": null,
         "hyper_growth_warning": false,
         "valuation_alerts": [],
-        "industry_pe": 14.5,
+        "industry_pe": 14.2,
         "pe_vs_peers": "In line with peers"
       },
       "score": {
         "overall_score": 34,
         "confidence": "Medium",
         "reasons": [
-          "Capacity/Product Launch: Tata Electronics and TCS to Roll Out India’s First Homegrown Chips by 2026",
           "Capacity/Product Launch: RIL, ITC, TCS, L&T, Infosys among top 10 under-owned stocks amid 2-decade low FII positioning",
+          "Capacity/Product Launch: Tata Electronics and TCS to Roll Out India’s First Homegrown Chips by 2026",
           "Capacity/Product Launch: As AI slows IT growth, JP Morgan expects TCS and Infosys to outperform Wipro, HCL Tech",
           "Capacity/Product Launch: IT stocks: TCS, Infosys, Persistent, Zensar Tech hit 52-week lows; decoding the crash",
           "Capacity/Product Launch: TCS Unveils 2026 Edition of TCS InQuizitive; Entries Now Open for Ahmedabad Students",
@@ -529,12 +544,14 @@
         ]
       },
       "fundamental_value": 4929.6,
-      "estimate_method": "Analyst Consensus"
+      "estimate_method": "Analyst Consensus",
+      "analyst_actions": [],
+      "institutional_holders": []
     },
     {
       "ticker": "QUICKHEAL",
       "name": "Quick Heal Technologies",
-      "price": "169.33",
+      "price": "165.09",
       "target": null,
       "growth_pct": null,
       "catalyst": "Surging enterprise adoption of their 'Seqrite' cybersecurity platform and government IT contracts.",
@@ -547,8 +564,8 @@
       "target_low": null,
       "rec_score": null,
       "screener": {
-        "market_cap": 931.0,
-        "current_price": 172.0,
+        "market_cap": 894.0,
+        "current_price": 165.0,
         "dividend_yield": 0.0,
         "roce": -4.65,
         "roe": -2.49,
@@ -603,28 +620,30 @@
           "Ensure risks are hedged or sizing is adjusted appropriately."
         ]
       },
-      "estimate_method": "Fundamental Estimate"
+      "estimate_method": "Fundamental Estimate",
+      "analyst_actions": [],
+      "institutional_holders": []
     }
   ],
   "surveillance_security": [
     {
       "ticker": "CPPLUS",
       "name": "Aditya Infotech (CP PLUS)",
-      "price": "3593.70",
-      "target": "3188.00",
-      "growth_pct": "-11.3%",
+      "price": "3554.60",
+      "target": "3453.00",
+      "growth_pct": "-2.9%",
       "catalyst": "CCTV market leader (35%+ share) newly listed, scaling domestic camera manufacturing under PLI.",
-      "rating": "None",
+      "rating": "Strong Buy",
       "revenue_growth": "+45.5%",
       "earnings_growth": "+187.4%",
       "analyst_count": 4,
-      "target_median": "3188.00",
-      "target_high": "3806.00",
+      "target_median": "3453.00",
+      "target_high": "3833.00",
       "target_low": "3044.00",
-      "rec_score": null,
+      "rec_score": 1.0,
       "screener": {
-        "market_cap": 42100.0,
-        "current_price": 3572.0,
+        "market_cap": 41950.0,
+        "current_price": 3555.0,
         "pe_ratio": 114.0,
         "dividend_yield": 0.0,
         "roce": 29.6,
@@ -654,9 +673,9 @@
           19.0,
           30.0
         ],
-        "industry_share_pct": 19.38,
+        "industry_share_pct": 19.3,
         "industry_peer_count": 7,
-        "industry_share_change_pp": 0.0,
+        "industry_share_change_pp": -0.08,
         "graham_intrinsic_value": 1866.8,
         "owner_earnings": 0.0,
         "retained_earnings_ratio": 1.2,
@@ -668,14 +687,14 @@
           "Fails P/E Screen (P/E 114.0 > 15 & Price > Intrinsic)",
           "No Dividend Yield"
         ],
-        "industry_pe": 18.8,
-        "pe_vs_peers": "506% above peers"
+        "industry_pe": 85.2,
+        "pe_vs_peers": "34% above peers"
       },
       "score": {
-        "overall_score": 7,
+        "overall_score": 10,
         "confidence": "Medium",
         "reasons": [
-          "Sector benefits from macro policy tailwinds (Fallback)",
+          "Policy Notification: Earnings Tell The Story For Aditya Infotech Limited (NSE:CPPLUS)",
           "Operating Margin Expansion (+6.0%)",
           "High Return on Capital (ROCE: 29.6%)",
           "High Return on Equity (ROE: 25.4%)",
@@ -687,19 +706,21 @@
           "No Dividend Yield"
         ],
         "recommendations": [
-          "Hold / Neutral",
+          "Buy / Accumulate Candidate",
           "Ensure risks are hedged or sizing is adjusted appropriately."
         ]
       },
       "fundamental_value": 1866.8,
-      "estimate_method": "Analyst Consensus"
+      "estimate_method": "Analyst Consensus",
+      "analyst_actions": [],
+      "institutional_holders": []
     },
     {
       "ticker": "ADSL",
       "name": "Allied Digital Services",
-      "price": "119.91",
+      "price": "116.82",
       "target": "180.00",
-      "growth_pct": "+50.1%",
+      "growth_pct": "+54.1%",
       "catalyst": "System integrator winning smart/safe city surveillance projects, managing master command centers.",
       "rating": "None",
       "revenue_growth": "+31.0%",
@@ -710,10 +731,10 @@
       "target_low": "180.00",
       "rec_score": null,
       "screener": {
-        "market_cap": 676.0,
-        "current_price": 120.0,
-        "pe_ratio": 18.8,
-        "dividend_yield": 1.25,
+        "market_cap": 662.0,
+        "current_price": 117.0,
+        "pe_ratio": 18.4,
+        "dividend_yield": 1.28,
         "roce": 7.32,
         "roe": 5.92,
         "q_opm": -3.78,
@@ -749,10 +770,10 @@
         "net_current_assets": null,
         "hyper_growth_warning": false,
         "valuation_alerts": [
-          "Fails P/E Screen (P/E 18.8 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 18.4 > 15 & Price > Intrinsic)"
         ],
-        "industry_pe": 18.8,
-        "pe_vs_peers": "In line with peers"
+        "industry_pe": 85.2,
+        "pe_vs_peers": "78% below peers"
       },
       "score": {
         "overall_score": 1,
@@ -762,21 +783,23 @@
         ],
         "risks": [
           "Overvalued vs Graham Intrinsic Value (-78.0)",
-          "Fails P/E Screen (P/E 18.8 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 18.4 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Monitor / Underweight",
           "Ensure risks are hedged or sizing is adjusted appropriately."
         ]
       },
-      "estimate_method": "Analyst Consensus"
+      "estimate_method": "Analyst Consensus",
+      "analyst_actions": [],
+      "institutional_holders": []
     },
     {
       "ticker": "IDEAFORGE",
       "name": "IdeaForge Technology",
-      "price": "853.00",
+      "price": "859.85",
       "target": "1031.00",
-      "growth_pct": "+20.9%",
+      "growth_pct": "+19.9%",
       "catalyst": "Pioneer in tactical and mapping drone systems, primary supplier for Indian Army and police borders.",
       "rating": "None",
       "revenue_growth": "+594.4%",
@@ -787,8 +810,8 @@
       "target_low": "875.00",
       "rec_score": null,
       "screener": {
-        "market_cap": 3710.0,
-        "current_price": 855.0,
+        "market_cap": 3742.0,
+        "current_price": 860.0,
         "dividend_yield": 0.0,
         "roce": -2.44,
         "roe": -2.82,
@@ -833,8 +856,8 @@
         "confidence": "Medium",
         "reasons": [
           "Policy Notification: Paras Defence, ideaForge, other defence stocks slide up to 5%. What’s triggering the selloff?",
-          "Policy Notification: Defence stocks in demand: Paras, Data Patterns, Ideaforge surge up to 12%",
           "Policy Notification: Zen Technologies jumps 9%, ideaForge hits upper circuit as India eyes Rs 20,000 crore drone buy",
+          "Policy Notification: Defence stocks in demand: Paras, Data Patterns, Ideaforge surge up to 12%",
           "Operating Margin Expansion (+128.0%)",
           "Undervalued vs Graham Intrinsic Value (1801.8)"
         ],
@@ -847,46 +870,112 @@
         ]
       },
       "fundamental_value": 1801.8,
-      "estimate_method": "Analyst Consensus"
+      "estimate_method": "Analyst Consensus",
+      "analyst_actions": [],
+      "institutional_holders": []
     },
     {
       "ticker": "ZENTEC",
       "name": "Zen Technologies",
-      "price": null,
-      "target": null,
-      "growth_pct": null,
+      "price": "1818.60",
+      "target": "1775.00",
+      "growth_pct": "-2.4%",
       "catalyst": "Anti-drone systems and combat training simulators, winning repeat Ministry of Defence counter-drone orders.",
-      "rating": "N/A",
-      "revenue_growth": null,
-      "earnings_growth": null,
-      "analyst_count": null,
-      "target_median": null,
-      "target_high": null,
-      "target_low": null,
-      "rec_score": null,
-      "screener": {}
+      "rating": "Buy",
+      "revenue_growth": "-45.2%",
+      "earnings_growth": "-68.8%",
+      "analyst_count": 6,
+      "target_median": "1775.00",
+      "target_high": "1900.00",
+      "target_low": "1600.00",
+      "rec_score": 1.7,
+      "screener": {
+        "market_cap": 16430.0,
+        "current_price": 1819.0,
+        "pe_ratio": 85.2,
+        "dividend_yield": 0.05,
+        "roce": 16.2,
+        "roe": 10.7,
+        "q_opm": 28.0,
+        "quarterly_ebitda_margin": [
+          41.0,
+          37.0,
+          37.0,
+          28.0
+        ],
+        "opm_expansion": -9.0,
+        "q_eps": 3.49,
+        "operating_margin_trend": [
+          7.0,
+          33.0,
+          41.0,
+          39.0,
+          36.0
+        ],
+        "capex": 0.0,
+        "rd_pct": 1.5,
+        "roce_trend": [
+          2.0,
+          23.0,
+          46.0,
+          37.0,
+          16.0
+        ],
+        "graham_intrinsic_value": 453.7,
+        "owner_earnings": 0.0,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Medium (Narrow Moat)",
+        "is_bargain": false,
+        "net_current_assets": null,
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "Fails P/E Screen (P/E 85.2 > 15 & Price > Intrinsic)"
+        ],
+        "industry_pe": 85.2,
+        "pe_vs_peers": "In line with peers"
+      },
+      "analyst_actions": [],
+      "institutional_holders": [],
+      "score": {
+        "overall_score": 2,
+        "confidence": "Medium",
+        "reasons": [
+          "Sector benefits from macro policy tailwinds (Fallback)",
+          "Narrow Economic Moat"
+        ],
+        "risks": [
+          "Overvalued vs Graham Intrinsic Value (453.7)",
+          "Fails P/E Screen (P/E 85.2 > 15 & Price > Intrinsic)"
+        ],
+        "recommendations": [
+          "Monitor / Underweight",
+          "Ensure risks are hedged or sizing is adjusted appropriately."
+        ]
+      },
+      "fundamental_value": 453.7,
+      "estimate_method": "Analyst Consensus"
     }
   ],
   "manufacturing_electronics": [
     {
       "ticker": "DIXON",
       "name": "Dixon Technologies",
-      "price": "13313.00",
+      "price": "12934.00",
       "target": "12092.00",
-      "growth_pct": "-9.2%",
+      "growth_pct": "-6.5%",
       "catalyst": "Leader in electronic assembly (mobile, laptop, LED TV), heavily subsidized under manufacturing PLI.",
       "rating": "Buy",
       "revenue_growth": "+2.1%",
       "earnings_growth": "-36.1%",
       "analyst_count": 29,
       "target_median": "12092.00",
-      "target_high": "15200.00",
+      "target_high": "16200.00",
       "target_low": "8157.00",
       "rec_score": 2.3,
       "screener": {
-        "market_cap": 81321.0,
-        "current_price": 13300.0,
-        "pe_ratio": 56.6,
+        "market_cap": 79096.0,
+        "current_price": 12934.0,
+        "pe_ratio": 55.0,
         "dividend_yield": 0.06,
         "roce": 42.0,
         "roe": 37.4,
@@ -926,9 +1015,9 @@
         "net_current_assets": null,
         "hyper_growth_warning": false,
         "valuation_alerts": [
-          "Fails P/E Screen (P/E 56.6 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 55.0 > 15 & Price > Intrinsic)"
         ],
-        "industry_pe": 60.7,
+        "industry_pe": 58.8,
         "pe_vs_peers": "In line with peers"
       },
       "score": {
@@ -947,7 +1036,7 @@
         ],
         "risks": [
           "Overvalued vs Graham Intrinsic Value (5482.1)",
-          "Fails P/E Screen (P/E 56.6 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 55.0 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Strong Buy Candidate",
@@ -955,14 +1044,16 @@
         ]
       },
       "fundamental_value": 5482.1,
-      "estimate_method": "Analyst Consensus"
+      "estimate_method": "Analyst Consensus",
+      "analyst_actions": [],
+      "institutional_holders": []
     },
     {
       "ticker": "KAYNES",
       "name": "Kaynes Technology",
-      "price": "3313.00",
+      "price": "3210.70",
       "target": "3393.00",
-      "growth_pct": "+2.4%",
+      "growth_pct": "+5.7%",
       "catalyst": "High-end electronics and PCBA manufacturing, setting up a state-of-the-art semiconductor OSAT plant.",
       "rating": "Hold",
       "revenue_growth": "+26.2%",
@@ -973,9 +1064,9 @@
       "target_low": "2647.00",
       "rec_score": 3.0,
       "screener": {
-        "market_cap": 22213.0,
-        "current_price": 3314.0,
-        "pe_ratio": 60.7,
+        "market_cap": 21524.0,
+        "current_price": 3211.0,
+        "pe_ratio": 58.8,
         "dividend_yield": 0.0,
         "roce": 13.2,
         "roe": 9.64,
@@ -1012,10 +1103,10 @@
         "net_current_assets": null,
         "hyper_growth_warning": false,
         "valuation_alerts": [
-          "Fails P/E Screen (P/E 60.7 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 58.8 > 15 & Price > Intrinsic)",
           "No Dividend Yield"
         ],
-        "industry_pe": 60.7,
+        "industry_pe": 58.8,
         "pe_vs_peers": "In line with peers"
       },
       "score": {
@@ -1027,7 +1118,7 @@
         ],
         "risks": [
           "Overvalued vs Graham Intrinsic Value (1769.3)",
-          "Fails P/E Screen (P/E 60.7 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 58.8 > 15 & Price > Intrinsic)",
           "No Dividend Yield"
         ],
         "recommendations": [
@@ -1036,14 +1127,16 @@
         ]
       },
       "fundamental_value": 1769.3,
-      "estimate_method": "Analyst Consensus"
+      "estimate_method": "Analyst Consensus",
+      "analyst_actions": [],
+      "institutional_holders": []
     },
     {
       "ticker": "CGPOWER",
       "name": "CG Power & Industrial",
-      "price": "906.90",
+      "price": "908.10",
       "target": "930.00",
-      "growth_pct": "+2.5%",
+      "growth_pct": "+2.4%",
       "catalyst": "Partnering on a $1B semiconductor fab, strong order pipeline in railways and power grid equipment.",
       "rating": "Buy",
       "revenue_growth": "+25.0%",
@@ -1054,8 +1147,8 @@
       "target_low": "502.00",
       "rec_score": 2.1,
       "screener": {
-        "market_cap": 142772.0,
-        "current_price": 906.0,
+        "market_cap": 143102.0,
+        "current_price": 908.0,
         "pe_ratio": 118.0,
         "dividend_yield": 0.14,
         "roce": 26.7,
@@ -1095,8 +1188,8 @@
         "valuation_alerts": [
           "Fails P/E Screen (P/E 118.0 > 15 & Price > Intrinsic)"
         ],
-        "industry_pe": 60.7,
-        "pe_vs_peers": "94% above peers"
+        "industry_pe": 58.8,
+        "pe_vs_peers": "101% above peers"
       },
       "score": {
         "overall_score": 6,
@@ -1117,16 +1210,18 @@
         ]
       },
       "fundamental_value": 301.6,
-      "estimate_method": "Analyst Consensus"
+      "estimate_method": "Analyst Consensus",
+      "analyst_actions": [],
+      "institutional_holders": []
     }
   ],
   "fmcg": [
     {
       "ticker": "VBL",
       "name": "Varun Beverages (PepsiCo)",
-      "price": "479.85",
+      "price": "474.55",
       "target": "594.00",
-      "growth_pct": "+23.8%",
+      "growth_pct": "+25.2%",
       "catalyst": "PepsiCo's dominant bottler, expanding into newer territories and scaling dairy/juice products.",
       "rating": "Strong Buy",
       "revenue_growth": "+18.1%",
@@ -1137,10 +1232,10 @@
       "target_low": "422.00",
       "rec_score": 1.5,
       "screener": {
-        "market_cap": 162223.0,
-        "current_price": 480.0,
-        "pe_ratio": 51.0,
-        "dividend_yield": 0.31,
+        "market_cap": 160498.0,
+        "current_price": 475.0,
+        "pe_ratio": 50.4,
+        "dividend_yield": 0.32,
         "roce": 19.7,
         "roe": 16.2,
         "q_opm": 23.0,
@@ -1179,9 +1274,9 @@
         "net_current_assets": null,
         "hyper_growth_warning": false,
         "valuation_alerts": [
-          "Fails P/E Screen (P/E 51.0 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 50.4 > 15 & Price > Intrinsic)"
         ],
-        "industry_pe": 51.0,
+        "industry_pe": 50.4,
         "pe_vs_peers": "In line with peers"
       },
       "score": {
@@ -1194,7 +1289,7 @@
           "Wide Economic Moat (Sustained Margin Expansion)"
         ],
         "risks": [
-          "Fails P/E Screen (P/E 51.0 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 50.4 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Hold / Neutral",
@@ -1202,28 +1297,30 @@
         ]
       },
       "fundamental_value": 335.4,
-      "estimate_method": "Analyst Consensus"
+      "estimate_method": "Analyst Consensus",
+      "analyst_actions": [],
+      "institutional_holders": []
     },
     {
       "ticker": "TATACONSUM",
       "name": "Tata Consumer Products",
-      "price": "1109.10",
-      "target": "1345.00",
-      "growth_pct": "+21.3%",
+      "price": "1089.80",
+      "target": "1347.50",
+      "growth_pct": "+23.6%",
       "catalyst": "Premiumization strategy in foods & beverages, high-growth acquisitions (Capital Foods, Organic India).",
       "rating": "Buy",
       "revenue_growth": "+17.9%",
       "earnings_growth": "+21.5%",
-      "analyst_count": 29,
-      "target_median": "1345.00",
+      "analyst_count": 28,
+      "target_median": "1347.50",
       "target_high": "1460.00",
       "target_low": "1124.00",
       "rec_score": 1.8,
       "screener": {
-        "market_cap": 109752.0,
-        "current_price": 1109.0,
-        "pe_ratio": 71.5,
-        "dividend_yield": 0.89,
+        "market_cap": 107871.0,
+        "current_price": 1090.0,
+        "pe_ratio": 70.2,
+        "dividend_yield": 0.92,
         "roce": 9.24,
         "roe": 7.35,
         "q_opm": 15.0,
@@ -1259,10 +1356,10 @@
         "net_current_assets": null,
         "hyper_growth_warning": false,
         "valuation_alerts": [
-          "Fails P/E Screen (P/E 71.5 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 70.2 > 15 & Price > Intrinsic)"
         ],
-        "industry_pe": 51.0,
-        "pe_vs_peers": "40% above peers"
+        "industry_pe": 50.4,
+        "pe_vs_peers": "39% above peers"
       },
       "score": {
         "overall_score": 1,
@@ -1272,7 +1369,7 @@
         ],
         "risks": [
           "Overvalued vs Graham Intrinsic Value (551.2)",
-          "Fails P/E Screen (P/E 71.5 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 70.2 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Monitor / Underweight",
@@ -1280,14 +1377,16 @@
         ]
       },
       "fundamental_value": 551.2,
-      "estimate_method": "Analyst Consensus"
+      "estimate_method": "Analyst Consensus",
+      "analyst_actions": [],
+      "institutional_holders": []
     },
     {
       "ticker": "ITC",
       "name": "ITC Ltd",
-      "price": "282.75",
+      "price": "280.65",
       "target": "330.00",
-      "growth_pct": "+16.7%",
+      "growth_pct": "+17.6%",
       "catalyst": "Resilient cigarette margins funding rapid expansion of high-margin FMCG brands, direct rural boost play.",
       "rating": "Hold",
       "revenue_growth": "-5.0%",
@@ -1298,10 +1397,10 @@
       "target_low": "290.00",
       "rec_score": 2.6,
       "screener": {
-        "market_cap": 353519.0,
-        "current_price": 282.0,
-        "pe_ratio": 17.0,
-        "dividend_yield": 5.12,
+        "market_cap": 351457.0,
+        "current_price": 281.0,
+        "pe_ratio": 16.8,
+        "dividend_yield": 5.17,
         "roce": 38.9,
         "roe": 29.3,
         "q_opm": 39.0,
@@ -1337,7 +1436,7 @@
         "net_current_assets": null,
         "hyper_growth_warning": false,
         "valuation_alerts": [],
-        "industry_pe": 51.0,
+        "industry_pe": 50.4,
         "pe_vs_peers": "67% below peers"
       },
       "score": {
@@ -1362,16 +1461,18 @@
         ]
       },
       "fundamental_value": 559.0,
-      "estimate_method": "Analyst Consensus"
+      "estimate_method": "Analyst Consensus",
+      "analyst_actions": [],
+      "institutional_holders": []
     }
   ],
   "sports_athleisure": [
     {
       "ticker": "METROBRAND",
       "name": "Metro Brands Ltd",
-      "price": "1051.00",
+      "price": "1050.70",
       "target": "1250.00",
-      "growth_pct": "+18.9%",
+      "growth_pct": "+19.0%",
       "catalyst": "Exclusive retail rights for Fila and Foot Locker in India, expanding athleisure footprint rapidly.",
       "rating": "Buy",
       "revenue_growth": "+20.3%",
@@ -1382,10 +1483,10 @@
       "target_low": "1040.00",
       "rec_score": 1.8,
       "screener": {
-        "market_cap": 28666.0,
-        "current_price": 1052.0,
-        "pe_ratio": 69.7,
-        "dividend_yield": 0.53,
+        "market_cap": 28621.0,
+        "current_price": 1051.0,
+        "pe_ratio": 69.6,
+        "dividend_yield": 0.52,
         "roce": 20.2,
         "roe": 22.2,
         "q_opm": 31.0,
@@ -1424,7 +1525,7 @@
         "net_current_assets": null,
         "hyper_growth_warning": false,
         "valuation_alerts": [
-          "Fails P/E Screen (P/E 69.7 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 69.6 > 15 & Price > Intrinsic)"
         ],
         "industry_pe": 60.7,
         "pe_vs_peers": "15% above peers"
@@ -1440,7 +1541,7 @@
         ],
         "risks": [
           "Overvalued vs Graham Intrinsic Value (556.4)",
-          "Fails P/E Screen (P/E 69.7 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 69.6 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Hold / Neutral",
@@ -1448,14 +1549,16 @@
         ]
       },
       "fundamental_value": 556.4,
-      "estimate_method": "Analyst Consensus"
+      "estimate_method": "Analyst Consensus",
+      "analyst_actions": [],
+      "institutional_holders": []
     },
     {
       "ticker": "CAMPUS",
       "name": "Campus Activewear",
-      "price": "228.82",
+      "price": "229.89",
       "target": "307.00",
-      "growth_pct": "+34.2%",
+      "growth_pct": "+33.5%",
       "catalyst": "Dominant direct-to-consumer sports footwear brand in tier-2/3 cities, major beneficiary of fitness trends.",
       "rating": "Strong Buy",
       "revenue_growth": "+12.3%",
@@ -1466,9 +1569,9 @@
       "target_low": "247.00",
       "rec_score": 1.3,
       "screener": {
-        "market_cap": 7013.0,
-        "current_price": 229.0,
-        "pe_ratio": 51.6,
+        "market_cap": 7033.0,
+        "current_price": 230.0,
+        "pe_ratio": 51.8,
         "dividend_yield": 0.65,
         "roce": 31.8,
         "roe": 29.5,
@@ -1508,7 +1611,7 @@
         "net_current_assets": null,
         "hyper_growth_warning": false,
         "valuation_alerts": [
-          "Fails P/E Screen (P/E 51.6 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 51.8 > 15 & Price > Intrinsic)"
         ],
         "industry_pe": 60.7,
         "pe_vs_peers": "15% below peers"
@@ -1524,7 +1627,7 @@
         ],
         "risks": [
           "Overvalued vs Graham Intrinsic Value (122.2)",
-          "Fails P/E Screen (P/E 51.6 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 51.8 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Hold / Neutral",
@@ -1532,23 +1635,25 @@
         ]
       },
       "fundamental_value": 122.2,
-      "estimate_method": "Analyst Consensus"
+      "estimate_method": "Analyst Consensus",
+      "analyst_actions": [],
+      "institutional_holders": []
     },
     {
       "ticker": "PAGEIND",
       "name": "Page Industries",
-      "price": "42130.00",
-      "target": "42433.00",
-      "growth_pct": "+0.7%",
+      "price": "41415.00",
+      "target": "42911.50",
+      "growth_pct": "+3.6%",
       "catalyst": "Jockey master franchise holder, expanding sports shorts, tees, and athleisure wear into rural hubs.",
       "rating": "Buy",
       "revenue_growth": "+14.1%",
       "earnings_growth": "+9.0%",
       "analyst_count": 26,
-      "target_median": "42433.00",
-      "target_high": "48000.00",
+      "target_median": "42911.50",
+      "target_high": "48810.00",
       "target_low": "31000.00",
-      "rec_score": 2.5,
+      "rec_score": 2.4,
       "screener": {
         "capex": 0.0,
         "rd_pct": 1.5,
@@ -1577,14 +1682,16 @@
           "Ensure risks are hedged or sizing is adjusted appropriately."
         ]
       },
-      "estimate_method": "Analyst Consensus"
+      "estimate_method": "Analyst Consensus",
+      "analyst_actions": [],
+      "institutional_holders": []
     },
     {
       "ticker": "RELAXO",
       "name": "Relaxo Footwears Limited",
-      "price": "398.55",
+      "price": "384.80",
       "target": "388.00",
-      "growth_pct": "-2.6%",
+      "growth_pct": "+0.8%",
       "catalyst": "Auto-discovered via media radar. Catalyst: Relaxo Footwears Ltd (RELAXO) Share Price",
       "rating": "Hold",
       "revenue_growth": "+8.0%",
@@ -1626,16 +1733,18 @@
           "Ensure risks are hedged or sizing is adjusted appropriately."
         ]
       },
-      "estimate_method": "Analyst Consensus"
+      "estimate_method": "Analyst Consensus",
+      "analyst_actions": [],
+      "institutional_holders": []
     }
   ],
   "big_cap_industries": [
     {
       "ticker": "LT",
       "name": "Larsen & Toubro (L&T)",
-      "price": "3979.60",
+      "price": "3892.10",
       "target": "4530.00",
-      "growth_pct": "+13.8%",
+      "growth_pct": "+16.4%",
       "catalyst": "Heavy infrastructure leader, direct beneficiary of the government's ₹11.11 Lakh Cr CAPEX budget.",
       "rating": "Buy",
       "revenue_growth": "+11.7%",
@@ -1646,10 +1755,10 @@
       "target_low": "3600.00",
       "rec_score": 1.7,
       "screener": {
-        "market_cap": 547802.0,
-        "current_price": 3982.0,
-        "pe_ratio": 33.4,
-        "dividend_yield": 0.96,
+        "market_cap": 535488.0,
+        "current_price": 3892.0,
+        "pe_ratio": 32.6,
+        "dividend_yield": 0.98,
         "roce": 14.6,
         "roe": 15.9,
         "q_opm": 13.0,
@@ -1688,8 +1797,8 @@
         "net_current_assets": null,
         "hyper_growth_warning": false,
         "valuation_alerts": [],
-        "industry_pe": 27.9,
-        "pe_vs_peers": "20% above peers"
+        "industry_pe": 27.4,
+        "pe_vs_peers": "19% above peers"
       },
       "score": {
         "overall_score": 29,
@@ -1712,14 +1821,16 @@
         ]
       },
       "fundamental_value": 5032.3,
-      "estimate_method": "Analyst Consensus"
+      "estimate_method": "Analyst Consensus",
+      "analyst_actions": [],
+      "institutional_holders": []
     },
     {
       "ticker": "RELIANCE",
       "name": "Reliance Industries",
-      "price": "1292.10",
+      "price": "1275.90",
       "target": "1685.00",
-      "growth_pct": "+30.4%",
+      "growth_pct": "+32.1%",
       "catalyst": "Consolidating 5G market share, scaling retail stores, and commissioning green energy gigafactories.",
       "rating": "Strong Buy",
       "revenue_growth": "+12.5%",
@@ -1730,10 +1841,10 @@
       "target_low": "1510.00",
       "rec_score": 1.3,
       "screener": {
-        "market_cap": 1749216.0,
-        "current_price": 1293.0,
-        "pe_ratio": 22.5,
-        "dividend_yield": 0.46,
+        "market_cap": 1728929.0,
+        "current_price": 1276.0,
+        "pe_ratio": 22.2,
+        "dividend_yield": 0.47,
         "roce": 10.3,
         "roe": 8.91,
         "q_opm": 15.0,
@@ -1769,7 +1880,7 @@
         "net_current_assets": null,
         "hyper_growth_warning": false,
         "valuation_alerts": [],
-        "industry_pe": 27.9,
+        "industry_pe": 27.4,
         "pe_vs_peers": "19% below peers"
       },
       "score": {
@@ -1789,16 +1900,18 @@
         ]
       },
       "fundamental_value": 1630.2,
-      "estimate_method": "Analyst Consensus"
+      "estimate_method": "Analyst Consensus",
+      "analyst_actions": [],
+      "institutional_holders": []
     }
   ],
   "textiles_apparel": [
     {
       "ticker": "WELSPUNLIV",
       "name": "Welspun Living",
-      "price": "168.26",
+      "price": "162.93",
       "target": "166.00",
-      "growth_pct": "-1.3%",
+      "growth_pct": "+1.9%",
       "catalyst": "Major beneficiary of textile PLI, expanding home textiles capacity and global export market share.",
       "rating": "Buy",
       "revenue_growth": "-8.0%",
@@ -1809,9 +1922,9 @@
       "target_low": "145.00",
       "rec_score": 1.5,
       "screener": {
-        "market_cap": 16071.0,
-        "current_price": 168.0,
-        "pe_ratio": 73.8,
+        "market_cap": 15639.0,
+        "current_price": 163.0,
+        "pe_ratio": 71.8,
         "dividend_yield": 0.06,
         "roce": 6.25,
         "roe": 4.47,
@@ -1851,7 +1964,7 @@
         "net_current_assets": null,
         "hyper_growth_warning": false,
         "valuation_alerts": [],
-        "industry_pe": 52.0,
+        "industry_pe": 50.4,
         "pe_vs_peers": "42% above peers"
       },
       "score": {
@@ -1867,14 +1980,16 @@
         ]
       },
       "fundamental_value": 140.4,
-      "estimate_method": "Analyst Consensus"
+      "estimate_method": "Analyst Consensus",
+      "analyst_actions": [],
+      "institutional_holders": []
     },
     {
       "ticker": "GOKEX",
       "name": "Gokaldas Exports",
-      "price": "835.85",
+      "price": "808.65",
       "target": "885.00",
-      "growth_pct": "+5.9%",
+      "growth_pct": "+9.4%",
       "catalyst": "Top apparel manufacturer, setting up new fabrics processing mill under textile PLI approval.",
       "rating": "Strong Buy",
       "revenue_growth": "+5.3%",
@@ -1885,9 +2000,9 @@
       "target_low": "832.00",
       "rec_score": 1.4,
       "screener": {
-        "market_cap": 6106.0,
-        "current_price": 833.0,
-        "pe_ratio": 61.0,
+        "market_cap": 5927.0,
+        "current_price": 809.0,
+        "pe_ratio": 59.2,
         "dividend_yield": 0.0,
         "roce": 8.39,
         "roe": 4.72,
@@ -1924,10 +2039,10 @@
         "net_current_assets": null,
         "hyper_growth_warning": false,
         "valuation_alerts": [
-          "Fails P/E Screen (P/E 61.0 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 59.2 > 15 & Price > Intrinsic)",
           "No Dividend Yield"
         ],
-        "industry_pe": 52.0,
+        "industry_pe": 50.4,
         "pe_vs_peers": "17% above peers"
       },
       "score": {
@@ -1938,7 +2053,7 @@
           "Operating Margin Expansion (+3.0%)"
         ],
         "risks": [
-          "Fails P/E Screen (P/E 61.0 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 59.2 > 15 & Price > Intrinsic)",
           "No Dividend Yield"
         ],
         "recommendations": [
@@ -1947,14 +2062,16 @@
         ]
       },
       "fundamental_value": 638.3,
-      "estimate_method": "Analyst Consensus"
+      "estimate_method": "Analyst Consensus",
+      "analyst_actions": [],
+      "institutional_holders": []
     },
     {
       "ticker": "ARVIND",
       "name": "Arvind Ltd",
-      "price": "539.15",
+      "price": "525.50",
       "target": "607.50",
-      "growth_pct": "+12.7%",
+      "growth_pct": "+15.6%",
       "catalyst": "Leading denim manufacturer, investing in technical textiles under recent government schemes.",
       "rating": "Strong Buy",
       "revenue_growth": "+15.0%",
@@ -1965,9 +2082,9 @@
       "target_low": "400.00",
       "rec_score": 1.0,
       "screener": {
-        "market_cap": 14127.0,
-        "current_price": 539.0,
-        "pe_ratio": 33.1,
+        "market_cap": 13783.0,
+        "current_price": 526.0,
+        "pe_ratio": 32.4,
         "dividend_yield": 0.71,
         "roce": 13.8,
         "roe": 10.9,
@@ -2004,7 +2121,7 @@
         "net_current_assets": null,
         "hyper_growth_warning": false,
         "valuation_alerts": [],
-        "industry_pe": 52.0,
+        "industry_pe": 50.4,
         "pe_vs_peers": "36% below peers"
       },
       "score": {
@@ -2022,22 +2139,24 @@
         ]
       },
       "fundamental_value": 791.7,
-      "estimate_method": "Analyst Consensus"
+      "estimate_method": "Analyst Consensus",
+      "analyst_actions": [],
+      "institutional_holders": []
     },
     {
       "ticker": "FAZE3Q",
       "name": "Faze Three Limited",
-      "price": "589.95",
-      "target": "943.92",
+      "price": "571.65",
+      "target": "914.64",
       "growth_pct": "+60.0%",
       "catalyst": "Auto-discovered via media radar. Catalyst: Faze Three Secures PLI Approval to Scale Technical Textiles with ₹100 Crore Investment Plan",
       "rating": "None",
       "revenue_growth": "+31.6%",
       "earnings_growth": "+12.5%",
       "screener": {
-        "market_cap": 1438.0,
-        "current_price": 591.0,
-        "pe_ratio": 42.9,
+        "market_cap": 1396.0,
+        "current_price": 572.0,
+        "pe_ratio": 41.6,
         "dividend_yield": 0.0,
         "roce": 9.18,
         "roe": 7.7,
@@ -2076,8 +2195,8 @@
         "valuation_alerts": [
           "No Dividend Yield"
         ],
-        "industry_pe": 52.0,
-        "pe_vs_peers": "18% below peers"
+        "industry_pe": 50.4,
+        "pe_vs_peers": "17% below peers"
       },
       "score": {
         "overall_score": 4,
@@ -2096,30 +2215,32 @@
         ]
       },
       "fundamental_value": 1047.8,
-      "estimate_method": "Fundamental Estimate"
+      "estimate_method": "Fundamental Estimate",
+      "analyst_actions": [],
+      "institutional_holders": []
     }
   ],
   "logistics_heavy_capital": [
     {
       "ticker": "CONCOR",
       "name": "Container Corporation of India",
-      "price": "464.20",
-      "target": "510.00",
-      "growth_pct": "+9.9%",
+      "price": "451.40",
+      "target": "520.00",
+      "growth_pct": "+15.2%",
       "catalyst": "Dominant railway container carrier, major beneficiary of the ₹10,000 crore container manufacturing scheme.",
-      "rating": "None",
+      "rating": "Hold",
       "revenue_growth": "-1.1%",
       "earnings_growth": "-12.0%",
       "analyst_count": 16,
-      "target_median": "510.00",
+      "target_median": "520.00",
       "target_high": "625.00",
       "target_low": "456.00",
       "rec_score": 2.6,
       "screener": {
-        "market_cap": 35312.0,
-        "current_price": 464.0,
-        "pe_ratio": 28.4,
-        "dividend_yield": 1.98,
+        "market_cap": 34365.0,
+        "current_price": 451.0,
+        "pe_ratio": 27.7,
+        "dividend_yield": 2.04,
         "roce": 12.4,
         "roe": 9.81,
         "q_opm": 19.0,
@@ -2158,8 +2279,8 @@
         "net_current_assets": null,
         "hyper_growth_warning": false,
         "valuation_alerts": [],
-        "industry_pe": 62.6,
-        "pe_vs_peers": "55% below peers"
+        "industry_pe": 62.8,
+        "pe_vs_peers": "56% below peers"
       },
       "score": {
         "overall_score": 6,
@@ -2174,14 +2295,16 @@
         ]
       },
       "fundamental_value": 448.5,
-      "estimate_method": "Analyst Consensus"
+      "estimate_method": "Analyst Consensus",
+      "analyst_actions": [],
+      "institutional_holders": []
     },
     {
       "ticker": "BHEL",
       "name": "Bharat Heavy Electricals",
-      "price": "375.80",
+      "price": "377.80",
       "target": "417.50",
-      "growth_pct": "+11.1%",
+      "growth_pct": "+10.5%",
       "catalyst": "State-owned heavy power equipment giant, expanding local container manufacturing and green energy grids.",
       "rating": "Hold",
       "revenue_growth": "+36.9%",
@@ -2192,9 +2315,9 @@
       "target_low": "140.00",
       "rec_score": 3.0,
       "screener": {
-        "market_cap": 130908.0,
-        "current_price": 376.0,
-        "pe_ratio": 81.8,
+        "market_cap": 131605.0,
+        "current_price": 378.0,
+        "pe_ratio": 82.2,
         "dividend_yield": 0.37,
         "roce": 8.51,
         "roe": 6.29,
@@ -2231,7 +2354,7 @@
         "net_current_assets": null,
         "hyper_growth_warning": false,
         "valuation_alerts": [],
-        "industry_pe": 62.6,
+        "industry_pe": 62.8,
         "pe_vs_peers": "31% above peers"
       },
       "score": {
@@ -2255,12 +2378,14 @@
         ]
       },
       "fundamental_value": 482.3,
-      "estimate_method": "Analyst Consensus"
+      "estimate_method": "Analyst Consensus",
+      "analyst_actions": [],
+      "institutional_holders": []
     },
     {
       "ticker": "CUMMINSIND",
       "name": "Cummins India",
-      "price": "5496.50",
+      "price": "5498.50",
       "target": "5850.00",
       "growth_pct": "+6.4%",
       "catalyst": "Leading heavy engine maker, supplying power backups and engines for logistics and railway expansion.",
@@ -2273,10 +2398,10 @@
       "target_low": "3420.00",
       "rec_score": 2.7,
       "screener": {
-        "market_cap": 151768.0,
-        "current_price": 5475.0,
-        "pe_ratio": 62.6,
-        "dividend_yield": 1.22,
+        "market_cap": 152311.0,
+        "current_price": 5498.0,
+        "pe_ratio": 62.8,
+        "dividend_yield": 1.2,
         "roce": 39.5,
         "roe": 30.2,
         "q_opm": 21.0,
@@ -2312,9 +2437,9 @@
         "net_current_assets": null,
         "hyper_growth_warning": false,
         "valuation_alerts": [
-          "Fails P/E Screen (P/E 62.6 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 62.8 > 15 & Price > Intrinsic)"
         ],
-        "industry_pe": 62.6,
+        "industry_pe": 62.8,
         "pe_vs_peers": "In line with peers"
       },
       "score": {
@@ -2328,7 +2453,7 @@
         ],
         "risks": [
           "Overvalued vs Graham Intrinsic Value (3045.9)",
-          "Fails P/E Screen (P/E 62.6 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 62.8 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Hold / Neutral",
@@ -2336,30 +2461,32 @@
         ]
       },
       "fundamental_value": 3045.9,
-      "estimate_method": "Analyst Consensus"
+      "estimate_method": "Analyst Consensus",
+      "analyst_actions": [],
+      "institutional_holders": []
     }
   ],
   "aerospace_defence": [
     {
       "ticker": "HAL",
       "name": "Hindustan Aeronautics",
-      "price": "4429.00",
-      "target": "5300.00",
-      "growth_pct": "+19.7%",
+      "price": "4364.70",
+      "target": "5315.00",
+      "growth_pct": "+21.8%",
       "catalyst": "State aerospace major, expanding local fighter jet assembly and benefiting from custom duty exemptions.",
-      "rating": "None",
+      "rating": "Buy",
       "revenue_growth": "+1.8%",
       "earnings_growth": "+5.5%",
       "analyst_count": 24,
-      "target_median": "5300.00",
+      "target_median": "5315.00",
       "target_high": "6300.00",
       "target_low": "3200.00",
       "rec_score": 1.8,
       "screener": {
-        "market_cap": 295933.0,
-        "current_price": 4425.0,
-        "pe_ratio": 32.4,
-        "dividend_yield": 0.91,
+        "market_cap": 291923.0,
+        "current_price": 4365.0,
+        "pe_ratio": 32.0,
+        "dividend_yield": 0.92,
         "roce": 32.0,
         "roe": 24.0,
         "q_opm": 36.0,
@@ -2389,7 +2516,7 @@
         ],
         "industry_share_pct": 49.85,
         "industry_peer_count": 7,
-        "industry_share_change_pp": -0.34,
+        "industry_share_change_pp": 0.0,
         "graham_intrinsic_value": 8156.2,
         "owner_earnings": 0.0,
         "retained_earnings_ratio": 1.2,
@@ -2398,7 +2525,7 @@
         "net_current_assets": null,
         "hyper_growth_warning": false,
         "valuation_alerts": [],
-        "industry_pe": 50.0,
+        "industry_pe": 49.2,
         "pe_vs_peers": "35% below peers"
       },
       "score": {
@@ -2420,14 +2547,16 @@
         ]
       },
       "fundamental_value": 8156.2,
-      "estimate_method": "Analyst Consensus"
+      "estimate_method": "Analyst Consensus",
+      "analyst_actions": [],
+      "institutional_holders": []
     },
     {
       "ticker": "BEL",
       "name": "Bharat Electronics",
-      "price": "415.55",
+      "price": "407.60",
       "target": "501.00",
-      "growth_pct": "+20.6%",
+      "growth_pct": "+22.9%",
       "catalyst": "Defence electronics leader, securing major naval and surveillance command radar orders.",
       "rating": "Buy",
       "revenue_growth": "+11.7%",
@@ -2438,10 +2567,10 @@
       "target_low": "346.00",
       "rec_score": 1.6,
       "screener": {
-        "market_cap": 303283.0,
-        "current_price": 415.0,
-        "pe_ratio": 50.0,
-        "dividend_yield": 0.57,
+        "market_cap": 298089.0,
+        "current_price": 408.0,
+        "pe_ratio": 49.2,
+        "dividend_yield": 0.59,
         "roce": 36.5,
         "roe": 27.6,
         "q_opm": 29.0,
@@ -2471,7 +2600,7 @@
         ],
         "industry_share_pct": 36.56,
         "industry_peer_count": 7,
-        "industry_share_change_pp": -0.25,
+        "industry_share_change_pp": 0.0,
         "graham_intrinsic_value": 395.2,
         "owner_earnings": 0.0,
         "retained_earnings_ratio": 1.2,
@@ -2480,7 +2609,7 @@
         "net_current_assets": null,
         "hyper_growth_warning": false,
         "valuation_alerts": [],
-        "industry_pe": 50.0,
+        "industry_pe": 49.2,
         "pe_vs_peers": "In line with peers"
       },
       "score": {
@@ -2503,27 +2632,29 @@
         ]
       },
       "fundamental_value": 395.2,
-      "estimate_method": "Analyst Consensus"
+      "estimate_method": "Analyst Consensus",
+      "analyst_actions": [],
+      "institutional_holders": []
     },
     {
       "ticker": "ASTRAMICRO",
       "name": "Astra Microwave",
-      "price": "1853.00",
+      "price": "1809.30",
       "target": "1470.00",
-      "growth_pct": "-20.7%",
+      "growth_pct": "-18.8%",
       "catalyst": "High-end microwave sub-systems maker, critical supplier of radars and satellite payloads.",
-      "rating": "None",
+      "rating": "Buy",
       "revenue_growth": "+19.7%",
       "earnings_growth": "+43.9%",
       "analyst_count": 8,
       "target_median": "1470.00",
-      "target_high": "1665.00",
+      "target_high": "1715.00",
       "target_low": "1068.00",
-      "rec_score": null,
+      "rec_score": 1.6,
       "screener": {
-        "market_cap": 17612.0,
-        "current_price": 1855.0,
-        "pe_ratio": 91.3,
+        "market_cap": 17189.0,
+        "current_price": 1809.0,
+        "pe_ratio": 89.1,
         "dividend_yield": 0.12,
         "roce": 20.2,
         "roe": 16.0,
@@ -2554,7 +2685,7 @@
         ],
         "industry_share_pct": 1.75,
         "industry_peer_count": 7,
-        "industry_share_change_pp": -0.01,
+        "industry_share_change_pp": 0.0,
         "graham_intrinsic_value": 1450.8,
         "owner_earnings": 0.0,
         "retained_earnings_ratio": 1.2,
@@ -2563,10 +2694,10 @@
         "net_current_assets": null,
         "hyper_growth_warning": false,
         "valuation_alerts": [
-          "Fails P/E Screen (P/E 91.3 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 89.1 > 15 & Price > Intrinsic)"
         ],
-        "industry_pe": 50.0,
-        "pe_vs_peers": "83% above peers"
+        "industry_pe": 49.2,
+        "pe_vs_peers": "81% above peers"
       },
       "score": {
         "overall_score": 6,
@@ -2578,7 +2709,7 @@
           "Wide Economic Moat (Sustained Margin Expansion)"
         ],
         "risks": [
-          "Fails P/E Screen (P/E 91.3 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 89.1 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Hold / Neutral",
@@ -2586,14 +2717,16 @@
         ]
       },
       "fundamental_value": 1450.8,
-      "estimate_method": "Analyst Consensus"
+      "estimate_method": "Analyst Consensus",
+      "analyst_actions": [],
+      "institutional_holders": []
     }
   ],
   "semiconductors_equipment": [
     {
       "ticker": "ASMTEC",
       "name": "ASM Technologies",
-      "price": "4127.00",
+      "price": "4081.20",
       "target": null,
       "growth_pct": null,
       "catalyst": "Engineering design services for semiconductor equipment makers under India Semiconductor Mission (ISM) 2.0.",
@@ -2633,12 +2766,14 @@
           "Ensure risks are hedged or sizing is adjusted appropriately."
         ]
       },
-      "estimate_method": "Fundamental Estimate"
+      "estimate_method": "Fundamental Estimate",
+      "analyst_actions": [],
+      "institutional_holders": []
     },
     {
       "ticker": "RIR",
       "name": "RIR Power Electronics",
-      "price": "162.20",
+      "price": "159.55",
       "target": null,
       "growth_pct": null,
       "catalyst": "Power semiconductor device supplier, building new SiC fab facility under semiconductor PLI.",
@@ -2678,12 +2813,14 @@
           "Ensure risks are hedged or sizing is adjusted appropriately."
         ]
       },
-      "estimate_method": "Fundamental Estimate"
+      "estimate_method": "Fundamental Estimate",
+      "analyst_actions": [],
+      "institutional_holders": []
     },
     {
       "ticker": "SPELS",
       "name": "SPEL Semiconductor",
-      "price": "154.55",
+      "price": "155.05",
       "target": null,
       "growth_pct": null,
       "catalyst": "First semiconductor OSAT and assembly facility listed, expanding IC testing capabilities.",
@@ -2724,14 +2861,16 @@
           "Ensure risks are hedged or sizing is adjusted appropriately."
         ]
       },
-      "estimate_method": "Fundamental Estimate"
+      "estimate_method": "Fundamental Estimate",
+      "analyst_actions": [],
+      "institutional_holders": []
     }
   ],
   "macro_indicators": [
     {
       "ticker": "MAKEINDIA",
       "name": "Mirae Asset Nifty India Manufacturing ETF",
-      "price": "162.20",
+      "price": "159.91",
       "target": null,
       "growth_pct": null,
       "catalyst": "Passive index fund tracking the Nifty India Manufacturing Index. Captures the Make in India and PLI momentum.",
@@ -2748,16 +2887,18 @@
         "pe_ratio": "N/A",
         "roce": "N/A",
         "roe": "N/A"
-      }
+      },
+      "analyst_actions": [],
+      "institutional_holders": []
     }
   ],
   "industrial_manufacturing": [
     {
       "ticker": "SIEMENS",
       "name": "Siemens Ltd",
-      "price": "3481.80",
+      "price": "3446.10",
       "target": "3751.00",
-      "growth_pct": "+7.7%",
+      "growth_pct": "+8.8%",
       "catalyst": "Diversified capital-goods major, expanding local factory automation and grid equipment manufacturing.",
       "rating": "Hold",
       "revenue_growth": "+14.6%",
@@ -2768,9 +2909,9 @@
       "target_low": "2750.00",
       "rec_score": 2.6,
       "screener": {
-        "market_cap": 123752.0,
-        "current_price": 3475.0,
-        "pe_ratio": 52.2,
+        "market_cap": 122716.0,
+        "current_price": 3446.0,
+        "pe_ratio": 51.7,
         "dividend_yield": 0.0,
         "roce": 21.2,
         "roe": 16.3,
@@ -2801,6 +2942,7 @@
         ],
         "industry_share_pct": 15.22,
         "industry_peer_count": 7,
+        "industry_share_change_pp": 0.0,
         "graham_intrinsic_value": 1350.7,
         "owner_earnings": 0.0,
         "retained_earnings_ratio": 1.2,
@@ -2809,10 +2951,10 @@
         "net_current_assets": null,
         "hyper_growth_warning": false,
         "valuation_alerts": [
-          "Fails P/E Screen (P/E 52.2 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 51.7 > 15 & Price > Intrinsic)",
           "No Dividend Yield"
         ],
-        "industry_pe": 54.1,
+        "industry_pe": 53.8,
         "pe_vs_peers": "In line with peers"
       },
       "score": {
@@ -2826,7 +2968,7 @@
         ],
         "risks": [
           "Overvalued vs Graham Intrinsic Value (1350.7)",
-          "Fails P/E Screen (P/E 52.2 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 51.7 > 15 & Price > Intrinsic)",
           "No Dividend Yield"
         ],
         "recommendations": [
@@ -2835,14 +2977,16 @@
         ]
       },
       "fundamental_value": 1350.7,
-      "estimate_method": "Analyst Consensus"
+      "estimate_method": "Analyst Consensus",
+      "analyst_actions": [],
+      "institutional_holders": []
     },
     {
       "ticker": "THERMAX",
       "name": "Thermax Ltd",
-      "price": "4582.50",
+      "price": "4602.50",
       "target": "4362.50",
-      "growth_pct": "-4.8%",
+      "growth_pct": "-5.2%",
       "catalyst": "Industrial energy & environment engineering leader, scaling green hydrogen and boiler manufacturing capacity.",
       "rating": "None",
       "revenue_growth": "+11.1%",
@@ -2853,9 +2997,9 @@
       "target_low": "2893.00",
       "rec_score": null,
       "screener": {
-        "market_cap": 54086.0,
-        "current_price": 4539.0,
-        "pe_ratio": 97.8,
+        "market_cap": 54854.0,
+        "current_price": 4602.0,
+        "pe_ratio": 99.1,
         "dividend_yield": 0.3,
         "roce": 13.9,
         "roe": 10.6,
@@ -2892,10 +3036,10 @@
         "net_current_assets": null,
         "hyper_growth_warning": false,
         "valuation_alerts": [
-          "Fails P/E Screen (P/E 97.8 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 99.1 > 15 & Price > Intrinsic)"
         ],
-        "industry_pe": 54.1,
-        "pe_vs_peers": "81% above peers"
+        "industry_pe": 53.8,
+        "pe_vs_peers": "84% above peers"
       },
       "score": {
         "overall_score": 1,
@@ -2905,7 +3049,7 @@
         ],
         "risks": [
           "Overvalued vs Graham Intrinsic Value (2665.0)",
-          "Fails P/E Screen (P/E 97.8 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 99.1 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Monitor / Underweight",
@@ -2913,27 +3057,29 @@
         ]
       },
       "fundamental_value": 2665.0,
-      "estimate_method": "Analyst Consensus"
+      "estimate_method": "Analyst Consensus",
+      "analyst_actions": [],
+      "institutional_holders": []
     },
     {
       "ticker": "KIRLOSENG",
       "name": "Kirloskar Oil Engines",
-      "price": "2297.10",
-      "target": "2430.00",
-      "growth_pct": "+5.8%",
+      "price": "2277.00",
+      "target": "2500.00",
+      "growth_pct": "+9.8%",
       "catalyst": "Legacy engineering major pivoting to power generation and farm equipment manufacturing under 'Make in India'.",
-      "rating": "Buy",
+      "rating": "Strong Buy",
       "revenue_growth": "+20.7%",
       "earnings_growth": "+21.2%",
-      "analyst_count": 5,
-      "target_median": "2430.00",
-      "target_high": "2750.00",
+      "analyst_count": 6,
+      "target_median": "2500.00",
+      "target_high": "2815.00",
       "target_low": "1645.00",
-      "rec_score": 1.6,
+      "rec_score": 1.5,
       "screener": {
-        "market_cap": 33234.0,
-        "current_price": 2286.0,
-        "pe_ratio": 56.0,
+        "market_cap": 33113.0,
+        "current_price": 2277.0,
+        "pe_ratio": 55.8,
         "dividend_yield": 0.31,
         "roce": 14.7,
         "roe": 17.7,
@@ -2970,9 +3116,9 @@
         "net_current_assets": null,
         "hyper_growth_warning": false,
         "valuation_alerts": [
-          "Fails P/E Screen (P/E 56.0 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 55.8 > 15 & Price > Intrinsic)"
         ],
-        "industry_pe": 54.1,
+        "industry_pe": 53.8,
         "pe_vs_peers": "In line with peers"
       },
       "score": {
@@ -2985,7 +3131,7 @@
         ],
         "risks": [
           "Overvalued vs Graham Intrinsic Value (1418.3)",
-          "Fails P/E Screen (P/E 56.0 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 55.8 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Monitor / Underweight",
@@ -2993,14 +3139,16 @@
         ]
       },
       "fundamental_value": 1418.3,
-      "estimate_method": "Analyst Consensus"
+      "estimate_method": "Analyst Consensus",
+      "analyst_actions": [],
+      "institutional_holders": []
     },
     {
       "ticker": "ELGIEQUIP",
       "name": "Elgi Equipments",
-      "price": "590.10",
+      "price": "575.55",
       "target": "665.00",
-      "growth_pct": "+12.7%",
+      "growth_pct": "+15.5%",
       "catalyst": "Global air compressor manufacturer, expanding export-oriented capacity from Indian plants.",
       "rating": "None",
       "revenue_growth": "+12.1%",
@@ -3011,10 +3159,10 @@
       "target_low": "636.00",
       "rec_score": null,
       "screener": {
-        "market_cap": 18698.0,
-        "current_price": 590.0,
-        "pe_ratio": 42.4,
-        "dividend_yield": 0.46,
+        "market_cap": 18204.0,
+        "current_price": 576.0,
+        "pe_ratio": 41.3,
+        "dividend_yield": 0.47,
         "roce": 23.7,
         "roe": 21.5,
         "q_opm": 16.0,
@@ -3050,8 +3198,8 @@
         "net_current_assets": null,
         "hyper_growth_warning": false,
         "valuation_alerts": [],
-        "industry_pe": 54.1,
-        "pe_vs_peers": "22% below peers"
+        "industry_pe": 53.8,
+        "pe_vs_peers": "23% below peers"
       },
       "score": {
         "overall_score": 7,
@@ -3069,16 +3217,18 @@
         ]
       },
       "fundamental_value": 525.2,
-      "estimate_method": "Analyst Consensus"
+      "estimate_method": "Analyst Consensus",
+      "analyst_actions": [],
+      "institutional_holders": []
     }
   ],
   "midcap_it": [
     {
       "ticker": "PERSISTENT",
       "name": "Persistent Systems",
-      "price": "4815.00",
+      "price": "4769.50",
       "target": "5175.00",
-      "growth_pct": "+7.5%",
+      "growth_pct": "+8.5%",
       "catalyst": "High-growth digital engineering and enterprise AI services provider, consistently outpacing large-cap IT growth rates.",
       "rating": "Hold",
       "revenue_growth": "+25.1%",
@@ -3089,10 +3239,10 @@
       "target_low": "3749.00",
       "rec_score": 2.5,
       "screener": {
-        "market_cap": 76045.0,
-        "current_price": 4821.0,
-        "pe_ratio": 39.4,
-        "dividend_yield": 0.71,
+        "market_cap": 75251.0,
+        "current_price": 4770.0,
+        "pe_ratio": 39.0,
+        "dividend_yield": 0.73,
         "roce": 34.4,
         "roe": 27.3,
         "q_opm": 19.0,
@@ -3122,6 +3272,7 @@
         ],
         "industry_share_pct": 1.97,
         "industry_peer_count": 7,
+        "industry_share_change_pp": 0.0,
         "graham_intrinsic_value": 4361.5,
         "owner_earnings": 0.0,
         "retained_earnings_ratio": 1.2,
@@ -3130,8 +3281,8 @@
         "net_current_assets": null,
         "hyper_growth_warning": false,
         "valuation_alerts": [],
-        "industry_pe": 32.0,
-        "pe_vs_peers": "23% above peers"
+        "industry_pe": 31.2,
+        "pe_vs_peers": "25% above peers"
       },
       "score": {
         "overall_score": 6,
@@ -3148,14 +3299,16 @@
         ]
       },
       "fundamental_value": 4361.5,
-      "estimate_method": "Analyst Consensus"
+      "estimate_method": "Analyst Consensus",
+      "analyst_actions": [],
+      "institutional_holders": []
     },
     {
       "ticker": "COFORGE",
       "name": "Coforge Ltd",
-      "price": "1474.10",
+      "price": "1445.90",
       "target": "1725.00",
-      "growth_pct": "+17.0%",
+      "growth_pct": "+19.3%",
       "catalyst": "Mid-tier IT services firm with large deal wins in BFSI and travel verticals, expanding margins via GenAI offerings.",
       "rating": "Buy",
       "revenue_growth": "+30.5%",
@@ -3163,13 +3316,13 @@
       "analyst_count": 35,
       "target_median": "1725.00",
       "target_high": "2410.00",
-      "target_low": "1190.00",
+      "target_low": "1225.00",
       "rec_score": 1.6,
       "screener": {
-        "market_cap": 63608.0,
-        "current_price": 1479.0,
-        "pe_ratio": 38.7,
-        "dividend_yield": 1.01,
+        "market_cap": 62122.0,
+        "current_price": 1446.0,
+        "pe_ratio": 37.8,
+        "dividend_yield": 1.05,
         "roce": 23.5,
         "roe": 20.6,
         "q_opm": 20.0,
@@ -3205,7 +3358,7 @@
         "net_current_assets": null,
         "hyper_growth_warning": false,
         "valuation_alerts": [],
-        "industry_pe": 32.0,
+        "industry_pe": 31.2,
         "pe_vs_peers": "21% above peers"
       },
       "score": {
@@ -3225,14 +3378,16 @@
         ]
       },
       "fundamental_value": 2369.9,
-      "estimate_method": "Analyst Consensus"
+      "estimate_method": "Analyst Consensus",
+      "analyst_actions": [],
+      "institutional_holders": []
     },
     {
       "ticker": "MPHASIS",
       "name": "Mphasis Ltd",
-      "price": "2301.20",
+      "price": "2241.90",
       "target": "2620.00",
-      "growth_pct": "+13.9%",
+      "growth_pct": "+16.9%",
       "catalyst": "Direct-core BFS-focused IT services player, key beneficiary of enterprise cloud and cost-takeout deals.",
       "rating": "Buy",
       "revenue_growth": "+14.4%",
@@ -3243,10 +3398,10 @@
       "target_low": "1840.00",
       "rec_score": 2.0,
       "screener": {
-        "market_cap": 44051.0,
-        "current_price": 2308.0,
-        "pe_ratio": 23.4,
-        "dividend_yield": 2.68,
+        "market_cap": 42794.0,
+        "current_price": 2242.0,
+        "pe_ratio": 22.7,
+        "dividend_yield": 2.77,
         "roce": 22.1,
         "roe": 18.5,
         "q_opm": 19.0,
@@ -3282,7 +3437,7 @@
         "net_current_assets": null,
         "hyper_growth_warning": false,
         "valuation_alerts": [],
-        "industry_pe": 32.0,
+        "industry_pe": 31.2,
         "pe_vs_peers": "27% below peers"
       },
       "score": {
@@ -3301,14 +3456,16 @@
         ]
       },
       "fundamental_value": 3472.3,
-      "estimate_method": "Analyst Consensus"
+      "estimate_method": "Analyst Consensus",
+      "analyst_actions": [],
+      "institutional_holders": []
     },
     {
       "ticker": "LTTS",
       "name": "L&T Technology Services",
-      "price": "3228.80",
+      "price": "3141.10",
       "target": "3610.00",
-      "growth_pct": "+11.8%",
+      "growth_pct": "+14.9%",
       "catalyst": "Engineering R&D services leader, scaling embedded software and semiconductor design-services wins.",
       "rating": "Hold",
       "revenue_growth": "-4.2%",
@@ -3319,10 +3476,10 @@
       "target_low": "2900.00",
       "rec_score": 2.9,
       "screener": {
-        "market_cap": 34078.0,
-        "current_price": 3213.0,
-        "pe_ratio": 25.2,
-        "dividend_yield": 1.82,
+        "market_cap": 33280.0,
+        "current_price": 3141.0,
+        "pe_ratio": 24.6,
+        "dividend_yield": 1.85,
         "roce": 26.7,
         "roe": 21.5,
         "q_opm": 18.0,
@@ -3358,14 +3515,14 @@
         "net_current_assets": null,
         "hyper_growth_warning": false,
         "valuation_alerts": [],
-        "industry_pe": 32.0,
+        "industry_pe": 31.2,
         "pe_vs_peers": "21% below peers"
       },
       "score": {
-        "overall_score": 8,
+        "overall_score": 11,
         "confidence": "Medium",
         "reasons": [
-          "Sector benefits from macro policy tailwinds (Fallback)",
+          "Policy Notification: L&T Technology Services Pivots on Engineering Intelligence, Divests SWC Business",
           "High Return on Capital (ROCE: 26.7%)",
           "High Return on Equity (ROE: 21.5%)",
           "Wide Economic Moat (Sustained Margin Expansion)",
@@ -3373,11 +3530,13 @@
         ],
         "risks": [],
         "recommendations": [
-          "Hold / Neutral"
+          "Buy / Accumulate Candidate"
         ]
       },
       "fundamental_value": 4072.9,
-      "estimate_method": "Analyst Consensus"
+      "estimate_method": "Analyst Consensus",
+      "analyst_actions": [],
+      "institutional_holders": []
     }
   ]
 }
