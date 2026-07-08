@@ -237,11 +237,6 @@ STOCK_WATCHLIST = {
             "catalyst": "CCTV market leader (35%+ share) newly listed, scaling domestic camera manufacturing under PLI.",
         },
         {
-            "ticker": "DIXON",
-            "name": "Dixon Technologies",
-            "catalyst": "Primary EMS contract manufacturer producing CCTVs and DVRs for CP Plus and others under PLI.",
-        },
-        {
             "ticker": "ADSL",
             "name": "Allied Digital Services",
             "catalyst": "System integrator winning smart/safe city surveillance projects, managing master command centers.",
