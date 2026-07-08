@@ -25,11 +25,12 @@ from analysis.market_share import (
     compute_industry_share,
     snapshot_prior_industry_shares,
 )
-from providers.exchange_events import (
-    fetch_fundraising_events_async,
-    fetch_institutional_deals_async,
-)
 from entities import find_duplicate_holdings
+from providers.isin_master import (
+    load_isin_master,
+    refresh_isin_master_async,
+    annotate_watchlist_isins,
+)
 
 
 def save_data_for_dashboard(brief_data, watchlist):
@@ -58,6 +59,12 @@ async def run_pipeline():
     # scrapers gain nothing from threads.
     watchlist = load_watchlist()
 
+    # Stamp each holding's ISIN from the committed symbol→ISIN master so
+    # identity-keyed features (rotation's duplicate guard, the duplicate-
+    # holding check below) work from the first line of the run, offline.
+    isin_master = load_isin_master()
+    annotate_watchlist_isins(watchlist, isin_master)
+
     # Snapshot targets/coverage before anything mutates the watchlist, so
     # estimate-revision momentum can diff "before this run" vs "after".
     prior_estimates = revisions_mod.snapshot_prior_estimates(watchlist)
@@ -84,16 +91,22 @@ async def run_pipeline():
     peer_competitors, industry_peers = await fetch_all_screener_fundamentals(watchlist)
     data["peer_competitors"] = peer_competitors or {}
 
+    # The Screener fetch rebuilds each stock's screener dict from scratch,
+    # dropping the ISIN stamped above — re-annotate so identity survives
+    # into the duplicate check and the committed watchlist.
+    isin_covered = annotate_watchlist_isins(watchlist, isin_master)
+    log.info(f"ISIN coverage: {isin_covered} holdings keyed by ISIN.")
+
     # True industry market share: each holding's slice of its FULL Screener
     # industry peer group's quarterly sales, not just the watchlist subset.
     data["industry_share"] = compute_industry_share(
         watchlist, industry_peers, prior_industry_shares
     )
 
-    # Safety net: ISIN now identifies each holding uniquely (populated by the
-    # Screener fetch above), so the same company silently ending up tracked
-    # under two sectors — as DIXON was, until this check existed — surfaces
-    # as a log warning the same run it happens instead of persisting unnoticed.
+    # Safety net: ISIN identifies each holding uniquely, so the same company
+    # silently ending up tracked under two sectors — as DIXON was, until this
+    # check existed — surfaces as a log warning the same run it happens
+    # instead of persisting unnoticed.
     duplicate_holdings = find_duplicate_holdings(watchlist)
     for dup in duplicate_holdings:
         holdings_desc = ", ".join(
@@ -114,8 +127,7 @@ async def run_pipeline():
         sebi_task = check_sebi_sid_filings_async(session)
         inst_task = fetch_institutional_activity_async(session, watchlist)
         filings_task = fetch_exchange_filings_async(session, watchlist)
-        fundraising_task = fetch_fundraising_events_async(session, watchlist)
-        deals_task = fetch_institutional_deals_async(session, watchlist)
+        isin_refresh_task = refresh_isin_master_async(session, isin_master)
 
         (
             pli_competitors,
@@ -123,16 +135,14 @@ async def run_pipeline():
             sebi_filings,
             inst_activity,
             corp_filings,
-            fundraising_events,
-            institutional_deals,
+            _isin_added,
         ) = await asyncio.gather(
             pli_task,
             adv_rss_task,
             sebi_task,
             inst_task,
             filings_task,
-            fundraising_task,
-            deals_task,
+            isin_refresh_task,
         )
 
         from history.store import HistoryStore
@@ -157,14 +167,6 @@ async def run_pipeline():
         merged_inst = store.deduplicate_and_merge(
             "institutional_activity", inst_activity, ["company", "title"]
         )
-        merged_fundraising = store.deduplicate_and_merge(
-            "fundraising_events", fundraising_events, ["company", "subject"]
-        )
-        merged_deals = store.deduplicate_and_merge(
-            "institutional_deals",
-            institutional_deals,
-            ["ticker", "client", "date", "side"],
-        )
 
         data["emerging_competitors"] = merged_competitors
         data["corporate_agreements"] = merged_agreements
@@ -172,8 +174,6 @@ async def run_pipeline():
         data["sebi_filings"] = merged_sebi
         data["institutional_activity"] = merged_inst
         data["corporate_filings"] = merged_filings
-        data["fundraising_events"] = merged_fundraising[:40]
-        data["institutional_deals"] = merged_deals[:40]
 
     # Compile margin of safety and moat analytics
     build_dashboard_views(data, watchlist)

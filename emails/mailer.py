@@ -709,35 +709,6 @@ def _render_email(brief_data, watchlist, caps):
     inst_activity = brief_data.get("institutional_activity", [])
     sebi_filings = brief_data.get("sebi_filings", [])
     inst_baseline = brief_data.get("institutional_baseline", [])
-    fundraising_events = brief_data.get("fundraising_events", [])
-    institutional_deals = brief_data.get("institutional_deals", [])
-
-    def _fund_item(e):
-        ticker_str = f" ({e['ticker']})" if e.get("ticker") else ""
-        source_str = f" [{e['source']}]" if e.get("source") else ""
-        return (
-            f"<li><strong>{e.get('company', '')}</strong>{ticker_str}: "
-            f"{e.get('subject', '')[:110]} "
-            f"<em style='font-size: 10px; color: #94a3b8;'>"
-            f"[{e.get('date', '')}]{source_str}</em></li>"
-        )
-
-    fundraising_items = "".join(
-        _fund_item(e) for e in fundraising_events[: caps["lists"]]
-    )
-
-    def _deal_item(d):
-        source_str = f" [{d['source']}]" if d.get("source") else ""
-        side_color = "#34d399" if d.get("side") == "buy" else "#f87171"
-        return (
-            f"<li><span class='stock-ticker'>{d.get('ticker', '')}</span> — "
-            f"<span style='color: {side_color};'>{d.get('side', '')}</span> "
-            f"{d.get('deal_type', 'bulk')} deal by {d.get('client', 'undisclosed')} "
-            f"<em style='font-size: 10px; color: #94a3b8;'>"
-            f"[{d.get('date', '')}]{source_str}</em></li>"
-        )
-
-    deal_items = "".join(_deal_item(d) for d in institutional_deals[: caps["lists"]])
 
     baseline_items = ""
     for b in inst_baseline[: caps["lists"]]:
@@ -754,13 +725,7 @@ def _render_email(brief_data, watchlist, caps):
             f"<span style='color: {trend_color}; font-size: 11px;'>(1Y {r1y_str} · {trend})</span></li>"
         )
 
-    if (
-        inst_activity
-        or sebi_filings
-        or baseline_items
-        or fundraising_items
-        or deal_items
-    ):
+    if inst_activity or sebi_filings or baseline_items:
         inst_items = "".join(
             [
                 f"<li><strong>{i['source']}</strong>: {i['headline']}</li>"
@@ -778,8 +743,6 @@ def _render_email(brief_data, watchlist, caps):
             <h3 style="color: #a78bfa; margin-bottom: 10px; font-size: 16px;"> Institutional Capital &amp; Fund Flow Tracker</h3>
             {f'<h4 style="margin: 5px 0; color: #94a3b8; font-size: 12px; text-transform: uppercase;">SEBI SID Filings (Leading Indicator):</h4><ul style="font-size: 13px; padding-left: 20px; color: #cbd5e1; margin-bottom: 10px;">{sebi_items}</ul>' if sebi_items else ''}
             {f'<h4 style="margin: 5px 0; color: #94a3b8; font-size: 12px; text-transform: uppercase;">Institutional Activity Feed (Lagging):</h4><ul style="font-size: 13px; padding-left: 20px; color: #cbd5e1;">{inst_items}</ul>' if inst_items else ''}
-            {f'<h4 style="margin: 5px 0; color: #94a3b8; font-size: 12px; text-transform: uppercase;">Bulk &amp; Block Deals (Exchange-Disclosed):</h4><ul style="font-size: 13px; padding-left: 20px; color: #cbd5e1;">{deal_items}</ul>' if deal_items else ''}
-            {f'<h4 style="margin: 5px 0; color: #94a3b8; font-size: 12px; text-transform: uppercase;">Capital Raising Radar (QIP / Rights / Preferential):</h4><ul style="font-size: 13px; padding-left: 20px; color: #cbd5e1;">{fundraising_items}</ul>' if fundraising_items else ''}
             {f'<h4 style="margin: 5px 0; color: #94a3b8; font-size: 12px; text-transform: uppercase;">Accumulation Baseline (Historical MF NAV):</h4><ul style="font-size: 13px; padding-left: 20px; color: #cbd5e1;">{baseline_items}</ul>' if baseline_items else ''}
         </div>
         """

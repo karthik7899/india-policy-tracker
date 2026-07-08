@@ -141,9 +141,9 @@ def test_invalid_stock_entries(monkeypatch):
 def test_auto_curate_skips_candidate_matching_existing_isin_holding(monkeypatch):
     """Regression: DIXON was independently tracked in two sectors because
     ticker/name string matching missed that a "new" candidate was actually
-    an existing holding. A candidate whose Screener page ISIN matches a
-    holding already in the watchlist must be skipped even when its
-    resolved ticker string differs."""
+    an existing holding. A candidate whose ISIN (resolved via the committed
+    symbol→ISIN master) matches a holding already in the watchlist must be
+    skipped even when its resolved ticker string differs."""
     watchlist = {
         "clean_energy": [
             {
@@ -190,10 +190,15 @@ def test_auto_curate_skips_candidate_matching_existing_isin_holding(monkeypatch)
             return {"targetMeanPrice": 120.0, "recommendationKey": "buy"}
 
     monkeypatch.setattr(rotation_mod, "get_cached_ticker", lambda *a, **k: MockTicker())
+    # Candidate identity resolves through the symbol→ISIN master — TPREL maps
+    # to the same ISIN the TATAPOWER holding already carries.
+    monkeypatch.setattr(
+        rotation_mod, "load_isin_master", lambda: {"TPREL": "INE245A01021"}
+    )
 
     class FakeResponse:
         status_code = 200
-        text = "Tata Power Renewables Ltd ISIN: INE245A01021 details..."
+        text = "Tata Power Renewables Ltd quarterly details..."
 
     monkeypatch.setattr(requests.Session, "get", lambda self, *a, **k: FakeResponse())
 

@@ -2,7 +2,8 @@ import re
 from logger import log
 import requests
 from config import save_watchlist
-from entities import build_entity_master, extract_isin, resolve_entity_by_isin
+from entities import build_entity_master, resolve_entity_by_isin
+from providers.isin_master import load_isin_master
 from providers.yahoo import get_cached_ticker
 from utils import to_float
 from .parsing import resolve_ticker_from_name
@@ -126,6 +127,7 @@ def auto_curate_watchlist(brief_data, watchlist):
     # actually an existing holding resurfacing under a different symbol or
     # name spelling, which the ticker-string check below can't see.
     entity_master = build_entity_master(watchlist)
+    isin_master = load_isin_master()
 
     # We will construct a structured emerging_players dictionary
     structured_emerging = {s: [] for s in SECTOR_METADATA}
@@ -208,7 +210,10 @@ def auto_curate_watchlist(brief_data, watchlist):
 
                     # Fetch candidate QoQ growth from Screener (using pooled session)
                     candidate_qoq_growth = 0.0
-                    candidate_isin = None
+                    # Candidate identity from the committed symbol→ISIN master
+                    # — a Screener page-scan was tried and found nothing in
+                    # production (run #73: 0/46).
+                    candidate_isin = isin_master.get(ticker)
                     try:
                         url = f"https://www.screener.in/company/{ticker}/consolidated/"
                         r = session.get(
@@ -221,7 +226,6 @@ def auto_curate_watchlist(brief_data, watchlist):
                             )
                         if r.status_code == 200:
                             html = r.text
-                            candidate_isin = extract_isin(html)
                             qs_match = re.search(
                                 r'id="quarters"(.*?)(?:</section>)', html, re.DOTALL
                             )

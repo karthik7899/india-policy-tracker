@@ -37,13 +37,7 @@ def update_single_stock(stock, prefetched_prices=None):
             stock["price"] = f"{data['price']:.2f}"
 
         for k, v in data.items():
-            if k == "price" or v is None:
-                continue
-            if k == "isin":
-                # Keeps the entity master (entities.py) reading from a single
-                # location regardless of which provider found the ISIN.
-                stock.setdefault("screener", {})["isin"] = v
-            else:
+            if k != "price" and v is not None:
                 stock[k] = v
 
         live_price = to_float(stock.get("price"))
