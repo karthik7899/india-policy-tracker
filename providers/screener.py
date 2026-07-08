@@ -3,7 +3,6 @@ import asyncio
 from bs4 import BeautifulSoup
 from logger import log
 from analysis.parsing import extract_row_values, calculate_trend, calculate_growth
-from entities import extract_isin
 from utils import fetch_text_async
 
 
@@ -36,14 +35,6 @@ async def fetch_screener_async(session, ticker, sector, price):
     # Screener's warehouse id enables the peers API (structured competitor list).
     warehouse_el = soup.find(attrs={"data-warehouse-id": True})
     warehouse_id = warehouse_el.get("data-warehouse-id") if warehouse_el else None
-
-    # ISIN is the stable entity key (see entities.py) — never changes for
-    # the life of the listing, unlike the ticker string. Costs nothing extra
-    # since the page is already fetched; a regex scan survives markup churn
-    # that would break a CSS-selector lookup.
-    isin = extract_isin(text)
-    if isin:
-        sc["isin"] = isin
 
     # 1. Top Ratios Extract
     ratios_div = soup.find("div", class_="company-ratios")
