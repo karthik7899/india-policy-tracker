@@ -211,7 +211,13 @@ async def _bootstrap_nse_session(session):
             _NSE_HOME_URL, headers=_NSE_HEADERS, timeout=15
         ) as response:
             await response.read()
-            return response.status == 200
+            if response.status != 200:
+                log.warning(
+                    f"NSE session bootstrap returned {response.status} for "
+                    f"{_NSE_HOME_URL}"
+                )
+                return False
+            return True
     except Exception as e:
         log.warning(f"NSE session bootstrap failed: {type(e).__name__}: {str(e)[:150]}")
         return False

@@ -1,6 +1,17 @@
+import datetime
+
+import pandas as pd
 import yfinance as yf
 
+from logger import log
+
 _TICKER_CACHE = {}
+
+# How far back an analyst rating change still counts as "recent" enough to
+# surface — older changes are already priced in and just add noise.
+_UPGRADE_LOOKBACK_DAYS = 30
+_MAX_ANALYST_ACTIONS = 5
+_MAX_INSTITUTIONAL_HOLDERS = 5
 
 
 def get_cached_ticker(yahoo_ticker):
@@ -47,7 +58,124 @@ def fetch_stock_data(yahoo_ticker, timeout=10):
         _parse_recommendations(data, info)
         _parse_growth_metrics(data, info)
 
+    data["isin"] = _fetch_isin(ticker_obj)
+    data["analyst_actions"] = _fetch_upgrades_downgrades(ticker_obj)
+    data["institutional_holders"] = _fetch_institutional_holders(ticker_obj)
+
     return data
+
+
+def _fetch_isin(ticker_obj):
+    """Best-effort ISIN via yfinance's own lookup.
+
+    Unlike the other fields on this Ticker (history/info/upgrades_downgrades/
+    institutional_holders, all backed by Yahoo's own quoteSummary API),
+    yfinance's .isin property is explicitly marked "experimental" in its own
+    source and is backed by a *different* host (markets.businessinsider.com)
+    that this pipeline has never otherwise touched — so this is genuinely
+    less certain to work in CI than the rest of this module. Enhancement
+    data only: never raises, degrades to None.
+    """
+    try:
+        isin = ticker_obj.isin
+        if isin and isin != "-" and len(isin) == 12:
+            return isin
+    except Exception as e:
+        log.warning(
+            f"{getattr(ticker_obj, 'ticker', '?')}: ISIN lookup failed: {type(e).__name__}: {str(e)[:150]}"
+        )
+    return None
+
+
+def _fetch_upgrades_downgrades(ticker_obj, lookback_days=_UPGRADE_LOOKBACK_DAYS):
+    """Recent analyst rating changes — Yahoo's own quoteSummary API
+    (upgradeDowngradeHistory module), the same mechanism .info already uses
+    successfully in this pipeline. A discrete, human-readable complement to
+    the target-price revision momentum already tracked from committed
+    run-over-run snapshots (analysis/revisions.py). Enhancement data only:
+    never raises, degrades to an empty list.
+    """
+    try:
+        df = ticker_obj.upgrades_downgrades
+        if df is None or df.empty:
+            return []
+        cutoff = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(
+            days=lookback_days
+        )
+        actions = []
+        for grade_date, row in df.iterrows():
+            row_date = grade_date.to_pydatetime()
+            if row_date.tzinfo is None:
+                row_date = row_date.replace(tzinfo=datetime.timezone.utc)
+            if row_date < cutoff:
+                continue
+            firm = row.get("Firm")
+            action = row.get("Action")
+            # pandas NaN is truthy in Python — `not firm` alone would let a
+            # missing value through as the literal string "nan".
+            if pd.isna(firm) or not firm or pd.isna(action) or not action:
+                continue
+            from_grade = row.get("FromGrade")
+            to_grade = row.get("ToGrade")
+            actions.append(
+                {
+                    "firm": str(firm),
+                    "action": str(action),
+                    "from_grade": (
+                        None
+                        if pd.isna(from_grade) or not from_grade
+                        else str(from_grade)
+                    ),
+                    "to_grade": (
+                        None if pd.isna(to_grade) or not to_grade else str(to_grade)
+                    ),
+                    "date": row_date.strftime("%Y-%m-%d"),
+                }
+            )
+        actions.sort(key=lambda a: a["date"], reverse=True)
+        return actions[:_MAX_ANALYST_ACTIONS]
+    except Exception as e:
+        log.warning(
+            f"{getattr(ticker_obj, 'ticker', '?')}: upgrades/downgrades lookup failed: "
+            f"{type(e).__name__}: {str(e)[:150]}"
+        )
+        return []
+
+
+def _fetch_institutional_holders(ticker_obj, top_n=_MAX_INSTITUTIONAL_HOLDERS):
+    """Top institutional holders — Yahoo's own quoteSummary API
+    (institutionOwnership module). Enhancement data only: never raises,
+    degrades to an empty list."""
+    try:
+        df = ticker_obj.institutional_holders
+        if df is None or df.empty:
+            return []
+        holders = []
+        for _, row in df.iterrows():
+            holder = row.get("Holder")
+            if pd.isna(holder) or not holder:
+                continue
+            date_reported = row.get("Date Reported")
+            holders.append(
+                {
+                    "holder": str(holder),
+                    "shares": row.get("Shares"),
+                    "value": row.get("Value"),
+                    "pct_held": row.get("pctHeld"),
+                    "date_reported": (
+                        date_reported.strftime("%Y-%m-%d")
+                        if hasattr(date_reported, "strftime")
+                        else None
+                    ),
+                }
+            )
+        return holders[:top_n]
+    except Exception as e:
+        log.warning(
+            f"{getattr(ticker_obj, 'ticker', '?')}: institutional holders lookup failed: "
+            f"{type(e).__name__}: {str(e)[:150]}"
+        )
+        return []
 
 
 def _parse_targets(data, info):
