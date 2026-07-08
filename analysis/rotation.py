@@ -4,6 +4,7 @@ import requests
 from config import save_watchlist
 from entities import build_entity_master, extract_isin, resolve_entity_by_isin
 from providers.yahoo import get_cached_ticker
+from utils import to_float
 from .parsing import resolve_ticker_from_name
 
 
@@ -99,10 +100,12 @@ def detect_emerging_players(brief_data, watchlist):
 
 
 def _get_potential(stock):
-    try:
-        return float(stock["growth_pct"].replace("%", ""))
-    except Exception:
-        return 0.0
+    # to_float handles every historical growth_pct format ("+23.0%", 23.0,
+    # None) — the old string-only parse silently returned 0.0 the moment
+    # the field held a number instead of a string, ranking every stock
+    # equally weakest.
+    value = to_float(stock.get("growth_pct"))
+    return 0.0 if value is None else value
 
 
 def auto_curate_watchlist(brief_data, watchlist):
@@ -341,15 +344,9 @@ def auto_curate_watchlist(brief_data, watchlist):
                         )
                     else:
 
-                        def get_potential(stock):
-                            try:
-                                return float(stock["growth_pct"].replace("%", ""))
-                            except Exception:
-                                return 0.0
-
-                        sorted_watchlist = sorted(current_watchlist, key=get_potential)
+                        sorted_watchlist = sorted(current_watchlist, key=_get_potential)
                         weakest_stock = sorted_watchlist[0]
-                        weakest_potential = get_potential(weakest_stock)
+                        weakest_potential = _get_potential(weakest_stock)
 
                         if growth_pct_val > weakest_potential:
                             watchlist[sector] = [

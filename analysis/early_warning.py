@@ -7,31 +7,19 @@ alerts. No new data sources are required — this is a consolidating layer on to
 of data the daily briefing already produces.
 """
 
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 from config import SECTOR_METADATA
 from config_scoring import SCORING_CONFIG, EARLY_WARNING_CONFIG
+from utils import to_float
 
 # Lower rank sorts first.
 _SEVERITY_RANK = {"Critical": 0, "High": 1, "Medium": 2, "Low": 3}
 _DIRECTION_RANK = {"risk": 0, "opportunity": 1}
 
 
-def _to_float(value: Any) -> Optional[float]:
-    """Best-effort numeric coercion tolerant of ``None``, strings and ``%``/``+`` signs."""
-    if value is None or isinstance(value, bool):
-        return None
-    if isinstance(value, (int, float)):
-        return float(value)
-    if isinstance(value, str):
-        cleaned = value.strip().replace("%", "").replace("+", "").replace(",", "")
-        if not cleaned or cleaned in {"-", "—", "N/A", "NA"}:
-            return None
-        try:
-            return float(cleaned)
-        except ValueError:
-            return None
-    return None
+# Canonical coercion shared across the codebase (was a private copy here).
+_to_float = to_float
 
 
 def _build_policy_map(data: Dict[str, Any]) -> Dict[str, List[str]]:

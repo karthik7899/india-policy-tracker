@@ -1,5 +1,6 @@
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from logger import log
+from utils import to_float
 import yfinance as yf
 
 
@@ -45,13 +46,9 @@ def update_single_stock(stock, prefetched_prices=None):
             else:
                 stock[k] = v
 
-        if (
-            "target" in stock
-            and stock["target"]
-            and "price" in stock
-            and stock["price"]
-        ):
-            _calculate_growth_pct(stock, float(stock["price"]), ticker)
+        live_price = to_float(stock.get("price"))
+        if to_float(stock.get("target")) is not None and live_price is not None:
+            _calculate_growth_pct(stock, live_price, ticker)
 
         return data.get("price") is not None
 
@@ -63,7 +60,7 @@ def update_single_stock(stock, prefetched_prices=None):
 
 
 def _calculate_growth_pct(stock, live_price, ticker):
-    target_price = float(stock.get("target", 0))
+    target_price = to_float(stock.get("target")) or 0.0
     if target_price > 0 and live_price > 0:
         growth_val = ((target_price - live_price) / live_price) * 100
         sign = "+" if growth_val > 0 else ""

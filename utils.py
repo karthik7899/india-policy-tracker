@@ -35,6 +35,30 @@ def safe_int(
         return default
 
 
+def to_float(value: Union[str, int, float, None]) -> Optional[float]:
+    """Canonical tolerant numeric coercion for stock-record fields.
+
+    Accepts numbers as-is and strings in every format this pipeline has
+    historically produced ("482.95", "+23.0%", "1,840.00", "N/A", "-", "—"),
+    returning None for anything non-numeric. This is THE coercion helper —
+    five modules used to carry private copies of it, which meant a parsing
+    fix in one never reached the others.
+    """
+    if value is None or isinstance(value, bool):
+        return None
+    if isinstance(value, (int, float)):
+        return float(value)
+    if isinstance(value, str):
+        cleaned = value.strip().replace("%", "").replace("+", "").replace(",", "")
+        if not cleaned or cleaned.upper() in {"N/A", "NA", "-", "—", "NONE"}:
+            return None
+        try:
+            return float(cleaned)
+        except ValueError:
+            return None
+    return None
+
+
 def safe_percentage(
     val: Union[str, int, float, None], default: Optional[float] = None
 ) -> Optional[float]:

@@ -19,21 +19,7 @@ _FUNDAMENTAL_UPSIDE_FLOOR = -50.0
 _FUNDAMENTAL_UPSIDE_CAP = 60.0
 
 
-def _to_float(value):
-    """Best-effort numeric coercion tolerant of None/strings/%/N/A."""
-    if value is None or isinstance(value, bool):
-        return None
-    if isinstance(value, (int, float)):
-        return float(value)
-    if isinstance(value, str):
-        cleaned = value.strip().replace("%", "").replace("+", "").replace(",", "")
-        if not cleaned or cleaned.upper() in {"N/A", "NA", "-", "—"}:
-            return None
-        try:
-            return float(cleaned)
-        except ValueError:
-            return None
-    return None
+from utils import to_float as _to_float  # noqa: E402  canonical shared coercion
 
 
 def _apply_potential_estimate(stock, price, graham_value):

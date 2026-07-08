@@ -13,22 +13,7 @@ by the gap between numbers already on the stock.
 """
 
 from logger import log
-
-
-def _to_float(value):
-    if value is None or isinstance(value, bool):
-        return None
-    if isinstance(value, (int, float)):
-        return float(value)
-    if isinstance(value, str):
-        cleaned = value.strip().replace("%", "").replace("+", "").replace(",", "")
-        if not cleaned or cleaned.upper() in {"N/A", "NA", "-", "—"}:
-            return None
-        try:
-            return float(cleaned)
-        except ValueError:
-            return None
-    return None
+from utils import to_float as _to_float
 
 
 def compute_variant_perception(watchlist, min_divergence_pct=15.0):
