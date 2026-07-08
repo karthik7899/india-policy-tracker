@@ -2711,7 +2711,7 @@
       "estimate_method": "Fundamental Estimate"
     },
     {
-      "ticker": "RIRPOWER",
+      "ticker": "RIR",
       "name": "RIR Power Electronics",
       "price": "1840.00",
       "target": null,
@@ -2756,7 +2756,7 @@
       "estimate_method": "Fundamental Estimate"
     },
     {
-      "ticker": "SPEL",
+      "ticker": "SPELS",
       "name": "SPEL Semiconductor",
       "price": "115.00",
       "target": null,
@@ -2788,7 +2788,6 @@
         "overall_score": 8,
         "confidence": "Low",
         "reasons": [
-          "Capacity/Product Launch: ATG unveils Svenska Spel’s Anna Romboli as new CEO",
           "PLI Approval / Target: SPEL Semiconductor Limited Files SEBI SAST Compliance Declaration for FY26"
         ],
         "risks": [
@@ -2803,50 +2802,6 @@
     }
   ],
   "macro_indicators": [
-    {
-      "ticker": "MANUETF",
-      "name": "ICICI Pru Nifty India Manufacturing ETF",
-      "price": "100.50",
-      "target": null,
-      "growth_pct": null,
-      "catalyst": "Passive index fund tracking the broader GVA growth of India's manufacturing sector.",
-      "rating": "N/A",
-      "revenue_growth": null,
-      "earnings_growth": null,
-      "analyst_count": null,
-      "target_median": null,
-      "target_high": null,
-      "target_low": null,
-      "rec_score": null,
-      "screener": {
-        "market_cap": "N/A",
-        "pe_ratio": "N/A",
-        "roce": "N/A",
-        "roe": "N/A"
-      }
-    },
-    {
-      "ticker": "HDFCMANETF",
-      "name": "HDFC Nifty India Manufacturing ETF",
-      "price": "52.40",
-      "target": null,
-      "growth_pct": null,
-      "catalyst": "Passive index fund tracking manufacturing sector performance under PLI schemes.",
-      "rating": "N/A",
-      "revenue_growth": null,
-      "earnings_growth": null,
-      "analyst_count": null,
-      "target_median": null,
-      "target_high": null,
-      "target_low": null,
-      "rec_score": null,
-      "screener": {
-        "market_cap": "N/A",
-        "pe_ratio": "N/A",
-        "roce": "N/A",
-        "roe": "N/A"
-      }
-    },
     {
       "ticker": "MAKEINDIA",
       "name": "Mirae Asset Nifty India Manufacturing ETF",
@@ -2868,6 +2823,146 @@
         "roce": "N/A",
         "roe": "N/A"
       }
+    }
+  ],
+  "industrial_manufacturing": [
+    {
+      "ticker": "SIEMENS",
+      "name": "Siemens Ltd",
+      "price": null,
+      "target": null,
+      "growth_pct": null,
+      "catalyst": "Diversified capital-goods major, expanding local factory automation and grid equipment manufacturing.",
+      "rating": "N/A",
+      "revenue_growth": null,
+      "earnings_growth": null,
+      "analyst_count": null,
+      "target_median": null,
+      "target_high": null,
+      "target_low": null,
+      "rec_score": null,
+      "screener": {}
+    },
+    {
+      "ticker": "THERMAX",
+      "name": "Thermax Ltd",
+      "price": null,
+      "target": null,
+      "growth_pct": null,
+      "catalyst": "Industrial energy & environment engineering leader, scaling green hydrogen and boiler manufacturing capacity.",
+      "rating": "N/A",
+      "revenue_growth": null,
+      "earnings_growth": null,
+      "analyst_count": null,
+      "target_median": null,
+      "target_high": null,
+      "target_low": null,
+      "rec_score": null,
+      "screener": {}
+    },
+    {
+      "ticker": "KIRLOSENG",
+      "name": "Kirloskar Oil Engines",
+      "price": null,
+      "target": null,
+      "growth_pct": null,
+      "catalyst": "Legacy engineering major pivoting to power generation and farm equipment manufacturing under 'Make in India'.",
+      "rating": "N/A",
+      "revenue_growth": null,
+      "earnings_growth": null,
+      "analyst_count": null,
+      "target_median": null,
+      "target_high": null,
+      "target_low": null,
+      "rec_score": null,
+      "screener": {}
+    },
+    {
+      "ticker": "ELGIEQUIP",
+      "name": "Elgi Equipments",
+      "price": null,
+      "target": null,
+      "growth_pct": null,
+      "catalyst": "Global air compressor manufacturer, expanding export-oriented capacity from Indian plants.",
+      "rating": "N/A",
+      "revenue_growth": null,
+      "earnings_growth": null,
+      "analyst_count": null,
+      "target_median": null,
+      "target_high": null,
+      "target_low": null,
+      "rec_score": null,
+      "screener": {}
+    }
+  ],
+  "midcap_it": [
+    {
+      "ticker": "PERSISTENT",
+      "name": "Persistent Systems",
+      "price": null,
+      "target": null,
+      "growth_pct": null,
+      "catalyst": "High-growth digital engineering and enterprise AI services provider, consistently outpacing large-cap IT growth rates.",
+      "rating": "N/A",
+      "revenue_growth": null,
+      "earnings_growth": null,
+      "analyst_count": null,
+      "target_median": null,
+      "target_high": null,
+      "target_low": null,
+      "rec_score": null,
+      "screener": {}
+    },
+    {
+      "ticker": "COFORGE",
+      "name": "Coforge Ltd",
+      "price": null,
+      "target": null,
+      "growth_pct": null,
+      "catalyst": "Mid-tier IT services firm with large deal wins in BFSI and travel verticals, expanding margins via GenAI offerings.",
+      "rating": "N/A",
+      "revenue_growth": null,
+      "earnings_growth": null,
+      "analyst_count": null,
+      "target_median": null,
+      "target_high": null,
+      "target_low": null,
+      "rec_score": null,
+      "screener": {}
+    },
+    {
+      "ticker": "MPHASIS",
+      "name": "Mphasis Ltd",
+      "price": null,
+      "target": null,
+      "growth_pct": null,
+      "catalyst": "Direct-core BFS-focused IT services player, key beneficiary of enterprise cloud and cost-takeout deals.",
+      "rating": "N/A",
+      "revenue_growth": null,
+      "earnings_growth": null,
+      "analyst_count": null,
+      "target_median": null,
+      "target_high": null,
+      "target_low": null,
+      "rec_score": null,
+      "screener": {}
+    },
+    {
+      "ticker": "LTTS",
+      "name": "L&T Technology Services",
+      "price": null,
+      "target": null,
+      "growth_pct": null,
+      "catalyst": "Engineering R&D services leader, scaling embedded software and semiconductor design-services wins.",
+      "rating": "N/A",
+      "revenue_growth": null,
+      "earnings_growth": null,
+      "analyst_count": null,
+      "target_median": null,
+      "target_high": null,
+      "target_low": null,
+      "rec_score": null,
+      "screener": {}
     }
   ]
 }
