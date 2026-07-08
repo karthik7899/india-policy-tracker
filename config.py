@@ -247,9 +247,9 @@ STOCK_WATCHLIST = {
             "catalyst": "Pioneer in tactical and mapping drone systems, primary supplier for Indian Army and police borders.",
         },
         {
-            "ticker": "ZENSARTECH",
-            "name": "Zensar Technologies Limited",
-            "catalyst": "Auto-discovered via media radar. Catalyst: Zen Technologies climbs 4% on launch of anti-drone smart border system",
+            "ticker": "ZENTEC",
+            "name": "Zen Technologies",
+            "catalyst": "Anti-drone systems and combat training simulators, winning repeat Ministry of Defence counter-drone orders.",
         },
     ],
     "textiles_apparel": [
