@@ -331,3 +331,97 @@ def test_honorifics_not_detected_as_companies():
         ]
     }
     assert detect_emerging_players(brief, _WATCHLIST) == {}
+
+
+# ---------------------------------------------------------------------------
+# industry-wide market share (full Screener peer-table denominator)
+# ---------------------------------------------------------------------------
+
+from analysis.market_share import (  # noqa: E402
+    compute_industry_share,
+    snapshot_prior_industry_shares,
+)
+
+_IND_WATCHLIST = {
+    "clean_energy": [
+        {"ticker": "TATAPOWER", "name": "Tata Power"},
+        {"ticker": "SUZLON", "name": "Suzlon Energy"},
+    ]
+}
+
+_INDUSTRY_PEERS = {
+    "clean_energy": [
+        {"ticker": "TATAPOWER", "name": "Tata Power", "sales_qtr": 600.0},
+        {"ticker": "SUZLON", "name": "Suzlon Energy", "sales_qtr": 200.0},
+        {"ticker": "RIVAL1", "name": "Rival One", "sales_qtr": 800.0},
+        {"ticker": "RIVAL2", "name": "Rival Two", "sales_qtr": 400.0},
+    ]
+}
+
+
+def test_industry_share_uses_full_peer_denominator():
+    import copy
+
+    wl = copy.deepcopy(_IND_WATCHLIST)
+    rollup = compute_industry_share(wl, _INDUSTRY_PEERS)
+    rows = {r["ticker"]: r for r in rollup["clean_energy"]}
+    # denominator = 2000 across 4 companies, not just the 2 watchlist stocks
+    assert rows["TATAPOWER"]["share_pct"] == 30.0
+    assert rows["SUZLON"]["share_pct"] == 10.0
+    assert rows["TATAPOWER"]["peer_count"] == 4
+    sc = wl["clean_energy"][0]["screener"]
+    assert sc["industry_share_pct"] == 30.0
+    assert "industry_share_change_pp" not in sc  # no prior yet
+
+
+def test_industry_share_change_vs_prior_run():
+    import copy
+
+    wl = copy.deepcopy(_IND_WATCHLIST)
+    rollup = compute_industry_share(wl, _INDUSTRY_PEERS, {"TATAPOWER": 32.5})
+    rows = {r["ticker"]: r for r in rollup["clean_energy"]}
+    assert rows["TATAPOWER"]["change_pp"] == -2.5
+    assert wl["clean_energy"][0]["screener"]["industry_share_change_pp"] == -2.5
+
+
+def test_industry_share_skips_bad_data():
+    wl = {"sec": [{"ticker": "AAA", "name": "AAA"}]}
+    peers = {
+        "sec": [{"ticker": "AAA", "sales_qtr": 0}, {"ticker": "B", "sales_qtr": -5}]
+    }
+    assert compute_industry_share(wl, peers) == {}
+    assert compute_industry_share(wl, {}) == {}
+    assert compute_industry_share(wl, None) == {}
+
+
+def test_snapshot_prior_industry_shares():
+    wl = {
+        "sec": [
+            {"ticker": "AAA", "screener": {"industry_share_pct": 12.5}},
+            {"ticker": "BBB", "screener": {}},
+        ]
+    }
+    assert snapshot_prior_industry_shares(wl) == {"AAA": 12.5}
+
+
+def test_industry_share_drives_market_share_signal():
+    wl = {
+        "sec": [
+            {
+                "ticker": "AAA",
+                "name": "AAA Ltd",
+                "screener": {
+                    "industry_share_pct": 28.0,
+                    "industry_share_change_pp": -1.5,
+                    "industry_peer_count": 12,
+                },
+            }
+        ]
+    }
+    warnings = [
+        w for w in generate_early_warnings({}, wl) if w["category"] == "Market Share"
+    ]
+    assert len(warnings) == 1
+    assert warnings[0]["direction"] == "risk"
+    assert "12-company industry group" in warnings[0]["signal"]
+    assert "29.5% → 28.0%" in warnings[0]["signal"]

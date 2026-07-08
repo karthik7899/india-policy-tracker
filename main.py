@@ -25,10 +25,6 @@ from analysis.market_share import (
     compute_industry_share,
     snapshot_prior_industry_shares,
 )
-from providers.exchange_events import (
-    fetch_fundraising_events_async,
-    fetch_institutional_deals_async,
-)
 from entities import find_duplicate_holdings
 
 
@@ -114,8 +110,6 @@ async def run_pipeline():
         sebi_task = check_sebi_sid_filings_async(session)
         inst_task = fetch_institutional_activity_async(session, watchlist)
         filings_task = fetch_exchange_filings_async(session, watchlist)
-        fundraising_task = fetch_fundraising_events_async(session, watchlist)
-        deals_task = fetch_institutional_deals_async(session, watchlist)
 
         (
             pli_competitors,
@@ -123,16 +117,12 @@ async def run_pipeline():
             sebi_filings,
             inst_activity,
             corp_filings,
-            fundraising_events,
-            institutional_deals,
         ) = await asyncio.gather(
             pli_task,
             adv_rss_task,
             sebi_task,
             inst_task,
             filings_task,
-            fundraising_task,
-            deals_task,
         )
 
         from history.store import HistoryStore
@@ -157,14 +147,6 @@ async def run_pipeline():
         merged_inst = store.deduplicate_and_merge(
             "institutional_activity", inst_activity, ["company", "title"]
         )
-        merged_fundraising = store.deduplicate_and_merge(
-            "fundraising_events", fundraising_events, ["company", "subject"]
-        )
-        merged_deals = store.deduplicate_and_merge(
-            "institutional_deals",
-            institutional_deals,
-            ["ticker", "client", "date", "side"],
-        )
 
         data["emerging_competitors"] = merged_competitors
         data["corporate_agreements"] = merged_agreements
@@ -172,8 +154,6 @@ async def run_pipeline():
         data["sebi_filings"] = merged_sebi
         data["institutional_activity"] = merged_inst
         data["corporate_filings"] = merged_filings
-        data["fundraising_events"] = merged_fundraising[:40]
-        data["institutional_deals"] = merged_deals[:40]
 
     # Compile margin of safety and moat analytics
     build_dashboard_views(data, watchlist)

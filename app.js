@@ -1308,51 +1308,6 @@ function renderFilingsTable() {
 
 // Render Institutional Flows
 function renderInstitutionalFlows() {
-    // Exchange-disclosed bulk/block deals
-    const dealsBody = document.getElementById("deals-body");
-    if (dealsBody) {
-        dealsBody.innerHTML = "";
-        const deals = appData.briefing.institutional_deals || [];
-        if (deals.length === 0) {
-            setTableEmpty(dealsBody, 5, "No deals on watchlist names", "No bulk or block deal touched a watchlist company in the tracked window.");
-        } else {
-            deals.slice(0, 15).forEach(d => {
-                const isBuy = d.side === "buy";
-                const color = isBuy ? "var(--success, #34d399)" : "var(--danger, #f87171)";
-                const tr = document.createElement("tr");
-                tr.innerHTML = `
-                    <td class="t-ticker">${escapeHtml(d.ticker)}</td>
-                    <td style="color: ${color}; font-weight: 700; text-transform: uppercase;">${escapeHtml(d.side)} (${escapeHtml(d.deal_type || "bulk")})</td>
-                    <td>${escapeHtml(d.client || "Undisclosed")}</td>
-                    <td class="num">${escapeHtml(d.quantity ?? "—")}</td>
-                    <td>${escapeHtml(d.date || "—")}</td>
-                `;
-                dealsBody.appendChild(tr);
-            });
-        }
-    }
-
-    // Capital-raising disclosures
-    const fundBody = document.getElementById("fundraising-body");
-    if (fundBody) {
-        fundBody.innerHTML = "";
-        const events = appData.briefing.fundraising_events || [];
-        if (events.length === 0) {
-            setTableEmpty(fundBody, 4, "No capital-raising disclosures", "No QIP, rights, preferential or buyback filing was detected in the tracked window.");
-        } else {
-            events.slice(0, 15).forEach(e => {
-                const tr = document.createElement("tr");
-                tr.innerHTML = `
-                    <td><strong>${escapeHtml(e.company)}</strong>${e.ticker ? ` <span class="t-ticker">${escapeHtml(e.ticker)}</span>` : ""}</td>
-                    <td><span class="badge-warning-alert" style="font-size: 9px;">${escapeHtml(e.keyword || "fund raising")}</span></td>
-                    <td style="max-width: 320px; white-space: normal; font-size: 12px;">${escapeHtml(e.subject || "")}</td>
-                    <td>${escapeHtml(e.date || "—")}</td>
-                `;
-                fundBody.appendChild(tr);
-            });
-        }
-    }
-
     // SEBI Filings Table
     const sebiBody = document.getElementById("sebi-filings-body");
     if (sebiBody) {
