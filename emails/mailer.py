@@ -714,23 +714,30 @@ def _render_email(brief_data, watchlist, caps):
 
     def _fund_item(e):
         ticker_str = f" ({e['ticker']})" if e.get("ticker") else ""
+        source_str = f" [{e['source']}]" if e.get("source") else ""
         return (
             f"<li><strong>{e.get('company', '')}</strong>{ticker_str}: "
             f"{e.get('subject', '')[:110]} "
-            f"<em style='font-size: 10px; color: #94a3b8;'>[{e.get('date', '')}]</em></li>"
+            f"<em style='font-size: 10px; color: #94a3b8;'>"
+            f"[{e.get('date', '')}]{source_str}</em></li>"
         )
 
     fundraising_items = "".join(
         _fund_item(e) for e in fundraising_events[: caps["lists"]]
     )
-    deal_items = "".join(
-        f"<li><span class='stock-ticker'>{d.get('ticker', '')}</span> — "
-        f"<span style='color: {'#34d399' if d.get('side') == 'buy' else '#f87171'};'>"
-        f"{d.get('side', '')}</span> {d.get('deal_type', 'bulk')} deal by "
-        f"{d.get('client', 'undisclosed')} "
-        f"<em style='font-size: 10px; color: #94a3b8;'>[{d.get('date', '')}]</em></li>"
-        for d in institutional_deals[: caps["lists"]]
-    )
+
+    def _deal_item(d):
+        source_str = f" [{d['source']}]" if d.get("source") else ""
+        side_color = "#34d399" if d.get("side") == "buy" else "#f87171"
+        return (
+            f"<li><span class='stock-ticker'>{d.get('ticker', '')}</span> — "
+            f"<span style='color: {side_color};'>{d.get('side', '')}</span> "
+            f"{d.get('deal_type', 'bulk')} deal by {d.get('client', 'undisclosed')} "
+            f"<em style='font-size: 10px; color: #94a3b8;'>"
+            f"[{d.get('date', '')}]{source_str}</em></li>"
+        )
+
+    deal_items = "".join(_deal_item(d) for d in institutional_deals[: caps["lists"]])
 
     baseline_items = ""
     for b in inst_baseline[: caps["lists"]]:
