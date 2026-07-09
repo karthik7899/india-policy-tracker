@@ -5,6 +5,7 @@ from config import load_watchlist, save_watchlist, SECTOR_METADATA
 from logger import log
 from scraper import (
     fetch_all_feeds_async,
+    fetch_global_event_feeds_async,
     scrape_pib_pli_approvals_async,
     fetch_advanced_rss_feeds_async,
     check_sebi_sid_filings_async,
@@ -128,6 +129,7 @@ async def run_pipeline():
         inst_task = fetch_institutional_activity_async(session, watchlist)
         filings_task = fetch_exchange_filings_async(session, watchlist)
         isin_refresh_task = refresh_isin_master_async(session, isin_master)
+        global_events_task = fetch_global_event_feeds_async(session)
 
         (
             pli_competitors,
@@ -136,6 +138,7 @@ async def run_pipeline():
             inst_activity,
             corp_filings,
             _isin_added,
+            global_market_news,
         ) = await asyncio.gather(
             pli_task,
             adv_rss_task,
@@ -143,6 +146,7 @@ async def run_pipeline():
             inst_task,
             filings_task,
             isin_refresh_task,
+            global_events_task,
         )
 
         from history.store import HistoryStore
@@ -174,6 +178,21 @@ async def run_pipeline():
         data["sebi_filings"] = merged_sebi
         data["institutional_activity"] = merged_inst
         data["corporate_filings"] = merged_filings
+        data["global_market_news"] = global_market_news[:30]
+
+        # Market-event engine: classify WHAT happened across every collected
+        # headline, keep a rolling window via the committed history, and let
+        # the entity graph grow itself from tie-up headlines.
+        from analysis.entity_graph import load_entity_graph, harvest_partner_edges
+        from analysis.event_engine import classify_headlines, compute_supply_stress
+
+        graph = load_entity_graph()
+        events = classify_headlines(data, watchlist)
+        data["market_events"] = store.deduplicate_and_merge(
+            "market_events", events, ["headline", "event_type"]
+        )[:120]
+        data["supply_stress"] = compute_supply_stress(data["market_events"], graph)
+        harvest_partner_edges(data["corporate_agreements"], watchlist, graph)
 
     # Compile margin of safety and moat analytics
     build_dashboard_views(data, watchlist)

@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 import urllib.parse
 import re
 from logger import log
-from config import SECTOR_QUERIES
+from config import SECTOR_QUERIES, GLOBAL_EVENT_QUERIES
 from providers.rss import fetch_query_feed_async
 from analysis.parsing import title_matches_company
 
@@ -144,6 +144,65 @@ def _extract_pli_data_from_html(html, title, published_date=""):
             )
 
     return unique_companies
+
+
+async def fetch_global_event_feeds_async(session):
+    """Global market-event headlines: supply-chain shocks, big tie-ups, and
+    anchor-company moves whose second-order impact lands on Indian holdings.
+
+    Queries are entity-free vocabulary from config plus one query assembled
+    at runtime from the entity graph's anchor nodes — so which companies get
+    watched is data, never code. Enhancement channel: fail-safe, capped, and
+    never blocks the briefing.
+    """
+    from analysis.entity_graph import load_entity_graph
+    from utils import fetch_text_async
+
+    queries = list(GLOBAL_EVENT_QUERIES)
+    anchors = sorted(
+        {
+            str(e.get("src"))
+            for e in load_entity_graph().get("edges", [])
+            if e.get("type") == "anchor_demand"
+        }
+    )
+    if anchors:
+        anchor_q = " OR ".join(f'"{a}"' for a in anchors[:12])
+        queries.append(
+            f"({anchor_q}) AND (deal OR partnership OR investment OR "
+            f"order OR expansion OR supply)"
+        )
+
+    items = []
+    seen = set()
+    for query in queries:
+        try:
+            encoded = urllib.parse.quote(f"{query} when:3d")
+            url = (
+                f"https://news.google.com/rss/search?q={encoded}"
+                f"&hl=en-IN&gl=IN&ceid=IN:en"
+            )
+            status, xml_data = await fetch_text_async(session, url, timeout=15)
+            if status != 200:
+                continue
+            feed = feedparser.parse(xml_data)
+            for entry in feed.entries[:5]:
+                title = entry.get("title", "").split(" - ")[0].strip()
+                if not title or title.lower() in seen:
+                    continue
+                seen.add(title.lower())
+                items.append(
+                    {
+                        "title": title,
+                        "link": entry.get("link", ""),
+                        "date": entry.get("published", ""),
+                        "source": entry.get("source", {}).get("title", "News"),
+                    }
+                )
+        except Exception as e:
+            log.error(f"Global event feed query failed: {e}")
+    log.info(f"Global event feed: {len(items)} headlines collected.")
+    return items
 
 
 async def scrape_pib_pli_approvals_async(session, watchlist):
