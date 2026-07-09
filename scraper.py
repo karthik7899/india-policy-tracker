@@ -8,6 +8,7 @@ import re
 from logger import log
 from config import SECTOR_QUERIES
 from providers.rss import fetch_query_feed_async
+from analysis.parsing import title_matches_company
 
 
 async def fetch_all_feeds_async():
@@ -248,9 +249,12 @@ async def fetch_advanced_rss_feeds_async(session, watchlist):
     # Combine queries in chunks of 4 to be polite to RSS service
     ticker_chunks = [all_tickers[i : i + 4] for i in range(0, len(all_tickers), 4)]
 
-    # ⚡ Bolt Optimization: Pre-flatten watchlist to avoid O(n^2) loop and repeated .lower() calls
+    # Pre-flatten watchlist once; matching itself is word-boundary + person-
+    # name-guarded (see analysis.parsing.title_matches_company) — bare
+    # substring checks mis-attributed "IBM CEO Arvind Krishna ..." to Arvind
+    # Ltd and let ticker LT match any headline containing "Ltd".
     flat_watchlist = [
-        (s["ticker"].lower(), s["name"].lower(), s["name"], sector_name)
+        (s["ticker"], s["name"], sector_name)
         for sector_name, stocks in watchlist.items()
         for s in stocks
     ]
@@ -299,9 +303,8 @@ async def fetch_advanced_rss_feeds_async(session, watchlist):
 
                         matched_company = "Unknown"
                         matched_industry = "Manufacturing"
-                        title_lower = title.lower()
-                        for t_lower, n_lower, s_name, sector_name in flat_watchlist:
-                            if t_lower in title_lower or n_lower in title_lower:
+                        for ticker_sym, s_name, sector_name in flat_watchlist:
+                            if title_matches_company(title, ticker_sym, s_name):
                                 matched_company = s_name
                                 matched_industry = sector_name
                                 break
@@ -338,9 +341,8 @@ async def fetch_exchange_filings_async(session, watchlist):
 
     ticker_chunks = [all_tickers[i : i + 4] for i in range(0, len(all_tickers), 4)]
 
-    # ⚡ Bolt Optimization: Pre-flatten watchlist to avoid O(n^2) loop and repeated .lower() calls
     flat_watchlist = [
-        (s["ticker"].lower(), s["name"].lower(), s["name"], sector_name)
+        (s["ticker"], s["name"], sector_name)
         for sector_name, stocks in watchlist.items()
         for s in stocks
     ]
@@ -361,9 +363,8 @@ async def fetch_exchange_filings_async(session, watchlist):
 
                         matched_company = "Unknown"
                         matched_industry = "Corporate"
-                        title_lower = title.lower()
-                        for t_lower, n_lower, s_name, sector_name in flat_watchlist:
-                            if t_lower in title_lower or n_lower in title_lower:
+                        for ticker_sym, s_name, sector_name in flat_watchlist:
+                            if title_matches_company(title, ticker_sym, s_name):
                                 matched_company = s_name
                                 matched_industry = sector_name
                                 break
@@ -478,13 +479,13 @@ def _parse_block_deal_headline(headline, flat_watchlist, headline_lower):
     if company_match:
         company = company_match.group(1).strip()
 
-    # Match against watchlist stocks
+    # Match against watchlist stocks (word-boundary + person-name guard)
     matched_company = None
     matched_ticker = None
-    for t_lower, n_lower, s_name, s_ticker in flat_watchlist:
-        if t_lower in headline_lower or n_lower in headline_lower:
+    for ticker_sym, s_name, _sector in flat_watchlist:
+        if title_matches_company(headline, ticker_sym, s_name):
             matched_company = s_name
-            matched_ticker = s_ticker
+            matched_ticker = ticker_sym
             break
 
     if matched_company:
@@ -501,11 +502,8 @@ async def fetch_institutional_activity_async(session, watchlist):
     encoded_query = urllib.parse.quote(f"{query} when:7d")
     rss_url = f"https://news.google.com/rss/search?q={encoded_query}&hl=en-IN&gl=IN&ceid=IN:en"
 
-    # ⚡ Bolt Optimization: Pre-flatten watchlist to avoid O(n^2) loop and repeated .lower() calls
     flat_watchlist = [
-        (s["ticker"].lower(), s["name"].lower(), s["name"], s["ticker"])
-        for stocks in watchlist.values()
-        for s in stocks
+        (s["ticker"], s["name"], None) for stocks in watchlist.values() for s in stocks
     ]
 
     activity = []
