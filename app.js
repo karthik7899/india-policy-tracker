@@ -1753,6 +1753,35 @@ function renderSectorValuation() {
         `;
         tbody.appendChild(tr);
     });
+
+    renderSectorGrowth();
+}
+
+function renderSectorGrowth() {
+    const tbody = document.getElementById("sector-growth-body");
+    if (!tbody) return;
+    tbody.innerHTML = "";
+
+    const rollup = (appData && appData.briefing && appData.briefing.sector_growth) || [];
+
+    if (rollup.length === 0) {
+        setTableEmpty(tbody, 5, "No growth data yet", "Sector growth needs each holding's quarterly revenue series; it populates as Screener fundamentals load.");
+        return;
+    }
+
+    rollup.forEach(r => {
+        const fmt = v => (v > 0 ? `+${v}%` : `${v}%`);
+        const yoyColor = (r.median_yoy_pct || 0) >= 0 ? "var(--success, #34d399)" : "var(--danger, #f87171)";
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td>${escapeHtml(r.label)}</td>
+            <td class="num" style="color: ${yoyColor}; font-weight: 700;">${escapeHtml(fmt(r.median_yoy_pct))}</td>
+            <td class="num">${escapeHtml(fmt(r.median_cagr_pct))}</td>
+            <td class="num">${escapeHtml(r.stock_count)}</td>
+            <td><span class="t-ticker">${escapeHtml(r.fastest_ticker)}</span> <small style="color: var(--text-secondary);">${escapeHtml(fmt(r.fastest_yoy_pct))}</small></td>
+        `;
+        tbody.appendChild(tr);
+    });
 }
 
 const THESIS_BADGE_CLASS = {

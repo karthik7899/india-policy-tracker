@@ -126,6 +126,45 @@ def _build_sector_valuation_html(rollup):
     """
 
 
+def _build_sector_growth_html(rollup):
+    """Sector revenue-growth leaders (median YoY / CAGR). '' when empty."""
+    if not rollup:
+        return ""
+
+    rows = ""
+    for r in rollup[:10]:
+        yoy = r.get("median_yoy_pct")
+        cagr = r.get("median_cagr_pct")
+        yoy_color = "#34d399" if (yoy or 0) >= 0 else "#f87171"
+        yoy_sign = "+" if (yoy or 0) > 0 else ""
+        cagr_sign = "+" if (cagr or 0) > 0 else ""
+        fast_sign = "+" if (r.get("fastest_yoy_pct") or 0) > 0 else ""
+        rows += f"""
+        <tr>
+            <td>{r.get('label', '')}</td>
+            <td style="color: {yoy_color}; font-weight: 600;">{yoy_sign}{yoy}%</td>
+            <td style="color: #e2e8f0;">{cagr_sign}{cagr}%</td>
+            <td style="color: #94a3b8; font-size: 11px;">{r.get('fastest_ticker', '')} ({fast_sign}{r.get('fastest_yoy_pct', '')}%)</td>
+        </tr>
+        """
+
+    return f"""
+    <div class="section-card">
+        <h3 style="color: #34d399; margin-bottom: 6px; font-size: 16px;">Sector Growth Leaders (Revenue)</h3>
+        <p style="font-size: 12px; color: #94a3b8; margin: 0 0 12px 0;">
+            Median revenue growth across each sector's holdings — YoY (same quarter last year)
+            and annualized CAGR over the trailing quarters. Fastest-compounding themes first.
+        </p>
+        <table class="stock-table">
+            <thead>
+                <tr><th>Sector</th><th>Median YoY</th><th>Median CAGR</th><th>Fastest Grower</th></tr>
+            </thead>
+            <tbody>{rows}</tbody>
+        </table>
+    </div>
+    """
+
+
 _THESIS_BADGE = {
     "Broken": ("#7f1d1d", "#fca5a5"),
     "Weakening": ("#7c2d12", "#fdba74"),
@@ -859,9 +898,11 @@ def _render_email(brief_data, watchlist, caps):
     sector_valuation_html = _build_sector_valuation_html(
         brief_data.get("sector_valuation", [])
     )
+    sector_growth_html = _build_sector_growth_html(brief_data.get("sector_growth", []))
 
     body_html += (
         sector_valuation_html
+        + sector_growth_html
         + agreements_html
         + launches_html
         + filings_html
