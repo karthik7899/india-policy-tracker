@@ -167,12 +167,40 @@ def _evaluate_stock(
         opm_expansion is not None
         and opm_expansion <= EARLY_WARNING_CONFIG.margin_compression
     ):
-        emit(
-            "Medium",
-            "risk",
-            "Margin Compression",
-            f"Operating margin contracted {abs(opm_expansion):.1f}%.",
+        if opm_expansion <= EARLY_WARNING_CONFIG.margin_compression_critical:
+            margin_severity = "Critical"
+        elif opm_expansion <= EARLY_WARNING_CONFIG.margin_compression_high:
+            margin_severity = "High"
+        else:
+            margin_severity = "Medium"
+
+        # A persistent multi-quarter slide is worse than a one-off dip of
+        # the same size — escalate one level and show the trajectory.
+        q_margins = [
+            m
+            for m in (
+                _to_float(v) for v in (screener.get("quarterly_ebitda_margin") or [])
+            )
+            if m is not None
+        ]
+        persistent = (
+            len(q_margins) >= 3 and q_margins[-1] < q_margins[-2] < q_margins[-3]
         )
+        if persistent and margin_severity != "Critical":
+            margin_severity = "High" if margin_severity == "Medium" else "Critical"
+
+        if persistent:
+            trail = " → ".join(f"{m:.1f}%" for m in q_margins[-3:])
+            margin_signal = (
+                f"Operating margin compressing for 3 straight quarters "
+                f"({trail}); latest drop {abs(opm_expansion):.1f}pp."
+            )
+        else:
+            margin_signal = (
+                f"Operating margin contracted {abs(opm_expansion):.1f}pp QoQ."
+            )
+
+        emit(margin_severity, "risk", "Margin Compression", margin_signal)
 
     if valuation_alerts:
         deduped = list(dict.fromkeys(str(a) for a in valuation_alerts if a))
@@ -466,6 +494,22 @@ def _competitive_threats(
                 sc.get("qoq_sales_growth") if isinstance(sc, dict) else None
             )
             if incumbent_growth is None:
+                # Data gap must not mute the radar entirely — a fast-growing
+                # challenger is still worth pointing to, at lower confidence.
+                alerts.append(
+                    {
+                        "ticker": ticker,
+                        "name": name,
+                        "sector": sector_label,
+                        "severity": "Low",
+                        "direction": "risk",
+                        "category": "Competitive Threat",
+                        "signal": (
+                            f"{challenger_name} is growing at +{challenger_growth:.1f}% "
+                            f"QoQ in this sector (own growth data unavailable)."
+                        ),
+                    }
+                )
                 continue
             if (
                 incumbent_growth < _CHALLENGER_GROWTH_BAR
@@ -513,6 +557,10 @@ def generate_early_warnings(
 
     # Sector-level competitive-threat pass (news radar + Screener peer radar).
     warnings.extend(_competitive_threats(data, watchlist))
+
+    from analysis.competitive_intel import new_entrant_signals
+
+    warnings.extend(new_entrant_signals(data, watchlist))
 
     # Direct market-share measurement, with a growth-laggard fallback for
     # stocks the share computation couldn't cover.

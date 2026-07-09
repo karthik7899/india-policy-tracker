@@ -1514,3 +1514,89 @@ a:focus-visible {
     }
 }
 
+
+/* ---- Interactivity: warning filters, ticker deep-links, generic sort ---- */
+
+.filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--border-subtle, rgba(148, 163, 184, 0.15));
+}
+
+.filter-group {
+    display: inline-flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.filter-group + .filter-group {
+    padding-left: 12px;
+    border-left: 1px solid var(--border-subtle, rgba(148, 163, 184, 0.2));
+}
+
+.filter-chip {
+    font: inherit;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--border-subtle, rgba(148, 163, 184, 0.3));
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.filter-chip:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.filter-chip.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #fff;
+}
+
+.filter-search {
+    flex: 1 1 220px;
+    max-width: 320px;
+}
+
+.filter-count {
+    margin-left: auto;
+    font-size: 11px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+
+/* Every ticker cell deep-links to the Stocks Screener. */
+.t-ticker {
+    cursor: pointer;
+}
+
+.t-ticker:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+/* Generic click-to-sort affordance on data tables. */
+.premium-table th:not(.sortable) {
+    cursor: pointer;
+    user-select: none;
+}
+
+.premium-table th.sorted-asc::after {
+    content: " ▲";
+    font-size: 9px;
+    color: var(--primary);
+}
+
+.premium-table th.sorted-desc::after {
+    content: " ▼";
+    font-size: 9px;
+    color: var(--primary);
+}

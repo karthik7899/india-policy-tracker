@@ -227,28 +227,40 @@ def resolve_ticker_from_name(company_name, session=None):
 
 
 def extract_row_values(soup, section_id, row_label_pattern):
+    """Extracts the numeric cells of a labelled row from a Screener section.
+
+    The label must be matched against the cell's TEXT, not its ``.string``:
+    BeautifulSoup's ``string=`` matcher only fires when a tag contains a
+    single bare text node, and Screener wraps expandable row labels (Sales,
+    Net Profit, Borrowings, Promoters, ...) in a nested <button>, making
+    ``.string`` None. That single quirk silently blanked every sales/debt/
+    shareholding-derived metric in production while plain-label rows
+    (OPM %, EPS) kept working — so this walks first-column cells and
+    matches on ``get_text()`` instead.
+    """
     sec = soup.find("section", id=section_id)
     if not sec:
         return []
-    import re
-
-    td_label = sec.find("td", string=re.compile(row_label_pattern))
-    if td_label:
-        tr = td_label.find_parent("tr")
-        if tr:
-            tds = tr.find_all("td")
-            vals = [
-                td.get_text(strip=True).replace(",", "").replace("%", "")
-                for td in tds[1:]
-                if td.get_text(strip=True)
-            ]
-            numeric_vals = []
-            for v in vals:
-                try:
-                    numeric_vals.append(float(v))
-                except ValueError:
-                    pass
-            return numeric_vals
+    pattern = re.compile(row_label_pattern)
+    for tr in sec.find_all("tr"):
+        tds = tr.find_all("td")
+        if not tds:
+            continue
+        label_text = tds[0].get_text(" ", strip=True)
+        if not pattern.search(label_text):
+            continue
+        vals = [
+            td.get_text(strip=True).replace(",", "").replace("%", "")
+            for td in tds[1:]
+            if td.get_text(strip=True)
+        ]
+        numeric_vals = []
+        for v in vals:
+            try:
+                numeric_vals.append(float(v))
+            except ValueError:
+                pass
+        return numeric_vals
     return []
 
 

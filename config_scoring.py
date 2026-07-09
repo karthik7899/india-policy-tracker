@@ -59,8 +59,13 @@ class EarlyWarningThresholds(BaseModel):
     promoter_exit_high: float = -1.0
     promoter_exit_critical: float = -2.0
 
-    # Operating margin contraction (% point change vs prior period)
+    # Operating margin contraction (% point change vs prior period).
+    # Severity ladders with the size of the drop — a 61pp collapse must not
+    # rank the same as a 2pp dip — and a persistent multi-quarter decline
+    # escalates one level further.
     margin_compression: float = -2.0
+    margin_compression_high: float = -6.0
+    margin_compression_critical: float = -12.0
 
     # Leverage above which the position is flagged as critical
     leverage_critical: float = 1.0

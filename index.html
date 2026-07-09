@@ -598,6 +598,25 @@
                         <h3>Early Warning System</h3>
                         <p class="subtitle">Prioritized risk &amp; opportunity signals synthesized across holdings, fundamentals, institutional flows, and price action.</p>
                     </div>
+                    <div class="filter-bar" id="warning-filters" role="group" aria-label="Filter warnings">
+                        <div class="filter-group" data-filter-group="severity">
+                            <button type="button" class="filter-chip active" data-filter-value="all">All</button>
+                            <button type="button" class="filter-chip" data-filter-value="Critical">Critical</button>
+                            <button type="button" class="filter-chip" data-filter-value="High">High</button>
+                            <button type="button" class="filter-chip" data-filter-value="Medium">Medium</button>
+                            <button type="button" class="filter-chip" data-filter-value="Low">Low</button>
+                        </div>
+                        <div class="filter-group" data-filter-group="direction">
+                            <button type="button" class="filter-chip active" data-filter-value="all">Both</button>
+                            <button type="button" class="filter-chip" data-filter-value="risk">Risks</button>
+                            <button type="button" class="filter-chip" data-filter-value="opportunity">Opportunities</button>
+                        </div>
+                        <div class="search-bar-container filter-search">
+                            <label class="sr-only" for="warning-search">Filter warnings</label>
+                            <input type="search" id="warning-search" placeholder="Filter by ticker, category, signal..." autocomplete="off">
+                        </div>
+                        <span class="filter-count" id="warning-count" aria-live="polite"></span>
+                    </div>
                     <div class="table-scroll-container">
                         <table class="premium-table">
                             <thead>

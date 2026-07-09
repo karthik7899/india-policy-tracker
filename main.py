@@ -209,6 +209,12 @@ async def run_pipeline():
 
     # Synthesize a prioritized early-warning feed from the collected signals
     from analysis.early_warning import generate_early_warnings
+    from analysis.competitive_intel import detect_new_entrants
+
+    # Connect fetched headlines to the incumbents they threaten (e.g. Amber
+    # Enterprises moving on mobile manufacturing = a Dixon problem) before
+    # the early-warning engine runs.
+    data["new_entrants"] = detect_new_entrants(data, watchlist)
 
     data["early_warnings"] = generate_early_warnings(data, watchlist)
 

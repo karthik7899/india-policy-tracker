@@ -236,7 +236,61 @@ document.addEventListener("DOMContentLoaded", () => {
     setupQuickActions();
     loadDashboardData();
     setupStockSearch();
+    setupWarningFilters();
+    setupTickerNavigation();
+    setupGenericTableSorting();
 });
+
+// Any ticker cell anywhere in the app deep-links into the Stocks Screener,
+// pre-filtered to that ticker. Delegated so every renderer gets it for free.
+function setupTickerNavigation() {
+    document.addEventListener("click", event => {
+        const cell = event.target.closest(".t-ticker");
+        if (!cell) return;
+        const ticker = (cell.textContent || "").trim().split(/\s/)[0];
+        if (!ticker) return;
+        const searchInput = document.getElementById("stock-search");
+        if (searchInput) searchInput.value = ticker;
+        activateTab("stocks");
+        renderStocksTable(ticker);
+    });
+}
+
+// Click-to-sort for every data table that doesn't have data-driven sorting
+// of its own (the Stocks Screener keeps its dedicated th.sortable path).
+// Sorts the rendered rows in place, numeric-aware.
+function setupGenericTableSorting() {
+    document.addEventListener("click", event => {
+        const th = event.target.closest(".premium-table th");
+        if (!th || th.classList.contains("sortable")) return;
+        const table = th.closest("table");
+        const tbody = table && table.querySelector("tbody");
+        if (!tbody || tbody.querySelector(".empty-state")) return;
+
+        const index = Array.from(th.parentNode.children).indexOf(th);
+        const ascending = th.classList.contains("sorted-desc");
+        table.querySelectorAll("th").forEach(h => h.classList.remove("sorted-asc", "sorted-desc"));
+        th.classList.add(ascending ? "sorted-asc" : "sorted-desc");
+
+        const numeric = text => {
+            const cleaned = text.replace(/[₹,%+,]/g, "").replace(/—/g, "");
+            const value = parseFloat(cleaned);
+            return Number.isNaN(value) ? null : value;
+        };
+        const rows = Array.from(tbody.querySelectorAll("tr"));
+        rows.sort((a, b) => {
+            const ta = (a.children[index]?.textContent || "").trim();
+            const tb = (b.children[index]?.textContent || "").trim();
+            const na = numeric(ta);
+            const nb = numeric(tb);
+            let cmp;
+            if (na !== null && nb !== null) cmp = na - nb;
+            else cmp = ta.localeCompare(tb);
+            return ascending ? cmp : -cmp;
+        });
+        rows.forEach(r => tbody.appendChild(r));
+    });
+}
 
 // Tab Toggling Logic
 function setupTabToggles() {
@@ -1605,15 +1659,54 @@ const SEVERITY_BADGE_CLASS = {
     Low: "badge-neutral-alert"
 };
 
+// Active early-warning filters (severity chip, direction chip, free text).
+const warningFilters = { severity: "all", direction: "all", query: "" };
+
+function setupWarningFilters() {
+    const bar = document.getElementById("warning-filters");
+    if (!bar) return;
+    bar.querySelectorAll(".filter-group").forEach(group => {
+        const key = group.getAttribute("data-filter-group");
+        group.querySelectorAll(".filter-chip").forEach(chip => {
+            chip.addEventListener("click", () => {
+                group.querySelectorAll(".filter-chip").forEach(c => c.classList.remove("active"));
+                chip.classList.add("active");
+                warningFilters[key] = chip.getAttribute("data-filter-value");
+                renderEarlyWarnings();
+            });
+        });
+    });
+    const search = document.getElementById("warning-search");
+    if (search) {
+        search.addEventListener("input", e => {
+            warningFilters.query = e.target.value.trim().toLowerCase();
+            renderEarlyWarnings();
+        });
+    }
+}
+
 function renderEarlyWarnings() {
     const tbody = document.getElementById("early-warning-table-body");
     if (!tbody) return;
     tbody.innerHTML = "";
 
-    const warnings = (appData && appData.briefing && appData.briefing.early_warnings) || [];
+    const all = (appData && appData.briefing && appData.briefing.early_warnings) || [];
+    const warnings = all.filter(w => {
+        if (warningFilters.severity !== "all" && (w.severity || "Low") !== warningFilters.severity) return false;
+        if (warningFilters.direction !== "all" && w.direction !== warningFilters.direction) return false;
+        if (warningFilters.query) {
+            const haystack = `${w.ticker} ${w.name} ${w.sector} ${w.category} ${w.signal}`.toLowerCase();
+            if (!haystack.includes(warningFilters.query)) return false;
+        }
+        return true;
+    });
+
+    const countEl = document.getElementById("warning-count");
+    if (countEl) countEl.textContent = `${warnings.length} of ${all.length} signals`;
 
     if (warnings.length === 0) {
-        setTableEmpty(tbody, 6, "No active warnings", "No risk or opportunity signals were triggered in the latest cycle.");
+        const msg = all.length === 0 ? "No active warnings" : "No signals match the current filters";
+        setTableEmpty(tbody, 6, msg, all.length === 0 ? "No risk or opportunity signals were triggered in the latest cycle." : "Adjust the severity, direction, or text filters above.");
         return;
     }
 
