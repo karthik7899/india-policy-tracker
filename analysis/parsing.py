@@ -1,5 +1,6 @@
 import re
 import urllib.parse
+import functools
 from logger import log
 
 # Words that precede a PERSON's given name, never a company mention
@@ -95,6 +96,25 @@ def _clean_token(token):
     return token.lower().rstrip(".").removesuffix("'s")
 
 
+@functools.lru_cache(maxsize=2048)
+def _tokenize_title(title):
+    tokens = tuple(_TOKEN_RE.findall(title or ""))
+    lowered = tuple(_clean_token(t) for t in tokens)
+    return tokens, lowered
+
+
+@functools.lru_cache(maxsize=512)
+def _tokenize_name(name):
+    own_name_tokens = frozenset(_clean_token(t) for t in _TOKEN_RE.findall(name or ""))
+    name_core = (name or "").split("(")[0]
+    core_tokens = tuple(_clean_token(t) for t in _TOKEN_RE.findall(name_core))
+    aliases = tuple(
+        tuple(_clean_token(t) for t in _TOKEN_RE.findall(alias))
+        for alias in re.findall(r"\(([^)]+)\)", name or "")
+    )
+    return own_name_tokens, core_tokens, aliases
+
+
 def title_matches_company(title, ticker, name):
     """Does this headline actually mention this company — not a person or a
     different company sharing a token with it?
@@ -115,11 +135,11 @@ def title_matches_company(title, ticker, name):
       occurrence ("HAL", "ARVIND") always reads as a ticker, never a
       given name, so the surname guard doesn't apply to it.
     """
-    tokens = _TOKEN_RE.findall(title or "")
+    tokens, lowered = _tokenize_title(title)
     if not tokens:
         return False
-    lowered = [_clean_token(t) for t in tokens]
-    own_name_tokens = {_clean_token(t) for t in _TOKEN_RE.findall(name or "")}
+
+    own_name_tokens, core_tokens, aliases = _tokenize_name(name)
 
     def _single_token_match(candidate):
         candidate = candidate.lower()
@@ -154,14 +174,11 @@ def title_matches_company(title, ticker, name):
                 return True
         return False
 
-    # Company name core ("Larsen & Toubro" from "Larsen & Toubro (L&T)").
-    name_core = (name or "").split("(")[0]
-    if _phrase_match([_clean_token(t) for t in _TOKEN_RE.findall(name_core)]):
+    if _phrase_match(core_tokens):
         return True
 
-    # Parenthetical aliases: "(L&T)", "(PepsiCo)", "(CP PLUS)".
-    for alias in re.findall(r"\(([^)]+)\)", name or ""):
-        if _phrase_match([_clean_token(t) for t in _TOKEN_RE.findall(alias)]):
+    for alias_tokens in aliases:
+        if _phrase_match(alias_tokens):
             return True
 
     return _single_token_match(ticker or "")
