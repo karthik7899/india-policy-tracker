@@ -218,8 +218,12 @@ async def run_pipeline():
 
     # Sector-relative valuation: annotate stocks with peer-group P/E context
     from analysis.sector_valuation import build_sector_valuation
+    from analysis.sector_growth import build_sector_growth
 
     data["sector_valuation"] = build_sector_valuation(watchlist)
+    # Which sectors are compounding fastest — median revenue YoY/CAGR from
+    # each holding's quarterly sales series (fastest first).
+    data["sector_growth"] = build_sector_growth(watchlist)
 
     # Establish the historical-MF institutional accumulation baseline (backtesting)
     from analysis.backtesting import build_institutional_baseline
