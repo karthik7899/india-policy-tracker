@@ -141,7 +141,7 @@ _NON_COMPANIES = {
 }
 
 
-def _collect_headlines(data: Dict[str, Any], watchlist: Dict[str, Any]) -> List[str]:
+def collect_headlines(data: Dict[str, Any], watchlist: Dict[str, Any]) -> List[str]:
     """Every collected headline, whichever feed carried it."""
     seen = set()
     headlines: List[str] = []
@@ -166,6 +166,9 @@ def _collect_headlines(data: Dict[str, Any], watchlist: Dict[str, Any]) -> List[
     for item in data.get("corporate_filings", []) or []:
         if isinstance(item, dict):
             _add(item.get("filing"))
+    for item in data.get("global_market_news", []) or []:
+        if isinstance(item, dict):
+            _add(item.get("title"))
     return headlines
 
 
@@ -200,7 +203,7 @@ def detect_new_entrants(
     seen_pairs = set()
 
     try:
-        headlines = _collect_headlines(data, watchlist)
+        headlines = collect_headlines(data, watchlist)
         for headline in headlines:
             lower = headline.lower()
             if not any(move in lower for move in _ENTRY_MOVES):

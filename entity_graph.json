@@ -1,0 +1,300 @@
+{
+  "edges": [
+    {
+      "src": "Airbus",
+      "dst": "aerospace_defence",
+      "type": "anchor_demand",
+      "note": "Aerospace prime — Indian supplier/offset ecosystem exposure",
+      "evidence": "curated",
+      "added": "2026-07-10"
+    },
+    {
+      "src": "AMD",
+      "dst": "semiconductors_equipment",
+      "type": "anchor_demand",
+      "note": "Semiconductor demand/capex anchor — ISM ecosystem exposure",
+      "evidence": "curated",
+      "added": "2026-07-10"
+    },
+    {
+      "src": "Apple",
+      "dst": "manufacturing_electronics",
+      "type": "anchor_demand",
+      "note": "Global electronics demand anchor — India EMS/PLI ecosystem exposure",
+      "evidence": "curated",
+      "added": "2026-07-10"
+    },
+    {
+      "src": "Apple",
+      "dst": "semiconductors_equipment",
+      "type": "anchor_demand",
+      "note": "Semiconductor demand/capex anchor — ISM ecosystem exposure",
+      "evidence": "curated",
+      "added": "2026-07-10"
+    },
+    {
+      "src": "Boeing",
+      "dst": "aerospace_defence",
+      "type": "anchor_demand",
+      "note": "Aerospace prime — Indian supplier/offset ecosystem exposure",
+      "evidence": "curated",
+      "added": "2026-07-10"
+    },
+    {
+      "src": "Broadcom",
+      "dst": "semiconductors_equipment",
+      "type": "anchor_demand",
+      "note": "Semiconductor demand/capex anchor — ISM ecosystem exposure",
+      "evidence": "curated",
+      "added": "2026-07-10"
+    },
+    {
+      "src": "BYD",
+      "dst": "clean_energy",
+      "type": "anchor_demand",
+      "note": "EV/energy-storage demand anchor",
+      "evidence": "curated",
+      "added": "2026-07-10"
+    },
+    {
+      "src": "Google",
+      "dst": "manufacturing_electronics",
+      "type": "anchor_demand",
+      "note": "Global electronics demand anchor — India EMS/PLI ecosystem exposure",
+      "evidence": "curated",
+      "added": "2026-07-10"
+    },
+    {
+      "src": "Intel",
+      "dst": "semiconductors_equipment",
+      "type": "anchor_demand",
+      "note": "Semiconductor demand/capex anchor — ISM ecosystem exposure",
+      "evidence": "curated",
+      "added": "2026-07-10"
+    },
+    {
+      "src": "Lockheed Martin",
+      "dst": "aerospace_defence",
+      "type": "anchor_demand",
+      "note": "Aerospace prime — Indian supplier/offset ecosystem exposure",
+      "evidence": "curated",
+      "added": "2026-07-10"
+    },
+    {
+      "src": "Micron",
+      "dst": "manufacturing_electronics",
+      "type": "anchor_demand",
+      "note": "Global electronics demand anchor — India EMS/PLI ecosystem exposure",
+      "evidence": "curated",
+      "added": "2026-07-10"
+    },
+    {
+      "src": "Micron",
+      "dst": "semiconductors_equipment",
+      "type": "anchor_demand",
+      "note": "Semiconductor demand/capex anchor — ISM ecosystem exposure",
+      "evidence": "curated",
+      "added": "2026-07-10"
+    },
+    {
+      "src": "Nvidia",
+      "dst": "manufacturing_electronics",
+      "type": "anchor_demand",
+      "note": "Global electronics demand anchor — India EMS/PLI ecosystem exposure",
+      "evidence": "curated",
+      "added": "2026-07-10"
+    },
+    {
+      "src": "Nvidia",
+      "dst": "semiconductors_equipment",
+      "type": "anchor_demand",
+      "note": "Semiconductor demand/capex anchor — ISM ecosystem exposure",
+      "evidence": "curated",
+      "added": "2026-07-10"
+    },
+    {
+      "src": "Qualcomm",
+      "dst": "manufacturing_electronics",
+      "type": "anchor_demand",
+      "note": "Global electronics demand anchor — India EMS/PLI ecosystem exposure",
+      "evidence": "curated",
+      "added": "2026-07-10"
+    },
+    {
+      "src": "Qualcomm",
+      "dst": "semiconductors_equipment",
+      "type": "anchor_demand",
+      "note": "Semiconductor demand/capex anchor — ISM ecosystem exposure",
+      "evidence": "curated",
+      "added": "2026-07-10"
+    },
+    {
+      "src": "Samsung",
+      "dst": "manufacturing_electronics",
+      "type": "anchor_demand",
+      "note": "Global electronics demand anchor — India EMS/PLI ecosystem exposure",
+      "evidence": "curated",
+      "added": "2026-07-10"
+    },
+    {
+      "src": "Tesla",
+      "dst": "clean_energy",
+      "type": "anchor_demand",
+      "note": "EV/energy-storage demand anchor",
+      "evidence": "curated",
+      "added": "2026-07-10"
+    },
+    {
+      "src": "TSMC",
+      "dst": "manufacturing_electronics",
+      "type": "anchor_demand",
+      "note": "Global electronics demand anchor — India EMS/PLI ecosystem exposure",
+      "evidence": "curated",
+      "added": "2026-07-10"
+    },
+    {
+      "src": "TSMC",
+      "dst": "semiconductors_equipment",
+      "type": "anchor_demand",
+      "note": "Semiconductor demand/capex anchor — ISM ecosystem exposure",
+      "evidence": "curated",
+      "added": "2026-07-10"
+    },
+    {
+      "src": "Xiaomi",
+      "dst": "manufacturing_electronics",
+      "type": "anchor_demand",
+      "note": "Global electronics demand anchor — India EMS/PLI ecosystem exposure",
+      "evidence": "curated",
+      "added": "2026-07-10"
+    },
+    {
+      "src": "copper",
+      "dst": "clean_energy",
+      "type": "input_cost",
+      "note": "copper cost exposure",
+      "evidence": "curated",
+      "added": "2026-07-10"
+    },
+    {
+      "src": "copper",
+      "dst": "data_center_support",
+      "type": "input_cost",
+      "note": "copper cost exposure",
+      "evidence": "curated",
+      "added": "2026-07-10"
+    },
+    {
+      "src": "cotton",
+      "dst": "textiles_apparel",
+      "type": "input_cost",
+      "note": "cotton cost exposure",
+      "evidence": "curated",
+      "added": "2026-07-10"
+    },
+    {
+      "src": "crude oil",
+      "dst": "fmcg",
+      "type": "input_cost",
+      "note": "crude oil cost exposure",
+      "evidence": "curated",
+      "added": "2026-07-10"
+    },
+    {
+      "src": "crude oil",
+      "dst": "textiles_apparel",
+      "type": "input_cost",
+      "note": "crude oil cost exposure",
+      "evidence": "curated",
+      "added": "2026-07-10"
+    },
+    {
+      "src": "freight",
+      "dst": "logistics_heavy_capital",
+      "type": "input_cost",
+      "note": "freight cost exposure",
+      "evidence": "curated",
+      "added": "2026-07-10"
+    },
+    {
+      "src": "freight",
+      "dst": "textiles_apparel",
+      "type": "input_cost",
+      "note": "freight cost exposure",
+      "evidence": "curated",
+      "added": "2026-07-10"
+    },
+    {
+      "src": "lithium",
+      "dst": "clean_energy",
+      "type": "input_cost",
+      "note": "lithium cost exposure",
+      "evidence": "curated",
+      "added": "2026-07-10"
+    },
+    {
+      "src": "memory chip",
+      "dst": "manufacturing_electronics",
+      "type": "input_cost",
+      "note": "memory chip cost exposure",
+      "evidence": "curated",
+      "added": "2026-07-10"
+    },
+    {
+      "src": "rare earth",
+      "dst": "aerospace_defence",
+      "type": "input_cost",
+      "note": "rare earth cost exposure",
+      "evidence": "curated",
+      "added": "2026-07-10"
+    },
+    {
+      "src": "rare earth",
+      "dst": "clean_energy",
+      "type": "input_cost",
+      "note": "rare earth cost exposure",
+      "evidence": "curated",
+      "added": "2026-07-10"
+    },
+    {
+      "src": "rare earth",
+      "dst": "manufacturing_electronics",
+      "type": "input_cost",
+      "note": "rare earth cost exposure",
+      "evidence": "curated",
+      "added": "2026-07-10"
+    },
+    {
+      "src": "semiconductor",
+      "dst": "manufacturing_electronics",
+      "type": "input_cost",
+      "note": "semiconductor cost exposure",
+      "evidence": "curated",
+      "added": "2026-07-10"
+    },
+    {
+      "src": "semiconductor",
+      "dst": "surveillance_security",
+      "type": "input_cost",
+      "note": "semiconductor cost exposure",
+      "evidence": "curated",
+      "added": "2026-07-10"
+    },
+    {
+      "src": "steel",
+      "dst": "industrial_manufacturing",
+      "type": "input_cost",
+      "note": "steel cost exposure",
+      "evidence": "curated",
+      "added": "2026-07-10"
+    },
+    {
+      "src": "steel",
+      "dst": "logistics_heavy_capital",
+      "type": "input_cost",
+      "note": "steel cost exposure",
+      "evidence": "curated",
+      "added": "2026-07-10"
+    }
+  ]
+}

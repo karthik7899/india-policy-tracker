@@ -364,6 +364,18 @@ SECTOR_METADATA = {
     },
 }
 
+# Global market-event queries — deliberately entity-free vocabulary; the
+# anchor-company query is assembled at runtime from entity_graph.json so the
+# code never hard-codes a company name (design rule zero).
+GLOBAL_EVENT_QUERIES = [
+    '"supply chain" AND (semiconductor OR electronics OR "rare earth") '
+    'AND (shortage OR disruption OR "export restriction" OR "export curb")',
+    "(semiconductor OR smartphone OR electronics) AND "
+    '("joint venture" OR partnership OR "multiyear commitment" OR "billion deal")',
+    '("raw material" OR copper OR lithium OR "freight rates") AND '
+    "(surge OR spike OR shortage) AND (manufacturing OR electronics OR energy)",
+]
+
 SECTOR_QUERIES = {
     "aerospace_defence": [
         'site:pib.gov.in "defence custom duty" OR ' '"defence aerospace"',

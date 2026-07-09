@@ -559,8 +559,10 @@ def generate_early_warnings(
     warnings.extend(_competitive_threats(data, watchlist))
 
     from analysis.competitive_intel import new_entrant_signals
+    from analysis.event_engine import market_event_signals
 
     warnings.extend(new_entrant_signals(data, watchlist))
+    warnings.extend(market_event_signals(data, watchlist))
 
     # Direct market-share measurement, with a growth-laggard fallback for
     # stocks the share computation couldn't cover.
