@@ -22,6 +22,7 @@ _SEVERITY_BADGE = {
 _SIZE_BUDGET_BYTES = 95_000
 
 _CAPS_NORMAL = {
+    "stocks": 3,
     "news": 3,
     "warnings": 12,
     "lists": 5,
@@ -31,7 +32,8 @@ _CAPS_NORMAL = {
     "caution": 8,
 }
 _CAPS_COMPACT = {
-    "news": 2,
+    "stocks": 2,
+    "news": 1,
     "warnings": 8,
     "lists": 3,
     "research": 4,
@@ -526,9 +528,12 @@ def _render_email(brief_data, watchlist, caps):
         else:
             news_html = "<p style='font-size: 13px; color: #4b5563; font-style: italic;'>No policy updates tracked in this cycle.</p>"
 
-        # Format stocks HTML table
+        # Format stocks HTML table — capped per sector: the email is the
+        # digest, the dashboard is the detail (47 full cards alone were
+        # ~36 KB, pushing even the compact render against Gmail's clip).
         stock_rows = ""
-        for s in stocks:
+        shown_stocks = stocks[: caps.get("stocks", len(stocks))]
+        for s in shown_stocks:
             rating_text = s.get("rating", "N/A")
             growth_val = s.get("revenue_growth")
             earnings_val = s.get("earnings_growth")
@@ -628,6 +633,15 @@ def _render_email(brief_data, watchlist, caps):
                     Spotted news mentions of: {players_str}. Mapped as potential new entrants or disruptive competitors in the {meta['label']} sector.
                 </div>
                 """
+
+        hidden_stocks = len(stocks) - len(shown_stocks)
+        if hidden_stocks > 0:
+            stock_rows += (
+                f"<tr><td colspan='5' style='font-size: 11px; color: #6b7280;'>"
+                f"+ {hidden_stocks} more holding(s) on the "
+                f"<a href='{DASHBOARD_URL}' style='color: #60a5fa;' target='_blank'>live dashboard</a>."
+                f"</td></tr>"
+            )
 
         body_html += f"""
             <div class="section-card">

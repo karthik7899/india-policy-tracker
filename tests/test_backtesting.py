@@ -76,6 +76,21 @@ def test_compute_accumulation_baseline_insufficient_data():
     assert compute_accumulation_baseline([("2026-01-01", 10.0)]) is None
 
 
+def test_base_fund_name_handles_all_separator_formats():
+    """Regression for run #76: hyphen-without-spaces share classes slipped
+    past the old " - " split and the same fund logged twice."""
+    a = _base_fund_name("BANK OF INDIA Manufacturing & Infrastructure Fund-Growth")
+    b = _base_fund_name(
+        "BANK OF INDIA Manufacturing & Infrastructure Fund-Quarterly IDCW"
+    )
+    assert a == b == "bank of india manufacturing & infrastructure fund"
+    t1 = _base_fund_name("Tata Infrastructure Fund-Regular Plan- Growth Option")
+    t2 = _base_fund_name(
+        "TATA Infrastructure Fund Regular Plan - Payout of IDCW Option"
+    )
+    assert t1 == t2 == "tata infrastructure fund"
+
+
 def test_base_fund_name_strips_plan_and_option_qualifiers():
     assert (
         _base_fund_name("DSP BlackRock Technology.com Fund - Direct Plan - Growth")

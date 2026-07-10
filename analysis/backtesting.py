@@ -150,11 +150,43 @@ def _http_get_json(session: requests.Session, url: str) -> Optional[Any]:
     return None
 
 
+# AMFI plan/option vocabulary — a token from this set marks where the share
+# class begins and the underlying fund's name ends.
+_PLAN_OPTION_TOKENS = {
+    "direct",
+    "regular",
+    "growth",
+    "idcw",
+    "dividend",
+    "payout",
+    "reinvestment",
+    "bonus",
+    "quarterly",
+    "monthly",
+    "annual",
+    "plan",
+    "option",
+}
+
+
 def _base_fund_name(scheme_name: str) -> str:
-    """Strip AMFI plan/option qualifiers (e.g. "- Direct Plan - Growth",
-    "- Regular Plan - IDCW") so different share classes of the same
-    underlying fund normalize to one name for dedup purposes."""
-    return (scheme_name or "").split(" - ")[0].strip().lower()
+    """Normalize a scheme name to its underlying fund for dedup purposes.
+
+    AMFI lists the same fund once per share class, and the separator format
+    is wildly inconsistent: "Fund - Direct Plan - Growth", "Fund-Growth",
+    "Fund-Quarterly IDCW", "Fund Regular Plan - Payout of IDCW Option". A
+    separator-based split (" - ") missed the no-space hyphen variants and
+    let duplicates back into the baseline (run #76: the same BANK OF INDIA
+    and Tata Infrastructure funds logged twice). Instead, hyphens are
+    treated as spaces and the name is truncated at the first plan/option
+    token."""
+    tokens = (scheme_name or "").lower().replace("-", " ").split()
+    base = []
+    for token in tokens:
+        if token.strip(".,()") in _PLAN_OPTION_TOKENS:
+            break
+        base.append(token)
+    return " ".join(base).strip()
 
 
 def discover_thematic_schemes(
