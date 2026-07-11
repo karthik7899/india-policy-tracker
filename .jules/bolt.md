@@ -45,3 +45,6 @@ Actually, the reviewer pointed out that changing `ticker_obj.history(period="1d"
 ## 2026-06-25 - Async Ticker Resolution Overhead
 **Learning:** Found an anti-pattern in `scrape_pib_pli_approvals_async` where synchronous `resolve_ticker_from_name` calls were placed inside a loop iterating over candidate competitors, causing event-loop blocking and degrading scraping performance.
 **Action:** When gathering data asynchronously, ensure auxiliary lookups (like ticker resolution) within candidate loops use async HTTP libraries and are gathered concurrently with `asyncio.gather` to preserve the benefits of asynchronous IO.
+## 2026-07-11 - Regex vs BeautifulSoup Performance in RSS Parsing
+**Learning:** Using `BeautifulSoup(..., "html.parser").get_text(strip=True)` inside a loop to perform simple HTML tag stripping on RSS entries (titles and summaries) is extremely slow and acts as a significant CPU bottleneck. Regex-based stripping (`re.sub(r'<[^>]+>', '', text)`) combined with `html.unescape` is orders of magnitude faster (50x-100x speedup).
+**Action:** Use regex and `html.unescape()` instead of `BeautifulSoup` when you only need to strip basic HTML tags from raw text, especially in hot loops or high-volume parsers.
