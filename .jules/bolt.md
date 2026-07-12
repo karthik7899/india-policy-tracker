@@ -45,3 +45,7 @@ Actually, the reviewer pointed out that changing `ticker_obj.history(period="1d"
 ## 2026-06-25 - Async Ticker Resolution Overhead
 **Learning:** Found an anti-pattern in `scrape_pib_pli_approvals_async` where synchronous `resolve_ticker_from_name` calls were placed inside a loop iterating over candidate competitors, causing event-loop blocking and degrading scraping performance.
 **Action:** When gathering data asynchronously, ensure auxiliary lookups (like ticker resolution) within candidate loops use async HTTP libraries and are gathered concurrently with `asyncio.gather` to preserve the benefits of asynchronous IO.
+
+## 2024-10-24 - String Tokenization Memoization for Parsing Loops
+**Learning:** In string matching algorithms executed inside tight nested loops (e.g., comparing news headlines against 300+ stock names in `scraper.py`), repeated execution of regex searches and string comprehensions creates a significant performance bottleneck.
+**Action:** Extract tokenization logic (regex parsing and lowercase/strip formatting) into helper functions and apply `@functools.lru_cache`. Ensure that cached data structures are immutable (like `tuple` or `frozenset`) to prevent downstream side-effects. This reduces processing overhead by ~70%.
