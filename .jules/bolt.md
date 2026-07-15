@@ -45,3 +45,11 @@ Actually, the reviewer pointed out that changing `ticker_obj.history(period="1d"
 ## 2026-06-25 - Async Ticker Resolution Overhead
 **Learning:** Found an anti-pattern in `scrape_pib_pli_approvals_async` where synchronous `resolve_ticker_from_name` calls were placed inside a loop iterating over candidate competitors, causing event-loop blocking and degrading scraping performance.
 **Action:** When gathering data asynchronously, ensure auxiliary lookups (like ticker resolution) within candidate loops use async HTTP libraries and are gathered concurrently with `asyncio.gather` to preserve the benefits of asynchronous IO.
+
+## 2024-07-25 - BeautifulSoup Anti-Pattern in Hot Loops
+**Learning:** Instantiating `BeautifulSoup` inside hot loops (like processing hundreds of RSS feed items) to perform simple HTML tag stripping is a significant performance anti-pattern. Benchmarks showed it taking ~37x longer than a simple regex-based alternative.
+**Action:** For simple HTML tag stripping, especially in hot loops, prefer using a combination of `re.sub(r'<[^>]+>', '', text)` and `html.unescape()` over full DOM parsers like `BeautifulSoup` to achieve massive performance gains without sacrificing correctness.
+
+## 2024-07-25 - BeautifulSoup Anti-Pattern in Hot Loops
+**Learning:** Instantiating `BeautifulSoup` inside hot loops (like processing hundreds of RSS feed items) to perform simple HTML tag stripping is a significant performance anti-pattern. Benchmarks showed it taking ~37x longer than a simple regex-based alternative.
+**Action:** For simple HTML tag stripping, especially in hot loops, prefer using a combination of `re.sub(r'<[^>]+>', '', text)` and `html.unescape()` over full DOM parsers like `BeautifulSoup` to achieve massive performance gains without sacrificing correctness.
