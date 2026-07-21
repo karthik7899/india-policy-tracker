@@ -53,7 +53,7 @@ def test_extract_row_values_handles_button_wrapped_labels():
     """Regression: BeautifulSoup's string= matcher returns None for tags with
     child elements, so every button-wrapped Screener row (Sales, Net Profit,
     Borrowings, Promoters...) silently extracted nothing in production."""
-    soup = BeautifulSoup(_SCREENER_SECTION, "html.parser")
+    soup = BeautifulSoup(_SCREENER_SECTION, "lxml")
     assert extract_row_values(soup, "quarters", "Sales") == [1000.0, 1200.0]
     assert extract_row_values(soup, "quarters", "Net Profit") == [80.0, 95.0]
     assert extract_row_values(soup, "quarters", "OPM") == [15.0, 13.0]  # still works
