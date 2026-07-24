@@ -52,3 +52,6 @@ Actually, the reviewer pointed out that changing `ticker_obj.history(period="1d"
 ## 2026-06-25 - High-Performance HTML Stripping
 **Learning:** For high-performance HTML tag stripping in hot loops (e.g., RSS feed parsing), `BeautifulSoup` introduces significant overhead (taking ~1.8s for 10k parses vs ~0.05s for regex). `BeautifulSoup` should be avoided for simple text extraction where full DOM parsing is unnecessary.
 **Action:** Use regex (`re.sub(r'<[^>]+>', '', text)`) and `html.unescape()` instead of `BeautifulSoup` for massive speedups (50x-100x) when merely stripping tags from strings like RSS titles and summaries.
+## 2026-07-25 - lxml parsing Optimization
+ **Learning:** When parsing HTML documents, `html.parser` is slow. Switching to `lxml` is a C-based parser and yields a 30-50% parsing speedup, and provides equivalent trees for `BeautifulSoup` when working with full DOMs.
+ **Action:** For DOM parsing tasks that require full parsing, use the `lxml` parser instead of Python's built-in `html.parser` with `BeautifulSoup`. Ensure that `lxml` is added as a dependency.

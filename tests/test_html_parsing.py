@@ -39,7 +39,7 @@ MOCK_HTML = """
 
 
 def test_extract_row_values():
-    soup = BeautifulSoup(MOCK_HTML, "html.parser")
+    soup = BeautifulSoup(MOCK_HTML, "lxml")
 
     # Test normal extraction with commas
     sales = extract_row_values(soup, "quarters", "Sales")
