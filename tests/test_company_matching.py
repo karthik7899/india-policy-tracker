@@ -156,3 +156,68 @@ def test_empty_and_garbage_inputs():
     assert title_matches_company("", "ARVIND", "Arvind Ltd") is False
     assert title_matches_company(None, "ARVIND", "Arvind Ltd") is False
     assert title_matches_company("Some headline", "", "") is False
+
+
+# ---------------------------------------------------------------------------
+# entity boundaries: a longer company name that starts with our token
+# ---------------------------------------------------------------------------
+
+
+def test_itc_hotels_is_not_itc():
+    """Regression: three ITC Hotels events were recorded as ITC's.
+
+    ITC Hotels is separately listed since the demerger. The ALL-CAPS
+    exemption (added so HAL and ARVIND read as tickers) had disabled the
+    guard that already rejected "Siemens Energy" for SIEMENS.
+    """
+    assert (
+        title_matches_company(
+            "ITC Hotels to acquire GHK Hospitality for Rs 155 crore", "ITC", "ITC Ltd"
+        )
+        is False
+    )
+    assert title_matches_company("ITC Q1 profit rises 8%", "ITC", "ITC Ltd")
+    assert title_matches_company("ITC Ltd shares gain 2%", "ITC", "ITC Ltd")
+
+
+def test_lt_tech_is_not_lt():
+    assert (
+        title_matches_company(
+            "AMI Paradigm acquires L&T Tech's smart world business",
+            "LT",
+            "Larsen & Toubro (L&T)",
+        )
+        is False
+    )
+
+
+def test_comma_separated_list_still_matches():
+    """ "BEL, Bharat Dynamics" is two companies, not one long name — and the
+    punctuation is the only thing that says so."""
+    assert title_matches_company(
+        "BEL, Bharat Dynamics shares surge on BrahMos order",
+        "BEL",
+        "Bharat Electronics",
+    )
+
+
+def test_title_case_function_words_do_not_break_a_match():
+    """Title-Case headlines capitalize prepositions; no company name
+    continues into one."""
+    assert title_matches_company(
+        "RITES Signs MoU with CONCOR For Project Management Consultancy",
+        "CONCOR",
+        "Container Corporation of India",
+    )
+    assert title_matches_company(
+        "Suzlon In Talks For A 400MW Order", "SUZLON", "Suzlon Energy"
+    )
+
+
+def test_reporting_period_after_ticker_is_not_a_name():
+    assert title_matches_company(
+        "HAL Q1 results beat estimates", "HAL", "Hindustan Aeronautics"
+    )
+    assert title_matches_company(
+        "TCS FY26 guidance raised", "TCS", "Tata Consultancy Services"
+    )

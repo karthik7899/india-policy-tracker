@@ -91,6 +91,44 @@ _HEADLINE_VERBS = {
 
 _TOKEN_RE = re.compile(r"[A-Za-z0-9&.']+")
 
+# Reporting periods are capitalized but are not part of a company's name:
+# "HAL Q1 results" names HAL, not a company called "HAL Q1".
+_PERIOD_RE = re.compile(r"^(q[1-4]|h[12]|fy\d{2,4}|cy\d{2,4}|9m|1h|2h)$")
+
+# Title-Case headlines capitalize function words too ("RITES Signs MoU with
+# CONCOR For Project Management"), and no company name continues into one, so
+# they must not read as the start of a longer name.
+_FUNCTION_WORDS = {
+    "for",
+    "with",
+    "and",
+    "or",
+    "to",
+    "in",
+    "on",
+    "at",
+    "of",
+    "from",
+    "by",
+    "as",
+    "after",
+    "over",
+    "amid",
+    "into",
+    "via",
+    "against",
+    "under",
+    "up",
+    "down",
+    "the",
+    "a",
+    "an",
+    "its",
+    "his",
+    "her",
+    "their",
+}
+
 
 def _clean_token(token):
     return token.lower().rstrip(".").removesuffix("'s")
@@ -98,9 +136,18 @@ def _clean_token(token):
 
 @functools.lru_cache(maxsize=1024)
 def _parse_title(title):
-    tokens = _TOKEN_RE.findall(title or "")
+    matches = list(_TOKEN_RE.finditer(title or ""))
+    tokens = tuple(m.group(0) for m in matches)
     lowered = tuple(_clean_token(t) for t in tokens)
-    return tuple(tokens), lowered
+    # Whether each token runs straight into the next with only whitespace
+    # between them. "ITC Hotels" is one name; "BEL, Bharat Dynamics" is two
+    # companies in a list, and the punctuation is the only thing that says so.
+    text = title or ""
+    adjacent = tuple(
+        text[matches[i].end() : matches[i + 1].start()].strip() == ""
+        for i in range(len(matches) - 1)
+    )
+    return tokens, lowered, adjacent
 
 
 @functools.lru_cache(maxsize=256)
@@ -133,13 +180,20 @@ def title_matches_company(title, ticker, name):
       alias ("(L&T)") is an additional candidate.
     - A single-token match (the ticker, or a one-word alias) is guarded:
       rejected when preceded by a person title (CEO/Mr/Shri/...), or when
-      it appears mixed-case followed by a capitalized word that is not
-      corporate vocabulary, part of this company's own name, or a headline
-      verb — that shape is a person's given name + surname. An ALL-CAPS
-      occurrence ("HAL", "ARVIND") always reads as a ticker, never a
-      given name, so the surname guard doesn't apply to it.
+      the very next word is capitalized and is not corporate vocabulary,
+      part of this company's own name, a headline verb, or a reporting
+      period. That shape is either a person ("Arvind Krishna") or a longer
+      company name that merely starts with our token ("ITC Hotels", a
+      separately listed company whose acquisitions were being recorded as
+      ITC's).
+
+      The guard requires the two words to be whitespace-adjacent, which is
+      what separates "ITC Hotels" from "BEL, Bharat Dynamics" — a list of
+      two companies, where BEL genuinely is mentioned. It applies to
+      ALL-CAPS tokens too: they cannot be a person's given name, but they
+      can certainly begin a different company's name.
     """
-    tokens, lowered = _parse_title(title)
+    tokens, lowered, adjacent = _parse_title(title)
     if not tokens:
         return False
 
@@ -152,17 +206,19 @@ def title_matches_company(title, ticker, name):
                 continue
             if i > 0 and lowered[i - 1] in _PERSON_TITLES:
                 continue  # "CEO Arvind ..." — a person, not the company
-            original = tokens[i]
-            is_all_caps = original.isupper() and len(original) >= 2
-            if not is_all_caps and i + 1 < len(tokens):
+            if i + 1 < len(tokens) and adjacent[i]:
                 nxt_clean = lowered[i + 1]
                 if (
                     tokens[i + 1][0].isupper()
                     and nxt_clean not in _CORP_CONTINUATIONS
                     and nxt_clean not in own_name_tokens
                     and nxt_clean not in _HEADLINE_VERBS
+                    and nxt_clean not in _FUNCTION_WORDS
+                    and not _PERIOD_RE.match(nxt_clean)
                 ):
-                    continue  # "Arvind Krishna" — given name + surname
+                    # "Arvind Krishna" (a person) or "ITC Hotels" (a
+                    # different listed company that starts with our token).
+                    continue
             return True
         return False
 

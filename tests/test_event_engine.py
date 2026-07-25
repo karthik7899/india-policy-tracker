@@ -268,3 +268,101 @@ def test_committed_graph_json_parses_raw():
     with open(os.path.join(_REPO_ROOT, "entity_graph.json"), encoding="utf-8") as f:
         raw = json.load(f)
     assert isinstance(raw.get("edges"), list)
+
+
+# ---------------------------------------------------------------------------
+# clause scoping and certainty
+# ---------------------------------------------------------------------------
+
+from analysis.event_engine import (  # noqa: E402
+    classify_certainty,
+    split_clauses,
+)
+
+
+def test_split_clauses_on_headline_punctuation():
+    assert split_clauses(
+        "ITC Hotels to acquire GHK Hospitality for Rs 155 crore; shares decline 5%"
+    ) == [
+        "ITC Hotels to acquire GHK Hospitality for Rs 155 crore",
+        "shares decline 5%",
+    ]
+    # Nothing to split on -> unchanged, so single-clause headlines behave
+    # exactly as they did before.
+    assert split_clauses("Suzlon wins a 300MW order") == ["Suzlon wins a 300MW order"]
+    assert split_clauses("") == []
+
+
+def test_certainty_reads_intent_and_rumour_as_such():
+    """The three real headlines that were being recorded as completed."""
+    assert (
+        classify_certainty("Schneider Electric Announces Intention To Acquire Cognite")
+        == "announced"
+    )
+    assert (
+        classify_certainty(
+            "Dixon Tech Up Almost 1% Intraday on Reports of Govt Approval "
+            "Likely to Vivo Joint Venture"
+        )
+        == "reported"
+    )
+    assert classify_certainty("Siemens to acquire RTL design automation") == "announced"
+    assert classify_certainty("Suzlon signed a 300MW contract") == "completed"
+
+
+def test_weakest_reading_wins():
+    """A reported intention is a rumour, not an announcement."""
+    assert classify_certainty("Reportedly plans to acquire a rival") == "reported"
+
+
+def test_negation_in_one_clause_does_not_kill_another():
+    """Regression: negation was matched against the whole headline.
+
+    "A calls off talks; B wins order" dropped B's genuine order win because
+    the denial lived in a different clause.
+    """
+    wl = {"sec": [{"ticker": "SUZLON", "name": "Suzlon Energy"}]}
+    data = {
+        "sec": [
+            {"title": "Rival calls off merger talks; Suzlon wins order worth 300cr"}
+        ]
+    }
+    events = classify_headlines(data, wl)
+    assert len(events) == 1
+    assert events[0]["event_type"] == "order_win"
+    assert events[0]["actors"] == ["SUZLON"]
+
+
+def test_actor_must_share_a_clause_with_the_event():
+    """Attribution is relational: a company in the reaction clause did not
+    do the thing described in the first one."""
+    wl = {"sec": [{"ticker": "SUZLON", "name": "Suzlon Energy"}]}
+    data = {
+        "sec": [{"title": "Rival bags order worth 500cr; Suzlon shares decline 5%"}]
+    }
+    events = classify_headlines(data, wl)
+    assert events == [] or events[0]["actors"] == []
+
+
+def test_events_carry_certainty():
+    wl = {"sec": [{"ticker": "SUZLON", "name": "Suzlon Energy"}]}
+    data = {"sec": [{"title": "Suzlon reportedly in talks for a joint venture"}]}
+    events = classify_headlines(data, wl)
+    assert events[0]["certainty"] == "reported"
+
+
+def test_rumoured_disruption_is_excluded_from_supply_stress():
+    """Speculation must not trip a threshold built for real events."""
+    import datetime
+
+    today = datetime.date.today().isoformat()
+    # A real sector key: compute_supply_stress only counts sectors it tracks.
+    rumour = {
+        "event_type": "supply_disruption",
+        "certainty": "reported",
+        "domains": ["clean_energy"],
+        "date": today,
+    }
+    real = dict(rumour, certainty="completed")
+    assert compute_supply_stress([rumour, rumour], {}) == {}
+    assert compute_supply_stress([real, real], {}).get("clean_energy") == 2
