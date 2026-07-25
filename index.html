@@ -126,7 +126,17 @@
             
             <!-- Dashboard Tab -->
             <section id="tab-dashboard" class="tab-pane active">
-                
+
+                <!-- What moved since the previous run. Rendered first because
+                     the counters below barely change day to day. -->
+                <div class="glass-card" id="whats-new-card">
+                    <div class="table-header-bar">
+                        <h3>Since the last run</h3>
+                        <p class="subtitle">Everything that changed in this cycle — target revisions, thesis transitions, watchlist decisions and the day's most severe alerts.</p>
+                    </div>
+                    <div id="whats-new-body"><!-- Populated dynamically --></div>
+                </div>
+
                 <!-- Stat Cards Grid -->
                 <div class="stats-grid">
                     <div class="stat-card">

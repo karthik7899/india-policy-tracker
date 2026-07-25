@@ -264,6 +264,13 @@ async def run_pipeline():
 
     data["early_warnings"] = generate_early_warnings(data, watchlist)
 
+    # Attribute collected headlines to the holdings they actually name, so
+    # picking a company shows that company's coverage rather than its
+    # sector's.
+    from analysis.stock_topics import build_stock_topics
+
+    data["stock_topics"] = build_stock_topics(data, watchlist)
+
     # Thesis health: does the accumulated evidence this cycle still support
     # each holding's catalyst, or has a kill criterion tripped?
     data["thesis_health"] = compute_thesis_health(

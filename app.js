@@ -196,14 +196,14 @@ function formatGrowthBadge(growthStr, style = 'inline') {
     
     const absValStr = Math.abs(val).toFixed(1) + '%';
     if (val > 0) {
-        if (style === 'table') return `<span style="font-weight: 700; color: #34d399;">+${absValStr} YoY</span>`;
-        return `<span style="font-size: 9px; padding: 2px 6px; background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 4px; display: inline-block; font-weight: 600;">+${absValStr} YoY</span>`;
+        if (style === 'table') return `<span style="font-weight: 700; color: var(--success);">+${absValStr} YoY</span>`;
+        return `<span style="font-size: 9px; padding: 2px 6px; background: rgba(16, 185, 129, 0.15); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 4px; display: inline-block; font-weight: 600;">+${absValStr} YoY</span>`;
     } else if (val < 0) {
-        if (style === 'table') return `<span style="font-weight: 700; color: #f87171;">-${absValStr} YoY</span>`;
-        return `<span style="font-size: 9px; padding: 2px 6px; background: rgba(239, 68, 68, 0.12); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 4px; display: inline-block; font-weight: 600;">-${absValStr} YoY</span>`;
+        if (style === 'table') return `<span style="font-weight: 700; color: var(--danger);">-${absValStr} YoY</span>`;
+        return `<span style="font-size: 9px; padding: 2px 6px; background: rgba(239, 68, 68, 0.12); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 4px; display: inline-block; font-weight: 600;">-${absValStr} YoY</span>`;
     } else {
-        if (style === 'table') return `<span style="font-weight: 700; color: #cbd5e1;">0.0% YoY</span>`;
-        return `<span style="font-size: 9px; padding: 2px 6px; background: rgba(203, 213, 225, 0.12); color: #cbd5e1; border: 1px solid rgba(203, 213, 225, 0.3); border-radius: 4px; display: inline-block; font-weight: 600;">0.0% YoY</span>`;
+        if (style === 'table') return `<span style="font-weight: 700; color: var(--text-primary);">0.0% YoY</span>`;
+        return `<span style="font-size: 9px; padding: 2px 6px; background: rgba(203, 213, 225, 0.12); color: var(--text-primary); border: 1px solid rgba(203, 213, 225, 0.3); border-radius: 4px; display: inline-block; font-weight: 600;">0.0% YoY</span>`;
     }
 }
 
@@ -215,9 +215,9 @@ function formatPotential(pctStr) {
     if (isNaN(val)) return escapeHtml(pctStr);
     const isPositive = typeof pctStr === 'string' ? pctStr.startsWith('+') : val > 0;
     const absValStr = Math.abs(val).toFixed(1) + '%';
-    if (isPositive || val > 0) return `<span style="font-weight:700; color:#34d399;">+${absValStr}</span>`;
-    if (val < 0) return `<span style="font-weight:700; color:#f87171;">-${absValStr}</span>`;
-    return `<span style="font-weight:700; color:#cbd5e1;">0.0%</span>`;
+    if (isPositive || val > 0) return `<span style="font-weight:700; color:var(--success);">+${absValStr}</span>`;
+    if (val < 0) return `<span style="font-weight:700; color:var(--danger);">-${absValStr}</span>`;
+    return `<span style="font-weight:700; color:var(--text-primary);">0.0%</span>`;
 }
 
 // Helper: Format analyst info badge
@@ -310,6 +310,11 @@ function activateTab(targetTab) {
         const isActive = button.getAttribute("data-tab") === targetTab;
         button.classList.toggle("active", isActive);
         button.setAttribute("aria-selected", String(isActive));
+        // On narrow screens the strip scrolls, so the active tab can sit well
+        // outside the window — pull it back into view.
+        if (isActive && button.scrollIntoView) {
+            button.scrollIntoView({ block: "nearest", inline: "nearest" });
+        }
     });
     document.querySelectorAll(".tab-pane").forEach(pane => {
         pane.classList.toggle("active", pane === targetPane);
@@ -427,6 +432,7 @@ function initDashboard(data, isFallback = false) {
     setText("competitors-count", countEmergingCompetitors(data));
 
     // Render components
+    renderWhatsNew(data);
     renderSectorChips(data);
     renderPolicyFeed(data);
     renderTopPicks(data);
@@ -905,7 +911,7 @@ function renderSectorDetail(sectorKey) {
     stocks.forEach(s => {
         const analystBadge = formatAnalystBadge(s);
         const growthBadge = formatGrowthBadge(s.revenue_growth, 'badge');
-        const earningsBadge = s.earnings_growth ? `<span style="font-size: 9px; padding: 2px 6px; background: rgba(139, 92, 246, 0.12); color: #a78bfa; border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 4px; display: inline-block; font-weight: 600;">EPS ${s.earnings_growth}</span>` : '';
+        const earningsBadge = s.earnings_growth ? `<span style="font-size: 9px; padding: 2px 6px; background: rgba(139, 92, 246, 0.12); color: var(--accent, #a78bfa); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 4px; display: inline-block; font-weight: 600;">EPS ${s.earnings_growth}</span>` : '';
         
         // Build Screener.in fundamentals row (actual filed data)
         const sc = s.screener || {};
@@ -924,10 +930,10 @@ function renderSectorDetail(sectorKey) {
             if (sc.q_net_profit) {
                 const profitNum = parseFloat(sc.q_net_profit);
                 if (profitNum < 0) {
-                    profitStyle = 'style="background: rgba(239, 68, 68, 0.12); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.25);"';
+                    profitStyle = 'style="background: rgba(239, 68, 68, 0.12); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.25);"';
                     profitLabel = 'Loss';
                 } else {
-                    profitStyle = 'style="background: rgba(16, 185, 129, 0.12); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.25);"';
+                    profitStyle = 'style="background: rgba(16, 185, 129, 0.12); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.25);"';
                 }
             }
             const qProfitHtml = sc.q_net_profit ? `<span class="sc-chip" ${profitStyle} title="Quarterly Net Profit/Loss">${profitLabel}: <strong>₹${Number(Math.abs(sc.q_net_profit)).toLocaleString('en-IN')} Cr</strong></span>` : '';
@@ -941,20 +947,20 @@ function renderSectorDetail(sectorKey) {
             let shareHtml = '';
             if (sc.industry_share_pct) {
                 const indChange = Number(sc.industry_share_change_pp) || 0;
-                const indDelta = indChange ? ` <span style="color: ${indChange > 0 ? '#34d399' : '#f87171'};">(${indChange > 0 ? '+' : ''}${indChange}pp)</span>` : '';
+                const indDelta = indChange ? ` <span style="color: ${indChange > 0 ? 'var(--success)' : 'var(--danger)'};">(${indChange > 0 ? '+' : ''}${indChange}pp)</span>` : '';
                 shareHtml = `<span class="sc-chip" title="Share of the full ${sc.industry_peer_count || ''}-company industry peer group's quarterly revenue (Screener peer table)">Industry Share: <strong>${sc.industry_share_pct}%</strong>${indDelta}</span>`;
             } else if (sc.peer_share_pct) {
                 const shareChange = Number(sc.peer_share_change_pp) || 0;
-                const shareDelta = shareChange ? ` <span style="color: ${shareChange > 0 ? '#34d399' : '#f87171'};">(${shareChange > 0 ? '+' : ''}${shareChange}pp)</span>` : '';
+                const shareDelta = shareChange ? ` <span style="color: ${shareChange > 0 ? 'var(--success)' : 'var(--danger)'};">(${shareChange > 0 ? '+' : ''}${shareChange}pp)</span>` : '';
                 shareHtml = `<span class="sc-chip" title="Share of tracked sector peer revenue, change over ${sc.peer_share_lookback || 1} quarter(s)">Peer Share: <strong>${sc.peer_share_pct}%</strong>${shareDelta}</span>`;
             }
-            const qtrLabel = sc.latest_quarter ? `<small style="color: #f59e0b; font-size: 9px; font-weight: 700; text-transform: uppercase;">(${sc.latest_quarter})</small>` : '';
+            const qtrLabel = sc.latest_quarter ? `<small style="color: var(--warning); font-size: 9px; font-weight: 700; text-transform: uppercase;">(${sc.latest_quarter})</small>` : '';
             
             screenerHtml = `
                 <div class="dsc-fundamentals">
                     <!-- Ratios & Shareholding Sub-Section -->
                     <div style="margin-bottom: 8px;">
-                        <div style="font-size: 8.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #94a3b8; margin-bottom: 6px; display: flex; justify-content: space-between;">
+                        <div style="font-size: 8.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); margin-bottom: 6px; display: flex; justify-content: space-between;">
                             <span>Filed Ratios & Holdings</span>
                             <span style="font-size: 7.5px; opacity: 0.6;">Source: Screener.in</span>
                         </div>
@@ -964,7 +970,7 @@ function renderSectorDetail(sectorKey) {
                     </div>
                     <!-- Quarterly Earnings Sub-Section -->
                     <div>
-                        <div style="font-size: 8.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #94a3b8; margin-bottom: 6px; display: flex; gap: 6px; align-items: center;">
+                        <div style="font-size: 8.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); margin-bottom: 6px; display: flex; gap: 6px; align-items: center;">
                             <span>Quarterly Performance</span>
                             ${qtrLabel}
                         </div>
@@ -987,6 +993,8 @@ function renderSectorDetail(sectorKey) {
             const fv = s.fundamental_value ? ` (Graham IV ₹${escapeHtml(s.fundamental_value)})` : '';
             methodBadge = `<span class="method-badge method-fundamental" title="Upside derived from Graham intrinsic value${fv}">Model Est.</span>`;
         }
+
+        const topicsHtml = buildStockTopics(s.ticker);
 
         stocksHtml += `
             <div class="detail-stock-card">
@@ -1012,6 +1020,7 @@ function renderSectorDetail(sectorKey) {
                 </div>
                 <p class="dsc-catalyst"><strong>Watchlist Catalyst:</strong> ${escapeHtml(s.catalyst)}</p>
                 ${screenerHtml}
+                ${topicsHtml}
             </div>
         `;
     });
@@ -1048,11 +1057,157 @@ function renderSectorDetail(sectorKey) {
     `;
 }
 
+// --- What changed in this cycle --------------------------------------------
+
+function whatsNewGroup(title, items, tone) {
+    if (items.length === 0) return "";
+    const body = items.map(i => `<li>${i}</li>`).join("");
+    return `<div class="wn-group wn-${tone}">
+        <div class="wn-group-head">${escapeHtml(title)} <span>(${items.length})</span></div>
+        <ul>${body}</ul>
+    </div>`;
+}
+
+// The counters below this panel barely move between runs. These are the
+// things that actually changed, gathered from the outputs that already
+// exist rather than from anything newly computed.
+function renderWhatsNew(data) {
+    const host = document.getElementById("whats-new-body");
+    if (!host) return;
+    const b = (data && data.briefing) || {};
+    const groups = [];
+
+    const revisions = (b.estimate_revisions || []).slice(0, 6).map(r => {
+        const dir = r.direction === "up" ? "raised" : "cut";
+        const pct = r.target_change_pct;
+        return `<span class="t-ticker">${escapeHtml(r.ticker)}</span> consensus target ${dir}
+                <strong>${escapeHtml((pct > 0 ? "+" : "") + pct)}%</strong>`;
+    });
+    groups.push(whatsNewGroup("Analyst targets moved", revisions, "info"));
+
+    // Thesis transitions: anything no longer intact is what warrants a look.
+    const health = b.thesis_health || {};
+    const broken = Object.values(health).filter(h => h && h.status === "Broken")
+        .slice(0, 6)
+        .map(h => `<span class="t-ticker">${escapeHtml(h.ticker)}</span> thesis <strong>broken</strong>
+                   <small>${escapeHtml((h.reasons || [])[0] || "")}</small>`);
+    groups.push(whatsNewGroup("Theses broken", broken, "danger"));
+
+    const decisions = [];
+    Object.values(b.emerging_players || {}).forEach(rows => {
+        (rows || []).forEach(r => {
+            if (r.status === "Watchlisted" && /Added|Rotated/i.test(r.reason || "")) {
+                decisions.push(`<span class="t-ticker">${escapeHtml(r.ticker || "")}</span> ${escapeHtml(r.reason)}`);
+            }
+        });
+    });
+    groups.push(whatsNewGroup("Watchlist changes", decisions.slice(0, 6), "success"));
+
+    const deferred = [];
+    Object.values(b.emerging_players || {}).forEach(rows => {
+        (rows || []).forEach(r => {
+            if (r.status === "Deferred") {
+                deferred.push(`<span class="t-ticker">${escapeHtml(r.ticker || r.name || "")}</span> held for a later run`);
+            }
+        });
+    });
+    groups.push(whatsNewGroup("Deferred candidates", deferred.slice(0, 5), "info"));
+
+    const entrants = (b.new_entrants || []).slice(0, 4).map(e =>
+        `<strong>${escapeHtml(e.challenger)}</strong> entering ${escapeHtml(e.sector_label || e.sector)}
+         — pressures ${escapeHtml((e.incumbents || []).join(", "))}`);
+    groups.push(whatsNewGroup("New entrants", entrants, "warning"));
+
+    const critical = (b.early_warnings || []).filter(w => w.severity === "Critical")
+        .slice(0, 6)
+        .map(w => `<span class="t-ticker">${escapeHtml(w.ticker)}</span>
+                   <small>${escapeHtml(w.category)}</small> ${escapeHtml(w.signal)}`);
+    groups.push(whatsNewGroup("Critical alerts", critical, "danger"));
+
+    const rendered = groups.filter(Boolean).join("");
+    host.innerHTML = rendered || `<p class="wn-quiet">Nothing changed materially in this cycle — no target revisions, thesis breaks, watchlist decisions or critical alerts.</p>`;
+}
+
+// --- Per-stock coverage ----------------------------------------------------
+
+const TOPIC_KIND_CLASS = {
+    "Sector news": "topic-news",
+    Agreement: "topic-deal",
+    Launch: "topic-launch",
+    Filing: "topic-filing",
+    Global: "topic-global"
+};
+
+// Headlines attributed to one holding by analysis/stock_topics.py, which
+// reuses the same matcher as the pipeline — deliberately not re-derived in the
+// browser, so the person guard and alias rules live in exactly one place.
+function buildStockTopics(ticker) {
+    const all = (appData && appData.briefing && appData.briefing.stock_topics) || {};
+    const items = all[(ticker || "").toUpperCase()] || [];
+    if (items.length === 0) {
+        return `<p class="stock-topics-empty">No coverage naming this company in the current window.</p>`;
+    }
+
+    const rows = items.map(t => {
+        const cls = TOPIC_KIND_CLASS[t.kind] || "topic-event";
+        const title = t.link
+            ? `<a href="${safeExternalUrl(t.link)}" target="_blank" rel="noopener noreferrer">${escapeHtml(t.title)}</a>`
+            : escapeHtml(t.title);
+        const meta = [t.source, t.date].filter(Boolean).map(escapeHtml).join(" · ");
+        return `<li class="stock-topic">
+            <span class="topic-kind ${cls}">${escapeHtml(t.kind)}</span>
+            <span class="topic-title">${title}</span>
+            ${meta ? `<span class="topic-meta">${meta}</span>` : ""}
+        </li>`;
+    }).join("");
+
+    return `<div class="stock-topics">
+        <div class="stock-topics-head">Coverage naming this company <span>(${items.length})</span></div>
+        <ul>${rows}</ul>
+    </div>`;
+}
+
+function toggleStockDetail(row, stock) {
+    const open = row.nextElementSibling
+        && row.nextElementSibling.classList.contains("stock-detail-row");
+    if (open) {
+        row.nextElementSibling.remove();
+        row.setAttribute("aria-expanded", "false");
+        row.classList.remove("stock-row-open");
+        return;
+    }
+    // Only one open at a time — two expanded rows in an 18-column table is
+    // more scrolling than it is context.
+    document.querySelectorAll(".stock-detail-row").forEach(e => e.remove());
+    document.querySelectorAll(".stock-row-open").forEach(e => {
+        e.classList.remove("stock-row-open");
+        e.setAttribute("aria-expanded", "false");
+    });
+
+    const detail = document.createElement("tr");
+    detail.className = "stock-detail-row";
+    const cell = document.createElement("td");
+    cell.colSpan = row.children.length;
+    cell.innerHTML = `
+        <div class="stock-detail">
+            <div class="stock-detail-head">
+                <strong>${escapeHtml(stock.name)}</strong>
+                <span class="t-ticker">${escapeHtml(stock.ticker)}</span>
+                <span class="stock-detail-cat">${escapeHtml(stock.catalyst || "")}</span>
+            </div>
+            ${buildStockTopics(stock.ticker)}
+        </div>`;
+    detail.appendChild(cell);
+    row.after(detail);
+    row.setAttribute("aria-expanded", "true");
+    row.classList.add("stock-row-open");
+}
+
 // --- Sector detail building blocks -----------------------------------------
 
 function sectorMetric(label, value, tone, title) {
-    const color = tone === "up" ? "var(--success, #34d399)"
-        : tone === "down" ? "var(--danger, #f87171)"
+    const color = tone === "up" ? "var(--success)"
+        : tone === "down" ? "var(--danger)"
         : "var(--text-primary)";
     return `<div class="sector-metric" title="${escapeHtml(title || label)}">
         <span class="sector-metric-label">${escapeHtml(label)}</span>
@@ -1132,7 +1287,7 @@ function buildSectorChallengers(sectorKey) {
     const body = rows.map(c => `
         <tr>
             <td><strong>${escapeHtml(c.name || "")}</strong> <span class="t-ticker">${escapeHtml(c.ticker || "")}</span></td>
-            <td class="num" style="color: var(--success, #34d399); font-weight:700;">${escapeHtml(`+${c.growth_pct}%`)}</td>
+            <td class="num" style="color: var(--success); font-weight:700;">${escapeHtml(`+${c.growth_pct}%`)}</td>
             <td class="num">${escapeHtml(String(c.industry_share_pct ?? "—"))}%</td>
             <td class="num">${escapeHtml(cr(c.market_cap))}</td>
             <td class="num">${escapeHtml(String(c.pe_ratio ?? "—"))}</td>
@@ -1301,6 +1456,21 @@ function renderStocksTable(filterQuery = "") {
             <td>${formatAnalystBadge(s)}</td>
             <td style="max-width: 280px; white-space: normal; font-size: 11px;">${escapeHtml(s.catalyst)}</td>
         `;
+        // Picking a row opens that company's coverage underneath it, rather
+        // than sending you to the sector feed to find the relevant lines.
+        tr.classList.add("stock-row");
+        tr.tabIndex = 0;
+        tr.setAttribute("role", "button");
+        tr.setAttribute("aria-expanded", "false");
+        tr.setAttribute("aria-label", `Show coverage for ${s.name}`);
+        const openDetail = () => toggleStockDetail(tr, s);
+        tr.addEventListener("click", ev => {
+            if (ev.target.closest("a")) return; // let real links behave normally
+            openDetail();
+        });
+        tr.addEventListener("keydown", ev => {
+            if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); openDetail(); }
+        });
         tbody.appendChild(tr);
     });
 
@@ -1826,7 +1996,7 @@ function renderEarlyWarnings() {
         const badgeClass = SEVERITY_BADGE_CLASS[severity] || "badge-neutral-alert";
         const isRisk = w.direction === "risk";
         const dirIcon = isRisk ? "▼" : "▲";
-        const dirColor = isRisk ? "var(--danger, #f87171)" : "var(--success, #34d399)";
+        const dirColor = isRisk ? "var(--danger)" : "var(--success)";
 
         const tr = document.createElement("tr");
         tr.innerHTML = `
@@ -1859,8 +2029,8 @@ function renderSectorValuation() {
             <td>${escapeHtml(r.label)}</td>
             <td><strong>${escapeHtml(r.median_pe)}</strong></td>
             <td>${escapeHtml(r.stock_count)}</td>
-            <td style="color: var(--success, #34d399);">${escapeHtml(r.cheapest_ticker)} <small>(${escapeHtml(r.cheapest_pe)})</small></td>
-            <td style="color: var(--danger, #f87171);">${escapeHtml(r.most_expensive_ticker)} <small>(${escapeHtml(r.most_expensive_pe)})</small></td>
+            <td style="color: var(--success);">${escapeHtml(r.cheapest_ticker)} <small>(${escapeHtml(r.cheapest_pe)})</small></td>
+            <td style="color: var(--danger);">${escapeHtml(r.most_expensive_ticker)} <small>(${escapeHtml(r.most_expensive_pe)})</small></td>
         `;
         tbody.appendChild(tr);
     });
@@ -1884,12 +2054,12 @@ function renderSectorGrowth() {
         // A missing figure reads as "not computable from the history we have",
         // never as zero.
         const fmt = v => (v === null || v === undefined ? "—" : (v > 0 ? `+${v}%` : `${v}%`));
-        const ttmColor = (r.median_ttm_growth_pct || 0) >= 0 ? "var(--success, #34d399)" : "var(--danger, #f87171)";
+        const ttmColor = (r.median_ttm_growth_pct || 0) >= 0 ? "var(--success)" : "var(--danger)";
         const holdings = r.excluded_count
             ? `${r.stock_count} <small style="color: var(--text-secondary);">(${r.excluded_count} excluded)</small>`
             : `${r.stock_count}`;
         const thin = r.low_confidence
-            ? ` <small style="color: var(--warning, #fbbf24);" title="Median of a single holding — not a sector view">thin</small>`
+            ? ` <small style="color: var(--warning);" title="Median of a single holding — not a sector view">thin</small>`
             : "";
         const tr = document.createElement("tr");
         tr.innerHTML = `
@@ -1967,7 +2137,7 @@ function renderResearchEngine() {
         } else {
             revisions.forEach(r => {
                 const up = r.direction === "up";
-                const color = up ? "var(--success, #34d399)" : "var(--danger, #f87171)";
+                const color = up ? "var(--success)" : "var(--danger)";
                 const arrow = up ? "▲" : "▼";
                 const tr = document.createElement("tr");
                 tr.innerHTML = `
@@ -1991,7 +2161,7 @@ function renderResearchEngine() {
         } else {
             variant.forEach(r => {
                 const bullish = r.direction === "more_bullish";
-                const color = bullish ? "var(--success, #34d399)" : "var(--danger, #f87171)";
+                const color = bullish ? "var(--success)" : "var(--danger)";
                 const tr = document.createElement("tr");
                 tr.innerHTML = `
                     <td class="t-ticker">${escapeHtml(r.ticker)}</td>
@@ -2036,7 +2206,7 @@ function renderResearchEngine() {
         } else {
             recentOutcomes.forEach(e => {
                 const win = e.outcome === "Thesis Playing Out";
-                const color = win ? "var(--success, #34d399)" : "var(--danger, #f87171)";
+                const color = win ? "var(--success)" : "var(--danger)";
                 const tr = document.createElement("tr");
                 tr.innerHTML = `
                     <td class="t-ticker">${escapeHtml(e.ticker)}</td>
