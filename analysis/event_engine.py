@@ -15,6 +15,7 @@ loop that hardened the headline→company matcher.
 """
 
 import datetime
+import re
 from typing import Any, Dict, List
 
 from analysis.competitive_intel import SECTOR_BATTLEGROUNDS, collect_headlines
@@ -102,8 +103,63 @@ EVENT_VOCABULARY: Dict[str, tuple] = {
     ),
 }
 
+# How settled the event is. The engine used to record every match as though
+# it had happened: "Schneider Electric Announces Intention To Acquire Cognite"
+# and "Dixon Tech Up ... on Reports of Govt Approval Likely to Vivo Joint
+# Venture" were both filed as completed events, and 16% of a live run's events
+# were intentions or rumours read as fact. Order matters — the weakest reading
+# that fits wins, so a reported intention is reported, not announced.
+CERTAINTY_MARKERS = (
+    (
+        "reported",
+        (
+            "reportedly",
+            "reports of",
+            "report says",
+            "sources say",
+            "rumour",
+            "rumor",
+            "speculation",
+            "likely to",
+            "could ",
+            "may ",
+            "in talks",
+            "exploring",
+            "mulls",
+            "weighing",
+            "considering",
+        ),
+    ),
+    (
+        "announced",
+        (
+            "intention to",
+            "intends to",
+            "plans to",
+            "planning to",
+            "proposed",
+            "proposes",
+            "set to",
+            "to acquire",
+            "to buy",
+            "agreed to",
+            "in principle",
+            "signs mou",
+            "mou with",
+            "memorandum of understanding",
+        ),
+    ),
+)
+
+CERTAINTY_COMPLETED = "completed"
+
+# Clause boundaries. Semicolons and dashes separate independent statements in
+# headline style; a comma followed by a market-reaction verb usually does too.
+_CLAUSE_RE = re.compile(r"\s*[;—–]\s*|\s+-\s+|\s*\|\s*")
+
 # A negated move is not a move — "denies plans to enter" must classify as
-# nothing rather than as an entry.
+# nothing rather than as an entry. Scoped to a clause, so a denial in one
+# statement no longer cancels a genuine event in another.
 NEGATION_MARKERS = (
     "denies",
     "rules out",
@@ -130,15 +186,35 @@ _RISK_TYPES = ("supply_disruption", "input_cost_shock")
 _MAX_SIGNALS_PER_SECTOR = 3
 
 
+def split_clauses(headline: str) -> List[str]:
+    """Break a headline into independent statements.
+
+    Falls back to the whole headline when there is nothing to split on, so a
+    single-clause headline behaves exactly as before.
+    """
+    parts = [p.strip() for p in _CLAUSE_RE.split(headline or "") if p and p.strip()]
+    return parts or ([headline] if headline else [])
+
+
+def classify_certainty(text: str) -> str:
+    """``reported`` / ``announced`` / ``completed`` for one clause."""
+    lower = (text or "").lower()
+    for level, markers in CERTAINTY_MARKERS:
+        if any(m in lower for m in markers):
+            return level
+    return CERTAINTY_COMPLETED
+
+
 def classify_headlines(
     data: Dict[str, Any], watchlist: Dict[str, Any]
 ) -> List[Dict[str, Any]]:
     """Classify every collected headline into typed market events.
 
-    Returns [{headline, event_type, phrase, domains, actors, direction,
-    date}] — ``domains`` are watchlist sectors whose battleground vocabulary
-    the headline touches (Tier 1); ``actors`` are watchlist tickers named in
-    the headline (direct attribution).
+    Returns [{headline, event_type, phrase, certainty, domains, actors,
+    direction, date}] — ``domains`` are watchlist sectors whose battleground
+    vocabulary the headline touches (Tier 1); ``actors`` are watchlist tickers
+    named in the same clause as the event (direct attribution); ``certainty``
+    is how settled the event is (reported / announced / completed).
     """
     events: List[Dict[str, Any]] = []
     today = datetime.date.today().isoformat()
@@ -151,27 +227,47 @@ def classify_headlines(
         ]
         for headline in collect_headlines(data, watchlist):
             lower = headline.lower()
-            if any(neg in lower for neg in NEGATION_MARKERS):
-                continue
 
-            event_type = phrase = None
-            for etype, vocabulary in EVENT_VOCABULARY.items():
-                hit = next((v for v in vocabulary if v in lower), None)
-                if hit:
-                    event_type, phrase = etype, hit
-                    break
+            # Classify within a clause, not across the whole headline. A
+            # headline routinely carries two of them — "ITC Hotels to acquire
+            # GHK for Rs 155 crore; shares decline 5%" — and matching the
+            # event, its actors and any negation against the full string lets
+            # one clause cancel or claim what belongs to the other.
+            event_type = phrase = certainty = None
+            actors: List[str] = []
+            for clause in split_clauses(headline):
+                clause_lower = clause.lower()
+                if any(neg in clause_lower for neg in NEGATION_MARKERS):
+                    continue  # this clause is a denial; others may still count
+
+                hit_type = hit_phrase = None
+                for etype, vocabulary in EVENT_VOCABULARY.items():
+                    hit = next((v for v in vocabulary if v in clause_lower), None)
+                    if hit:
+                        hit_type, hit_phrase = etype, hit
+                        break
+                if not hit_type:
+                    continue
+
+                # Attribution is relational, so the company has to appear
+                # alongside the event, not merely somewhere in the headline.
+                event_type, phrase = hit_type, hit_phrase
+                certainty = classify_certainty(clause)
+                actors = [
+                    ticker
+                    for ticker, name in holdings
+                    if title_matches_company(clause, ticker, name)
+                ]
+                break
             if not event_type:
                 continue
 
+            # Domains stay headline-wide: unlike actors they are topical
+            # rather than relational, and Tier 1 routing is deliberately loose.
             domains = [
                 sector
                 for sector, battleground in SECTOR_BATTLEGROUNDS.items()
                 if any(term in lower for term in battleground)
-            ]
-            actors = [
-                ticker
-                for ticker, name in holdings
-                if title_matches_company(headline, ticker, name)
             ]
             if not domains and not actors:
                 continue  # classified, but touches nothing we track
@@ -181,6 +277,7 @@ def classify_headlines(
                     "headline": headline[:180],
                     "event_type": event_type,
                     "phrase": phrase,
+                    "certainty": certainty,
                     "domains": domains,
                     "actors": actors,
                     "direction": _EVENT_DIRECTION.get(event_type, "opportunity"),
@@ -219,6 +316,11 @@ def compute_supply_stress(
             if not isinstance(event, dict):
                 continue
             if event.get("event_type") not in _RISK_TYPES:
+                continue
+            # A rumoured disruption is not a disruption. Counting one toward
+            # a sector's stress score would let speculation trip a threshold
+            # built to measure things that actually happened.
+            if event.get("certainty") == "reported":
                 continue
             if str(event.get("date", "")) < cutoff:
                 continue
@@ -282,7 +384,13 @@ def market_event_signals(
             headline = event.get("headline", "")
             etype = event.get("event_type", "event")
 
-            # Direct attribution: a holding named in the headline.
+            # Direct attribution: a holding named in the headline. The
+            # certainty qualifier travels with the signal, so a rumour is
+            # never read as a done deal.
+            certainty = event.get("certainty") or ""
+            qualifier = (
+                f" ({certainty})" if certainty and certainty != "completed" else ""
+            )
             for ticker in event.get("actors") or []:
                 alerts.append(
                     {
@@ -292,7 +400,10 @@ def market_event_signals(
                         "severity": "Low",
                         "direction": event.get("direction", "opportunity"),
                         "category": "Corporate Move",
-                        "signal": f"{etype.replace('_', ' ').title()}: “{headline}”",
+                        "signal": (
+                            f"{etype.replace('_', ' ').title()}{qualifier}: "
+                            f"“{headline}”"
+                        ),
                     }
                 )
 
