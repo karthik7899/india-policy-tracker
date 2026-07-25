@@ -7,6 +7,8 @@ from analysis.market_share import compute_peer_market_share  # noqa: E402
 from analysis.early_warning import generate_early_warnings  # noqa: E402
 from analysis.rotation import detect_emerging_players  # noqa: E402
 from providers.screener import parse_peer_table  # noqa: E402
+from providers.screener import _assemble_peer_views  # noqa: E402
+from providers.screener import _fetch_industry_tables  # noqa: E402
 
 
 def _stock(ticker, sales_trend=None, **screener_extra):
@@ -375,21 +377,27 @@ _IND_WATCHLIST = {
     ]
 }
 
-_INDUSTRY_PEERS = {
-    "clean_energy": [
-        {"ticker": "TATAPOWER", "name": "Tata Power", "sales_qtr": 600.0},
-        {"ticker": "SUZLON", "name": "Suzlon Energy", "sales_qtr": 200.0},
-        {"ticker": "RIVAL1", "name": "Rival One", "sales_qtr": 800.0},
-        {"ticker": "RIVAL2", "name": "Rival Two", "sales_qtr": 400.0},
-    ]
-}
+# One entry per industry scanned, not per sector — a sector routinely spans
+# several Screener industries.
+_INDUSTRY_TABLES = [
+    {
+        "sector": "clean_energy",
+        "via_ticker": "TATAPOWER",
+        "rows": [
+            {"ticker": "TATAPOWER", "name": "Tata Power", "sales_qtr": 600.0},
+            {"ticker": "SUZLON", "name": "Suzlon Energy", "sales_qtr": 200.0},
+            {"ticker": "RIVAL1", "name": "Rival One", "sales_qtr": 800.0},
+            {"ticker": "RIVAL2", "name": "Rival Two", "sales_qtr": 400.0},
+        ],
+    }
+]
 
 
 def test_industry_share_uses_full_peer_denominator():
     import copy
 
     wl = copy.deepcopy(_IND_WATCHLIST)
-    rollup = compute_industry_share(wl, _INDUSTRY_PEERS)
+    rollup = compute_industry_share(wl, _INDUSTRY_TABLES)
     rows = {r["ticker"]: r for r in rollup["clean_energy"]}
     # denominator = 2000 across 4 companies, not just the 2 watchlist stocks
     assert rows["TATAPOWER"]["share_pct"] == 30.0
@@ -404,7 +412,7 @@ def test_industry_share_change_vs_prior_run():
     import copy
 
     wl = copy.deepcopy(_IND_WATCHLIST)
-    rollup = compute_industry_share(wl, _INDUSTRY_PEERS, {"TATAPOWER": 32.5})
+    rollup = compute_industry_share(wl, _INDUSTRY_TABLES, {"TATAPOWER": 32.5})
     rows = {r["ticker"]: r for r in rollup["clean_energy"]}
     assert rows["TATAPOWER"]["change_pp"] == -2.5
     assert wl["clean_energy"][0]["screener"]["industry_share_change_pp"] == -2.5
@@ -412,12 +420,20 @@ def test_industry_share_change_vs_prior_run():
 
 def test_industry_share_skips_bad_data():
     wl = {"sec": [{"ticker": "AAA", "name": "AAA"}]}
-    peers = {
-        "sec": [{"ticker": "AAA", "sales_qtr": 0}, {"ticker": "B", "sales_qtr": -5}]
-    }
-    assert compute_industry_share(wl, peers) == {}
-    assert compute_industry_share(wl, {}) == {}
+    tables = [
+        {
+            "sector": "sec",
+            "via_ticker": "AAA",
+            "rows": [
+                {"ticker": "AAA", "sales_qtr": 0},
+                {"ticker": "B", "sales_qtr": -5},
+            ],
+        }
+    ]
+    assert compute_industry_share(wl, tables) == {}
+    assert compute_industry_share(wl, []) == {}
     assert compute_industry_share(wl, None) == {}
+    assert compute_industry_share(wl, [None, "junk", {}]) == {}
 
 
 def test_snapshot_prior_industry_shares():
@@ -451,3 +467,82 @@ def test_industry_share_drives_market_share_signal():
     assert warnings[0]["direction"] == "risk"
     assert "12-company industry group" in warnings[0]["signal"]
     assert "29.5% → 28.0%" in warnings[0]["signal"]
+
+
+# ---------------------------------------------------------------------------
+# Per-industry peer discovery (providers/screener.py)
+# ---------------------------------------------------------------------------
+
+
+def _row(ticker, sales):
+    return {"ticker": ticker, "name": ticker, "sales_qtr": sales}
+
+
+def test_assemble_stamps_share_within_each_industry_not_across_the_sector():
+    """A sector spanning two industries must not share one denominator.
+
+    clean_energy holds a utility and a turbine maker, which Screener files in
+    different industries. Pooling both tables would measure each holding
+    against companies it does not compete with and understate everyone.
+    """
+    tables = [
+        ("TATAPOWER", [_row("TATAPOWER", 600.0), _row("UTILRIVAL", 400.0)]),
+        ("SUZLON", [_row("SUZLON", 200.0), _row("WINDRIVAL", 300.0)]),
+    ]
+    sectors = {"TATAPOWER": "clean_energy", "SUZLON": "clean_energy"}
+    peers, industry_tables = _assemble_peer_views(
+        tables, sectors, {"TATAPOWER", "SUZLON"}
+    )
+
+    by_ticker = {r["ticker"]: r for t in industry_tables for r in t["rows"]}
+    # 600/1000 and 200/500 — each against its own industry.
+    assert by_ticker["TATAPOWER"]["industry_share_pct"] == 60.0
+    assert by_ticker["SUZLON"]["industry_share_pct"] == 40.0
+    assert len(industry_tables) == 2
+
+    # Challengers from both industries merge into the one sector radar.
+    assert sorted(r["ticker"] for r in peers["clean_energy"]) == [
+        "UTILRIVAL",
+        "WINDRIVAL",
+    ]
+    assert by_ticker["WINDRIVAL"]["via_ticker"] == "SUZLON"
+
+
+def test_assemble_excludes_holdings_from_the_challenger_radar():
+    tables = [("HELD", [_row("HELD", 100.0), _row("OTHER", 100.0)])]
+    peers, _ = _assemble_peer_views(tables, {"HELD": "sec"}, {"HELD"})
+    assert [r["ticker"] for r in peers["sec"]] == ["OTHER"]
+
+
+def test_fetch_skips_holdings_already_covered_by_a_fetched_table():
+    """One request per industry, not per holding.
+
+    A holding appearing inside an already-fetched table shares that industry,
+    so its own table would be near-identical.
+    """
+    import asyncio
+
+    fetched = []
+
+    async def fake_peers(session, ticker, warehouse_id):
+        fetched.append(ticker)
+        # A and B are industry peers; C sits in a different industry.
+        if ticker == "A":
+            return "A", [_row("A", 1.0), _row("B", 1.0)]
+        return ticker, [_row(ticker, 1.0)]
+
+    async def passthrough(coro):
+        return await coro
+
+    import providers.screener as sc
+
+    original = sc.fetch_peers_async
+    sc.fetch_peers_async = fake_peers
+    try:
+        holdings = [("A", 1), ("B", 2), ("C", 3)]
+        tables = asyncio.run(_fetch_industry_tables(holdings, passthrough, None))
+    finally:
+        sc.fetch_peers_async = original
+
+    assert fetched == ["A", "C"], "B shares A's industry and must be skipped"
+    assert [t for t, _ in tables] == ["A", "C"]

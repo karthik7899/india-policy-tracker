@@ -88,7 +88,6 @@ async def run_pipeline():
     prior = HistoryStore().data.get("briefing", {})
     prior_screened = screen_sector_candidates(
         prior.get("peer_competitors") or {},
-        prior.get("industry_peers") or {},
         known_symbols=set(isin_master),
     )
 
@@ -109,13 +108,10 @@ async def run_pipeline():
 
     # Fetch Screener.in fundamentals async; also returns Screener's industry
     # peer tables — a competitor-discovery channel independent of headlines.
-    peer_competitors, industry_peers = await fetch_all_screener_fundamentals(watchlist)
+    peer_competitors, industry_tables = await fetch_all_screener_fundamentals(watchlist)
     data["peer_competitors"] = peer_competitors or {}
-    # Persist the full peer tables so next run's screen has the same revenue
-    # denominator this run used to compute industry share.
-    data["industry_peers"] = industry_peers or {}
     data["candidate_screen"] = screen_sector_candidates(
-        peer_competitors or {}, industry_peers or {}, known_symbols=set(isin_master)
+        peer_competitors or {}, known_symbols=set(isin_master)
     )
 
     # The Screener fetch rebuilds each stock's screener dict from scratch,
@@ -127,7 +123,7 @@ async def run_pipeline():
     # True industry market share: each holding's slice of its FULL Screener
     # industry peer group's quarterly sales, not just the watchlist subset.
     data["industry_share"] = compute_industry_share(
-        watchlist, industry_peers, prior_industry_shares
+        watchlist, industry_tables, prior_industry_shares
     )
 
     # Safety net: ISIN identifies each holding uniquely, so the same company

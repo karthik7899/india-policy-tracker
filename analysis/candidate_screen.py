@@ -43,16 +43,6 @@ MIN_GROWTH_PCT = 15.0
 MAX_CANDIDATES_PER_SECTOR = 3
 
 
-def _industry_revenue(rows: List[Dict[str, Any]]) -> float:
-    """Total quarterly revenue across a sector's full peer table."""
-    total = 0.0
-    for row in rows or []:
-        sales = to_float((row or {}).get("sales_qtr"))
-        if sales and sales > 0:
-            total += sales
-    return total
-
-
 def _round_or_none(value: Any) -> Optional[float]:
     num = to_float(value)
     return None if num is None else round(num, 1)
@@ -79,15 +69,15 @@ def _best_growth(row: Dict[str, Any]) -> Optional[float]:
 
 def screen_sector_candidates(
     peer_competitors: Dict[str, List[Dict[str, Any]]],
-    industry_peers: Dict[str, List[Dict[str, Any]]],
     max_per_sector: int = MAX_CANDIDATES_PER_SECTOR,
     known_symbols: Optional[set] = None,
 ) -> Dict[str, List[Dict[str, Any]]]:
     """Rank non-holding peers per sector against the three gates.
 
-    ``industry_peers`` supplies the revenue denominator because it includes the
-    companies we already own — market share measured against competitors only
-    would flatter every candidate.
+    Each row already carries ``industry_share_pct``, stamped against its own
+    industry table when the peers were fetched. Recomputing a denominator here
+    would have to pool every industry scanned for a sector, which understates
+    the share of a company competing in only one of them.
 
     ``known_symbols`` is the NSE equity list (see providers/isin_master.py).
     Screener identifies BSE-only companies by numeric scrip code, and those
@@ -97,7 +87,6 @@ def screen_sector_candidates(
     screened: Dict[str, List[Dict[str, Any]]] = {}
     try:
         for sector, rows in (peer_competitors or {}).items():
-            denominator = _industry_revenue((industry_peers or {}).get(sector) or rows)
             passed = []
             for row in rows or []:
                 if not isinstance(row, dict) or not row.get("ticker"):
@@ -108,13 +97,8 @@ def screen_sector_candidates(
                 if known_symbols and ticker not in known_symbols:
                     continue
                 market_cap = to_float(row.get("market_cap"))
-                sales = to_float(row.get("sales_qtr"))
                 growth = _best_growth(row)
-                share = (
-                    round(sales / denominator * 100, 2)
-                    if sales and denominator > 0
-                    else None
-                )
+                share = to_float(row.get("industry_share_pct"))
 
                 failed = []
                 if market_cap is None or market_cap < MIN_MARKET_CAP_CR:
