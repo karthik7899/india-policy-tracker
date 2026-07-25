@@ -135,3 +135,70 @@ class TestScreenedCandidatesReachRotation(unittest.TestCase):
                 setattr(rot, attr, value)
 
         self.assertEqual(evaluated, [])
+
+
+class TestIntakeCap(unittest.TestCase):
+    """Watchlist growth must be bounded per run.
+
+    With the fundamental screen feeding pre-resolved candidates, measured
+    headroom was 16 additions in a single pass — and it compounds, since each
+    new holding anchors another industry peer table next run.
+    """
+
+    def _run_with(self, screened, cap):
+        import analysis.rotation as rot
+
+        evaluated = []
+        originals = {}
+
+        def monkey(attr, value):
+            originals.setdefault(attr, getattr(rot, attr))
+            setattr(rot, attr, value)
+
+        def fake_ticker(symbol):
+            evaluated.append(symbol)
+            raise RuntimeError("no network in tests")
+
+        monkey("get_cached_ticker", fake_ticker)
+        monkey("MAX_INTAKE_PER_RUN", cap)
+        try:
+            watchlist = {"sec": [{"ticker": "HELD", "name": "Held Co"}]}
+            emerging, _ = rot.auto_curate_watchlist(
+                {"sec": []}, watchlist, screened_candidates=screened
+            )
+        finally:
+            for attr, value in originals.items():
+                setattr(rot, attr, value)
+        return evaluated, emerging
+
+    def test_candidates_beyond_the_cap_are_deferred_not_dropped(self):
+        # Nothing is added here (the price lookup fails), so the cap is not
+        # consumed — every candidate should still be evaluated.
+        screened = {
+            "sec": [
+                {"name": f"Cand {i}", "ticker": f"C{i}", "growth_pct": float(i)}
+                for i in range(4)
+            ]
+        }
+        evaluated, _ = self._run_with(screened, cap=3)
+        self.assertEqual(len(evaluated), 4)
+
+    def test_strongest_candidates_are_evaluated_first(self):
+        """The cap must spend its slots on the best names available anywhere."""
+        screened = {
+            "sec": [
+                {"name": "Weak", "ticker": "WEAK", "growth_pct": 16.0},
+                {"name": "Strong", "ticker": "STRONG", "growth_pct": 99.0},
+                {"name": "Mid", "ticker": "MID", "growth_pct": 40.0},
+            ]
+        }
+        evaluated, _ = self._run_with(screened, cap=3)
+        self.assertEqual(evaluated, ["STRONG.NS", "MID.NS", "WEAK.NS"])
+
+    def test_a_zero_cap_defers_everything_with_a_reason(self):
+        screened = {"sec": [{"name": "Cand", "ticker": "C1", "growth_pct": 50.0}]}
+        evaluated, emerging = self._run_with(screened, cap=0)
+        self.assertEqual(evaluated, [], "no price lookups once the cap is spent")
+        statuses = [e["status"] for e in emerging["sec"]]
+        self.assertEqual(statuses, ["Deferred"])
+        self.assertIn("next run", emerging["sec"][0]["reason"])

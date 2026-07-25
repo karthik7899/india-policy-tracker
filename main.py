@@ -1,5 +1,6 @@
 import asyncio
 import datetime
+import sys
 import aiohttp
 from config import load_watchlist, save_watchlist, SECTOR_METADATA
 from logger import log
@@ -279,8 +280,17 @@ async def run_pipeline():
     html = build_html_email(data, watchlist)
     send_email(html)
 
+    # Deliberately after the send: a degraded briefing is still worth reading,
+    # and it carries the evidence needed to diagnose the degradation. This only
+    # decides whether the job reports success.
+    from health import log_run_health
+
+    healthy = log_run_health(data, watchlist)
+
     log.info("Briefing cycle finished successfully.")
+    return healthy
 
 
 if __name__ == "__main__":
-    asyncio.run(run_pipeline())
+    if not asyncio.run(run_pipeline()):
+        sys.exit(1)
