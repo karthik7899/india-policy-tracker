@@ -36,16 +36,26 @@ from providers.isin_master import (
 
 
 def save_data_for_dashboard(brief_data, watchlist):
-    """Saves the aggregated feed data to a JSON file for the static dashboard."""
+    """Write the run's two outputs.
+
+    history.json keeps the full corpus for the next run's deduplication and
+    for the four consumers that read the accumulated feeds; dashboard_data.json
+    carries a trimmed display copy, because the browser downloads it whole on
+    every page load. Splitting them means nothing done for the dashboard's
+    sake can shrink what the pipeline computes on.
+    """
+    from dashboard.payload import build_display_payload
+    from history.store import HistoryStore
+    from utils import atomic_write_json
+
+    HistoryStore().save(brief_data)
+
     output = {
         "last_updated": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "watchlist": watchlist,
         "sectors": SECTOR_METADATA,
-        "briefing": brief_data,
+        "briefing": build_display_payload(brief_data),
     }
-
-    from utils import atomic_write_json
-
     atomic_write_json(output, "dashboard_data.json")
 
     log.info(
@@ -262,7 +272,15 @@ async def run_pipeline():
     # the early-warning engine runs.
     data["new_entrants"] = detect_new_entrants(data, watchlist)
 
-    data["early_warnings"] = generate_early_warnings(data, watchlist)
+    # Tag each warning against the previous run so the dashboard can lead
+    # with what is new rather than re-presenting yesterday's standing
+    # conditions.
+    from dashboard.payload import annotate_warning_status
+
+    data["early_warnings"] = annotate_warning_status(
+        generate_early_warnings(data, watchlist),
+        prior.get("early_warnings") or [],
+    )
 
     # Attribute collected headlines to the holdings they actually name, so
     # picking a company shows that company's coverage rather than its
