@@ -279,6 +279,32 @@ def test_parse_peer_table_extracts_all_rows():
     assert rows[1]["sales_qtr"] == 400.0
 
 
+def test_parse_peer_table_captures_profit_and_valuation_columns():
+    """Profit, P/E and ROCE ride along in the same fragment.
+
+    Without them a candidate can only be screened on revenue, which is why
+    discovery leaned on press coverage instead of fundamentals.
+    """
+    rival = parse_peer_table(_PEERS_HTML)[0]
+    assert rival["profit_var_pct"] == 12.0
+    assert rival["np_qtr"] == 80.0
+    assert rival["pe_ratio"] == 30.0
+    assert rival["roce"] == 18.0
+
+
+def test_parse_peer_table_tolerates_missing_columns():
+    """A narrower table must yield None for absent fields, never a wrong index."""
+    narrow = """
+    <table><thead><tr><th>Name</th><th>Sales Qtr Rs.Cr.</th></tr></thead>
+    <tbody><tr><td><a href="/company/SOLO/">Solo Co</a></td><td>900</td></tr></tbody>
+    </table>
+    """
+    row = parse_peer_table(narrow)[0]
+    assert row["sales_qtr"] == 900.0
+    assert row["profit_var_pct"] is None
+    assert row["market_cap"] is None
+
+
 def test_parse_peer_table_handles_garbage():
     assert parse_peer_table("") == []
     assert parse_peer_table("<div>no table here</div>") == []

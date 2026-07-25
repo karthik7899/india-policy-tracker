@@ -74,8 +74,28 @@ async def run_pipeline():
     # Gather news data async
     data = await fetch_all_feeds_async()
 
+    # Rotation runs before the Screener fetch (so anything it adds gets
+    # fundamentals the same run), which means this run's peer tables do not
+    # exist yet. The previous run's are already committed in
+    # dashboard_data.json and are screened on quarterly fundamentals, so a
+    # day of staleness costs nothing.
+    from history.store import HistoryStore
+    from analysis.candidate_screen import (
+        candidates_for_rotation,
+        screen_sector_candidates,
+    )
+
+    prior = HistoryStore().data.get("briefing", {})
+    prior_screened = screen_sector_candidates(
+        prior.get("peer_competitors") or {},
+        prior.get("industry_peers") or {},
+        known_symbols=set(isin_master),
+    )
+
     # Auto-curate the watchlist (discovers emerging players and rotates stocks)
-    emerging, rotation_decisions = auto_curate_watchlist(data, watchlist)
+    emerging, rotation_decisions = auto_curate_watchlist(
+        data, watchlist, screened_candidates=candidates_for_rotation(prior_screened)
+    )
     data["emerging_players"] = emerging
 
     rotation_ledger = postmortem.load_ledger()
@@ -91,6 +111,12 @@ async def run_pipeline():
     # peer tables — a competitor-discovery channel independent of headlines.
     peer_competitors, industry_peers = await fetch_all_screener_fundamentals(watchlist)
     data["peer_competitors"] = peer_competitors or {}
+    # Persist the full peer tables so next run's screen has the same revenue
+    # denominator this run used to compute industry share.
+    data["industry_peers"] = industry_peers or {}
+    data["candidate_screen"] = screen_sector_candidates(
+        peer_competitors or {}, industry_peers or {}, known_symbols=set(isin_master)
+    )
 
     # The Screener fetch rebuilds each stock's screener dict from scratch,
     # dropping the ISIN stamped above — re-annotate so identity survives

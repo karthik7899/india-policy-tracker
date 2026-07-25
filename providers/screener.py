@@ -205,16 +205,25 @@ def parse_peer_table(html):
         return candidates
 
     headers = [th.get_text(strip=True).lower() for th in table.find_all("th")]
-    name_idx = sales_var_idx = mcap_idx = sales_qtr_idx = None
+    idx = {}
     for i, h in enumerate(headers):
         if h.startswith("name"):
-            name_idx = i
+            idx["name"] = i
         elif "sales var" in h:
-            sales_var_idx = i
+            idx["sales_var"] = i
         elif h.startswith("sales qtr"):
-            sales_qtr_idx = i
+            idx["sales_qtr"] = i
         elif "mar cap" in h or "market cap" in h:
-            mcap_idx = i
+            idx["mcap"] = i
+        elif "profit var" in h:
+            idx["profit_var"] = i
+        elif h.startswith("np qtr"):
+            idx["np_qtr"] = i
+        elif h.startswith("p/e"):
+            idx["pe"] = i
+        elif h.startswith("roce"):
+            idx["roce"] = i
+    name_idx = idx.get("name")
     if name_idx is None:
         return candidates
 
@@ -244,9 +253,16 @@ def parse_peer_table(html):
             {
                 "name": name,
                 "ticker": peer_ticker.upper(),
-                "sales_var_pct": _cell_float(cells, sales_var_idx),
-                "market_cap": _cell_float(cells, mcap_idx),
-                "sales_qtr": _cell_float(cells, sales_qtr_idx),
+                "sales_var_pct": _cell_float(cells, idx.get("sales_var")),
+                "market_cap": _cell_float(cells, idx.get("mcap")),
+                "sales_qtr": _cell_float(cells, idx.get("sales_qtr")),
+                # Profit, valuation and returns travel in the same table and
+                # cost nothing extra to read. They are what makes a candidate
+                # screenable on fundamentals rather than on press coverage.
+                "profit_var_pct": _cell_float(cells, idx.get("profit_var")),
+                "np_qtr": _cell_float(cells, idx.get("np_qtr")),
+                "pe_ratio": _cell_float(cells, idx.get("pe")),
+                "roce": _cell_float(cells, idx.get("roce")),
             }
         )
     return candidates

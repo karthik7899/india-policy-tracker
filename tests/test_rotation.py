@@ -64,3 +64,74 @@ class TestDetectEmergingPlayers(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestScreenedCandidatesReachRotation(unittest.TestCase):
+    """A peer that cleared the fundamental screen must actually be evaluated.
+
+    Before this path existed, discovery ran only on headline regex plus name
+    resolution, so a listed competitor sitting in the Screener peer radar with
+    a known ticker was never even looked at.
+    """
+
+    def _run(self, screened, monkey):
+        import analysis.rotation as rot
+
+        evaluated = []
+
+        def fake_resolve(name, session=None):
+            evaluated.append(("resolved", name))
+            return None, None
+
+        # Stop evaluation right after resolution so the test never touches
+        # the network; what matters is which candidates got that far.
+        def fake_ticker(symbol):
+            evaluated.append(("priced", symbol))
+            raise RuntimeError("no network in tests")
+
+        monkey(rot, "resolve_ticker_from_name", fake_resolve)
+        monkey(rot, "get_cached_ticker", fake_ticker)
+        watchlist = {"sec": [{"ticker": "HELD", "name": "Held Co"}]}
+        rot.auto_curate_watchlist({"sec": []}, watchlist, screened_candidates=screened)
+        return evaluated
+
+    def test_preresolved_candidate_skips_name_resolution(self):
+        import analysis.rotation as rot
+
+        originals = {}
+
+        def monkey(mod, attr, value):
+            originals.setdefault(attr, getattr(mod, attr))
+            setattr(mod, attr, value)
+
+        try:
+            evaluated = self._run(
+                {"sec": [{"name": "Syrma SGS Tech.", "ticker": "SYRMA"}]}, monkey
+            )
+        finally:
+            for attr, value in originals.items():
+                setattr(rot, attr, value)
+
+        # It went straight to the price check under its Screener ticker,
+        # rather than being thrown away by name resolution.
+        self.assertIn(("priced", "SYRMA.NS"), evaluated)
+        self.assertNotIn(("resolved", "Syrma SGS Tech."), evaluated)
+
+    def test_existing_holding_is_not_re_added(self):
+        import analysis.rotation as rot
+
+        originals = {}
+
+        def monkey(mod, attr, value):
+            originals.setdefault(attr, getattr(mod, attr))
+            setattr(mod, attr, value)
+
+        try:
+            evaluated = self._run(
+                {"sec": [{"name": "Held Co", "ticker": "HELD"}]}, monkey
+            )
+        finally:
+            for attr, value in originals.items():
+                setattr(rot, attr, value)
+
+        self.assertEqual(evaluated, [])

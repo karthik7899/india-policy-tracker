@@ -1600,3 +1600,102 @@ a:focus-visible {
     font-size: 9px;
     color: var(--primary);
 }
+
+/* --- Sector detail: metric strip, alerts, challengers --------------------- */
+
+.sector-metric-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.sector-metric {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 8px 12px;
+    min-width: 92px;
+    background: var(--surface-soft);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+}
+
+.sector-metric-label {
+    font-size: 8.5px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+}
+
+.sector-metric-value {
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.sector-panel {
+    margin-top: 18px;
+    padding: 14px 16px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+}
+
+.sector-panel-sub {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin: 0 0 10px 0;
+}
+
+.sector-alert-row {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.sector-alert-row:last-of-type {
+    border-bottom: none;
+}
+
+.sector-alert-cat {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: var(--text-secondary);
+}
+
+.sector-alert-text {
+    flex: 1 1 260px;
+    font-size: 12px;
+    color: var(--text-primary);
+}
+
+.sector-alert-more {
+    margin: 8px 0 0 0;
+    font-size: 11px;
+    font-style: italic;
+    color: var(--text-secondary);
+}
+
+@media (max-width: 720px) {
+    .sector-metric {
+        flex: 1 1 calc(50% - 10px);
+        min-width: 0;
+    }
+}
+
+/* Filed-fundamentals block inside a sector stock card. Previously carried a
+   hardcoded dark background inline, which read as a muddy grey slab against
+   the light theme's white cards. */
+.dsc-fundamentals {
+    margin-top: 12px;
+    padding: 12px;
+    background: var(--surface-soft);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+}

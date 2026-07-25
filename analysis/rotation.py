@@ -109,8 +109,15 @@ def _get_potential(stock):
     return 0.0 if value is None else value
 
 
-def auto_curate_watchlist(brief_data, watchlist):
+def auto_curate_watchlist(brief_data, watchlist, screened_candidates=None):
     """Discovers emerging competitors and rotates underperforming stocks.
+
+    Candidates come from two places: names extracted from sector headlines,
+    and — via ``screened_candidates`` — listed peers that cleared the
+    fundamental gates in analysis/candidate_screen.py. The second source
+    exists because the first depends on a company being written about and
+    then correctly name-resolved, which is why a competitor as visible as
+    Syrma sat in the peer radar for months without ever being evaluated.
 
     Returns (structured_emerging, decisions): the emerging-player radar dict,
     and a list of {action, sector, stock} for every add/rotate this run —
@@ -134,17 +141,34 @@ def auto_curate_watchlist(brief_data, watchlist):
 
     watchlisted_tickers = {x["ticker"] for s_list in watchlist.values() for x in s_list}
 
+    # Headline-derived names arrive unresolved; screened peers arrive with a
+    # ticker Screener already gave us. Both are evaluated by the same gates
+    # below — the only difference is that the screened ones skip a name
+    # lookup that discards most headline candidates.
+    candidate_sectors = {
+        sector: [(n, None) for n in names] for sector, names in emerging_sectors.items()
+    }
+    for sector, rows in (screened_candidates or {}).items():
+        bucket = candidate_sectors.setdefault(sector, [])
+        known = {n.lower() for n, _ in bucket}
+        for row in rows or []:
+            if (row.get("name") or "").lower() not in known:
+                bucket.append((row.get("name"), row.get("ticker")))
+
     with requests.Session() as session:
-        for sector, companies in emerging_sectors.items():
+        for sector, companies in candidate_sectors.items():
             if sector not in watchlist:
                 continue
 
-            for name in companies:
+            for name, preresolved in companies:
                 log.info(f"Evaluating candidate company: {name} in {sector}")
-                ticker, full_name = resolve_ticker_from_name(name, session=session)
+                if preresolved:
+                    ticker, full_name = preresolved, name
+                else:
+                    ticker, full_name = resolve_ticker_from_name(name, session=session)
                 if not ticker:
                     log.info(f"Could not resolve ticker for: {name}. Skipping.")
-                    structured_emerging[sector].append(
+                    structured_emerging.setdefault(sector, []).append(
                         {
                             "name": name,
                             "ticker": None,
@@ -157,7 +181,7 @@ def auto_curate_watchlist(brief_data, watchlist):
                 already_watchlisted = ticker in watchlisted_tickers
                 if already_watchlisted:
                     log.info(f"Ticker {ticker} is already in watchlist. Skipping.")
-                    structured_emerging[sector].append(
+                    structured_emerging.setdefault(sector, []).append(
                         {
                             "name": full_name or name,
                             "ticker": ticker,
@@ -177,7 +201,7 @@ def auto_curate_watchlist(brief_data, watchlist):
                         log.info(
                             f"No market data for {yahoo_ticker}. Skipping candidate."
                         )
-                        structured_emerging[sector].append(
+                        structured_emerging.setdefault(sector, []).append(
                             {
                                 "name": full_name or name,
                                 "ticker": ticker,
@@ -258,7 +282,7 @@ def auto_curate_watchlist(brief_data, watchlist):
                             f"existing holding {existing_entity['ticker']} "
                             f"({existing_entity['sector']}). Skipping as duplicate."
                         )
-                        structured_emerging[sector].append(
+                        structured_emerging.setdefault(sector, []).append(
                             {
                                 "name": full_name or name,
                                 "ticker": ticker,
@@ -292,7 +316,7 @@ def auto_curate_watchlist(brief_data, watchlist):
                                 else f"Failed QoQ growth threshold ({candidate_qoq_growth:.1f}% < 15%)"
                             )
                         )
-                        structured_emerging[sector].append(
+                        structured_emerging.setdefault(sector, []).append(
                             {
                                 "name": full_name or name,
                                 "ticker": ticker,
@@ -337,7 +361,7 @@ def auto_curate_watchlist(brief_data, watchlist):
                                 "stock": dict(candidate_stock),
                             }
                         )
-                        structured_emerging[sector].append(
+                        structured_emerging.setdefault(sector, []).append(
                             {
                                 "name": full_name,
                                 "ticker": ticker,
@@ -374,7 +398,7 @@ def auto_curate_watchlist(brief_data, watchlist):
                                     "stock": dict(candidate_stock),
                                 }
                             )
-                            structured_emerging[sector].append(
+                            structured_emerging.setdefault(sector, []).append(
                                 {
                                     "name": full_name,
                                     "ticker": ticker,
@@ -387,7 +411,7 @@ def auto_curate_watchlist(brief_data, watchlist):
                             log.info(
                                 f"Candidate {ticker} (Upside: {growth_pct_val:.1f}%) did not outperform the weakest watchlist pick {weakest_stock['ticker']} (Upside: {weakest_potential:.1f}%). Skipping rotation."
                             )
-                            structured_emerging[sector].append(
+                            structured_emerging.setdefault(sector, []).append(
                                 {
                                     "name": full_name,
                                     "ticker": ticker,
@@ -399,7 +423,7 @@ def auto_curate_watchlist(brief_data, watchlist):
 
                 except Exception as e:
                     log.error(f"Error checking financials for {yahoo_ticker}: {e}")
-                    structured_emerging[sector].append(
+                    structured_emerging.setdefault(sector, []).append(
                         {
                             "name": name,
                             "ticker": ticker,
