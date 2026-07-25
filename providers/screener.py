@@ -323,12 +323,13 @@ class _RequestPacer:
 async def fetch_all_screener_fundamentals(watchlist):
     """Loads Screener fundamentals into each stock and discovers peer competitors.
 
-    Returns (peer_competitors, industry_peers):
+    Returns (peer_competitors, industry_tables):
       - peer_competitors: {sector: [row, ...]} of Screener industry peers NOT
-        in the watchlist — the competitor-discovery radar.
-      - industry_peers: {sector: [row, ...]} of the FULL peer table including
-        watchlist companies, each row carrying absolute quarterly sales —
-        the denominator for true industry market share.
+        in the watchlist — the competitor-discovery radar, merged across every
+        industry scanned for that sector.
+      - industry_tables: [{sector, via_ticker, rows}, ...] — one entry per
+        industry scanned, kept apart so market share is measured within an
+        industry rather than across a sector's several industries.
     Both empty when peer data is unavailable.
     """
     log.info("Fetching actual filed fundamentals from Screener.in (Async)...")
@@ -364,44 +365,112 @@ async def fetch_all_screener_fundamentals(watchlist):
 
         results = await asyncio.gather(*tasks)
 
-        # Peer tables are industry-level, so within a sector they overlap
-        # almost entirely — one lookup per sector is enough and keeps the
-        # extra load on Screener to ~a dozen requests per run.
-        sector_representative = {}
+        holdings = []
         for ticker, sc_data, warehouse_id in results:
             if sc_data:
                 ticker_to_stock[ticker]["screener"] = sc_data
                 log.info(
                     f"{ticker}: Screener data loaded (PE={sc_data.get('pe_ratio', 'N/A')})"
                 )
-            sector = ticker_to_sector.get(ticker)
-            if warehouse_id and sector and sector not in sector_representative:
-                sector_representative[sector] = (ticker, warehouse_id)
+            if warehouse_id and ticker_to_sector.get(ticker):
+                holdings.append((ticker, warehouse_id))
 
-        peer_tasks = [
-            throttled(fetch_peers_async(session, ticker, warehouse_id))
-            for ticker, warehouse_id in sector_representative.values()
-        ]
-        peer_results = await asyncio.gather(*peer_tasks) if peer_tasks else []
+        peer_results = await _fetch_industry_tables(holdings, throttled, session)
 
+    return _assemble_peer_views(peer_results, ticker_to_sector, watchlist_tickers)
+
+
+async def _fetch_industry_tables(holdings, throttled, session):
+    """Fetch one peer table per *industry* represented in the watchlist.
+
+    Screener's peer table is industry-level, and the previous implementation
+    read that as "one table per sector" — it fetched a single table for each
+    sector, from whichever holding happened to be first. But our sectors are
+    thesis groupings, not industries: clean_energy holds a power utility, a
+    wind-turbine maker and a renewable IPP, which Screener files in three
+    different industries. Only the first was ever scanned, so 29 of 47
+    holdings sat in industries this pipeline never looked at, and the
+    competitors living there — solar module makers, EMS companies — could not
+    be discovered at all.
+
+    A holding that turns up inside an already-fetched table shares that
+    industry, so its own table would be near-identical and is skipped. That
+    keeps the request count near one per distinct industry rather than one per
+    holding, which matters because Screener rate-limits and has returned 429s
+    on this pipeline before.
+
+    Deciding what to skip requires seeing each response before issuing the
+    next, so these run sequentially. That costs nothing: the shared pacer
+    already spaces request *starts* a second apart, so a concurrent gather
+    finishes no sooner unless a response outruns the pacing interval.
+    """
+    covered = set()
+    tables = []
+    for ticker, warehouse_id in holdings:
+        if ticker in covered:
+            continue
+        _, rows = await throttled(fetch_peers_async(session, ticker, warehouse_id))
+        covered.add(ticker)
+        if not rows:
+            continue
+        tables.append((ticker, rows))
+        # Everyone in this table is in the same industry as `ticker`.
+        covered.update(r["ticker"] for r in rows)
+    log.info(
+        f"Peer radar: {len(tables)} industry table(s) fetched for "
+        f"{len(holdings)} holding(s)."
+    )
+    return tables
+
+
+def _assemble_peer_views(peer_results, ticker_to_sector, watchlist_tickers):
+    """Split raw peer tables into the candidate radar and the share tables.
+
+    Returns ``(peer_competitors, industry_tables)``:
+
+    * ``peer_competitors`` — {sector: [row]} of non-holding competitors, merged
+      across every industry scanned for that sector. Merging is right here:
+      these are challengers to the sector's thesis whichever industry they sit
+      in.
+    * ``industry_tables`` — one entry per fetched table, kept separate on
+      purpose. Market share is a company's slice of *its own industry*, so
+      pooling several industries into one denominator would understate every
+      holding's share. Each row is stamped with the share it holds inside its
+      own table, so downstream consumers never have to rebuild a denominator.
+    """
     peer_competitors = {}
-    industry_peers = {}
-    for ticker, rows in peer_results:
-        sector = ticker_to_sector.get(ticker)
+    industry_tables = []
+
+    for via_ticker, rows in peer_results:
+        sector = ticker_to_sector.get(via_ticker)
         if not sector or not rows:
             continue
-        full_bucket = industry_peers.setdefault(sector, [])
-        cand_bucket = peer_competitors.setdefault(sector, [])
-        seen = {r["ticker"] for r in full_bucket}
+
+        total = sum(
+            row["sales_qtr"]
+            for row in rows
+            if isinstance(row.get("sales_qtr"), (int, float)) and row["sales_qtr"] > 0
+        )
         for row in rows:
-            if row["ticker"] in seen:
+            row["via_ticker"] = via_ticker
+            sales = row.get("sales_qtr")
+            if total > 0 and isinstance(sales, (int, float)) and sales > 0:
+                row["industry_share_pct"] = round(sales / total * 100, 2)
+            row["industry_peer_count"] = len(rows)
+
+        industry_tables.append(
+            {"sector": sector, "via_ticker": via_ticker, "rows": rows}
+        )
+
+        bucket = peer_competitors.setdefault(sector, [])
+        seen = {r["ticker"] for r in bucket}
+        for row in rows:
+            if row["ticker"] in seen or row["ticker"] in watchlist_tickers:
                 continue
             seen.add(row["ticker"])
-            full_bucket.append(row)
-            if row["ticker"] not in watchlist_tickers:
-                cand_bucket.append(row)
+            bucket.append(row)
 
     if peer_competitors:
         found = sum(len(v) for v in peer_competitors.values())
         log.info(f"Peer radar: {found} non-watchlist competitors discovered.")
-    return peer_competitors, industry_peers
+    return peer_competitors, industry_tables

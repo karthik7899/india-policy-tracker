@@ -102,14 +102,16 @@ def compute_peer_market_share(watchlist):
     return rollup
 
 
-def compute_industry_share(watchlist, industry_peers, prior_shares=None):
+def compute_industry_share(watchlist, industry_tables, prior_shares=None):
     """Each holding's share of its FULL industry peer group's quarterly sales.
 
-    ``industry_peers`` comes from Screener's peer tables (one per sector) and
-    includes every listed industry peer with its absolute quarterly sales —
-    a far better denominator than the 2-5 watchlist stocks the peer-group
-    estimate uses. All figures in a table come from the same source and
-    quarter, so the ratio is internally consistent.
+    ``industry_tables`` is a list of ``{sector, via_ticker, rows}`` — one entry
+    per industry scanned, not one per sector. A sector routinely spans several
+    industries (clean_energy holds a utility, a turbine maker and a renewable
+    IPP), and each holding's share has to be measured against its own industry:
+    pooling them into a single denominator would understate everyone. All
+    figures within a table come from the same source and quarter, so the ratio
+    is internally consistent.
 
     ``prior_shares`` is {ticker: share_pct} from the previous run (committed
     dashboard data), enabling a run-over-run change until enough history
@@ -118,12 +120,15 @@ def compute_industry_share(watchlist, industry_peers, prior_shares=None):
     """
     prior_shares = prior_shares or {}
     rollup = {}
-    for sector, rows in (industry_peers or {}).items():
-        if sector == "macro_indicators":
+    for table in industry_tables or []:
+        if not isinstance(table, dict):
+            continue
+        sector = table.get("sector")
+        if not sector or sector == "macro_indicators":
             continue
 
         sales_by_ticker = {}
-        for row in rows or []:
+        for row in table.get("rows") or []:
             if not isinstance(row, dict):
                 continue
             sales = row.get("sales_qtr")
@@ -134,7 +139,7 @@ def compute_industry_share(watchlist, industry_peers, prior_shares=None):
         if total <= 0 or len(sales_by_ticker) < MIN_PEER_GROUP:
             continue
 
-        sector_rows = []
+        sector_rows = rollup.setdefault(sector, [])
         for stock in watchlist.get(sector, []) or []:
             if not isinstance(stock, dict):
                 continue
@@ -167,9 +172,11 @@ def compute_industry_share(watchlist, industry_peers, prior_shares=None):
                 }
             )
 
-        if sector_rows:
-            sector_rows.sort(key=lambda r: r["share_pct"], reverse=True)
-            rollup[sector] = sector_rows
+    for sector in list(rollup):
+        if rollup[sector]:
+            rollup[sector].sort(key=lambda r: r["share_pct"], reverse=True)
+        else:
+            del rollup[sector]
 
     if rollup:
         covered = sum(len(v) for v in rollup.values())
