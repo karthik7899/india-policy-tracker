@@ -1699,3 +1699,188 @@ a:focus-visible {
     border: 1px solid var(--border-color);
     border-radius: 8px;
 }
+
+/* --- "Since the last run" panel ------------------------------------------- */
+
+#whats-new-card { margin-bottom: 18px; }
+
+.wn-group {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.wn-group:last-child { border-bottom: none; }
+
+.wn-group-head {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+}
+
+.wn-group-head span { opacity: 0.7; }
+
+.wn-group ul { margin: 0; padding-left: 16px; }
+
+.wn-group li {
+    font-size: 12.5px;
+    line-height: 1.7;
+    color: var(--text-primary);
+}
+
+.wn-group li small { color: var(--text-secondary); }
+
+.wn-danger  .wn-group-head { color: var(--danger); }
+.wn-warning .wn-group-head { color: var(--warning); }
+.wn-success .wn-group-head { color: var(--success); }
+
+.wn-quiet {
+    margin: 0;
+    font-size: 13px;
+    font-style: italic;
+    color: var(--text-secondary);
+}
+
+/* --- Per-stock coverage --------------------------------------------------- */
+
+.stock-topics {
+    margin-top: 12px;
+    padding: 10px 12px;
+    background: var(--surface-soft);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+}
+
+.stock-topics-head {
+    font-size: 8.5px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+.stock-topics ul { margin: 0; padding: 0; list-style: none; }
+
+.stock-topic {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px;
+    padding: 5px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.stock-topic:last-child { border-bottom: none; }
+
+.topic-kind {
+    flex: 0 0 auto;
+    font-size: 8.5px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: var(--surface-hover);
+    color: var(--text-secondary);
+}
+
+.topic-news   { color: var(--primary); }
+.topic-deal   { color: var(--success); }
+.topic-launch { color: var(--warning); }
+
+.topic-title {
+    flex: 1 1 220px;
+    font-size: 12px;
+    color: var(--text-primary);
+}
+
+.topic-title a { color: inherit; text-decoration: none; }
+.topic-title a:hover { text-decoration: underline; }
+
+.topic-meta {
+    flex: 0 0 auto;
+    font-size: 10px;
+    color: var(--text-muted, var(--text-secondary));
+}
+
+.stock-topics-empty {
+    margin: 12px 0 0 0;
+    font-size: 11.5px;
+    font-style: italic;
+    color: var(--text-secondary);
+}
+
+/* --- Expandable stock rows ------------------------------------------------ */
+
+.stock-row { cursor: pointer; }
+.stock-row:hover { background: var(--surface-hover); }
+.stock-row-open { background: var(--surface-hover); }
+
+.stock-row:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: -2px;
+}
+
+.stock-detail-row > td { padding: 0 !important; background: var(--bg-card); }
+
+.stock-detail { padding: 14px 16px; }
+
+.stock-detail-head {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.stock-detail-cat {
+    flex: 1 1 240px;
+    font-size: 11.5px;
+    color: var(--text-secondary);
+}
+
+/* Keep the ticker readable while scrolling an 18-column table sideways. */
+#tab-stocks .premium-table td:first-child,
+#tab-stocks .premium-table th:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    background: var(--bg-card);
+}
+
+#tab-stocks .stock-row:hover td:first-child,
+#tab-stocks .stock-row-open td:first-child { background: var(--surface-hover); }
+
+/* --- Mobile tab strip ----------------------------------------------------- */
+
+/* The strip scrolls, but nothing said so: 14 tabs in a 358px window meant the
+   later ones were reachable yet undiscoverable. */
+@media (max-width: 900px) {
+    .nav-menu {
+        position: relative;
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .nav-menu::after {
+        content: "";
+        position: sticky;
+        right: 0;
+        flex: 0 0 28px;
+        align-self: stretch;
+        margin-left: -28px;
+        pointer-events: none;
+        background: linear-gradient(to right, transparent, var(--bg-surface));
+    }
+}
+
+/* A grid child defaults to min-width:auto, so it refuses to shrink below its
+   widest content — the challenger table then pushed the whole page wider than
+   the viewport instead of scrolling inside its own container. */
+.sectors-split-layout > * { min-width: 0; }
+.sector-detail-panel,
+.sector-panel,
+.detail-body-grid > * { min-width: 0; }
