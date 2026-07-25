@@ -951,7 +951,7 @@ function renderSectorDetail(sectorKey) {
             const qtrLabel = sc.latest_quarter ? `<small style="color: #f59e0b; font-size: 9px; font-weight: 700; text-transform: uppercase;">(${sc.latest_quarter})</small>` : '';
             
             screenerHtml = `
-                <div class="dsc-fundamentals" style="margin-top: 12px; padding: 12px; background: rgba(30, 41, 59, 0.3); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 8px;">
+                <div class="dsc-fundamentals">
                     <!-- Ratios & Shareholding Sub-Section -->
                     <div style="margin-bottom: 8px;">
                         <div style="font-size: 8.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #94a3b8; margin-bottom: 6px; display: flex; justify-content: space-between;">
@@ -1023,8 +1023,11 @@ function renderSectorDetail(sectorKey) {
                 <h3>${escapeHtml(sect.label)}</h3>
             </div>
             <p>${escapeHtml(sect.desc)}</p>
+            ${buildSectorMetricStrip(sectorKey)}
         </div>
-        
+
+        ${buildSectorAlerts(sect.label)}
+
         <div class="detail-body-grid">
             <div>
                 <h4 class="detail-sub-header">Recent Sector Bulletins</h4>
@@ -1032,7 +1035,7 @@ function renderSectorDetail(sectorKey) {
                     ${newsHtml}
                 </div>
             </div>
-            
+
             <div>
                 <h4 class="detail-sub-header">Curated Growth Portfolios</h4>
                 <div style="max-height:450px; overflow-y:auto; padding-right:8px;">
@@ -1040,7 +1043,115 @@ function renderSectorDetail(sectorKey) {
                 </div>
             </div>
         </div>
+
+        ${buildSectorChallengers(sectorKey)}
     `;
+}
+
+// --- Sector detail building blocks -----------------------------------------
+
+function sectorMetric(label, value, tone, title) {
+    const color = tone === "up" ? "var(--success, #34d399)"
+        : tone === "down" ? "var(--danger, #f87171)"
+        : "var(--text-primary)";
+    return `<div class="sector-metric" title="${escapeHtml(title || label)}">
+        <span class="sector-metric-label">${escapeHtml(label)}</span>
+        <span class="sector-metric-value" style="color:${color};">${escapeHtml(value)}</span>
+    </div>`;
+}
+
+function buildSectorMetricStrip(sectorKey) {
+    const b = (appData && appData.briefing) || {};
+    const pct = v => (v === null || v === undefined ? "—" : `${v > 0 ? "+" : ""}${v}%`);
+    const tone = v => (v === null || v === undefined ? "" : (v >= 0 ? "up" : "down"));
+
+    const growth = (b.sector_growth || []).find(r => r.sector === sectorKey);
+    const valuation = (b.sector_valuation || []).find(r => r.sector === sectorKey);
+    const stage = (b.curve_stage || {})[sectorKey];
+    const holdings = ((appData.watchlist || {})[sectorKey] || []).length;
+
+    let cells = "";
+    if (growth) {
+        cells += sectorMetric("TTM Growth", pct(growth.median_ttm_growth_pct), tone(growth.median_ttm_growth_pct),
+            "Median trailing-twelve-month revenue growth across this sector's holdings");
+        cells += sectorMetric("YoY", pct(growth.median_yoy_pct), tone(growth.median_yoy_pct),
+            "Latest quarter vs the same quarter a year earlier");
+        if (growth.low_confidence) {
+            cells += sectorMetric("Confidence", "thin", "down",
+                "Median rests on a single holding — not a sector view");
+        }
+    }
+    if (valuation && valuation.median_pe) {
+        cells += sectorMetric("Median P/E", String(valuation.median_pe), "",
+            `Cheapest ${valuation.cheapest_ticker || "—"} at ${valuation.cheapest_pe || "—"}`);
+    }
+    if (stage && stage.stage) {
+        cells += sectorMetric("Curve Stage", stage.stage, "",
+            `Median QoQ growth ${pct(stage.median_qoq_growth_pct)} across ${stage.stock_count} holding(s)`);
+    }
+    cells += sectorMetric("Holdings", String(holdings), "", "Companies tracked in this sector");
+
+    return cells ? `<div class="sector-metric-strip">${cells}</div>` : "";
+}
+
+function buildSectorAlerts(sectorLabel) {
+    // Warnings carry the sector's display label rather than its key.
+    const all = ((appData && appData.briefing && appData.briefing.early_warnings) || [])
+        .filter(w => w.sector === sectorLabel);
+    if (all.length === 0) return "";
+
+    const rank = { Critical: 0, High: 1, Medium: 2, Low: 3 };
+    all.sort((a, b) => (rank[a.severity] ?? 9) - (rank[b.severity] ?? 9));
+    const shown = all.slice(0, 6);
+
+    const items = shown.map(w => {
+        const cls = w.severity === "Critical" ? "badge-danger-alert"
+            : w.severity === "High" ? "badge-warning-alert" : "badge-neutral";
+        return `<div class="sector-alert-row">
+            <span class="badge ${cls}">${escapeHtml(w.severity)}</span>
+            <span class="sector-alert-cat">${escapeHtml(w.category || "Signal")}</span>
+            <span class="t-ticker">${escapeHtml(w.ticker || "")}</span>
+            <span class="sector-alert-text">${escapeHtml(w.signal || "")}</span>
+        </div>`;
+    }).join("");
+
+    const more = all.length > shown.length
+        ? `<p class="sector-alert-more">+ ${all.length - shown.length} more on the Early Warning tab.</p>` : "";
+
+    return `<div class="sector-panel">
+        <h4 class="detail-sub-header">Sector Alerts <small>(${all.length})</small></h4>
+        ${items}${more}
+    </div>`;
+}
+
+function buildSectorChallengers(sectorKey) {
+    const rows = ((appData && appData.briefing && appData.briefing.candidate_screen) || {})[sectorKey] || [];
+    if (rows.length === 0) return "";
+
+    const cr = v => (v === null || v === undefined ? "—" : `₹${Number(v).toLocaleString("en-IN")} Cr`);
+    const body = rows.map(c => `
+        <tr>
+            <td><strong>${escapeHtml(c.name || "")}</strong> <span class="t-ticker">${escapeHtml(c.ticker || "")}</span></td>
+            <td class="num" style="color: var(--success, #34d399); font-weight:700;">${escapeHtml(`+${c.growth_pct}%`)}</td>
+            <td class="num">${escapeHtml(String(c.industry_share_pct ?? "—"))}%</td>
+            <td class="num">${escapeHtml(cr(c.market_cap))}</td>
+            <td class="num">${escapeHtml(String(c.pe_ratio ?? "—"))}</td>
+            <td><small style="color: var(--text-secondary);">${escapeHtml(c.basis || "")}</small></td>
+        </tr>`).join("");
+
+    return `<div class="sector-panel">
+        <h4 class="detail-sub-header">Challengers Not Yet Held</h4>
+        <p class="sector-panel-sub">Listed peers from Screener's industry table that clear the size, market-share and growth gates. Ranked by profit growth where reported, revenue growth otherwise.</p>
+        <div class="table-scroll-container">
+            <table class="premium-table">
+                <thead><tr>
+                    <th>Company</th><th class="num">Growth</th><th class="num">Industry Share</th>
+                    <th class="num">Market Cap</th><th class="num">P/E</th><th>Basis</th>
+                </tr></thead>
+                <tbody>${body}</tbody>
+            </table>
+        </div>
+    </div>`;
 }
 
 // Stock Screener Matrix Rendering
