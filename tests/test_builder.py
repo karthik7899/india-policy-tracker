@@ -29,6 +29,7 @@ def test_build_dashboard_views_enriches_stock_screener_and_score():
             "roce": 22.0,
             "roe": 18.0,
             "q_eps": 5.0,
+            "eps_trend": [5.0, 5.0, 5.0, 5.0],
             "q_net_profit": 50.0,
             "qoq_sales_growth": 18.0,
             "dividend_yield": 1.2,
@@ -122,6 +123,7 @@ def test_fundamental_estimate_method_tagging():
             "current_ratio": 2.2,
             "roce": 21.0,
             "q_eps": 6.0,
+            "eps_trend": [6.0, 6.0, 6.0, 6.0],
             "qoq_sales_growth": 18.0,
             "dividend_yield": 1.0,
             "debt_trend": [10.0],
@@ -146,6 +148,7 @@ def test_analyst_coverage_keeps_consensus_method():
         {
             "pe_ratio": 14.0,
             "q_eps": 6.0,
+            "eps_trend": [6.0, 6.0, 6.0, 6.0],
             "qoq_sales_growth": 18.0,
             "dividend_yield": 1.0,
             "current_ratio": 2.2,

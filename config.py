@@ -31,6 +31,23 @@ STOCK_WATCHLIST = {
             "catalyst": "High-end microwave sub-systems maker, critical supplier of radars and satellite payloads.",
         },
     ],
+    "banking_financials": [
+        {
+            "ticker": "HDFCBANK",
+            "name": "HDFC Bank",
+            "catalyst": "Largest private lender; post-merger deposit repricing and a direct read on retail credit demand.",
+        },
+        {
+            "ticker": "ICICIBANK",
+            "name": "ICICI Bank",
+            "catalyst": "Retail-led credit growth with sector-leading asset quality and digital lending scale.",
+        },
+        {
+            "ticker": "SBIN",
+            "name": "State Bank of India",
+            "catalyst": "Primary financing channel for government infrastructure and PLI-linked capex lending.",
+        },
+    ],
     "big_cap_industries": [
         {
             "ticker": "LT",
@@ -104,6 +121,40 @@ STOCK_WATCHLIST = {
             "ticker": "ITC",
             "name": "ITC Ltd",
             "catalyst": "Resilient cigarette margins funding rapid expansion of high-margin FMCG brands, direct rural boost play.",
+        },
+    ],
+    "healthcare_hospitals": [
+        {
+            "ticker": "APOLLOHOSP",
+            "name": "Apollo Hospitals Enterprise",
+            "catalyst": "Largest hospital network; bed-capacity expansion and the Heal-in-India medical tourism push.",
+        },
+        {
+            "ticker": "MAXHEALTH",
+            "name": "Max Healthcare Institute",
+            "catalyst": "Metro-focused hospital operator adding beds at high occupancy and rising revenue per bed.",
+        },
+        {
+            "ticker": "FORTIS",
+            "name": "Fortis Healthcare",
+            "catalyst": "Hospital and diagnostics network benefiting from insurance penetration and Ayushman Bharat volumes.",
+        },
+    ],
+    "hospitality_travel": [
+        {
+            "ticker": "INDHOTEL",
+            "name": "Indian Hotels Company",
+            "catalyst": "Taj operator scaling asset-light management contracts against record domestic travel demand.",
+        },
+        {
+            "ticker": "CHALET",
+            "name": "Chalet Hotels",
+            "catalyst": "Business-hotel portfolio near airports and office hubs, geared to corporate travel recovery.",
+        },
+        {
+            "ticker": "LEMONTREE",
+            "name": "Lemon Tree Hotels",
+            "catalyst": "Mid-market chain expanding into tier-2 cities as UDAN air connectivity widens the travel base.",
         },
     ],
     "industrial_manufacturing": [
@@ -278,6 +329,12 @@ SECTOR_METADATA = {
         "icon": "✈️",
         "label": "Aerospace & Defence",
     },
+    "banking_financials": {
+        "desc": "Credit growth, RBI policy transmission, and "
+        "infrastructure project financing.",
+        "icon": "🏦",
+        "label": "Banking & Financials",
+    },
     "big_cap_industries": {
         "desc": "Nation-building conglomerates, heavy "
         "engineering, and infrastructure giants.",
@@ -307,6 +364,18 @@ SECTOR_METADATA = {
         "consumer product growth.",
         "icon": "🛒",
         "label": "FMCG & Consumption",
+    },
+    "healthcare_hospitals": {
+        "desc": "Hospital bed capacity, insurance penetration, "
+        "and medical tourism policy.",
+        "icon": "🏥",
+        "label": "Healthcare & Hospitals",
+    },
+    "hospitality_travel": {
+        "desc": "Hotel occupancy, room rates, and tourism "
+        "and air-connectivity infrastructure.",
+        "icon": "🏨",
+        "label": "Hospitality & Travel",
     },
     "industrial_manufacturing": {
         "desc": "Capital goods, factory automation, and "
@@ -383,6 +452,11 @@ SECTOR_QUERIES = {
         '"Hindustan Aeronautics" OR "Bharat Electronics" '
         'OR "Astra Microwave" defence',
     ],
+    "banking_financials": [
+        'site:pib.gov.in "banking" OR "credit growth" OR ' '"financial inclusion"',
+        "India bank credit growth RBI policy deposit rates asset quality",
+        '"HDFC Bank" OR "ICICI Bank" OR "State Bank of ' 'India" results credit',
+    ],
     "big_cap_industries": [
         'site:pib.gov.in "infrastructure" OR "capital ' 'expenditure" OR "Gati Shakti"',
         "India infra capex budget Larsen Toubro Reliance " "industries",
@@ -407,6 +481,17 @@ SECTOR_QUERIES = {
         'site:pib.gov.in "agriculture" OR "rural development" OR "food ' 'processing"',
         "India FMCG consumption rural demand inflation",
         "Varun Beverages ITC results shares",
+    ],
+    "healthcare_hospitals": [
+        'site:pib.gov.in "Ayushman Bharat" OR "health '
+        'infrastructure" OR "medical tourism"',
+        "India hospital bed capacity expansion health insurance penetration",
+        '"Apollo Hospitals" OR "Max Healthcare" OR "Fortis ' 'Healthcare" results',
+    ],
+    "hospitality_travel": [
+        'site:pib.gov.in "tourism" OR "UDAN" OR "hospitality ' 'infrastructure"',
+        "India hotel occupancy average room rate tourism demand",
+        '"Indian Hotels" OR "Chalet Hotels" OR "Lemon Tree" ' "hotels expansion",
     ],
     "industrial_manufacturing": [
         'site:pib.gov.in "capital goods" OR "industrial '

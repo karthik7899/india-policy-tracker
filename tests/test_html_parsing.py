@@ -35,6 +35,26 @@ MOCK_HTML = """
         </tbody>
     </table>
 </section>
+<section id="profit-loss">
+    <table>
+        <tbody>
+            <tr>
+                <td><button class="button-plain">Sales</button></td>
+                <td>1,000</td>
+                <td>1,200</td>
+                <td>1,450</td>
+                <td>1,700</td>
+            </tr>
+            <tr>
+                <td>EPS in Rs</td>
+                <td>10.0</td>
+                <td>12.5</td>
+                <td>15.0</td>
+                <td>18.0</td>
+            </tr>
+        </tbody>
+    </table>
+</section>
 """
 
 
@@ -56,6 +76,23 @@ def test_extract_row_values():
     # Test missing row
     missing_row = extract_row_values(soup, "quarters", "R&D")
     assert missing_row == []
+
+
+def test_extract_annual_profit_loss_rows():
+    """The annual P&L rows feed multi-year CAGR and trailing earnings.
+
+    Screener wraps expandable row labels in a <button>, which is what silently
+    blanked these extractions before the row matcher was repaired — so the
+    fixture keeps that markup on the Sales row.
+    """
+    soup = BeautifulSoup(MOCK_HTML, "html.parser")
+    assert extract_row_values(soup, "profit-loss", "Sales") == [
+        1000.0,
+        1200.0,
+        1450.0,
+        1700.0,
+    ]
+    assert extract_row_values(soup, "profit-loss", "EPS") == [10.0, 12.5, 15.0, 18.0]
 
 
 def test_calculate_trend():
