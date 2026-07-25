@@ -201,6 +201,7 @@ def test_variant_perception_flags_large_divergence():
                 "ticker": "AAA",
                 "name": "AAA Ltd",
                 "estimate_method": "Analyst Consensus",
+                "price": "150.00",
                 "target": "100.00",
                 "fundamental_value": 180.0,
             }
@@ -234,6 +235,7 @@ def test_variant_perception_skips_small_divergence():
                 "ticker": "AAA",
                 "name": "AAA Ltd",
                 "estimate_method": "Analyst Consensus",
+                "price": "100.00",
                 "target": "100.00",
                 "fundamental_value": 105.0,
             }
@@ -249,6 +251,7 @@ def test_variant_perception_sorted_by_magnitude():
                 "ticker": "SMALL",
                 "name": "Small",
                 "estimate_method": "Analyst Consensus",
+                "price": "110.00",
                 "target": "100.00",
                 "fundamental_value": 120.0,
             },
@@ -256,6 +259,7 @@ def test_variant_perception_sorted_by_magnitude():
                 "ticker": "BIG",
                 "name": "Big",
                 "estimate_method": "Analyst Consensus",
+                "price": "150.00",
                 "target": "100.00",
                 "fundamental_value": 200.0,
             },
@@ -263,6 +267,61 @@ def test_variant_perception_sorted_by_magnitude():
     }
     rows = compute_variant_perception(wl)
     assert [r["ticker"] for r in rows] == ["BIG", "SMALL"]
+
+
+def test_variant_perception_rejects_estimates_untethered_from_price():
+    """Regression: 72% of covered holdings once "diverged" from consensus.
+
+    An intrinsic value several times the traded price (HAL's Rs 14,681 against
+    a Rs 4,500 share) is a model artifact, not a disagreement with the Street,
+    and must not be published as a view. The same applies in the other
+    direction, where a depressed quarter collapsed the estimate.
+    """
+    wl = {
+        "sec": [
+            {
+                "ticker": "TOOHIGH",
+                "name": "Too High",
+                "estimate_method": "Analyst Consensus",
+                "price": "4500.00",
+                "target": "5300.00",
+                "fundamental_value": 14681.2,
+            },
+            {
+                "ticker": "TOOLOW",
+                "name": "Too Low",
+                "estimate_method": "Analyst Consensus",
+                "price": "14329.00",
+                "target": "13500.00",
+                "fundamental_value": 3120.6,
+            },
+            {
+                "ticker": "SANE",
+                "name": "Sane",
+                "estimate_method": "Analyst Consensus",
+                "price": "500.00",
+                "target": "501.00",
+                "fundamental_value": 711.4,
+            },
+        ]
+    }
+    rows = compute_variant_perception(wl)
+    assert [r["ticker"] for r in rows] == ["SANE"]
+
+
+def test_variant_perception_needs_a_price_to_judge_against():
+    wl = {
+        "sec": [
+            {
+                "ticker": "AAA",
+                "name": "AAA Ltd",
+                "estimate_method": "Analyst Consensus",
+                "target": "100.00",
+                "fundamental_value": 180.0,
+            }
+        ]
+    }
+    assert compute_variant_perception(wl) == []
 
 
 # ---------------------------------------------------------------------------

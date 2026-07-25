@@ -85,6 +85,13 @@ async def fetch_screener_async(session, ticker, sector, price):
     q_eps = extract_row_values(soup, "quarters", "EPS")
     if q_eps:
         sc["q_eps"] = q_eps[-1]
+        # The full quarterly EPS series, so earnings can be summed over a
+        # trailing year. Annualizing a single quarter (q_eps * 4) reads a
+        # seasonal peak or trough as the run rate — the March-quarter skew in
+        # Indian capital-goods and defence names roughly doubled it.
+        sc["eps_trend"] = q_eps[-8:]
+        if len(q_eps) >= 4:
+            sc["ttm_eps"] = round(sum(q_eps[-4:]), 2)
 
     q_net_profit = extract_row_values(soup, "quarters", "Net Profit")
     if q_net_profit:
@@ -94,6 +101,13 @@ async def fetch_screener_async(session, ticker, sector, price):
     a_opm = extract_row_values(soup, "profit-loss", "OPM")
     if a_opm:
         sc["operating_margin_trend"] = calculate_trend(a_opm, 5)
+
+    # Annual revenue is the only series long enough to carry a real multi-year
+    # CAGR — the quarterly table tops out at 8 quarters. Annual periods are
+    # also seasonality-free by construction (analysis/sector_growth.py).
+    a_sales = extract_row_values(soup, "profit-loss", "Sales")
+    if a_sales:
+        sc["annual_sales_trend"] = a_sales[-6:]
 
     # 4. Balance Sheet (Debt Trend)
     borrowings = extract_row_values(soup, "balance-sheet", "Borrowings")

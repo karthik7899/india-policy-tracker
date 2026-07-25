@@ -128,25 +128,33 @@ def _build_sector_valuation_html(rollup):
     """
 
 
+def _pct_or_dash(value):
+    """A percentage, or an em dash when the history could not support one."""
+    if value is None:
+        return "—"
+    return f"{'+' if value > 0 else ''}{value}%"
+
+
 def _build_sector_growth_html(rollup):
-    """Sector revenue-growth leaders (median YoY / CAGR). '' when empty."""
+    """Sector revenue-growth leaders (median TTM / YoY). '' when empty."""
     if not rollup:
         return ""
 
     rows = ""
     for r in rollup[:10]:
-        yoy = r.get("median_yoy_pct")
-        cagr = r.get("median_cagr_pct")
-        yoy_color = "#34d399" if (yoy or 0) >= 0 else "#f87171"
-        yoy_sign = "+" if (yoy or 0) > 0 else ""
-        cagr_sign = "+" if (cagr or 0) > 0 else ""
-        fast_sign = "+" if (r.get("fastest_yoy_pct") or 0) > 0 else ""
+        ttm = r.get("median_ttm_growth_pct")
+        ttm_color = "#34d399" if (ttm or 0) >= 0 else "#f87171"
+        thin = (
+            " <span style='color:#fbbf24; font-size:10px;'>thin</span>"
+            if r.get("low_confidence")
+            else ""
+        )
         rows += f"""
         <tr>
-            <td>{r.get('label', '')}</td>
-            <td style="color: {yoy_color}; font-weight: 600;">{yoy_sign}{yoy}%</td>
-            <td style="color: #e2e8f0;">{cagr_sign}{cagr}%</td>
-            <td style="color: #94a3b8; font-size: 11px;">{r.get('fastest_ticker', '')} ({fast_sign}{r.get('fastest_yoy_pct', '')}%)</td>
+            <td>{r.get('label', '')}{thin}</td>
+            <td style="color: {ttm_color}; font-weight: 600;">{_pct_or_dash(ttm)}</td>
+            <td style="color: #e2e8f0;">{_pct_or_dash(r.get('median_yoy_pct'))}</td>
+            <td style="color: #94a3b8; font-size: 11px;">{r.get('fastest_ticker', '')} ({_pct_or_dash(r.get('fastest_ttm_growth_pct'))})</td>
         </tr>
         """
 
@@ -154,12 +162,13 @@ def _build_sector_growth_html(rollup):
     <div class="section-card">
         <h3 style="color: #34d399; margin-bottom: 6px; font-size: 16px;">Sector Growth Leaders (Revenue)</h3>
         <p style="font-size: 12px; color: #94a3b8; margin: 0 0 12px 0;">
-            Median revenue growth across each sector's holdings — YoY (same quarter last year)
-            and annualized CAGR over the trailing quarters. Fastest-compounding themes first.
+            Median revenue growth per sector, ranked by trailing-twelve-month growth — the last
+            four quarters against the four before them, so seasonality cancels. "thin" marks a
+            sector measured off a single holding.
         </p>
         <table class="stock-table">
             <thead>
-                <tr><th>Sector</th><th>Median YoY</th><th>Median CAGR</th><th>Fastest Grower</th></tr>
+                <tr><th>Sector</th><th>TTM Growth</th><th>YoY</th><th>Fastest Grower</th></tr>
             </thead>
             <tbody>{rows}</tbody>
         </table>

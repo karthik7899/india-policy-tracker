@@ -1765,20 +1765,29 @@ function renderSectorGrowth() {
     const rollup = (appData && appData.briefing && appData.briefing.sector_growth) || [];
 
     if (rollup.length === 0) {
-        setTableEmpty(tbody, 5, "No growth data yet", "Sector growth needs each holding's quarterly revenue series; it populates as Screener fundamentals load.");
+        setTableEmpty(tbody, 6, "No growth data yet", "Sector growth needs each holding's quarterly revenue series; it populates as Screener fundamentals load.");
         return;
     }
 
     rollup.forEach(r => {
-        const fmt = v => (v > 0 ? `+${v}%` : `${v}%`);
-        const yoyColor = (r.median_yoy_pct || 0) >= 0 ? "var(--success, #34d399)" : "var(--danger, #f87171)";
+        // A missing figure reads as "not computable from the history we have",
+        // never as zero.
+        const fmt = v => (v === null || v === undefined ? "—" : (v > 0 ? `+${v}%` : `${v}%`));
+        const ttmColor = (r.median_ttm_growth_pct || 0) >= 0 ? "var(--success, #34d399)" : "var(--danger, #f87171)";
+        const holdings = r.excluded_count
+            ? `${r.stock_count} <small style="color: var(--text-secondary);">(${r.excluded_count} excluded)</small>`
+            : `${r.stock_count}`;
+        const thin = r.low_confidence
+            ? ` <small style="color: var(--warning, #fbbf24);" title="Median of a single holding — not a sector view">thin</small>`
+            : "";
         const tr = document.createElement("tr");
         tr.innerHTML = `
-            <td>${escapeHtml(r.label)}</td>
-            <td class="num" style="color: ${yoyColor}; font-weight: 700;">${escapeHtml(fmt(r.median_yoy_pct))}</td>
+            <td>${escapeHtml(r.label)}${thin}</td>
+            <td class="num" style="color: ${ttmColor}; font-weight: 700;">${escapeHtml(fmt(r.median_ttm_growth_pct))}</td>
+            <td class="num">${escapeHtml(fmt(r.median_yoy_pct))}</td>
             <td class="num">${escapeHtml(fmt(r.median_cagr_pct))}</td>
-            <td class="num">${escapeHtml(r.stock_count)}</td>
-            <td><span class="t-ticker">${escapeHtml(r.fastest_ticker)}</span> <small style="color: var(--text-secondary);">${escapeHtml(fmt(r.fastest_yoy_pct))}</small></td>
+            <td class="num">${holdings}</td>
+            <td><span class="t-ticker">${escapeHtml(r.fastest_ticker)}</span> <small style="color: var(--text-secondary);">${escapeHtml(fmt(r.fastest_ttm_growth_pct))}</small></td>
         `;
         tbody.appendChild(tr);
     });

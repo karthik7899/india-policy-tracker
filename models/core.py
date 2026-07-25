@@ -28,6 +28,11 @@ class CompanyFinancials(BaseModel):
     q_sales: Optional[float] = None
     qoq_sales_growth: Optional[float] = None
     quarterly_revenue_growth: List[float] = Field(default_factory=list)
+    # Trailing quarterly revenue (up to 8) and the annual P&L revenue row.
+    # Valuation and growth measures read these rather than single-quarter
+    # fields so seasonality cancels instead of compounding.
+    sales_trend: List[float] = Field(default_factory=list)
+    annual_sales_trend: List[float] = Field(default_factory=list)
 
     q_opm: Optional[float] = None
     opm_expansion: Optional[float] = None
@@ -36,6 +41,8 @@ class CompanyFinancials(BaseModel):
 
     q_eps: Optional[float] = None
     q_net_profit: Optional[float] = None
+    eps_trend: List[float] = Field(default_factory=list)
+    ttm_eps: Optional[float] = None
 
     debt_trend: List[float] = Field(default_factory=list)
     cash_flow_trend: List[float] = Field(default_factory=list)
