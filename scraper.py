@@ -57,7 +57,9 @@ async def fetch_all_feeds_async():
 
 def _extract_pli_data_from_html(html, title, published_date=""):
     companies = []
-    soup = BeautifulSoup(html, "html.parser")
+    soup = BeautifulSoup(
+        html, "lxml"
+    )  # ⚡ Bolt Optimization: Use lxml for faster HTML parsing
     text = soup.get_text(separator=" ")
 
     # 1. Sector extraction

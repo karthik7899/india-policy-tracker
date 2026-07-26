@@ -59,7 +59,7 @@ MOCK_HTML = """
 
 
 def test_extract_row_values():
-    soup = BeautifulSoup(MOCK_HTML, "html.parser")
+    soup = BeautifulSoup(MOCK_HTML, "lxml")
 
     # Test normal extraction with commas
     sales = extract_row_values(soup, "quarters", "Sales")
@@ -85,7 +85,7 @@ def test_extract_annual_profit_loss_rows():
     blanked these extractions before the row matcher was repaired — so the
     fixture keeps that markup on the Sales row.
     """
-    soup = BeautifulSoup(MOCK_HTML, "html.parser")
+    soup = BeautifulSoup(MOCK_HTML, "lxml")
     assert extract_row_values(soup, "profit-loss", "Sales") == [
         1000.0,
         1200.0,
