@@ -297,6 +297,90 @@ def classify_headlines(
     return events
 
 
+# Events older than this leave the corpus. Without it the list only ever
+# grows, and entries classified by an older version of the engine outlive
+# every fix made since.
+EVENT_RETENTION_DAYS = 45
+
+
+def refresh_merged_events(
+    events: List[Dict[str, Any]], watchlist: Dict[str, Any], today: str = ""
+) -> List[Dict[str, Any]]:
+    """Re-derive attribution on the accumulated event list, and drop stale rows.
+
+    Events merge across runs, so a correction to the matcher or the vocabulary
+    only ever applies to what is classified *today* — yesterday's mistakes are
+    carried forward untouched. That is not hypothetical: after the entity
+    boundary fix, three ITC Hotels events stayed attributed to ITC, and since
+    per-stock coverage reads these actors directly, they were still showing on
+    ITC's card the next day.
+
+    So every merged event is re-attributed with the current rules. An event
+    that no longer names anything we track is dropped, which is how those
+    three finally disappear. Certainty is filled in for rows that predate the
+    field. Cheap enough to do unconditionally — the list is capped at 120.
+    """
+    if not events:
+        return []
+    refreshed: List[Dict[str, Any]] = []
+    try:
+        holdings = [
+            (s.get("ticker", ""), s.get("name", ""))
+            for stocks in (watchlist or {}).values()
+            for s in stocks or []
+            if isinstance(s, dict)
+        ]
+        today = today or datetime.date.today().isoformat()
+        cutoff = (
+            datetime.date.fromisoformat(today)
+            - datetime.timedelta(days=EVENT_RETENTION_DAYS)
+        ).isoformat()
+
+        dropped_stale = dropped_orphan = reattributed = 0
+        for event in events:
+            if not isinstance(event, dict):
+                continue
+            if str(event.get("date", "")) < cutoff:
+                dropped_stale += 1
+                continue
+
+            headline = event.get("headline") or ""
+            clause = next(
+                (
+                    c
+                    for c in split_clauses(headline)
+                    if event.get("phrase") and event["phrase"] in c.lower()
+                ),
+                headline,
+            )
+            actors = [
+                ticker
+                for ticker, name in holdings
+                if title_matches_company(clause, ticker, name)
+            ]
+            if actors != (event.get("actors") or []):
+                reattributed += 1
+            if not actors and not (event.get("domains") or []):
+                dropped_orphan += 1
+                continue
+
+            event["actors"] = actors
+            if not event.get("certainty"):
+                event["certainty"] = classify_certainty(clause)
+            refreshed.append(event)
+
+        if dropped_stale or dropped_orphan or reattributed:
+            log.info(
+                f"Event corpus refresh: {reattributed} re-attributed, "
+                f"{dropped_orphan} no longer touch the watchlist, "
+                f"{dropped_stale} past {EVENT_RETENTION_DAYS}d retention."
+            )
+    except Exception as e:  # noqa: BLE001 - housekeeping must not break a run
+        log.warning(f"Event corpus refresh failed safely: {e!r}")
+        return events
+    return refreshed
+
+
 def compute_supply_stress(
     events: List[Dict[str, Any]], graph: Dict[str, Any], window_days: int = 14
 ) -> Dict[str, int]:

@@ -4,6 +4,8 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from emails.mailer import build_html_email  # noqa: E402
+from emails import mailer  # noqa: E402
+from config import SECTOR_METADATA  # noqa: E402
 import datetime  # noqa: E402
 
 
@@ -133,3 +135,79 @@ def test_build_html_email_empty():
     assert "Product Launches &amp; Innovations" not in html
     assert "Institutional Capital &amp; Fund Flow Tracker" not in html
     assert "Core Value Investing Matrix" not in html
+
+
+# ---------------------------------------------------------------------------
+# size ladder
+# ---------------------------------------------------------------------------
+
+
+def _bulky_brief():
+    """A briefing large enough to exceed any sane budget."""
+    news = [
+        {
+            "title": f"A fairly long sector headline number {i} about policy",
+            "link": "https://example.com/x",
+            "date": "Mon, 27 Jul 2026 06:00:00 GMT",
+            "source": "Example Wire",
+            "impact": "Positive",
+        }
+        for i in range(8)
+    ]
+    return {sector: list(news) for sector in list(SECTOR_METADATA)[:6]}
+
+
+def _bulky_watchlist():
+    stock = {
+        "ticker": "AAA",
+        "name": "Alpha Industries",
+        "price": "100.00",
+        "target": "150.00",
+        "growth_pct": "+50.0%",
+        "catalyst": "A reasonably wordy catalyst describing the thesis at length.",
+        "screener": {"pe_ratio": 20.0, "roce": 18.0, "market_cap": 5000.0},
+    }
+    return {
+        sector: [dict(stock, ticker=f"T{i}") for i in range(5)]
+        for sector in list(SECTOR_METADATA)[:6]
+    }
+
+
+def test_ladder_steps_down_until_it_fits(monkeypatch):
+    """Two rungs used to mean a breaching compact render shipped clipped."""
+    brief, wl = _bulky_brief(), _bulky_watchlist()
+    full = len(mailer._render_email(brief, wl, mailer._CAPS_NORMAL).encode())
+    minimal = len(mailer._render_email(brief, wl, mailer._CAPS_MINIMAL).encode())
+    assert minimal < full, "the floor must actually be smaller"
+
+    # A budget only the floor can meet.
+    monkeypatch.setattr(mailer, "_SIZE_BUDGET_BYTES", minimal + 10)
+    assert len(mailer.build_html_email(brief, wl).encode()) == minimal
+
+
+def test_generous_budget_keeps_full_richness(monkeypatch):
+    brief, wl = _bulky_brief(), _bulky_watchlist()
+    monkeypatch.setattr(mailer, "_SIZE_BUDGET_BYTES", 10_000_000)
+    full = len(mailer._render_email(brief, wl, mailer._CAPS_NORMAL).encode())
+    assert len(mailer.build_html_email(brief, wl).encode()) == full
+
+
+def test_unmeetable_budget_ships_the_floor_rather_than_nothing(monkeypatch, caplog):
+    """A clipped briefing must not look like a delivered one."""
+    import logging
+
+    brief, wl = _bulky_brief(), _bulky_watchlist()
+    monkeypatch.setattr(mailer, "_SIZE_BUDGET_BYTES", 100)
+    with caplog.at_level(logging.ERROR):
+        html = mailer.build_html_email(brief, wl)
+    assert html, "must still return a renderable email"
+    assert any("tightest caps" in r.message for r in caplog.records)
+
+
+def test_ladder_is_monotonically_smaller():
+    brief, wl = _bulky_brief(), _bulky_watchlist()
+    sizes = [
+        len(mailer._render_email(brief, wl, caps).encode())
+        for _, caps in mailer._CAP_LADDER
+    ]
+    assert sizes == sorted(sizes, reverse=True), sizes

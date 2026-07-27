@@ -217,13 +217,23 @@ async def run_pipeline():
         # headline, keep a rolling window via the committed history, and let
         # the entity graph grow itself from tie-up headlines.
         from analysis.entity_graph import load_entity_graph, harvest_partner_edges
-        from analysis.event_engine import classify_headlines, compute_supply_stress
+        from analysis.event_engine import (
+            classify_headlines,
+            compute_supply_stress,
+            refresh_merged_events,
+        )
 
         graph = load_entity_graph()
         events = classify_headlines(data, watchlist)
-        data["market_events"] = store.deduplicate_and_merge(
-            "market_events", events, ["headline", "event_type"]
-        )[:120]
+        # Re-attribute the merged list with the current rules, so a fix to the
+        # matcher reaches events carried over from earlier runs instead of
+        # only applying to today's.
+        data["market_events"] = refresh_merged_events(
+            store.deduplicate_and_merge(
+                "market_events", events, ["headline", "event_type"]
+            )[:120],
+            watchlist,
+        )
         data["supply_stress"] = compute_supply_stress(data["market_events"], graph)
         harvest_partner_edges(data["corporate_agreements"], watchlist, graph)
 
