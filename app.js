@@ -1986,8 +1986,20 @@ function renderEarlyWarnings() {
     if (countEl) countEl.textContent = `${warnings.length} of ${all.length} signals`;
 
     if (warnings.length === 0) {
-        const msg = all.length === 0 ? "No active warnings" : "No signals match the current filters";
-        setTableEmpty(tbody, 6, msg, all.length === 0 ? "No risk or opportunity signals were triggered in the latest cycle." : "Adjust the severity, direction, or text filters above.");
+        // "Nothing new" is a different statement from "nothing wrong": the
+        // standing conditions are still there, grouped below.
+        const ongoing = ((appData.briefing || {}).warning_summary || [])
+            .reduce((n, r) => n + (r.count || 0), 0);
+        const msg = all.length === 0
+            ? (ongoing ? "Nothing new since the last run" : "No active warnings")
+            : "No signals match the current filters";
+        const sub = all.length === 0
+            ? (ongoing
+                ? `No warning appeared or worsened in this cycle. ${ongoing} standing condition(s) are grouped below.`
+                : "No risk or opportunity signals were triggered in the latest cycle.")
+            : "Adjust the severity, direction, or text filters above.";
+        setTableEmpty(tbody, 6, msg, sub);
+        renderWarningSummary();
         return;
     }
 
@@ -1998,10 +2010,16 @@ function renderEarlyWarnings() {
         const dirIcon = isRisk ? "▼" : "▲";
         const dirColor = isRisk ? "var(--danger)" : "var(--success)";
 
+        const statusBadge = w.status === "escalated"
+            ? `<span class="wn-status wn-status-esc" title="Worse than the previous run">escalated</span>`
+            : w.status === "new"
+                ? `<span class="wn-status wn-status-new" title="Not present in the previous run">new</span>`
+                : "";
+
         const tr = document.createElement("tr");
         tr.innerHTML = `
             <td class="t-ticker">${escapeHtml(w.ticker)}</td>
-            <td><strong>${escapeHtml(w.name)}</strong></td>
+            <td><strong>${escapeHtml(w.name)}</strong> ${statusBadge}</td>
             <td><span class="chip" style="display:inline-block; border-color:transparent;">${escapeHtml(w.sector)}</span></td>
             <td><span class="${badgeClass}" style="font-size: 9px;">${escapeHtml(severity)}</span></td>
             <td style="color: ${dirColor}; white-space: nowrap;">${dirIcon} ${escapeHtml(w.category)}</td>
@@ -2009,6 +2027,36 @@ function renderEarlyWarnings() {
         `;
         tbody.appendChild(tr);
     });
+
+    renderWarningSummary();
+}
+
+// Conditions that did not change since the previous run. "46 holdings carry
+// valuation flags" is one fact, not 46 alerts — but the tickers stay visible
+// so the condition is still inspectable.
+function renderWarningSummary() {
+    const host = document.getElementById("warning-summary");
+    if (!host) return;
+    const rows = (appData && appData.briefing && appData.briefing.warning_summary) || [];
+    if (rows.length === 0) { host.innerHTML = ""; return; }
+
+    const total = rows.reduce((n, r) => n + (r.count || 0), 0);
+    const items = rows.map(r => {
+        const cls = SEVERITY_BADGE_CLASS[r.severity] || "badge-neutral-alert";
+        return `<div class="sector-alert-row">
+            <span class="${cls}" style="font-size:9px;">${escapeHtml(r.severity)}</span>
+            <span class="sector-alert-cat">${escapeHtml(r.category)}</span>
+            <strong>${escapeHtml(r.count)}</strong>
+            <span class="sector-alert-text">${(r.tickers || []).map(t =>
+                `<span class="t-ticker">${escapeHtml(t)}</span>`).join(" ")}</span>
+        </div>`;
+    }).join("");
+
+    host.innerHTML = `<div class="sector-panel">
+        <h4 class="detail-sub-header">Unchanged since the last run <small>(${total})</small></h4>
+        <p class="sector-panel-sub">Standing conditions, grouped. These re-fire every run until something changes, so they are counted here rather than listed above.</p>
+        ${items}
+    </div>`;
 }
 
 function renderSectorValuation() {

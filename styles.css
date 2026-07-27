@@ -1884,3 +1884,17 @@ a:focus-visible {
 .sector-detail-panel,
 .sector-panel,
 .detail-body-grid > * { min-width: 0; }
+
+/* Status of a warning relative to the previous run. */
+.wn-status {
+    font-size: 8.5px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    padding: 1px 5px;
+    border-radius: 4px;
+    vertical-align: middle;
+}
+
+.wn-status-new { background: var(--primary-glow); color: var(--primary); }
+.wn-status-esc { background: var(--danger-glow); color: var(--danger); }
