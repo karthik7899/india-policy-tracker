@@ -41,6 +41,25 @@ _CAPS_COMPACT = {
     "emerging": 5,
     "caution": 5,
 }
+# The floor. One holding per sector with the overflow link doing the rest —
+# enough to say what moved, and small enough that sector growth cannot push
+# the briefing past the clip limit.
+_CAPS_MINIMAL = {
+    "stocks": 1,
+    "news": 1,
+    "warnings": 6,
+    "lists": 2,
+    "research": 3,
+    "curve": 6,
+    "emerging": 3,
+    "caution": 3,
+}
+
+_CAP_LADDER = (
+    ("full", _CAPS_NORMAL),
+    ("compact", _CAPS_COMPACT),
+    ("minimal", _CAPS_MINIMAL),
+)
 
 
 def _build_early_warning_html(warnings, caps=_CAPS_NORMAL):
@@ -954,19 +973,37 @@ def _render_email(brief_data, watchlist, caps):
 def build_html_email(brief_data, watchlist):
     """Renders the briefing email, guaranteed under Gmail's clip limit.
 
-    Renders at full richness first; if the document exceeds the size budget,
-    re-renders once with compact row caps rather than risk the client
-    truncating the message mid-table.
+    Renders at full richness and steps down the cap ladder until the document
+    fits the budget. There used to be only two rungs, so if the compact render
+    itself breached there was nothing below it and Gmail would clip the message
+    mid-table — silently, since a clipped email still sends. That stopped being
+    hypothetical as the watchlist grew: adding three sectors took the compact
+    render from 80.8 KB to 90.6 KB against a 95 KB budget, so a few more would
+    have gone straight through the floor.
+
+    Sector-level content dominates the size (the per-sector stock cards alone
+    are 21.8 KB of a compact render), so each rung mostly trims what repeats
+    per sector, and the dashboard link carries the rest.
     """
-    html = _render_email(brief_data, watchlist, _CAPS_NORMAL)
-    size = len(html.encode("utf-8"))
-    if size > _SIZE_BUDGET_BYTES:
+    last_html = ""
+    for tier, caps in _CAP_LADDER:
+        last_html = _render_email(brief_data, watchlist, caps)
+        size = len(last_html.encode("utf-8"))
+        if size <= _SIZE_BUDGET_BYTES:
+            if tier != "full":
+                log.info(f"Briefing email rendered at '{tier}' caps: {size} bytes.")
+            return last_html
         log.warning(
-            f"Briefing email is {size} bytes (> {_SIZE_BUDGET_BYTES}); "
-            f"re-rendering with compact caps."
+            f"Briefing email is {size} bytes (> {_SIZE_BUDGET_BYTES}) at "
+            f"'{tier}' caps; stepping down."
         )
-        html = _render_email(brief_data, watchlist, _CAPS_COMPACT)
-    return html
+    # Past the last rung there is nothing left to trim, so say so loudly
+    # rather than let a clipped briefing look like a delivered one.
+    log.error(
+        f"Briefing email is {len(last_html.encode('utf-8'))} bytes even at the "
+        f"tightest caps — it may be clipped by the mail client."
+    )
+    return last_html
 
 
 def send_email(html_content):

@@ -366,3 +366,103 @@ def test_rumoured_disruption_is_excluded_from_supply_stress():
     real = dict(rumour, certainty="completed")
     assert compute_supply_stress([rumour, rumour], {}) == {}
     assert compute_supply_stress([real, real], {}).get("clean_energy") == 2
+
+
+# ---------------------------------------------------------------------------
+# corpus refresh: corrections must reach events carried over from prior runs
+# ---------------------------------------------------------------------------
+
+from analysis.event_engine import (  # noqa: E402
+    EVENT_RETENTION_DAYS,
+    refresh_merged_events,
+)
+
+
+def test_reattribution_drops_a_correction_that_the_matcher_now_rejects():
+    """Regression: three ITC Hotels events stayed attributed to ITC.
+
+    Events merge across runs, so the entity-boundary fix only applied to
+    what was classified that day. Per-stock coverage reads these actors
+    directly, so the stale rows were still on ITC's card the next morning.
+    """
+    import datetime
+
+    today = datetime.date.today().isoformat()
+    merged = [
+        {
+            "headline": "ITC Hotels to acquire GHK Hospitality for Rs 155 crore",
+            "event_type": "acquisition",
+            "phrase": "to acquire",
+            "domains": [],
+            "actors": ["ITC"],  # attributed by the old matcher
+            "date": today,
+        }
+    ]
+    wl = {"fmcg": [{"ticker": "ITC", "name": "ITC Ltd"}]}
+    # No actors left and no domains -> it touches nothing we track.
+    assert refresh_merged_events(merged, wl) == []
+
+
+def test_reattribution_keeps_and_updates_a_genuine_event():
+    import datetime
+
+    today = datetime.date.today().isoformat()
+    merged = [
+        {
+            "headline": "Suzlon wins order worth 300cr",
+            "event_type": "order_win",
+            "phrase": "order worth",
+            "domains": [],
+            "actors": [],
+            "date": today,
+        }
+    ]
+    wl = {"clean_energy": [{"ticker": "SUZLON", "name": "Suzlon Energy"}]}
+    out = refresh_merged_events(merged, wl)
+    assert out[0]["actors"] == ["SUZLON"]
+    assert out[0]["certainty"] == "completed"
+
+
+def test_certainty_backfilled_for_rows_predating_the_field():
+    import datetime
+
+    today = datetime.date.today().isoformat()
+    merged = [
+        {
+            "headline": "Suzlon reportedly in talks for a joint venture",
+            "event_type": "tie_up",
+            "phrase": "joint venture",
+            "domains": [],
+            "actors": ["SUZLON"],
+            "date": today,
+        }
+    ]
+    wl = {"clean_energy": [{"ticker": "SUZLON", "name": "Suzlon Energy"}]}
+    assert refresh_merged_events(merged, wl)[0]["certainty"] == "reported"
+
+
+def test_events_past_retention_are_dropped():
+    import datetime
+
+    old = (
+        datetime.date.today() - datetime.timedelta(days=EVENT_RETENTION_DAYS + 1)
+    ).isoformat()
+    merged = [
+        {
+            "headline": "Suzlon wins order worth 300cr",
+            "event_type": "order_win",
+            "phrase": "order worth",
+            "domains": ["clean_energy"],
+            "actors": ["SUZLON"],
+            "date": old,
+        }
+    ]
+    wl = {"clean_energy": [{"ticker": "SUZLON", "name": "Suzlon Energy"}]}
+    assert refresh_merged_events(merged, wl) == []
+
+
+def test_refresh_never_raises_and_returns_input_on_failure():
+    assert refresh_merged_events([], {}) == []
+    assert refresh_merged_events(None, {}) == []
+    # Junk rows are skipped, not fatal.
+    assert refresh_merged_events([None, "junk"], {"s": []}) == []
