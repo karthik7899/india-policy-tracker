@@ -33,6 +33,11 @@ class CompanyFinancials(BaseModel):
     # fields so seasonality cancels instead of compounding.
     sales_trend: List[float] = Field(default_factory=list)
     annual_sales_trend: List[float] = Field(default_factory=list)
+    # Annotated by analysis/sector_growth.py before scoring runs. Declared
+    # here so it survives coercion into this model — without it the scorer
+    # read None and skipped growth entirely.
+    revenue_ttm_growth_pct: Optional[float] = None
+    revenue_yoy_pct: Optional[float] = None
 
     q_opm: Optional[float] = None
     opm_expansion: Optional[float] = None
@@ -62,6 +67,11 @@ class CompanyFinancials(BaseModel):
 
 class CompanyScore(BaseModel):
     overall_score: int = 0
+    # Reported separately so the headline number is readable: news flow and
+    # balance-sheet quality move for different reasons and should not be
+    # indistinguishable once summed.
+    fundamental_score: int = 0
+    momentum_score: int = 0
     confidence: str = "Low"
     reasons: List[str] = Field(default_factory=list)
     risks: List[str] = Field(default_factory=list)

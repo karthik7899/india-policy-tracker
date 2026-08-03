@@ -237,6 +237,13 @@ async def run_pipeline():
         data["supply_stress"] = compute_supply_stress(data["market_events"], graph)
         harvest_partner_edges(data["corporate_agreements"], watchlist, graph)
 
+    # Revenue growth first: it annotates each holding's TTM figure, which the
+    # scoring model below reads. Running it afterwards left the scorer with no
+    # growth input at all, silently.
+    from analysis.sector_growth import build_sector_growth
+
+    data["sector_growth"] = build_sector_growth(watchlist)
+
     # Compile margin of safety and moat analytics
     build_dashboard_views(data, watchlist)
 
@@ -261,12 +268,8 @@ async def run_pipeline():
 
     # Sector-relative valuation: annotate stocks with peer-group P/E context
     from analysis.sector_valuation import build_sector_valuation
-    from analysis.sector_growth import build_sector_growth
 
     data["sector_valuation"] = build_sector_valuation(watchlist)
-    # Which sectors are compounding fastest — median revenue YoY/CAGR from
-    # each holding's quarterly sales series (fastest first).
-    data["sector_growth"] = build_sector_growth(watchlist)
 
     # Establish the historical-MF institutional accumulation baseline (backtesting)
     from analysis.backtesting import build_institutional_baseline

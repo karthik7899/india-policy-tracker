@@ -61,15 +61,42 @@ def _trailing_eps(fin: CompanyFinancials) -> Optional[float]:
     return None
 
 
+def _earning_power_is_intact(fin: CompanyFinancials) -> bool:
+    """Is there stable earning power here at all?
+
+    Graham's formula prices a durable stream of profits. Two states refute
+    that premise outright, and the formula returns nonsense for both:
+
+    * A loss over the trailing year. ideaForge's trailing EPS is -3.96, and
+      the multiple duly produced an intrinsic value of *negative* Rs 95.8,
+      which was stored and displayed as though it meant something.
+    * A latest quarter that has swung to an operating loss. BPCL's trailing
+      EPS of 39.48 still contains profitable quarters, so the model valued it
+      at Rs 823 against a Rs 320 price — a 129% "upside" on a company losing
+      money at the operating line this quarter (-2.7% margin, down 10.7pp).
+      Trailing profit is stale evidence once the current quarter turns.
+    """
+    q_eps = getattr(fin, "q_eps", None)
+    q_opm = getattr(fin, "q_opm", None)
+    if q_eps is not None and q_eps < 0:
+        return False
+    if q_opm is not None and q_opm < 0:
+        return False
+    return True
+
+
 def calculate_graham_intrinsic_value(fin: CompanyFinancials) -> float:
     """Graham's revised intrinsic value: ``EPS x (8.5 + 2g) x 4.4 / Y``.
 
-    Returns 0.0 when there is not a full trailing year of earnings to value —
-    an explicit "we cannot say" that callers gate on, rather than a number
-    derived from one quarter multiplied by four.
+    Returns 0.0 when the company cannot be valued this way — no full trailing
+    year of earnings, a trailing loss, or a latest quarter that has turned
+    down. That is an explicit "we cannot say" which callers gate on, rather
+    than a confident number derived from earnings that no longer exist.
     """
     eps = _trailing_eps(fin)
-    if eps is None:
+    if eps is None or eps <= 0:
+        return 0.0
+    if not _earning_power_is_intact(fin):
         return 0.0
     growth = _sustainable_growth(fin)
     multiple = (8.5 + 2 * growth) * (_GRAHAM_BASE_YIELD / _CURRENT_BOND_YIELD)

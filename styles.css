@@ -1898,3 +1898,20 @@ a:focus-visible {
 
 .wn-status-new { background: var(--primary-glow); color: var(--primary); }
 .wn-status-esc { background: var(--danger-glow); color: var(--danger); }
+
+/* --- Score composition ---------------------------------------------------- */
+
+/* A total built entirely from press coverage should not be visually
+   indistinguishable from one built on the balance sheet. */
+.score-split {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-top: 4px;
+    font-size: 9.5px;
+    font-weight: 600;
+}
+
+.score-pos { color: var(--success); }
+.score-neg { color: var(--danger); }
+.score-mom { color: var(--text-secondary); }

@@ -34,22 +34,33 @@ def _apply_potential_estimate(stock, price, graham_value):
         stock.get("target")
     )
 
-    # Always expose the raw intrinsic value for reference.
+    # Expose the raw intrinsic value, and clear it when the model declines to
+    # produce one. Setting without clearing let a stale value outlive the
+    # judgement behind it: once Graham refused to value BPCL on trailing
+    # profits it still carried Rs 822.9 from the previous run, and went on
+    # appearing in variant perception as a 129% bull call.
     if graham_value and graham_value > 0:
         stock["fundamental_value"] = round(graham_value, 1)
+    else:
+        stock.pop("fundamental_value", None)
 
     if has_analyst_coverage:
         stock["estimate_method"] = "Analyst Consensus"
         return
 
-    stock["estimate_method"] = "Fundamental Estimate"
+    # Only claim a fundamental estimate when one exists. ASM Technologies was
+    # labelled "Fundamental Estimate" while carrying no fundamental value at
+    # all — the model had declined to value it and the label said otherwise,
+    # which is worse than an honest blank.
+    if not (price > 0 and graham_value and graham_value > 0):
+        stock["estimate_method"] = "No Estimate"
+        return
 
-    # Derive a clamped upside from the Graham intrinsic value when we can.
-    if price > 0 and graham_value and graham_value > 0:
-        upside = (graham_value - price) / price * 100
-        upside = max(_FUNDAMENTAL_UPSIDE_FLOOR, min(_FUNDAMENTAL_UPSIDE_CAP, upside))
-        stock["growth_pct"] = f"{'+' if upside >= 0 else ''}{upside:.1f}%"
-        stock["target"] = f"{price * (1 + upside / 100):.2f}"
+    stock["estimate_method"] = "Fundamental Estimate"
+    upside = (graham_value - price) / price * 100
+    upside = max(_FUNDAMENTAL_UPSIDE_FLOOR, min(_FUNDAMENTAL_UPSIDE_CAP, upside))
+    stock["growth_pct"] = f"{'+' if upside >= 0 else ''}{upside:.1f}%"
+    stock["target"] = f"{price * (1 + upside / 100):.2f}"
 
 
 def build_dashboard_views(data: Dict[str, Any], watchlist: Dict[str, Any]):
@@ -64,31 +75,43 @@ def build_dashboard_views(data: Dict[str, Any], watchlist: Dict[str, Any]):
     for ev in data.get("emerging_competitors", []):
         name = ev.get("name", ev.get("company", ""))
         policy_map.setdefault(name.upper(), []).append(
-            {"event_type": "pli", "scheme": ev.get("scheme")}
+            {
+                "event_type": "pli",
+                "scheme": ev.get("scheme"),
+                "date": ev.get("approval_date") or ev.get("date"),
+            }
         )
 
     for ev in data.get("corporate_agreements", []):
         name = ev.get("company", "")
         policy_map.setdefault(name.upper(), []).append(
-            {"event_type": "agreement", "title": ev.get("title")}
+            {
+                "event_type": "agreement",
+                "title": ev.get("title"),
+                "date": ev.get("date"),
+            }
         )
 
     for ev in data.get("product_launches", []):
         name = ev.get("company", "")
         policy_map.setdefault(name.upper(), []).append(
-            {"event_type": "launch", "product": ev.get("product")}
+            {
+                "event_type": "launch",
+                "product": ev.get("product"),
+                "date": ev.get("date"),
+            }
         )
 
     for ev in data.get("corporate_filings", []):
         name = ev.get("company", "")
         policy_map.setdefault(name.upper(), []).append(
-            {"event_type": "filing", "title": ev.get("filing")}
+            {"event_type": "filing", "title": ev.get("filing"), "date": ev.get("date")}
         )
 
     for ev in data.get("sebi_filings", []):
         name = ev.get("company", "")
         policy_map.setdefault(name.upper(), []).append(
-            {"event_type": "sebi", "title": ev.get("title")}
+            {"event_type": "sebi", "title": ev.get("title"), "date": ev.get("date")}
         )
 
     for sector, stocks in watchlist.items():
