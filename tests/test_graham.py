@@ -96,3 +96,36 @@ def test_bond_yield_correction_is_applied():
     fin = CompanyFinancials(ttm_eps=100.0, sales_trend=[])
     # Default growth 6.0 -> (8.5 + 12) * 4.4/7 = 12.886 -> 1288.6
     assert calculate_graham_intrinsic_value(fin) == 1288.6
+
+
+# ---------------------------------------------------------------------------
+# earning power has to exist before it can be valued
+# ---------------------------------------------------------------------------
+
+
+def test_trailing_loss_yields_no_valuation_not_a_negative_one():
+    """ideaForge's trailing EPS is -3.96, which produced an intrinsic value
+    of *negative* Rs 95.8 — stored and displayed as though it meant
+    something."""
+    fin = CompanyFinancials(ttm_eps=-3.96, q_eps=13.86, sales_trend=_SEASONAL_SALES)
+    assert calculate_graham_intrinsic_value(fin) == 0.0
+
+
+def test_a_quarter_that_swung_to_a_loss_stops_the_valuation():
+    """BPCL: trailing EPS of 39.48 still held profitable quarters, so the
+    model valued it at Rs 823 against a Rs 320 price while the company was
+    losing money at the operating line."""
+    fin = CompanyFinancials(
+        ttm_eps=39.48, q_eps=-4.32, q_opm=-2.7, sales_trend=_SEASONAL_SALES
+    )
+    assert calculate_graham_intrinsic_value(fin) == 0.0
+
+
+def test_an_operating_loss_alone_is_enough_to_stop_it():
+    fin = CompanyFinancials(ttm_eps=39.48, q_eps=1.0, q_opm=-2.7)
+    assert calculate_graham_intrinsic_value(fin) == 0.0
+
+
+def test_a_profitable_company_is_still_valued():
+    fin = CompanyFinancials(ttm_eps=100.0, q_eps=25.0, q_opm=12.0, sales_trend=[])
+    assert calculate_graham_intrinsic_value(fin) > 0

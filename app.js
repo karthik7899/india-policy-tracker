@@ -113,6 +113,10 @@ const TAB_COPY = {
     sectors: ["Government Policy Logs", "Deep dive sector analysis, announcements history, and watchlists."],
     agreements: ["Corporate News & Agreements", "Scanned news alerts regarding joint ventures, strategic partnerships, and MoUs."],
     launches: ["Product Launches", "Real-time alerts on product launches, new manufacturing capacities, and rollouts."],
+    // Without an entry here activateTab bails out early, so the nav button
+    // renders and does nothing. Both of these were dead for that reason.
+    filings: ["Corporate Filings", "Exchange filings and disclosures mapped to the companies they concern."],
+    scoring: ["Scoring Engine", "How each holding's score is built — fundamentals earned and lost, and capped news flow."],
     institutional: ["Institutional Activity", "Scheme filings, block deals, and institutional buying signals."],
     graham: ["Margin of Safety (Deep Value)", "Defensive investor criteria checks and growth intrinsic value calculations."],
     buffett: ["Owner Earnings & Moats", "Owner earnings estimates, quality signals, and retained value creation metrics."],
@@ -1359,7 +1363,7 @@ function renderStocksTable(filterQuery = "") {
             case 'sector': valA = a.sectorLabel; valB = b.sectorLabel; break;
             case 'cmp': valA = parseNumeric(a.price); valB = parseNumeric(b.price); break;
             case 'pe': valA = parseNumeric(a.screener?.pe_ratio); valB = parseNumeric(b.screener?.pe_ratio); break;
-            case 'qoq': valA = parseNumeric(a.screener?.qoq_sales_growth); valB = parseNumeric(b.screener?.qoq_sales_growth); break;
+            case 'qoq': valA = parseNumeric(a.screener?.revenue_ttm_growth_pct); valB = parseNumeric(b.screener?.revenue_ttm_growth_pct); break;
             case 'roce': valA = parseNumeric(a.screener?.roce); valB = parseNumeric(b.screener?.roce); break;
             case 'roe': valA = parseNumeric(a.screener?.roe); valB = parseNumeric(b.screener?.roe); break;
             case 'capex': valA = parseNumeric(a.screener?.capex); valB = parseNumeric(b.screener?.capex); break;
@@ -1400,7 +1404,12 @@ function renderStocksTable(filterQuery = "") {
         const roceVal = sc.roce ? `${sc.roce}%` : '<span style="color: var(--text-muted);">—</span>';
         const roeVal = sc.roe ? `${sc.roe}%` : '<span style="color: var(--text-muted);">—</span>';
 
-        const qoqSalesVal = sc.qoq_sales_growth !== undefined ? `<strong>${sc.qoq_sales_growth}%</strong>` : '<span style="color: var(--text-muted);">—</span>';
+        // TTM growth, not the sequential quarter-on-quarter figure: that one
+        // reported BHEL at -37.5% while the business grew 27% year on year.
+        const ttm = sc.revenue_ttm_growth_pct;
+        const qoqSalesVal = (ttm !== undefined && ttm !== null)
+            ? `<strong style="color: ${ttm >= 0 ? 'var(--success)' : 'var(--danger)'};">${ttm > 0 ? '+' : ''}${ttm}%</strong>`
+            : '<span style="color: var(--text-muted);">—</span>';
         const capexVal = sc.capex !== undefined ? `₹${Number(sc.capex).toLocaleString('en-IN')}` : '<span style="color: var(--text-muted);">—</span>';
         const oeVal = sc.owner_earnings !== undefined ? `₹${Number(sc.owner_earnings).toLocaleString('en-IN')}` : '<span style="color: var(--text-muted);">—</span>';
         const grahamVal = sc.graham_intrinsic_value !== undefined ? `₹${sc.graham_intrinsic_value}` : '<span style="color: var(--text-muted);">—</span>';
@@ -1859,20 +1868,31 @@ function renderScoringTable() {
         const overallScore = scoreData.overall_score || 0;
         const confidence = scoreData.confidence || "Unknown";
         
-        let confBadge = '';
-        if (confidence === "High") confBadge = `<span class="badge-success-alert">High</span>`;
-        else if (confidence === "Medium") confBadge = `<span class="badge-warning-alert">Medium</span>`;
-        else confBadge = `<span class="badge-danger-alert">${escapeHtml(confidence)}</span>`;
+        const fundamental = scoreData.fundamental_score;
+        const momentum = scoreData.momentum_score;
+
+        // Confidence is data completeness, never a verdict on the company.
+        const confCls = confidence === "High" ? "badge-neutral-alert"
+            : confidence === "Medium" ? "badge-warning-alert" : "badge-danger-alert";
+        const confBadge = `<span class="${confCls}" title="How many inputs were available — not a view on the company">Data: ${escapeHtml(confidence)}</span>`;
+
+        // Show what the number is made of. A total built entirely from press
+        // coverage should not look like one built from the balance sheet.
+        const splitHtml = (fundamental === undefined || momentum === undefined) ? "" :
+            `<div class="score-split">
+                <span class="${fundamental < 0 ? 'score-neg' : 'score-pos'}" title="Earned from returns, balance sheet and valuation; reduced by failed screens">Fundamentals ${fundamental > 0 ? '+' : ''}${escapeHtml(fundamental)}</span>
+                <span class="score-mom" title="Policy and news flow — deduplicated, age-filtered and capped">News +${escapeHtml(momentum)}</span>
+            </div>`;
         
         let recommendations = (scoreData.recommendations || []).map(r => {
             const cssClass = r.includes("Strong Buy") ? "badge-success-alert" : r.includes("Buy") ? "badge-success-alert" : r.includes("Monitor") ? "badge-danger-alert" : "badge-warning-alert";
             return `<span class="${cssClass}" style="margin-right: 4px; margin-bottom: 4px; display: inline-block;">${escapeHtml(r)}</span>`;
         }).join('');
         
-        let reasonsHtml = (scoreData.reasons || []).map(r => `<div style="font-size: 11px; margin-bottom:2px;">ðŸ‘ ${escapeHtml(r)}</div>`).join('');
+        let reasonsHtml = (scoreData.reasons || []).map(r => `<div style="font-size: 11px; margin-bottom:2px;">👍 ${escapeHtml(r)}</div>`).join('');
         if (!reasonsHtml) reasonsHtml = '<span style="color: var(--text-muted);">None</span>';
         
-        let risksHtml = (scoreData.risks || []).map(r => `<div style="font-size: 11px; margin-bottom:2px; color: var(--danger-color);">âš ï¸  ${escapeHtml(r)}</div>`).join('');
+        let risksHtml = (scoreData.risks || []).map(r => `<div style="font-size: 11px; margin-bottom:2px; color: var(--danger-color);">⚠️  ${escapeHtml(r)}</div>`).join('');
         if (!risksHtml) risksHtml = '<span style="color: var(--text-muted);">None</span>';
         
         const tr = document.createElement("tr");
@@ -1881,7 +1901,7 @@ function renderScoringTable() {
                 <div class="t-ticker">${escapeHtml(s.ticker)}</div>
                 <div style="font-size: 11px; font-weight: normal; margin-top:2px; color: var(--text-muted);">${escapeHtml(s.name)}</div>
             </td>
-            <td><strong>${overallScore}</strong></td>
+            <td><strong style="font-size:15px;">${overallScore}</strong>${splitHtml}</td>
             <td>${confBadge}</td>
             <td style="max-width: 150px; white-space: normal;">${recommendations}</td>
             <td style="max-width: 250px; white-space: normal;">${reasonsHtml}</td>
