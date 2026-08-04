@@ -5,7 +5,7 @@ import sys
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from health import check_run_health  # noqa: E402
+from health import check_run_health, summarize_liquidity  # noqa: E402
 
 
 def _watchlist(n, priced=None, with_screener=None):
@@ -83,3 +83,54 @@ def test_never_raises_on_junk():
     assert ok is False  # empty watchlist
     ok, _ = check_run_health({"sector_growth": [1]}, {"sec": "not a list"})
     assert isinstance(ok, bool)
+
+
+# ---------------------------------------------------------------------------
+# turnover coverage is reported every run, and only a total collapse fails it
+# ---------------------------------------------------------------------------
+
+
+def _with_liquidity(n, bands):
+    """Watchlist of n holdings where bands[i] is the i-th holding's band."""
+    wl = _watchlist(n)
+    for stock, band in zip(wl["sec"], bands):
+        if band is not None:
+            stock["screener"]["liquidity_band"] = band
+            stock["screener"]["advt_cr"] = 0.4 if band == "illiquid" else 50.0
+    return wl
+
+
+def test_coverage_summary_counts_each_band():
+    counts = summarize_liquidity(
+        _with_liquidity(5, ["illiquid", "thin", "adequate", "liquid", None])
+    )
+    assert counts["total"] == 5
+    assert counts["measured"] == 4
+    assert counts["illiquid"] == 1
+    assert counts["thin"] == 1
+    assert counts["adequate"] == 1
+    assert counts["liquid"] == 1
+    assert counts["unknown"] == 1
+
+
+def test_turnover_coverage_is_reported_not_gated():
+    """Coverage is logged, never failed — the healthy baseline for this field
+    has not been measured in production yet, and a gate on a guessed baseline
+    either cries wolf daily or passes trivially."""
+    ok, problems = check_run_health(
+        _healthy_data(), _with_liquidity(10, ["liquid"] + [None] * 9)
+    )
+    assert ok is True
+    assert not any("traded-value" in p or "turnover" in p for p in problems)
+
+
+def test_zero_turnover_coverage_still_does_not_fail_the_run():
+    ok, problems = check_run_health(_healthy_data(), _with_liquidity(10, [None] * 10))
+    assert ok is True
+    assert not any("traded-value" in p or "turnover" in p for p in problems)
+
+
+def test_summary_survives_a_malformed_watchlist():
+    """The health module must never be the reason a run fails."""
+    assert summarize_liquidity({})["total"] == 0
+    assert summarize_liquidity({"sec": [None, "junk"]})["total"] == 0
