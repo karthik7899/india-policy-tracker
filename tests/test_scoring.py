@@ -158,3 +158,71 @@ def test_no_data_still_returns_a_score():
     score = calculate_aggregate_score(_company())
     assert score.confidence in ("Very Low", "Low")
     assert score.recommendations
+
+
+# ---------------------------------------------------------------------------
+# event size and tradeability now move the score
+# ---------------------------------------------------------------------------
+
+
+def test_the_same_order_scores_differently_by_company_size():
+    """A Rs 500 crore win is a catalyst for a mid-cap and noise for a giant."""
+    headline = _event("Wins order worth Rs 500 crore", event_type="order_win")
+    midcap = calculate_aggregate_score(
+        _company([headline], sales_trend=[500.0] * 4, roce=25.0)
+    )
+    megacap = calculate_aggregate_score(
+        _company([headline], sales_trend=[62500.0] * 4, roce=25.0)
+    )
+    assert midcap.momentum_score > megacap.momentum_score
+
+
+def test_an_unpriced_order_is_not_treated_as_a_small_one():
+    """Most headlines omit the value; absence of a number is not evidence."""
+    unpriced = calculate_aggregate_score(
+        _company(
+            [_event("Lands first US purchase order", event_type="order_win")],
+            sales_trend=[500.0] * 4,
+        )
+    )
+    tiny = calculate_aggregate_score(
+        _company(
+            [_event("Wins order worth Rs 1 crore", event_type="order_win")],
+            sales_trend=[500.0] * 4,
+        )
+    )
+    assert unpriced.momentum_score > tiny.momentum_score
+
+
+def test_a_policy_approval_is_not_penalised_for_having_no_rupee_figure():
+    approval = calculate_aggregate_score(
+        _company(
+            [_event("Cabinet approves PLI scheme", event_type="pli")],
+            sales_trend=[500.0] * 4,
+        )
+    )
+    assert approval.momentum_score > 1
+
+
+def test_illiquid_holdings_are_marked_down():
+    """A stock that cannot be exited carries a risk no ratio here expressed."""
+    tradeable = calculate_aggregate_score(
+        _company(roce=25.0, liquidity_band="liquid", advt_cr=250.0)
+    )
+    trapped = calculate_aggregate_score(
+        _company(
+            roce=25.0, liquidity_band="illiquid", advt_cr=0.3, days_to_exit_1cr=16.7
+        )
+    )
+    assert trapped.fundamental_score < tradeable.fundamental_score
+    assert any("Illiquid" in r for r in trapped.risks)
+
+
+def test_unmeasured_liquidity_is_not_punished():
+    """Silence about an unmeasured stock, not an accusation."""
+    unknown = calculate_aggregate_score(_company(roce=25.0))
+    measured = calculate_aggregate_score(
+        _company(roce=25.0, liquidity_band="adequate", advt_cr=12.0)
+    )
+    assert unknown.fundamental_score == measured.fundamental_score
+    assert not any("Illiquid" in r or "Thin" in r for r in unknown.risks)

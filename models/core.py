@@ -64,6 +64,15 @@ class CompanyFinancials(BaseModel):
     dii_pct: Optional[float] = None
     dii_change: Optional[float] = None
 
+    # Tradeability. Declared here for the same reason the TTM growth fields
+    # are: anything absent from this model is silently dropped on coercion,
+    # so the scorer would read None no matter what the fetcher attached.
+    advt_cr: Optional[float] = None
+    liquidity_band: Optional[str] = None
+    days_to_exit_1cr: Optional[float] = None
+    days_to_exit_5cr: Optional[float] = None
+    sessions: Optional[int] = None
+
 
 class CompanyScore(BaseModel):
     overall_score: int = 0

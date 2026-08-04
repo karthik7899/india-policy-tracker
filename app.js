@@ -224,6 +224,33 @@ function formatPotential(pctStr) {
     return `<span style="font-weight:700; color:var(--text-primary);">0.0%</span>`;
 }
 
+// Average daily value traded, coloured by whether a position can realistically
+// be entered and exited. Shows the turnover rather than only the verdict, and
+// puts the exit horizon in the tooltip so the band can be argued with.
+function formatLiquidity(sc) {
+    const advt = sc && sc.advt_cr;
+    if (advt === undefined || advt === null || isNaN(Number(advt))) {
+        return '<span style="color: var(--text-muted);" title="No volume history available">—</span>';
+    }
+    const band = sc.liquidity_band || 'unknown';
+    const colour = {
+        illiquid: 'var(--danger)',
+        thin: 'var(--warning, var(--danger))',
+        adequate: 'var(--text-primary)',
+        liquid: 'var(--success)',
+    }[band] || 'var(--text-primary)';
+
+    const days = sc.days_to_exit_1cr;
+    const horizon = (days !== undefined && days !== null)
+        ? ` · ~${Number(days) < 1 ? '<1' : Math.round(Number(days))} session(s) to exit ₹1 Cr at 20% of volume`
+        : '';
+    const value = Number(advt) >= 1
+        ? `₹${Number(advt).toLocaleString('en-IN', { maximumFractionDigits: 0 })} Cr`
+        : `₹${Number(advt).toFixed(2)} Cr`;
+    const title = `${band}${horizon}`;
+    return `<span style="font-weight:600; color:${colour};" title="${escapeHtml(title)}">${value}</span>`;
+}
+
 // Helper: Format analyst info badge
 function formatAnalystBadge(stock) {
     const rating = stock.rating;
@@ -1364,6 +1391,7 @@ function renderStocksTable(filterQuery = "") {
             case 'cmp': valA = parseNumeric(a.price); valB = parseNumeric(b.price); break;
             case 'pe': valA = parseNumeric(a.screener?.pe_ratio); valB = parseNumeric(b.screener?.pe_ratio); break;
             case 'qoq': valA = parseNumeric(a.screener?.revenue_ttm_growth_pct); valB = parseNumeric(b.screener?.revenue_ttm_growth_pct); break;
+            case 'advt': valA = parseNumeric(a.screener?.advt_cr); valB = parseNumeric(b.screener?.advt_cr); break;
             case 'roce': valA = parseNumeric(a.screener?.roce); valB = parseNumeric(b.screener?.roce); break;
             case 'roe': valA = parseNumeric(a.screener?.roe); valB = parseNumeric(b.screener?.roe); break;
             case 'capex': valA = parseNumeric(a.screener?.capex); valB = parseNumeric(b.screener?.capex); break;
@@ -1410,6 +1438,9 @@ function renderStocksTable(filterQuery = "") {
         const qoqSalesVal = (ttm !== undefined && ttm !== null)
             ? `<strong style="color: ${ttm >= 0 ? 'var(--success)' : 'var(--danger)'};">${ttm > 0 ? '+' : ''}${ttm}%</strong>`
             : '<span style="color: var(--text-muted);">—</span>';
+        // Tradeability. The cheapest-looking names in this book are
+        // consistently the thinnest, and nothing here used to say so.
+        const advtVal = formatLiquidity(sc);
         const capexVal = sc.capex !== undefined ? `₹${Number(sc.capex).toLocaleString('en-IN')}` : '<span style="color: var(--text-muted);">—</span>';
         const oeVal = sc.owner_earnings !== undefined ? `₹${Number(sc.owner_earnings).toLocaleString('en-IN')}` : '<span style="color: var(--text-muted);">—</span>';
         const grahamVal = sc.graham_intrinsic_value !== undefined ? `₹${sc.graham_intrinsic_value}` : '<span style="color: var(--text-muted);">—</span>';
@@ -1451,6 +1482,7 @@ function renderStocksTable(filterQuery = "") {
             <td><span class="chip" style="display:inline-block; border-color:transparent;">${escapeHtml(sectorLabel)}</span></td>
             <td class="num">₹${escapeHtml(s.price)}</td>
             <td class="num">${peVal}</td>
+            <td class="num">${advtVal}</td>
             <td class="num">${qoqSalesVal}</td>
             <td class="num">${roceVal}</td>
             <td class="num">${roeVal}</td>
@@ -1484,7 +1516,7 @@ function renderStocksTable(filterQuery = "") {
     });
 
     if (allStocksList.length === 0) {
-        setTableEmpty(tbody, 18, "No matching companies", "Try a ticker, company, sector, or catalyst keyword.");
+        setTableEmpty(tbody, 19, "No matching companies", "Try a ticker, company, sector, or catalyst keyword.");
     }
 
     updateSortHeaders();
