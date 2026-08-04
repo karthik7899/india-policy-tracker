@@ -4,13 +4,15 @@ from utils import to_float
 import yfinance as yf
 
 
-def update_single_stock(stock, prefetched_prices=None):
+def update_single_stock(stock, prefetched_prices=None, prefetched_liquidity=None):
     """Worker function to fetch Yahoo Finance metrics for a single stock."""
     from providers.yahoo import fetch_stock_data
     from logger import log
 
     if prefetched_prices is None:
         prefetched_prices = {}
+    if prefetched_liquidity is None:
+        prefetched_liquidity = {}
 
     ticker = stock["ticker"]
     yahoo_ticker = f"{ticker}.NS"
@@ -40,6 +42,14 @@ def update_single_stock(stock, prefetched_prices=None):
             if k != "price" and v is not None:
                 stock[k] = v
 
+        # Turnover rides on the same batch download as the price, so it is
+        # attached here rather than costing a second round trip per holding.
+        liquidity = prefetched_liquidity.get(yahoo_ticker)
+        if liquidity:
+            stock.setdefault("screener", {})
+            if isinstance(stock["screener"], dict):
+                stock["screener"].update(liquidity)
+
         live_price = to_float(stock.get("price"))
         if to_float(stock.get("target")) is not None and live_price is not None:
             _calculate_growth_pct(stock, live_price, ticker)
@@ -64,6 +74,27 @@ def _calculate_growth_pct(stock, live_price, ticker):
         )
 
 
+def _liquidity_from_frame(frame):
+    """Turnover assessment from one ticker's OHLCV frame, or None.
+
+    Isolated so a malformed frame for a single ticker cannot take down the
+    whole batch -- these arrive from a third party and a missing Volume
+    column on one obscure listing must not cost the other sixty-four their
+    prices.
+    """
+    from analysis.liquidity import assess
+
+    try:
+        if "Volume" not in frame:
+            return None
+        closes = frame["Close"].tolist()
+        volumes = frame["Volume"].tolist()
+        return assess(closes, volumes)
+    except Exception as e:
+        log.error(f"Liquidity computation failed for a ticker frame: {e}")
+        return None
+
+
 def update_live_stock_prices(watchlist):
     """Updates watchlist with live prices from Yahoo Finance.
 
@@ -82,18 +113,24 @@ def update_live_stock_prices(watchlist):
             yahoo_tickers.append(f"{stock['ticker']}.NS")
 
     prefetched_prices = {}
+    prefetched_liquidity = {}
     if yahoo_tickers:
         try:
             log.info("Batch downloading live prices...")
             # ⚡ Bolt Optimization: Batch fetch history for all tickers at once using yf.download.
             # This significantly reduces network overhead compared to individual requests
             # and helps prevent hitting rate limits while updating the entire watchlist.
+            #
+            # The window is a month rather than a day because the same response
+            # carries the volume series that turnover is computed from. One
+            # request answers both "what is it worth" and "can it be traded";
+            # the latest close is still the last row.
             data = yf.download(
                 yahoo_tickers,
-                period="1d",
+                period="1mo",
                 group_by="ticker",
                 threads=True,
-                timeout=10,
+                timeout=15,
                 progress=False,
             )
             if len(yahoo_tickers) == 1:
@@ -102,7 +139,10 @@ def update_live_stock_prices(watchlist):
                     and "Close" in data
                     and not data["Close"].isna().all()
                 ):
-                    prefetched_prices[yahoo_tickers[0]] = data["Close"].iloc[-1]
+                    prefetched_prices[yahoo_tickers[0]] = (
+                        data["Close"].dropna().iloc[-1]
+                    )
+                    prefetched_liquidity[yahoo_tickers[0]] = _liquidity_from_frame(data)
             else:
                 for ticker in yahoo_tickers:
                     if (
@@ -111,7 +151,11 @@ def update_live_stock_prices(watchlist):
                         and "Close" in data[ticker]
                         and not data[ticker]["Close"].isna().all()
                     ):
-                        prefetched_prices[ticker] = data[ticker]["Close"].iloc[-1]
+                        closes = data[ticker]["Close"].dropna()
+                        prefetched_prices[ticker] = closes.iloc[-1]
+                        prefetched_liquidity[ticker] = _liquidity_from_frame(
+                            data[ticker]
+                        )
         except Exception as e:
             log.error(f"Error during batch price download: {e}")
 
@@ -120,7 +164,9 @@ def update_live_stock_prices(watchlist):
     updated = 0
     with ThreadPoolExecutor(max_workers=8) as executor:
         futures = [
-            executor.submit(update_single_stock, stock, prefetched_prices)
+            executor.submit(
+                update_single_stock, stock, prefetched_prices, prefetched_liquidity
+            )
             for stock in all_stocks
         ]
         for future in as_completed(futures):

@@ -27,6 +27,7 @@ import re
 
 from models.core import Company, CompanyScore
 from config_scoring import SCORING_CONFIG
+from analysis import materiality, liquidity
 
 # News flow is a real signal but a bounded one. Past this, extra coverage says
 # more about a company's press office than its prospects.
@@ -43,6 +44,11 @@ PENALTY_PROMOTER_EXIT = 2
 PENALTY_POOR_LIQUIDITY = 1
 PENALTY_INSTITUTIONAL_SELLING = 1
 PENALTY_MARGIN_CONTRACTION = 1
+# Tradeability. A name that cannot be exited without moving the price is
+# carrying a risk no fundamental measure in this file expresses -- and the
+# cheapest-looking holdings here are consistently the thinnest ones.
+PENALTY_ILLIQUID = 2
+PENALTY_THIN_TRADING = 1
 
 _SCREEN_FAILURES = ("Debt Limit", "P/E Screen", "Hyper-Growth", "Current Ratio")
 
@@ -73,10 +79,22 @@ def _event_age_days(event, today):
 
 
 def _score_policy_events(company, today):
-    """Points from policy/news flow: deduplicated, age-filtered, capped."""
-    points = 0
+    """Points from policy/news flow: deduplicated, age-filtered, size-weighted,
+    then capped.
+
+    The size weighting is what stops the cap from flattening the signal. With
+    every event worth its face value, any company with three or more headlines
+    hit the ceiling, and 17 holdings scored an identical 8 — the cap removed
+    the inflation and took the ranking with it. Weighting each transactional
+    event by what it is worth against trailing revenue puts the spread back,
+    because a Rs 500 crore win against Rs 2,50,000 crore of revenue no longer
+    counts the same as one against Rs 2,000 crore.
+    """
+    points = 0.0
     reasons = []
     seen = set()
+    fin = getattr(company, "screener", None)
+
     for ev in getattr(company, "policy_events", None) or []:
         title = ev.get("title") or ev.get("scheme") or ev.get("product") or ""
         key = _normalize(title)
@@ -88,7 +106,8 @@ def _score_policy_events(company, today):
         if age is not None and age > POLICY_MAX_AGE_DAYS:
             continue
 
-        ev_type = (ev.get("event_type") or "").upper()
+        ev_type_raw = ev.get("event_type") or ""
+        ev_type = ev_type_raw.upper()
         if "PLI" in title.upper() or ev_type == "PLI":
             gain, label = SCORING_CONFIG.pli_approval, "PLI Approval / Target"
         elif "AGREEMENT" in ev_type or "MOU" in ev_type:
@@ -98,13 +117,21 @@ def _score_policy_events(company, today):
         else:
             gain, label = SCORING_CONFIG.pib_announcement, "Policy Notification"
 
+        # Weight by size where a size exists. Events with no readable amount
+        # keep their face value: unknown materiality is not small materiality.
+        verdict = materiality.assess(title, ev_type_raw, fin)
+        gain *= verdict["weight"]
+        if verdict["pct_of_revenue"] is not None:
+            label = f"{label} [{verdict['band']}, {verdict['pct_of_revenue']:.1f}% of revenue]"
+
         if points + gain > POLICY_POINT_CAP:
             gain = POLICY_POINT_CAP - points
         if gain <= 0:
             break
         points += gain
         reasons.append(f"{label}: {title}")
-    return points, reasons
+
+    return int(round(points)), reasons
 
 
 def calculate_aggregate_score(company: Company) -> CompanyScore:
@@ -194,6 +221,22 @@ def calculate_aggregate_score(company: Company) -> CompanyScore:
     if fin.roe is not None and fin.roe >= SCORING_CONFIG.min_roe:
         fundamental += 1
         reasons.append(f"High Return on Equity (ROE: {fin.roe}%)")
+
+    # Tradeability. Distinct from the current ratio above, which is balance
+    # sheet liquidity — this is whether the market will take the other side.
+    band = getattr(fin, "liquidity_band", None)
+    if band in ("illiquid", "thin"):
+        assessment = {
+            "liquidity_band": band,
+            "advt_cr": getattr(fin, "advt_cr", None),
+            "days_to_exit_1cr": getattr(fin, "days_to_exit_1cr", None),
+        }
+        fundamental -= PENALTY_ILLIQUID if band == "illiquid" else PENALTY_THIN_TRADING
+        warning = liquidity.liquidity_warning(company.ticker, assessment)
+        if warning:
+            risks.append(warning)
+    elif band == "liquid":
+        reasons.append(f"Liquid (Rs {fin.advt_cr:.0f} Cr traded daily)")
 
     # Ownership and institutional flow
     if fin.promoter_change is not None and fin.promoter_change <= -1.0:
