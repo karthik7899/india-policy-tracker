@@ -197,3 +197,55 @@ def test_competitive_threat_ignored_when_challenger_growth_unknown():
     }
     warnings = generate_early_warnings(data, watchlist)
     assert "Competitive Threat" not in _categories(warnings)
+
+
+# ---------------------------------------------------------------------------
+# every alert can explain itself
+# ---------------------------------------------------------------------------
+
+
+def test_every_emitted_category_has_a_documented_rule():
+    """The guard against the failure this feature exists to prevent.
+
+    A first draft of the rule book guessed category names instead of reading
+    them, leaving the largest group ("Market Share", ten of twenty-two alerts
+    that day) explained as "Rule not documented" while looking complete.
+    """
+    from analysis.early_warning import _RULE_BOOK
+    import re
+    import pathlib
+
+    source = pathlib.Path(__file__).parent.parent / "analysis"
+    emitted = set()
+    for path in source.glob("*.py"):
+        text = path.read_text(encoding="utf-8")
+        # Categories reach the alert dict either through emit(...) or a
+        # literal "category" key.
+        emitted.update(re.findall(r'"category":\s*"([^"]+)"', text))
+        for match in re.finditer(r'emit\(\s*"[^"]+",\s*"[^"]+",\s*"([^"]+)"', text):
+            emitted.add(match.group(1))
+
+    undocumented = {c for c in emitted if c not in _RULE_BOOK}
+    assert not undocumented, f"categories with no rule documented: {undocumented}"
+
+
+def test_annotation_labels_headline_derived_findings_as_low_confidence():
+    """Headline-derived alerts inherit every NLP classification error, and
+    must not present with the same authority as a reported figure."""
+    from analysis.early_warning import annotate_rule
+
+    numeric = annotate_rule({"category": "Margin Compression"})
+    headline = annotate_rule({"category": "Competitive Threat"})
+
+    assert numeric["confidence"] == "High"
+    assert headline["confidence"] == "Low"
+    assert "Screener" in numeric["evidence_source"]
+    assert "Headline" in headline["evidence_source"]
+
+
+def test_an_unknown_category_is_labelled_honestly_not_confidently():
+    from analysis.early_warning import annotate_rule
+
+    alert = annotate_rule({"category": "Something New"})
+    assert alert["rule"] == "Rule not documented"
+    assert alert["confidence"] == "Medium"
