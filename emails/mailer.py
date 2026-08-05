@@ -6,6 +6,13 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from logger import log
 from config import SECTOR_METADATA, DASHBOARD_URL
+from emails.summary import (
+    build_summary,
+    build_subject,
+    build_preheader,
+    build_plain_text,
+    _sector_label,
+)
 
 _SEVERITY_BADGE = {
     "Critical": ("#7f1d1d", "#fca5a5"),
@@ -60,6 +67,104 @@ _CAP_LADDER = (
     ("compact", _CAPS_COMPACT),
     ("minimal", _CAPS_MINIMAL),
 )
+
+
+def _build_exec_summary_html(summary):
+    """The first thing in the body: run trustworthiness, then what changed.
+
+    Placed above everything because it is the part that survives clipping.
+    The size ladder trims from the bottom, so whatever else is lost, the
+    reader still gets the status line and the day's deltas.
+
+    Table-based and inline-styled throughout — Outlook ignores most of the
+    stylesheet, and this block above all others has to render there.
+    """
+    cov = summary["coverage"]
+    ok = not summary["degraded"]
+    status_colour = "#34d399" if ok else "#f87171"
+    status_text = "Healthy" if ok else "DEGRADED"
+
+    header = (
+        '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" '
+        'style="background:#0f172a;border-bottom:1px solid #1f2937;">'
+        '<tr><td style="padding:14px 30px;font-size:12px;color:#94a3b8;'
+        'font-family:Arial,Helvetica,sans-serif;">'
+        f'Data completeness <strong style="color:#e2e8f0;">{cov["completeness"]}%</strong>'
+        f' &nbsp;|&nbsp; Priced <strong style="color:#e2e8f0;">{cov["priced"]}/{cov["total"]}</strong>'
+        f' &nbsp;|&nbsp; Run <strong style="color:{status_colour};">{status_text}</strong>'
+        "</td></tr></table>"
+    )
+
+    rows = []
+    if summary["day_type"] == "degraded":
+        rows.append(
+            "<strong style='color:#f87171;'>This run is degraded.</strong> "
+            f"Only {cov['priced']}/{cov['total']} holdings priced and "
+            f"{cov['fundamentals']}/{cov['total']} carry fundamentals. "
+            "Treat today's signals as provisional."
+        )
+    elif summary["day_type"] == "quiet":
+        rows.append(
+            "<strong>No new or escalated signals this cycle.</strong> "
+            f"{summary['ongoing_total']} standing condition(s) across "
+            f"{summary['ongoing_groups']} group(s) are unchanged."
+        )
+    else:
+        if summary["critical_total"]:
+            names = ", ".join(w.get("ticker", "") for w in summary["critical"])
+            rows.append(
+                f"<strong style='color:#f87171;'>Critical:</strong> "
+                f"{summary['critical_total']} risk signal(s) — {names}."
+            )
+        if summary["escalated"]:
+            names = ", ".join(w.get("ticker", "") for w in summary["escalated"][:4])
+            rows.append(
+                f"<strong style='color:#fdba74;'>Escalated:</strong> "
+                f"{len(summary['escalated'])} worsened since the last run — {names}."
+            )
+        if summary["opportunities_total"]:
+            names = ", ".join(w.get("ticker", "") for w in summary["opportunities"])
+            rows.append(
+                f"<strong style='color:#34d399;'>Catalysts:</strong> "
+                f"{summary['opportunities_total']} positive signal(s) — {names}."
+            )
+        if summary["broken_theses"]:
+            rows.append(
+                f"<strong>Theses:</strong> {summary['broken_theses']} marked broken; "
+                "review before acting on any score."
+            )
+        if summary["hot_sectors"]:
+            hot = ", ".join(
+                f"{_sector_label(k)} ({n})" for k, n in summary["hot_sectors"]
+            )
+            rows.append(f"<strong>Sectors moving:</strong> {hot}.")
+
+    # Suppressions are stated rather than left as blanks, so a missing
+    # valuation reads as a decision the model made and not as an oversight.
+    if summary["suppressed"]:
+        tickers = ", ".join(s.get("ticker", "") for s in summary["suppressed"][:5])
+        rows.append(
+            f"<strong>Estimates suppressed:</strong> {len(summary['suppressed'])} "
+            f"holding(s) carry no honest valuation — {tickers}."
+        )
+
+    if not rows:
+        rows.append("Nothing changed materially this cycle.")
+
+    items = "".join(
+        f'<li style="margin-bottom:7px;line-height:1.5;">{r}</li>' for r in rows
+    )
+    return (
+        header
+        + '<table role="presentation" width="100%" cellpadding="0" cellspacing="0">'
+        '<tr><td style="padding:20px 30px 6px 30px;">'
+        '<div style="font-size:11px;letter-spacing:1px;text-transform:uppercase;'
+        'color:#60a5fa;margin-bottom:10px;font-family:Arial,Helvetica,sans-serif;">'
+        "What changed today</div>"
+        '<ul style="margin:0;padding-left:18px;font-size:13.5px;color:#cbd5e1;'
+        f'font-family:Arial,Helvetica,sans-serif;">{items}</ul>'
+        "</td></tr></table>"
+    )
 
 
 def _build_early_warning_html(warnings, caps=_CAPS_NORMAL):
@@ -446,10 +551,12 @@ def _render_email(brief_data, watchlist, caps):
         1 for s in (watchlist or {}) if s in SECTOR_METADATA and s != "macro_indicators"
     )
 
-    preheader = (
-        f"{risk_count} risk &amp; {opp_count} opportunity signals across "
-        f"{sectors_tracked} sectors — {today_str}"
-    )
+    # Preheader and executive summary both come from the shared day summary,
+    # so the inbox preview, the subject and the body cannot state different
+    # counts. Computed on the unescaped data, then escaped once here.
+    summary = build_summary(brief_data, watchlist)
+    preheader = html_lib.escape(build_preheader(summary))
+    exec_summary_html = _build_exec_summary_html(summary)
 
     body_html = f"""
     <!DOCTYPE html>
@@ -467,6 +574,7 @@ def _render_email(brief_data, watchlist, caps):
                 <p>Daily Intelligence Report | {today_str}</p>
                 <a href="{DASHBOARD_URL}" class="cta-button" target="_blank">View Live Dashboard</a>
             </div>
+            {exec_summary_html}
             <div class="summary-strip">
                 <div class="stat">
                     <div class="stat-num" style="color: #f87171;">{risk_count}</div>
@@ -1006,8 +1114,123 @@ def build_html_email(brief_data, watchlist):
     return last_html
 
 
-def send_email(html_content):
-    """Sends the briefing email using environment variable configurations."""
+def _render_brief_email(summary, today_str):
+    """The short form, for days that do not warrant the full briefing.
+
+    A quiet day used to produce the same 83 KB document as a busy one: every
+    sector card, every table, rendered in full to say that nothing had
+    happened. That is how a daily email trains its reader to stop opening it.
+    A degraded run got the same treatment, which is worse — a normal-looking
+    briefing built on data the pipeline itself did not trust.
+
+    Both now get a page that can be read in ten seconds and links out for
+    anything more.
+    """
+    cov = summary["coverage"]
+    degraded = summary["day_type"] == "degraded"
+
+    if degraded:
+        headline = "Degraded run — signals are provisional"
+        colour = "#f87171"
+        detail = (
+            f"<p style='margin:0 0 10px 0;'>This run completed, but data "
+            f"completeness is below threshold.</p>"
+            f"<ul style='margin:0 0 14px 0;padding-left:18px;'>"
+            f"<li>Priced holdings: <strong>{cov['priced']}/{cov['total']}</strong></li>"
+            f"<li>Fundamentals fetched: <strong>{cov['fundamentals']}/{cov['total']}</strong></li>"
+            f"<li>Data completeness: <strong>{cov['completeness']}%</strong></li>"
+            f"</ul>"
+            f"<p style='margin:0;'>Treat today's signals as provisional and "
+            f"verify against the source before acting.</p>"
+        )
+    else:
+        headline = "No new or escalated signals"
+        colour = "#34d399"
+        detail = (
+            f"<p style='margin:0 0 10px 0;'>Nothing appeared or worsened in "
+            f"this cycle.</p>"
+            f"<ul style='margin:0 0 14px 0;padding-left:18px;'>"
+            f"<li>Ongoing conditions: <strong>{summary['ongoing_total']}</strong> "
+            f"across {summary['ongoing_groups']} group(s)</li>"
+            f"<li>Theses marked broken: <strong>{summary['broken_theses']}</strong></li>"
+            f"<li>Data completeness: <strong>{cov['completeness']}%</strong></li>"
+            f"</ul>"
+            f"<p style='margin:0;'>Standing conditions are unchanged and are "
+            f"grouped on the dashboard.</p>"
+        )
+
+    return f"""<!DOCTYPE html>
+<html><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
+<body style="margin:0;padding:20px;background:#0b0f19;
+ font-family:Arial,Helvetica,sans-serif;color:#cbd5e1;">
+<span style="display:none;visibility:hidden;opacity:0;color:transparent;
+ height:0;width:0;overflow:hidden;">{html_lib.escape(build_preheader(summary))}</span>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+<tr><td align="center">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0"
+ style="max-width:600px;background:#111827;border:1px solid #1f2937;border-radius:12px;">
+  <tr><td style="padding:26px 30px;background:#0f172a;border-bottom:2px solid {colour};">
+    <div style="font-size:19px;color:#ffffff;font-weight:bold;">India Policy &amp; Sector Tracker</div>
+    <div style="font-size:13px;color:#94a3b8;margin-top:5px;">{today_str}</div>
+  </td></tr>
+  <tr><td style="padding:24px 30px;">
+    <div style="font-size:16px;color:{colour};font-weight:bold;margin-bottom:12px;">{headline}</div>
+    <div style="font-size:13.5px;line-height:1.6;">{detail}</div>
+  </td></tr>
+  <tr><td align="center" style="padding:6px 30px 28px 30px;">
+    <a href="{DASHBOARD_URL}" target="_blank"
+       style="display:inline-block;padding:12px 26px;background:#2563eb;color:#ffffff;
+              text-decoration:none;border-radius:7px;font-size:14px;font-weight:bold;">
+      View Live Dashboard</a>
+  </td></tr>
+  <tr><td style="padding:16px 30px 22px 30px;border-top:1px solid #1f2937;
+                 font-size:10.5px;color:#64748b;line-height:1.5;">
+    Sources: PIB, Google News RSS, Screener.in, Yahoo Finance, SEBI filings, AMFI/MF NAV data.
+    Generated automatically and may contain data or classification errors.
+    Not investment advice; verify filings and fundamentals before acting.
+  </td></tr>
+</table></td></tr></table></body></html>"""
+
+
+def build_briefing_email(brief_data, watchlist):
+    """The whole message: subject, HTML, and plain-text alternative.
+
+    All three derive from one summary, so the subject cannot promise counts
+    the body contradicts.
+    """
+    summary = build_summary(brief_data or {}, watchlist or {})
+    today = datetime.date.today()
+
+    # Days with nothing to report, and days whose data cannot be trusted, get
+    # the short form. Sending the full briefing on either is what turns a
+    # daily email into something the reader learns to skip.
+    if summary["day_type"] in ("quiet", "degraded"):
+        html = _render_brief_email(summary, today.strftime("%A, %d %B %Y"))
+        log.info(
+            f"Briefing rendered in short form ({summary['day_type']} day): "
+            f"{len(html.encode('utf-8'))} bytes."
+        )
+    else:
+        html = build_html_email(brief_data, watchlist)
+
+    return {
+        "subject": build_subject(summary, today),
+        "html": html,
+        "text": build_plain_text(summary, DASHBOARD_URL, today),
+        "summary": summary,
+    }
+
+
+def send_email(html_content, subject=None, text_content=None):
+    """Sends the briefing email using environment variable configurations.
+
+    ``subject`` and ``text_content`` are optional so existing callers keep
+    working, but both should be supplied: the default subject is only a date,
+    which is the least useful thing a subject line can say, and without a
+    plain-text part the message goes out HTML-only — worse for spam scoring
+    and for anything that does not render markup.
+    """
     raw_emails = os.environ.get("RECEIVER_EMAIL", "")
     receiver_emails = [
         email.strip() for email in raw_emails.split(",") if email.strip()
@@ -1028,14 +1251,18 @@ def send_email(html_content):
     log.info(f"Connecting to SMTP server {smtp_server}:{smtp_port}...")
 
     msg = MIMEMultipart("alternative")
-    msg["Subject"] = (
-        f"🇮🇳 Daily India Policy Briefing: {datetime.date.today().strftime('%d %b %Y')}"
+    msg["Subject"] = subject or (
+        f"India Policy Tracker | {datetime.date.today().strftime('%d %b %Y')}"
     )
     msg["From"] = smtp_username
     msg["To"] = ", ".join(receiver_emails)
 
-    part = MIMEText(html_content, "html")
-    msg.attach(part)
+    # Order matters in a multipart/alternative: clients display the *last*
+    # part they can render, so plain text must be attached first or the HTML
+    # never wins.
+    if text_content:
+        msg.attach(MIMEText(text_content, "plain", "utf-8"))
+    msg.attach(MIMEText(html_content, "html", "utf-8"))
 
     try:
         port = int(smtp_port)
