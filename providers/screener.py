@@ -30,7 +30,13 @@ async def fetch_screener_async(session, ticker, sector, price):
     except Exception as e:
         log.error(f"{ticker}: Screener.in exception: {e}")
         return ticker, None, None
-    soup = BeautifulSoup(text, "html.parser")
+    # lxml rather than html.parser, for correctness before speed. On the
+    # malformed markup scrapers actually meet, html.parser mis-recovers in ways
+    # that silently fabricate numbers: an unclosed <td> made it fuse the cells
+    # "100" and "200" into a single value of 100200, and an unclosed <tr> let
+    # the following row's figures bleed into the row above. lxml recovers both
+    # correctly. See tests/test_html_parsing.py::TestParserRecovery.
+    soup = BeautifulSoup(text, "lxml")
 
     # Screener's warehouse id enables the peers API (structured competitor list).
     warehouse_el = soup.find(attrs={"data-warehouse-id": True})
@@ -199,7 +205,7 @@ def parse_peer_table(html):
     possible (analysis/market_share.py).
     """
     candidates = []
-    soup = BeautifulSoup(html, "html.parser")
+    soup = BeautifulSoup(html, "lxml")
     table = soup.find("table")
     if not table:
         return candidates

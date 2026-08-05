@@ -59,7 +59,7 @@ MOCK_HTML = """
 
 
 def test_extract_row_values():
-    soup = BeautifulSoup(MOCK_HTML, "html.parser")
+    soup = BeautifulSoup(MOCK_HTML, "lxml")
 
     # Test normal extraction with commas
     sales = extract_row_values(soup, "quarters", "Sales")
@@ -85,7 +85,7 @@ def test_extract_annual_profit_loss_rows():
     blanked these extractions before the row matcher was repaired — so the
     fixture keeps that markup on the Sales row.
     """
-    soup = BeautifulSoup(MOCK_HTML, "html.parser")
+    soup = BeautifulSoup(MOCK_HTML, "lxml")
     assert extract_row_values(soup, "profit-loss", "Sales") == [
         1000.0,
         1200.0,
@@ -107,3 +107,63 @@ def test_calculate_growth():
     assert calculate_growth(-100, -50) == 50.0
     assert calculate_growth(0, 100) == 0.0
     assert calculate_growth(None, 100) == 0.0
+
+
+class TestParserRecovery:
+    """Why the scrapers pass "lxml" rather than "html.parser".
+
+    Nine bot-authored pull requests proposed this swap as a speed
+    optimisation. The measurable benefit is correctness: on the malformed
+    markup real scraped pages contain, html.parser mis-recovers in ways that
+    produce numbers no cell ever held, with no error raised.
+    """
+
+    def _both(self, html, section="quarters", label="Sales"):
+        return (
+            extract_row_values(BeautifulSoup(html, "html.parser"), section, label),
+            extract_row_values(BeautifulSoup(html, "lxml"), section, label),
+        )
+
+    def test_unclosed_cells_are_not_fused_into_one_number(self):
+        """html.parser reads 100 and 200 as a single value of 100200."""
+        html = (
+            "<section id='quarters'><table><tbody>"
+            "<tr><td>Sales<td>100<td>200"
+            "</tbody></table></section>"
+        )
+        legacy, lxml_values = self._both(html)
+        assert lxml_values == [100.0, 200.0]
+        assert 100200.0 in legacy  # the defect this parser choice avoids
+
+    def test_an_unclosed_row_does_not_absorb_the_next_one(self):
+        """Expenses bled into Sales, making the series two rows long."""
+        html = (
+            "<section id='quarters'><table><tbody>"
+            "<tr><td>Sales</td><td>100</td><td>200</td>"
+            "<tr><td>Expenses</td><td>50</td><td>60</td>"
+            "</tbody></table></section>"
+        )
+        legacy, lxml_values = self._both(html)
+        assert lxml_values == [100.0, 200.0]
+        assert legacy == [100.0, 200.0, 50.0, 60.0]
+
+    def test_well_formed_markup_parses_identically(self):
+        """The swap must not move any number on pages that are already valid."""
+        for section, label in (
+            ("quarters", "Sales"),
+            ("balance-sheet", "Borrowings"),
+        ):
+            legacy, lxml_values = self._both(MOCK_HTML, section, label)
+            assert legacy == lxml_values
+
+    def test_the_nested_button_label_still_resolves(self):
+        """Screener wraps expandable row labels in a <button>; that quirk
+        already cost every sales/debt metric once."""
+        html = (
+            "<section id='quarters'><table><tbody>"
+            "<tr><td><button class='button-plain'>Sales<span></span></button></td>"
+            "<td>100</td><td>200</td></tr>"
+            "</tbody></table></section>"
+        )
+        legacy, lxml_values = self._both(html)
+        assert lxml_values == [100.0, 200.0] == legacy
