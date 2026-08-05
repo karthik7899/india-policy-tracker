@@ -30,7 +30,7 @@ async def fetch_screener_async(session, ticker, sector, price):
     except Exception as e:
         log.error(f"{ticker}: Screener.in exception: {e}")
         return ticker, None, None
-    soup = BeautifulSoup(text, "lxml")
+    soup = BeautifulSoup(text, "html.parser")
 
     # Screener's warehouse id enables the peers API (structured competitor list).
     warehouse_el = soup.find(attrs={"data-warehouse-id": True})
@@ -185,7 +185,7 @@ def parse_peer_table(html):
     possible (analysis/market_share.py).
     """
     candidates = []
-    soup = BeautifulSoup(html, "lxml")
+    soup = BeautifulSoup(html, "html.parser")
     table = soup.find("table")
     if not table:
         return candidates
