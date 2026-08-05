@@ -226,3 +226,42 @@ def test_unmeasured_liquidity_is_not_punished():
     )
     assert unknown.fundamental_score == measured.fundamental_score
     assert not any("Illiquid" in r or "Thin" in r for r in unknown.risks)
+
+
+# ---------------------------------------------------------------------------
+# events have to reach the company they are about
+# ---------------------------------------------------------------------------
+
+
+def test_events_without_a_company_are_dropped_not_filed_under_nothing():
+    """The corpus of corporate agreements scored nothing for months.
+
+    The scraper attributed launches and filings to a holding but never
+    agreements, so those records carried no company field. builder.py keyed
+    every one of them under "" — a key no holding matches — and they sat in
+    the payload looking present while contributing zero.
+    """
+    from dashboard.builder import build_dashboard_views
+
+    data = {
+        "corporate_agreements": [
+            {"company": "", "title": "Unattributed deal", "date": _TODAY},
+            {"company": "Unknown", "title": "Also unattributed", "date": _TODAY},
+            {"company": "Test Co", "title": "Real MoU signed", "date": _TODAY},
+        ]
+    }
+    watchlist = {
+        "sec": [
+            {
+                "ticker": "TEST",
+                "name": "Test Co",
+                "price": "100",
+                "screener": {"pe_ratio": 20.0, "roce": 25.0, "q_sales": 100.0},
+            }
+        ]
+    }
+    build_dashboard_views(data, watchlist)
+
+    reasons = watchlist["sec"][0]["score"]["reasons"]
+    assert any("Real MoU signed" in r for r in reasons)
+    assert not any("nattributed" in r for r in reasons)
