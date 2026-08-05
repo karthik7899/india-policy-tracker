@@ -336,8 +336,25 @@ async def fetch_advanced_rss_feeds_async(session, watchlist):
                 feed = feedparser.parse(xml_data)
                 for entry in feed.entries[:3]:
                     title = entry.get("title", "")
+
+                    # Attribute to a holding, exactly as launches and filings
+                    # already do. Without this the record carried no company
+                    # field at all, so dashboard/builder.py keyed all forty
+                    # agreements under "" and none of them ever reached the
+                    # holding they were about — a third of the policy-event
+                    # corpus scoring nothing, silently.
+                    matched_company = "Unknown"
+                    matched_industry = "Corporate"
+                    for ticker_sym, s_name, sector_name in flat_watchlist:
+                        if title_matches_company(title, ticker_sym, s_name):
+                            matched_company = s_name
+                            matched_industry = sector_name
+                            break
+
                     agreements.append(
                         {
+                            "company": matched_company,
+                            "industry": matched_industry,
                             "title": title.split(" - ")[0],
                             "link": entry.get("link", ""),
                             "date": entry.get("published", ""),

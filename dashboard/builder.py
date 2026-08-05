@@ -8,6 +8,7 @@ from analysis.moat import score_economic_moat
 from analysis.valuation import generate_valuation_alerts, check_hyper_growth_risk
 from analysis.scoring import calculate_aggregate_score
 from models.core import Company, CompanyFinancials, CompanyValuation
+from logger import log
 
 # Alert substrings that constitute a failure of Graham's Defensive Investor screen.
 _DEFENSIVE_FAIL_MARKERS = ("Current Ratio", "Debt Limit", "P/E Screen", "Dividend")
@@ -70,49 +71,70 @@ def build_dashboard_views(data: Dict[str, Any], watchlist: Dict[str, Any]):
     margin_of_safety = []
     buffett_valuation = []
 
-    # Pre-compute policy events mapped by ticker/name
+    # Pre-compute policy events mapped by ticker/name.
+    #
+    # Unattributed events are dropped rather than filed under "". They used to
+    # accumulate under that empty key, which no holding matches, so the whole
+    # corpus of agreements scored nothing while still looking present in the
+    # payload. Counting them here is what makes that visible next time.
     policy_map = {}
+    unattributed = 0
+
+    def _add(name, event):
+        nonlocal unattributed
+        key = (name or "").strip().upper()
+        if not key or key == "UNKNOWN":
+            unattributed += 1
+            return
+        policy_map.setdefault(key, []).append(event)
+
     for ev in data.get("emerging_competitors", []):
-        name = ev.get("name", ev.get("company", ""))
-        policy_map.setdefault(name.upper(), []).append(
+        _add(
+            ev.get("name", ev.get("company", "")),
             {
                 "event_type": "pli",
                 "scheme": ev.get("scheme"),
                 "date": ev.get("approval_date") or ev.get("date"),
-            }
+            },
         )
 
     for ev in data.get("corporate_agreements", []):
-        name = ev.get("company", "")
-        policy_map.setdefault(name.upper(), []).append(
+        _add(
+            ev.get("company", ""),
             {
                 "event_type": "agreement",
                 "title": ev.get("title"),
                 "date": ev.get("date"),
-            }
+            },
         )
 
     for ev in data.get("product_launches", []):
-        name = ev.get("company", "")
-        policy_map.setdefault(name.upper(), []).append(
+        _add(
+            ev.get("company", ""),
             {
                 "event_type": "launch",
                 "product": ev.get("product"),
                 "date": ev.get("date"),
-            }
+            },
         )
 
     for ev in data.get("corporate_filings", []):
-        name = ev.get("company", "")
-        policy_map.setdefault(name.upper(), []).append(
-            {"event_type": "filing", "title": ev.get("filing"), "date": ev.get("date")}
+        _add(
+            ev.get("company", ""),
+            {"event_type": "filing", "title": ev.get("filing"), "date": ev.get("date")},
         )
 
     for ev in data.get("sebi_filings", []):
-        name = ev.get("company", "")
-        policy_map.setdefault(name.upper(), []).append(
-            {"event_type": "sebi", "title": ev.get("title"), "date": ev.get("date")}
+        _add(
+            ev.get("company", ""),
+            {"event_type": "sebi", "title": ev.get("title"), "date": ev.get("date")},
         )
+
+    attached = sum(len(v) for v in policy_map.values())
+    log.info(
+        f"Policy events: {attached} attached to {len(policy_map)} entity key(s); "
+        f"{unattributed} could not be attributed to any company."
+    )
 
     for sector, stocks in watchlist.items():
         if sector == "macro_indicators":
