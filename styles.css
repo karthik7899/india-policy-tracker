@@ -1915,3 +1915,92 @@ a:focus-visible {
 .score-pos { color: var(--success); }
 .score-neg { color: var(--danger); }
 .score-mom { color: var(--text-secondary); }
+
+/* --- Daily brief: run status and KPI strip ------------------------------- */
+
+/* Whether the briefing can be trusted, stated before anything it qualifies. */
+.run-status-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 28px;
+    align-items: center;
+    padding: 10px 16px;
+    margin-bottom: 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    background: var(--card-bg);
+    font-size: 12px;
+}
+
+.rs-item { display: inline-flex; align-items: baseline; gap: 7px; }
+.rs-label { color: var(--text-secondary); }
+.run-status-bar strong { font-variant-numeric: tabular-nums; }
+.rs-ok { color: var(--success); }
+.rs-warn { color: var(--danger); }
+
+.kpi-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+    /* Grid children default to min-width:auto and will not shrink below their
+       content, which is what pushed the page into horizontal overflow the last
+       time a strip like this was added. */
+    min-width: 0;
+}
+
+.kpi-strip > * { min-width: 0; }
+
+.kpi-tile {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 14px 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    background: var(--card-bg);
+    text-align: left;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.kpi-tile:hover:not(.kpi-empty) {
+    border-color: var(--primary);
+    transform: translateY(-1px);
+}
+
+.kpi-tile:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+
+/* A tile whose number is zero leads to an empty list; say so by feel rather
+   than letting the click look broken. */
+.kpi-empty { cursor: default; opacity: 0.55; }
+
+.kpi-value {
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+}
+
+.kpi-label { font-size: 12px; font-weight: 600; }
+.kpi-sub { font-size: 10.5px; color: var(--text-secondary); }
+
+/* Severity is carried by a border, not by the number's colour alone, so the
+   distinction survives greyscale and colour-blindness. */
+.kpi-critical:not(.kpi-empty) { border-left: 3px solid var(--danger); }
+.kpi-critical:not(.kpi-empty) .kpi-value { color: var(--danger); }
+.kpi-escalated:not(.kpi-empty) { border-left: 3px solid var(--warning, var(--danger)); }
+.kpi-opportunity:not(.kpi-empty) { border-left: 3px solid var(--success); }
+.kpi-opportunity:not(.kpi-empty) .kpi-value { color: var(--success); }
+
+/* Health strip reuses the tiles but is read-only. */
+#health-strip .kpi-tile { cursor: default; }
+#health-strip .kpi-tile:hover { border-color: var(--border-color); transform: none; }
+
+@media (max-width: 640px) {
+    .kpi-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .kpi-value { font-size: 22px; }
+    .run-status-bar { gap: 6px 18px; font-size: 11px; }
+}

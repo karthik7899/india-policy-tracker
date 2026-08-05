@@ -124,7 +124,8 @@ const TAB_COPY = {
     valuation: ["Sector Valuation (Peer P/E)", "Median price-to-earnings per sector peer group — which themes are richly vs cheaply priced."],
     caution: ["Risk Alerts & Valuation Warnings", "Stocks that are not meeting the configured value and growth filters."],
     research: ["Thesis & Signals", "Falsifiable thesis health, estimate-revision momentum, variant perception, sector curve stage, and the rotation engine's own track record."],
-    stocks: ["Integrated Stocks Screener", "Curated companies, policy catalysts, and financial screening signals."]
+    stocks: ["Integrated Stocks Screener", "Curated companies, policy catalysts, and financial screening signals."],
+    system: ["Run Health & Data Audit", "What this run could and could not measure, named holding by holding — so a gap is actionable rather than a percentage."]
 };
 
 function escapeHtml(value) {
@@ -268,6 +269,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loadDashboardData();
     setupStockSearch();
     setupWarningFilters();
+    setupKpiDrilldowns();
     setupTickerNavigation();
     setupGenericTableSorting();
 });
@@ -371,6 +373,7 @@ function activateTab(targetTab) {
             valuation: renderSectorValuation,
             caution: renderCautionTable,
             research: renderResearchEngine,
+            system: renderSystemTab,
             stocks: () => renderStocksTable(document.getElementById("stock-search")?.value || "")
         };
         renderers[targetTab]?.();
@@ -462,7 +465,11 @@ function initDashboard(data, isFallback = false) {
     );
     setText("competitors-count", countEmergingCompetitors(data));
 
-    // Render components
+    // Render components. The status bar and KPI strip go first because they
+    // qualify everything below them — whether the run is trustworthy is not a
+    // footnote to the numbers, it is a precondition for reading them.
+    renderRunStatus();
+    renderDailyKpis();
     renderWhatsNew(data);
     renderSectorChips(data);
     renderPolicyFeed(data);
@@ -1992,8 +1999,218 @@ const SEVERITY_BADGE_CLASS = {
     Low: "badge-neutral-alert"
 };
 
-// Active early-warning filters (severity chip, direction chip, free text).
-const warningFilters = { severity: "all", direction: "all", query: "" };
+// Active early-warning filters (severity chip, direction chip, state chip,
+// free text). State is what the KPI tiles drive: "New Critical" is a severity
+// and a state together, and without the second half the tile would open a list
+// that still buries this run's two signals among the standing ones.
+const warningFilters = { severity: "all", direction: "all", status: "all", query: "" };
+
+// ---------------------------------------------------------------------------
+// Daily brief: what changed, and one click to the evidence
+// ---------------------------------------------------------------------------
+
+/** Everything the homepage counts, derived once so the tiles and the
+ *  drill-downs can never disagree about what a number meant. */
+function computeDailyKpis() {
+    const b = (appData && appData.briefing) || {};
+    const warnings = b.early_warnings || [];
+    const holdings = allWatchlistStocks();
+
+    const isNew = w => (w.status || "ongoing") === "new";
+    return {
+        critical: warnings.filter(w => w.severity === "Critical" && w.direction === "risk" && isNew(w)).length,
+        escalated: warnings.filter(w => (w.status || "") === "escalated").length,
+        opportunity: warnings.filter(w => w.direction === "opportunity" && isNew(w)).length,
+        broken: Object.values(b.thesis_health || {}).filter(t => t && t.status === "Broken").length,
+        candidates: Object.values(b.candidate_screen || {}).reduce(
+            (n, list) => n + ((list || []).length), 0),
+        suppressed: holdings.filter(s => s.estimate_method === "No Estimate").length,
+    };
+}
+
+/** Flatten the watchlist once. Several panels need it and each had been
+ *  re-deriving it with slightly different sector exclusions. */
+function allWatchlistStocks() {
+    const wl = (appData && appData.watchlist) || {};
+    const out = [];
+    Object.keys(wl).forEach(sector => {
+        if (sector === "macro_indicators") return;
+        (wl[sector] || []).forEach(s => {
+            if (s && typeof s === "object") out.push(Object.assign({ sectorKey: sector }, s));
+        });
+    });
+    return out;
+}
+
+function renderRunStatus() {
+    const b = (appData && appData.briefing) || {};
+    const holdings = allWatchlistStocks();
+    const total = holdings.length || 1;
+    const priced = holdings.filter(s => s.price).length;
+    const withFundamentals = holdings.filter(s => s.screener && Object.keys(s.screener).length).length;
+    const withTurnover = holdings.filter(s => s.screener && s.screener.advt_cr != null).length;
+
+    // Completeness is the mean of the coverages that actually gate analysis:
+    // price, fundamentals, and the trailing growth series the score reads.
+    // Averaging only the first two reported 100% on a run where 13 holdings
+    // had no growth figure at all — flattering precisely because the cheap
+    // fields are the ones that always arrive. Turnover is deliberately not in
+    // this average; it has its own slot beside it, so a structural outage
+    // there reads as a named failure rather than a diluted percentage.
+    const withGrowth = holdings.filter(
+        s => s.screener && s.screener.revenue_ttm_growth_pct != null).length;
+    const completeness = Math.round(
+        ((priced / total) + (withFundamentals / total) + (withGrowth / total)) / 3 * 100);
+
+    const set = (id, text, cls) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.textContent = text;
+        if (cls) el.className = cls;
+    };
+    set("rs-date", (appData && appData.last_updated) ? appData.last_updated.split(" ")[0] : "—");
+    set("rs-completeness", `${completeness}%`, completeness >= 80 ? "rs-ok" : "rs-warn");
+    const fresh = (b.freshness || {}).live_prices;
+    set("rs-health", fresh && fresh.updated === fresh.total ? "Healthy" : "Degraded",
+        fresh && fresh.updated === fresh.total ? "rs-ok" : "rs-warn");
+    // Stated even when zero: turnover reaching nothing is exactly the failure
+    // that shipped once already behind a green run.
+    set("rs-liquidity", `${withTurnover}/${total}`, withTurnover ? "rs-ok" : "rs-warn");
+}
+
+function renderDailyKpis() {
+    const k = computeDailyKpis();
+    Object.keys(k).forEach(key => {
+        const el = document.getElementById(`kpi-${key}-val`);
+        if (el) el.textContent = k[key];
+    });
+    // A tile that leads nowhere is worse than no tile, so zero-value tiles are
+    // visibly inert rather than silently unresponsive.
+    document.querySelectorAll("#kpi-strip .kpi-tile").forEach(tile => {
+        const empty = k[tile.dataset.kpi] === 0;
+        tile.classList.toggle("kpi-empty", empty);
+        tile.setAttribute("aria-disabled", empty ? "true" : "false");
+    });
+}
+
+/** Each tile opens the list behind its own number, pre-filtered. */
+const KPI_DRILLDOWNS = {
+    critical: () => openWarnings({ severity: "Critical", direction: "risk", status: "new" }),
+    escalated: () => openWarnings({ status: "escalated" }),
+    opportunity: () => openWarnings({ direction: "opportunity", status: "new" }),
+    broken: () => activateTab("research"),
+    candidates: () => activateTab("research"),
+    suppressed: () => activateTab("system"),
+};
+
+function openWarnings(filters) {
+    Object.assign(warningFilters, { severity: "all", direction: "all", status: "all", query: "" }, filters);
+    activateTab("earlywarning");
+    syncWarningChips();
+    renderEarlyWarnings();
+}
+
+/** Push programmatic filter state back onto the chips, so the tab does not
+ *  show "All" while displaying a filtered list. */
+function syncWarningChips() {
+    const bar = document.getElementById("warning-filters");
+    if (!bar) return;
+    bar.querySelectorAll(".filter-group").forEach(group => {
+        const key = group.getAttribute("data-filter-group");
+        group.querySelectorAll(".filter-chip").forEach(chip => {
+            chip.classList.toggle("active", chip.getAttribute("data-filter-value") === warningFilters[key]);
+        });
+    });
+}
+
+function setupKpiDrilldowns() {
+    document.querySelectorAll("#kpi-strip .kpi-tile").forEach(tile => {
+        tile.addEventListener("click", () => {
+            const handler = KPI_DRILLDOWNS[tile.dataset.kpi];
+            if (handler) handler();
+        });
+    });
+}
+
+// ---------------------------------------------------------------------------
+// System & Audit
+// ---------------------------------------------------------------------------
+
+function renderSystemTab() {
+    const holdings = allWatchlistStocks();
+    const total = holdings.length;
+    const sc = s => s.screener || {};
+    const count = pred => `${holdings.filter(pred).length}/${total}`;
+
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+    set("hs-priced", count(s => s.price));
+    set("hs-fundamentals", count(s => Object.keys(sc(s)).length));
+    set("hs-growth", count(s => sc(s).revenue_ttm_growth_pct != null));
+    set("hs-turnover", count(s => sc(s).advt_cr != null));
+    set("hs-analyst", count(s => s.analyst_count));
+
+    // Suppressed estimates, with the reason. The model already declines to
+    // value a company with no earning power; until now it declined silently.
+    const suppressed = holdings.filter(s => s.estimate_method === "No Estimate");
+    const sBody = document.getElementById("suppressed-table-body");
+    if (sBody) {
+        if (!suppressed.length) {
+            setTableEmpty(sBody, 4, "No suppressed estimates", "Every holding carries either analyst coverage or a fundamental estimate.");
+        } else {
+            sBody.innerHTML = suppressed.map(s => `
+                <tr>
+                    <td class="t-ticker">${escapeHtml(s.ticker)}</td>
+                    <td><strong>${escapeHtml(s.name)}</strong></td>
+                    <td>${escapeHtml(sectorLabelFor(s.sectorKey))}</td>
+                    <td>${escapeHtml(suppressionReason(s))}</td>
+                </tr>`).join("");
+        }
+    }
+
+    // Data gaps, named per holding. A percentage cannot be chased down.
+    const FIELDS = [
+        ["price", s => !s.price, "blocks every valuation and the score"],
+        ["Screener fundamentals", s => !Object.keys(sc(s)).length, "blocks scoring and peer comparison"],
+        ["TTM growth", s => sc(s).revenue_ttm_growth_pct == null, "growth contributes nothing to the score"],
+        ["turnover", s => sc(s).advt_cr == null, "liquidity penalty cannot fire"],
+    ];
+    const rows = [];
+    holdings.forEach(s => FIELDS.forEach(([field, missing, impact]) => {
+        if (missing(s)) rows.push({ s, field, impact });
+    }));
+    const gBody = document.getElementById("datagaps-table-body");
+    if (gBody) {
+        if (!rows.length) {
+            setTableEmpty(gBody, 4, "No data gaps", "Every tracked field resolved for every holding this run.");
+        } else {
+            gBody.innerHTML = rows.map(r => `
+                <tr>
+                    <td class="t-ticker">${escapeHtml(r.s.ticker)}</td>
+                    <td>${escapeHtml(r.s.name)}</td>
+                    <td>${escapeHtml(r.field)}</td>
+                    <td style="color: var(--text-secondary);">${escapeHtml(r.impact)}</td>
+                </tr>`).join("");
+        }
+    }
+}
+
+/** Why a valuation was withheld, in the model's own terms. */
+function suppressionReason(stock) {
+    const sc = stock.screener || {};
+    const ttmEps = sc.ttm_eps;
+    const qEps = sc.q_eps;
+    const qOpm = sc.q_opm;
+    if (ttmEps != null && ttmEps <= 0) return `Negative trailing earnings (TTM EPS ${ttmEps})`;
+    if (qOpm != null && qOpm < 0) return `Operating loss in the latest quarter (OPM ${qOpm}%)`;
+    if (qEps != null && qEps < 0) return `Latest quarter swung to a loss (EPS ${qEps})`;
+    if (!sc.eps_trend || sc.eps_trend.length < 4) return "Insufficient quarterly history for a trailing year";
+    return "Insufficient data for an honest estimate";
+}
+
+function sectorLabelFor(key) {
+    const meta = (appData && appData.sectors && appData.sectors[key]) || {};
+    return meta.name || key || "—";
+}
 
 function setupWarningFilters() {
     const bar = document.getElementById("warning-filters");
@@ -2027,6 +2244,7 @@ function renderEarlyWarnings() {
     const warnings = all.filter(w => {
         if (warningFilters.severity !== "all" && (w.severity || "Low") !== warningFilters.severity) return false;
         if (warningFilters.direction !== "all" && w.direction !== warningFilters.direction) return false;
+        if (warningFilters.status !== "all" && (w.status || "ongoing") !== warningFilters.status) return false;
         if (warningFilters.query) {
             const haystack = `${w.ticker} ${w.name} ${w.sector} ${w.category} ${w.signal}`.toLowerCase();
             if (!haystack.includes(warningFilters.query)) return false;
