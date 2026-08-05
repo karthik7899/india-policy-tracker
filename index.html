@@ -41,10 +41,10 @@
                 <button type="button" class="nav-btn active" data-tab="dashboard" aria-controls="tab-dashboard" aria-selected="true">
                     <span class="btn-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg></span> Dashboard
                 </button>
+                <p class="nav-group-label">Intelligence</p>
                 <button type="button" class="nav-btn" data-tab="sectors" aria-controls="tab-sectors" aria-selected="false">
                     <span class="btn-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span> Policy Logs
                 </button>
-                <p class="nav-group-label">Intelligence</p>
                 <button type="button" class="nav-btn" data-tab="agreements" aria-controls="tab-agreements" aria-selected="false">
                     <span class="btn-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 7h3a5 5 0 0 1 0 10h-3"/><path d="M9 17H6a5 5 0 0 1 0-10h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></span> News & Agreements
                 </button>
@@ -57,33 +57,35 @@
                 <button type="button" class="nav-btn" data-tab="institutional" aria-controls="tab-institutional" aria-selected="false">
                     <span class="btn-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="21" x2="21" y2="21"/><line x1="5" y1="17" x2="5" y2="10"/><line x1="9.5" y1="17" x2="9.5" y2="10"/><line x1="14.5" y1="17" x2="14.5" y2="10"/><line x1="19" y1="17" x2="19" y2="10"/><path d="M4 7l8-4.5L20 7z"/></svg></span> Institutional Activity
                 </button>
-                <p class="nav-group-label">Valuation & Scoring</p>
+                <button type="button" class="nav-btn" data-tab="research" aria-controls="tab-research" aria-selected="false">
+                    <span class="btn-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg></span> Thesis &amp; Signals
+                </button>
+                <p class="nav-group-label">Valuation & Fundamentals</p>
+                <button type="button" class="nav-btn" data-tab="stocks" aria-controls="tab-stocks" aria-selected="false">
+                    <span class="btn-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></span> Stocks Screener
+                </button>
+                <button type="button" class="nav-btn" data-tab="valuation" aria-controls="tab-valuation" aria-selected="false">
+                    <span class="btn-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="3" x2="12" y2="21"/><path d="M8 21h8"/><path d="M5 7l14-2"/><path d="M5 7l-2.5 6a2.8 2.8 0 0 0 5 0z"/><path d="M19 5l-2.5 6a2.8 2.8 0 0 0 5 0z"/></svg></span> Sector Valuation
+                </button>
+                <button type="button" class="nav-btn" data-tab="scoring" aria-controls="tab-scoring" aria-selected="false">
+                    <span class="btn-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></span> Scoring Engine
+                </button>
                 <button type="button" class="nav-btn" data-tab="graham" aria-controls="tab-graham" aria-selected="false">
                     <span class="btn-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span> Margin of Safety
                 </button>
                 <button type="button" class="nav-btn" data-tab="buffett" aria-controls="tab-buffett" aria-selected="false">
                     <span class="btn-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="6"/><polyline points="8.5 13.5 7 22 12 19.5 17 22 15.5 13.5"/></svg></span> Buffett Valuation
                 </button>
-                <button type="button" class="nav-btn" data-tab="scoring" aria-controls="tab-scoring" aria-selected="false">
-                    <span class="btn-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></span> Scoring Engine
-                </button>
-                <button type="button" class="nav-btn" data-tab="valuation" aria-controls="tab-valuation" aria-selected="false">
-                    <span class="btn-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="3" x2="12" y2="21"/><path d="M8 21h8"/><path d="M5 7l14-2"/><path d="M5 7l-2.5 6a2.8 2.8 0 0 0 5 0z"/><path d="M19 5l-2.5 6a2.8 2.8 0 0 0 5 0z"/></svg></span> Sector Valuation
-                </button>
-                <p class="nav-group-label">Risk Monitor</p>
+                <p class="nav-group-label">Risk</p>
                 <button type="button" class="nav-btn" data-tab="earlywarning" aria-controls="tab-earlywarning" aria-selected="false">
                     <span class="btn-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span> Early Warnings
                 </button>
                 <button type="button" class="nav-btn" data-tab="caution" aria-controls="tab-caution" aria-selected="false">
                     <span class="btn-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></span> Caution List
                 </button>
-                <p class="nav-group-label">Research Engine</p>
-                <button type="button" class="nav-btn" data-tab="research" aria-controls="tab-research" aria-selected="false">
-                    <span class="btn-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg></span> Thesis &amp; Signals
-                </button>
-                <p class="nav-group-label">Data Explorer</p>
-                <button type="button" class="nav-btn" data-tab="stocks" aria-controls="tab-stocks" aria-selected="false">
-                    <span class="btn-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></span> Stocks Screener
+                <p class="nav-group-label">System & Audit</p>
+                <button type="button" class="nav-btn" data-tab="system" aria-controls="tab-system" aria-selected="false">
+                    <span class="btn-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v4"/><path d="M12 18v4"/><path d="M4.9 4.9l2.9 2.9"/><path d="M16.2 16.2l2.9 2.9"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="M4.9 19.1l2.9-2.9"/><path d="M16.2 7.8l2.9-2.9"/><circle cx="12" cy="12" r="3"/></svg></span> Run Health
                 </button>
             </nav>
             
@@ -137,40 +139,51 @@
                     <div id="whats-new-body"><!-- Populated dynamically --></div>
                 </div>
 
-                <!-- Stat Cards Grid -->
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-header">
-                            <span class="stat-title">Tracked Sectors</span>
-                            <span class="stat-icon-bg bg-blue"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>
-                        </div>
-                        <h3 class="stat-value" id="tracked-sectors-val" aria-live="polite">-</h3>
-                        <p class="stat-sub">High-growth focus areas</p>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-header">
-                            <span class="stat-title">Watchlist Companies</span>
-                            <span class="stat-icon-bg bg-green"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span>
-                        </div>
-                        <h3 class="stat-value" id="total-stocks-val" aria-live="polite">-</h3>
-                        <p class="stat-sub">Across mid & large cap</p>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-header">
-                            <span class="stat-title">Active Policy Signals</span>
-                            <span class="stat-icon-bg bg-purple"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span>
-                        </div>
-                        <h3 class="stat-value" id="active-signals-val" aria-live="polite">-</h3>
-                        <p class="stat-sub">PIB & media updates parsed</p>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-header">
-                            <span class="stat-title">Average Potential</span>
-                            <span class="stat-icon-bg bg-orange"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></span>
-                        </div>
-                        <h3 class="stat-value" id="average-potential-val" aria-live="polite">-</h3>
-                        <p class="stat-sub">Average watchlist target upside</p>
-                    </div>
+                <!-- Run status line. Whether the briefing can be trusted is the first
+                     thing to establish, so it sits above every number it qualifies. -->
+                <div class="run-status-bar" id="run-status-bar" aria-live="polite">
+                    <span class="rs-item"><span class="rs-label">Date</span><strong id="rs-date">-</strong></span>
+                    <span class="rs-item"><span class="rs-label">Data completeness</span><strong id="rs-completeness">-</strong></span>
+                    <span class="rs-item"><span class="rs-label">Run</span><strong id="rs-health">-</strong></span>
+                    <span class="rs-item"><span class="rs-label">Turnover coverage</span><strong id="rs-liquidity">-</strong></span>
+                </div>
+
+                <!-- KPI strip: what changed, not what exists. The counters this
+                     replaced ("Tracked Sectors", "Watchlist Companies") were
+                     state, and state barely moves day to day — so the first
+                     thing on the page told you nothing about today. Every tile
+                     is a button that opens the evidence behind it. -->
+                <div class="kpi-strip" id="kpi-strip" aria-label="What changed this run">
+                    <button type="button" class="kpi-tile kpi-critical" data-kpi="critical">
+                        <span class="kpi-value" id="kpi-critical-val">-</span>
+                        <span class="kpi-label">New Critical</span>
+                        <span class="kpi-sub">risk, this run</span>
+                    </button>
+                    <button type="button" class="kpi-tile kpi-escalated" data-kpi="escalated">
+                        <span class="kpi-value" id="kpi-escalated-val">-</span>
+                        <span class="kpi-label">Escalated</span>
+                        <span class="kpi-sub">worsened vs last run</span>
+                    </button>
+                    <button type="button" class="kpi-tile kpi-opportunity" data-kpi="opportunity">
+                        <span class="kpi-value" id="kpi-opportunity-val">-</span>
+                        <span class="kpi-label">Opportunities</span>
+                        <span class="kpi-sub">positive signals</span>
+                    </button>
+                    <button type="button" class="kpi-tile" data-kpi="broken">
+                        <span class="kpi-value" id="kpi-broken-val">-</span>
+                        <span class="kpi-label">Theses Broken</span>
+                        <span class="kpi-sub">review required</span>
+                    </button>
+                    <button type="button" class="kpi-tile" data-kpi="candidates">
+                        <span class="kpi-value" id="kpi-candidates-val">-</span>
+                        <span class="kpi-label">Rotation Candidates</span>
+                        <span class="kpi-sub">cleared the screen</span>
+                    </button>
+                    <button type="button" class="kpi-tile" data-kpi="suppressed">
+                        <span class="kpi-value" id="kpi-suppressed-val">-</span>
+                        <span class="kpi-label">Estimates Suppressed</span>
+                        <span class="kpi-sub">no honest value</span>
+                    </button>
                 </div>
 
                 <div class="signal-strip" aria-label="Intelligence summary">
@@ -622,6 +635,14 @@
                             <button type="button" class="filter-chip" data-filter-value="risk">Risks</button>
                             <button type="button" class="filter-chip" data-filter-value="opportunity">Opportunities</button>
                         </div>
+                        <!-- Delta as a first-class lens: what appeared or worsened
+                             this run, rather than everything that is true. -->
+                        <div class="filter-group" data-filter-group="status">
+                            <button type="button" class="filter-chip active" data-filter-value="all">Any state</button>
+                            <button type="button" class="filter-chip" data-filter-value="new">New</button>
+                            <button type="button" class="filter-chip" data-filter-value="escalated">Escalated</button>
+                            <button type="button" class="filter-chip" data-filter-value="ongoing">Ongoing</button>
+                        </div>
                         <div class="search-bar-container filter-search">
                             <label class="sr-only" for="warning-search">Filter warnings</label>
                             <input type="search" id="warning-search" placeholder="Filter by ticker, category, signal..." autocomplete="off">
@@ -823,6 +844,51 @@
                                 <tbody id="rotation-outcomes-table-body"><!-- Populated dynamically --></tbody>
                             </table>
                         </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- System & Audit. Missing data is better than false precision,
+                 so the conditions under which the model declined to produce a
+                 number are shown as first-class output rather than blanks. -->
+            <section id="tab-system" class="tab-pane">
+                <div class="glass-card">
+                    <div class="table-header-bar">
+                        <h3>Run Health</h3>
+                        <p class="subtitle">Whether this briefing can be trusted. Coverage is stated as a count, because a percentage hides which holdings are missing.</p>
+                    </div>
+                    <div class="kpi-strip" id="health-strip">
+                        <div class="kpi-tile"><span class="kpi-value" id="hs-priced">-</span><span class="kpi-label">Priced</span><span class="kpi-sub">live quote</span></div>
+                        <div class="kpi-tile"><span class="kpi-value" id="hs-fundamentals">-</span><span class="kpi-label">Fundamentals</span><span class="kpi-sub">Screener</span></div>
+                        <div class="kpi-tile"><span class="kpi-value" id="hs-growth">-</span><span class="kpi-label">TTM Growth</span><span class="kpi-sub">revenue series</span></div>
+                        <div class="kpi-tile"><span class="kpi-value" id="hs-turnover">-</span><span class="kpi-label">Turnover</span><span class="kpi-sub">tradeability</span></div>
+                        <div class="kpi-tile"><span class="kpi-value" id="hs-analyst">-</span><span class="kpi-label">Analyst Cover</span><span class="kpi-sub">consensus target</span></div>
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <div class="table-header-bar">
+                        <h3>Suppressed Estimates</h3>
+                        <p class="subtitle">Holdings the valuation model declined to value, and why. An honest blank beats a confident number.</p>
+                    </div>
+                    <div class="table-scroll-container">
+                        <table class="premium-table">
+                            <thead><tr><th>Ticker</th><th>Company</th><th>Sector</th><th>Reason</th></tr></thead>
+                            <tbody id="suppressed-table-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <div class="table-header-bar">
+                        <h3>Data Gaps</h3>
+                        <p class="subtitle">Which holding is missing which field. Named individually, because an aggregate percentage cannot be acted on.</p>
+                    </div>
+                    <div class="table-scroll-container">
+                        <table class="premium-table">
+                            <thead><tr><th>Ticker</th><th>Company</th><th>Missing</th><th>Impact</th></tr></thead>
+                            <tbody id="datagaps-table-body"></tbody>
+                        </table>
                     </div>
                 </div>
             </section>
