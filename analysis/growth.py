@@ -3,6 +3,41 @@ from logger import log
 from utils import to_float
 import yfinance as yf
 
+# Where turnover waits between the price fetch and the Screener rebuild. A
+# sibling of "screener" rather than a field inside it, because only that one
+# key is replaced.
+_LIQUIDITY_STAGING_KEY = "_liquidity_pending"
+
+
+def apply_liquidity(watchlist):
+    """Merge staged turnover into each holding's screener dict.
+
+    Must run *after* the Screener fetch. Scoring reads these fields off
+    ``CompanyFinancials``, which is built from ``screener``, so turnover has to
+    live there in the end -- it just cannot be put there before the rebuild
+    that would erase it.
+
+    Returns the number of holdings that received turnover, so the caller can
+    log coverage instead of assuming it worked. The first production run of
+    this feature attached turnover to nothing and reported nothing, which is
+    the failure this return value exists to make visible.
+    """
+    applied = 0
+    for sector, stocks in (watchlist or {}).items():
+        for stock in stocks or []:
+            if not isinstance(stock, dict):
+                continue
+            staged = stock.pop(_LIQUIDITY_STAGING_KEY, None)
+            if not staged:
+                continue
+            screener = stock.get("screener")
+            if not isinstance(screener, dict):
+                screener = {}
+                stock["screener"] = screener
+            screener.update(staged)
+            applied += 1
+    return applied
+
 
 def update_single_stock(stock, prefetched_prices=None, prefetched_liquidity=None):
     """Worker function to fetch Yahoo Finance metrics for a single stock."""
@@ -43,12 +78,17 @@ def update_single_stock(stock, prefetched_prices=None, prefetched_liquidity=None
                 stock[k] = v
 
         # Turnover rides on the same batch download as the price, so it is
-        # attached here rather than costing a second round trip per holding.
+        # computed here rather than costing a second round trip per holding.
+        #
+        # It is staged on a sibling key rather than written into ``screener``
+        # directly, because the Screener fetch that runs next replaces that
+        # dict wholesale (providers/screener.py assigns ``stock["screener"] =
+        # sc_data`). Writing it there produced turnover for all 67 holdings
+        # and then silently discarded every one of them. apply_liquidity()
+        # merges this in once the rebuild has happened.
         liquidity = prefetched_liquidity.get(yahoo_ticker)
         if liquidity:
-            stock.setdefault("screener", {})
-            if isinstance(stock["screener"], dict):
-                stock["screener"].update(liquidity)
+            stock[_LIQUIDITY_STAGING_KEY] = liquidity
 
         live_price = to_float(stock.get("price"))
         if to_float(stock.get("target")) is not None and live_price is not None:

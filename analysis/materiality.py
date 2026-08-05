@@ -76,6 +76,62 @@ _AMOUNT_RE = re.compile(
     re.IGNORECASE,
 )
 
+# An amount is only this company's if the headline is about this company.
+#
+# The first production run showed why that needs enforcing. "BEL, HAL, Bharat
+# Dynamics: Defence stocks rally as DAC clears Rs 52,000 crore defence
+# acquisition proposals" was read as a HAL transaction worth 157% of HAL's
+# revenue, scored "transformative", and given the maximum weight -- and it
+# would have done the same for BEL and for Bharat Dynamics. The figure is a
+# government procurement programme spanning the sector and belongs to none of
+# them individually. A confidently wrong bull signal is worse than no signal,
+# so both shapes below are excluded.
+
+# Market commentary: reports a price move, never a transaction, even when it
+# quotes a real number.
+_COMMENTARY_MARKERS = (
+    "stocks rally",
+    "stock rally",
+    "shares rally",
+    "stocks gain",
+    "stocks jump",
+    "stocks surge",
+    "stocks slip",
+    "stocks fall",
+    "shares jump",
+    "shares surge",
+    "share price",
+    "top gainer",
+    "top loser",
+    "midcap loser",
+    "index rejig",
+    "hits 52-week",
+    "target price",
+)
+
+# Programme-level approvals: the amount is a budget or a sector allocation
+# handed down by a ministry or council, not an order booked by one company.
+_PROGRAMME_MARKERS = (
+    "dac clears",
+    "dac approves",
+    "cabinet approves",
+    "cabinet clears",
+    "ccs approves",
+    "ccs clears",
+    "acquisition proposals",
+    "procurement proposals",
+    "capital acquisition",
+    "outlay",
+    "budget allocation",
+    "allocates",
+    "sanctions",
+)
+
+# A headline that opens with a list of companies before a colon -- "BEL, HAL,
+# Bharat Dynamics: ..." -- is about a group, so no amount in it is assignable
+# to any single member.
+_COMPANY_LIST_RE = re.compile(r"^[^:]{0,80}?,[^:]{0,80}?:")
+
 # Event vocabulary that implies a transaction with a readable size. Anything
 # outside this set is left unweighted -- see the module docstring.
 _SIZED_EVENT_TYPES = frozenset(
@@ -180,12 +236,30 @@ def ttm_revenue_cr(fin) -> Optional[float]:
     return None
 
 
+def amount_is_attributable(title: str) -> bool:
+    """Could any amount in this headline belong to one company?
+
+    Applies before the event type is even considered: a headline about a whole
+    sector, or about a price move, carries figures that are real but are not
+    this company's, and treating them as such produces a maximum-confidence
+    signal built on somebody else's number.
+    """
+    lowered = (title or "").lower()
+    if any(marker in lowered for marker in _COMMENTARY_MARKERS):
+        return False
+    if any(marker in lowered for marker in _PROGRAMME_MARKERS):
+        return False
+    return not _COMPANY_LIST_RE.match(title or "")
+
+
 def is_sized_event(event_type: str, title: str) -> bool:
     """Should this event carry a rupee figure at all?
 
     A PLI approval legitimately has none, so it must not be judged for
     lacking one.
     """
+    if not amount_is_attributable(title):
+        return False
     if (event_type or "").lower().strip() in _SIZED_EVENT_TYPES:
         return True
     lowered = (title or "").lower()

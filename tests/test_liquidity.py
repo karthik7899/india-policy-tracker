@@ -115,3 +115,72 @@ class TestMissingSessions:
         nans = [float("nan")] * 5
         assert liquidity.average_daily_value_cr(nans, nans) is None
         assert liquidity.liquidity_warning("X", liquidity.assess(nans, nans)) is None
+
+
+class TestSurvivesTheScreenerRebuild:
+    """The failure that made this feature inert in its first production run.
+
+    Turnover was written into ``stock["screener"]`` during the price fetch.
+    The Screener fetch that runs next assigns that key wholesale
+    (``stock["screener"] = sc_data``), so all 67 holdings got turnover and all
+    67 lost it before anything read it. Coverage was 0/67 with no error
+    anywhere in the log.
+    """
+
+    @staticmethod
+    def _rebuild_screener(watchlist):
+        """What providers/screener.py does to every holding."""
+        for stocks in watchlist.values():
+            for stock in stocks:
+                stock["screener"] = {"pe_ratio": 20.0}
+
+    def test_turnover_survives_the_rebuild(self):
+        from analysis.growth import apply_liquidity, _LIQUIDITY_STAGING_KEY
+
+        watchlist = {
+            "sec": [{"ticker": "T1", _LIQUIDITY_STAGING_KEY: {"advt_cr": 12.0}}]
+        }
+        self._rebuild_screener(watchlist)
+        assert apply_liquidity(watchlist) == 1
+
+        screener = watchlist["sec"][0]["screener"]
+        assert screener["advt_cr"] == 12.0
+        assert screener["pe_ratio"] == 20.0  # the rebuild's own data is kept
+
+    def test_staging_key_is_cleared_so_it_never_reaches_the_payload(self):
+        from analysis.growth import apply_liquidity, _LIQUIDITY_STAGING_KEY
+
+        watchlist = {
+            "sec": [{"ticker": "T1", _LIQUIDITY_STAGING_KEY: {"advt_cr": 1.0}}]
+        }
+        apply_liquidity(watchlist)
+        assert _LIQUIDITY_STAGING_KEY not in watchlist["sec"][0]
+
+    def test_reports_how_many_holdings_it_reached(self):
+        """A count the caller can log, so zero coverage is visible."""
+        from analysis.growth import apply_liquidity, _LIQUIDITY_STAGING_KEY
+
+        watchlist = {
+            "sec": [
+                {"ticker": "T1", _LIQUIDITY_STAGING_KEY: {"advt_cr": 1.0}},
+                {"ticker": "T2"},
+            ]
+        }
+        assert apply_liquidity(watchlist) == 1
+
+    def test_handles_a_missing_or_malformed_screener(self):
+        from analysis.growth import apply_liquidity, _LIQUIDITY_STAGING_KEY
+
+        watchlist = {
+            "sec": [
+                {"ticker": "T1", _LIQUIDITY_STAGING_KEY: {"advt_cr": 1.0}},
+                {
+                    "ticker": "T2",
+                    "screener": None,
+                    _LIQUIDITY_STAGING_KEY: {"advt_cr": 2.0},
+                },
+                "junk",
+            ]
+        }
+        assert apply_liquidity(watchlist) == 2
+        assert watchlist["sec"][1]["screener"]["advt_cr"] == 2.0

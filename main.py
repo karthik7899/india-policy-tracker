@@ -13,7 +13,7 @@ from scraper import (
     fetch_institutional_activity_async,
     fetch_exchange_filings_async,
 )
-from analysis.growth import update_live_stock_prices
+from analysis.growth import update_live_stock_prices, apply_liquidity
 from analysis.rotation import auto_curate_watchlist
 from dashboard.builder import build_dashboard_views
 from providers.screener import fetch_all_screener_fundamentals
@@ -130,6 +130,12 @@ async def run_pipeline():
     # into the duplicate check and the committed watchlist.
     isin_covered = annotate_watchlist_isins(watchlist, isin_master)
     log.info(f"ISIN coverage: {isin_covered} holdings keyed by ISIN.")
+
+    # Turnover is re-applied here for the same reason ISIN is: it was computed
+    # during the price fetch above, and the Screener fetch has just replaced
+    # the dict it lives in.
+    liquidity_applied = apply_liquidity(watchlist)
+    log.info(f"Liquidity: turnover attached to {liquidity_applied} holding(s).")
 
     # True industry market share: each holding's slice of its FULL Screener
     # industry peer group's quarterly sales, not just the watchlist subset.
