@@ -28,6 +28,43 @@ MIN_PRICED_FRACTION = 0.6
 MIN_SCREENER_FRACTION = 0.5
 
 
+# Turnover is reported every run rather than gated on a fraction. The right
+# floor is not yet known — this measures a third-party field that may simply be
+# absent for thin listings — and a threshold guessed before the baseline exists
+# would go red daily and be tuned out within a week. Only a *total* collapse to
+# zero is unambiguous enough to fail the job on.
+def summarize_liquidity(watchlist: Dict[str, Any]) -> Dict[str, int]:
+    """Turnover coverage and band counts across the watchlist.
+
+    Coverage is the question that matters, and it is not the same question as
+    "did anything crash". Yahoo can return a clean response with no Volume
+    column for a thinly traded listing, in which case the stock lands in
+    ``unknown``, the illiquidity penalty never fires, and the feature looks
+    healthy while doing nothing for precisely the holdings that motivated it.
+    That failure is silent unless the count is stated out loud.
+    """
+    counts = {
+        "total": 0,
+        "measured": 0,
+        "illiquid": 0,
+        "thin": 0,
+        "adequate": 0,
+        "liquid": 0,
+        "unknown": 0,
+    }
+    for stock in _holdings(watchlist):
+        counts["total"] += 1
+        screener = stock.get("screener") or {}
+        band = screener.get("liquidity_band") or "unknown"
+        if screener.get("advt_cr") is not None:
+            counts["measured"] += 1
+        if band in counts:
+            counts[band] += 1
+        else:
+            counts["unknown"] += 1
+    return counts
+
+
 def _holdings(watchlist: Dict[str, Any]) -> List[Dict[str, Any]]:
     return [
         stock
@@ -72,6 +109,20 @@ def check_run_health(
 
         if not data.get("early_warnings"):
             problems.append("the early-warning engine produced nothing")
+
+        # Turnover coverage is deliberately NOT gated here yet. It is reported
+        # on every run by log_liquidity_coverage instead.
+        #
+        # The tempting check — prices arrived but no holding carries turnover,
+        # so every liquidity check is inert — is the right check to end up
+        # with, and it is not safe to add today: no production run has yet
+        # reported this field, so the healthy baseline is unmeasured. A gate
+        # set on a guessed baseline either fails the job daily over a source
+        # that simply omits Volume for thin listings, or passes trivially and
+        # gives false assurance. Both are worse than a logged number.
+        #
+        # Add the gate once a run has established what coverage actually looks
+        # like; the counts are in the log from this release onward.
     except Exception as e:  # noqa: BLE001
         log.warning(f"Run health check failed safely: {e!r}")
         return True, []
@@ -79,8 +130,27 @@ def check_run_health(
     return not problems, problems
 
 
+def log_liquidity_coverage(watchlist: Dict[str, Any]) -> None:
+    """State turnover coverage in the log on every run, healthy or not.
+
+    Logged unconditionally so the number is in the record daily and a slow
+    erosion is visible as a trend, rather than being discovered the next time
+    somebody thinks to go looking.
+    """
+    try:
+        c = summarize_liquidity(watchlist)
+        log.info(
+            f"Liquidity: {c['measured']}/{c['total']} holdings priced by turnover "
+            f"({c['illiquid']} illiquid, {c['thin']} thin, {c['adequate']} adequate, "
+            f"{c['liquid']} liquid, {c['unknown']} unmeasured)."
+        )
+    except Exception as e:  # noqa: BLE001
+        log.warning(f"Liquidity coverage summary failed safely: {e!r}")
+
+
 def log_run_health(data: Dict[str, Any], watchlist: Dict[str, Any]) -> bool:
     """Check health and log the verdict. Returns True when the run is sound."""
+    log_liquidity_coverage(watchlist)
     healthy, problems = check_run_health(data, watchlist)
     if healthy:
         log.info("Run health: all coverage checks passed.")

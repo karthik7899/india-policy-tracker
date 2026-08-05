@@ -129,3 +129,65 @@ class TestMateriality:
         assert materiality.classify(3.0) == "minor"
         assert materiality.classify(0.5) == "immaterial"
         assert materiality.classify(None) == "unknown"
+
+
+class TestAttribution:
+    """An amount is only this company's if the headline is about this company.
+
+    Every headline here is real, from the first production run of the feature.
+    """
+
+    HAL_RALLY = (
+        "BEL, HAL, Bharat Dynamics: Defence stocks rally as DAC clears "
+        "₹52,000 crore defence acquisition proposals"
+    )
+
+    def test_a_sector_programme_is_not_one_companys_order(self):
+        """The regression: this scored HAL 'transformative' at 157% of its own
+        revenue and applied the maximum weight, on a government procurement
+        figure spanning the sector."""
+        verdict = materiality.assess(self.HAL_RALLY, "", _MIDCAP)
+        assert verdict["pct_of_revenue"] is None
+        assert verdict["band"] == "unknown"
+        assert verdict["weight"] == materiality.WEIGHT_MATERIAL
+
+    def test_the_same_figure_is_rejected_for_every_company_named(self):
+        """It would otherwise have been credited to BEL and BDL as well."""
+        for fin in (_MIDCAP, _MEGACAP):
+            assert materiality.assess(self.HAL_RALLY, "order_win", fin)["band"] == (
+                "unknown"
+            )
+
+    def test_market_commentary_is_never_a_transaction(self):
+        for title in (
+            "Persistent Systems stock crashes 10%, top midcap loser today",
+            "Suzlon shares jump 5% on ₹350 crore order news",
+            "Brokerage sets target price of Rs 1,200 crore valuation",
+        ):
+            assert materiality.amount_is_attributable(title) is False
+
+    def test_programme_level_approvals_are_excluded(self):
+        for title in (
+            "Cabinet approves Rs 22,919 crore PLI scheme for electronics",
+            "CCS clears Rs 62,000 crore fighter engine deal",
+            "Government allocates Rs 1.2 lakh crore outlay for defence",
+        ):
+            assert materiality.amount_is_attributable(title) is False
+
+    def test_a_multi_company_list_headline_is_excluded(self):
+        assert materiality.amount_is_attributable("BEL, HAL, BDL: order news") is False
+
+    def test_a_single_company_order_still_scores(self):
+        """The guard must not silence the case the feature exists for."""
+        title = "BEL bags additional orders worth Rs 1,081 crore"
+        assert materiality.amount_is_attributable(title) is True
+        verdict = materiality.assess(title, "order_win", _MIDCAP)
+        assert verdict["amount_cr"] == 1081.0
+        assert verdict["pct_of_revenue"] is not None
+
+    def test_a_colon_without_a_list_is_not_excluded(self):
+        """Publishers prefix single-company headlines too: 'Suzlon: wins ...'."""
+        assert (
+            materiality.amount_is_attributable("Suzlon: wins order worth Rs 500 crore")
+            is True
+        )
