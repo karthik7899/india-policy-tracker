@@ -17,7 +17,7 @@ from analysis.growth import update_live_stock_prices, apply_liquidity
 from analysis.rotation import auto_curate_watchlist
 from dashboard.builder import build_dashboard_views
 from providers.screener import fetch_all_screener_fundamentals
-from emails.mailer import build_html_email, send_email
+from emails.mailer import build_briefing_email, send_email
 from analysis import revisions as revisions_mod
 from analysis import postmortem
 from analysis.thesis import compute_thesis_health
@@ -320,9 +320,11 @@ async def run_pipeline():
     # Save dashboard JSON
     save_data_for_dashboard(data, watchlist)
 
-    # Build and send email
-    html = build_html_email(data, watchlist)
-    send_email(html)
+    # Build and send email. Subject, body and plain-text part all come from
+    # one summary, so the inbox line cannot disagree with the briefing.
+    message = build_briefing_email(data, watchlist)
+    log.info(f"Briefing subject: {message['subject']}")
+    send_email(message["html"], message["subject"], message["text"])
 
     # Deliberately after the send: a degraded briefing is still worth reading,
     # and it carries the evidence needed to diagnose the degradation. This only
