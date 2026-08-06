@@ -256,6 +256,34 @@ def build_data_quality_html(
                 f"available."
             )
 
+    # Commodity and FX inputs. Reported whenever the key exists, including
+    # when nothing priced: a run that could not reach the price source must
+    # not read the same as a calm month in the commodity complex.
+    shock = brief_data.get("input_cost_shock")
+    if isinstance(shock, dict):
+        priced = len(shock.get("inputs") or {})
+        unmeasured = shock.get("unmeasured") or []
+        shocked = sum(
+            1
+            for row in (shock.get("sectors") or {}).values()
+            if isinstance(row, dict) and row.get("band") in ("material", "severe")
+        )
+        if priced:
+            notes.append(
+                f"<span style='color: #93c5fd;'>Input costs:</span> {priced} "
+                f"input(s) priced; {shocked} sector(s) carrying a material move."
+            )
+        if unmeasured:
+            named = ", ".join(
+                _esc(u.get("label") or u.get("input")) for u in unmeasured[:4]
+            )
+            more = len(unmeasured) - 4
+            notes.append(
+                f"<span style='color: #f87171;'>Inputs not priced:</span> {named}"
+                f"{f', and {more} more' if more > 0 else ''} &mdash; "
+                f"treated as unmeasured, not as unchanged."
+            )
+
     warnings = brief_data.get("early_warnings")
     if isinstance(warnings, list):
         sized = sum(

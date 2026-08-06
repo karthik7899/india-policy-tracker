@@ -11,6 +11,7 @@ from typing import Any, Dict, List
 
 from analysis import materiality
 from config import SECTOR_METADATA
+from config_commodities import MATERIAL_MOVE_PCT, WINDOW_DAYS
 from config_scoring import SCORING_CONFIG, EARLY_WARNING_CONFIG
 from logger import log
 from utils import to_float
@@ -194,6 +195,17 @@ _RULE_BOOK = {
         "A supply-side event landed on a sector this holding is exposed to",
         "Low",
         "Headline classification",
+    ),
+    # Priced inputs, not headlines about inputs — the confidence is Medium
+    # rather than Low because the move is read off a series, but the mapping
+    # from that move to this sector's margin is a coarse weight, not a cost
+    # sheet.
+    "Input Cost Shock": (
+        f"A mapped commodity or FX input moved at least "
+        f"{MATERIAL_MOVE_PCT:.0f}% over {WINDOW_DAYS} days, weighted by this "
+        f"sector's exposure and by whether it consumes or earns from the input",
+        "Medium",
+        "Commodity/FX price series",
     ),
     "Supply Stress (Forward)": (
         "Repeated supply-side events touched this sector inside a 14-day "

@@ -243,6 +243,13 @@ async def run_pipeline():
         data["supply_stress"] = compute_supply_stress(data["market_events"], graph)
         harvest_partner_edges(data["corporate_agreements"], watchlist, graph)
 
+        # The price-based counterpart of supply_stress above. That one counts
+        # supply-side headlines, so a quarter where copper quietly rose 18%
+        # with nobody writing about it produced no signal at all.
+        from analysis.input_cost import compute_input_cost_shock
+
+        data["input_cost_shock"] = compute_input_cost_shock()
+
     # Revenue growth first: it annotates each holding's TTM figure, which the
     # scoring model below reads. Running it afterwards left the scorer with no
     # growth input at all, silently.
