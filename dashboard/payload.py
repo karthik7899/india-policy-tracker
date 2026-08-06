@@ -96,7 +96,9 @@ def summarize_ongoing(warnings: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     return rows
 
 
-def build_display_payload(brief_data: Dict[str, Any]) -> Dict[str, Any]:
+def build_display_payload(
+    brief_data: Dict[str, Any], watchlist: Dict[str, Any] = None
+) -> Dict[str, Any]:
     """A display copy of the briefing: capped feeds, actionable warnings."""
     payload = dict(brief_data or {})
     try:
@@ -121,6 +123,19 @@ def build_display_payload(brief_data: Dict[str, Any]) -> Dict[str, Any]:
         if "coverage_count" in payload:
             counts = payload["coverage_count"]
             payload["coverage_count"] = counts if isinstance(counts, dict) else {}
+
+        # Sector blocks are assembled once, here, and rendered by both the
+        # email and the dashboard. Building them separately is how the two
+        # surfaces drift into disagreeing about which sectors matter.
+        from dashboard.sector_blocks import build_sector_blocks
+
+        # Emitted only when there is something to emit. An empty list would
+        # claim the assembly ran and found nothing eligible, which is a
+        # different statement from a payload that never had sectors to
+        # assemble — the same distinction coverage_count above turns on.
+        blocks = build_sector_blocks(payload, watchlist or {})
+        if blocks:
+            payload["sector_blocks"] = blocks
 
         warnings = payload.get("early_warnings")
         if isinstance(warnings, list):

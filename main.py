@@ -54,7 +54,7 @@ def save_data_for_dashboard(brief_data, watchlist):
         "last_updated": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "watchlist": watchlist,
         "sectors": SECTOR_METADATA,
-        "briefing": build_display_payload(brief_data),
+        "briefing": build_display_payload(brief_data, watchlist),
     }
     atomic_write_json(output, "dashboard_data.json")
 

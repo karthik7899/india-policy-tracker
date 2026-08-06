@@ -562,6 +562,13 @@ def _sectors_to_render(brief_data, caps):
     news this cycle. A sector with neither has nothing to say that the
     dashboard is not already holding.
     """
+    blocks = brief_data.get("sector_blocks")
+    if isinstance(blocks, list) and blocks:
+        # Already ordered and filtered by dashboard/sector_blocks.py. Reusing
+        # it is the point: the email and the page must not rank sectors
+        # differently from the same corpus.
+        return [b["id"] for b in blocks[: caps.get("sectors", 6)]], len(blocks)
+
     scored = []
     for key in brief_data:
         if key not in SECTOR_METADATA or key == "macro_indicators":
@@ -576,6 +583,48 @@ def _sectors_to_render(brief_data, caps):
     # both must not swap places between runs.
     scored.sort(key=lambda r: (-r[0], -r[1], r[2]))
     return [key for _, _, key in scored[: caps.get("sectors", 6)]], len(scored)
+
+
+def _sector_block_news_html(block, coverage_counts=None):
+    """Per-sector news from the shared block.
+
+    Every headline is an external link; where a source URL is missing the row
+    says so rather than emitting dead markup. Affected tickers carry the
+    Phase-1 coverage link, so a name in a sector card is one click from the
+    articles behind it.
+    """
+    if not block or not block.get("news"):
+        return (
+            "<p style='font-size:12px;color:#6b7280;margin:0;'>"
+            "No news attributed to this sector in the window.</p>"
+        )
+
+    counts = coverage_counts or {}
+    rows = []
+    for item in block["news"]:
+        headline = html_lib.escape(str(item.get("headline", "")))
+        url = item.get("url")
+        title = (
+            f"<a href='{html_lib.escape(str(url))}' target='_blank' "
+            f"rel='noopener noreferrer' class='news-title'>{headline}</a>"
+            if url
+            else f"<span class='news-title'>{headline}</span> "
+            "<span style='font-size:10px;color:#6b7280;'>(source link not available)</span>"
+        )
+        tag = html_lib.escape(str((item.get("tags") or ["other"])[0]).replace("_", " "))
+        tickers = " ".join(
+            coverage_link(tk, counts.get(str(tk).upper(), 0))
+            for tk in (item.get("affected_tickers") or [])[:3]
+        )
+        rows.append(
+            "<div class='news-item'>"
+            f"{title}"
+            f"<div class='meta-line'>{html_lib.escape(str(item.get('source') or 'Source not available'))}"
+            f" &middot; {tag}"
+            f" &middot; {html_lib.escape(str(item.get('confidence') or 'M'))} confidence"
+            f"{' &middot; ' + tickers if tickers else ''}</div></div>"
+        )
+    return "".join(rows)
 
 
 def _render_email(brief_data, watchlist, caps):
@@ -704,15 +753,23 @@ def _render_email(brief_data, watchlist, caps):
     body_html += _build_research_engine_html(brief_data, caps)
 
     selected_sectors, eligible_total = _sectors_to_render(brief_data, caps)
+    blocks_by_id = {
+        b.get("id"): b
+        for b in (brief_data.get("sector_blocks") or [])
+        if isinstance(b, dict)
+    }
     for sector in selected_sectors:
         news_items = brief_data.get(sector) or []
+        block = blocks_by_id.get(sector)
         meta = _escape_deep(SECTOR_METADATA[sector])
         stocks = watchlist.get(sector, [])
 
         # Format news HTML. The email carries the top items per sector to
         # stay under Gmail's ~102 KB clip limit; the dashboard has them all.
         news_html = ""
-        if news_items:
+        if block:
+            news_html = _sector_block_news_html(block, brief_data.get("coverage_count"))
+        elif news_items:
             for item in news_items[: caps["news"]]:
                 badge_class = (
                     "badge-positive"
