@@ -270,6 +270,7 @@ async def run_pipeline():
     postmortem.score_pending_decisions(rotation_ledger, watchlist)
     data["rotation_hit_rate"] = postmortem.compute_hit_rate(rotation_ledger)
     data["rotation_recent_outcomes"] = postmortem.recent_outcomes(rotation_ledger)
+    data["watchlist_changes"] = postmortem.recent_changes(rotation_ledger)
     postmortem.save_ledger(rotation_ledger)
 
     # Sector-relative valuation: annotate stocks with peer-group P/E context

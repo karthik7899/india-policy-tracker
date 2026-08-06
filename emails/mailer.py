@@ -13,6 +13,14 @@ from emails.summary import (
     build_plain_text,
     _sector_label,
 )
+from emails.sections import (
+    build_watchlist_changes_html,
+    build_valuation_extremes_html,
+    build_data_quality_html,
+    build_cta_html,
+    MAX_CHANGES,
+    MAX_EXTREMES,
+)
 
 _SEVERITY_BADGE = {
     "Critical": ("#7f1d1d", "#fca5a5"),
@@ -38,6 +46,8 @@ _CAPS_NORMAL = {
     "curve": 14,
     "emerging": 8,
     "caution": 8,
+    "changes": 6,
+    "extremes": 5,
 }
 _CAPS_COMPACT = {
     "sectors": 3,
@@ -49,6 +59,8 @@ _CAPS_COMPACT = {
     "curve": 10,
     "emerging": 5,
     "caution": 5,
+    "changes": 4,
+    "extremes": 3,
 }
 # The floor. One holding per sector with the overflow link doing the rest —
 # enough to say what moved, and small enough that sector growth cannot push
@@ -63,6 +75,8 @@ _CAPS_MINIMAL = {
     "curve": 6,
     "emerging": 3,
     "caution": 3,
+    "changes": 3,
+    "extremes": 2,
 }
 
 _CAP_LADDER = (
@@ -1325,6 +1339,31 @@ def _render_email(brief_data, watchlist, caps):
         + emerging_html_global
         + inst_html
         + valuation_html
+    )
+
+    # Closing sections, in the order the reader needs them: what moved in the
+    # watchlist itself, where valuations sit at the edges, what the run could
+    # not see, and then a single next action. The data-quality note comes last
+    # of the four on purpose -- it qualifies everything above it, so it reads
+    # as a caveat rather than as a disclaimer nobody reaches.
+    suppressed = [
+        {"ticker": s.get("ticker"), "reason": "no analyst or fundamental base"}
+        for key, stocks in (watchlist or {}).items()
+        if key != "macro_indicators" and isinstance(stocks, list)
+        for s in stocks
+        if isinstance(s, dict) and s.get("estimate_method") == "No Estimate"
+    ]
+    body_html += (
+        build_watchlist_changes_html(
+            brief_data.get("watchlist_changes"), caps.get("changes", MAX_CHANGES)
+        )
+        + build_valuation_extremes_html(
+            brief_data.get("sector_valuation"),
+            suppressed,
+            caps.get("extremes", MAX_EXTREMES),
+        )
+        + build_data_quality_html(brief_data, watchlist)
+        + build_cta_html(DASHBOARD_URL)
     )
 
     body_html += f"""
