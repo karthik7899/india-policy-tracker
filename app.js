@@ -1474,6 +1474,7 @@ function initSectorsTab() {
                 button.setAttribute("aria-pressed", String(isActive));
             });
             renderSectorDetail(key);
+            decorateTickerCells(document.getElementById("tab-sectors"));
         });
         listContainer.appendChild(btn);
     });
@@ -1481,7 +1482,87 @@ function initSectorsTab() {
     // Auto-select first sector on load
     if (sectorKeys.length > 0) {
         renderSectorDetail(sectorKeys[0]);
+        decorateTickerCells(document.getElementById("tab-sectors"));
     }
+}
+
+/** The sector block, rendered from the same payload field the email uses.
+ *  Assembling it twice is how the two surfaces drift into disagreeing about
+ *  which sectors matter, so this reads dashboard/sector_blocks.py's output
+ *  rather than re-deriving anything. */
+function sectorBlockFor(sectorKey) {
+    return ((appData.briefing || {}).sector_blocks || [])
+        .find(b => b && b.id === sectorKey) || null;
+}
+
+function renderSectorBlockHtml(block) {
+    if (!block) {
+        return `<div class="glass-card"><div class="table-header-bar">
+            <h3>Sector block</h3></div>
+            <p class="drawer-empty">Not available — this sector had no new or
+            escalated signal and no news in the window, so no block was
+            assembled for it this run.</p></div>`;
+    }
+
+    const na = '<span class="pane-na">Not available</span>';
+    const num = v => (v === null || v === undefined) ? na : escapeHtml(String(v));
+
+    const news = (block.news || []).length
+        ? block.news.map(n => {
+            const title = n.url
+                ? `<a href="${escapeHtml(n.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(n.headline)}</a>`
+                : `${escapeHtml(n.headline)} <span class="news-note">(source link not available)</span>`;
+            const tickers = (n.affected_tickers || [])
+                .map(tk => `<span class="t-ticker">${escapeHtml(tk)}</span>`).join(" ");
+            return `<li class="news-row"><div class="news-date">${escapeHtml(n.date || "Not available")}</div>
+                <div class="news-main"><div class="news-headline">${title}</div>
+                <div class="news-meta"><span>${escapeHtml(n.source || "Source not available")}</span>
+                <span class="news-tag">${escapeHtml(String((n.tags || ["other"])[0]).replace(/_/g, " "))}</span>
+                <span class="news-conf">${escapeHtml(n.confidence || "M")}</span>${tickers}</div>
+                </div></li>`;
+          }).join("")
+        : `<li class="drawer-empty">No news attributed to this sector in the window.</li>`;
+
+    const focus = (block.focus_stocks || []).length
+        ? block.focus_stocks.map(f => `<tr>
+            <td class="t-ticker">${escapeHtml(f.ticker)}</td>
+            <td class="num">${num(f.score)}</td>
+            <td>${escapeHtml(f.primary_signal || "")}</td>
+            <td class="num">${num(f.coverage_count)}</td>
+            <td>${f.pe_vs_peers ? escapeHtml(f.pe_vs_peers) : na}</td></tr>`).join("")
+        : `<tr><td colspan="5" class="drawer-empty">No holding stood out this cycle.</td></tr>`;
+
+    const threats = (block.threats || []).length
+        ? block.threats.map(x => `<li>${escapeHtml(x.name)} — ${escapeHtml(x.detail)}</li>`).join("")
+        : `<li class="pane-na">None detected this cycle</li>`;
+
+    const suppressed = (block.suppressed || []).length
+        ? block.suppressed.map(t => `<span class="t-ticker">${escapeHtml(t)}</span>`).join(" ")
+        : `<span class="pane-na">None</span>`;
+
+    return `<div class="glass-card">
+        <div class="table-header-bar">
+            <h3>${escapeHtml(block.name)}</h3>
+            <p class="subtitle">${escapeHtml(block.stance_line)} ·
+                median P/E ${block.median_pe != null ? escapeHtml(String(block.median_pe)) : "not available"}</p>
+        </div>
+        <div class="sector-block-grid">
+            <div>
+                <h4 class="sb-head">News in window</h4>
+                <ul class="news-list">${news}</ul>
+            </div>
+            <div>
+                <h4 class="sb-head">Stocks in focus</h4>
+                <div class="table-scroll-container"><table class="premium-table">
+                    <thead><tr><th>Ticker</th><th class="num">Score</th><th>Primary signal</th>
+                    <th class="num">Coverage</th><th>P/E vs peers</th></tr></thead>
+                    <tbody>${focus}</tbody></table></div>
+                <h4 class="sb-head">Competitive threats</h4>
+                <ul class="pane-list">${threats}</ul>
+                <h4 class="sb-head">Suppressed estimates</h4>
+                <div>${suppressed}</div>
+            </div>
+        </div></div>`;
 }
 
 function renderSectorDetail(sectorKey) {
@@ -1489,7 +1570,8 @@ function renderSectorDetail(sectorKey) {
     const news = appData.briefing[sectorKey] || [];
     const stocks = appData.watchlist[sectorKey] || [];
     const container = document.getElementById("sector-details-content");
-    
+    const blockHtml = renderSectorBlockHtml(sectorBlockFor(sectorKey));
+
     let newsHtml = "";
     if (news.length > 0) {
         news.forEach(n => {
@@ -1627,7 +1709,7 @@ function renderSectorDetail(sectorKey) {
         `;
     });
     
-    container.innerHTML = `
+    container.innerHTML = blockHtml + `
         <div class="detail-header">
             <div class="detail-header-top">
                 <span>${escapeHtml(sect.icon)}</span>

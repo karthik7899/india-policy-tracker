@@ -182,3 +182,31 @@ class TestParity:
         selected, total = _sectors_to_render(brief, _CAPS_NORMAL)
         assert selected == [b["id"] for b in brief["sector_blocks"]]
         assert total == len(brief["sector_blocks"])
+
+
+class TestSingleSourceOfTruth:
+    """Both surfaces must read the same assembled field.
+
+    The dashboard renders sector_blocks from the payload (app.js
+    sectorBlockFor / renderSectorBlockHtml) and the email ranks from the same
+    list. Neither re-derives ordering, caps or inclusion.
+    """
+
+    def test_the_dashboard_reads_the_payload_field_rather_than_rebuilding(self):
+        import pathlib
+
+        app_js = (pathlib.Path(__file__).parent.parent / "app.js").read_text(
+            encoding="utf-8"
+        )
+        assert "sector_blocks" in app_js
+        # It must not carry its own copy of the ranking constants.
+        assert "_SEVERITY_WEIGHT" not in app_js
+        assert "severity_weighted" not in app_js
+
+    def test_blocks_survive_the_payload_trim(self):
+        from dashboard.payload import build_display_payload
+
+        brief = _brief(early_warnings=[_warning("A", _KEYS[0], "Critical")])
+        brief[_KEYS[0]] = [{"title": "n", "link": "u"}]
+        payload = build_display_payload(brief, _watchlist(_KEYS[0]))
+        assert payload["sector_blocks"][0]["id"] == _KEYS[0]

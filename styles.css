@@ -2305,3 +2305,29 @@ a:focus-visible {
     .pane-key { flex-basis: auto; }
     .palette { margin-top: 6vh; }
 }
+
+/* --- Sector block (dashboard parity with the email) ---------------------- */
+
+.sector-block-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 20px;
+    padding: 4px 2px 8px 2px;
+}
+/* Grid children default to min-width:auto and refuse to shrink below their
+   content, which is what pushed the page into horizontal overflow the last
+   two times a grid was added here. */
+.sector-block-grid > * { min-width: 0; }
+
+.sb-head {
+    margin: 14px 0 7px 0;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-secondary);
+}
+.sb-head:first-child { margin-top: 0; }
+
+@media (max-width: 900px) {
+    .sector-block-grid { grid-template-columns: minmax(0, 1fr); }
+}
