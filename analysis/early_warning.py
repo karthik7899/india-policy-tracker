@@ -55,6 +55,188 @@ def _build_policy_map(data: Dict[str, Any]) -> Dict[str, List[str]]:
     return policy_map
 
 
+# What each alert category actually means, so a reader can argue with it.
+#
+# An alert that states a conclusion without its trigger is unfalsifiable: three
+# separate bugs this release cycle produced confident numbers from broken
+# inputs, and none of them were visible from the alert text alone. Each entry
+# gives the rule that fired, and how much the finding can be trusted:
+#
+#   High   — read directly off reported figures.
+#   Medium — derived from a comparison or trend this pipeline computed.
+#   Low    — inferred from headline text, so it inherits every classification
+#            error the NLP can make.
+_RULE_BOOK = {
+    "Promoter Exit": (
+        f"Promoter holding fell at least "
+        f"{abs(EARLY_WARNING_CONFIG.promoter_exit_critical):.1f} percentage "
+        f"points this quarter",
+        "High",
+        "Screener shareholding pattern",
+    ),
+    "Promoter Selling": (
+        f"Promoter holding fell at least "
+        f"{abs(EARLY_WARNING_CONFIG.promoter_exit_high):.1f} percentage points",
+        "High",
+        "Screener shareholding pattern",
+    ),
+    "FII Outflow": (
+        f"Foreign institutional holding fell at least "
+        f"{abs(EARLY_WARNING_CONFIG.fii_outflow_critical):.1f} percentage points",
+        "High",
+        "Screener shareholding pattern",
+    ),
+    "FII Selling": (
+        f"Foreign institutional holding fell at least "
+        f"{abs(EARLY_WARNING_CONFIG.fii_outflow_high):.1f} percentage points",
+        "High",
+        "Screener shareholding pattern",
+    ),
+    "Revenue Contraction": (
+        "Quarterly revenue fell against the comparable prior quarter",
+        "High",
+        "Screener quarterly results",
+    ),
+    "Liquidity Stress": (
+        f"Current ratio below {EARLY_WARNING_CONFIG.leverage_critical:.1f}",
+        "High",
+        "Screener balance sheet",
+    ),
+    "High Leverage": (
+        f"Debt to equity above {EARLY_WARNING_CONFIG.leverage_critical:.1f}",
+        "High",
+        "Screener balance sheet",
+    ),
+    "Elevated Leverage": (
+        "Debt to equity above the configured comfort threshold",
+        "High",
+        "Screener balance sheet",
+    ),
+    "Margin Compression": (
+        f"Operating margin contracted at least "
+        f"{abs(EARLY_WARNING_CONFIG.margin_compression):.1f} percentage points; "
+        f"severity ladders at "
+        f"{abs(EARLY_WARNING_CONFIG.margin_compression_high):.0f} and "
+        f"{abs(EARLY_WARNING_CONFIG.margin_compression_critical):.0f}",
+        "High",
+        "Screener quarterly results",
+    ),
+    "Valuation Stretch": (
+        "Failed one or more valuation screens (P/E, debt limit, hyper-growth)",
+        "Medium",
+        "Computed valuation screens",
+    ),
+    "Price Breakdown": (
+        f"Session move below {EARLY_WARNING_CONFIG.intraday_drop_critical:.0f}%",
+        "High",
+        "Yahoo Finance quote",
+    ),
+    "Below Trend": (
+        "Price trading under its moving average",
+        "Medium",
+        "Yahoo Finance quote",
+    ),
+    "Institutional Accumulation": (
+        "Domestic institutional holding rose this quarter",
+        "High",
+        "Screener shareholding pattern",
+    ),
+    "Institutional Buying": (
+        "Institutional holding rose this quarter",
+        "High",
+        "Screener shareholding pattern",
+    ),
+    "Policy Catalyst": (
+        "A policy or corporate event was attributed to this holding",
+        "Low",
+        "Headline classification",
+    ),
+    "Momentum Breakout": (
+        f"Traded volume at least "
+        f"{EARLY_WARNING_CONFIG.volume_surge_breakout:.1f}x its normal level",
+        "Medium",
+        "Yahoo Finance quote",
+    ),
+    # The single-word category is what the industry-share pass actually emits,
+    # and it accounted for ten of twenty-two alerts on the day this was
+    # written — the largest group, and the one my first draft left
+    # undocumented because I guessed the name instead of reading it.
+    "Market Share": (
+        f"Industry revenue share moved at least "
+        f"{abs(EARLY_WARNING_CONFIG.share_loss_pp):.2f} percentage points over "
+        f"the lookback",
+        "Medium",
+        "Computed industry share",
+    ),
+    "Corporate Move": (
+        "An exchange-disclosed corporate action was attributed to this holding",
+        "Low",
+        "Headline classification",
+    ),
+    # These three come from analysis/event_engine.py rather than this module,
+    # which is why a first pass missed them: none appeared in the day's payload
+    # I checked against. The coverage test reads the source instead.
+    "Ecosystem Signal": (
+        "A classified event reached this holding along an entity-graph edge "
+        "rather than naming it directly",
+        "Low",
+        "Headline classification via entity graph",
+    ),
+    "Supply Chain": (
+        "A supply-side event landed on a sector this holding is exposed to",
+        "Low",
+        "Headline classification",
+    ),
+    "Supply Stress (Forward)": (
+        "Repeated supply-side events touched this sector inside a 14-day "
+        "window — a leading indicator, not a reported figure",
+        "Low",
+        "Headline count over a rolling window",
+    ),
+    "Market Share Gain": (
+        f"Peer-group revenue share rose at least "
+        f"{EARLY_WARNING_CONFIG.share_gain_pp:.2f} percentage points",
+        "Medium",
+        "Computed peer-group share",
+    ),
+    "Market Share Loss": (
+        f"Peer-group revenue share fell at least "
+        f"{abs(EARLY_WARNING_CONFIG.share_loss_pp):.2f} percentage points",
+        "Medium",
+        "Computed peer-group share",
+    ),
+    "Growth Laggard": (
+        f"Revenue growth at least "
+        f"{EARLY_WARNING_CONFIG.growth_laggard_gap:.0f} points below the sector "
+        f"median",
+        "Medium",
+        "Computed sector median",
+    ),
+    "Competitive Threat": (
+        "A non-holding peer was detected gaining ground in this sector",
+        "Low",
+        "Headline classification",
+    ),
+    "New Entrant": (
+        "A company outside the watchlist was detected entering this sector",
+        "Low",
+        "Headline classification",
+    ),
+}
+
+# Anything not in the book is explained honestly rather than confidently.
+_UNKNOWN_RULE = ("Rule not documented", "Medium", "Mixed")
+
+
+def annotate_rule(alert: Dict[str, Any]) -> Dict[str, Any]:
+    """Attach the trigger rule, confidence and source to one alert."""
+    rule, confidence, source = _RULE_BOOK.get(alert.get("category"), _UNKNOWN_RULE)
+    alert["rule"] = rule
+    alert["confidence"] = confidence
+    alert["evidence_source"] = source
+    return alert
+
+
 def _evaluate_stock(
     stock: Dict[str, Any],
     sector_label: str,
@@ -67,15 +249,17 @@ def _evaluate_stock(
 
     def emit(severity: str, direction: str, category: str, signal: str) -> None:
         alerts.append(
-            {
-                "ticker": ticker,
-                "name": name,
-                "sector": sector_label,
-                "severity": severity,
-                "direction": direction,
-                "category": category,
-                "signal": signal,
-            }
+            annotate_rule(
+                {
+                    "ticker": ticker,
+                    "name": name,
+                    "sector": sector_label,
+                    "severity": severity,
+                    "direction": direction,
+                    "category": category,
+                    "signal": signal,
+                }
+            )
         )
 
     screener = stock.get("screener")
@@ -570,6 +754,13 @@ def generate_early_warnings(
     warnings.extend(_growth_laggards(watchlist))
 
     # Exchange-disclosed events: capital raises and bulk/block deals.
+
+    # Annotate everything here rather than at each source. Several alert
+    # producers live in other modules (competitive_intel, event_engine) and
+    # append directly, so per-site annotation would leave exactly those —
+    # the headline-derived, least reliable ones — unlabelled.
+    for alert in warnings:
+        annotate_rule(alert)
 
     warnings.sort(
         key=lambda a: (

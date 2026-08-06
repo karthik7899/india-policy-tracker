@@ -2235,6 +2235,62 @@ function setupWarningFilters() {
     }
 }
 
+
+// Confidence in how a finding was derived, never in the company itself.
+function formatConfidence(w) {
+    const level = w.confidence || "Medium";
+    const cls = { High: "conf-high", Medium: "conf-med", Low: "conf-low" }[level] || "conf-med";
+    const why = w.evidence_source ? ` · ${w.evidence_source}` : "";
+    return `<span class="conf-badge ${cls}" title="${escapeHtml(level + why)}">${escapeHtml(level)}</span>`;
+}
+
+// The drawer: the rule that fired, the numbers behind it, and where they came
+// from. Deliberately phrased as review prompts rather than instructions —
+// this is research tooling, not advice.
+function buildWarningDrawer(w) {
+    const rows = [
+        ["Trigger rule", w.rule || "Not documented"],
+        ["What fired", w.signal || "—"],
+        ["Derived from", w.evidence_source || "Mixed"],
+        ["Confidence", `${w.confidence || "Medium"} — ${CONFIDENCE_MEANING[w.confidence] || CONFIDENCE_MEANING.Medium}`],
+        ["State", w.status === "escalated" ? "Escalated: worse than the previous run"
+            : w.status === "new" ? "New: absent from the previous run"
+            : "Ongoing: unchanged since the previous run"],
+    ];
+    const body = rows.map(([k, v]) =>
+        `<div class="wd-row"><span class="wd-key">${escapeHtml(k)}</span>` +
+        `<span class="wd-val">${escapeHtml(v)}</span></div>`).join("");
+    const action = SUGGESTED_REVIEW[w.category];
+    const footer = action
+        ? `<div class="wd-action">Suggested review: ${escapeHtml(action)}</div>` : "";
+    return `<div class="warning-drawer">${body}${footer}</div>`;
+}
+
+const CONFIDENCE_MEANING = {
+    High: "read directly off reported figures",
+    Medium: "derived from a comparison this pipeline computed",
+    Low: "inferred from headline text, so it inherits classification errors",
+};
+
+// Review prompts, not recommendations. "Verify", "review", "check" — never
+// "buy" or "sell".
+const SUGGESTED_REVIEW = {
+    "Margin Compression": "check input-cost exposure and one-off items in the quarter",
+    "Revenue Contraction": "confirm against the filed result before treating as a trend",
+    "Promoter Exit": "verify the shareholding pattern and any pledge disclosure",
+    "Promoter Selling": "verify the shareholding pattern and any pledge disclosure",
+    "FII Outflow": "check whether the move is index-driven rather than company-specific",
+    "FII Selling": "check whether the move is index-driven rather than company-specific",
+    "High Leverage": "review the debt schedule and interest cover",
+    "Liquidity Stress": "review working-capital cycle and near-term maturities",
+    "Valuation Stretch": "re-check the peer set before treating the multiple as expensive",
+    "Market Share": "confirm the peer group is the right comparison set",
+    "Competitive Threat": "verify the competitor claim against a primary source",
+    "New Entrant": "verify the entrant claim against a primary source",
+    "Policy Catalyst": "confirm scheme eligibility before assuming impact",
+    "Corporate Move": "read the underlying disclosure before acting on the headline",
+};
+
 function renderEarlyWarnings() {
     const tbody = document.getElementById("early-warning-table-body");
     if (!tbody) return;
@@ -2268,7 +2324,7 @@ function renderEarlyWarnings() {
                 ? `No warning appeared or worsened in this cycle. ${ongoing} standing condition(s) are grouped below.`
                 : "No risk or opportunity signals were triggered in the latest cycle.")
             : "Adjust the severity, direction, or text filters above.";
-        setTableEmpty(tbody, 6, msg, sub);
+        setTableEmpty(tbody, 7, msg, sub);
         renderWarningSummary();
         return;
     }
@@ -2287,15 +2343,32 @@ function renderEarlyWarnings() {
                 : "";
 
         const tr = document.createElement("tr");
+        tr.className = "warning-row";
         tr.innerHTML = `
             <td class="t-ticker">${escapeHtml(w.ticker)}</td>
             <td><strong>${escapeHtml(w.name)}</strong> ${statusBadge}</td>
             <td><span class="chip" style="display:inline-block; border-color:transparent;">${escapeHtml(w.sector)}</span></td>
             <td><span class="${badgeClass}" style="font-size: 9px;">${escapeHtml(severity)}</span></td>
             <td style="color: ${dirColor}; white-space: nowrap;">${dirIcon} ${escapeHtml(w.category)}</td>
-            <td style="max-width: 420px; white-space: normal;">${escapeHtml(w.signal)}</td>
+            <td style="max-width: 380px; white-space: normal;">${escapeHtml(w.signal)}</td>
+            <td>${formatConfidence(w)}</td>
         `;
         tbody.appendChild(tr);
+
+        // Why this fired, one click away. An alert that states a conclusion
+        // without its trigger cannot be argued with — and three separate
+        // bugs this cycle produced confident numbers from broken inputs
+        // that the alert text alone gave no way to question.
+        const detail = document.createElement("tr");
+        detail.className = "warning-detail";
+        detail.style.display = "none";
+        detail.innerHTML = `<td colspan="7">${buildWarningDrawer(w)}</td>`;
+        tbody.appendChild(detail);
+        tr.addEventListener("click", () => {
+            const open = detail.style.display !== "none";
+            detail.style.display = open ? "none" : "table-row";
+            tr.classList.toggle("row-open", !open);
+        });
     });
 
     renderWarningSummary();
