@@ -203,3 +203,52 @@ class TestVariantSelection:
             _brief([_warning("BPCL", "Critical")]), _watchlist()
         )
         assert message["subject"] and message["html"] and message["text"]
+
+
+class TestCountsAreDeltasNotTotals:
+    """The subject must describe what changed, not what is true.
+
+    main.py passes the *untrimmed* corpus to the mailer, so counting every
+    warning produced a first production subject reading "11 Critical, 140
+    Opportunities" against a dashboard showing 42 actionable items — the wall
+    of alerts this rewrite replaced, reproduced in the line most likely to be
+    read.
+    """
+
+    def _mixed(self):
+        return _brief(
+            [
+                _warning("NEW1", "Critical", status="new"),
+                _warning("ESC1", "Critical", status="escalated"),
+                _warning("OLD1", "Critical", status="ongoing"),
+                _warning("OLD2", "Critical", status="ongoing"),
+                _warning("NEWOPP", direction="opportunity", status="new"),
+                _warning("OLDOPP1", direction="opportunity", status="ongoing"),
+                _warning("OLDOPP2", direction="opportunity", status="ongoing"),
+            ]
+        )
+
+    def test_critical_counts_only_new_and_escalated(self):
+        s = summary_mod.build_summary(self._mixed(), _watchlist())
+        assert s["critical_total"] == 2  # not 4
+
+    def test_opportunity_counts_only_new_and_escalated(self):
+        s = summary_mod.build_summary(self._mixed(), _watchlist())
+        assert s["opportunities_total"] == 1  # not 3
+
+    def test_the_subject_reflects_the_delta(self):
+        s = summary_mod.build_summary(self._mixed(), _watchlist())
+        subject = summary_mod.build_subject(s, _TODAY)
+        assert "2 Critical" in subject
+        assert "4 Critical" not in subject
+
+    def test_standing_conditions_are_still_counted_separately(self):
+        """Dropping them from the headline must not lose them entirely."""
+        s = summary_mod.build_summary(
+            _brief(
+                [_warning("OLD", status="ongoing")],
+                warning_summary=[{"count": 297}],
+            ),
+            _watchlist(),
+        )
+        assert s["ongoing_total"] == 297

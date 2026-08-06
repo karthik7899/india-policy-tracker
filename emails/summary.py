@@ -72,14 +72,24 @@ def build_summary(
     warnings = brief_data.get("early_warnings") or []
     is_new = lambda w: (w.get("status") or "ongoing") == "new"  # noqa: E731
 
+    escalated = [w for w in warnings if (w.get("status") or "") == "escalated"]
+    new_signals = [w for w in warnings if is_new(w)]
+
+    # Only what changed. These counts previously ran over every warning in the
+    # corpus, and the pipeline hands this function the *untrimmed* data — so
+    # the first production subject read "11 Critical, 140 Opportunities" while
+    # the dashboard showed 42 actionable items and the body listed twelve.
+    #
+    # A subject line advertising the standing set is the exact wall of alerts
+    # this rewrite existed to replace, reproduced in the one place guaranteed
+    # to be read. Standing conditions are still counted, as ongoing_total.
+    changed = [w for w in warnings if is_new(w) or (w.get("status") == "escalated")]
     critical = [
         w
-        for w in warnings
+        for w in changed
         if w.get("severity") == "Critical" and w.get("direction") == "risk"
     ]
-    escalated = [w for w in warnings if (w.get("status") or "") == "escalated"]
-    opportunities = [w for w in warnings if w.get("direction") == "opportunity"]
-    new_signals = [w for w in warnings if is_new(w)]
+    opportunities = [w for w in changed if w.get("direction") == "opportunity"]
 
     coverage = _coverage(watchlist)
     total = coverage["total"] or 1
