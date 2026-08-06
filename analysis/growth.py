@@ -135,6 +135,40 @@ def _liquidity_from_frame(frame):
         return None
 
 
+def _range_from_frame(frame):
+    """52-week high, low, and where the last close sits between them.
+
+    ``pct_above_low`` is the figure the pledge tracker reads: a promoter who
+    has pledged shares is squeezed by a falling price, so proximity to the
+    low is what converts a standing pledge into a live risk. Returns None
+    rather than a partial dict, because a range missing one end is not a
+    range and a caller that got one would be comparing against nothing.
+    """
+    import math
+
+    try:
+        if frame is None or "Close" not in frame:
+            return None
+        closes = frame["Close"].dropna()
+        if closes.empty:
+            return None
+        low, high, last = (
+            float(closes.min()),
+            float(closes.max()),
+            float(closes.iloc[-1]),
+        )
+        if any(math.isnan(v) for v in (low, high, last)) or low <= 0:
+            return None
+        return {
+            "week52_low": round(low, 2),
+            "week52_high": round(high, 2),
+            "pct_above_low": round((last - low) / low * 100, 2),
+        }
+    except Exception as e:
+        log.error(f"52-week range computation failed for a ticker frame: {e}")
+        return None
+
+
 def update_live_stock_prices(watchlist):
     """Updates watchlist with live prices from Yahoo Finance.
 
@@ -198,6 +232,40 @@ def update_live_stock_prices(watchlist):
                         )
         except Exception as e:
             log.error(f"Error during batch price download: {e}")
+
+    # 52-week range, for the pledge tracker's "near its low" leg. Fetched as
+    # weekly bars rather than by lengthening the month-long download above:
+    # that response also feeds turnover, which wants recent daily volume, and
+    # 52 weekly rows answer "where in its range is this" just as well as 250
+    # daily ones at a fraction of the payload.
+    if yahoo_tickers:
+        try:
+            year = yf.download(
+                yahoo_tickers,
+                period="1y",
+                interval="1wk",
+                group_by="ticker",
+                threads=True,
+                timeout=20,
+                progress=False,
+            )
+            ranged = 0
+            for stock in all_stocks:
+                symbol = f"{stock['ticker']}.NS"
+                staged = _range_from_frame(
+                    year[symbol]
+                    if (len(yahoo_tickers) > 1 and symbol in year)
+                    else (year if len(yahoo_tickers) == 1 else None)
+                )
+                if staged:
+                    # Same staging key discipline as turnover: written to the
+                    # stock, merged into screener after the Screener rebuild
+                    # that would otherwise erase it.
+                    stock.setdefault(_LIQUIDITY_STAGING_KEY, {}).update(staged)
+                    ranged += 1
+            log.info(f"52-week range: {ranged}/{len(all_stocks)} holdings priced.")
+        except Exception as e:
+            log.warning(f"52-week range download failed safely: {e!r}")
 
     # No custom session for yf.Ticker calls — see get_cached_ticker in
     # providers/yahoo.py for why that would be harmful.

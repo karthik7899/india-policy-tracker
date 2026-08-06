@@ -11,6 +11,11 @@ from typing import Any, Dict, List
 
 from analysis import materiality
 from config import SECTOR_METADATA
+from analysis.pledging import (
+    NEAR_LOW_PCT as PLEDGE_NEAR_LOW_PCT,
+    NOTABLE_PCT as PLEDGE_NOTABLE_PCT,
+    RISING_PP as PLEDGE_RISING_PP,
+)
 from config_commodities import MATERIAL_MOVE_PCT, WINDOW_DAYS
 from config_scoring import SCORING_CONFIG, EARLY_WARNING_CONFIG
 from logger import log
@@ -200,6 +205,16 @@ _RULE_BOOK = {
     # rather than Low because the move is read off a series, but the mapping
     # from that move to this sector's margin is a coarse weight, not a cost
     # sheet.
+    # A pledge is collateral, so the level alone is a standing condition. What
+    # makes it an alert is the level combined with a rising trend or a price
+    # near its 52-week low, where a margin call stops being hypothetical.
+    "Promoter Pledging": (
+        f"Promoter shares pledged above {PLEDGE_NOTABLE_PCT:.0f}%, escalating "
+        f"when the pledge is rising by {PLEDGE_RISING_PP:.1f}pp or the price "
+        f"is within {PLEDGE_NEAR_LOW_PCT:.0f}% of its 52-week low",
+        "High",
+        "Screener shareholding pattern",
+    ),
     "Input Cost Shock": (
         f"A mapped commodity or FX input moved at least "
         f"{MATERIAL_MOVE_PCT:.0f}% over {WINDOW_DAYS} days, weighted by this "
@@ -786,6 +801,19 @@ def generate_early_warnings(
     warnings.extend(_growth_laggards(watchlist))
 
     # Exchange-disclosed events: capital raises and bulk/block deals.
+
+    # Promoter pledging, and input costs where the sector shock is large
+    # enough to name. Both read data attached upstream, so both produce
+    # nothing rather than guessing when that data did not arrive.
+    from analysis.pledging import pledge_warnings
+
+    warnings.extend(pledge_warnings(watchlist))
+
+    shock = data.get("input_cost_shock")
+    if isinstance(shock, dict):
+        from analysis.input_cost import input_cost_warnings
+
+        warnings.extend(input_cost_warnings(shock))
 
     # Annotate everything here rather than at each source. Several alert
     # producers live in other modules (competitive_intel, event_engine) and

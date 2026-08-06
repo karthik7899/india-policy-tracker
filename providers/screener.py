@@ -188,6 +188,24 @@ async def fetch_screener_async(session, ticker, sector, price):
         if len(diis) >= 2:
             sc["dii_change"] = round(diis[-1] - diis[-2], 2)
 
+    # Pledged promoter holding. Screener prints this row only for companies
+    # that have any, so an absent row is the common and correct case -- but it
+    # is indistinguishable from a row we failed to match, which is why nothing
+    # is written when the lookup comes back empty. A holding with no
+    # pledged_pct key reads downstream as "not disclosed"; writing 0.0 here
+    # would assert an all-clear this parser has not earned.
+    #
+    # The label is matched loosely because the exact wording on the page could
+    # not be checked from the build sandbox (Screener refuses the connection
+    # there); "Pledged percentage" is the observed form, and the alternatives
+    # cost nothing to accept.
+    pledged = extract_row_values(soup, "shareholding", r"Pledg")
+    if pledged:
+        sc["pledged_pct"] = pledged[-1]
+        if len(pledged) >= 2:
+            sc["pledged_change"] = round(pledged[-1] - pledged[-2], 2)
+            sc["pledged_trend"] = pledged[-4:]
+
     sc = {k: v for k, v in sc.items() if v is not None}
     return ticker, sc, warehouse_id
 

@@ -256,6 +256,23 @@ def build_data_quality_html(
                 f"available."
             )
 
+        # Screener omits the pledge row for companies with no pledge and for
+        # a page the parser could not match, so this count is the only way to
+        # tell a clean watchlist from a blind one.
+        pledge_known = sum(
+            1
+            for k, v in (watchlist or {}).items()
+            if k != "macro_indicators" and isinstance(v, list)
+            for s in v
+            if isinstance(s, dict)
+            and (s.get("screener") or {}).get("pledged_pct") is not None
+        )
+        notes.append(
+            f"<span style='color: #93c5fd;'>Promoter pledging:</span> "
+            f"{pledge_known} of {held} holdings disclosed a pledge figure; "
+            f"the rest are unread, not confirmed unpledged."
+        )
+
     # Commodity and FX inputs. Reported whenever the key exists, including
     # when nothing priced: a run that could not reach the price source must
     # not read the same as a calm month in the commodity complex.
