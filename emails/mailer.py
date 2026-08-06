@@ -29,6 +29,7 @@ _SEVERITY_BADGE = {
 _SIZE_BUDGET_BYTES = 95_000
 
 _CAPS_NORMAL = {
+    "sectors": 6,
     "stocks": 3,
     "news": 3,
     "warnings": 12,
@@ -39,6 +40,7 @@ _CAPS_NORMAL = {
     "caution": 8,
 }
 _CAPS_COMPACT = {
+    "sectors": 3,
     "stocks": 2,
     "news": 1,
     "warnings": 8,
@@ -52,6 +54,7 @@ _CAPS_COMPACT = {
 # enough to say what moved, and small enough that sector growth cannot push
 # the briefing past the clip limit.
 _CAPS_MINIMAL = {
+    "sectors": 2,
     "stocks": 1,
     "news": 1,
     "warnings": 6,
@@ -510,6 +513,71 @@ def _escape_deep(value):
     return value
 
 
+# Sector selection.
+#
+# Every sector rendered every run, which is why sector cards are ~60% of the
+# email at every tier — 51 KB of the 85 KB minimal render, against a 95 KB
+# budget. The cap ladder trimmed rows *inside* each card and never trimmed the
+# number of cards, so a day with two moving sectors still shipped eighteen.
+#
+# Sixteen of those were telling the reader that nothing had changed, which is
+# the same state-not-delta problem the homepage had. Capping by delta makes the
+# email smaller and more informative at once.
+_SEVERITY_WEIGHT = {"Critical": 4, "High": 3, "Medium": 2, "Low": 1}
+
+
+def _sector_delta(sector_key, brief_data):
+    """Severity-weighted count of what changed in this sector this run.
+
+    Warnings carry the sector *label* ("Clean Energy") while the render loop
+    keys on the slug ("clean_energy"), so a naive equality check matches
+    nothing and the ranking silently degrades to alphabetical order — six
+    sectors chosen by first letter, presented as the six that moved most.
+    Both forms are accepted here rather than assuming either.
+    """
+    meta = SECTOR_METADATA.get(sector_key) or {}
+    names = {
+        str(sector_key).lower(),
+        str(meta.get("label", "")).lower(),
+        str(meta.get("name", "")).lower(),
+    }
+    names.discard("")
+
+    score = 0
+    for w in brief_data.get("early_warnings") or []:
+        if not isinstance(w, dict):
+            continue
+        if str(w.get("sector", "")).lower() not in names:
+            continue
+        if (w.get("status") or "ongoing") not in ("new", "escalated"):
+            continue
+        score += _SEVERITY_WEIGHT.get(w.get("severity"), 1)
+    return score
+
+
+def _sectors_to_render(brief_data, caps):
+    """Ordered sector keys for this render, most-changed first.
+
+    Inclusion: a sector appears only if something changed in it, or it carries
+    news this cycle. A sector with neither has nothing to say that the
+    dashboard is not already holding.
+    """
+    scored = []
+    for key in brief_data:
+        if key not in SECTOR_METADATA or key == "macro_indicators":
+            continue
+        delta = _sector_delta(key, brief_data)
+        news = len(brief_data.get(key) or [])
+        if not delta and not news:
+            continue
+        scored.append((delta, news, key))
+
+    # Deterministic: delta, then news volume, then name. Two sectors tying on
+    # both must not swap places between runs.
+    scored.sort(key=lambda r: (-r[0], -r[1], r[2]))
+    return [key for _, _, key in scored[: caps.get("sectors", 6)]], len(scored)
+
+
 def _render_email(brief_data, watchlist, caps):
     """Renders the HTML document at the row caps given."""
     brief_data = _escape_deep(brief_data or {})
@@ -635,21 +703,9 @@ def _render_email(brief_data, watchlist, caps):
     # computed above, no new fetches.
     body_html += _build_research_engine_html(brief_data, caps)
 
-    for sector, news_items in brief_data.items():
-        if sector in (
-            "emerging_players",
-            "emerging_competitors",
-            "corporate_agreements",
-            "product_launches",
-            "corporate_filings",
-            "sebi_filings",
-            "institutional_activity",
-            "margin_of_safety",
-            "buffett_valuation",
-        ):
-            continue
-        if sector not in SECTOR_METADATA:
-            continue
+    selected_sectors, eligible_total = _sectors_to_render(brief_data, caps)
+    for sector in selected_sectors:
+        news_items = brief_data.get(sector) or []
         meta = _escape_deep(SECTOR_METADATA[sector])
         stocks = watchlist.get(sector, [])
 
@@ -831,6 +887,23 @@ def _render_email(brief_data, watchlist, caps):
                 {emerging_html}
             </div>
         """
+
+    # Sectors dropped by the cap are stated, not silently absent. "18
+    # monitored, 6 shown" is a different message from "only 6 exist".
+    hidden_sectors = eligible_total - len(selected_sectors)
+    if hidden_sectors > 0 or not selected_sectors:
+        note = (
+            f"No sector changed this cycle — {eligible_total} monitored."
+            if not selected_sectors
+            else f"Showing the {len(selected_sectors)} most-changed of "
+            f"{eligible_total} sectors with activity."
+        )
+        body_html += (
+            '<div class="section-card" style="padding:14px 25px;">'
+            f'<p style="margin:0;font-size:12px;color:#94a3b8;">{note} '
+            f"<a href='{DASHBOARD_URL}' style='color:#60a5fa;' target='_blank'>"
+            "See every sector on the dashboard</a>.</p></div>"
+        )
 
     # Append Corporate Agreements & Product Launches
     agreements_html = ""
