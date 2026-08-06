@@ -90,6 +90,115 @@ def coverage_link(ticker, count, dashboard_url=None):
     )
 
 
+# Review prompts, mirroring app.js. Research tooling: "verify", "confirm",
+# "re-check" — never "buy" or "sell".
+_REVIEW_NOTE = {
+    "Margin Compression": "check input-cost exposure and one-off items",
+    "Revenue Contraction": "confirm against the filed result before treating as a trend",
+    "Promoter Exit": "verify the shareholding pattern and any pledge disclosure",
+    "Promoter Selling": "verify the shareholding pattern and any pledge disclosure",
+    "FII Outflow": "check whether the move is index-driven rather than company-specific",
+    "FII Selling": "check whether the move is index-driven rather than company-specific",
+    "High Leverage": "review the debt schedule and interest cover",
+    "Liquidity Stress": "review working-capital cycle and near-term maturities",
+    "Valuation Stretch": "re-check the peer set before calling the multiple expensive",
+    "Market Share": "confirm the peer group is the right comparison set",
+    "Competitive Threat": "verify the competitor claim against a primary source",
+    "Policy Catalyst": "confirm scheme eligibility before assuming impact",
+    "Institutional Accumulation": "check whether the flow is index-driven",
+    "Institutional Buying": "check whether the flow is index-driven",
+    "Supply Stress (Forward)": "leading indicator only — not yet in reported margins",
+}
+
+_STATE_BADGE = {
+    "new": ("#0c2a4d", "#60a5fa", "new"),
+    "escalated": ("#4a2a0c", "#fdba74", "escalated"),
+}
+
+
+def _alert_card(w, coverage_counts):
+    """One stacked alert card.
+
+    Direction and severity are independent badges. An institutional outflow is
+    a Critical *risk*, and rendering severity alone would let it sit in a list
+    a reader scans for opportunities.
+    """
+    sev = w.get("severity", "Low")
+    bg, fg = _SEVERITY_BADGE.get(sev, _SEVERITY_BADGE["Low"])
+    is_risk = w.get("direction") == "risk"
+    dir_bg, dir_fg = ("#7f1d1d", "#fca5a5") if is_risk else ("#064e3b", "#6ee7b7")
+    dir_label = "RISK" if is_risk else "OPPORTUNITY"
+
+    state = _STATE_BADGE.get(w.get("status") or "")
+    state_html = (
+        f"<span class='badge' style='background-color:{state[0]};color:{state[1]};'>"
+        f"{state[2]}</span>"
+        if state
+        else ""
+    )
+    ticker = w.get("ticker", "")
+    cov = coverage_link(ticker, (coverage_counts or {}).get(str(ticker).upper(), 0))
+    review = _REVIEW_NOTE.get(w.get("category"))
+
+    return (
+        "<div style='padding:12px 0;border-bottom:1px solid #1f2937;'>"
+        f"<div style='font-size:14px;font-weight:600;color:#e2e8f0;'>{ticker} "
+        f"<span style='font-weight:400;color:#94a3b8;font-size:12px;'>"
+        f"{w.get('name', '')}</span></div>"
+        f"<div style='margin:5px 0;'>"
+        f"<span class='badge' style='background-color:{dir_bg};color:{dir_fg};'>{dir_label}</span> "
+        f"<span class='badge' style='background-color:{bg};color:{fg};'>{sev}</span> "
+        f"{state_html} "
+        f"<span style='font-size:11px;color:#94a3b8;'>{w.get('category', '')}</span></div>"
+        f"<div style='font-size:12.5px;color:#cbd5e1;line-height:1.5;'>{w.get('signal', '')}</div>"
+        f"<div style='font-size:10.5px;color:#6b7280;margin-top:4px;'>"
+        f"{html_lib.escape(w.get('confidence') or 'M')} confidence"
+        f" &middot; {html_lib.escape(w.get('evidence_source') or 'mixed')}"
+        f"{' &middot; review: ' + html_lib.escape(review) if review else ''}"
+        f"{' &middot; ' + cov if cov else ''}</div>"
+        "</div>"
+    )
+
+
+def _build_alert_cards_html(summary, coverage_counts=None, caps=_CAPS_NORMAL):
+    """Critical alerts and opportunities as separate stacked sections.
+
+    Kept apart because they are answers to different questions. A single
+    severity-ranked table mixes "what might break" with "what might pay",
+    and the reader has to re-sort it mentally every morning.
+    """
+    out = ""
+    criticals = summary.get("critical") or []
+    opportunities = summary.get("opportunities") or []
+
+    if criticals:
+        cards = "".join(
+            _alert_card(w, coverage_counts) for w in criticals[: caps["warnings"]]
+        )
+        out += (
+            "<div class='section-card'>"
+            "<h3 style='color:#f87171;margin:0 0 4px 0;font-size:16px;'>Critical Alerts</h3>"
+            f"<p style='font-size:11px;color:#6b7280;margin:0 0 6px 0;'>"
+            f"{summary.get('critical_total', 0)} new or escalated risk signal(s) "
+            "this cycle.</p>"
+            f"{cards}</div>"
+        )
+
+    if opportunities:
+        cards = "".join(
+            _alert_card(w, coverage_counts) for w in opportunities[: caps["warnings"]]
+        )
+        out += (
+            "<div class='section-card'>"
+            "<h3 style='color:#34d399;margin:0 0 4px 0;font-size:16px;'>Opportunity Signals</h3>"
+            f"<p style='font-size:11px;color:#6b7280;margin:0 0 6px 0;'>"
+            f"{summary.get('opportunities_total', 0)} positive signal(s); each needs "
+            "validation before it means anything.</p>"
+            f"{cards}</div>"
+        )
+    return out
+
+
 def _build_exec_summary_html(summary):
     """The first thing in the body: run trustworthiness, then what changed.
 
@@ -695,6 +804,9 @@ def _render_email(brief_data, watchlist, caps):
     summary = build_summary(brief_data, watchlist)
     preheader = html_lib.escape(build_preheader(summary))
     exec_summary_html = _build_exec_summary_html(summary)
+    alert_cards_html = _build_alert_cards_html(
+        summary, brief_data.get("coverage_count"), caps
+    )
 
     body_html = f"""
     <!DOCTYPE html>
@@ -713,6 +825,7 @@ def _render_email(brief_data, watchlist, caps):
                 <a href="{DASHBOARD_URL}" class="cta-button" target="_blank">View Live Dashboard</a>
             </div>
             {exec_summary_html}
+            {alert_cards_html}
             <div class="summary-strip">
                 <div class="stat">
                     <div class="stat-num" style="color: #f87171;">{risk_count}</div>

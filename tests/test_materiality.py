@@ -191,3 +191,168 @@ class TestAttribution:
             materiality.amount_is_attributable("Suzlon: wins order worth Rs 500 crore")
             is True
         )
+
+
+class TestCountedNouns:
+    """Lakh and crore count things as readily as they count rupees.
+
+    "Pledges 3.70 Lakh Equity Shares" was extracted as Rs 0.037 crore. It was
+    filtered downstream for being the wrong event kind, so nothing reached a
+    score -- but the parser had already agreed a share count was money, and
+    widening the sized-event vocabulary would have exposed that.
+    """
+
+    def test_a_share_count_is_not_a_rupee_amount(self):
+        assert (
+            materiality.extract_amount_cr(
+                "ideaForge Technology Promoter Ankit Mehta Pledges "
+                "3.70 Lakh Equity Shares"
+            )
+            is None
+        )
+
+    def test_crore_counts_shares_too(self):
+        assert materiality.extract_amount_cr(
+            "Company issues 5 crore equity shares"
+        ) is (None)
+
+    def test_physical_quantities_are_not_amounts(self):
+        for title in (
+            "Plant capacity of 5 lakh tonnes commissioned",
+            "Sold 1.2 lakh vehicles in July",
+            "Leases 1.72 lakh sq ft of office space",
+        ):
+            assert materiality.extract_amount_cr(title) is None
+
+    def test_a_currency_marker_settles_it(self):
+        """'Rs 3 lakh shares buyback fund' is money despite the noun."""
+        assert materiality.extract_amount_cr("Rs 3 lakh shares buyback fund") == 0.03
+
+    def test_a_counted_noun_does_not_hide_a_real_price(self):
+        """Both numbers are read; the count is dropped and the price kept."""
+        assert (
+            materiality.extract_amount_cr(
+                "Order for 2 crore units valued at Rs 300 crore"
+            )
+            == 300.0
+        )
+
+    def test_the_real_headline_keeps_its_price(self):
+        assert (
+            materiality.extract_amount_cr(
+                "Microchip Technology India has acquired 1.72 lakh sq ft of "
+                "office space in EPIP Zone, Whitefield, for ₹176 crore"
+            )
+            == 176.0
+        )
+
+
+class TestSharedVehicles:
+    """A jointly-owned vehicle's capitalisation belongs to its partners."""
+
+    JV = "Syrma SGS, Kaga Electronics Form ₹250 Million EMS Joint Venture"
+
+    def test_a_joint_venture_figure_is_not_one_partners_order(self):
+        assert materiality.amount_is_attributable(self.JV) is False
+
+    def test_the_list_guard_alone_would_have_missed_it(self):
+        """The colon lands before the comma once a kind prefix is attached,
+        so the multi-company shape is invisible to the list guard."""
+        assert materiality._COMPANY_LIST_RE.match(self.JV) is None
+
+    def test_consortium_and_partnership_are_excluded_too(self):
+        for title in (
+            "Larsen & Toubro in consortium for Rs 5,000 crore metro contract",
+            "Tata Power in partnership with a state utility on Rs 900 crore park",
+        ):
+            assert materiality.amount_is_attributable(title) is False
+
+    def test_a_sole_award_is_untouched(self):
+        assert (
+            materiality.amount_is_attributable(
+                "Syrma SGS wins Rs 250 crore supply order"
+            )
+            is True
+        )
+
+
+class TestTransactionVocabulary:
+    """Sizing must not turn on which verb form the sub-editor chose."""
+
+    def test_the_infinitive_is_sized_like_the_third_person(self):
+        title = "Varun Beverages to acquire 100% in a beverage maker for Rs 1,119 crore"
+        assert materiality.is_sized_event("launch", title) is True
+        assert materiality.assess(title, "launch", _MIDCAP)["amount_cr"] == 1119.0
+
+    def test_divestments_are_sized_events(self):
+        title = "LTTS to sell Smart World unit for ₹452 crore to refocus on AI"
+        assert materiality.is_sized_event("filing", title) is True
+
+    def test_an_unsized_event_stays_unsized(self):
+        """A PLI approval legitimately carries no company-level figure."""
+        assert (
+            materiality.is_sized_event("filing", "Company reports Q1 results") is False
+        )
+
+
+class TestNonTransactions:
+    """Feed names are not event classifications.
+
+    ``corporate_agreements`` is a news query, so earnings, joint ventures and
+    sector totals all arrive in it and were sized as deals. Every headline
+    below is real and was reaching the scorer as a transaction.
+    """
+
+    def test_reported_results_are_not_deals(self):
+        for title in (
+            "CONCOR Q1 Revenue Reaches ₹2,160 Crore as Net Profit Holds at ₹267 Crore",
+            "MRPL Annual Report FY 2025-26: Profit After Tax Surges to ₹1,931 Crore",
+            "Fortis Malar Hospitals Q1 Results: Net profit rises to ₹17.71 lakh",
+            "Arvind Fashions Q1 revenue rises 15.5% to ₹1,279 crore",
+        ):
+            assert materiality.amount_is_attributable(title) is False
+
+    def test_an_earnings_figure_is_not_read_as_a_deal_size(self):
+        """The headline names a real acquisition but prints only the profit,
+        so the deal would have been sized at the earnings number."""
+        title = "ITC Hotels Q4 profit up 23% at ₹317 cr; to acquire Zuri Hotels"
+        assert materiality.amount_is_attributable(title) is False
+
+    def test_abbreviated_joint_ventures_are_caught(self):
+        title = "Dixon Tech Secures IMG Approval for Vivo JV Targeting ₹30,000 Cr"
+        assert materiality.amount_is_attributable(title) is False
+
+    def test_a_partnership_total_is_not_one_partners_number(self):
+        title = "Trump Announces $300 Billion Partnership with Reliance"
+        assert materiality.amount_is_attributable(title) is False
+
+    def test_multi_project_totals_are_excluded(self):
+        title = "Eight coal gasification projects to draw ₹65,365 crore investment"
+        assert materiality.amount_is_attributable(title) is False
+
+    def test_a_guarantee_is_not_revenue(self):
+        title = (
+            "ONGC backs MRPL's crude imports from Saudi Aramco with $500 mn guarantee"
+        )
+        assert materiality.amount_is_attributable(title) is False
+
+    def test_a_prospective_market_size_is_not_an_order(self):
+        title = "Zen Technologies jumps 9%, ideaForge hits upper circuit as India eyes Rs 20,000 crore drone buy"
+        assert materiality.amount_is_attributable(title) is False
+
+    def test_singular_price_moves_are_caught_like_plural_ones(self):
+        """The literal list held 'shares jump' but not 'jumps 9%'."""
+        assert materiality.amount_is_attributable(
+            "Suzlon jumps 9% on ₹350 cr news"
+        ) is (False)
+
+    def test_real_awards_survive_every_guard(self):
+        """The guards must not silence the cases the feature exists for."""
+        for title in (
+            "Defence Ministry signs 1950 crore contract with Bharat Electronics Limited",
+            "BEL bags additional orders worth Rs 1,081 crore",
+            "Varun Beverages to acquire 100% in a beverage maker for Rs 1,119 crore",
+            "Supreme Power Equipment Marks Entry into Maharashtra with ₹13.50 Cr "
+            "Transformer Order",
+        ):
+            assert materiality.amount_is_attributable(title) is True

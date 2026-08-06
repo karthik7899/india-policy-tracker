@@ -76,6 +76,20 @@ _AMOUNT_RE = re.compile(
     re.IGNORECASE,
 )
 
+# "Pledges 3.70 Lakh Equity Shares" is a share count, not Rs 0.037 crore, and
+# "5 crore equity shares" is not Rs 5 crore. The multiplier words are shared
+# between money and plain counting in Indian usage, so the unit alone cannot
+# tell them apart -- what follows it can. Without this the pledge headline
+# above was extracted as a rupee figure; it happened to be filtered later for
+# being the wrong event kind, which is luck rather than correctness.
+_COUNT_NOUN_RE = re.compile(
+    r"^[\s-]*(?:equity\s+|preference\s+|bonus\s+)?"
+    r"(?:shares?|share[s]?\b|units?|nos\.?|tonnes?|tons?|kg|mw|gw|kwh|"
+    r"litres?|liters?|sq\.?\s*ft|square\s+feet|employees?|customers?|"
+    r"subscribers?|users?|vehicles?|seats?|rooms?|barrels?)\b",
+    re.IGNORECASE,
+)
+
 # An amount is only this company's if the headline is about this company.
 #
 # The first production run showed why that needs enforcing. "BEL, HAL, Bharat
@@ -107,6 +121,39 @@ _COMMENTARY_MARKERS = (
     "index rejig",
     "hits 52-week",
     "target price",
+    "upper circuit",
+    "lower circuit",
+)
+
+# The literal list above only ever caught the plural forms a sub-editor
+# happened to use -- "shares jump" but not "jumps 9%". The move itself has a
+# regular shape, so match that instead: a verb of price movement next to a
+# percentage. "Zen Technologies jumps 9%, ideaForge hits upper circuit as
+# India eyes Rs 20,000 crore drone buy" is commentary wrapped around a sector
+# figure, and was reaching the extractor because none of its words were on
+# the list.
+_PRICE_MOVE_RE = re.compile(
+    r"\b(?:jump|jumps|jumped|surge|surges|surged|rally|rallies|rallied|"
+    r"soar|soars|soared|zoom|zooms|zoomed|slip|slips|slipped|plunge|plunges|"
+    r"plunged|crash|crashes|crashed|tank|tanks|tanked|gain|gains|gained|"
+    r"fall|falls|fell|rise|rises|rose|climb|climbs|climbed|drop|drops|"
+    r"dropped|declines?|declined)\b[^.;]{0,30}?\d+(?:\.\d+)?\s*%",
+    re.IGNORECASE,
+)
+
+# A number the market or the state is contemplating is nobody's booked
+# order. "India eyes Rs 20,000 crore drone buy" sizes an opportunity, not a
+# transaction.
+_PROSPECTIVE_MARKERS = (
+    "eyes rs",
+    "eyes ₹",
+    "eyeing",
+    "set to award",
+    "plans to award",
+    "market to reach",
+    "opportunity worth",
+    "pipeline worth",
+    "expected to award",
 )
 
 # Programme-level approvals: the amount is a budget or a sector allocation
@@ -132,6 +179,73 @@ _PROGRAMME_MARKERS = (
 # to any single member.
 _COMPANY_LIST_RE = re.compile(r"^[^:]{0,80}?,[^:]{0,80}?:")
 
+# A jointly-owned vehicle's capitalisation belongs to its partners in
+# proportions the headline never states. "Syrma SGS, Kaga Electronics Form
+# Rs 250 Million EMS Joint Venture" is a real figure, but booking all of it
+# against Syrma's revenue overstates it by whatever Kaga put in -- the same
+# error as reading a sector procurement budget as one company's order. The
+# list guard above misses these because the colon lands before the comma
+# ("Agreement: A, B Form ..."), so the shape has to be matched on its own.
+_SHARED_VEHICLE_MARKERS = (
+    "joint venture",
+    "consortium",
+    "partnership with",
+)
+
+# "Vivo JV Targeting Rs 30,000 Cr" and "JV with" both abbreviate it. Matched
+# as a word so "JVs" and bare "JV" count but no longer word does.
+_JV_RE = re.compile(r"\bjvs?\b", re.IGNORECASE)
+
+# Results are not transactions. The event kinds below come from the name of
+# the feed a headline arrived in -- "corporate_agreements" is a news query,
+# not a classification -- so an earnings headline sitting in that feed was
+# being read as a sized deal: "CONCOR Q1 Revenue Reaches Rs 2,160 Crore" was
+# scored as a Rs 2,160 crore transaction, and "MRPL Annual Report FY 2025-26:
+# Profit After Tax Surges to Rs 1,931 Crore" as a Rs 1,931 crore one. Both are
+# the company's own reported performance, already counted elsewhere.
+_RESULTS_MARKERS = (
+    "q1 results",
+    "q2 results",
+    "q3 results",
+    "q4 results",
+    "q1 revenue",
+    "q2 revenue",
+    "q3 revenue",
+    "q4 revenue",
+    "quarterly results",
+    "annual report",
+    "net profit",
+    "profit after tax",
+    "net loss",
+    "revenue rises",
+    "revenue reaches",
+    "revenue grows",
+    "earnings summary",
+    "results:",
+    # "ITC Hotels Q4 profit up 23% at Rs 317 cr; to acquire Zuri Hotels" has
+    # a real acquisition in it, but the only figure printed is the profit --
+    # so the extractor sized the deal at the earnings number. Better to read
+    # nothing than to read the wrong quantity confidently.
+    "profit up",
+    "profit rises",
+    "profit surges",
+    "profit falls",
+    "profit jumps",
+)
+
+# A figure covering several projects, or promised rather than transacted, is
+# not a booked order. "Eight coal gasification projects to draw Rs 65,365
+# crore investment" is the HAL sector-procurement shape wearing different
+# words. A guarantee is a contingent liability, not revenue.
+_AGGREGATE_MARKERS = (
+    "projects to draw",
+    "combined investment",
+    "cumulative investment",
+    "total investment of",
+    "guarantee",
+    "guarantees",
+)
+
 # Event vocabulary that implies a transaction with a readable size. Anything
 # outside this set is left unweighted -- see the module docstring.
 _SIZED_EVENT_TYPES = frozenset(
@@ -143,6 +257,16 @@ _SIZED_PHRASES = (
     "deal",
     "acquisition",
     "acquires",
+    # The list held only the third-person form, so "to acquire ... for Rs
+    # 1,119 crore" was left unsized while "acquires" was sized -- a grammar
+    # accident deciding whether a real transaction counted. Divestments are
+    # the same event seen from the other side and were missing outright.
+    "acquire",
+    "to sell",
+    "divest",
+    "stake sale",
+    "sells stake",
+    "buyout",
     "stake",
     "investment",
     "invest",
@@ -197,11 +321,17 @@ def extract_amount_cr(text: str) -> Optional[float]:
         if multiplier is None:
             continue
 
+        # A counted noun straight after the unit means the number counts
+        # things, not rupees -- unless the headline put a currency marker on
+        # it, which settles the question the other way.
+        marker = (match.group("cur") or "").lower()
+        if not marker and _COUNT_NOUN_RE.match(text[match.end() :]):
+            continue
+
         amount = value * multiplier
 
         # Dollar amounts convert; the currency marker may sit on the number
         # itself or immediately before it.
-        marker = (match.group("cur") or "").lower()
         window = text[max(0, match.start() - 6) : match.start()].lower()
         if any(f in marker for f in _FOREIGN) or any(f in window for f in _FOREIGN):
             amount *= _USD_INR
@@ -247,7 +377,19 @@ def amount_is_attributable(title: str) -> bool:
     lowered = (title or "").lower()
     if any(marker in lowered for marker in _COMMENTARY_MARKERS):
         return False
+    if _PRICE_MOVE_RE.search(lowered):
+        return False
     if any(marker in lowered for marker in _PROGRAMME_MARKERS):
+        return False
+    if any(marker in lowered for marker in _PROSPECTIVE_MARKERS):
+        return False
+    if any(marker in lowered for marker in _SHARED_VEHICLE_MARKERS):
+        return False
+    if _JV_RE.search(lowered):
+        return False
+    if any(marker in lowered for marker in _RESULTS_MARKERS):
+        return False
+    if any(marker in lowered for marker in _AGGREGATE_MARKERS):
         return False
     return not _COMPANY_LIST_RE.match(title or "")
 
