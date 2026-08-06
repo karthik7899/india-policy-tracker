@@ -69,6 +69,24 @@ _CAP_LADDER = (
 )
 
 
+def coverage_link(ticker, count, dashboard_url=None):
+    """ "Coverage (n)" as a deep link into the drawer for that holding.
+
+    The email cannot hold the article list — it is already at the size floor —
+    but it can hand the reader the exact place the list lives, so a headline
+    they want to check is one click rather than a search away.
+    """
+    base = dashboard_url or DASHBOARD_URL
+    ticker = html_lib.escape(str(ticker or "").upper())
+    if not ticker:
+        return ""
+    return (
+        f'<a href="{base}#stock/{ticker}/news" target="_blank" '
+        f'style="color:#60a5fa;text-decoration:underline;font-size:11px;">'
+        f"Coverage ({int(count or 0)})</a>"
+    )
+
+
 def _build_exec_summary_html(summary):
     """The first thing in the body: run trustworthiness, then what changed.
 
@@ -167,10 +185,12 @@ def _build_exec_summary_html(summary):
     )
 
 
-def _build_early_warning_html(warnings, caps=_CAPS_NORMAL):
+def _build_early_warning_html(warnings, caps=_CAPS_NORMAL, coverage_counts=None):
     """Renders the prioritized Early Warning card. Returns '' when there is nothing to flag."""
     if not warnings:
         return ""
+
+    coverage_counts = coverage_counts or {}
 
     rows = ""
     for w in warnings[: caps["warnings"]]:
@@ -187,6 +207,7 @@ def _build_early_warning_html(warnings, caps=_CAPS_NORMAL):
             <td class="ew-td">
                 <span class="stock-ticker">{w.get('ticker', '')}</span>
                 <span style="color: #94a3b8; font-size: 11px;"> · {w.get('sector', '')}</span>
+                <br>{coverage_link(w.get('ticker'), coverage_counts.get(str(w.get('ticker', '')).upper(), 0))}
             </td>
             <td class="ew-td">{sev_badge}</td>
             <td class="ew-td" style="color: {dir_color};">{dir_icon} {w.get('category', '')}</td>
@@ -605,7 +626,9 @@ def _render_email(brief_data, watchlist, caps):
     """
 
     # Early Warning System — the first actionable thing the reader should see
-    body_html += _build_early_warning_html(warnings, caps)
+    body_html += _build_early_warning_html(
+        warnings, caps, brief_data.get("coverage_count")
+    )
 
     # Research Engine: thesis health, revision momentum, variant perception,
     # curve stage, rotation track record — all synthesized from data already

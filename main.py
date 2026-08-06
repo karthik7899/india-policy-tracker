@@ -308,6 +308,17 @@ async def run_pipeline():
 
     data["stock_topics"] = build_stock_topics(data, watchlist)
 
+    # The same attribution kept as a full audit — merged and excluded items
+    # included — written per ticker so the browser pays for it only when a
+    # reader opens a drawer. The counts ride in the payload; the detail does
+    # not, which is what keeps dashboard_data.json a display copy.
+    from analysis.coverage import build_coverage, coverage_counts
+    from history.store import write_coverage_sidecars
+
+    coverage = build_coverage(data, watchlist)
+    data["coverage_count"] = coverage_counts(coverage)
+    write_coverage_sidecars(coverage)
+
     # Thesis health: does the accumulated evidence this cycle still support
     # each holding's catalyst, or has a kill criterion tripped?
     data["thesis_health"] = compute_thesis_health(

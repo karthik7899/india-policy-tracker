@@ -113,6 +113,15 @@ def build_display_payload(brief_data: Dict[str, Any]) -> Dict[str, Any]:
                 if isinstance(items, list)
             }
 
+        # Coverage counts ride in the payload; the per-item audit does not.
+        # Normalised when present so a malformed value cannot reach the
+        # browser, but never invented: a run that computed no coverage must
+        # not ship a key claiming it looked and found none. The badge treats a
+        # missing entry as zero, which is the same display and an honest one.
+        if "coverage_count" in payload:
+            counts = payload["coverage_count"]
+            payload["coverage_count"] = counts if isinstance(counts, dict) else {}
+
         warnings = payload.get("early_warnings")
         if isinstance(warnings, list):
             payload["warning_summary"] = summarize_ongoing(warnings)

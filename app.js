@@ -270,9 +270,304 @@ document.addEventListener("DOMContentLoaded", () => {
     setupStockSearch();
     setupWarningFilters();
     setupKpiDrilldowns();
+    setupCoverageDrawer();
     setupTickerNavigation();
     setupGenericTableSorting();
 });
+
+// ---------------------------------------------------------------------------
+// News coverage: badge, drawer, deep link
+// ---------------------------------------------------------------------------
+
+// Sidecars are fetched on first open and cached. They are deliberately not in
+// dashboard_data.json: the browser downloads that file whole on every page
+// load, and nobody reads a hundred audit rows on arrival.
+const newsCache = new Map();
+
+function coverageCount(ticker) {
+    const counts = (appData && appData.briefing && appData.briefing.coverage_count) || {};
+    return counts[String(ticker || "").toUpperCase()] || 0;
+}
+
+/** The badge markup. Zero is rendered too — "no coverage" is a finding, and
+ *  an absent badge would be indistinguishable from a renderer that forgot. */
+function coverageBadge(ticker) {
+    const n = coverageCount(ticker);
+    const label = n === 1 ? "1 news article" : `${n} news articles`;
+    return `<button type="button" class="cov-badge${n ? "" : " cov-zero"}"
+        data-coverage-ticker="${escapeHtml(ticker)}"
+        aria-label="${escapeHtml(label)} for ${escapeHtml(ticker)}"
+        title="${escapeHtml(label)} for ${escapeHtml(ticker)} — click to open">
+        <svg class="cov-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 4h13a2 2 0 0 1 2 2v12a2 2 0 0 0 2 2H6a2 2 0 0 1-2-2z"/>
+            <line x1="8" y1="8" x2="15" y2="8"/><line x1="8" y1="12" x2="15" y2="12"/>
+            <line x1="8" y1="16" x2="12" y2="16"/>
+        </svg><span>${n}</span></button>`;
+}
+
+/** Decorate every ticker cell in the document that has not been decorated yet.
+ *  Runs after each render rather than inside each renderer, so tables added
+ *  later inherit the badge without their author doing anything. */
+function decorateTickerCells(root) {
+    (root || document).querySelectorAll(".t-ticker").forEach(cell => {
+        if (cell.querySelector(".cov-badge")) return;
+        const ticker = (cell.textContent || "").trim().split(/\s/)[0];
+        if (!ticker) return;
+        cell.insertAdjacentHTML("beforeend", " " + coverageBadge(ticker));
+    });
+}
+
+const NEWS_TAG_FILTERS = ["order_win", "tie_up", "capacity_add",
+    "supply_disruption", "input_cost_shock", "competitive_threat", "index_move"];
+
+const newsFilters = { bucket: "all", tag: "all", query: "" };
+
+async function loadCoverage(ticker) {
+    const key = String(ticker).toUpperCase();
+    if (newsCache.has(key)) return newsCache.get(key);
+    try {
+        const res = await fetch(`news/${encodeURIComponent(key)}.json`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        newsCache.set(key, data.items || []);
+    } catch (e) {
+        // A missing sidecar is a real state (holding added today, or the run
+        // failed to write it). Say so rather than rendering an empty list that
+        // reads as "no news".
+        newsCache.set(key, null);
+    }
+    return newsCache.get(key);
+}
+
+function openNewsDrawer(ticker) {
+    const key = String(ticker || "").toUpperCase();
+    if (!key) return;
+    if (location.hash !== `#stock/${key}/news`) {
+        location.hash = `#stock/${key}/news`;
+        return; // the hashchange handler re-enters
+    }
+    renderNewsDrawer(key);
+}
+
+function closeNewsDrawer() {
+    const el = document.getElementById("news-drawer");
+    if (el) el.remove();
+    document.body.classList.remove("drawer-open");
+    if (location.hash.startsWith("#stock/")) {
+        history.replaceState(null, "", location.pathname + location.search);
+    }
+    if (lastFocusedBeforeDrawer && document.contains(lastFocusedBeforeDrawer)) {
+        lastFocusedBeforeDrawer.focus();
+    }
+}
+
+let lastFocusedBeforeDrawer = null;
+
+async function renderNewsDrawer(ticker) {
+    lastFocusedBeforeDrawer = document.activeElement;
+    document.getElementById("news-drawer")?.remove();
+
+    const stock = allWatchlistStocks().find(
+        s => String(s.ticker).toUpperCase() === ticker);
+    const sector = stock ? sectorLabelFor(stock.sectorKey) : "Not available";
+    const n = coverageCount(ticker);
+
+    const host = document.createElement("div");
+    host.id = "news-drawer";
+    host.className = "drawer-host";
+    host.innerHTML = `
+        <div class="drawer-scrim" data-drawer-close></div>
+        <aside class="drawer-panel" role="dialog" aria-modal="true"
+               aria-label="${escapeHtml(n === 1 ? "1 news article" : n + " news articles")} for ${escapeHtml(ticker)}">
+            <header class="drawer-head">
+                <div>
+                    <div class="drawer-title">${escapeHtml(ticker)}
+                        <span class="drawer-count">${n}</span></div>
+                    <div class="drawer-sub">${escapeHtml(sector)} · counted within the last
+                        ${NEWS_WINDOW_DAYS} days</div>
+                </div>
+                <button type="button" class="drawer-close" data-drawer-close
+                        aria-label="Close">&times;</button>
+            </header>
+            <div class="drawer-filters" id="news-filter-bar">
+                <div class="filter-group" data-news-group="bucket">
+                    <button type="button" class="filter-chip active" data-news-value="all">All</button>
+                    <button type="button" class="filter-chip" data-news-value="risk">Risk</button>
+                    <button type="button" class="filter-chip" data-news-value="policy">Policy</button>
+                    <button type="button" class="filter-chip" data-news-value="merged">Deduped</button>
+                    <button type="button" class="filter-chip" data-news-value="excluded">Excluded</button>
+                </div>
+                <div class="filter-group" data-news-group="tag">
+                    <button type="button" class="filter-chip active" data-news-value="all">Any type</button>
+                    ${NEWS_TAG_FILTERS.map(t =>
+                        `<button type="button" class="filter-chip" data-news-value="${t}">${t.replace(/_/g, " ")}</button>`).join("")}
+                </div>
+                <input type="search" id="news-search" class="drawer-search"
+                       placeholder="Search headlines" aria-label="Search headlines">
+            </div>
+            <div class="drawer-body" id="news-drawer-body">Loading coverage…</div>
+        </aside>`;
+    document.body.appendChild(host);
+    document.body.classList.add("drawer-open");
+
+    const items = await loadCoverage(ticker);
+
+    // Recompute the header from the sidecar once it arrives. On a cold deep
+    // link the drawer renders before dashboard_data.json has loaded, so
+    // coverageCount() was 0 and the panel announced "0 news articles" above
+    // eleven of them — a wrong number stated with full confidence, in the
+    // accessible label where it is least likely to be noticed.
+    if (Array.isArray(items)) {
+        const counted = items.filter(i => i.status === "counted").length;
+        const label = counted === 1 ? "1 news article" : `${counted} news articles`;
+        host.querySelector(".drawer-count").textContent = counted;
+        host.querySelector(".drawer-panel")
+            .setAttribute("aria-label", `${label} for ${ticker}`);
+    }
+
+    newsFilters.bucket = "all";
+    newsFilters.tag = "all";
+    newsFilters.query = "";
+    paintNewsList(ticker, items);
+
+    host.querySelectorAll("[data-news-group] .filter-chip").forEach(chip => {
+        chip.addEventListener("click", () => {
+            const group = chip.closest("[data-news-group]");
+            group.querySelectorAll(".filter-chip").forEach(c => c.classList.remove("active"));
+            chip.classList.add("active");
+            newsFilters[group.dataset.newsGroup] = chip.dataset.newsValue;
+            paintNewsList(ticker, newsCache.get(ticker));
+        });
+    });
+    host.querySelector("#news-search").addEventListener("input", e => {
+        newsFilters.query = e.target.value.trim().toLowerCase();
+        paintNewsList(ticker, newsCache.get(ticker));
+    });
+    host.querySelectorAll("[data-drawer-close]").forEach(
+        el => el.addEventListener("click", closeNewsDrawer));
+
+    trapFocus(host.querySelector(".drawer-panel"));
+}
+
+const NEWS_WINDOW_DAYS = 120;
+
+function matchesNewsFilters(item) {
+    const tags = (item.event_tags || []).map(t => String(t).toLowerCase());
+    if (newsFilters.bucket === "merged" && item.status !== "merged") return false;
+    if (newsFilters.bucket === "excluded" && item.status !== "excluded") return false;
+    if (newsFilters.bucket === "risk"
+        && !tags.some(t => /supply|cost|threat|disruption/.test(t))) return false;
+    if (newsFilters.bucket === "policy"
+        && !tags.some(t => /policy|pli|filing|agreement/.test(t))) return false;
+    if (newsFilters.tag !== "all" && !tags.includes(newsFilters.tag)) return false;
+    if (newsFilters.query
+        && !String(item.headline || "").toLowerCase().includes(newsFilters.query)) return false;
+    return true;
+}
+
+/** "Excluded from attribution" undersells a merge: a deduplicated headline was
+ *  counted once, not rejected. Say which is which. */
+function auditSummaryLabel(audit) {
+    const merged = audit.filter(i => i.status === "merged").length;
+    const excluded = audit.length - merged;
+    const parts = [];
+    if (excluded) parts.push(`${excluded} excluded`);
+    if (merged) parts.push(`${merged} merged as duplicates`);
+    return `Not counted toward the score — ${parts.join(", ")}`;
+}
+
+function paintNewsList(ticker, items) {
+    const body = document.getElementById("news-drawer-body");
+    if (!body) return;
+
+    if (items === null || items === undefined) {
+        body.innerHTML = `<p class="drawer-empty">Not available — no coverage sidecar
+            was published for ${escapeHtml(ticker)} in the latest run.</p>`;
+        return;
+    }
+
+    const shown = items.filter(matchesNewsFilters);
+    const counted = shown.filter(i => i.status === "counted");
+    const audit = shown.filter(i => i.status !== "counted");
+
+    const row = item => {
+        const tags = (item.event_tags || []).filter(Boolean)
+            .map(t => `<span class="news-tag">${escapeHtml(String(t).replace(/_/g, " "))}</span>`).join("");
+        const link = item.source_url
+            ? `<a href="${escapeHtml(item.source_url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.headline)}</a>`
+            : `${escapeHtml(item.headline)} <span class="news-note">(source link not available)</span>`;
+        const note = item.status === "counted"
+            ? "counted toward momentum (capped at 8)"
+            : escapeHtml(item.exclusion_reason || item.status);
+        return `<li class="news-row">
+            <div class="news-date">${escapeHtml(item.date || "Not available")}</div>
+            <div class="news-main">
+                <div class="news-headline">${link}</div>
+                <div class="news-meta">
+                    <span>${escapeHtml(item.source_label || "Source not available")}</span>
+                    ${tags}
+                    <span class="news-conf" title="Attribution confidence">${escapeHtml(item.confidence || "M")}</span>
+                </div>
+                <div class="news-note">${note}</div>
+            </div></li>`;
+    };
+
+    body.innerHTML = `
+        ${counted.length
+            ? `<ul class="news-list">${counted.map(row).join("")}</ul>`
+            : `<p class="drawer-empty">No counted coverage matches these filters.</p>`}
+        ${audit.length ? `<details class="news-audit">
+            <summary>${auditSummaryLabel(audit)}</summary>
+            <ul class="news-list">${audit.map(row).join("")}</ul></details>` : ""}`;
+}
+
+/** Keep Tab inside the panel while it is open. */
+function trapFocus(panel) {
+    if (!panel) return;
+    const focusable = () => [...panel.querySelectorAll(
+        'a[href], button, input, [tabindex]:not([tabindex="-1"])')]
+        .filter(el => el.offsetParent !== null);
+    (focusable()[0] || panel).focus();
+    panel.addEventListener("keydown", e => {
+        if (e.key !== "Tab") return;
+        const els = focusable();
+        if (!els.length) return;
+        const first = els[0], last = els[els.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault(); last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault(); first.focus();
+        }
+    });
+}
+
+function setupCoverageDrawer() {
+    // Delegated: badges are injected after every render, and re-binding per
+    // renderer is how half of them would end up inert.
+    document.addEventListener("click", event => {
+        const badge = event.target.closest("[data-coverage-ticker]");
+        if (!badge) return;
+        event.stopPropagation();  // do not also trigger the row's own handler
+        openNewsDrawer(badge.dataset.coverageTicker);
+    });
+    document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && document.getElementById("news-drawer")) {
+            closeNewsDrawer();
+        }
+    });
+    window.addEventListener("hashchange", routeFromHash);
+    routeFromHash();
+}
+
+function routeFromHash() {
+    const m = /^#stock\/([A-Za-z0-9_-]+)\/news$/.exec(location.hash || "");
+    if (m) {
+        renderNewsDrawer(m[1].toUpperCase());
+    } else if (document.getElementById("news-drawer")) {
+        closeNewsDrawer();
+    }
+}
 
 // Any ticker cell anywhere in the app deep-links into the Stocks Screener,
 // pre-filtered to that ticker. Delegated so every renderer gets it for free.
@@ -377,6 +672,10 @@ function activateTab(targetTab) {
             stocks: () => renderStocksTable(document.getElementById("stock-search")?.value || "")
         };
         renderers[targetTab]?.();
+        // Badges are applied after the renderer rather than inside it: every
+        // current and future table with a .t-ticker cell inherits coverage
+        // without its author wiring anything.
+        decorateTickerCells(document.getElementById(`tab-${targetTab}`));
     }
 
     const main = document.getElementById("main-content");
@@ -471,6 +770,7 @@ function initDashboard(data, isFallback = false) {
     renderRunStatus();
     renderDailyKpis();
     renderWhatsNew(data);
+    decorateTickerCells(document);
     renderSectorChips(data);
     renderPolicyFeed(data);
     renderTopPicks(data);
