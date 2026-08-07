@@ -357,6 +357,16 @@ function buildStockPane(stock, tab) {
                 `<li><strong>${escapeHtml(w.severity)}</strong> · ${escapeHtml(w.category)} — ${escapeHtml(w.signal)}
                  <span class="pane-note">${escapeHtml(w.confidence || "M")} confidence · ${escapeHtml(w.evidence_source || "mixed")}</span></li>`).join("")}</ul>`
             : `<span class="pane-na">No new or escalated warning this run</span>`]);
+        // Pledging. An absent figure is "Not disclosed", never 0% — Screener
+        // omits the row both for companies with no pledge and for a page the
+        // parser could not match, and only one of those is an all-clear.
+        rows.push(["Promoter pledge", pledgeCell(sc)]);
+        rows.push(["52-week range", sc.week52_low != null && sc.week52_high != null
+            ? `${escapeHtml(String(sc.week52_low))} – ${escapeHtml(String(sc.week52_high))}
+               <span class="pane-note">${sc.pct_above_low != null
+                   ? `${escapeHtml(String(sc.pct_above_low))}% above the low`
+                   : "position in range not available"}</span>`
+            : na]);
         rows.push(["Thesis", val(((appData.briefing || {}).thesis_health || {})[stock.ticker]?.status)]);
     } else if (tab === "peers") {
         rows.push(["Industry share", sc.industry_share_pct != null
@@ -371,6 +381,29 @@ function buildStockPane(stock, tab) {
     return `<div class="pane-rows">${rows.map(([k, v]) =>
         `<div class="pane-row"><span class="pane-key">${escapeHtml(k)}</span>
          <span class="pane-val">${v}</span></div>`).join("")}</div>`;
+}
+
+/** Pledge exposure for one holding, mirroring analysis/pledging.py's bands.
+ *  Kept deliberately dumb: it reads the fields the pipeline computed rather
+ *  than re-deriving severity here, so the page and the email cannot disagree
+ *  about what counts as a squeeze. */
+function pledgeCell(sc) {
+    const pct = (sc || {}).pledged_pct;
+    if (pct === undefined || pct === null) {
+        return `<span class="pane-na">Not disclosed — Screener published no
+            pledge row for this holding</span>`;
+    }
+    if (Number(pct) <= 0) return `<span class="pane-pos">None pledged</span>`;
+
+    const change = sc.pledged_change;
+    const nearLow = sc.pct_above_low != null && sc.pct_above_low <= 20;
+    const rising = typeof change === "number" && change >= 0.5;
+    const severe = Number(pct) >= 40 || (Number(pct) >= 15 && (rising || nearLow));
+    const notes = [];
+    if (rising) notes.push(`up ${change > 0 ? "+" : ""}${escapeHtml(String(change))}pp`);
+    if (nearLow) notes.push(`${escapeHtml(String(sc.pct_above_low))}% above its 52-week low`);
+    return `<span class="${severe ? "pane-neg" : ""}">${escapeHtml(String(pct))}% pledged</span>
+        ${notes.length ? `<span class="pane-note">${notes.join(" · ")}</span>` : ""}`;
 }
 
 function coverageCount(ticker) {
@@ -809,6 +842,13 @@ function setupCoverageDrawer() {
         }
     });
     window.addEventListener("hashchange", routeFromHash);
+    // Routed once here so the drawer opens immediately on a cold deep-link,
+    // and again from loadDashboardData once the payload lands. Without the
+    // second pass every non-news tab rendered "not in the current watchlist
+    // payload" permanently: this runs synchronously during DOMContentLoaded,
+    // while the fetch that populates appData is still in flight, so
+    // buildStockPane was handed nothing and said so. The news tab escaped it
+    // by deriving its header from the sidecar it fetches itself.
     routeFromHash();
 }
 
@@ -975,11 +1015,13 @@ function loadDashboardData() {
         .then(data => {
             appData = data;
             initDashboard(data, false);
+            routeFromHash();
         })
         .catch(err => {
             console.warn("Failed to load live data, fallback to static mock seed database:", err);
             appData = MOCK_DATA;
             initDashboard(MOCK_DATA, true);
+            routeFromHash();
         });
 }
 
@@ -1495,6 +1537,42 @@ function sectorBlockFor(sectorKey) {
         .find(b => b && b.id === sectorKey) || null;
 }
 
+/** Priced commodity and FX pressure on one sector.
+ *
+ *  Three outcomes that must not look alike: the run priced the inputs and
+ *  this sector was calm, the run priced them and found pressure, or the run
+ *  could not reach the price source at all. The third rendered as the first
+ *  would turn a broken fetch into a clean bill of health. */
+function inputCostHtml(sectorKey) {
+    const shock = (appData.briefing || {}).input_cost_shock;
+    if (!shock || typeof shock !== "object") {
+        return `<p class="pane-na">Input costs were not computed this run.</p>`;
+    }
+
+    const unmeasured = (shock.unmeasured || []).length;
+    const caveat = unmeasured
+        ? `<p class="pane-note">${unmeasured} input(s) could not be priced this
+           run — unmeasured, not unchanged.</p>`
+        : "";
+
+    const row = (shock.sectors || {})[sectorKey];
+    if (!row) {
+        return `<p class="pane-na">No mapped input moved materially for this
+            sector.</p>${caveat}`;
+    }
+
+    const pressure = row.score > 0;
+    const drivers = (row.drivers || []).map(d =>
+        `<li><strong>${escapeHtml(d.label)}</strong> ${d.change_pct > 0 ? "+" : ""}${escapeHtml(String(d.change_pct))}%
+         <span class="pane-note">${escapeHtml(d.side)} · weight ${escapeHtml(String(d.weight))} · ${escapeHtml(d.direction)}</span></li>`).join("");
+
+    return `<p class="${pressure ? "pane-neg" : "pane-pos"}">
+            ${pressure ? "Cost pressure" : "Tailwind"} ${escapeHtml(String(Math.abs(row.score)))}
+            <span class="pane-note">${escapeHtml(row.band)} · weighted % of the exposed cost base</span>
+        </p>
+        <ul class="pane-list">${drivers}</ul>${caveat}`;
+}
+
 function renderSectorBlockHtml(block) {
     if (!block) {
         return `<div class="glass-card"><div class="table-header-bar">
@@ -1570,7 +1648,14 @@ function renderSectorDetail(sectorKey) {
     const news = appData.briefing[sectorKey] || [];
     const stocks = appData.watchlist[sectorKey] || [];
     const container = document.getElementById("sector-details-content");
-    const blockHtml = renderSectorBlockHtml(sectorBlockFor(sectorKey));
+    // Input costs hang off the sector, not off the block. Rendering them
+    // inside the block hid them for every sector that earned no block this
+    // run — which on the 06 Aug payload was all of them, while twelve sectors
+    // carried a priced move.
+    const blockHtml = renderSectorBlockHtml(sectorBlockFor(sectorKey))
+        + `<div class="glass-card"><div class="table-header-bar"><h3>Input costs</h3>
+           <p class="subtitle">Priced commodity and FX moves weighted by this
+           sector's exposure.</p></div>${inputCostHtml(sectorKey)}</div>`;
 
     let newsHtml = "";
     if (news.length > 0) {
@@ -1777,15 +1862,37 @@ function renderWhatsNew(data) {
                    <small>${escapeHtml((h.reasons || [])[0] || "")}</small>`);
     groups.push(whatsNewGroup("Theses broken", broken, "danger"));
 
-    const decisions = [];
-    Object.values(b.emerging_players || {}).forEach(rows => {
-        (rows || []).forEach(r => {
-            if (r.status === "Watchlisted" && /Added|Rotated/i.test(r.reason || "")) {
-                decisions.push(`<span class="t-ticker">${escapeHtml(r.ticker || "")}</span> ${escapeHtml(r.reason)}`);
-            }
+    // The rotation ledger is the authoritative record of what entered and left,
+    // with the date and the price the call was made at. The emerging_players
+    // scan below it only sees candidates promoted this run, so it misses exits
+    // entirely and cannot say when anything happened. Preferred when present,
+    // same as sector_blocks — derive in one place, render in both.
+    const ledger = (b.watchlist_changes || []).filter(c => c && c.ticker);
+    let decisions;
+    if (ledger.length) {
+        decisions = ledger.slice(0, 6).map(c => {
+            const action = String(c.action || "changed").replace(/_/g, " ");
+            const priced = (typeof c.price_at_decision === "number")
+                ? ` at ${c.price_at_decision}` : "";
+            const outcome = c.outcome
+                ? ` — ${escapeHtml(c.outcome)}`
+                : ` — <small>not yet scored</small>`;
+            return `<span class="t-ticker">${escapeHtml(c.ticker)}</span>
+                    <strong>${escapeHtml(action)}</strong>${escapeHtml(priced)}
+                    <small>${escapeHtml(c.date || "")}</small>${outcome}`;
         });
-    });
-    groups.push(whatsNewGroup("Watchlist changes", decisions.slice(0, 6), "success"));
+    } else {
+        decisions = [];
+        Object.values(b.emerging_players || {}).forEach(rows => {
+            (rows || []).forEach(r => {
+                if (r.status === "Watchlisted" && /Added|Rotated/i.test(r.reason || "")) {
+                    decisions.push(`<span class="t-ticker">${escapeHtml(r.ticker || "")}</span> ${escapeHtml(r.reason)}`);
+                }
+            });
+        });
+        decisions = decisions.slice(0, 6);
+    }
+    groups.push(whatsNewGroup("Watchlist changes", decisions, "success"));
 
     const deferred = [];
     Object.values(b.emerging_players || {}).forEach(rows => {
