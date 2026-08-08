@@ -18,6 +18,8 @@ from emails.sections import (
     build_valuation_extremes_html,
     build_data_quality_html,
     build_cta_html,
+    with_fragment,
+    LANDING_FRAGMENT,
     MAX_CHANGES,
     MAX_EXTREMES,
 )
@@ -836,7 +838,7 @@ def _render_email(brief_data, watchlist, caps):
             <div class="header">
                 <h1>🇮🇳 India Policy &amp; Growth Sector Brief</h1>
                 <p>Daily Intelligence Report | {today_str}</p>
-                <a href="{DASHBOARD_URL}" class="cta-button" target="_blank">View Live Dashboard</a>
+                <a href="{with_fragment(DASHBOARD_URL, LANDING_FRAGMENT)}" class="cta-button" target="_blank">View Live Dashboard</a>
             </div>
             {exec_summary_html}
             {alert_cards_html}

@@ -225,3 +225,98 @@ class TestCta:
         html = build_cta_html("https://example.com/dash").lower()
         for word in (">buy", ">sell", "buy now", "sell now"):
             assert word not in html
+
+
+class TestDashboardLinksResolve:
+    """Every fragment the email links to must name a real dashboard tab.
+
+    app.js routes plain #<tab> fragments now, so a wrong one is a link that
+    visibly does nothing. "#overview" was exactly that — it named no tab, and
+    went unnoticed while the router still ignored fragments entirely. Read out
+    of app.js rather than duplicated here, for the same reason the rule-book
+    test reads its categories from source: a copy drifts silently.
+    """
+
+    @staticmethod
+    def _tab_ids():
+        import pathlib
+        import re
+
+        source = (pathlib.Path(__file__).parent.parent / "app.js").read_text(
+            encoding="utf-8"
+        )
+        block = re.search(r"const TAB_COPY = \{(.*?)\n\};", source, re.S)
+        assert block, "TAB_COPY not found in app.js — did the tab model change?"
+        return set(re.findall(r"^\s{4}(\w+):", block.group(1), re.M))
+
+    def _fragments(self, html):
+        import re
+
+        return set(re.findall(r'href=[\'"][^\'"]*#([A-Za-z0-9_]+)[\'"]', html))
+
+    def test_every_cta_fragment_is_a_real_tab(self):
+        tabs = self._tab_ids()
+        for fragment in self._fragments(build_cta_html("https://example.com/dash")):
+            assert fragment in tabs, f"#{fragment} names no dashboard tab"
+
+    def test_the_landing_fragment_is_a_real_tab(self):
+        from emails.sections import LANDING_FRAGMENT
+
+        assert LANDING_FRAGMENT.lstrip("#") in self._tab_ids()
+
+    def test_the_primary_cta_lands_on_the_holdings_view(self):
+        """The reader arrives wanting the companies the email discussed."""
+        from emails.sections import LANDING_FRAGMENT, with_fragment
+
+        html = build_cta_html("https://example.com/dash")
+        assert with_fragment("https://example.com/dash", LANDING_FRAGMENT) in html
+
+    def test_the_header_cta_lands_there_too(self):
+        """Both dashboard buttons in the email must agree on the destination."""
+        import re
+
+        from emails.mailer import _render_email, _CAPS_NORMAL
+        from emails.sections import LANDING_FRAGMENT
+
+        html = _render_email({}, {}, _CAPS_NORMAL)
+        headers = re.findall(r'href="([^"]*)" class="cta-button"', html)
+        assert headers, "no header CTA rendered"
+        assert all(h.endswith(LANDING_FRAGMENT) for h in headers), headers
+
+
+class TestFragmentJoining:
+    """rstrip("/") ate the trailing slash, leaving
+    ".../india-policy-tracker#holdings". GitHub Pages redirects that to the
+    directory and browsers carry the fragment across, so it worked — at the
+    cost of a round trip per click, and only while the host stays forgiving.
+    """
+
+    def test_a_trailing_slash_is_preserved(self):
+        from emails.sections import with_fragment
+
+        assert (
+            with_fragment("https://x.github.io/repo/", "#holdings")
+            == "https://x.github.io/repo/#holdings"
+        )
+
+    def test_a_missing_slash_is_added(self):
+        from emails.sections import with_fragment
+
+        assert (
+            with_fragment("https://x.github.io/repo", "#holdings")
+            == "https://x.github.io/repo/#holdings"
+        )
+
+    def test_a_bare_fragment_gets_its_hash(self):
+        from emails.sections import with_fragment
+
+        assert with_fragment("https://x/", "holdings") == "https://x/#holdings"
+
+    def test_no_url_in_the_email_doubles_its_slash(self):
+        import re
+
+        from emails.mailer import _render_email, _CAPS_NORMAL
+
+        html = _render_email({}, {}, _CAPS_NORMAL)
+        for url in re.findall(r'href="(https?://[^"]*)"', html):
+            assert "//" not in url.split("://", 1)[1], url

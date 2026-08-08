@@ -110,6 +110,7 @@ let growthChartInstance = null;
 
 const TAB_COPY = {
     dashboard: ["Policy & Sector Overview", "Real-time mapping of government policies to market indicators."],
+    holdings: ["Holdings by Sector", "Every tracked company grouped under its sector, most-changed sector first."],
     sectors: ["Government Policy Logs", "Deep dive sector analysis, announcements history, and watchlists."],
     agreements: ["Corporate News & Agreements", "Scanned news alerts regarding joint ventures, strategic partnerships, and MoUs."],
     launches: ["Product Launches", "Real-time alerts on product launches, new manufacturing capacities, and rollouts."],
@@ -868,9 +869,17 @@ function routeFromHash() {
     if (m) {
         const tab = STOCK_TABS.some(([id]) => id === m[2]) ? m[2] : "snapshot";
         renderNewsDrawer(m[1].toUpperCase(), tab);
-    } else if (document.getElementById("news-drawer")) {
-        closeNewsDrawer();
+        return;
     }
+    if (document.getElementById("news-drawer")) closeNewsDrawer();
+
+    // Plain #<tab> deep links. The email's primary CTA is #holdings, and
+    // without this the link landed on the default Dashboard tab and silently
+    // ignored the fragment. Only known tabs route: activateTab already bails
+    // on an unknown one, so a stale or hand-typed hash leaves the page as it
+    // was rather than blanking it.
+    const tab = (location.hash || "").replace(/^#/, "");
+    if (tab && TAB_COPY[tab]) activateTab(tab);
 }
 
 // Any ticker cell anywhere in the app deep-links into the Stocks Screener,
@@ -959,6 +968,7 @@ function activateTab(targetTab) {
     if (appData) {
         const renderers = {
             dashboard: () => renderCharts(appData),
+            holdings: renderHoldings,
             sectors: initSectorsTab,
             agreements: renderAgreementsTable,
             launches: renderLaunchesTable,
@@ -1641,6 +1651,125 @@ function renderSectorBlockHtml(block) {
                 <div>${suppressed}</div>
             </div>
         </div></div>`;
+}
+
+// --- Holdings by sector: the email's landing page ----------------------------
+
+/** Severity-weighted count of what changed in a sector this run.
+ *  Mirrors sector_delta() in dashboard/sector_blocks.py. Recomputed here only
+ *  because sector_blocks carries the sectors that earned a block, and this
+ *  view lists every sector including the quiet ones. */
+const _SEV_WEIGHT = { Critical: 4, High: 3, Medium: 2, Low: 1 };
+
+function holdingsSectorDelta(sectorKey, warnings) {
+    const meta = (appData.sectors || {})[sectorKey] || {};
+    const names = new Set([sectorKey, meta.label, meta.name]
+        .filter(Boolean).map(s => String(s).toLowerCase()));
+    return warnings.reduce((sum, w) => {
+        if (!names.has(String(w.sector || "").toLowerCase())) return sum;
+        const state = w.status || "ongoing";
+        if (state !== "new" && state !== "escalated") return sum;
+        return sum + (_SEV_WEIGHT[w.severity] || 1);
+    }, 0);
+}
+
+function renderHoldings() {
+    const host = document.getElementById("holdings-body");
+    if (!host || !appData) return;
+
+    const watchlist = appData.watchlist || {};
+    const warnings = (appData.briefing || {}).early_warnings || [];
+    const na = '<span class="pane-na">Not available</span>';
+
+    // Strongest signal per ticker, so each row can say why it is worth a look
+    // without repeating the whole warning feed.
+    const signalFor = {};
+    warnings.forEach(w => {
+        const t = String(w.ticker || "").toUpperCase();
+        if (!t) return;
+        const weight = _SEV_WEIGHT[w.severity] || 1;
+        if (!signalFor[t] || weight > signalFor[t].weight) {
+            signalFor[t] = { weight, severity: w.severity, category: w.category };
+        }
+    });
+
+    const keys = Object.keys(watchlist)
+        .filter(k => k !== "macro_indicators" && Array.isArray(watchlist[k]) && watchlist[k].length)
+        .map(k => ({ key: k, delta: holdingsSectorDelta(k, warnings) }))
+        // Most-changed first, then alphabetical so a tie cannot reorder
+        // between runs — a reshuffled list reads as new information.
+        .sort((a, b) => b.delta - a.delta ||
+            String((appData.sectors[a.key] || {}).label || a.key)
+                .localeCompare(String((appData.sectors[b.key] || {}).label || b.key)));
+
+    if (!keys.length) {
+        host.innerHTML = `<div class="glass-card"><p class="drawer-empty">
+            No holdings in this payload.</p></div>`;
+        return;
+    }
+
+    const total = keys.reduce((n, k) => n + watchlist[k.key].length, 0);
+    let html = `<div class="glass-card">
+        <div class="table-header-bar">
+            <h3>Holdings by Sector</h3>
+            <p class="subtitle">${total} holdings across ${keys.length} sectors,
+               most-changed sector first. Tickers open the full stock drawer.</p>
+        </div>
+        <p style="margin: 0 0 4px 0;">
+            <button type="button" class="filter-chip" data-tab-target="stocks">
+                Open the full screener &rarr;</button>
+            <span class="pane-note">valuation, ROCE, owner earnings and every
+            other column</span>
+        </p>
+    </div>`;
+
+    keys.forEach(({ key, delta }) => {
+        const meta = appData.sectors[key] || {};
+        const stocks = watchlist[key];
+        const rows = stocks.map(s => {
+            const sc = s.screener || {};
+            const t = String(s.ticker || "").toUpperCase();
+            const sig = signalFor[t];
+            // growth_pct arrives pre-formatted ("+8.6%"), not numeric. Passing
+            // it through Number() gave NaN, which failed the >= 0 test and
+            // painted every row negative while doubling the percent sign.
+            const potential = s.growth_pct;
+            return `<tr>
+                <td class="t-ticker">${escapeHtml(s.ticker || "")}</td>
+                <td>${escapeHtml(s.name || "")}</td>
+                <td class="num">${s.price != null ? escapeHtml(String(s.price)) : na}</td>
+                <td class="num">${(s.score || {}).overall_score != null
+                    ? escapeHtml(String(s.score.overall_score)) : na}</td>
+                <td class="num">${potential != null ? formatPotential(potential) : na}</td>
+                <td class="num">${formatLiquidity(sc)}</td>
+                <td>${sig
+                    ? `<span class="${SEVERITY_BADGE_CLASS[sig.severity] || "badge-neutral-alert"}"
+                         style="font-size: 9px;">${escapeHtml(sig.severity)}</span>
+                       ${escapeHtml(sig.category)}`
+                    : `<span class="pane-na">No signal this cycle</span>`}</td>
+            </tr>`;
+        }).join("");
+
+        html += `<div class="glass-card">
+            <div class="table-header-bar">
+                <h3>${escapeHtml(meta.icon || "")} ${escapeHtml(meta.label || key)}</h3>
+                <p class="subtitle">${stocks.length} holding${stocks.length === 1 ? "" : "s"} ·
+                    ${delta ? `changed signal weight ${delta}` : "no new or escalated signal this run"}</p>
+            </div>
+            <div class="table-scroll-container"><table class="premium-table">
+                <thead><tr><th>Ticker</th><th>Company</th><th class="num">CMP</th>
+                <th class="num">Score</th><th class="num">Potential</th>
+                <th class="num">Liquidity</th><th>Strongest signal</th></tr></thead>
+                <tbody>${rows}</tbody></table></div>
+        </div>`;
+    });
+
+    host.innerHTML = html;
+    // Re-bind the inline screener link: setupQuickActions ran before this
+    // markup existed, so its delegation never saw these buttons.
+    host.querySelectorAll("[data-tab-target]").forEach(btn => {
+        btn.addEventListener("click", () => activateTab(btn.dataset.tabTarget));
+    });
 }
 
 function renderSectorDetail(sectorKey) {

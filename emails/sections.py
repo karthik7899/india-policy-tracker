@@ -23,6 +23,31 @@ MAX_CHANGES = 6
 MAX_EXTREMES = 5
 MAX_SUPPRESSED = 8
 
+# Where every "open the dashboard" link in the briefing lands. The reader
+# arrives wanting to see the holdings the email just talked about, grouped the
+# way the email grouped them; the default Dashboard tab is a chart summary and
+# made them navigate before they could look anything up.
+LANDING_FRAGMENT = "#holdings"
+
+
+def with_fragment(base: str, fragment: str) -> str:
+    """Join a dashboard URL to a #fragment without eating the trailing slash.
+
+    ``rstrip("/")`` turned ".../india-policy-tracker/" into
+    ".../india-policy-tracker#holdings", which only works because GitHub Pages
+    redirects to the directory and browsers carry the fragment across the
+    redirect. Relying on that costs a round trip on every click and breaks the
+    moment the site moves somewhere less forgiving.
+    """
+    base = base or ""
+    fragment = fragment or ""
+    if fragment and not fragment.startswith("#"):
+        fragment = "#" + fragment
+    if base and not base.endswith("/"):
+        base += "/"
+    return f"{base}{fragment}"
+
+
 _ACTION_LABEL = {
     "added": ("Added", "#34d399", "#065f46"),
     "rotated_in": ("Rotated in", "#34d399", "#065f46"),
@@ -332,11 +357,16 @@ def build_cta_html(dashboard_url: str) -> str:
     A briefing that ends in a wall of equally-weighted links asks the reader
     to choose, which is the one thing the digest exists to save them from.
     """
-    base = (dashboard_url or "").rstrip("/")
+    base = dashboard_url or ""
+    # Every fragment here must name a real dashboard tab. app.js routes plain
+    # #<tab> links now, so a wrong one is a link that visibly does nothing
+    # rather than one the page quietly ignored -- "#overview" was exactly that
+    # until the router started reading fragments. test_email_sections.py reads
+    # TAB_COPY out of app.js to keep these honest.
     secondary = (
-        ("Alerts", f"{base}#overview"),
-        ("Sectors", f"{base}#sectors"),
-        ("System health", f"{base}#system"),
+        ("Alerts", with_fragment(base, "#earlywarning")),
+        ("Sectors", with_fragment(base, "#sectors")),
+        ("System health", with_fragment(base, "#system")),
     )
     links = " &nbsp;·&nbsp; ".join(
         f"<a href='{_esc(url)}' style='color: #60a5fa; text-decoration: none;' "
@@ -345,8 +375,8 @@ def build_cta_html(dashboard_url: str) -> str:
     )
     return f"""
     <div class="section-card" style="text-align: center;">
-        <a href="{_esc(base)}" class="cta-button" target="_blank"
-           style="margin-top: 0;">Review today's changes</a>
+        <a href="{_esc(with_fragment(base, LANDING_FRAGMENT))}" class="cta-button"
+           target="_blank" style="margin-top: 0;">Review today's changes</a>
         <p style="font-size: 12px; color: #6b7280; margin: 14px 0 0 0;">{links}</p>
     </div>
     """
