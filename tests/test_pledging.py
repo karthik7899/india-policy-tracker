@@ -175,3 +175,147 @@ class TestRangeComputation:
         from analysis.growth import _range_from_frame
 
         assert _range_from_frame(pd.DataFrame({"Close": [float("nan")] * 3})) is None
+
+
+class TestStagingSurvivesMultipleProducers:
+    """Turnover and the 52-week range stage on the same key.
+
+    The first live run priced the range for all 69 holdings and shipped none:
+    update_single_stock assigned the staging key outright, wiping whatever the
+    52-week pass had put there moments earlier. Last writer wins, silently —
+    the identical failure the comment above that line already described for
+    turnover being written into ``screener``.
+    """
+
+    def test_both_producers_survive_into_screener(self, monkeypatch):
+        import providers.yahoo
+
+        from analysis.growth import (
+            _LIQUIDITY_STAGING_KEY,
+            apply_liquidity,
+            update_single_stock,
+        )
+
+        # update_single_stock always calls out for the quote; the staging
+        # behaviour is what is under test, not the fetch.
+        monkeypatch.setattr(
+            providers.yahoo, "fetch_stock_data", lambda _t: {"price": 100.0}
+        )
+
+        stock = {"ticker": "X", "price": "100"}
+        # The 52-week pass stages first...
+        stock.setdefault(_LIQUIDITY_STAGING_KEY, {}).update(
+            {"week52_low": 42.5, "week52_high": 86.0, "pct_above_low": 6.0}
+        )
+        # ...then the per-stock update stages turnover.
+        update_single_stock(
+            stock,
+            prefetched_prices={"X.NS": 100.0},
+            prefetched_liquidity={
+                "X.NS": {"advt_cr": 12.0, "liquidity_band": "liquid"}
+            },
+        )
+        apply_liquidity({"sector": [stock]})
+
+        sc = stock.get("screener") or {}
+        assert sc.get("advt_cr") == 12.0, "turnover must survive"
+        assert sc.get("week52_low") == 42.5, "the 52-week range must survive too"
+        assert sc.get("pct_above_low") == 6.0
+
+    def test_turnover_alone_still_works(self, monkeypatch):
+        import providers.yahoo
+
+        from analysis.growth import apply_liquidity, update_single_stock
+
+        monkeypatch.setattr(
+            providers.yahoo, "fetch_stock_data", lambda _t: {"price": 100.0}
+        )
+        stock = {"ticker": "Y", "price": "100"}
+        update_single_stock(
+            stock,
+            prefetched_prices={"Y.NS": 100.0},
+            prefetched_liquidity={"Y.NS": {"advt_cr": 5.0}},
+        )
+        apply_liquidity({"sector": [stock]})
+        assert (stock.get("screener") or {}).get("advt_cr") == 5.0
+
+
+class TestPledgeRowDiagnostic:
+    """The pledge row matched nothing on the first live run — 0 of 69.
+
+    Screener refuses connections from the build sandbox, so the real label
+    cannot be checked there. Guessing at the wording would be a change with no
+    evidence behind it; instead the first holding that misses the row reports
+    what the page actually carries, so the next run answers the question.
+    """
+
+    HTML = (
+        '<section id="shareholding"><table>'
+        "<tr><td><button>Promoters</button></td><td>61.2</td><td>61.0</td></tr>"
+        "<tr><td>FIIs</td><td>5.1</td><td>5.4</td></tr>"
+        "<tr><td>Public</td><td>25.7</td><td>25.4</td></tr>"
+        "</table></section>"
+    )
+
+    def _soup(self, html=None):
+        from bs4 import BeautifulSoup
+
+        return BeautifulSoup(html or self.HTML, "lxml")
+
+    def test_it_names_the_rows_the_page_actually_has(self, caplog):
+        import logging
+
+        import providers.screener as sc
+
+        sc._shareholding_rows_reported = False
+        with caplog.at_level(logging.INFO):
+            sc._report_shareholding_rows(self._soup(), "TESTCO")
+
+        assert "Promoters" in caplog.text
+        assert "FIIs" in caplog.text
+
+    def test_it_reports_once_not_once_per_holding(self, caplog):
+        import logging
+
+        import providers.screener as sc
+
+        sc._shareholding_rows_reported = False
+        with caplog.at_level(logging.INFO):
+            sc._report_shareholding_rows(self._soup(), "FIRST")
+            caplog.clear()
+            sc._report_shareholding_rows(self._soup(), "SECOND")
+
+        assert caplog.text == "", "69 copies of the same answer would bury the log"
+
+    def test_a_missing_section_is_reported_distinctly(self, caplog):
+        import logging
+
+        import providers.screener as sc
+
+        sc._shareholding_rows_reported = False
+        with caplog.at_level(logging.INFO):
+            sc._report_shareholding_rows(self._soup("<html></html>"), "NOSEC")
+
+        assert "no shareholding section" in caplog.text
+
+    def test_it_never_raises(self):
+        import providers.screener as sc
+
+        sc._shareholding_rows_reported = False
+        sc._report_shareholding_rows(None, "X")  # must not blow up a run
+
+    def test_a_real_pledge_row_is_still_extracted(self):
+        """The diagnostic must not have displaced the thing it diagnoses.
+        Screener wraps expandable row labels in a <button>, which is the quirk
+        extract_row_values exists to handle."""
+        from analysis.parsing import extract_row_values
+
+        html = self.HTML.replace(
+            "<tr><td>Public</td>",
+            "<tr><td><button>Pledged percentage</button></td>"
+            "<td>12.5</td><td>14.0</td></tr><tr><td>Public</td>",
+        )
+        assert extract_row_values(self._soup(html), "shareholding", r"Pledg") == [
+            12.5,
+            14.0,
+        ]

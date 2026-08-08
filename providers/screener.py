@@ -5,6 +5,45 @@ from logger import log
 from analysis.parsing import extract_row_values, calculate_trend, calculate_growth
 from utils import TransientNetworkError, fetch_text_async, retry_network
 
+# The pledge row matched nothing on the first live run — 0 of 69 holdings —
+# and from the build sandbox Screener refuses connections, so the real row
+# label cannot be checked here. Rather than guess at the wording, the first
+# holding that misses it reports the labels the page actually carries. Once
+# per run: the answer is the same for every company, and 69 copies of it
+# would bury the rest of the log.
+_shareholding_rows_reported = False
+
+
+def _report_shareholding_rows(soup, ticker):
+    """Log the shareholding row labels once, when the pledge row is missing.
+
+    A no-op after the first call. Purely diagnostic — it reads nothing into
+    the payload and cannot change a number.
+    """
+    global _shareholding_rows_reported
+    if _shareholding_rows_reported:
+        return
+    try:
+        section = soup.find("section", id="shareholding")
+        if not section:
+            log.info(f"Pledge row absent for {ticker}: no shareholding section.")
+            _shareholding_rows_reported = True
+            return
+        labels = []
+        for tr in section.find_all("tr"):
+            cells = tr.find_all("td")
+            if cells:
+                label = cells[0].get_text(" ", strip=True)
+                if label:
+                    labels.append(label)
+        log.info(
+            f"Pledge row not matched for {ticker}. Shareholding rows present: "
+            f"{labels}"
+        )
+    except Exception as e:  # noqa: BLE001 - a diagnostic must never break a run
+        log.warning(f"Could not list shareholding rows for {ticker}: {e!r}")
+    _shareholding_rows_reported = True
+
 
 async def fetch_screener_async(session, ticker, sector, price):
     # ETFs / index funds do not have individual fundamentals
@@ -205,6 +244,8 @@ async def fetch_screener_async(session, ticker, sector, price):
         if len(pledged) >= 2:
             sc["pledged_change"] = round(pledged[-1] - pledged[-2], 2)
             sc["pledged_trend"] = pledged[-4:]
+    else:
+        _report_shareholding_rows(soup, ticker)
 
     sc = {k: v for k, v in sc.items() if v is not None}
     return ticker, sc, warehouse_id
