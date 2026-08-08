@@ -86,9 +86,15 @@ def update_single_stock(stock, prefetched_prices=None, prefetched_liquidity=None
         # sc_data`). Writing it there produced turnover for all 67 holdings
         # and then silently discarded every one of them. apply_liquidity()
         # merges this in once the rebuild has happened.
+        #
+        # Merged rather than assigned, because turnover is no longer the only
+        # thing staged here: the 52-week range is written to the same key
+        # before this runs, and a plain assignment discarded all 69 of them on
+        # the first live run. That is the identical failure described above,
+        # one level down -- last writer wins, silently.
         liquidity = prefetched_liquidity.get(yahoo_ticker)
         if liquidity:
-            stock[_LIQUIDITY_STAGING_KEY] = liquidity
+            stock.setdefault(_LIQUIDITY_STAGING_KEY, {}).update(liquidity)
 
         live_price = to_float(stock.get("price"))
         if to_float(stock.get("target")) is not None and live_price is not None:
