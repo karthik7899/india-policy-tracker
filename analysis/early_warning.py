@@ -826,11 +826,16 @@ def generate_early_warnings(
     # actually changes where the alert lands in the sort below.
     annotate_order_materiality(warnings, watchlist)
 
+    # Every field read defensively. This ranks alerts from five different
+    # modules, and a direct subscript makes the sort key a place where one
+    # malformed alert takes down the whole run -- which is exactly what
+    # happened when sector-level input-cost alerts arrived without a ticker:
+    # KeyError inside the lambda, no briefing, no dashboard update.
     warnings.sort(
         key=lambda a: (
-            _DIRECTION_RANK.get(a["direction"], 9),
-            _SEVERITY_RANK.get(a["severity"], 9),
-            a["ticker"],
+            _DIRECTION_RANK.get(a.get("direction"), 9),
+            _SEVERITY_RANK.get(a.get("severity"), 9),
+            str(a.get("ticker") or ""),
         )
     )
     return warnings
