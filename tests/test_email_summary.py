@@ -252,3 +252,119 @@ class TestCountsAreDeltasNotTotals:
             _watchlist(),
         )
         assert s["ongoing_total"] == 297
+
+
+class TestSectorSelection:
+    """Sector cards were ~60% of the email at every tier — 51 KB of an 85 KB
+    minimal render — because the ladder trimmed rows inside each card and never
+    trimmed the number of cards. Eighteen sectors shipped on a day two moved.
+    """
+
+    def _brief_with_sectors(self):
+        from config import SECTOR_METADATA
+
+        keys = [k for k in SECTOR_METADATA if k != "macro_indicators"][:5]
+        data = _brief(
+            [
+                # Warnings carry the sector LABEL, not the slug.
+                _warning("A", "Critical", sector=SECTOR_METADATA[keys[0]]["label"]),
+                _warning("B", "Critical", sector=SECTOR_METADATA[keys[0]]["label"]),
+                _warning("C", "Low", sector=SECTOR_METADATA[keys[1]]["label"]),
+                _warning(
+                    "D",
+                    "Ongoing",
+                    sector=SECTOR_METADATA[keys[2]]["label"],
+                    status="ongoing",
+                ),
+            ]
+        )
+        for k in keys:
+            # Shape matches what the scrapers emit; the renderer reads
+            # impact/source directly.
+            data[k] = [
+                {
+                    "title": f"news for {k}",
+                    "link": "u",
+                    "date": "",
+                    "impact": "Positive",
+                    "source": "Test",
+                }
+            ]
+        return data, keys
+
+    def test_the_delta_ranking_matches_on_label_not_only_slug(self):
+        """A naive equality check matched nothing, so the ranking silently
+        degraded to alphabetical — six sectors chosen by first letter and
+        presented as the six that moved most."""
+        from emails.mailer import _sector_delta
+
+        data, keys = self._brief_with_sectors()
+        assert _sector_delta(keys[0], data) == 8  # two Criticals
+        assert _sector_delta(keys[1], data) == 1  # one Low
+
+    def test_ongoing_warnings_do_not_count_as_change(self):
+        from emails.mailer import _sector_delta
+
+        data, keys = self._brief_with_sectors()
+        assert _sector_delta(keys[2], data) == 0
+
+    def test_sectors_are_ordered_by_delta_and_capped_per_tier(self):
+        from emails.mailer import _sectors_to_render, _CAP_LADDER
+
+        data, keys = self._brief_with_sectors()
+        for _, caps in _CAP_LADDER:
+            selected, eligible = _sectors_to_render(data, caps)
+            assert len(selected) <= caps["sectors"]
+            assert selected[0] == keys[0]  # highest delta always first
+            assert eligible >= len(selected)
+
+    def test_ordering_is_deterministic_across_calls(self):
+        """Two sectors tying on delta and news volume must not swap between
+        runs — a reordered email reads as new information."""
+        from emails.mailer import _sectors_to_render, _CAPS_NORMAL
+
+        data, _ = self._brief_with_sectors()
+        first = _sectors_to_render(data, _CAPS_NORMAL)[0]
+        for _ in range(5):
+            assert _sectors_to_render(data, _CAPS_NORMAL)[0] == first
+
+    def test_a_sector_with_no_change_and_no_news_is_omitted(self):
+        from emails.mailer import _sectors_to_render, _CAPS_NORMAL
+        from config import SECTOR_METADATA
+
+        quiet_key = [k for k in SECTOR_METADATA if k != "macro_indicators"][-1]
+        data = _brief([])
+        data[quiet_key] = []
+        selected, _ = _sectors_to_render(data, _CAPS_NORMAL)
+        assert quiet_key not in selected
+
+    def test_dropped_sectors_are_stated_not_silently_absent(self):
+        """ "18 monitored, 6 shown" is a different message from "6 exist"."""
+        from emails.mailer import _render_email, _CAPS_NORMAL
+
+        data, keys = self._brief_with_sectors()
+        # The sector card renders holdings, so the watchlist has to carry the
+        # fields the scrapers normally supply.
+        watchlist = {
+            k: [
+                {
+                    "ticker": f"T{i}",
+                    "name": f"T{i} Ltd",
+                    "price": "100.00",
+                    "catalyst": "test catalyst",
+                    "screener": {"pe_ratio": 20.0},
+                }
+            ]
+            for i, k in enumerate(keys)
+        }
+        # Five eligible sectors against the minimal cap of two, so three are
+        # dropped and the note must account for them.
+        from emails.mailer import _CAPS_MINIMAL
+
+        html = _render_email(data, watchlist, _CAPS_MINIMAL)
+        assert "most-changed" in html
+        assert "5 sectors" in html
+
+        # Nothing dropped: no note, because there is nothing to account for.
+        full = _render_email(data, watchlist, _CAPS_NORMAL)
+        assert "most-changed" not in full

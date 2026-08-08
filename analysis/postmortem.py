@@ -161,3 +161,16 @@ def recent_outcomes(ledger, limit=5):
     judged = [e for e in ledger if e.get("outcome") in (_PLAYING_OUT, _UNDERPERFORMING)]
     judged.sort(key=lambda e: e["date"], reverse=True)
     return judged[:limit]
+
+
+def recent_changes(ledger, limit=8):
+    """Newest watchlist entries and exits, newest first.
+
+    ``recent_outcomes`` above only reports decisions old enough to have been
+    scored, which on a young ledger is none of them. A holding added this
+    morning is still the most consequential thing that happened to the
+    watchlist today, and the briefing had no way to say so.
+    """
+    rows = [e for e in ledger or [] if isinstance(e, dict) and e.get("date")]
+    rows.sort(key=lambda e: str(e.get("date")), reverse=True)
+    return rows[:limit]

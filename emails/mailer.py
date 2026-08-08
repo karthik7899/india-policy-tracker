@@ -13,6 +13,16 @@ from emails.summary import (
     build_plain_text,
     _sector_label,
 )
+from emails.sections import (
+    build_watchlist_changes_html,
+    build_valuation_extremes_html,
+    build_data_quality_html,
+    build_cta_html,
+    with_fragment,
+    LANDING_FRAGMENT,
+    MAX_CHANGES,
+    MAX_EXTREMES,
+)
 
 _SEVERITY_BADGE = {
     "Critical": ("#7f1d1d", "#fca5a5"),
@@ -29,6 +39,7 @@ _SEVERITY_BADGE = {
 _SIZE_BUDGET_BYTES = 95_000
 
 _CAPS_NORMAL = {
+    "sectors": 6,
     "stocks": 3,
     "news": 3,
     "warnings": 12,
@@ -37,8 +48,11 @@ _CAPS_NORMAL = {
     "curve": 14,
     "emerging": 8,
     "caution": 8,
+    "changes": 6,
+    "extremes": 5,
 }
 _CAPS_COMPACT = {
+    "sectors": 3,
     "stocks": 2,
     "news": 1,
     "warnings": 8,
@@ -47,11 +61,14 @@ _CAPS_COMPACT = {
     "curve": 10,
     "emerging": 5,
     "caution": 5,
+    "changes": 4,
+    "extremes": 3,
 }
 # The floor. One holding per sector with the overflow link doing the rest —
 # enough to say what moved, and small enough that sector growth cannot push
 # the briefing past the clip limit.
 _CAPS_MINIMAL = {
+    "sectors": 2,
     "stocks": 1,
     "news": 1,
     "warnings": 6,
@@ -60,6 +77,8 @@ _CAPS_MINIMAL = {
     "curve": 6,
     "emerging": 3,
     "caution": 3,
+    "changes": 3,
+    "extremes": 2,
 }
 
 _CAP_LADDER = (
@@ -67,6 +86,133 @@ _CAP_LADDER = (
     ("compact", _CAPS_COMPACT),
     ("minimal", _CAPS_MINIMAL),
 )
+
+
+def coverage_link(ticker, count, dashboard_url=None):
+    """ "Coverage (n)" as a deep link into the drawer for that holding.
+
+    The email cannot hold the article list — it is already at the size floor —
+    but it can hand the reader the exact place the list lives, so a headline
+    they want to check is one click rather than a search away.
+    """
+    base = dashboard_url or DASHBOARD_URL
+    ticker = html_lib.escape(str(ticker or "").upper())
+    if not ticker:
+        return ""
+    return (
+        f'<a href="{base}#stock/{ticker}/news" target="_blank" '
+        f'style="color:#60a5fa;text-decoration:underline;font-size:11px;">'
+        f"Coverage ({int(count or 0)})</a>"
+    )
+
+
+# Review prompts, mirroring app.js. Research tooling: "verify", "confirm",
+# "re-check" — never "buy" or "sell".
+_REVIEW_NOTE = {
+    "Margin Compression": "check input-cost exposure and one-off items",
+    "Revenue Contraction": "confirm against the filed result before treating as a trend",
+    "Promoter Exit": "verify the shareholding pattern and any pledge disclosure",
+    "Promoter Selling": "verify the shareholding pattern and any pledge disclosure",
+    "FII Outflow": "check whether the move is index-driven rather than company-specific",
+    "FII Selling": "check whether the move is index-driven rather than company-specific",
+    "High Leverage": "review the debt schedule and interest cover",
+    "Liquidity Stress": "review working-capital cycle and near-term maturities",
+    "Valuation Stretch": "re-check the peer set before calling the multiple expensive",
+    "Market Share": "confirm the peer group is the right comparison set",
+    "Competitive Threat": "verify the competitor claim against a primary source",
+    "Policy Catalyst": "confirm scheme eligibility before assuming impact",
+    "Institutional Accumulation": "check whether the flow is index-driven",
+    "Institutional Buying": "check whether the flow is index-driven",
+    "Supply Stress (Forward)": "leading indicator only — not yet in reported margins",
+}
+
+_STATE_BADGE = {
+    "new": ("#0c2a4d", "#60a5fa", "new"),
+    "escalated": ("#4a2a0c", "#fdba74", "escalated"),
+}
+
+
+def _alert_card(w, coverage_counts):
+    """One stacked alert card.
+
+    Direction and severity are independent badges. An institutional outflow is
+    a Critical *risk*, and rendering severity alone would let it sit in a list
+    a reader scans for opportunities.
+    """
+    sev = w.get("severity", "Low")
+    bg, fg = _SEVERITY_BADGE.get(sev, _SEVERITY_BADGE["Low"])
+    is_risk = w.get("direction") == "risk"
+    dir_bg, dir_fg = ("#7f1d1d", "#fca5a5") if is_risk else ("#064e3b", "#6ee7b7")
+    dir_label = "RISK" if is_risk else "OPPORTUNITY"
+
+    state = _STATE_BADGE.get(w.get("status") or "")
+    state_html = (
+        f"<span class='badge' style='background-color:{state[0]};color:{state[1]};'>"
+        f"{state[2]}</span>"
+        if state
+        else ""
+    )
+    ticker = w.get("ticker", "")
+    cov = coverage_link(ticker, (coverage_counts or {}).get(str(ticker).upper(), 0))
+    review = _REVIEW_NOTE.get(w.get("category"))
+
+    return (
+        "<div style='padding:12px 0;border-bottom:1px solid #1f2937;'>"
+        f"<div style='font-size:14px;font-weight:600;color:#e2e8f0;'>{ticker} "
+        f"<span style='font-weight:400;color:#94a3b8;font-size:12px;'>"
+        f"{w.get('name', '')}</span></div>"
+        f"<div style='margin:5px 0;'>"
+        f"<span class='badge' style='background-color:{dir_bg};color:{dir_fg};'>{dir_label}</span> "
+        f"<span class='badge' style='background-color:{bg};color:{fg};'>{sev}</span> "
+        f"{state_html} "
+        f"<span style='font-size:11px;color:#94a3b8;'>{w.get('category', '')}</span></div>"
+        f"<div style='font-size:12.5px;color:#cbd5e1;line-height:1.5;'>{w.get('signal', '')}</div>"
+        f"<div style='font-size:10.5px;color:#6b7280;margin-top:4px;'>"
+        f"{html_lib.escape(w.get('confidence') or 'M')} confidence"
+        f" &middot; {html_lib.escape(w.get('evidence_source') or 'mixed')}"
+        f"{' &middot; review: ' + html_lib.escape(review) if review else ''}"
+        f"{' &middot; ' + cov if cov else ''}</div>"
+        "</div>"
+    )
+
+
+def _build_alert_cards_html(summary, coverage_counts=None, caps=_CAPS_NORMAL):
+    """Critical alerts and opportunities as separate stacked sections.
+
+    Kept apart because they are answers to different questions. A single
+    severity-ranked table mixes "what might break" with "what might pay",
+    and the reader has to re-sort it mentally every morning.
+    """
+    out = ""
+    criticals = summary.get("critical") or []
+    opportunities = summary.get("opportunities") or []
+
+    if criticals:
+        cards = "".join(
+            _alert_card(w, coverage_counts) for w in criticals[: caps["warnings"]]
+        )
+        out += (
+            "<div class='section-card'>"
+            "<h3 style='color:#f87171;margin:0 0 4px 0;font-size:16px;'>Critical Alerts</h3>"
+            f"<p style='font-size:11px;color:#6b7280;margin:0 0 6px 0;'>"
+            f"{summary.get('critical_total', 0)} new or escalated risk signal(s) "
+            "this cycle.</p>"
+            f"{cards}</div>"
+        )
+
+    if opportunities:
+        cards = "".join(
+            _alert_card(w, coverage_counts) for w in opportunities[: caps["warnings"]]
+        )
+        out += (
+            "<div class='section-card'>"
+            "<h3 style='color:#34d399;margin:0 0 4px 0;font-size:16px;'>Opportunity Signals</h3>"
+            f"<p style='font-size:11px;color:#6b7280;margin:0 0 6px 0;'>"
+            f"{summary.get('opportunities_total', 0)} positive signal(s); each needs "
+            "validation before it means anything.</p>"
+            f"{cards}</div>"
+        )
+    return out
 
 
 def _build_exec_summary_html(summary):
@@ -167,10 +313,12 @@ def _build_exec_summary_html(summary):
     )
 
 
-def _build_early_warning_html(warnings, caps=_CAPS_NORMAL):
+def _build_early_warning_html(warnings, caps=_CAPS_NORMAL, coverage_counts=None):
     """Renders the prioritized Early Warning card. Returns '' when there is nothing to flag."""
     if not warnings:
         return ""
+
+    coverage_counts = coverage_counts or {}
 
     rows = ""
     for w in warnings[: caps["warnings"]]:
@@ -187,6 +335,7 @@ def _build_early_warning_html(warnings, caps=_CAPS_NORMAL):
             <td class="ew-td">
                 <span class="stock-ticker">{w.get('ticker', '')}</span>
                 <span style="color: #94a3b8; font-size: 11px;"> · {w.get('sector', '')}</span>
+                <br>{coverage_link(w.get('ticker'), coverage_counts.get(str(w.get('ticker', '')).upper(), 0))}
             </td>
             <td class="ew-td">{sev_badge}</td>
             <td class="ew-td" style="color: {dir_color};">{dir_icon} {w.get('category', '')}</td>
@@ -489,6 +638,120 @@ def _escape_deep(value):
     return value
 
 
+# Sector selection.
+#
+# Every sector rendered every run, which is why sector cards are ~60% of the
+# email at every tier — 51 KB of the 85 KB minimal render, against a 95 KB
+# budget. The cap ladder trimmed rows *inside* each card and never trimmed the
+# number of cards, so a day with two moving sectors still shipped eighteen.
+#
+# Sixteen of those were telling the reader that nothing had changed, which is
+# the same state-not-delta problem the homepage had. Capping by delta makes the
+# email smaller and more informative at once.
+_SEVERITY_WEIGHT = {"Critical": 4, "High": 3, "Medium": 2, "Low": 1}
+
+
+def _sector_delta(sector_key, brief_data):
+    """Severity-weighted count of what changed in this sector this run.
+
+    Warnings carry the sector *label* ("Clean Energy") while the render loop
+    keys on the slug ("clean_energy"), so a naive equality check matches
+    nothing and the ranking silently degrades to alphabetical order — six
+    sectors chosen by first letter, presented as the six that moved most.
+    Both forms are accepted here rather than assuming either.
+    """
+    meta = SECTOR_METADATA.get(sector_key) or {}
+    names = {
+        str(sector_key).lower(),
+        str(meta.get("label", "")).lower(),
+        str(meta.get("name", "")).lower(),
+    }
+    names.discard("")
+
+    score = 0
+    for w in brief_data.get("early_warnings") or []:
+        if not isinstance(w, dict):
+            continue
+        if str(w.get("sector", "")).lower() not in names:
+            continue
+        if (w.get("status") or "ongoing") not in ("new", "escalated"):
+            continue
+        score += _SEVERITY_WEIGHT.get(w.get("severity"), 1)
+    return score
+
+
+def _sectors_to_render(brief_data, caps):
+    """Ordered sector keys for this render, most-changed first.
+
+    Inclusion: a sector appears only if something changed in it, or it carries
+    news this cycle. A sector with neither has nothing to say that the
+    dashboard is not already holding.
+    """
+    blocks = brief_data.get("sector_blocks")
+    if isinstance(blocks, list) and blocks:
+        # Already ordered and filtered by dashboard/sector_blocks.py. Reusing
+        # it is the point: the email and the page must not rank sectors
+        # differently from the same corpus.
+        return [b["id"] for b in blocks[: caps.get("sectors", 6)]], len(blocks)
+
+    scored = []
+    for key in brief_data:
+        if key not in SECTOR_METADATA or key == "macro_indicators":
+            continue
+        delta = _sector_delta(key, brief_data)
+        news = len(brief_data.get(key) or [])
+        if not delta and not news:
+            continue
+        scored.append((delta, news, key))
+
+    # Deterministic: delta, then news volume, then name. Two sectors tying on
+    # both must not swap places between runs.
+    scored.sort(key=lambda r: (-r[0], -r[1], r[2]))
+    return [key for _, _, key in scored[: caps.get("sectors", 6)]], len(scored)
+
+
+def _sector_block_news_html(block, coverage_counts=None):
+    """Per-sector news from the shared block.
+
+    Every headline is an external link; where a source URL is missing the row
+    says so rather than emitting dead markup. Affected tickers carry the
+    Phase-1 coverage link, so a name in a sector card is one click from the
+    articles behind it.
+    """
+    if not block or not block.get("news"):
+        return (
+            "<p style='font-size:12px;color:#6b7280;margin:0;'>"
+            "No news attributed to this sector in the window.</p>"
+        )
+
+    counts = coverage_counts or {}
+    rows = []
+    for item in block["news"]:
+        headline = html_lib.escape(str(item.get("headline", "")))
+        url = item.get("url")
+        title = (
+            f"<a href='{html_lib.escape(str(url))}' target='_blank' "
+            f"rel='noopener noreferrer' class='news-title'>{headline}</a>"
+            if url
+            else f"<span class='news-title'>{headline}</span> "
+            "<span style='font-size:10px;color:#6b7280;'>(source link not available)</span>"
+        )
+        tag = html_lib.escape(str((item.get("tags") or ["other"])[0]).replace("_", " "))
+        tickers = " ".join(
+            coverage_link(tk, counts.get(str(tk).upper(), 0))
+            for tk in (item.get("affected_tickers") or [])[:3]
+        )
+        rows.append(
+            "<div class='news-item'>"
+            f"{title}"
+            f"<div class='meta-line'>{html_lib.escape(str(item.get('source') or 'Source not available'))}"
+            f" &middot; {tag}"
+            f" &middot; {html_lib.escape(str(item.get('confidence') or 'M'))} confidence"
+            f"{' &middot; ' + tickers if tickers else ''}</div></div>"
+        )
+    return "".join(rows)
+
+
 def _render_email(brief_data, watchlist, caps):
     """Renders the HTML document at the row caps given."""
     brief_data = _escape_deep(brief_data or {})
@@ -557,6 +820,9 @@ def _render_email(brief_data, watchlist, caps):
     summary = build_summary(brief_data, watchlist)
     preheader = html_lib.escape(build_preheader(summary))
     exec_summary_html = _build_exec_summary_html(summary)
+    alert_cards_html = _build_alert_cards_html(
+        summary, brief_data.get("coverage_count"), caps
+    )
 
     body_html = f"""
     <!DOCTYPE html>
@@ -572,9 +838,10 @@ def _render_email(brief_data, watchlist, caps):
             <div class="header">
                 <h1>🇮🇳 India Policy &amp; Growth Sector Brief</h1>
                 <p>Daily Intelligence Report | {today_str}</p>
-                <a href="{DASHBOARD_URL}" class="cta-button" target="_blank">View Live Dashboard</a>
+                <a href="{with_fragment(DASHBOARD_URL, LANDING_FRAGMENT)}" class="cta-button" target="_blank">View Live Dashboard</a>
             </div>
             {exec_summary_html}
+            {alert_cards_html}
             <div class="summary-strip">
                 <div class="stat">
                     <div class="stat-num" style="color: #f87171;">{risk_count}</div>
@@ -605,35 +872,33 @@ def _render_email(brief_data, watchlist, caps):
     """
 
     # Early Warning System — the first actionable thing the reader should see
-    body_html += _build_early_warning_html(warnings, caps)
+    body_html += _build_early_warning_html(
+        warnings, caps, brief_data.get("coverage_count")
+    )
 
     # Research Engine: thesis health, revision momentum, variant perception,
     # curve stage, rotation track record — all synthesized from data already
     # computed above, no new fetches.
     body_html += _build_research_engine_html(brief_data, caps)
 
-    for sector, news_items in brief_data.items():
-        if sector in (
-            "emerging_players",
-            "emerging_competitors",
-            "corporate_agreements",
-            "product_launches",
-            "corporate_filings",
-            "sebi_filings",
-            "institutional_activity",
-            "margin_of_safety",
-            "buffett_valuation",
-        ):
-            continue
-        if sector not in SECTOR_METADATA:
-            continue
+    selected_sectors, eligible_total = _sectors_to_render(brief_data, caps)
+    blocks_by_id = {
+        b.get("id"): b
+        for b in (brief_data.get("sector_blocks") or [])
+        if isinstance(b, dict)
+    }
+    for sector in selected_sectors:
+        news_items = brief_data.get(sector) or []
+        block = blocks_by_id.get(sector)
         meta = _escape_deep(SECTOR_METADATA[sector])
         stocks = watchlist.get(sector, [])
 
         # Format news HTML. The email carries the top items per sector to
         # stay under Gmail's ~102 KB clip limit; the dashboard has them all.
         news_html = ""
-        if news_items:
+        if block:
+            news_html = _sector_block_news_html(block, brief_data.get("coverage_count"))
+        elif news_items:
             for item in news_items[: caps["news"]]:
                 badge_class = (
                     "badge-positive"
@@ -808,6 +1073,23 @@ def _render_email(brief_data, watchlist, caps):
                 {emerging_html}
             </div>
         """
+
+    # Sectors dropped by the cap are stated, not silently absent. "18
+    # monitored, 6 shown" is a different message from "only 6 exist".
+    hidden_sectors = eligible_total - len(selected_sectors)
+    if hidden_sectors > 0 or not selected_sectors:
+        note = (
+            f"No sector changed this cycle — {eligible_total} monitored."
+            if not selected_sectors
+            else f"Showing the {len(selected_sectors)} most-changed of "
+            f"{eligible_total} sectors with activity."
+        )
+        body_html += (
+            '<div class="section-card" style="padding:14px 25px;">'
+            f'<p style="margin:0;font-size:12px;color:#94a3b8;">{note} '
+            f"<a href='{DASHBOARD_URL}' style='color:#60a5fa;' target='_blank'>"
+            "See every sector on the dashboard</a>.</p></div>"
+        )
 
     # Append Corporate Agreements & Product Launches
     agreements_html = ""
@@ -1059,6 +1341,31 @@ def _render_email(brief_data, watchlist, caps):
         + emerging_html_global
         + inst_html
         + valuation_html
+    )
+
+    # Closing sections, in the order the reader needs them: what moved in the
+    # watchlist itself, where valuations sit at the edges, what the run could
+    # not see, and then a single next action. The data-quality note comes last
+    # of the four on purpose -- it qualifies everything above it, so it reads
+    # as a caveat rather than as a disclaimer nobody reaches.
+    suppressed = [
+        {"ticker": s.get("ticker"), "reason": "no analyst or fundamental base"}
+        for key, stocks in (watchlist or {}).items()
+        if key != "macro_indicators" and isinstance(stocks, list)
+        for s in stocks
+        if isinstance(s, dict) and s.get("estimate_method") == "No Estimate"
+    ]
+    body_html += (
+        build_watchlist_changes_html(
+            brief_data.get("watchlist_changes"), caps.get("changes", MAX_CHANGES)
+        )
+        + build_valuation_extremes_html(
+            brief_data.get("sector_valuation"),
+            suppressed,
+            caps.get("extremes", MAX_EXTREMES),
+        )
+        + build_data_quality_html(brief_data, watchlist)
+        + build_cta_html(DASHBOARD_URL)
     )
 
     body_html += f"""

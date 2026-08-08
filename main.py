@@ -54,7 +54,7 @@ def save_data_for_dashboard(brief_data, watchlist):
         "last_updated": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "watchlist": watchlist,
         "sectors": SECTOR_METADATA,
-        "briefing": build_display_payload(brief_data),
+        "briefing": build_display_payload(brief_data, watchlist),
     }
     atomic_write_json(output, "dashboard_data.json")
 
@@ -243,6 +243,13 @@ async def run_pipeline():
         data["supply_stress"] = compute_supply_stress(data["market_events"], graph)
         harvest_partner_edges(data["corporate_agreements"], watchlist, graph)
 
+        # The price-based counterpart of supply_stress above. That one counts
+        # supply-side headlines, so a quarter where copper quietly rose 18%
+        # with nobody writing about it produced no signal at all.
+        from analysis.input_cost import compute_input_cost_shock
+
+        data["input_cost_shock"] = compute_input_cost_shock()
+
     # Revenue growth first: it annotates each holding's TTM figure, which the
     # scoring model below reads. Running it afterwards left the scorer with no
     # growth input at all, silently.
@@ -270,6 +277,7 @@ async def run_pipeline():
     postmortem.score_pending_decisions(rotation_ledger, watchlist)
     data["rotation_hit_rate"] = postmortem.compute_hit_rate(rotation_ledger)
     data["rotation_recent_outcomes"] = postmortem.recent_outcomes(rotation_ledger)
+    data["watchlist_changes"] = postmortem.recent_changes(rotation_ledger)
     postmortem.save_ledger(rotation_ledger)
 
     # Sector-relative valuation: annotate stocks with peer-group P/E context
@@ -307,6 +315,17 @@ async def run_pipeline():
     from analysis.stock_topics import build_stock_topics
 
     data["stock_topics"] = build_stock_topics(data, watchlist)
+
+    # The same attribution kept as a full audit — merged and excluded items
+    # included — written per ticker so the browser pays for it only when a
+    # reader opens a drawer. The counts ride in the payload; the detail does
+    # not, which is what keeps dashboard_data.json a display copy.
+    from analysis.coverage import build_coverage, coverage_counts
+    from history.store import write_coverage_sidecars
+
+    coverage = build_coverage(data, watchlist)
+    data["coverage_count"] = coverage_counts(coverage)
+    write_coverage_sidecars(coverage)
 
     # Thesis health: does the accumulated evidence this cycle still support
     # each holding's catalyst, or has a kill criterion tripped?

@@ -87,3 +87,46 @@ class HistoryStore:
                 merged.append(event)
 
         return merged
+
+
+# Per-ticker news sidecars.
+#
+# The drawer needs the full audit — counted, merged and excluded items with
+# their reasons — which is roughly 111 records today and grows with the
+# watchlist. Putting that in dashboard_data.json would undo the payload/corpus
+# split: the browser downloads that file whole on every page load, and nobody
+# reads 111 audit rows on arrival. One file per ticker, fetched on first open.
+NEWS_DIR = "news"
+
+
+def write_coverage_sidecars(coverage: Dict[str, List[Dict[str, Any]]]) -> int:
+    """Write ``news/<TICKER>.json`` per holding. Returns files written.
+
+    Stale sidecars are removed rather than left behind: a holding rotated out
+    of the watchlist would otherwise keep serving its last coverage forever,
+    and a drawer showing month-old news as current is worse than an empty one.
+    """
+    from utils import atomic_write_json
+
+    written = 0
+    try:
+        os.makedirs(NEWS_DIR, exist_ok=True)
+        current = set()
+        for ticker, items in (coverage or {}).items():
+            safe = "".join(c for c in str(ticker).upper() if c.isalnum() or c in "-_")
+            if not safe:
+                continue
+            current.add(f"{safe}.json")
+            atomic_write_json(
+                {"ticker": safe, "items": items}, os.path.join(NEWS_DIR, f"{safe}.json")
+            )
+            written += 1
+
+        for stale in os.listdir(NEWS_DIR):
+            if stale.endswith(".json") and stale not in current:
+                os.remove(os.path.join(NEWS_DIR, stale))
+
+        log.info(f"Coverage sidecars: {written} written to {NEWS_DIR}/.")
+    except Exception as e:  # noqa: BLE001 - a sidecar must never break a run
+        log.warning(f"Coverage sidecar write failed safely: {e!r}")
+    return written

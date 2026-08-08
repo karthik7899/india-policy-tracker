@@ -9,8 +9,16 @@ of data the daily briefing already produces.
 
 from typing import Any, Dict, List
 
+from analysis import materiality
 from config import SECTOR_METADATA
+from analysis.pledging import (
+    NEAR_LOW_PCT as PLEDGE_NEAR_LOW_PCT,
+    NOTABLE_PCT as PLEDGE_NOTABLE_PCT,
+    RISING_PP as PLEDGE_RISING_PP,
+)
+from config_commodities import MATERIAL_MOVE_PCT, WINDOW_DAYS
 from config_scoring import SCORING_CONFIG, EARLY_WARNING_CONFIG
+from logger import log
 from utils import to_float
 
 # Lower rank sorts first.
@@ -28,29 +36,35 @@ def _build_policy_map(data: Dict[str, Any]) -> Dict[str, List[str]]:
     Mirrors the mapping built in ``dashboard/builder.py`` so the two views stay
     consistent.
     """
-    policy_map: Dict[str, List[str]] = {}
+    policy_map: Dict[str, List[Dict[str, str]]] = {}
 
-    def _add(name: str, label: str) -> None:
+    def _add(name: str, kind: str, title: str) -> None:
         if not name:
             return
-        policy_map.setdefault(name.upper(), []).append(label)
+        # Kind and title are kept apart. The reader wants them joined, but
+        # anything measuring the headline needs the bare title: the "Kind: "
+        # prefix introduces a colon that makes a two-company headline look
+        # like a single-company one to the attribution guards, and it is the
+        # event kind -- not the alert category -- that says whether a rupee
+        # figure belongs in the headline at all.
+        policy_map.setdefault(name.upper(), []).append(
+            {"kind": kind, "title": str(title or ""), "label": f"{kind}: {title}"}
+        )
 
     for ev in data.get("emerging_competitors", []):
         _add(
             ev.get("name", ev.get("company", "")),
-            f"PLI / scheme: {ev.get('scheme') or ev.get('announcement') or 'approval'}",
+            "PLI / scheme",
+            ev.get("scheme") or ev.get("announcement") or "approval",
         )
     for ev in data.get("corporate_agreements", []):
-        _add(ev.get("company", ""), f"Agreement: {ev.get('title', '')}")
+        _add(ev.get("company", ""), "Agreement", ev.get("title", ""))
     for ev in data.get("product_launches", []):
-        _add(
-            ev.get("company", ""),
-            f"Launch: {ev.get('product') or ev.get('title', '')}",
-        )
+        _add(ev.get("company", ""), "Launch", ev.get("product") or ev.get("title", ""))
     for ev in data.get("corporate_filings", []):
-        _add(ev.get("company", ""), f"Filing: {ev.get('filing', '')}")
+        _add(ev.get("company", ""), "Filing", ev.get("filing", ""))
     for ev in data.get("sebi_filings", []):
-        _add(ev.get("company", ""), f"SEBI: {ev.get('title', '')}")
+        _add(ev.get("company", ""), "SEBI", ev.get("title", ""))
 
     return policy_map
 
@@ -187,6 +201,27 @@ _RULE_BOOK = {
         "Low",
         "Headline classification",
     ),
+    # Priced inputs, not headlines about inputs — the confidence is Medium
+    # rather than Low because the move is read off a series, but the mapping
+    # from that move to this sector's margin is a coarse weight, not a cost
+    # sheet.
+    # A pledge is collateral, so the level alone is a standing condition. What
+    # makes it an alert is the level combined with a rising trend or a price
+    # near its 52-week low, where a margin call stops being hypothetical.
+    "Promoter Pledging": (
+        f"Promoter shares pledged above {PLEDGE_NOTABLE_PCT:.0f}%, escalating "
+        f"when the pledge is rising by {PLEDGE_RISING_PP:.1f}pp or the price "
+        f"is within {PLEDGE_NEAR_LOW_PCT:.0f}% of its 52-week low",
+        "High",
+        "Screener shareholding pattern",
+    ),
+    "Input Cost Shock": (
+        f"A mapped commodity or FX input moved at least "
+        f"{MATERIAL_MOVE_PCT:.0f}% over {WINDOW_DAYS} days, weighted by this "
+        f"sector's exposure and by whether it consumes or earns from the input",
+        "Medium",
+        "Commodity/FX price series",
+    ),
     "Supply Stress (Forward)": (
         "Repeated supply-side events touched this sector inside a 14-day "
         "window — a leading indicator, not a reported figure",
@@ -247,20 +282,30 @@ def _evaluate_stock(
     name = str(stock.get("name", "")).strip()
     alerts: List[Dict[str, Any]] = []
 
-    def emit(severity: str, direction: str, category: str, signal: str) -> None:
-        alerts.append(
-            annotate_rule(
-                {
-                    "ticker": ticker,
-                    "name": name,
-                    "sector": sector_label,
-                    "severity": severity,
-                    "direction": direction,
-                    "category": category,
-                    "signal": signal,
-                }
-            )
-        )
+    def emit(
+        severity: str,
+        direction: str,
+        category: str,
+        signal: str,
+        sources: List[Dict[str, str]] = None,
+    ) -> None:
+        alert = {
+            "ticker": ticker,
+            "name": name,
+            "sector": sector_label,
+            "severity": severity,
+            "direction": direction,
+            "category": category,
+            "signal": signal,
+        }
+        # Alerts built from headlines keep them separately. The signal joins
+        # them for reading; anything measuring an amount has to read them one
+        # at a time, because a figure in the third headline is not evidence
+        # about the first and the attribution guards cannot tell them apart
+        # once they are one string.
+        if sources:
+            alert["source_headlines"] = list(sources)
+        alerts.append(annotate_rule(alert))
 
     screener = stock.get("screener")
     if not isinstance(screener, dict):
@@ -447,11 +492,13 @@ def _evaluate_stock(
 
     catalysts = policy_map.get(name.upper(), []) + policy_map.get(ticker.upper(), [])
     if catalysts:
+        unique = list({c["label"]: c for c in catalysts}.values())
         emit(
             "Medium",
             "opportunity",
             "Policy Catalyst",
-            "Active policy tailwind — " + "; ".join(dict.fromkeys(catalysts)),
+            "Active policy tailwind — " + "; ".join(c["label"] for c in unique),
+            sources=unique,
         )
 
     if (
@@ -755,12 +802,29 @@ def generate_early_warnings(
 
     # Exchange-disclosed events: capital raises and bulk/block deals.
 
+    # Promoter pledging, and input costs where the sector shock is large
+    # enough to name. Both read data attached upstream, so both produce
+    # nothing rather than guessing when that data did not arrive.
+    from analysis.pledging import pledge_warnings
+
+    warnings.extend(pledge_warnings(watchlist))
+
+    shock = data.get("input_cost_shock")
+    if isinstance(shock, dict):
+        from analysis.input_cost import input_cost_warnings
+
+        warnings.extend(input_cost_warnings(shock))
+
     # Annotate everything here rather than at each source. Several alert
     # producers live in other modules (competitive_intel, event_engine) and
     # append directly, so per-site annotation would leave exactly those —
     # the headline-derived, least reliable ones — unlabelled.
     for alert in warnings:
         annotate_rule(alert)
+
+    # Size the order-type alerts before they are ranked, so an escalation
+    # actually changes where the alert lands in the sort below.
+    annotate_order_materiality(warnings, watchlist)
 
     warnings.sort(
         key=lambda a: (
@@ -769,4 +833,113 @@ def generate_early_warnings(
             a["ticker"],
         )
     )
+    return warnings
+
+
+# ---------------------------------------------------------------------------
+# Order-win materiality (Phase 4.1)
+# ---------------------------------------------------------------------------
+
+# An order is only newsworthy relative to the company that won it: the same
+# Rs 500 crore is a rounding error for one holding and a step change for
+# another. The materiality engine already computes that ratio for scoring;
+# this applies the same judgement to alert severity, so a genuinely large win
+# is not filed at the same level as a routine one.
+#
+# Escalation is one-way and gated at the material band. It never *lowers* a
+# severity: a small order alongside a real risk finding must not soften it.
+MATERIAL_ESCALATION_PCT = 5.0
+
+_ESCALATE = {"Low": "Medium", "Medium": "High", "High": "Critical"}
+
+
+def _largest_attributable(sources, fin):
+    """Biggest share-of-revenue among headlines that survive the guards.
+
+    Each headline is measured on its own, against its own event kind. Sizing
+    the joined signal instead would hand ``amount_is_attributable`` one string
+    built from several stories, where a guard that should reject the second
+    headline suppresses the first as well -- or, worse, fails to fire at all
+    and books a figure from one story against a company named only in another.
+    """
+    best = None
+    for src in sources:
+        if not isinstance(src, dict):
+            continue
+        title = src.get("title") or ""
+        if not title:
+            continue
+        verdict = materiality.assess(title, src.get("kind") or "", fin)
+        pct = verdict.get("pct_of_revenue")
+        if pct is None:
+            continue
+        if best is None or pct > best[0]:
+            best = (pct, verdict["band"], title)
+    return best
+
+
+def annotate_order_materiality(warnings, watchlist):
+    """Size headline-backed opportunity alerts against revenue, and escalate.
+
+    Never raises: an enrichment that can fail a run is worse than one that
+    occasionally adds nothing.
+    """
+    try:
+        from models.core import CompanyFinancials
+
+        fins = {}
+        for stocks in (watchlist or {}).values():
+            for s in stocks or []:
+                if not isinstance(s, dict) or not s.get("ticker"):
+                    continue
+                sc = s.get("screener")
+                if isinstance(sc, dict):
+                    try:
+                        fins[str(s["ticker"]).upper()] = CompanyFinancials(**sc)
+                    except Exception:
+                        continue
+
+        sized = escalated = 0
+        for w in warnings or []:
+            if not isinstance(w, dict):
+                continue
+            # Only alerts that carry their own headlines can be sized. Rule
+            # alerts state a computed condition in prose -- any number in one
+            # is a percentage point or a ratio, not an order value.
+            sources = w.get("source_headlines")
+            if not isinstance(sources, list) or not sources:
+                continue
+
+            fin = fins.get(str(w.get("ticker", "")).upper())
+            best = _largest_attributable(sources, fin)
+            if best is None:
+                continue
+
+            pct, band, headline = best
+            w["materiality_pct"] = pct
+            w["materiality_band"] = band
+            w["materiality_basis"] = headline
+            sized += 1
+
+            # Direction is a property of the finding, not of its size. A big
+            # number attached to a risk alert makes the risk larger, but this
+            # rule only knows how to read order-shaped upside, so it leaves
+            # risk severities to the rules that set them.
+            if pct >= MATERIAL_ESCALATION_PCT and w.get("direction") == "opportunity":
+                new_sev = _ESCALATE.get(w.get("severity"))
+                if new_sev:
+                    w["severity"] = new_sev
+                    w["signal"] = (
+                        f"{w.get('signal') or ''} "
+                        f"(sized at {pct:.1f}% of trailing revenue)"
+                    ).strip()
+                    escalated += 1
+
+        if sized:
+            log.info(
+                f"Order materiality: {sized} alert(s) sized against revenue, "
+                f"{escalated} escalated (>={MATERIAL_ESCALATION_PCT:.0f}%)."
+            )
+    except Exception as e:  # noqa: BLE001
+        log.warning(f"Order materiality annotation failed safely: {e!r}")
     return warnings
