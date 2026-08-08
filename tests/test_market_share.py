@@ -546,3 +546,105 @@ def test_fetch_skips_holdings_already_covered_by_a_fetched_table():
 
     assert fetched == ["A", "C"], "B shares A's industry and must be skipped"
     assert [t for t, _ in tables] == ["A", "C"]
+
+
+class TestPeersRetry:
+    """The 08 Aug run lost seven holdings' peer tables to a single 429.
+
+    fetch_peers_async issued one request and returned empty on any non-200,
+    while the company-page path retried the identical rate-limit response and
+    recovered on its first backoff. These requests run sequentially behind the
+    pacer, so the retry budget stays tighter than the company page's.
+    """
+
+    URL = "https://www.screener.in/api/company/1/peers/"
+
+    class _Response:
+        def __init__(self, status, text=""):
+            self.status = status
+            self._text = text
+
+        async def text(self):
+            return self._text
+
+        async def __aenter__(self):
+            return self
+
+        async def __aexit__(self, *exc):
+            return False
+
+    class _Session:
+        """Replays a queue of statuses, one per request."""
+
+        def __init__(self, statuses, body=""):
+            self.statuses = list(statuses)
+            self.body = body
+            self.calls = 0
+
+        def get(self, url, headers=None, timeout=None):
+            self.calls += 1
+            status = self.statuses.pop(0) if self.statuses else 200
+            return TestPeersRetry._Response(status, self.body)
+
+    @staticmethod
+    def _run(session, monkeypatch):
+        import asyncio
+
+        import providers.screener as sc
+
+        # The decorator backs off with asyncio.sleep between attempts; the
+        # behaviour under test is the retry, not the wait. Patched on the
+        # asyncio module the decorator imported, or the suite spends six real
+        # seconds proving a branch it already took.
+        async def _no_wait(_delay):
+            return None
+
+        monkeypatch.setattr(asyncio, "sleep", _no_wait)
+        return asyncio.run(sc.fetch_peers_async(session, "HAL", 1))
+
+    def test_a_rate_limit_is_retried_not_abandoned(self, monkeypatch):
+        import providers.screener as sc
+
+        body = "<table><thead><tr><th>Name</th></tr></thead><tbody></tbody></table>"
+        session = self._Session([429, 200], body)
+        monkeypatch.setattr(sc, "parse_peer_table", lambda _t: [{"ticker": "PEER"}])
+
+        ticker, rows = self._run(session, monkeypatch)
+
+        assert session.calls == 2, "the 429 should have been retried"
+        assert ticker == "HAL"
+        assert rows == [{"ticker": "PEER"}]
+
+    def test_it_gives_up_after_the_budget_and_degrades_to_empty(self, monkeypatch):
+        import providers.screener as sc
+
+        session = self._Session([429, 429, 429, 429, 429])
+        ticker, rows = self._run(session, monkeypatch)
+
+        assert rows == [], "enhancement data must never fail the run"
+        assert session.calls == sc._PEERS_MAX_RETRIES + 1
+
+    def test_the_budget_stays_tighter_than_the_company_pages(self, monkeypatch):
+        """These run sequentially behind the pacer, so every retry costs
+        wall-clock directly — which is what the original no-retry rule
+        protected."""
+        import providers.screener as sc
+
+        assert sc._PEERS_MAX_RETRIES < 3
+
+    def test_a_404_is_an_answer_and_is_not_retried(self, monkeypatch):
+        """This company has no peer table. Re-asking spends the budget on a
+        question already answered."""
+        session = self._Session([404, 200])
+        _ticker, rows = self._run(session, monkeypatch)
+
+        assert session.calls == 1
+        assert rows == []
+
+    def test_a_clean_response_makes_one_request(self, monkeypatch):
+        import providers.screener as sc
+
+        monkeypatch.setattr(sc, "parse_peer_table", lambda _t: [])
+        session = self._Session([200])
+        self._run(session, monkeypatch)
+        assert session.calls == 1

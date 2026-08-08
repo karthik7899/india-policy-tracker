@@ -3,7 +3,7 @@ import asyncio
 from bs4 import BeautifulSoup
 from logger import log
 from analysis.parsing import extract_row_values, calculate_trend, calculate_growth
-from utils import fetch_text_async
+from utils import TransientNetworkError, fetch_text_async, retry_network
 
 
 async def fetch_screener_async(session, ticker, sector, price):
@@ -292,6 +292,32 @@ def parse_peer_table(html):
     return candidates
 
 
+# Two attempts rather than the three the company pages get. These requests run
+# sequentially behind the shared pacer, so every retry adds wall-clock time
+# directly -- which is what the original "no retries" rule was protecting. The
+# 08 Aug run showed the cost of that rule: seven holdings (HAL, LT, ADANIPOWER,
+# TATACONSUM, CONCOR, MPHASIS, ZENTEC) lost their peer table to a 429 that the
+# company-page path shrugged off on its first retry. Screener's limit is
+# short-lived, so one backed-off retry recovers most of them for ~2-6s each
+# instead of dropping the industry silently.
+_PEERS_MAX_RETRIES = 2
+_PEERS_BASE_DELAY = 2.0
+
+
+@retry_network(max_retries=_PEERS_MAX_RETRIES, base_delay=_PEERS_BASE_DELAY)
+async def _fetch_peers_once(session, url, headers):
+    """One peers request. Raises TransientNetworkError so the decorator retries.
+
+    Only the transient statuses raise. A 404 is a real answer -- this company
+    has no peer table -- and retrying it would spend the budget re-asking a
+    question already answered.
+    """
+    async with session.get(url, headers=headers, timeout=10) as response:
+        if response.status in (408, 429, 500, 502, 503, 504):
+            raise TransientNetworkError(f"HTTP {response.status} for {url}")
+        return response.status, await response.text()
+
+
 async def fetch_peers_async(session, ticker, warehouse_id):
     """Fetches Screener's peer-comparison table for one company.
 
@@ -300,22 +326,22 @@ async def fetch_peers_async(session, ticker, warehouse_id):
     row arrives with quarterly sales variation attached, so candidates can be
     growth-screened immediately.
 
-    Enhancement data only, so it fails fast: a single attempt with a short
-    timeout and no retries — a retry storm here must never slow the briefing.
-    Degrades to an empty list on any failure.
+    Enhancement data, so it still degrades to an empty list on any failure --
+    it just no longer gives up on the first rate-limit response.
     """
     url = f"https://www.screener.in/api/company/{warehouse_id}/peers/"
     headers = {"X-Requested-With": "XMLHttpRequest"}
     try:
-        async with session.get(url, headers=headers, timeout=10) as response:
-            if response.status != 200:
-                log.warning(f"{ticker}: Screener peers API returned {response.status}")
-                return ticker, []
-            text = await response.text()
-        return ticker, parse_peer_table(text)
+        status, text = await _fetch_peers_once(session, url, headers)
     except Exception as e:
-        log.warning(f"{ticker}: Screener peers fetch failed: {e!r}")
+        # Includes a transient status that survived every retry. Logged as the
+        # data loss it is: this holding's industry goes unscanned this run.
+        log.warning(f"{ticker}: Screener peers fetch failed after retries: {e!r}")
         return ticker, []
+    if status != 200:
+        log.warning(f"{ticker}: Screener peers API returned {status}")
+        return ticker, []
+    return ticker, parse_peer_table(text)
 
 
 # Screener.in's limiter is rate-based, not concurrency-based: a live run at
