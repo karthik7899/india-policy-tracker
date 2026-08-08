@@ -2,7 +2,51 @@
   "ticker": "SCHNEIDER",
   "items": [
     {
-      "date": "2026-08-06",
+      "date": "Wed, 01 Jul 2026 12:00:00 GMT",
+      "headline": "Schneider Electric’s Planned Acquisition of Cognite Reinforces the Data Foundation for Industrial AI",
+      "source_url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxQdElGQS1DcDI4LVJpa0xycDFtdFJTa25NUmJPVDIzLWZDd1BvVlNYNUZMektBdjU0SFpOc2VkNUdrY0tyMi0xVkF4WmRaWDZYZkFNbkhQWnpzLWNhTHFNcUpVTjg0Q3NpZEMtVGpyelhnWTVUdHZ4MEZqR0kyU1NhdmVnazV6R1htRlNsMjYyZEMtZDRtdWlGNmJrbzB2STd0OWoydXdRY3pUeEN6V0lCeldlNF84MWc?oc=5",
+      "source_label": "ARC Advisory Group",
+      "event_tags": [
+        "Agreement"
+      ],
+      "confidence": "M",
+      "status": "counted"
+    },
+    {
+      "date": "Thu, 02 Jul 2026 14:35:56 GMT",
+      "headline": "Schneider Electric’s solutions to turn problems into competitive advantages",
+      "source_url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxOQWdBazFmZGt4WDVvMGNTbTdwVUNfbDZISHhKYS02NmkzVS1HczRqU29xa2EtS1BYZFhDeGdibWt0LTRTZjc1UnJIT3hLWHZhMjk3OUFBN2YwN05QblRyZHd4NHlLbnVlNnMtOUptR19GeWU5QUlUbkk4NDlmdHJEQWJxYWFOUmFnbTVKUG1NaDIxYnFFYUgw?oc=5",
+      "source_label": "Engineer Live",
+      "event_tags": [
+        "Agreement"
+      ],
+      "confidence": "M",
+      "status": "counted"
+    },
+    {
+      "date": "Wed, 01 Jul 2026 13:25:59 GMT",
+      "headline": "Schneider Electric Announces Intention To Acquire Cognite",
+      "source_url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxQclN4YTB4UHMtc0V1VEpnOHFiS0xWVVI2UFhmTFNBejdnM2h4VUsyQk5WVFpNV0RTNkJ1NUhjMzlIcU5XWmdweXNJc3V0bFRWcjR4VFlkOTg5QW8tM3JCMnZYSVdnWGU1b25nd0kxTHQ1M2s4YjJBSXFEX2FZYkttNloxY3RZbGhBUjJ5Z1NrYzFxdDdw?oc=5",
+      "source_label": "Forrester",
+      "event_tags": [
+        "Agreement"
+      ],
+      "confidence": "M",
+      "status": "counted"
+    },
+    {
+      "date": "Wed, 01 Jul 2026 11:47:45 GMT",
+      "headline": "Schneider Electric Unveils Ultra-Compact Lexium SCARA High-Speed Robot to Boost Manufacturing Productivity",
+      "source_url": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxPb3ZIOHJSZzgyc2RMa2dkdXlwWjV0M2RhV3B5dFZDR3A5Y2dVTDdIY3VkV25DelhpTWRmTkpTRHY2Z0JuNkJOSnJxcUNrcHNXMTJFR0FHSUJIUG9raGdiRXhHSXdRQmRNMVFsR09GZk9YbG50aGRCZ0hvNEtZamJKYTNzSVZvV0E1V0VCS2pvN0lJNk1nSFNhWDZDSHVOVjRIQnRxQUVZZU1uMWJhUHFVSEx4UXZleDBUZ2lNMmlSRDRucDJncjluejd4RmVfUHRR?oc=5",
+      "source_label": "Machine Maker",
+      "event_tags": [
+        "Launch"
+      ],
+      "confidence": "M",
+      "status": "counted"
+    },
+    {
+      "date": "2026-08-08",
       "headline": "Schneider Electric’s Planned Acquisition of Cognite Reinforces the Data Foundation for Industrial AI",
       "source_url": "",
       "source_label": "",
@@ -11,10 +55,11 @@
         "Event"
       ],
       "confidence": "H",
-      "status": "counted"
+      "status": "merged",
+      "exclusion_reason": "merged: duplicate phrasing of “Schneider Electric’s Planned Acquisition of Cognite Reinforc”"
     },
     {
-      "date": "2026-08-06",
+      "date": "2026-08-08",
       "headline": "Schneider Electric Announces Intention To Acquire Cognite",
       "source_url": "",
       "source_label": "",
@@ -23,7 +68,8 @@
         "Event"
       ],
       "confidence": "H",
-      "status": "counted"
+      "status": "merged",
+      "exclusion_reason": "merged: duplicate phrasing of “Schneider Electric Announces Intention To Acquire Cognite”"
     }
   ]
 }
