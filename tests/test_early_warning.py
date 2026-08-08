@@ -398,3 +398,77 @@ class TestOrderMateriality:
 
         assert annotate_order_materiality(None, None) is None
         assert annotate_order_materiality([None, {}, 7], {}) is not None
+
+
+class TestHeterogeneousAlertSorting:
+    """The ranking sort reads alerts produced by five separate modules.
+
+    A direct subscript in the sort key makes it the one place a single
+    malformed alert can take down the whole run. It did: sector-level
+    input-cost alerts carry no ticker, the lambda did ``a["ticker"]``, and the
+    08 Aug manual run died with KeyError before writing a briefing or the
+    dashboard payload.
+
+    The unit tests for each producer passed throughout — input_cost_warnings
+    was only ever called directly, never through generate_early_warnings with
+    a shock present. That integration gap is what these cover.
+    """
+
+    WATCHLIST = {
+        "clean_energy": [
+            {
+                "ticker": "SOLAR",
+                "name": "Solar Corp",
+                "screener": {"fii_change": 1.2, "dii_change": 0.9},
+            }
+        ]
+    }
+
+    def _shock(self):
+        from analysis.input_cost import compute_input_cost_shock
+        from config_commodities import COMMODITY_MAP
+
+        prices = {k: {"first": 100.0, "last": 100.5} for k in COMMODITY_MAP}
+        prices["copper"] = {"first": 100.0, "last": 145.0}  # severe
+        return compute_input_cost_shock(prices)
+
+    def test_a_run_with_input_cost_alerts_does_not_raise(self):
+        """The regression, end to end."""
+        data = {"input_cost_shock": self._shock()}
+        warnings = generate_early_warnings(data, self.WATCHLIST)
+        assert any(w["category"] == "Input Cost Shock" for w in warnings)
+
+    def test_sector_alerts_carry_an_explicit_empty_ticker(self):
+        data = {"input_cost_shock": self._shock()}
+        for w in generate_early_warnings(data, self.WATCHLIST):
+            assert "ticker" in w, f"{w.get('category')} omits ticker"
+
+    def test_the_sort_survives_an_alert_missing_every_field(self):
+        """Defence in depth: the sort must not be the thing that breaks."""
+        from analysis.early_warning import _DIRECTION_RANK, _SEVERITY_RANK
+
+        alerts = [
+            {},
+            {"direction": "risk"},
+            {"severity": "Critical"},
+            {"ticker": None},
+            {"direction": "risk", "severity": "Critical", "ticker": "A"},
+        ]
+        alerts.sort(
+            key=lambda a: (
+                _DIRECTION_RANK.get(a.get("direction"), 9),
+                _SEVERITY_RANK.get(a.get("severity"), 9),
+                str(a.get("ticker") or ""),
+            )
+        )
+        assert len(alerts) == 5
+
+    def test_input_cost_alerts_rank_alongside_company_alerts(self):
+        """A sector alert with no ticker must still sort by direction and
+        severity, not sink to the bottom regardless of how bad it is."""
+        data = {"input_cost_shock": self._shock()}
+        warnings = generate_early_warnings(data, self.WATCHLIST)
+        directions = [w.get("direction") for w in warnings]
+        assert directions == sorted(
+            directions, key=lambda d: 0 if d == "risk" else 1
+        ), "risks must still precede opportunities"

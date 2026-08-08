@@ -221,6 +221,14 @@ def input_cost_warnings(shock: Dict[str, Any]) -> list:
             top = (row.get("drivers") or [{}])[0]
             alerts.append(
                 {
+                    # A commodity move is a property of the sector, not of any
+                    # one holding in it, so there is no ticker to name. Carried
+                    # as an explicit empty string rather than omitted: every
+                    # other alert producer sets this key, and consumers -- the
+                    # ranking sort, the email cards, the coverage badge -- all
+                    # read it positionally.
+                    "ticker": "",
+                    "name": "",
                     "sector": sector,
                     "severity": "High" if row.get("band") == "severe" else "Medium",
                     "direction": "risk" if pressure else "opportunity",
