@@ -2331,3 +2331,74 @@ a:focus-visible {
 @media (max-width: 900px) {
     .sector-block-grid { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* --- Completeness meter, breadcrumb, sector heatmap ---------------------- */
+
+/* The percentage alone reads the same at 62% and 96%. The bar makes the
+   shortfall visible without comparing against a remembered figure. */
+.rs-meter {
+    display: inline-block;
+    width: 54px;
+    height: 5px;
+    margin-left: 6px;
+    border-radius: 999px;
+    background: var(--border-subtle, rgba(148, 163, 184, 0.25));
+    overflow: hidden;
+    vertical-align: middle;
+}
+.rs-meter-fill { display: block; height: 100%; width: 0; border-radius: 999px; transition: width 0.3s ease; }
+.rs-ok-bg { background: var(--success); }
+.rs-warn-bg { background: var(--danger); }
+
+.breadcrumb-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin: 10px 0 0 0;
+    font-size: 11px;
+    color: var(--text-muted);
+}
+.crumb { color: var(--text-secondary); }
+.crumb-current { color: var(--text-primary); font-weight: 600; }
+.crumb-sep { color: var(--text-muted); opacity: 0.6; }
+.crumb-link {
+    font: inherit;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--primary);
+    cursor: pointer;
+}
+.crumb-link:hover { text-decoration: underline; }
+
+/* One hue throughout: the eye reads intensity as magnitude without a legend,
+   and a two-colour scale would imply a good/bad axis that severity-weighted
+   change does not have. */
+.heat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 8px;
+}
+.heat-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 10px 12px;
+    border: 1px solid var(--border-subtle, rgba(148, 163, 184, 0.22));
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: left;
+    font: inherit;
+    color: var(--text-primary);
+    transition: transform 0.12s ease, border-color 0.12s ease;
+}
+.heat-cell:hover { transform: translateY(-1px); border-color: var(--primary); }
+.heat-cell:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.heat-label { font-size: 11px; font-weight: 600; line-height: 1.25; }
+.heat-value { font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+@media (max-width: 640px) {
+    .heat-grid { grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)); }
+    .rs-meter { width: 40px; }
+}
