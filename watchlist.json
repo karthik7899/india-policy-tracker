@@ -3,9 +3,9 @@
     {
       "ticker": "HAL",
       "name": "Hindustan Aeronautics",
-      "price": "4893.50",
+      "price": "4972.40",
       "target": "5300.00",
-      "growth_pct": "+8.3%",
+      "growth_pct": "+6.6%",
       "catalyst": "State aerospace major, expanding local fighter jet assembly and benefiting from custom duty exemptions.",
       "rating": "Buy",
       "revenue_growth": "+1.8%",
@@ -16,65 +16,65 @@
       "target_low": "3200.00",
       "rec_score": 1.8,
       "screener": {
-        "market_cap": 326964.0,
-        "current_price": 4889.0,
-        "pe_ratio": 35.9,
-        "dividend_yield": 0.92,
+        "market_cap": 332398.0,
+        "current_price": 4970.0,
+        "pe_ratio": 35.7,
+        "dividend_yield": 0.91,
         "roce": 32.0,
         "roe": 24.0,
-        "q_sales": 13942.0,
-        "qoq_sales_growth": 81.09,
+        "q_sales": 5515.0,
+        "qoq_sales_growth": -60.44,
         "quarterly_revenue_growth": [
-          4819.0,
           6629.0,
           7699.0,
-          13942.0
+          13942.0,
+          5515.0
         ],
         "sales_trend": [
-          4348.0,
           5976.0,
           6957.0,
           13700.0,
           4819.0,
           6629.0,
           7699.0,
-          13942.0
+          13942.0,
+          5515.0
         ],
-        "q_opm": 36.0,
+        "q_opm": 28.0,
         "quarterly_ebitda_margin": [
-          27.0,
           24.0,
           24.0,
-          36.0
+          36.0,
+          28.0
         ],
-        "opm_expansion": 12.0,
-        "q_eps": 62.74,
+        "opm_expansion": -8.0,
+        "q_eps": 23.77,
         "eps_trend": [
-          21.49,
           22.59,
           21.53,
           59.46,
           20.69,
           24.96,
           27.91,
-          62.74
+          62.74,
+          23.77
         ],
-        "ttm_eps": 136.3,
-        "q_net_profit": 4196.0,
+        "ttm_eps": 139.38,
+        "q_net_profit": 1590.0,
         "operating_margin_trend": [
-          22.0,
           25.0,
           32.0,
           31.0,
+          30.0,
           30.0
         ],
         "annual_sales_trend": [
-          22755.0,
           24620.0,
           26927.0,
           30381.0,
           30981.0,
-          33089.0
+          33089.0,
+          33785.0
         ],
         "debt_trend": [
           49.0,
@@ -90,7 +90,7 @@
           13643.0,
           10906.0
         ],
-        "capex": 2788.4,
+        "capex": 1103.0,
         "rd_pct": 6.2,
         "roce_trend": [
           30.0,
@@ -107,71 +107,73 @@
         "dii_change": 1.47,
         "isin": "INE066F01020",
         "week52_low": 3588.6,
-        "week52_high": 4910.0,
-        "pct_above_low": 36.36,
-        "advt_cr": 370.65,
+        "week52_high": 4972.3,
+        "pct_above_low": 38.56,
+        "advt_cr": 423.85,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.1,
-        "industry_share_pct": 62.75,
-        "industry_peer_count": 7,
-        "industry_share_change_pp": 0.71,
-        "peer_share_pct": 70.9,
-        "peer_share_change_pp": -3.81,
+        "industry_share_pct": 38.88,
+        "industry_peer_count": 8,
+        "industry_share_change_pp": -23.87,
+        "peer_share_pct": 49.1,
+        "peer_share_change_pp": -1.88,
         "peer_share_lookback": 4,
         "peer_group_size": 3,
-        "revenue_yoy_pct": 1.8,
-        "revenue_ttm_growth_pct": 6.8,
-        "revenue_cagr_pct": 7.8,
+        "revenue_yoy_pct": 14.4,
+        "revenue_ttm_growth_pct": 7.4,
+        "revenue_cagr_pct": 6.5,
         "revenue_growth_quality": "ok",
-        "graham_intrinsic_value": 1894.1,
-        "owner_earnings": 14000.9,
+        "graham_intrinsic_value": 2044.4,
+        "owner_earnings": 5262.3,
         "retained_earnings_ratio": 2.86,
         "moat_status": "Strong (Wide Moat)",
         "is_bargain": false,
         "net_current_assets": null,
-        "hyper_growth_warning": false,
+        "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 35.9 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 35.7 > 15 & Price > Intrinsic)",
+          "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 47.9,
-        "pe_vs_peers": "25% below peers"
+        "industry_pe": 48.2,
+        "pe_vs_peers": "26% below peers"
       },
       "score": {
-        "overall_score": 11,
-        "fundamental_score": 3,
+        "overall_score": 7,
+        "fundamental_score": -1,
         "momentum_score": 8,
         "confidence": "High",
         "reasons": [
           "Capacity/Product Launch: Tata Group’s AI Mission: Unveils Tata’s AI Data Centre & Chip Strategy, Partners OpenAI & AMD Roue (dw8byGgWDD)",
           "Capacity/Product Launch: 'Sanctions still in place...': Iran's top negotiator Ghalibaf unveils new Hormuz transit strategy",
           "Policy Notification: BEL, HAL, Bharat Dynamics: Defence stocks rally as DAC clears ₹52,000 crore defence acquisition proposals",
-          "Operating Margin Expansion (+12.0%)",
           "High Return on Capital (ROCE: 32.0%)",
           "High Return on Equity (ROE: 24.0%)",
-          "Liquid (Rs 371 Cr traded daily)",
+          "Liquid (Rs 424 Cr traded daily)",
           "DII Accumulation (+1.47%)",
           "Wide Economic Moat (Sustained Margin Expansion)"
         ],
         "risks": [
+          "Operating margin contracted (-8.0pp)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 35.9 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 35.7 > 15 & Price > Intrinsic)",
+          "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
-          "Buy Candidate"
+          "Hold / Monitor"
         ]
       },
       "estimate_method": "Analyst Consensus",
-      "fundamental_value": 1894.1
+      "fundamental_value": 2044.4
     },
     {
       "ticker": "BEL",
       "name": "Bharat Electronics",
-      "price": "402.30",
+      "price": "404.95",
       "target": "500.00",
-      "growth_pct": "+24.3%",
+      "growth_pct": "+23.5%",
       "catalyst": "Defence electronics leader, securing major naval and surveillance command radar orders.",
       "rating": "Strong Buy",
       "revenue_growth": "+24.9%",
@@ -182,9 +184,9 @@
       "target_low": "346.00",
       "rec_score": 1.5,
       "screener": {
-        "market_cap": 294219.0,
-        "current_price": 402.0,
-        "pe_ratio": 47.9,
+        "market_cap": 296521.0,
+        "current_price": 406.0,
+        "pe_ratio": 48.2,
         "dividend_yield": 0.62,
         "roce": 36.4,
         "roe": 27.4,
@@ -272,19 +274,19 @@
         "dii_pct": 21.02,
         "dii_change": 1.02,
         "isin": "INE263A01024",
-        "week52_low": 367.83,
-        "week52_high": 468.45,
-        "pct_above_low": 9.37,
-        "advt_cr": 451.46,
+        "week52_low": 367.34,
+        "week52_high": 467.81,
+        "pct_above_low": 10.24,
+        "advt_cr": 455.28,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.1,
-        "industry_share_pct": 24.97,
-        "industry_peer_count": 7,
-        "industry_share_change_pp": 0.29,
-        "peer_share_pct": 28.2,
-        "peer_share_change_pp": 4.0,
+        "industry_share_pct": 39.1,
+        "industry_peer_count": 8,
+        "industry_share_change_pp": 14.13,
+        "peer_share_pct": 49.4,
+        "peer_share_change_pp": 2.42,
         "peer_share_lookback": 4,
         "peer_group_size": 3,
         "revenue_yoy_pct": 24.9,
@@ -300,10 +302,10 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 47.9 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 48.2 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 47.9,
+        "industry_pe": 48.2,
         "pe_vs_peers": "In line with peers"
       },
       "score": {
@@ -318,7 +320,7 @@
           "Strong revenue growth (TTM +19.8%)",
           "High Return on Capital (ROCE: 36.4%)",
           "High Return on Equity (ROE: 27.4%)",
-          "Liquid (Rs 451 Cr traded daily)",
+          "Liquid (Rs 455 Cr traded daily)",
           "DII Accumulation (+1.02%)",
           "Wide Economic Moat (Sustained Margin Expansion)"
         ],
@@ -326,7 +328,7 @@
           "Operating margin contracted (-4.0pp)",
           "FII Selling (-1.49%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 47.9 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 48.2 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -339,9 +341,9 @@
     {
       "ticker": "ASTRAMICRO",
       "name": "Astra Microwave",
-      "price": "1719.60",
+      "price": "1679.80",
       "target": "1600.00",
-      "growth_pct": "-7.0%",
+      "growth_pct": "-4.8%",
       "catalyst": "High-end microwave sub-systems maker, critical supplier of radars and satellite payloads.",
       "rating": "Buy",
       "revenue_growth": "+19.7%",
@@ -352,10 +354,10 @@
       "target_low": "1068.00",
       "rec_score": 1.6,
       "screener": {
-        "market_cap": 16264.0,
-        "current_price": 1713.0,
-        "pe_ratio": 86.1,
-        "dividend_yield": 0.13,
+        "market_cap": 16006.0,
+        "current_price": 1686.0,
+        "pe_ratio": 84.7,
+        "dividend_yield": 0.14,
         "roce": 20.2,
         "roe": 16.0,
         "q_sales": 177.0,
@@ -444,17 +446,17 @@
         "isin": "INE386C01029",
         "week52_low": 879.2,
         "week52_high": 1861.6,
-        "pct_above_low": 95.52,
-        "advt_cr": 105.6,
+        "pct_above_low": 91.05,
+        "advt_cr": 104.42,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.2,
-        "industry_share_pct": 0.8,
-        "industry_peer_count": 7,
-        "industry_share_change_pp": 0.01,
-        "peer_share_pct": 0.9,
-        "peer_share_change_pp": -0.19,
+        "industry_share_pct": 1.25,
+        "industry_peer_count": 8,
+        "industry_share_change_pp": 0.45,
+        "peer_share_pct": 1.6,
+        "peer_share_change_pp": -0.54,
         "peer_share_lookback": 4,
         "peer_group_size": 3,
         "revenue_yoy_pct": -11.5,
@@ -470,11 +472,11 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 86.1 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 84.7 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 47.9,
-        "pe_vs_peers": "80% above peers"
+        "industry_pe": 48.2,
+        "pe_vs_peers": "76% above peers"
       },
       "score": {
         "overall_score": 2,
@@ -485,7 +487,7 @@
           "Sector benefits from macro policy tailwinds (Fallback)",
           "High Return on Capital (ROCE: 20.2%)",
           "High Return on Equity (ROE: 16.0%)",
-          "Liquid (Rs 106 Cr traded daily)",
+          "Liquid (Rs 104 Cr traded daily)",
           "FII Accumulation (+3.18%)",
           "DII Accumulation (+0.67%)",
           "Wide Economic Moat (Sustained Margin Expansion)"
@@ -493,7 +495,7 @@
         "risks": [
           "Operating margin contracted (-14.0pp)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 86.1 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 84.7 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -510,10 +512,10 @@
       "name": "HDFC Bank",
       "catalyst": "Largest private lender; post-merger deposit repricing and a direct read on retail credit demand.",
       "screener": {
-        "market_cap": 1119800.0,
-        "current_price": 727.0,
+        "market_cap": 1123499.0,
+        "current_price": 729.0,
         "pe_ratio": 14.2,
-        "dividend_yield": 1.79,
+        "dividend_yield": 1.78,
         "roce": 7.02,
         "roe": 13.6,
         "q_eps": 12.5,
@@ -545,12 +547,12 @@
         "dii_pct": 41.75,
         "dii_change": 1.61,
         "isin": "INE040A01034",
-        "week52_low": 726.25,
+        "week52_low": 728.15,
         "week52_high": 991.21,
         "pct_above_low": 0.0,
-        "advt_cr": 2162.27,
+        "advt_cr": 2148.51,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.0,
         "industry_share_pct": 40.54,
@@ -567,7 +569,7 @@
         "industry_pe": 14.2,
         "pe_vs_peers": "In line with peers"
       },
-      "price": "726.30",
+      "price": "728.20",
       "rating": "Strong Buy",
       "revenue_growth": "+16.6%",
       "earnings_growth": "+18.1%",
@@ -577,7 +579,7 @@
       "target_low": "896.00",
       "target": "997.00",
       "rec_score": 1.2,
-      "growth_pct": "+37.3%",
+      "growth_pct": "+36.9%",
       "score": {
         "overall_score": 1,
         "fundamental_score": 0,
@@ -585,7 +587,7 @@
         "confidence": "Medium",
         "reasons": [
           "Sector benefits from macro policy tailwinds (Fallback)",
-          "Liquid (Rs 2162 Cr traded daily)",
+          "Liquid (Rs 2149 Cr traded daily)",
           "DII Accumulation (+1.61%)"
         ],
         "risks": [
@@ -603,9 +605,9 @@
       "name": "ICICI Bank",
       "catalyst": "Retail-led credit growth with sector-leading asset quality and digital lending scale.",
       "screener": {
-        "market_cap": 1025967.0,
-        "current_price": 1430.0,
-        "pe_ratio": 18.3,
+        "market_cap": 1016573.0,
+        "current_price": 1417.0,
+        "pe_ratio": 18.1,
         "dividend_yield": 0.84,
         "roce": 7.18,
         "roe": 15.9,
@@ -638,10 +640,10 @@
         "isin": "INE090A01021",
         "week52_low": 1205.64,
         "week52_high": 1432.23,
-        "pct_above_low": 18.66,
-        "advt_cr": 1733.25,
+        "pct_above_low": 17.51,
+        "advt_cr": 1710.11,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.0,
         "industry_share_pct": 23.38,
@@ -655,12 +657,12 @@
         "net_current_assets": null,
         "hyper_growth_warning": false,
         "valuation_alerts": [
-          "Fails P/E Screen (P/E 18.3 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 18.1 > 15 & Price > Intrinsic)"
         ],
         "industry_pe": 14.2,
-        "pe_vs_peers": "29% above peers"
+        "pe_vs_peers": "27% above peers"
       },
-      "price": "1430.00",
+      "price": "1416.80",
       "rating": "Strong Buy",
       "revenue_growth": "+11.4%",
       "earnings_growth": "+13.8%",
@@ -670,7 +672,7 @@
       "target_low": "1592.00",
       "target": "1730.00",
       "rec_score": 1.1,
-      "growth_pct": "+21.0%",
+      "growth_pct": "+22.1%",
       "score": {
         "overall_score": 2,
         "fundamental_score": 1,
@@ -679,12 +681,12 @@
         "reasons": [
           "Sector benefits from macro policy tailwinds (Fallback)",
           "High Return on Equity (ROE: 15.9%)",
-          "Liquid (Rs 1733 Cr traded daily)",
+          "Liquid (Rs 1710 Cr traded daily)",
           "DII Accumulation (+2.38%)",
           "Narrow Economic Moat"
         ],
         "risks": [
-          "Fails P/E Screen (P/E 18.3 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 18.1 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Avoid / High Risk"
@@ -698,10 +700,10 @@
       "name": "State Bank of India",
       "catalyst": "Primary financing channel for government infrastructure and PLI-linked capex lending.",
       "screener": {
-        "market_cap": 998337.0,
+        "market_cap": 998753.0,
         "current_price": 1082.0,
         "pe_ratio": 11.9,
-        "dividend_yield": 1.63,
+        "dividend_yield": 1.61,
         "roce": 6.13,
         "roe": 15.4,
         "q_eps": 26.12,
@@ -735,15 +737,15 @@
         "isin": "INE062A01020",
         "week52_low": 788.29,
         "week52_high": 1194.57,
-        "pct_above_low": 37.18,
-        "advt_cr": 1139.73,
+        "pct_above_low": 37.5,
+        "advt_cr": 1163.22,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.0,
-        "industry_share_pct": 46.63,
+        "industry_share_pct": 44.89,
         "industry_peer_count": 7,
-        "industry_share_change_pp": 0.0,
+        "industry_share_change_pp": -1.74,
         "graham_intrinsic_value": 1203.4,
         "owner_earnings": 100484.0,
         "retained_earnings_ratio": 2.86,
@@ -755,7 +757,7 @@
         "industry_pe": 14.2,
         "pe_vs_peers": "16% below peers"
       },
-      "price": "1081.80",
+      "price": "1083.90",
       "rating": "Strong Buy",
       "revenue_growth": "+10.3%",
       "earnings_growth": "+9.9%",
@@ -765,7 +767,7 @@
       "target_low": "1070.00",
       "target": "1270.00",
       "rec_score": 1.4,
-      "growth_pct": "+17.4%",
+      "growth_pct": "+17.2%",
       "score": {
         "overall_score": 6,
         "fundamental_score": 5,
@@ -774,7 +776,7 @@
         "reasons": [
           "Sector benefits from macro policy tailwinds (Fallback)",
           "High Return on Equity (ROE: 15.4%)",
-          "Liquid (Rs 1140 Cr traded daily)",
+          "Liquid (Rs 1163 Cr traded daily)",
           "DII Accumulation (+0.41%)",
           "Narrow Economic Moat",
           "Trading below Graham Intrinsic Value (1203.4)"
@@ -792,9 +794,9 @@
     {
       "ticker": "LT",
       "name": "Larsen & Toubro (L&T)",
-      "price": "4005.60",
+      "price": "3996.20",
       "target": "4539.50",
-      "growth_pct": "+13.3%",
+      "growth_pct": "+13.6%",
       "catalyst": "Heavy infrastructure leader, direct beneficiary of the government's ₹11.11 Lakh Cr CAPEX budget.",
       "rating": "Buy",
       "revenue_growth": "+8.1%",
@@ -805,10 +807,10 @@
       "target_low": "3550.00",
       "rec_score": 1.7,
       "screener": {
-        "market_cap": 550959.0,
-        "current_price": 4004.0,
-        "pe_ratio": 31.3,
-        "dividend_yield": 0.94,
+        "market_cap": 552286.0,
+        "current_price": 4014.0,
+        "pe_ratio": 31.4,
+        "dividend_yield": 0.95,
         "roce": 14.6,
         "roe": 15.9,
         "q_sales": 67942.0,
@@ -895,17 +897,17 @@
         "isin": "INE018A01030",
         "week52_low": 3401.58,
         "week52_high": 4338.23,
-        "pct_above_low": 17.77,
-        "advt_cr": 690.24,
+        "pct_above_low": 17.5,
+        "advt_cr": 698.06,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.0,
         "industry_share_pct": 78.75,
         "industry_peer_count": 7,
-        "industry_share_change_pp": 5.15,
-        "peer_share_pct": 10.0,
-        "peer_share_change_pp": -2.2,
+        "industry_share_change_pp": 0.0,
+        "peer_share_pct": 8.5,
+        "peer_share_change_pp": -1.82,
         "peer_share_lookback": 4,
         "peer_group_size": 5,
         "revenue_yoy_pct": 6.7,
@@ -921,11 +923,11 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 31.3 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 31.4 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 21.7,
-        "pe_vs_peers": "44% above peers"
+        "industry_pe": 21.3,
+        "pe_vs_peers": "47% above peers"
       },
       "score": {
         "overall_score": 6,
@@ -937,13 +939,13 @@
           "Capacity/Product Launch: LBank Unveils Q2 2026 Report, Featuring 25 Million Users and Advances in Prediction Markets and Cultural IP",
           "Capacity/Product Launch: Stim Machine: France unveils a more powerful and cheaper alternative to Valve's Steam Machine",
           "High Return on Equity (ROE: 15.9%)",
-          "Liquid (Rs 690 Cr traded daily)",
+          "Liquid (Rs 698 Cr traded daily)",
           "FII Accumulation (+0.35%)",
           "Narrow Economic Moat"
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 31.3 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 31.4 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -956,9 +958,9 @@
     {
       "ticker": "RELIANCE",
       "name": "Reliance Industries",
-      "price": "1315.30",
+      "price": "1313.80",
       "target": "1692.50",
-      "growth_pct": "+28.7%",
+      "growth_pct": "+28.8%",
       "catalyst": "Consolidating 5G market share, scaling retail stores, and commissioning green energy gigafactories.",
       "rating": "Strong Buy",
       "revenue_growth": "+29.7%",
@@ -969,8 +971,8 @@
       "target_low": "1360.00",
       "rec_score": 1.3,
       "screener": {
-        "market_cap": 1782370.0,
-        "current_price": 1317.0,
+        "market_cap": 1776281.0,
+        "current_price": 1313.0,
         "pe_ratio": 23.8,
         "dividend_yield": 0.45,
         "roce": 10.3,
@@ -1061,17 +1063,17 @@
         "isin": "INE002A01018",
         "week52_low": 1278.0,
         "week52_high": 1584.97,
-        "pct_above_low": 2.92,
-        "advt_cr": 1505.51,
+        "pct_above_low": 2.8,
+        "advt_cr": 1487.04,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.0,
         "industry_share_pct": 33.15,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
-        "peer_share_pct": 45.7,
-        "peer_share_change_pp": -1.12,
+        "peer_share_pct": 38.6,
+        "peer_share_change_pp": -0.79,
         "peer_share_lookback": 4,
         "peer_group_size": 5,
         "revenue_yoy_pct": 27.0,
@@ -1088,8 +1090,8 @@
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)"
         ],
-        "industry_pe": 21.7,
-        "pe_vs_peers": "In line with peers"
+        "industry_pe": 21.3,
+        "pe_vs_peers": "12% above peers"
       },
       "score": {
         "overall_score": 9,
@@ -1101,7 +1103,7 @@
           "Capacity/Product Launch: Reliance Unveils Comprehensive Clean Energy Strategy Amid India’s Energy 'Supercycle'",
           "Policy Notification: Reliance Industries stocks gain over 2% after Meta partnership for AI data centre in Gujarat",
           "Strong revenue growth (TTM +15.0%)",
-          "Liquid (Rs 1506 Cr traded daily)",
+          "Liquid (Rs 1487 Cr traded daily)",
           "DII Accumulation (+0.64%)",
           "Trading below Graham Intrinsic Value (1336.3)"
         ],
@@ -1117,188 +1119,25 @@
       "fundamental_value": 1336.3
     },
     {
-      "ticker": "CHENNPETRO",
-      "name": "C P C L",
-      "price": "1413.50",
-      "target": "1540.00",
-      "growth_pct": "+8.9%",
-      "catalyst": "Auto-discovered via media radar. Catalyst: Policy tailwinds in the big_cap_industries segment.",
-      "rating": "Strong Buy",
-      "revenue_growth": "+84.8%",
-      "analyst_count": 1,
-      "target_median": "1540.00",
-      "target_high": "1540.00",
-      "target_low": "1540.00",
-      "screener": {
-        "market_cap": 21075.0,
-        "current_price": 1415.0,
-        "pe_ratio": 5.04,
-        "dividend_yield": 4.39,
-        "roce": 34.9,
-        "roe": 31.8,
-        "q_sales": 27369.0,
-        "qoq_sales_growth": 62.75,
-        "quarterly_revenue_growth": [
-          16327.0,
-          15683.0,
-          16817.0,
-          27369.0
-        ],
-        "sales_trend": [
-          12086.0,
-          12925.0,
-          17249.0,
-          14812.0,
-          16327.0,
-          15683.0,
-          16817.0,
-          27369.0
-        ],
-        "q_opm": 6.0,
-        "quarterly_ebitda_margin": [
-          7.0,
-          9.0,
-          12.0,
-          6.0
-        ],
-        "opm_expansion": -6.0,
-        "q_eps": 69.26,
-        "eps_trend": [
-          -42.55,
-          1.4,
-          31.56,
-          -2.69,
-          48.3,
-          67.26,
-          95.48,
-          69.26
-        ],
-        "ttm_eps": 280.3,
-        "q_net_profit": 1031.0,
-        "operating_margin_trend": [
-          7.0,
-          7.0,
-          1.8,
-          8.0,
-          8.0
-        ],
-        "annual_sales_trend": [
-          43068.0,
-          76271.0,
-          66024.0,
-          58983.0,
-          63148.0,
-          76197.0
-        ],
-        "debt_trend": [
-          9238.0,
-          4260.0,
-          2786.0,
-          3117.0,
-          1964.0
-        ],
-        "cash_flow_trend": [
-          1026.0,
-          5749.0,
-          2694.0,
-          1352.0,
-          2945.0
-        ],
-        "capex": 5473.8,
-        "rd_pct": 1.5,
-        "roce_trend": [
-          20.0,
-          45.0,
-          35.0,
-          4.0,
-          35.0
-        ],
-        "promoter_pct": 67.29,
-        "promoter_change": 0.0,
-        "fii_pct": 14.98,
-        "fii_change": 2.39,
-        "dii_pct": 1.01,
-        "dii_change": -1.1,
-        "isin": "INE178A01016",
-        "week52_low": 602.11,
-        "week52_high": 1412.7,
-        "pct_above_low": 134.62,
-        "advt_cr": 358.59,
-        "liquidity_band": "liquid",
-        "sessions": 23,
-        "days_to_exit_1cr": 0.0,
-        "days_to_exit_5cr": 0.1,
-        "industry_share_pct": 2.93,
-        "industry_peer_count": 7,
-        "industry_share_change_pp": 0.0,
-        "peer_share_pct": 4.0,
-        "peer_share_change_pp": 1.19,
-        "peer_share_lookback": 4,
-        "peer_group_size": 5,
-        "revenue_yoy_pct": 84.8,
-        "revenue_ttm_growth_pct": 33.5,
-        "revenue_cagr_pct": 12.1,
-        "revenue_growth_quality": "ok",
-        "graham_intrinsic_value": 6783.3,
-        "owner_earnings": -1192.7,
-        "retained_earnings_ratio": 2.86,
-        "moat_status": "Strong (Wide Moat)",
-        "is_bargain": false,
-        "net_current_assets": null,
-        "hyper_growth_warning": false,
-        "valuation_alerts": [
-          "Fails Debt Limit (Debt > Net Assets)"
-        ],
-        "industry_pe": 21.7,
-        "pe_vs_peers": "77% below peers"
-      },
-      "score": {
-        "overall_score": 8,
-        "fundamental_score": 7,
-        "momentum_score": 1,
-        "confidence": "High",
-        "reasons": [
-          "Sector benefits from macro policy tailwinds (Fallback)",
-          "Strong revenue growth (TTM +33.5%)",
-          "High Return on Capital (ROCE: 34.9%)",
-          "High Return on Equity (ROE: 31.8%)",
-          "Liquid (Rs 359 Cr traded daily)",
-          "FII Accumulation (+2.39%)",
-          "Wide Economic Moat (Sustained Margin Expansion)",
-          "Trading below Graham Intrinsic Value (6783.3)"
-        ],
-        "risks": [
-          "Operating margin contracted (-6.0pp)",
-          "Fails Debt Limit (Debt > Net Assets)"
-        ],
-        "recommendations": [
-          "Hold / Monitor"
-        ]
-      },
-      "fundamental_value": 6783.3,
-      "estimate_method": "Analyst Consensus",
-      "rec_score": 1.0
-    },
-    {
       "ticker": "KPIL",
       "name": "Kalpataru Proj.",
-      "price": "1417.80",
+      "price": "1381.00",
       "target": "1552.00",
-      "growth_pct": "+9.5%",
+      "growth_pct": "+12.4%",
       "catalyst": "Auto-discovered via media radar. Catalyst: Policy tailwinds in the big_cap_industries segment.",
       "rating": "Strong Buy",
-      "revenue_growth": "+10.1%",
-      "earnings_growth": "+89.4%",
+      "revenue_growth": "+5.1%",
+      "earnings_growth": "+45.2%",
       "analyst_count": 20,
       "target_median": "1552.00",
       "target_high": "1764.00",
       "target_low": "1249.00",
       "rec_score": 1.1,
       "screener": {
-        "market_cap": 24142.0,
-        "current_price": 1414.0,
-        "pe_ratio": 21.7,
-        "dividend_yield": 0.78,
+        "market_cap": 23708.0,
+        "current_price": 1388.0,
+        "pe_ratio": 21.3,
+        "dividend_yield": 0.79,
         "roce": 18.3,
         "roe": 13.7,
         "q_sales": 6408.0,
@@ -1386,18 +1225,18 @@
         "dii_change": -0.28,
         "isin": "INE220B01022",
         "week52_low": 1062.49,
-        "week52_high": 1417.4,
-        "pct_above_low": 33.4,
-        "advt_cr": 19.09,
-        "liquidity_band": "adequate",
-        "sessions": 23,
-        "days_to_exit_1cr": 0.3,
-        "days_to_exit_5cr": 1.3,
+        "week52_high": 1387.58,
+        "pct_above_low": 29.98,
+        "advt_cr": 38.02,
+        "liquidity_band": "liquid",
+        "sessions": 24,
+        "days_to_exit_1cr": 0.1,
+        "days_to_exit_5cr": 0.7,
         "industry_share_pct": 7.43,
         "industry_peer_count": 7,
-        "industry_share_change_pp": -1.0,
-        "peer_share_pct": 0.9,
-        "peer_share_change_pp": -0.24,
+        "industry_share_change_pp": 0.0,
+        "peer_share_pct": 0.8,
+        "peer_share_change_pp": -0.2,
         "peer_share_lookback": 4,
         "peer_group_size": 5,
         "revenue_yoy_pct": 3.8,
@@ -1414,7 +1253,7 @@
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)"
         ],
-        "industry_pe": 21.7,
+        "industry_pe": 21.3,
         "pe_vs_peers": "In line with peers"
       },
       "score": {
@@ -1424,6 +1263,7 @@
         "confidence": "High",
         "reasons": [
           "Sector benefits from macro policy tailwinds (Fallback)",
+          "Liquid (Rs 38 Cr traded daily)",
           "Narrow Economic Moat",
           "Trading below Graham Intrinsic Value (1574.0)"
         ],
@@ -1440,9 +1280,9 @@
     {
       "ticker": "IOC",
       "name": "I O C L",
-      "price": "141.35",
+      "price": "140.57",
       "target": "156.00",
-      "growth_pct": "+10.4%",
+      "growth_pct": "+11.0%",
       "catalyst": "Auto-discovered via media radar. Catalyst: Policy tailwinds in the big_cap_industries segment.",
       "rating": "Buy",
       "revenue_growth": "+38.5%",
@@ -1452,9 +1292,9 @@
       "target_low": "105.00",
       "rec_score": 2.5,
       "screener": {
-        "market_cap": 199533.0,
+        "market_cap": 199039.0,
         "current_price": 141.0,
-        "pe_ratio": 5.91,
+        "pe_ratio": 5.92,
         "dividend_yield": 5.85,
         "roce": 18.7,
         "roe": 20.5,
@@ -1544,17 +1384,17 @@
         "isin": "INE242A01010",
         "week52_low": 130.91,
         "week52_high": 185.14,
-        "pct_above_low": 7.98,
-        "advt_cr": 149.22,
+        "pct_above_low": 7.38,
+        "advt_cr": 148.08,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.2,
         "industry_share_pct": 28.54,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
-        "peer_share_pct": 39.3,
-        "peer_share_change_pp": 2.37,
+        "peer_share_pct": 33.2,
+        "peer_share_change_pp": 2.13,
         "peer_share_lookback": 4,
         "peer_group_size": 5,
         "revenue_yoy_pct": 38.5,
@@ -1571,8 +1411,8 @@
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)"
         ],
-        "industry_pe": 21.7,
-        "pe_vs_peers": "73% below peers"
+        "industry_pe": 21.3,
+        "pe_vs_peers": "72% below peers"
       },
       "score": {
         "overall_score": 4,
@@ -1582,12 +1422,172 @@
         "reasons": [
           "Government Contract/MoU: Eternal, IOC, IndiGo, other crude-sensitive shares gain up to 4% as oil falls below $85",
           "High Return on Equity (ROE: 20.5%)",
-          "Liquid (Rs 149 Cr traded daily)",
+          "Liquid (Rs 148 Cr traded daily)",
           "DII Accumulation (+0.42%)",
           "Narrow Economic Moat"
         ],
         "risks": [
           "Operating margin contracted (-10.5pp)",
+          "Fails Debt Limit (Debt > Net Assets)"
+        ],
+        "recommendations": [
+          "Avoid / High Risk"
+        ]
+      },
+      "estimate_method": "Analyst Consensus"
+    },
+    {
+      "ticker": "BPCL",
+      "name": "B P C L",
+      "price": "312.95",
+      "target": "360.00",
+      "growth_pct": "+15.0%",
+      "catalyst": "Auto-discovered via media radar. Catalyst: Policy tailwinds in the big_cap_industries segment.",
+      "rating": "Hold",
+      "revenue_growth": "+34.4%",
+      "analyst_count": 31,
+      "target_median": "360.00",
+      "target_high": "490.00",
+      "target_low": "236.00",
+      "rec_score": 2.5,
+      "screener": {
+        "market_cap": 135557.0,
+        "current_price": 312.0,
+        "pe_ratio": 8.73,
+        "dividend_yield": 5.59,
+        "roce": 25.6,
+        "roe": 28.8,
+        "q_sales": 151277.0,
+        "qoq_sales_growth": 27.44,
+        "quarterly_revenue_growth": [
+          104946.0,
+          119029.0,
+          118701.0,
+          151277.0
+        ],
+        "sales_trend": [
+          102785.0,
+          113166.0,
+          111230.0,
+          112551.0,
+          104946.0,
+          119029.0,
+          118701.0,
+          151277.0
+        ],
+        "q_opm": -2.7,
+        "quarterly_ebitda_margin": [
+          9.0,
+          10.0,
+          8.0,
+          -2.7
+        ],
+        "opm_expansion": -10.7,
+        "q_eps": -4.32,
+        "eps_trend": [
+          5.29,
+          8.77,
+          10.12,
+          15.76,
+          14.27,
+          16.57,
+          12.96,
+          -4.32
+        ],
+        "ttm_eps": 39.48,
+        "q_net_profit": -1873.0,
+        "operating_margin_trend": [
+          2.3,
+          10.0,
+          6.0,
+          9.0,
+          5.0
+        ],
+        "annual_sales_trend": [
+          346791.0,
+          473187.0,
+          448083.0,
+          440272.0,
+          455228.0,
+          493954.0
+        ],
+        "debt_trend": [
+          64534.0,
+          69376.0,
+          54599.0,
+          61101.0,
+          54424.0
+        ],
+        "cash_flow_trend": [
+          20336.0,
+          12466.0,
+          35936.0,
+          23678.0,
+          50769.0
+        ],
+        "capex": 30255.4,
+        "rd_pct": 1.5,
+        "roce_trend": [
+          16.0,
+          7.0,
+          32.0,
+          16.0,
+          26.0
+        ],
+        "promoter_pct": 52.98,
+        "promoter_change": 0.0,
+        "fii_pct": 16.84,
+        "fii_change": -2.73,
+        "dii_pct": 21.07,
+        "dii_change": 2.55,
+        "isin": "INE029A01011",
+        "week52_low": 278.15,
+        "week52_high": 386.35,
+        "pct_above_low": 12.51,
+        "advt_cr": 194.78,
+        "liquidity_band": "liquid",
+        "sessions": 24,
+        "days_to_exit_1cr": 0.0,
+        "days_to_exit_5cr": 0.1,
+        "industry_share_pct": 16.21,
+        "industry_peer_count": 7,
+        "peer_share_pct": 18.9,
+        "peer_share_change_pp": 0.67,
+        "peer_share_lookback": 4,
+        "peer_group_size": 5,
+        "revenue_yoy_pct": 34.4,
+        "revenue_ttm_growth_pct": 12.3,
+        "revenue_cagr_pct": 7.3,
+        "revenue_growth_quality": "ok",
+        "graham_intrinsic_value": 0.0,
+        "owner_earnings": -33393.5,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Medium (Narrow Moat)",
+        "is_bargain": false,
+        "net_current_assets": null,
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "Fails Debt Limit (Debt > Net Assets)"
+        ],
+        "industry_pe": 21.3,
+        "pe_vs_peers": "59% below peers"
+      },
+      "score": {
+        "overall_score": 3,
+        "fundamental_score": 0,
+        "momentum_score": 3,
+        "confidence": "High",
+        "reasons": [
+          "Capacity/Product Launch: वैश्विक कच्चे तेल संकट के बीच,BPCL की रणनीतिक कुशलता",
+          "High Return on Capital (ROCE: 25.6%)",
+          "High Return on Equity (ROE: 28.8%)",
+          "Liquid (Rs 195 Cr traded daily)",
+          "DII Accumulation (+2.55%)",
+          "Narrow Economic Moat"
+        ],
+        "risks": [
+          "Operating margin contracted (-10.7pp)",
+          "FII Selling (-2.73%)",
           "Fails Debt Limit (Debt > Net Assets)"
         ],
         "recommendations": [
@@ -1601,9 +1601,9 @@
     {
       "ticker": "SUZLON",
       "name": "Suzlon Energy",
-      "price": "47.22",
+      "price": "47.34",
       "target": "63.36",
-      "growth_pct": "+34.2%",
+      "growth_pct": "+33.8%",
       "catalyst": "Turnaround story, completely debt-free, dominating wind turbine supply with a record order book.",
       "rating": "Strong Buy",
       "revenue_growth": "+22.5%",
@@ -1614,8 +1614,8 @@
       "target_low": "51.00",
       "rec_score": 1.4,
       "screener": {
-        "market_cap": 64304.0,
-        "current_price": 47.2,
+        "market_cap": 64523.0,
+        "current_price": 47.3,
         "pe_ratio": 20.5,
         "dividend_yield": 0.0,
         "roce": 35.1,
@@ -1706,15 +1706,15 @@
         "isin": "INE040H01021",
         "week52_low": 39.99,
         "week52_high": 60.4,
-        "pct_above_low": 18.08,
-        "advt_cr": 327.95,
+        "pct_above_low": 18.38,
+        "advt_cr": 323.21,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.1,
         "industry_share_pct": 12.81,
         "industry_peer_count": 8,
-        "industry_share_change_pp": -0.04,
+        "industry_share_change_pp": 0.0,
         "peer_share_pct": 13.1,
         "peer_share_change_pp": -0.94,
         "peer_share_lookback": 4,
@@ -1734,8 +1734,8 @@
           "Fails Debt Limit (Debt > Net Assets)",
           "No Dividend Yield"
         ],
-        "industry_pe": 43.8,
-        "pe_vs_peers": "53% below peers"
+        "industry_pe": 44.2,
+        "pe_vs_peers": "54% below peers"
       },
       "score": {
         "overall_score": 16,
@@ -1749,7 +1749,7 @@
           "Strong revenue growth (TTM +45.2%)",
           "High Return on Capital (ROCE: 35.1%)",
           "High Return on Equity (ROE: 40.6%)",
-          "Liquid (Rs 328 Cr traded daily)",
+          "Liquid (Rs 323 Cr traded daily)",
           "FII Accumulation (+0.3%)",
           "DII Accumulation (+1.94%)",
           "Wide Economic Moat (Sustained Margin Expansion)",
@@ -1769,9 +1769,9 @@
     {
       "ticker": "ADANIGREEN",
       "name": "Adani Green Energy",
-      "price": "1342.00",
+      "price": "1324.20",
       "target": "1650.00",
-      "growth_pct": "+23.0%",
+      "growth_pct": "+24.6%",
       "catalyst": "Developing the world's largest renewable energy park in Khavda, Gujarat (30 GW capacity target).",
       "rating": "Buy",
       "revenue_growth": "+16.6%",
@@ -1782,9 +1782,9 @@
       "target_low": "1000.00",
       "rec_score": 1.6,
       "screener": {
-        "market_cap": 221265.0,
-        "current_price": 1343.0,
-        "pe_ratio": 114.0,
+        "market_cap": 218572.0,
+        "current_price": 1327.0,
+        "pe_ratio": 113.0,
         "dividend_yield": 0.0,
         "roce": 7.39,
         "roe": 11.4,
@@ -1874,10 +1874,10 @@
         "isin": "INE364U01010",
         "week52_low": 772.8,
         "week52_high": 1556.2,
-        "pct_above_low": 73.76,
-        "advt_cr": 369.2,
+        "pct_above_low": 71.3,
+        "advt_cr": 368.05,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.1,
         "industry_share_pct": 6.13,
@@ -1900,11 +1900,11 @@
         "hyper_growth_warning": false,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 114.0 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 113.0 > 15 & Price > Intrinsic)",
           "No Dividend Yield"
         ],
-        "industry_pe": 43.8,
-        "pe_vs_peers": "160% above peers"
+        "industry_pe": 44.2,
+        "pe_vs_peers": "156% above peers"
       },
       "score": {
         "overall_score": 4,
@@ -1914,13 +1914,13 @@
         "reasons": [
           "Policy Notification: Adani Green Energy Limited Just Missed EPS By 8.7%: Here's What Analysts Think Will Happen Next",
           "Operating Margin Expansion (+8.0%)",
-          "Liquid (Rs 369 Cr traded daily)",
+          "Liquid (Rs 368 Cr traded daily)",
           "FII Accumulation (+0.74%)",
           "DII Accumulation (+0.26%)"
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 114.0 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 113.0 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Avoid / High Risk"
@@ -1932,9 +1932,9 @@
     {
       "ticker": "ACMESOLAR",
       "name": "ACME Solar Hold.",
-      "price": "371.05",
+      "price": "371.55",
       "target": "427.00",
-      "growth_pct": "+15.1%",
+      "growth_pct": "+14.9%",
       "catalyst": "Auto-discovered via media radar. Catalyst: Policy tailwinds in the clean_energy segment.",
       "rating": "Strong Buy",
       "revenue_growth": "+46.8%",
@@ -1945,9 +1945,9 @@
       "target_low": "374.00",
       "rec_score": 1.4,
       "screener": {
-        "market_cap": 26087.0,
-        "current_price": 369.0,
-        "pe_ratio": 43.8,
+        "market_cap": 26296.0,
+        "current_price": 372.0,
+        "pe_ratio": 44.2,
         "dividend_yield": 0.05,
         "roce": 8.89,
         "roe": 10.4,
@@ -2037,10 +2037,10 @@
         "isin": "INE622W01025",
         "week52_low": 198.78,
         "week52_high": 385.25,
-        "pct_above_low": 86.66,
-        "advt_cr": 78.13,
+        "pct_above_low": 86.78,
+        "advt_cr": 72.52,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.1,
         "days_to_exit_5cr": 0.3,
         "industry_share_pct": 1.19,
@@ -2063,9 +2063,9 @@
         "hyper_growth_warning": false,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 43.8 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 44.2 > 15 & Price > Intrinsic)"
         ],
-        "industry_pe": 43.8,
+        "industry_pe": 44.2,
         "pe_vs_peers": "In line with peers"
       },
       "score": {
@@ -2076,14 +2076,14 @@
         "reasons": [
           "Policy Notification: ACME Solar Holdings Ltd (NSE:ACMESOLAR) (Q1 2027) Earnings Call Highlights: Record Revenue and ...",
           "Strong revenue growth (TTM +47.5%)",
-          "Liquid (Rs 78 Cr traded daily)",
+          "Liquid (Rs 73 Cr traded daily)",
           "FII Accumulation (+0.79%)",
           "DII Accumulation (+12.05%)"
         ],
         "risks": [
           "Promoters cut their stake (-11.89%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 43.8 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 44.2 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Avoid / High Risk"
@@ -2095,9 +2095,9 @@
     {
       "ticker": "ADANIPOWER",
       "name": "Adani Power",
-      "price": "207.63",
+      "price": "205.30",
       "target": "257.00",
-      "growth_pct": "+23.8%",
+      "growth_pct": "+25.2%",
       "catalyst": "Auto-discovered via media radar. Catalyst: Policy tailwinds in the clean_energy segment.",
       "rating": "None",
       "revenue_growth": "+34.0%",
@@ -2108,9 +2108,9 @@
       "target_low": "220.00",
       "rec_score": 1.4,
       "screener": {
-        "market_cap": 400543.0,
-        "current_price": 208.0,
-        "pe_ratio": 28.1,
+        "market_cap": 396397.0,
+        "current_price": 206.0,
+        "pe_ratio": 27.8,
         "dividend_yield": 0.0,
         "roce": 17.2,
         "roe": 21.1,
@@ -2200,10 +2200,10 @@
         "isin": "INE814H01011",
         "week52_low": 116.81,
         "week52_high": 243.37,
-        "pct_above_low": 77.74,
-        "advt_cr": 487.93,
+        "pct_above_low": 75.76,
+        "advt_cr": 458.97,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.1,
         "industry_share_pct": 34.78,
@@ -2226,11 +2226,11 @@
         "hyper_growth_warning": false,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 28.1 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 27.8 > 15 & Price > Intrinsic)",
           "No Dividend Yield"
         ],
-        "industry_pe": 43.8,
-        "pe_vs_peers": "36% below peers"
+        "industry_pe": 44.2,
+        "pe_vs_peers": "37% below peers"
       },
       "score": {
         "overall_score": 5,
@@ -2241,14 +2241,14 @@
           "Sector benefits from macro policy tailwinds (Fallback)",
           "Operating Margin Expansion (+9.0%)",
           "High Return on Equity (ROE: 21.1%)",
-          "Liquid (Rs 488 Cr traded daily)",
+          "Liquid (Rs 459 Cr traded daily)",
           "FII Accumulation (+0.03%)",
           "DII Accumulation (+0.38%)",
           "Wide Economic Moat (Sustained Margin Expansion)"
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 28.1 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 27.8 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Hold / Monitor"
@@ -2260,7 +2260,7 @@
     {
       "ticker": "NTPCGREEN",
       "name": "NTPC Green Ene.",
-      "price": "92.41",
+      "price": "92.40",
       "target": "101.00",
       "growth_pct": "+9.3%",
       "catalyst": "Auto-discovered via media radar. Catalyst: Policy tailwinds in the clean_energy segment.",
@@ -2273,8 +2273,8 @@
       "target_low": "85.00",
       "rec_score": 2.7,
       "screener": {
-        "market_cap": 77649.0,
-        "current_price": 92.2,
+        "market_cap": 77977.0,
+        "current_price": 92.5,
         "pe_ratio": 128.0,
         "dividend_yield": 0.0,
         "roce": 3.56,
@@ -2360,10 +2360,10 @@
         "isin": "INE0ONG01011",
         "week52_low": 86.3,
         "week52_high": 111.96,
-        "pct_above_low": 7.08,
-        "advt_cr": 80.58,
+        "pct_above_low": 7.07,
+        "advt_cr": 79.82,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.1,
         "days_to_exit_5cr": 0.3,
         "industry_share_pct": 1.53,
@@ -2389,8 +2389,8 @@
           "Fails P/E Screen (P/E 128.0 > 15 & Price > Intrinsic)",
           "No Dividend Yield"
         ],
-        "industry_pe": 43.8,
-        "pe_vs_peers": "192% above peers"
+        "industry_pe": 44.2,
+        "pe_vs_peers": "190% above peers"
       },
       "score": {
         "overall_score": 5,
@@ -2401,7 +2401,7 @@
           "Government Contract/MoU: NTPCGREEN Share Price Today",
           "Strong revenue growth (TTM +42.1%)",
           "Operating Margin Expansion (+4.0%)",
-          "Liquid (Rs 81 Cr traded daily)",
+          "Liquid (Rs 80 Cr traded daily)",
           "FII Accumulation (+0.06%)",
           "DII Accumulation (+0.14%)"
         ],
@@ -2421,9 +2421,9 @@
     {
       "ticker": "TCS",
       "name": "Tata Consultancy Services",
-      "price": "2429.30",
+      "price": "2342.10",
       "target": "2400.00",
-      "growth_pct": "-1.2%",
+      "growth_pct": "+2.5%",
       "catalyst": "Expanding sovereign cloud and secure cyber command centers globally for enterprise clients.",
       "rating": "Buy",
       "revenue_growth": "+13.9%",
@@ -2434,10 +2434,10 @@
       "target_low": "1800.00",
       "rec_score": 2.1,
       "screener": {
-        "market_cap": 881619.0,
-        "current_price": 2437.0,
-        "pe_ratio": 16.4,
-        "dividend_yield": 2.65,
+        "market_cap": 848170.0,
+        "current_price": 2344.0,
+        "pe_ratio": 15.8,
+        "dividend_yield": 2.71,
         "roce": 63.0,
         "roe": 51.8,
         "q_sales": 72275.0,
@@ -2526,10 +2526,10 @@
         "isin": "INE467B01029",
         "week52_low": 2057.72,
         "week52_high": 3162.94,
-        "pct_above_low": 18.06,
-        "advt_cr": 993.7,
+        "pct_above_low": 13.82,
+        "advt_cr": 1021.13,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.0,
         "industry_share_pct": 34.23,
@@ -2553,8 +2553,8 @@
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)"
         ],
-        "industry_pe": 30.2,
-        "pe_vs_peers": "46% below peers"
+        "industry_pe": 29.7,
+        "pe_vs_peers": "47% below peers"
       },
       "score": {
         "overall_score": 12,
@@ -2566,7 +2566,7 @@
           "Government Contract/MoU: Redefining AI Readiness: A TCS, AMD, and Nutanix Leadership Discussion",
           "High Return on Capital (ROCE: 63.0%)",
           "High Return on Equity (ROE: 51.8%)",
-          "Liquid (Rs 994 Cr traded daily)",
+          "Liquid (Rs 1021 Cr traded daily)",
           "DII Accumulation (+0.07%)",
           "Wide Economic Moat (Sustained Margin Expansion)"
         ],
@@ -2583,7 +2583,7 @@
     {
       "ticker": "QUICKHEAL",
       "name": "Quick Heal Technologies",
-      "price": "150.50",
+      "price": "148.62",
       "target": null,
       "growth_pct": null,
       "catalyst": "Surging enterprise adoption of their 'Seqrite' cybersecurity platform and government IT contracts.",
@@ -2596,8 +2596,8 @@
       "target_low": null,
       "rec_score": null,
       "screener": {
-        "market_cap": 823.0,
-        "current_price": 152.0,
+        "market_cap": 817.0,
+        "current_price": 150.0,
         "dividend_yield": 0.0,
         "roce": -4.65,
         "roe": -2.49,
@@ -2687,12 +2687,12 @@
         "isin": "INE306L01010",
         "week52_low": 132.57,
         "week52_high": 336.15,
-        "pct_above_low": 13.52,
-        "advt_cr": 0.83,
+        "pct_above_low": 12.11,
+        "advt_cr": 0.82,
         "liquidity_band": "illiquid",
-        "sessions": 23,
-        "days_to_exit_1cr": 6.0,
-        "days_to_exit_5cr": 30.2,
+        "sessions": 24,
+        "days_to_exit_1cr": 6.1,
+        "days_to_exit_5cr": 30.5,
         "industry_share_pct": 0.88,
         "industry_peer_count": 8,
         "industry_share_change_pp": 0.0,
@@ -2726,7 +2726,7 @@
         ],
         "risks": [
           "Revenue shrinking (TTM -6.6%)",
-          "Illiquid: Rs 0.83 Cr traded daily, ~6 sessions to exit Rs 1 Cr"
+          "Illiquid: Rs 0.82 Cr traded daily, ~6 sessions to exit Rs 1 Cr"
         ],
         "recommendations": [
           "Avoid / High Risk"
@@ -2737,9 +2737,9 @@
     {
       "ticker": "OFSS",
       "name": "Oracle Fin.Serv.",
-      "price": "11838.00",
+      "price": "11635.00",
       "target": "13050.00",
-      "growth_pct": "+10.2%",
+      "growth_pct": "+12.2%",
       "catalyst": "Auto-discovered via media radar. Catalyst: Policy tailwinds in the cybersecurity segment.",
       "rating": "None",
       "revenue_growth": "+68.7%",
@@ -2750,10 +2750,10 @@
       "target_low": "11750.00",
       "rec_score": 1.5,
       "screener": {
-        "market_cap": 103133.0,
-        "current_price": 11844.0,
-        "pe_ratio": 30.2,
-        "dividend_yield": 3.39,
+        "market_cap": 101312.0,
+        "current_price": 11635.0,
+        "pe_ratio": 29.7,
+        "dividend_yield": 3.44,
         "roce": 45.3,
         "roe": 32.6,
         "q_sales": 3125.0,
@@ -2841,16 +2841,16 @@
         "dii_change": -0.33,
         "isin": "INE881D01027",
         "week52_low": 6344.25,
-        "week52_high": 11838.0,
-        "pct_above_low": 86.59,
-        "advt_cr": 468.84,
+        "week52_high": 11805.0,
+        "pct_above_low": 83.39,
+        "advt_cr": 461.26,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.1,
         "industry_share_pct": 61.21,
         "industry_peer_count": 8,
-        "industry_share_change_pp": -0.12,
+        "industry_share_change_pp": 0.0,
         "peer_share_pct": 4.1,
         "peer_share_change_pp": 1.3,
         "peer_share_lookback": 4,
@@ -2868,9 +2868,9 @@
         "hyper_growth_warning": false,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 30.2 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 29.7 > 15 & Price > Intrinsic)"
         ],
-        "industry_pe": 30.2,
+        "industry_pe": 29.7,
         "pe_vs_peers": "In line with peers"
       },
       "score": {
@@ -2884,13 +2884,13 @@
           "Operating Margin Expansion (+9.0%)",
           "High Return on Capital (ROCE: 45.3%)",
           "High Return on Equity (ROE: 32.6%)",
-          "Liquid (Rs 469 Cr traded daily)",
+          "Liquid (Rs 461 Cr traded daily)",
           "FII Accumulation (+1.66%)",
           "Wide Economic Moat (Sustained Margin Expansion)"
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 30.2 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 29.7 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Hold / Monitor"
@@ -2902,9 +2902,9 @@
     {
       "ticker": "CAPILLARY",
       "name": "Capillary Tech.",
-      "price": "525.45",
+      "price": "540.00",
       "target": "642.50",
-      "growth_pct": "+22.3%",
+      "growth_pct": "+19.0%",
       "catalyst": "Auto-discovered via media radar. Catalyst: Policy tailwinds in the cybersecurity segment.",
       "rating": "Strong Buy",
       "revenue_growth": "+42.7%",
@@ -2914,9 +2914,9 @@
       "target_high": "650.00",
       "target_low": "635.00",
       "screener": {
-        "market_cap": 4181.0,
-        "current_price": 525.0,
-        "pe_ratio": 81.6,
+        "market_cap": 4290.0,
+        "current_price": 539.0,
+        "pe_ratio": 83.7,
         "dividend_yield": 0.0,
         "roce": 3.42,
         "roe": 2.95,
@@ -3004,15 +3004,15 @@
         "isin": "INE0ILV01024",
         "week52_low": 476.25,
         "week52_high": 719.35,
-        "pct_above_low": 10.33,
-        "advt_cr": 75.38,
+        "pct_above_low": 13.39,
+        "advt_cr": 77.11,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.1,
         "days_to_exit_5cr": 0.3,
         "industry_share_pct": 5.03,
         "industry_peer_count": 8,
-        "industry_share_change_pp": -0.01,
+        "industry_share_change_pp": 0.0,
         "peer_share_pct": 0.3,
         "peer_share_change_pp": 0.06,
         "peer_share_lookback": 4,
@@ -3030,11 +3030,11 @@
         "hyper_growth_warning": false,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 81.6 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 83.7 > 15 & Price > Intrinsic)",
           "No Dividend Yield"
         ],
-        "industry_pe": 30.2,
-        "pe_vs_peers": "170% above peers"
+        "industry_pe": 29.7,
+        "pe_vs_peers": "182% above peers"
       },
       "score": {
         "overall_score": -2,
@@ -3043,12 +3043,12 @@
         "confidence": "High",
         "reasons": [
           "Sector benefits from macro policy tailwinds (Fallback)",
-          "Liquid (Rs 75 Cr traded daily)",
+          "Liquid (Rs 77 Cr traded daily)",
           "DII Accumulation (+0.78%)"
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 81.6 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 83.7 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Avoid / High Risk"
@@ -3062,9 +3062,9 @@
     {
       "ticker": "SCHNEIDER",
       "name": "Schneider Electric Infra",
-      "price": "1410.00",
+      "price": "1438.80",
       "target": "1400.00",
-      "growth_pct": "-0.7%",
+      "growth_pct": "-2.7%",
       "catalyst": "Critical supplier of electrical distribution, smart grids, and high-efficiency cooling for data centers.",
       "rating": "None",
       "revenue_growth": "+0.5%",
@@ -3086,12 +3086,12 @@
         "isin": "INE839M01018",
         "week52_low": 606.7,
         "week52_high": 1481.6,
-        "pct_above_low": 132.4,
-        "advt_cr": 31.47,
+        "pct_above_low": 137.15,
+        "advt_cr": 36.75,
         "liquidity_band": "liquid",
-        "sessions": 23,
-        "days_to_exit_1cr": 0.2,
-        "days_to_exit_5cr": 0.8,
+        "sessions": 24,
+        "days_to_exit_1cr": 0.1,
+        "days_to_exit_5cr": 0.7,
         "graham_intrinsic_value": 0.0,
         "owner_earnings": 0.0,
         "retained_earnings_ratio": 1.2,
@@ -3110,7 +3110,7 @@
         "confidence": "Low",
         "reasons": [
           "Capacity/Product Launch: Schneider Electric Unveils Ultra-Compact Lexium SCARA High-Speed Robot to Boost Manufacturing Productivity",
-          "Liquid (Rs 31 Cr traded daily)",
+          "Liquid (Rs 37 Cr traded daily)",
           "FII Accumulation (+0.24%)",
           "DII Accumulation (+0.58%)"
         ],
@@ -3124,9 +3124,9 @@
     {
       "ticker": "STLTECH",
       "name": "Sterlite Technologies (STL)",
-      "price": "629.00",
+      "price": "678.85",
       "target": "860.00",
-      "growth_pct": "+36.7%",
+      "growth_pct": "+26.7%",
       "catalyst": "Expanding optical fiber and cable capacities to meet hyper-scale data center interconnect demands.",
       "rating": "None",
       "revenue_growth": "+87.4%",
@@ -3137,9 +3137,9 @@
       "target_low": "770.00",
       "rec_score": 1.5,
       "screener": {
-        "market_cap": 32397.0,
-        "current_price": 630.0,
-        "pe_ratio": 137.0,
+        "market_cap": 34689.0,
+        "current_price": 675.0,
+        "pe_ratio": 147.0,
         "dividend_yield": 0.0,
         "roce": 7.65,
         "roe": 1.24,
@@ -3228,16 +3228,16 @@
         "dii_change": 1.84,
         "isin": "INE089C01029",
         "week52_low": 88.39,
-        "week52_high": 654.35,
-        "pct_above_low": 611.62,
-        "advt_cr": 127.0,
+        "week52_high": 678.85,
+        "pct_above_low": 668.02,
+        "advt_cr": 130.53,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.2,
-        "industry_share_pct": 45.75,
+        "industry_share_pct": 45.71,
         "industry_peer_count": 7,
-        "industry_share_change_pp": 0.0,
+        "industry_share_change_pp": -0.04,
         "peer_share_pct": 48.6,
         "peer_share_change_pp": 7.53,
         "peer_share_lookback": 4,
@@ -3255,11 +3255,11 @@
         "hyper_growth_warning": false,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 137.0 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 147.0 > 15 & Price > Intrinsic)",
           "No Dividend Yield"
         ],
-        "industry_pe": 52.6,
-        "pe_vs_peers": "160% above peers"
+        "industry_pe": 53.6,
+        "pe_vs_peers": "174% above peers"
       },
       "score": {
         "overall_score": 5,
@@ -3270,14 +3270,14 @@
           "Policy Notification [transformative, 147.1% of revenue]: STL’s subsidiary announces supply agreement valued over $1Bn with a Hyperscaler for AI-Ready Data Center build-outs",
           "Strong revenue growth (TTM +36.2%)",
           "Operating Margin Expansion (+6.0%)",
-          "Liquid (Rs 127 Cr traded daily)",
+          "Liquid (Rs 131 Cr traded daily)",
           "FII Accumulation (+1.49%)",
           "DII Accumulation (+1.84%)"
         ],
         "risks": [
           "Promoters cut their stake (-2.23%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 137.0 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 147.0 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Hold / Monitor"
@@ -3289,9 +3289,9 @@
     {
       "ticker": "ANANTRAJ",
       "name": "Anant Raj Ltd",
-      "price": "610.45",
+      "price": "607.25",
       "target": "710.00",
-      "growth_pct": "+16.3%",
+      "growth_pct": "+16.9%",
       "catalyst": "Real-estate developer transitioning commercial properties into major data center hubs in NCR.",
       "rating": "None",
       "revenue_growth": "+19.6%",
@@ -3302,8 +3302,8 @@
       "target_low": "650.00",
       "rec_score": 1.3,
       "screener": {
-        "market_cap": 21904.0,
-        "current_price": 609.0,
+        "market_cap": 21875.0,
+        "current_price": 608.0,
         "pe_ratio": 37.8,
         "dividend_yield": 0.16,
         "roce": 12.1,
@@ -3394,10 +3394,10 @@
         "isin": "INE242C01024",
         "week52_low": 436.58,
         "week52_high": 718.62,
-        "pct_above_low": 39.82,
-        "advt_cr": 156.54,
+        "pct_above_low": 39.09,
+        "advt_cr": 156.08,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.2,
         "industry_share_pct": 5.07,
@@ -3423,8 +3423,8 @@
           "Fails P/E Screen (P/E 37.8 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 52.6,
-        "pe_vs_peers": "28% below peers"
+        "industry_pe": 53.6,
+        "pe_vs_peers": "29% below peers"
       },
       "score": {
         "overall_score": -3,
@@ -3435,7 +3435,7 @@
           "Sector benefits from macro policy tailwinds (Fallback)",
           "Strong revenue growth (TTM +17.0%)",
           "Operating Margin Expansion (+3.0%)",
-          "Liquid (Rs 157 Cr traded daily)"
+          "Liquid (Rs 156 Cr traded daily)"
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
@@ -3452,23 +3452,23 @@
     {
       "ticker": "GODREJPROP",
       "name": "Godrej Propert.",
-      "price": "2011.40",
-      "target": "2330.00",
-      "growth_pct": "+15.8%",
+      "price": "2002.10",
+      "target": "2310.00",
+      "growth_pct": "+15.4%",
       "catalyst": "Auto-discovered via media radar. Catalyst: Policy tailwinds in the data_center_support segment.",
       "rating": "Buy",
       "revenue_growth": "+16.5%",
       "earnings_growth": "-41.7%",
-      "analyst_count": 22,
-      "target_median": "2330.00",
+      "analyst_count": 23,
+      "target_median": "2310.00",
       "target_high": "3000.00",
       "target_low": "1525.00",
-      "rec_score": 1.9,
+      "rec_score": 2.0,
       "screener": {
-        "market_cap": 60643.0,
-        "current_price": 2013.0,
-        "pe_ratio": 37.5,
-        "dividend_yield": 0.49,
+        "market_cap": 60068.0,
+        "current_price": 1994.0,
+        "pe_ratio": 37.1,
+        "dividend_yield": 0.5,
         "roce": 7.63,
         "roe": 8.82,
         "q_sales": 506.0,
@@ -3557,10 +3557,10 @@
         "isin": "INE484J01027",
         "week52_low": 1497.96,
         "week52_high": 2276.99,
-        "pct_above_low": 34.28,
-        "advt_cr": 152.03,
+        "pct_above_low": 33.64,
+        "advt_cr": 149.02,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.2,
         "industry_share_pct": 4.06,
@@ -3583,11 +3583,11 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 37.5 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 37.1 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 52.6,
-        "pe_vs_peers": "29% below peers"
+        "industry_pe": 53.6,
+        "pe_vs_peers": "31% below peers"
       },
       "score": {
         "overall_score": -5,
@@ -3596,13 +3596,13 @@
         "confidence": "High",
         "reasons": [
           "Sector benefits from macro policy tailwinds (Fallback)",
-          "Liquid (Rs 152 Cr traded daily)",
+          "Liquid (Rs 149 Cr traded daily)",
           "DII Accumulation (+0.84%)"
         ],
         "risks": [
           "Operating margin contracted (-73.0pp)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 37.5 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 37.1 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -3614,17 +3614,17 @@
     {
       "ticker": "OPTIEMUS",
       "name": "Optiemus Infra.",
-      "price": "544.15",
-      "target": "272.07",
+      "price": "563.50",
+      "target": "281.75",
       "growth_pct": "-50.0%",
       "catalyst": "Auto-discovered via media radar. Catalyst: Policy tailwinds in the data_center_support segment.",
       "rating": "None",
       "revenue_growth": "+102.8%",
       "earnings_growth": "+46.0%",
       "screener": {
-        "market_cap": 4900.0,
-        "current_price": 544.0,
-        "pe_ratio": 67.4,
+        "market_cap": 5052.0,
+        "current_price": 560.0,
+        "pe_ratio": 69.5,
         "dividend_yield": 0.0,
         "roce": 10.9,
         "roe": 9.16,
@@ -3705,8 +3705,8 @@
           14.0,
           11.0
         ],
-        "promoter_pct": 71.54,
-        "promoter_change": -0.63,
+        "promoter_pct": 71.53,
+        "promoter_change": -0.64,
         "fii_pct": 3.21,
         "fii_change": -0.03,
         "dii_pct": 2.27,
@@ -3714,15 +3714,15 @@
         "isin": "INE350C01017",
         "week52_low": 310.85,
         "week52_high": 681.6,
-        "pct_above_low": 75.05,
-        "advt_cr": 16.17,
+        "pct_above_low": 81.28,
+        "advt_cr": 15.98,
         "liquidity_band": "adequate",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.3,
-        "days_to_exit_5cr": 1.5,
-        "industry_share_pct": 21.15,
+        "days_to_exit_5cr": 1.6,
+        "industry_share_pct": 21.13,
         "industry_peer_count": 7,
-        "industry_share_change_pp": 0.0,
+        "industry_share_change_pp": -0.02,
         "peer_share_pct": 22.5,
         "peer_share_change_pp": 4.93,
         "peer_share_lookback": 4,
@@ -3740,11 +3740,11 @@
         "hyper_growth_warning": false,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 67.4 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 69.5 > 15 & Price > Intrinsic)",
           "No Dividend Yield"
         ],
-        "industry_pe": 52.6,
-        "pe_vs_peers": "28% above peers"
+        "industry_pe": 53.6,
+        "pe_vs_peers": "30% above peers"
       },
       "score": {
         "overall_score": -1,
@@ -3758,7 +3758,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 67.4 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 69.5 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Avoid / High Risk"
@@ -3772,9 +3772,9 @@
     {
       "ticker": "VBL",
       "name": "Varun Beverages (PepsiCo)",
-      "price": "436.30",
+      "price": "437.40",
       "target": "555.00",
-      "growth_pct": "+27.2%",
+      "growth_pct": "+26.9%",
       "catalyst": "PepsiCo's dominant bottler, expanding into newer territories and scaling dairy/juice products.",
       "rating": "Strong Buy",
       "revenue_growth": "+20.4%",
@@ -3785,9 +3785,9 @@
       "target_low": "422.00",
       "rec_score": 1.4,
       "screener": {
-        "market_cap": 147712.0,
+        "market_cap": 147915.0,
         "current_price": 437.0,
-        "pe_ratio": 43.6,
+        "pe_ratio": 43.7,
         "dividend_yield": 0.34,
         "roce": 19.7,
         "roe": 16.2,
@@ -3877,14 +3877,14 @@
         "isin": "INE200M01021",
         "week52_low": 388.01,
         "week52_high": 538.85,
-        "pct_above_low": 12.44,
-        "advt_cr": 312.61,
+        "pct_above_low": 12.73,
+        "advt_cr": 312.18,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.1,
         "industry_share_pct": 99.43,
-        "industry_peer_count": 4,
+        "industry_peer_count": 3,
         "industry_share_change_pp": 0.0,
         "peer_share_pct": 25.7,
         "peer_share_change_pp": 4.6,
@@ -3903,9 +3903,9 @@
         "hyper_growth_warning": false,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 43.6 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 43.7 > 15 & Price > Intrinsic)"
         ],
-        "industry_pe": 43.6,
+        "industry_pe": 43.7,
         "pe_vs_peers": "In line with peers"
       },
       "score": {
@@ -3917,13 +3917,13 @@
           "Policy Notification: What does extension of PepsiCo's agreement mean for Varun Beverages?",
           "Operating Margin Expansion (+5.0%)",
           "High Return on Equity (ROE: 16.2%)",
-          "Liquid (Rs 313 Cr traded daily)",
+          "Liquid (Rs 312 Cr traded daily)",
           "DII Accumulation (+0.81%)",
           "Wide Economic Moat (Sustained Margin Expansion)"
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 43.6 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 43.7 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Hold / Monitor"
@@ -3935,9 +3935,9 @@
     {
       "ticker": "TATACONSUM",
       "name": "Tata Consumer Products",
-      "price": "1069.50",
+      "price": "1064.40",
       "target": "1340.00",
-      "growth_pct": "+25.3%",
+      "growth_pct": "+25.9%",
       "catalyst": "Premiumization strategy in foods & beverages, high-growth acquisitions (Capital Foods, Organic India).",
       "rating": "Buy",
       "revenue_growth": "+11.9%",
@@ -3948,9 +3948,9 @@
       "target_low": "1124.00",
       "rec_score": 1.8,
       "screener": {
-        "market_cap": 105570.0,
-        "current_price": 1067.0,
-        "pe_ratio": 64.0,
+        "market_cap": 104942.0,
+        "current_price": 1060.0,
+        "pe_ratio": 63.6,
         "dividend_yield": 0.93,
         "roce": 9.24,
         "roe": 7.35,
@@ -4040,15 +4040,15 @@
         "isin": "INE192A01025",
         "week52_low": 1033.26,
         "week52_high": 1223.65,
-        "pct_above_low": 3.51,
-        "advt_cr": 153.61,
+        "pct_above_low": 3.01,
+        "advt_cr": 154.02,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.2,
-        "industry_share_pct": 73.05,
+        "industry_share_pct": 73.39,
         "industry_peer_count": 7,
-        "industry_share_change_pp": -1.09,
+        "industry_share_change_pp": 0.34,
         "peer_share_pct": 16.3,
         "peer_share_change_pp": 1.9,
         "peer_share_lookback": 4,
@@ -4066,11 +4066,11 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 64.0 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 63.6 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 43.6,
-        "pe_vs_peers": "47% above peers"
+        "industry_pe": 43.7,
+        "pe_vs_peers": "46% above peers"
       },
       "score": {
         "overall_score": -3,
@@ -4085,7 +4085,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 64.0 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 63.6 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -4098,9 +4098,9 @@
     {
       "ticker": "ITC",
       "name": "ITC Ltd",
-      "price": "278.55",
+      "price": "276.90",
       "target": "318.00",
-      "growth_pct": "+14.2%",
+      "growth_pct": "+14.8%",
       "catalyst": "Resilient cigarette margins funding rapid expansion of high-margin FMCG brands, direct rural boost play.",
       "rating": "Buy",
       "revenue_growth": "-11.1%",
@@ -4111,9 +4111,9 @@
       "target_low": "270.00",
       "rec_score": 2.4,
       "screener": {
-        "market_cap": 349008.0,
-        "current_price": 279.0,
-        "pe_ratio": 17.7,
+        "market_cap": 347317.0,
+        "current_price": 277.0,
+        "pe_ratio": 17.6,
         "dividend_yield": 5.22,
         "roce": 38.9,
         "roe": 29.3,
@@ -4199,12 +4199,12 @@
         "dii_pct": 49.13,
         "dii_change": -0.02,
         "isin": "INE154A01025",
-        "week52_low": 278.6,
+        "week52_low": 277.0,
         "week52_high": 400.8,
         "pct_above_low": 0.0,
-        "advt_cr": 420.74,
+        "advt_cr": 420.04,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.1,
         "industry_share_pct": 49.91,
@@ -4227,10 +4227,10 @@
         "hyper_growth_warning": false,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 17.7 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 17.6 > 15 & Price > Intrinsic)"
         ],
-        "industry_pe": 43.6,
-        "pe_vs_peers": "59% below peers"
+        "industry_pe": 43.7,
+        "pe_vs_peers": "60% below peers"
       },
       "score": {
         "overall_score": 6,
@@ -4243,14 +4243,14 @@
           "Capacity/Product Launch: Premiumization drive growth for ITC’s Personal Care Division in FY26",
           "High Return on Capital (ROCE: 38.9%)",
           "High Return on Equity (ROE: 29.3%)",
-          "Liquid (Rs 421 Cr traded daily)",
+          "Liquid (Rs 420 Cr traded daily)",
           "Wide Economic Moat (Sustained Margin Expansion)"
         ],
         "risks": [
           "Revenue shrinking (TTM -3.2%)",
           "Operating margin contracted (-12.0pp)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 17.7 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 17.6 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Hold / Monitor"
@@ -4266,65 +4266,65 @@
       "name": "Apollo Hospitals Enterprise",
       "catalyst": "Largest hospital network; bed-capacity expansion and the Heal-in-India medical tourism push.",
       "screener": {
-        "market_cap": 123812.0,
-        "current_price": 8611.0,
-        "pe_ratio": 66.2,
+        "market_cap": 124187.0,
+        "current_price": 8637.0,
+        "pe_ratio": 59.0,
         "dividend_yield": 0.23,
         "roce": 17.4,
         "roe": 21.2,
-        "q_sales": 6606.0,
-        "qoq_sales_growth": 1.99,
+        "q_sales": 7044.0,
+        "qoq_sales_growth": 6.63,
         "quarterly_revenue_growth": [
-          5842.0,
           6304.0,
           6477.0,
-          6606.0
+          6606.0,
+          7044.0
         ],
         "sales_trend": [
-          5086.0,
           5589.0,
           5527.0,
           5592.0,
           5842.0,
           6304.0,
           6477.0,
-          6606.0
+          6606.0,
+          7044.0
         ],
-        "q_opm": 15.0,
+        "q_opm": 16.0,
         "quarterly_ebitda_margin": [
           15.0,
           15.0,
           15.0,
-          15.0
+          16.0
         ],
-        "opm_expansion": 0.0,
-        "q_eps": 36.81,
+        "opm_expansion": 1.0,
+        "q_eps": 40.39,
         "eps_trend": [
-          21.23,
           26.34,
           25.89,
           27.1,
           30.1,
           33.19,
           34.93,
-          36.81
+          36.81,
+          40.39
         ],
-        "ttm_eps": 135.03,
-        "q_net_profit": 551.0,
+        "ttm_eps": 145.32,
+        "q_net_profit": 610.0,
         "operating_margin_trend": [
-          15.0,
           12.0,
           13.0,
           14.0,
+          15.0,
           15.0
         ],
         "annual_sales_trend": [
-          10560.0,
           14663.0,
           16612.0,
           19059.0,
           21794.0,
-          25228.0
+          25228.0,
+          26430.0
         ],
         "debt_trend": [
           4068.0,
@@ -4340,7 +4340,7 @@
           2136.0,
           2856.0
         ],
-        "capex": 1321.2,
+        "capex": 1408.8,
         "rd_pct": 1.5,
         "roce_trend": [
           17.0,
@@ -4357,26 +4357,26 @@
         "dii_change": 0.96,
         "isin": "INE437A01024",
         "week52_low": 6793.98,
-        "week52_high": 8988.0,
-        "pct_above_low": 26.61,
-        "advt_cr": 245.06,
+        "week52_high": 8957.0,
+        "pct_above_low": 27.3,
+        "advt_cr": 272.32,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.1,
-        "industry_share_pct": 31.0,
+        "industry_share_pct": 32.39,
         "industry_peer_count": 7,
-        "industry_share_change_pp": 0.0,
-        "peer_share_pct": 58.5,
-        "peer_share_change_pp": 0.66,
+        "industry_share_change_pp": 1.39,
+        "peer_share_pct": 60.0,
+        "peer_share_change_pp": 1.14,
         "peer_share_lookback": 4,
         "peer_group_size": 3,
-        "revenue_yoy_pct": 18.1,
-        "revenue_ttm_growth_pct": 15.8,
-        "revenue_cagr_pct": 19.0,
+        "revenue_yoy_pct": 20.6,
+        "revenue_ttm_growth_pct": 17.2,
+        "revenue_cagr_pct": 12.5,
         "revenue_growth_quality": "ok",
-        "graham_intrinsic_value": 3267.7,
-        "owner_earnings": 1562.2,
+        "graham_intrinsic_value": 3516.7,
+        "owner_earnings": 1710.6,
         "retained_earnings_ratio": 2.86,
         "moat_status": "Strong (Wide Moat)",
         "is_bargain": false,
@@ -4384,13 +4384,13 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 66.2 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 59.0 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 66.2,
+        "industry_pe": 63.1,
         "pe_vs_peers": "In line with peers"
       },
-      "price": "8599.50",
+      "price": "8649.00",
       "rating": "Strong Buy",
       "revenue_growth": "+18.1%",
       "earnings_growth": "+35.6%",
@@ -4400,7 +4400,7 @@
       "target_low": "6230.00",
       "target": "9600.00",
       "rec_score": 1.4,
-      "growth_pct": "+11.6%",
+      "growth_pct": "+11.0%",
       "score": {
         "overall_score": 0,
         "fundamental_score": -1,
@@ -4408,23 +4408,23 @@
         "confidence": "High",
         "reasons": [
           "Sector benefits from macro policy tailwinds (Fallback)",
-          "Strong revenue growth (TTM +15.8%)",
+          "Strong revenue growth (TTM +17.2%)",
           "High Return on Equity (ROE: 21.2%)",
-          "Liquid (Rs 245 Cr traded daily)",
+          "Liquid (Rs 272 Cr traded daily)",
           "DII Accumulation (+0.96%)",
           "Wide Economic Moat (Sustained Margin Expansion)"
         ],
         "risks": [
           "FII Selling (-1.13%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 66.2 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 59.0 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
           "Avoid / High Risk"
         ]
       },
-      "fundamental_value": 3267.7,
+      "fundamental_value": 3516.7,
       "estimate_method": "Analyst Consensus"
     },
     {
@@ -4432,10 +4432,10 @@
       "name": "Max Healthcare Institute",
       "catalyst": "Metro-focused hospital operator adding beds at high occupancy and rising revenue per bed.",
       "screener": {
-        "market_cap": 99349.0,
-        "current_price": 1021.0,
-        "pe_ratio": 67.0,
-        "dividend_yield": 0.19,
+        "market_cap": 98604.0,
+        "current_price": 1013.0,
+        "pe_ratio": 66.5,
+        "dividend_yield": 0.2,
         "roce": 14.7,
         "roe": 14.7,
         "q_sales": 2143.0,
@@ -4524,17 +4524,17 @@
         "isin": "INE027H01010",
         "week52_low": 942.92,
         "week52_high": 1232.51,
-        "pct_above_low": 8.3,
-        "advt_cr": 173.38,
+        "pct_above_low": 7.05,
+        "advt_cr": 176.62,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.1,
-        "industry_share_pct": 10.06,
+        "industry_share_pct": 9.86,
         "industry_peer_count": 7,
-        "industry_share_change_pp": 0.0,
-        "peer_share_pct": 19.0,
-        "peer_share_change_pp": -0.78,
+        "industry_share_change_pp": -0.2,
+        "peer_share_pct": 18.3,
+        "peer_share_change_pp": -0.99,
         "peer_share_lookback": 4,
         "peer_group_size": 3,
         "revenue_yoy_pct": 12.2,
@@ -4550,13 +4550,13 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 67.0 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 66.5 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 66.2,
+        "industry_pe": 63.1,
         "pe_vs_peers": "In line with peers"
       },
-      "price": "1021.20",
+      "price": "1009.40",
       "rating": "Buy",
       "revenue_growth": "+12.2%",
       "earnings_growth": "+7.4%",
@@ -4566,7 +4566,7 @@
       "target_low": "825.00",
       "target": "1190.00",
       "rec_score": 2.0,
-      "growth_pct": "+16.5%",
+      "growth_pct": "+17.9%",
       "score": {
         "overall_score": -3,
         "fundamental_score": -4,
@@ -4576,13 +4576,13 @@
           "Sector benefits from macro policy tailwinds (Fallback)",
           "Strong revenue growth (TTM +19.2%)",
           "Operating Margin Expansion (+2.0%)",
-          "Liquid (Rs 173 Cr traded daily)",
+          "Liquid (Rs 177 Cr traded daily)",
           "DII Accumulation (+3.63%)"
         ],
         "risks": [
           "FII Selling (-3.61%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 67.0 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 66.5 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -4597,9 +4597,9 @@
       "name": "Fortis Healthcare",
       "catalyst": "Hospital and diagnostics network benefiting from insurance penetration and Ayushman Bharat volumes.",
       "screener": {
-        "market_cap": 68350.0,
-        "current_price": 905.0,
-        "pe_ratio": 64.1,
+        "market_cap": 67357.0,
+        "current_price": 892.0,
+        "pe_ratio": 63.1,
         "dividend_yield": 0.11,
         "roce": 13.4,
         "roe": 11.2,
@@ -4689,17 +4689,17 @@
         "isin": "INE061F01013",
         "week52_low": 787.91,
         "week52_high": 1083.75,
-        "pct_above_low": 14.59,
-        "advt_cr": 107.97,
+        "pct_above_low": 13.15,
+        "advt_cr": 117.95,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.2,
-        "industry_share_pct": 11.95,
+        "industry_share_pct": 11.71,
         "industry_peer_count": 7,
-        "industry_share_change_pp": 0.0,
-        "peer_share_pct": 22.5,
-        "peer_share_change_pp": 0.12,
+        "industry_share_change_pp": -0.24,
+        "peer_share_pct": 21.7,
+        "peer_share_change_pp": -0.15,
         "peer_share_lookback": 4,
         "peer_group_size": 3,
         "revenue_yoy_pct": 17.4,
@@ -4715,13 +4715,13 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 64.1 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 63.1 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 66.2,
+        "industry_pe": 63.1,
         "pe_vs_peers": "In line with peers"
       },
-      "price": "902.85",
+      "price": "891.50",
       "rating": "Strong Buy",
       "revenue_growth": "+17.5%",
       "earnings_growth": "+2.3%",
@@ -4731,7 +4731,7 @@
       "target_low": "975.00",
       "target": "1127.50",
       "rec_score": 1.3,
-      "growth_pct": "+24.9%",
+      "growth_pct": "+26.5%",
       "score": {
         "overall_score": 3,
         "fundamental_score": -5,
@@ -4739,15 +4739,15 @@
         "confidence": "High",
         "reasons": [
           "Government Contract/MoU: Fortis Healthcare posts ₹2545 crore in Q1FY27, profit after tax up 2.3%",
-          "Government Contract/MoU: Fortis Healthcare To Add 400 Beds Over Next Three Quarters In FY27",
+          "Government Contract/MoU: Buy Fortis Healthcare; target of Rs 1120: Prabhudas Lilladher",
           "Strong revenue growth (TTM +17.5%)",
-          "Liquid (Rs 108 Cr traded daily)",
+          "Liquid (Rs 118 Cr traded daily)",
           "DII Accumulation (+0.88%)"
         ],
         "risks": [
           "Operating margin contracted (-2.0pp)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 64.1 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 63.1 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -4764,9 +4764,9 @@
       "name": "Indian Hotels Company",
       "catalyst": "Taj operator scaling asset-light management contracts against record domestic travel demand.",
       "screener": {
-        "market_cap": 102238.0,
-        "current_price": 718.0,
-        "pe_ratio": 52.6,
+        "market_cap": 102025.0,
+        "current_price": 717.0,
+        "pe_ratio": 52.5,
         "dividend_yield": 0.45,
         "roce": 17.1,
         "roe": 14.2,
@@ -4856,10 +4856,10 @@
         "isin": "INE053A01029",
         "week52_low": 580.17,
         "week52_high": 785.35,
-        "pct_above_low": 23.82,
-        "advt_cr": 152.17,
+        "pct_above_low": 23.53,
+        "advt_cr": 150.35,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.2,
         "industry_share_pct": 41.16,
@@ -4882,13 +4882,13 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 52.6 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 52.5 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 33.6,
-        "pe_vs_peers": "57% above peers"
+        "industry_pe": 34.0,
+        "pe_vs_peers": "54% above peers"
       },
-      "price": "718.40",
+      "price": "716.80",
       "rating": "Buy",
       "revenue_growth": "+15.1%",
       "earnings_growth": "+20.7%",
@@ -4898,7 +4898,7 @@
       "target_low": "699.00",
       "target": "840.00",
       "rec_score": 1.6,
-      "growth_pct": "+16.9%",
+      "growth_pct": "+17.2%",
       "score": {
         "overall_score": -5,
         "fundamental_score": -6,
@@ -4906,7 +4906,7 @@
         "confidence": "High",
         "reasons": [
           "Sector benefits from macro policy tailwinds (Fallback)",
-          "Liquid (Rs 152 Cr traded daily)",
+          "Liquid (Rs 150 Cr traded daily)",
           "DII Accumulation (+1.89%)",
           "Narrow Economic Moat"
         ],
@@ -4914,7 +4914,7 @@
           "Operating margin contracted (-6.0pp)",
           "FII Selling (-1.52%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 52.6 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 52.5 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -4929,9 +4929,9 @@
       "name": "Chalet Hotels",
       "catalyst": "Business-hotel portfolio near airports and office hubs, geared to corporate travel recovery.",
       "screener": {
-        "market_cap": 17826.0,
-        "current_price": 814.0,
-        "pe_ratio": 33.3,
+        "market_cap": 18056.0,
+        "current_price": 824.0,
+        "pe_ratio": 33.7,
         "dividend_yield": 0.12,
         "roce": 17.1,
         "roe": 19.2,
@@ -5021,10 +5021,10 @@
         "isin": "INE427F01016",
         "week52_low": 723.5,
         "week52_high": 1028.76,
-        "pct_above_low": 12.81,
-        "advt_cr": 9.09,
+        "pct_above_low": 13.93,
+        "advt_cr": 9.28,
         "liquidity_band": "adequate",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.5,
         "days_to_exit_5cr": 2.7,
         "industry_share_pct": 9.01,
@@ -5047,13 +5047,13 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 33.3 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 33.7 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 33.6,
+        "industry_pe": 34.0,
         "pe_vs_peers": "In line with peers"
       },
-      "price": "816.15",
+      "price": "824.30",
       "rating": "Strong Buy",
       "revenue_growth": "-42.7%",
       "earnings_growth": "-57.7%",
@@ -5063,7 +5063,7 @@
       "target_low": "890.00",
       "target": "980.00",
       "rec_score": 1.2,
-      "growth_pct": "+20.1%",
+      "growth_pct": "+18.9%",
       "score": {
         "overall_score": 1,
         "fundamental_score": -2,
@@ -5078,7 +5078,7 @@
         "risks": [
           "Operating margin contracted (-2.0pp)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 33.3 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 33.7 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -5093,9 +5093,9 @@
       "name": "Lemon Tree Hotels",
       "catalyst": "Mid-market chain expanding into tier-2 cities as UDAN air connectivity widens the travel base.",
       "screener": {
-        "market_cap": 8584.0,
-        "current_price": 108.0,
-        "pe_ratio": 33.6,
+        "market_cap": 8715.0,
+        "current_price": 110.0,
+        "pe_ratio": 34.0,
         "dividend_yield": 0.0,
         "roce": 14.0,
         "roe": 19.4,
@@ -5185,10 +5185,10 @@
         "isin": "INE970X01018",
         "week52_low": 101.11,
         "week52_high": 175.37,
-        "pct_above_low": 7.25,
-        "advt_cr": 31.22,
+        "pct_above_low": 8.31,
+        "advt_cr": 31.06,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.2,
         "days_to_exit_5cr": 0.8,
         "industry_share_pct": 6.06,
@@ -5211,14 +5211,14 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 33.6 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 34.0 > 15 & Price > Intrinsic)",
           "No Dividend Yield",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 33.6,
+        "industry_pe": 34.0,
         "pe_vs_peers": "In line with peers"
       },
-      "price": "108.44",
+      "price": "109.51",
       "rating": "Strong Buy",
       "revenue_growth": "+9.2%",
       "earnings_growth": "+20.8%",
@@ -5228,7 +5228,7 @@
       "target_low": "120.00",
       "target": "151.00",
       "rec_score": 1.2,
-      "growth_pct": "+39.2%",
+      "growth_pct": "+37.9%",
       "score": {
         "overall_score": -5,
         "fundamental_score": -6,
@@ -5244,7 +5244,7 @@
           "Operating margin contracted (-9.0pp)",
           "FII Selling (-2.15%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 33.6 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 34.0 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -5259,23 +5259,23 @@
     {
       "ticker": "SIEMENS",
       "name": "Siemens Ltd",
-      "price": "4044.00",
-      "target": "3751.00",
-      "growth_pct": "-7.2%",
+      "price": "3993.90",
+      "target": "3778.50",
+      "growth_pct": "-5.4%",
       "catalyst": "Diversified capital-goods major, expanding local factory automation and grid equipment manufacturing.",
       "rating": "Hold",
-      "revenue_growth": "+14.6%",
-      "earnings_growth": "-36.4%",
+      "revenue_growth": "+14.8%",
+      "earnings_growth": "+406.1%",
       "analyst_count": 26,
-      "target_median": "3751.00",
-      "target_high": "4375.00",
-      "target_low": "2950.00",
+      "target_median": "3778.50",
+      "target_high": "4850.00",
+      "target_low": "3000.00",
       "rec_score": 2.6,
       "screener": {
-        "market_cap": 143333.0,
-        "current_price": 4025.0,
-        "pe_ratio": 95.3,
-        "dividend_yield": 0.44,
+        "market_cap": 142053.0,
+        "current_price": 3989.0,
+        "pe_ratio": 94.5,
+        "dividend_yield": 0.45,
         "roce": 21.4,
         "roe": 19.2,
         "q_sales": 4714.0,
@@ -5363,16 +5363,16 @@
         "dii_change": 0.51,
         "isin": "INE003A01024",
         "week52_low": 2886.22,
-        "week52_high": 4044.0,
-        "pct_above_low": 40.11,
-        "advt_cr": 156.49,
+        "week52_high": 3993.9,
+        "pct_above_low": 38.38,
+        "advt_cr": 159.96,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.2,
         "industry_share_pct": 16.62,
         "industry_peer_count": 8,
-        "industry_share_change_pp": 0.29,
+        "industry_share_change_pp": 0.0,
         "peer_share_pct": 52.3,
         "peer_share_change_pp": 1.11,
         "peer_share_lookback": 4,
@@ -5390,10 +5390,10 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 95.3 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 94.5 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 87.4,
+        "industry_pe": 88.1,
         "pe_vs_peers": "In line with peers"
       },
       "score": {
@@ -5407,13 +5407,13 @@
           "Capacity/Product Launch: Siemens to acquire RTL design automation software company",
           "High Return on Capital (ROCE: 21.4%)",
           "High Return on Equity (ROE: 19.2%)",
-          "Liquid (Rs 156 Cr traded daily)",
+          "Liquid (Rs 160 Cr traded daily)",
           "DII Accumulation (+0.51%)",
           "Wide Economic Moat (Sustained Margin Expansion)"
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 95.3 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 94.5 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -5426,9 +5426,9 @@
     {
       "ticker": "THERMAX",
       "name": "Thermax Ltd",
-      "price": "4038.90",
+      "price": "4068.80",
       "target": "4262.00",
-      "growth_pct": "+5.5%",
+      "growth_pct": "+4.7%",
       "catalyst": "Industrial energy & environment engineering leader, scaling green hydrogen and boiler manufacturing capacity.",
       "rating": "Hold",
       "revenue_growth": "+7.1%",
@@ -5439,10 +5439,10 @@
       "target_low": "3300.00",
       "rec_score": 2.7,
       "screener": {
-        "market_cap": 48095.0,
-        "current_price": 4036.0,
-        "pe_ratio": 87.4,
-        "dividend_yield": 0.35,
+        "market_cap": 48494.0,
+        "current_price": 4070.0,
+        "pe_ratio": 88.1,
+        "dividend_yield": 0.34,
         "roce": 13.9,
         "roe": 10.6,
         "q_sales": 2303.0,
@@ -5531,15 +5531,15 @@
         "isin": "INE152A01029",
         "week52_low": 2834.12,
         "week52_high": 4962.43,
-        "pct_above_low": 42.51,
-        "advt_cr": 164.83,
+        "pct_above_low": 43.56,
+        "advt_cr": 156.84,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.2,
         "industry_share_pct": 8.12,
         "industry_peer_count": 8,
-        "industry_share_change_pp": -0.02,
+        "industry_share_change_pp": 0.0,
         "peer_share_pct": 25.5,
         "peer_share_change_pp": -1.34,
         "peer_share_lookback": 4,
@@ -5557,10 +5557,10 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 87.4 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 88.1 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 87.4,
+        "industry_pe": 88.1,
         "pe_vs_peers": "In line with peers"
       },
       "score": {
@@ -5571,13 +5571,13 @@
         "reasons": [
           "Capacity/Product Launch: Thermax Limited and Ankur Scientific Partner to Launch India’s First Green Methanol Plant at Deendayal Port Authority",
           "Policy Notification: BSE Power index hits 16-month high; Siemens, Thermax soar 6%",
-          "Liquid (Rs 165 Cr traded daily)",
+          "Liquid (Rs 157 Cr traded daily)",
           "FII Accumulation (+0.21%)"
         ],
         "risks": [
           "Operating margin contracted (-8.0pp)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 87.4 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 88.1 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -5590,9 +5590,9 @@
     {
       "ticker": "KIRLOSENG",
       "name": "Kirloskar Oil Engines",
-      "price": "2100.30",
+      "price": "2107.70",
       "target": "2565.50",
-      "growth_pct": "+22.1%",
+      "growth_pct": "+21.7%",
       "catalyst": "Legacy engineering major pivoting to power generation and farm equipment manufacturing under 'Make in India'.",
       "rating": "Strong Buy",
       "revenue_growth": "+13.4%",
@@ -5603,9 +5603,9 @@
       "target_low": "1645.00",
       "rec_score": 1.5,
       "screener": {
-        "market_cap": 30430.0,
-        "current_price": 2091.0,
-        "pe_ratio": 53.4,
+        "market_cap": 30484.0,
+        "current_price": 2095.0,
+        "pe_ratio": 53.5,
         "dividend_yield": 0.33,
         "roce": 14.6,
         "roe": 17.5,
@@ -5695,12 +5695,12 @@
         "isin": "INE146L01010",
         "week52_low": 863.15,
         "week52_high": 2486.64,
-        "pct_above_low": 143.33,
-        "advt_cr": 99.98,
+        "pct_above_low": 144.19,
+        "advt_cr": 100.34,
         "liquidity_band": "liquid",
-        "sessions": 23,
-        "days_to_exit_1cr": 0.1,
-        "days_to_exit_5cr": 0.3,
+        "sessions": 24,
+        "days_to_exit_1cr": 0.0,
+        "days_to_exit_5cr": 0.2,
         "industry_share_pct": 22.38,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
@@ -5721,10 +5721,10 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 53.4 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 53.5 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 87.4,
+        "industry_pe": 88.1,
         "pe_vs_peers": "39% below peers"
       },
       "score": {
@@ -5743,7 +5743,7 @@
         "risks": [
           "Operating margin contracted (-3.0pp)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 53.4 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 53.5 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -5756,7 +5756,7 @@
     {
       "ticker": "ELGIEQUIP",
       "name": "Elgi Equipments",
-      "price": "577.85",
+      "price": "577.60",
       "target": "665.00",
       "growth_pct": "+15.1%",
       "catalyst": "Global air compressor manufacturer, expanding export-oriented capacity from Indian plants.",
@@ -5772,10 +5772,10 @@
         "isin": "INE285A01027",
         "week52_low": 423.03,
         "week52_high": 609.91,
-        "pct_above_low": 36.6,
-        "advt_cr": 15.57,
+        "pct_above_low": 36.54,
+        "advt_cr": 15.28,
         "liquidity_band": "adequate",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.3,
         "days_to_exit_5cr": 1.6,
         "industry_share_pct": 12.45,
@@ -5812,9 +5812,9 @@
     {
       "ticker": "CONCOR",
       "name": "Container Corporation of India",
-      "price": "520.45",
+      "price": "525.50",
       "target": "550.00",
-      "growth_pct": "+5.7%",
+      "growth_pct": "+4.7%",
       "catalyst": "Dominant railway container carrier, major beneficiary of the ₹10,000 crore container manufacturing scheme.",
       "rating": "Buy",
       "revenue_growth": "+0.3%",
@@ -5822,13 +5822,13 @@
       "analyst_count": 15,
       "target_median": "550.00",
       "target_high": "667.00",
-      "target_low": "457.00",
+      "target_low": "470.00",
       "rec_score": 2.3,
       "screener": {
-        "market_cap": 39357.0,
-        "current_price": 517.0,
-        "pe_ratio": 31.7,
-        "dividend_yield": 1.48,
+        "market_cap": 40187.0,
+        "current_price": 528.0,
+        "pe_ratio": 32.4,
+        "dividend_yield": 1.45,
         "roce": 12.4,
         "roe": 9.81,
         "q_sales": 2160.0,
@@ -5917,10 +5917,10 @@
         "isin": "INE111A01025",
         "week52_low": 436.86,
         "week52_high": 545.62,
-        "pct_above_low": 19.24,
-        "advt_cr": 137.93,
+        "pct_above_low": 20.29,
+        "advt_cr": 135.11,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.2,
         "industry_share_pct": 15.96,
@@ -5943,11 +5943,11 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 31.7 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 32.4 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 59.8,
-        "pe_vs_peers": "47% below peers"
+        "industry_pe": 60.3,
+        "pe_vs_peers": "46% below peers"
       },
       "score": {
         "overall_score": 4,
@@ -5956,15 +5956,15 @@
         "confidence": "High",
         "reasons": [
           "Government Contract/MoU: CONCOR appoints Shri Ajit Kumar Panda as CMD effective Aug 1, 2026",
+          "Capacity/Product Launch: CONCOR Launches Ennore to Hyderabad Rail Freight Service",
           "Capacity/Product Launch: CONCOR awarded Authorized Economic Operator (AEO) Certificate by Indian Customs",
-          "Capacity/Product Launch: Top stocks in news: HDFC Bank, RITES, YES Bank, Concor, Axis Bank, SW Solar, Afcons Infra",
           "Operating Margin Expansion (+2.0%)",
-          "Liquid (Rs 138 Cr traded daily)",
+          "Liquid (Rs 135 Cr traded daily)",
           "DII Accumulation (+0.08%)"
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 31.7 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 32.4 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -5977,9 +5977,9 @@
     {
       "ticker": "BHEL",
       "name": "Bharat Heavy Electricals",
-      "price": "408.95",
+      "price": "414.75",
       "target": "452.00",
-      "growth_pct": "+10.5%",
+      "growth_pct": "+9.0%",
       "catalyst": "State-owned heavy power equipment giant, expanding local container manufacturing and green energy grids.",
       "rating": "None",
       "revenue_growth": "+40.3%",
@@ -5990,10 +5990,10 @@
       "target_low": "140.00",
       "rec_score": 2.8,
       "screener": {
-        "market_cap": 142521.0,
-        "current_price": 409.0,
-        "pe_ratio": 58.6,
-        "dividend_yield": 0.35,
+        "market_cap": 145254.0,
+        "current_price": 417.0,
+        "pe_ratio": 59.7,
+        "dividend_yield": 0.33,
         "roce": 9.14,
         "roe": 6.23,
         "q_sales": 7698.0,
@@ -6082,10 +6082,10 @@
         "isin": "INE257A01026",
         "week52_low": 207.34,
         "week52_high": 422.0,
-        "pct_above_low": 97.19,
-        "advt_cr": 509.08,
+        "pct_above_low": 100.01,
+        "advt_cr": 512.75,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.0,
         "peer_share_pct": 46.3,
@@ -6105,10 +6105,10 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 58.6 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 59.7 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 59.8,
+        "industry_pe": 60.3,
         "pe_vs_peers": "In line with peers"
       },
       "score": {
@@ -6121,13 +6121,13 @@
           "Capacity/Product Launch: BHEL unveils India’s first indigenous 1200 kV transformer",
           "Capacity/Product Launch: BHEL unveils India's first 1200 kV homegrown transformer",
           "Strong revenue growth (TTM +27.0%)",
-          "Liquid (Rs 509 Cr traded daily)",
+          "Liquid (Rs 513 Cr traded daily)",
           "FII Accumulation (+2.29%)"
         ],
         "risks": [
           "Operating margin contracted (-7.0pp)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 58.6 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 59.7 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -6140,9 +6140,9 @@
     {
       "ticker": "CUMMINSIND",
       "name": "Cummins India",
-      "price": "5376.50",
+      "price": "5366.50",
       "target": "6066.00",
-      "growth_pct": "+12.8%",
+      "growth_pct": "+13.0%",
       "catalyst": "Leading heavy engine maker, supplying power backups and engines for logistics and railway expansion.",
       "rating": "Buy",
       "revenue_growth": "+17.9%",
@@ -6153,8 +6153,8 @@
       "target_low": "3500.00",
       "rec_score": 2.3,
       "screener": {
-        "market_cap": 148635.0,
-        "current_price": 5362.0,
+        "market_cap": 148551.0,
+        "current_price": 5359.0,
         "pe_ratio": 60.9,
         "dividend_yield": 1.23,
         "roce": 39.5,
@@ -6245,10 +6245,10 @@
         "isin": "INE298A01020",
         "week52_low": 3736.38,
         "week52_high": 5832.62,
-        "pct_above_low": 43.8,
-        "advt_cr": 237.91,
+        "pct_above_low": 43.63,
+        "advt_cr": 237.27,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.1,
         "peer_share_pct": 20.6,
@@ -6271,7 +6271,7 @@
           "Fails P/E Screen (P/E 60.9 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 59.8,
+        "industry_pe": 60.3,
         "pe_vs_peers": "In line with peers"
       },
       "score": {
@@ -6284,7 +6284,7 @@
           "Strong revenue growth (TTM +15.3%)",
           "High Return on Capital (ROCE: 39.5%)",
           "High Return on Equity (ROE: 30.2%)",
-          "Liquid (Rs 238 Cr traded daily)",
+          "Liquid (Rs 237 Cr traded daily)",
           "FII Accumulation (+0.42%)",
           "Wide Economic Moat (Sustained Margin Expansion)"
         ],
@@ -6304,16 +6304,16 @@
     {
       "ticker": "TVSSCS",
       "name": "TVS Supply",
-      "price": "129.02",
-      "target": "64.51",
+      "price": "128.21",
+      "target": "64.11",
       "growth_pct": "-50.0%",
       "catalyst": "Auto-discovered via media radar. Catalyst: Policy tailwinds in the logistics_heavy_capital segment.",
       "rating": "None",
       "revenue_growth": "+29.2%",
       "screener": {
-        "market_cap": 5707.0,
+        "market_cap": 5681.0,
         "current_price": 129.0,
-        "pe_ratio": 80.5,
+        "pe_ratio": 80.2,
         "dividend_yield": 0.0,
         "roce": 10.1,
         "roe": 9.7,
@@ -6403,12 +6403,12 @@
         "isin": "INE395N01027",
         "week52_low": 93.96,
         "week52_high": 141.66,
-        "pct_above_low": 37.31,
-        "advt_cr": 4.84,
+        "pct_above_low": 36.45,
+        "advt_cr": 4.76,
         "liquidity_band": "thin",
-        "sessions": 23,
-        "days_to_exit_1cr": 1.0,
-        "days_to_exit_5cr": 5.2,
+        "sessions": 24,
+        "days_to_exit_1cr": 1.1,
+        "days_to_exit_5cr": 5.3,
         "industry_share_pct": 24.64,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
@@ -6429,12 +6429,12 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 80.5 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 80.2 > 15 & Price > Intrinsic)",
           "No Dividend Yield",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 59.8,
-        "pe_vs_peers": "35% above peers"
+        "industry_pe": 60.3,
+        "pe_vs_peers": "33% above peers"
       },
       "score": {
         "overall_score": -5,
@@ -6446,9 +6446,9 @@
           "Strong revenue growth (TTM +16.9%)"
         ],
         "risks": [
-          "Thin: Rs 4.84 Cr traded daily, ~1 sessions to exit Rs 1 Cr",
+          "Thin: Rs 4.76 Cr traded daily, ~1 sessions to exit Rs 1 Cr",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 80.5 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 80.2 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -6464,7 +6464,7 @@
     {
       "ticker": "MAKEINDIA",
       "name": "Mirae Asset Nifty India Manufacturing ETF",
-      "price": "169.15",
+      "price": "169.07",
       "target": null,
       "growth_pct": null,
       "catalyst": "Passive index fund tracking the Nifty India Manufacturing Index. Captures the Make in India and PLI momentum.",
@@ -6482,14 +6482,14 @@
         "roce": "N/A",
         "roe": "N/A",
         "isin": "INF769K01IB1",
-        "week52_low": 143.55,
+        "week52_low": 161.52,
         "week52_high": 169.61,
-        "pct_above_low": 17.83,
-        "advt_cr": 0.76,
+        "pct_above_low": 4.67,
+        "advt_cr": 0.75,
         "liquidity_band": "illiquid",
-        "sessions": 23,
-        "days_to_exit_1cr": 6.5,
-        "days_to_exit_5cr": 32.7
+        "sessions": 24,
+        "days_to_exit_1cr": 6.7,
+        "days_to_exit_5cr": 33.4
       }
     }
   ],
@@ -6497,9 +6497,9 @@
     {
       "ticker": "DIXON",
       "name": "Dixon Technologies",
-      "price": "13883.00",
+      "price": "13681.00",
       "target": "15440.00",
-      "growth_pct": "+11.2%",
+      "growth_pct": "+12.9%",
       "catalyst": "Leader in electronic assembly (mobile, laptop, LED TV), heavily subsidized under manufacturing PLI.",
       "rating": "Buy",
       "revenue_growth": "+21.1%",
@@ -6510,9 +6510,9 @@
       "target_low": "8157.00",
       "rec_score": 2.2,
       "screener": {
-        "market_cap": 84822.0,
-        "current_price": 13873.0,
-        "pe_ratio": 45.2,
+        "market_cap": 83765.0,
+        "current_price": 13700.0,
+        "pe_ratio": 44.6,
         "dividend_yield": 0.06,
         "roce": 42.0,
         "roe": 37.4,
@@ -6602,10 +6602,10 @@
         "isin": "INE935N01020",
         "week52_low": 9920.5,
         "week52_high": 18177.0,
-        "pct_above_low": 39.94,
-        "advt_cr": 640.14,
+        "pct_above_low": 37.91,
+        "advt_cr": 632.07,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.0,
         "industry_share_pct": 61.68,
@@ -6628,10 +6628,10 @@
         "hyper_growth_warning": false,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 45.2 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 44.6 > 15 & Price > Intrinsic)"
         ],
-        "industry_pe": 72.4,
-        "pe_vs_peers": "38% below peers"
+        "industry_pe": 73.4,
+        "pe_vs_peers": "39% below peers"
       },
       "score": {
         "overall_score": 10,
@@ -6644,13 +6644,13 @@
           "Policy Notification: Dixon to BEL",
           "High Return on Capital (ROCE: 42.0%)",
           "High Return on Equity (ROE: 37.4%)",
-          "Liquid (Rs 640 Cr traded daily)",
+          "Liquid (Rs 632 Cr traded daily)",
           "DII Accumulation (+0.24%)",
           "Wide Economic Moat (Sustained Margin Expansion)"
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 45.2 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 44.6 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Buy Candidate"
@@ -6662,9 +6662,9 @@
     {
       "ticker": "KAYNES",
       "name": "Kaynes Technology",
-      "price": "3737.80",
+      "price": "3779.60",
       "target": "3595.00",
-      "growth_pct": "-3.8%",
+      "growth_pct": "-4.9%",
       "catalyst": "High-end electronics and PCBA manufacturing, setting up a state-of-the-art semiconductor OSAT plant.",
       "rating": "Hold",
       "revenue_growth": "+42.6%",
@@ -6675,9 +6675,9 @@
       "target_low": "2790.00",
       "rec_score": 3.1,
       "screener": {
-        "market_cap": 25141.0,
-        "current_price": 3740.0,
-        "pe_ratio": 72.4,
+        "market_cap": 25509.0,
+        "current_price": 3795.0,
+        "pe_ratio": 73.4,
         "dividend_yield": 0.0,
         "roce": 13.2,
         "roe": 9.64,
@@ -6767,15 +6767,15 @@
         "isin": "INE918Z01012",
         "week52_low": 3076.9,
         "week52_high": 7341.0,
-        "pct_above_low": 21.45,
-        "advt_cr": 499.29,
+        "pct_above_low": 22.84,
+        "advt_cr": 496.63,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.1,
-        "industry_share_pct": 13.4,
+        "industry_share_pct": 13.44,
         "industry_peer_count": 7,
-        "industry_share_change_pp": 0.0,
+        "industry_share_change_pp": 0.04,
         "peer_share_pct": 4.3,
         "peer_share_change_pp": 0.49,
         "peer_share_lookback": 4,
@@ -6793,11 +6793,11 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 72.4 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 73.4 > 15 & Price > Intrinsic)",
           "No Dividend Yield",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 72.4,
+        "industry_pe": 73.4,
         "pe_vs_peers": "In line with peers"
       },
       "score": {
@@ -6809,12 +6809,12 @@
           "Government Contract/MoU: Accumulate Kaynes Technology India; target of Rs 4390: Prabhudas Lilladher",
           "Government Contract/MoU: Kaynes Technology Q1 falls short of estimates; net profit drops 24% despite 41% revenue growth",
           "Strong revenue growth (TTM +34.9%)",
-          "Liquid (Rs 499 Cr traded daily)"
+          "Liquid (Rs 497 Cr traded daily)"
         ],
         "risks": [
           "FII Selling (-1.46%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 72.4 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 73.4 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -6827,9 +6827,9 @@
     {
       "ticker": "CGPOWER",
       "name": "CG Power & Industrial",
-      "price": "875.45",
+      "price": "884.00",
       "target": "961.50",
-      "growth_pct": "+9.8%",
+      "growth_pct": "+8.8%",
       "catalyst": "Partnering on a $1B semiconductor fab, strong order pipeline in railways and power grid equipment.",
       "rating": "None",
       "revenue_growth": "+14.0%",
@@ -6840,9 +6840,9 @@
       "target_low": "627.00",
       "rec_score": 2.1,
       "screener": {
-        "market_cap": 137518.0,
-        "current_price": 873.0,
-        "pe_ratio": 108.0,
+        "market_cap": 139117.0,
+        "current_price": 883.0,
+        "pe_ratio": 109.0,
         "dividend_yield": 0.15,
         "roce": 26.7,
         "roe": 20.5,
@@ -6932,10 +6932,10 @@
         "isin": "INE067A01029",
         "week52_low": 547.89,
         "week52_high": 963.7,
-        "pct_above_low": 59.79,
-        "advt_cr": 344.01,
+        "pct_above_low": 61.35,
+        "advt_cr": 331.64,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.1,
         "peer_share_pct": 15.0,
@@ -6955,10 +6955,10 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 108.0 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 109.0 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 72.4,
+        "industry_pe": 73.4,
         "pe_vs_peers": "49% above peers"
       },
       "score": {
@@ -6971,14 +6971,14 @@
           "Strong revenue growth (TTM +21.4%)",
           "High Return on Capital (ROCE: 26.7%)",
           "High Return on Equity (ROE: 20.5%)",
-          "Liquid (Rs 344 Cr traded daily)",
+          "Liquid (Rs 332 Cr traded daily)",
           "DII Accumulation (+0.22%)",
           "Wide Economic Moat (Sustained Margin Expansion)"
         ],
         "risks": [
           "Operating margin contracted (-2.0pp)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 108.0 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 109.0 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -6991,17 +6991,17 @@
     {
       "ticker": "LLOYDSENGG",
       "name": "Lloyds Engineeri",
-      "price": "93.28",
-      "target": "46.64",
+      "price": "91.86",
+      "target": "45.93",
       "growth_pct": "-50.0%",
       "catalyst": "Auto-discovered via media radar. Catalyst: Policy tailwinds in the manufacturing_electronics segment.",
       "rating": "None",
       "revenue_growth": "+142.9%",
       "earnings_growth": "+91.7%",
       "screener": {
-        "market_cap": 13606.0,
-        "current_price": 93.0,
-        "pe_ratio": 60.8,
+        "market_cap": 13622.0,
+        "current_price": 92.2,
+        "pe_ratio": 60.9,
         "dividend_yield": 0.27,
         "roce": 16.1,
         "roe": 15.1,
@@ -7076,15 +7076,15 @@
         "isin": "INE093R01011",
         "week52_low": 39.04,
         "week52_high": 96.88,
-        "pct_above_low": 138.93,
-        "advt_cr": 125.97,
+        "pct_above_low": 135.3,
+        "advt_cr": 123.72,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.2,
-        "industry_share_pct": 7.47,
+        "industry_share_pct": 7.49,
         "industry_peer_count": 7,
-        "industry_share_change_pp": 0.0,
+        "industry_share_change_pp": 0.02,
         "peer_share_pct": 2.4,
         "peer_share_change_pp": 1.17,
         "peer_share_lookback": 4,
@@ -7102,11 +7102,11 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 60.8 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 60.9 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 72.4,
-        "pe_vs_peers": "16% below peers"
+        "industry_pe": 73.4,
+        "pe_vs_peers": "17% below peers"
       },
       "score": {
         "overall_score": 1,
@@ -7117,13 +7117,13 @@
           "Sector benefits from macro policy tailwinds (Fallback)",
           "Strong revenue growth (TTM +75.9%)",
           "High Return on Equity (ROE: 15.1%)",
-          "Liquid (Rs 126 Cr traded daily)",
+          "Liquid (Rs 124 Cr traded daily)",
           "DII Accumulation (+0.05%)",
           "Wide Economic Moat (Sustained Margin Expansion)"
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 60.8 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 60.9 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -7136,7 +7136,7 @@
     {
       "ticker": "SYRMA",
       "name": "Syrma SGS Tech.",
-      "price": "1496.00",
+      "price": "1496.70",
       "target": "1570.00",
       "growth_pct": "+4.9%",
       "catalyst": "Auto-discovered via media radar. Catalyst: Policy tailwinds in the manufacturing_electronics segment.",
@@ -7149,9 +7149,9 @@
       "target_low": "940.00",
       "rec_score": 1.7,
       "screener": {
-        "market_cap": 28896.0,
-        "current_price": 1498.0,
-        "pe_ratio": 77.8,
+        "market_cap": 28922.0,
+        "current_price": 1500.0,
+        "pe_ratio": 77.9,
         "dividend_yield": 0.1,
         "roce": 16.8,
         "roe": 14.0,
@@ -7240,16 +7240,16 @@
         "dii_change": -0.69,
         "isin": "INE0DYJ01015",
         "week52_low": 665.35,
-        "week52_high": 1496.0,
-        "pct_above_low": 124.84,
-        "advt_cr": 201.75,
+        "week52_high": 1496.7,
+        "pct_above_low": 124.95,
+        "advt_cr": 197.67,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.1,
-        "industry_share_pct": 22.51,
+        "industry_share_pct": 22.57,
         "industry_peer_count": 7,
-        "industry_share_change_pp": 0.0,
+        "industry_share_change_pp": 0.06,
         "peer_share_pct": 7.3,
         "peer_share_change_pp": 1.88,
         "peer_share_lookback": 4,
@@ -7267,10 +7267,10 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 77.8 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 77.9 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 72.4,
+        "industry_pe": 73.4,
         "pe_vs_peers": "In line with peers"
       },
       "score": {
@@ -7282,14 +7282,14 @@
           "Government Contract/MoU [transformative, 29.3% of revenue]: Syrma SGS eyes 35%+ revenue growth, targets ₹1,600 crore exports and ₹1,200 crore ODM in FY27",
           "Government Contract/MoU [transformative, 18.3% of revenue]: Semicon 2.0: Syrma SGS plans to invest Rs 1,000 crore in semionductor projects",
           "Strong revenue growth (TTM +53.0%)",
-          "Liquid (Rs 202 Cr traded daily)",
+          "Liquid (Rs 198 Cr traded daily)",
           "FII Accumulation (+0.91%)",
           "Narrow Economic Moat"
         ],
         "risks": [
           "Operating margin contracted (-2.0pp)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 77.8 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 77.9 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -7304,9 +7304,9 @@
     {
       "ticker": "PERSISTENT",
       "name": "Persistent Systems",
-      "price": "5476.50",
+      "price": "5484.00",
       "target": "5700.00",
-      "growth_pct": "+4.1%",
+      "growth_pct": "+3.9%",
       "catalyst": "High-growth digital engineering and enterprise AI services provider, consistently outpacing large-cap IT growth rates.",
       "rating": "Hold",
       "revenue_growth": "+29.1%",
@@ -7317,9 +7317,9 @@
       "target_low": "3310.00",
       "rec_score": 2.5,
       "screener": {
-        "market_cap": 86131.0,
-        "current_price": 5460.0,
-        "pe_ratio": 43.3,
+        "market_cap": 86548.0,
+        "current_price": 5486.0,
+        "pe_ratio": 43.5,
         "dividend_yield": 0.72,
         "roce": 34.4,
         "roe": 27.2,
@@ -7409,10 +7409,10 @@
         "isin": "INE262H01013",
         "week52_low": 4622.74,
         "week52_high": 6474.71,
-        "pct_above_low": 18.47,
-        "advt_cr": 304.67,
+        "pct_above_low": 18.63,
+        "advt_cr": 315.34,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.1,
         "industry_share_pct": 2.0,
@@ -7435,11 +7435,11 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 43.3 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 43.5 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "industry_pe": 35.1,
-        "pe_vs_peers": "23% above peers"
+        "pe_vs_peers": "24% above peers"
       },
       "score": {
         "overall_score": 6,
@@ -7452,14 +7452,14 @@
           "Strong revenue growth (TTM +25.4%)",
           "High Return on Capital (ROCE: 34.4%)",
           "High Return on Equity (ROE: 27.2%)",
-          "Liquid (Rs 305 Cr traded daily)",
+          "Liquid (Rs 315 Cr traded daily)",
           "Wide Economic Moat (Sustained Margin Expansion)"
         ],
         "risks": [
           "Operating margin contracted (-3.0pp)",
           "FII Selling (-1.32%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 43.3 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 43.5 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -7472,9 +7472,9 @@
     {
       "ticker": "COFORGE",
       "name": "Coforge Ltd",
-      "price": "1803.30",
+      "price": "1810.00",
       "target": "1950.00",
-      "growth_pct": "+8.1%",
+      "growth_pct": "+7.7%",
       "catalyst": "Mid-tier IT services firm with large deal wins in BFSI and travel verticals, expanding margins via GenAI offerings.",
       "rating": "Buy",
       "revenue_growth": "+49.9%",
@@ -7485,10 +7485,10 @@
       "target_low": "1187.00",
       "rec_score": 1.6,
       "screener": {
-        "market_cap": 79726.0,
-        "current_price": 1800.0,
-        "pe_ratio": 41.6,
-        "dividend_yield": 0.66,
+        "market_cap": 80186.0,
+        "current_price": 1810.0,
+        "pe_ratio": 41.8,
+        "dividend_yield": 0.67,
         "roce": 23.5,
         "roe": 21.4,
         "q_sales": 5528.0,
@@ -7577,10 +7577,10 @@
         "isin": "INE591G01017",
         "week52_low": 1084.28,
         "week52_high": 1964.09,
-        "pct_above_low": 66.3,
-        "advt_cr": 538.17,
+        "pct_above_low": 66.93,
+        "advt_cr": 527.9,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.0,
         "industry_share_pct": 2.55,
@@ -7603,7 +7603,7 @@
         "hyper_growth_warning": false,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 41.6 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 41.8 > 15 & Price > Intrinsic)"
         ],
         "industry_pe": 35.1,
         "pe_vs_peers": "19% above peers"
@@ -7620,13 +7620,13 @@
           "Strong revenue growth (TTM +35.7%)",
           "High Return on Capital (ROCE: 23.5%)",
           "High Return on Equity (ROE: 21.4%)",
-          "Liquid (Rs 538 Cr traded daily)",
+          "Liquid (Rs 528 Cr traded daily)",
           "Wide Economic Moat (Sustained Margin Expansion)"
         ],
         "risks": [
           "FII Selling (-6.35%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 41.6 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 41.8 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Hold / Monitor"
@@ -7638,9 +7638,9 @@
     {
       "ticker": "MPHASIS",
       "name": "Mphasis Ltd",
-      "price": "2503.50",
+      "price": "2503.80",
       "target": "2650.00",
-      "growth_pct": "+5.9%",
+      "growth_pct": "+5.8%",
       "catalyst": "Direct-core BFS-focused IT services player, key beneficiary of enterprise cloud and cost-takeout deals.",
       "rating": "Buy",
       "revenue_growth": "+17.5%",
@@ -7651,10 +7651,10 @@
       "target_low": "1720.00",
       "rec_score": 1.9,
       "screener": {
-        "market_cap": 47790.0,
-        "current_price": 2504.0,
+        "market_cap": 47891.0,
+        "current_price": 2509.0,
         "pe_ratio": 24.7,
-        "dividend_yield": 2.48,
+        "dividend_yield": 2.46,
         "roce": 22.1,
         "roe": 18.5,
         "q_sales": 4384.0,
@@ -7743,10 +7743,10 @@
         "isin": "INE356A01018",
         "week52_low": 2028.81,
         "week52_high": 2915.63,
-        "pct_above_low": 23.4,
-        "advt_cr": 147.84,
+        "pct_above_low": 23.41,
+        "advt_cr": 145.0,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.2,
         "industry_share_pct": 2.03,
@@ -7783,7 +7783,7 @@
           "Policy Notification: Mphasis acquires Theory and Practice Business Intelligence Inc., strengthening its 'Decisioning Intelligence' capabilities",
           "High Return on Capital (ROCE: 22.1%)",
           "High Return on Equity (ROE: 18.5%)",
-          "Liquid (Rs 148 Cr traded daily)",
+          "Liquid (Rs 145 Cr traded daily)",
           "Wide Economic Moat (Sustained Margin Expansion)"
         ],
         "risks": [
@@ -7799,9 +7799,9 @@
     {
       "ticker": "LTTS",
       "name": "L&T Technology Services",
-      "price": "3631.70",
+      "price": "3624.00",
       "target": "3522.00",
-      "growth_pct": "-3.0%",
+      "growth_pct": "-2.8%",
       "catalyst": "Engineering R&D services leader, scaling embedded software and semiconductor design-services wins.",
       "rating": "Hold",
       "revenue_growth": "+2.6%",
@@ -7812,10 +7812,10 @@
       "target_low": "2950.00",
       "rec_score": 2.7,
       "screener": {
-        "market_cap": 38528.0,
-        "current_price": 3632.0,
-        "pe_ratio": 28.7,
-        "dividend_yield": 1.61,
+        "market_cap": 38223.0,
+        "current_price": 3603.0,
+        "pe_ratio": 28.4,
+        "dividend_yield": 1.62,
         "roce": 26.7,
         "roe": 21.5,
         "q_sales": 2940.0,
@@ -7904,15 +7904,15 @@
         "isin": "INE010V01017",
         "week52_low": 3151.86,
         "week52_high": 4623.86,
-        "pct_above_low": 15.22,
-        "advt_cr": 80.24,
+        "pct_above_low": 14.98,
+        "advt_cr": 78.62,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.1,
         "days_to_exit_5cr": 0.3,
-        "industry_share_pct": 31.19,
+        "industry_share_pct": 27.36,
         "industry_peer_count": 7,
-        "industry_share_change_pp": 0.0,
+        "industry_share_change_pp": -3.83,
         "peer_share_pct": 17.1,
         "peer_share_change_pp": -2.54,
         "peer_share_lookback": 4,
@@ -7930,10 +7930,10 @@
         "hyper_growth_warning": false,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 28.7 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 28.4 > 15 & Price > Intrinsic)"
         ],
         "industry_pe": 35.1,
-        "pe_vs_peers": "18% below peers"
+        "pe_vs_peers": "19% below peers"
       },
       "score": {
         "overall_score": 11,
@@ -7946,13 +7946,13 @@
           "Capacity/Product Launch: LTTS Unveils Ainfonix™ 4.0 to Advance AI-Driven Engineering Intelligence",
           "High Return on Capital (ROCE: 26.7%)",
           "High Return on Equity (ROE: 21.5%)",
-          "Liquid (Rs 80 Cr traded daily)",
+          "Liquid (Rs 79 Cr traded daily)",
           "FII Accumulation (+0.27%)",
           "Wide Economic Moat (Sustained Margin Expansion)"
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 28.7 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 28.4 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Buy Candidate"
@@ -7966,7 +7966,7 @@
     {
       "ticker": "ASMTEC",
       "name": "ASM Technologies",
-      "price": "4916.55",
+      "price": "4929.80",
       "target": null,
       "growth_pct": null,
       "catalyst": "Engineering design services for semiconductor equipment makers under India Semiconductor Mission (ISM) 2.0.",
@@ -8011,7 +8011,7 @@
     {
       "ticker": "SPELS",
       "name": "SPEL Semiconductor",
-      "price": "152.70",
+      "price": "150.95",
       "target": null,
       "growth_pct": null,
       "catalyst": "First semiconductor OSAT and assembly facility listed, expanding IC testing capabilities.",
@@ -8056,16 +8056,16 @@
     {
       "ticker": "DIACABS",
       "name": "Diamond Power",
-      "price": "365.00",
-      "target": "182.50",
+      "price": "371.30",
+      "target": "185.65",
       "growth_pct": "-50.0%",
       "catalyst": "Auto-discovered via media radar. Catalyst: Policy tailwinds in the semiconductors_equipment segment.",
       "rating": "None",
       "revenue_growth": "+108.5%",
       "earnings_growth": "+690.9%",
       "screener": {
-        "market_cap": 21758.0,
-        "current_price": 364.0,
+        "market_cap": 21815.0,
+        "current_price": 365.0,
         "pe_ratio": 138.0,
         "dividend_yield": 0.0,
         "roce": 26.5,
@@ -8154,11 +8154,11 @@
         "dii_change": 0.16,
         "isin": "INE989C01020",
         "week52_low": 119.7,
-        "week52_high": 365.0,
-        "pct_above_low": 204.93,
-        "advt_cr": 190.03,
+        "week52_high": 371.3,
+        "pct_above_low": 210.19,
+        "advt_cr": 190.24,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.1,
         "industry_share_pct": 3.32,
@@ -8184,7 +8184,7 @@
           "Fails P/E Screen (P/E 138.0 > 15 & Price > Intrinsic)",
           "No Dividend Yield"
         ],
-        "industry_pe": 146.0,
+        "industry_pe": 151.0,
         "pe_vs_peers": "In line with peers"
       },
       "score": {
@@ -8216,9 +8216,9 @@
     {
       "ticker": "MTARTECH",
       "name": "MTAR Technologie",
-      "price": "6815.00",
+      "price": "7329.00",
       "target": "8542.50",
-      "growth_pct": "+25.3%",
+      "growth_pct": "+16.6%",
       "catalyst": "Auto-discovered via media radar. Catalyst: Policy tailwinds in the semiconductors_equipment segment.",
       "rating": "Strong Buy",
       "revenue_growth": "+130.4%",
@@ -8228,9 +8228,9 @@
       "target_high": "10040.00",
       "target_low": "7550.00",
       "screener": {
-        "market_cap": 20917.0,
-        "current_price": 6800.0,
-        "pe_ratio": 154.0,
+        "market_cap": 22362.0,
+        "current_price": 7270.0,
+        "pe_ratio": 164.0,
         "dividend_yield": 0.0,
         "roce": 15.1,
         "roe": 12.5,
@@ -8320,10 +8320,10 @@
         "isin": "INE864I01014",
         "week52_low": 1396.0,
         "week52_high": 8374.5,
-        "pct_above_low": 387.11,
-        "advt_cr": 131.73,
+        "pct_above_low": 425.0,
+        "advt_cr": 127.26,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.2,
         "industry_share_pct": 1.72,
@@ -8346,10 +8346,10 @@
         "hyper_growth_warning": false,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 154.0 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 164.0 > 15 & Price > Intrinsic)",
           "No Dividend Yield"
         ],
-        "industry_pe": 146.0,
+        "industry_pe": 151.0,
         "pe_vs_peers": "In line with peers"
       },
       "score": {
@@ -8361,14 +8361,14 @@
           "Policy Notification: MTAR Technologies Ltd (MTARTECH) Share Price",
           "Strong revenue growth (TTM +53.6%)",
           "Operating Margin Expansion (+4.0%)",
-          "Liquid (Rs 132 Cr traded daily)",
+          "Liquid (Rs 127 Cr traded daily)",
           "FII Accumulation (+7.49%)",
           "Narrow Economic Moat"
         ],
         "risks": [
           "Promoters cut their stake (-1.09%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 154.0 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 164.0 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Avoid / High Risk"
@@ -8381,9 +8381,9 @@
     {
       "ticker": "UTLSOLAR",
       "name": "Fujiyama Power",
-      "price": "386.75",
+      "price": "398.40",
       "target": "420.00",
-      "growth_pct": "+8.6%",
+      "growth_pct": "+5.4%",
       "catalyst": "Auto-discovered via media radar. Catalyst: Policy tailwinds in the semiconductors_equipment segment.",
       "rating": "None",
       "revenue_growth": "+87.5%",
@@ -8394,9 +8394,9 @@
       "target_low": "370.00",
       "rec_score": 1.0,
       "screener": {
-        "market_cap": 11854.0,
-        "current_price": 386.0,
-        "pe_ratio": 600.0,
+        "market_cap": 12310.0,
+        "current_price": 401.0,
+        "pe_ratio": 623.0,
         "dividend_yield": 0.0,
         "roce": 16.6,
         "roe": 58.0,
@@ -8429,11 +8429,11 @@
         "dii_change": 0.38,
         "isin": "INE12UR01024",
         "week52_low": 182.93,
-        "week52_high": 389.95,
-        "pct_above_low": 111.42,
-        "advt_cr": 16.4,
+        "week52_high": 398.4,
+        "pct_above_low": 117.79,
+        "advt_cr": 16.41,
         "liquidity_band": "adequate",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.3,
         "days_to_exit_5cr": 1.5,
         "industry_share_pct": 4.29,
@@ -8448,10 +8448,10 @@
         "hyper_growth_warning": false,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 600.0 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 623.0 > 15 & Price > Intrinsic)",
           "No Dividend Yield"
         ],
-        "industry_pe": 146.0,
+        "industry_pe": 151.0,
         "pe_vs_peers": "Extreme outlier (excluded from peer stats)"
       },
       "score": {
@@ -8467,7 +8467,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 600.0 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 623.0 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Avoid / High Risk"
@@ -8480,9 +8480,9 @@
     {
       "ticker": "METROBRAND",
       "name": "Metro Brands Ltd",
-      "price": "950.60",
+      "price": "949.70",
       "target": "1200.00",
-      "growth_pct": "+26.2%",
+      "growth_pct": "+26.4%",
       "catalyst": "Exclusive retail rights for Fila and Foot Locker in India, expanding athleisure footprint rapidly.",
       "rating": "Buy",
       "revenue_growth": "+14.7%",
@@ -8493,10 +8493,10 @@
       "target_low": "1034.00",
       "rec_score": 1.8,
       "screener": {
-        "market_cap": 26016.0,
-        "current_price": 954.0,
-        "pe_ratio": 64.0,
-        "dividend_yield": 0.32,
+        "market_cap": 25866.0,
+        "current_price": 949.0,
+        "pe_ratio": 63.6,
+        "dividend_yield": 0.63,
         "roce": 20.2,
         "roe": 22.2,
         "q_sales": 720.0,
@@ -8585,19 +8585,19 @@
         "isin": "INE317I01021",
         "week52_low": 910.6,
         "week52_high": 1307.36,
-        "pct_above_low": 4.39,
-        "advt_cr": 5.92,
+        "pct_above_low": 4.29,
+        "advt_cr": 5.95,
         "liquidity_band": "adequate",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.8,
         "days_to_exit_5cr": 4.2,
         "industry_share_pct": 20.3,
         "industry_peer_count": 7,
-        "industry_share_change_pp": -0.9,
-        "peer_share_pct": 68.1,
-        "peer_share_change_pp": -1.49,
+        "industry_share_change_pp": 0.0,
+        "peer_share_pct": 35.3,
+        "peer_share_change_pp": 1.31,
         "peer_share_lookback": 4,
-        "peer_group_size": 2,
+        "peer_group_size": 3,
         "revenue_yoy_pct": 14.6,
         "revenue_ttm_growth_pct": 15.5,
         "revenue_cagr_pct": 17.1,
@@ -8611,11 +8611,11 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 64.0 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 63.6 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 56.5,
-        "pe_vs_peers": "13% above peers"
+        "industry_pe": 53.2,
+        "pe_vs_peers": "20% above peers"
       },
       "score": {
         "overall_score": 2,
@@ -8632,7 +8632,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 64.0 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 63.6 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -8645,9 +8645,9 @@
     {
       "ticker": "CAMPUS",
       "name": "Campus Activewear",
-      "price": "218.14",
+      "price": "218.32",
       "target": "310.00",
-      "growth_pct": "+42.1%",
+      "growth_pct": "+42.0%",
       "catalyst": "Dominant direct-to-consumer sports footwear brand in tier-2/3 cities, major beneficiary of fitness trends.",
       "rating": "Strong Buy",
       "revenue_growth": "+12.2%",
@@ -8658,10 +8658,10 @@
       "target_low": "237.00",
       "rec_score": 1.3,
       "screener": {
-        "market_cap": 6664.0,
+        "market_cap": 6667.0,
         "current_price": 218.0,
-        "pe_ratio": 49.0,
-        "dividend_yield": 0.69,
+        "pe_ratio": 49.1,
+        "dividend_yield": 0.68,
         "roce": 31.8,
         "roe": 29.5,
         "q_sales": 338.0,
@@ -8744,19 +8744,19 @@
         "isin": "INE278Y01022",
         "week52_low": 215.08,
         "week52_high": 281.42,
-        "pct_above_low": 1.42,
-        "advt_cr": 75.01,
+        "pct_above_low": 1.58,
+        "advt_cr": 72.52,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.1,
         "days_to_exit_5cr": 0.3,
         "industry_share_pct": 10.85,
         "industry_peer_count": 7,
-        "industry_share_change_pp": -0.49,
-        "peer_share_pct": 31.9,
-        "peer_share_change_pp": 1.49,
+        "industry_share_change_pp": 0.0,
+        "peer_share_pct": 16.6,
+        "peer_share_change_pp": 1.69,
         "peer_share_lookback": 4,
-        "peer_group_size": 2,
+        "peer_group_size": 3,
         "revenue_yoy_pct": 22.9,
         "revenue_ttm_growth_pct": null,
         "revenue_cagr_pct": 259.1,
@@ -8770,11 +8770,11 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 49.0 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 49.1 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 56.5,
-        "pe_vs_peers": "13% below peers"
+        "industry_pe": 53.2,
+        "pe_vs_peers": "In line with peers"
       },
       "score": {
         "overall_score": 6,
@@ -8786,13 +8786,13 @@
           "Policy Notification: Campus Activewear Number of Employees 2026 | Employee Count & Headcount Data",
           "High Return on Capital (ROCE: 31.8%)",
           "High Return on Equity (ROE: 29.5%)",
-          "Liquid (Rs 75 Cr traded daily)",
+          "Liquid (Rs 73 Cr traded daily)",
           "Wide Economic Moat (Sustained Margin Expansion)"
         ],
         "risks": [
           "Operating margin contracted (-4.0pp)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 49.0 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 49.1 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -8805,9 +8805,9 @@
     {
       "ticker": "PAGEIND",
       "name": "Page Industries",
-      "price": "38145.00",
+      "price": "37515.00",
       "target": "42911.50",
-      "growth_pct": "+12.5%",
+      "growth_pct": "+14.4%",
       "catalyst": "Jockey master franchise holder, expanding sports shorts, tees, and athleisure wear into rural hubs.",
       "rating": "Buy",
       "revenue_growth": "+14.1%",
@@ -8828,11 +8828,11 @@
         "dii_change": 0.43,
         "isin": "INE761H01022",
         "week52_low": 30166.4,
-        "week52_high": 45167.64,
-        "pct_above_low": 26.45,
-        "advt_cr": 86.16,
+        "week52_high": 45167.63,
+        "pct_above_low": 24.36,
+        "advt_cr": 87.4,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.1,
         "days_to_exit_5cr": 0.3,
         "graham_intrinsic_value": 0.0,
@@ -8853,7 +8853,7 @@
         "confidence": "Low",
         "reasons": [
           "Sector benefits from macro policy tailwinds (Fallback)",
-          "Liquid (Rs 86 Cr traded daily)",
+          "Liquid (Rs 87 Cr traded daily)",
           "DII Accumulation (+0.43%)"
         ],
         "risks": [],
@@ -8866,9 +8866,9 @@
     {
       "ticker": "RELAXO",
       "name": "Relaxo Footwears Limited",
-      "price": "438.45",
+      "price": "423.65",
       "target": "388.00",
-      "growth_pct": "-11.5%",
+      "growth_pct": "-8.4%",
       "catalyst": "Auto-discovered via media radar. Catalyst: Relaxo Footwears Ltd (RELAXO) Share Price",
       "rating": "None",
       "revenue_growth": "+8.0%",
@@ -8890,15 +8890,15 @@
         "isin": "INE131B01039",
         "week52_low": 249.75,
         "week52_high": 497.2,
-        "pct_above_low": 75.34,
-        "advt_cr": 118.23,
+        "pct_above_low": 69.63,
+        "advt_cr": 105.25,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.2,
         "industry_share_pct": 21.16,
         "industry_peer_count": 7,
-        "industry_share_change_pp": -0.94,
+        "industry_share_change_pp": 0.0,
         "graham_intrinsic_value": 0.0,
         "owner_earnings": 0.0,
         "retained_earnings_ratio": 1.2,
@@ -8917,7 +8917,7 @@
         "confidence": "Low",
         "reasons": [
           "Policy Notification: Relaxo Footwears Number of Employees 2026 | Employee Count & Headcount Data",
-          "Liquid (Rs 118 Cr traded daily)",
+          "Liquid (Rs 105 Cr traded daily)",
           "FII Accumulation (+0.07%)"
         ],
         "risks": [],
@@ -8926,15 +8926,174 @@
         ]
       },
       "estimate_method": "Analyst Consensus"
+    },
+    {
+      "ticker": "BATAINDIA",
+      "name": "Bata India",
+      "price": "723.05",
+      "target": "730.00",
+      "growth_pct": "+1.0%",
+      "catalyst": "Auto-discovered via media radar. Catalyst: Policy tailwinds in the sports_athleisure segment.",
+      "rating": "Underperform",
+      "revenue_growth": "+5.0%",
+      "earnings_growth": "-95.3%",
+      "analyst_count": 16,
+      "target_median": "730.00",
+      "target_high": "904.00",
+      "target_low": "568.00",
+      "rec_score": 3.7,
+      "screener": {
+        "market_cap": 9255.0,
+        "current_price": 720.0,
+        "pe_ratio": 53.2,
+        "dividend_yield": 3.48,
+        "roce": 12.7,
+        "roe": 10.6,
+        "q_sales": 979.0,
+        "qoq_sales_growth": 18.24,
+        "quarterly_revenue_growth": [
+          801.0,
+          945.0,
+          828.0,
+          979.0
+        ],
+        "sales_trend": [
+          837.0,
+          919.0,
+          788.0,
+          942.0,
+          801.0,
+          945.0,
+          828.0,
+          979.0
+        ],
+        "q_opm": 21.0,
+        "quarterly_ebitda_margin": [
+          18.0,
+          22.0,
+          18.0,
+          21.0
+        ],
+        "opm_expansion": 3.0,
+        "q_eps": 4.98,
+        "eps_trend": [
+          4.04,
+          4.57,
+          3.57,
+          4.05,
+          1.08,
+          5.14,
+          0.17,
+          4.98
+        ],
+        "ttm_eps": 11.37,
+        "q_net_profit": 64.0,
+        "operating_margin_trend": [
+          23.0,
+          23.0,
+          22.0,
+          21.0,
+          20.0
+        ],
+        "annual_sales_trend": [
+          2388.0,
+          3452.0,
+          3479.0,
+          3489.0,
+          3516.0,
+          3553.0
+        ],
+        "debt_trend": [
+          1094.0,
+          1246.0,
+          1357.0,
+          1446.0,
+          1387.0
+        ],
+        "cash_flow_trend": [
+          212.0,
+          629.0,
+          453.0,
+          738.0,
+          595.0
+        ],
+        "capex": 195.8,
+        "rd_pct": 1.5,
+        "roce_trend": [
+          8.0,
+          20.0,
+          19.0,
+          15.0,
+          13.0
+        ],
+        "promoter_pct": 50.16,
+        "promoter_change": 0.0,
+        "fii_pct": 6.38,
+        "fii_change": -0.05,
+        "dii_pct": 27.22,
+        "dii_change": -1.17,
+        "isin": "INE176A01028",
+        "week52_low": 624.02,
+        "week52_high": 1243.01,
+        "pct_above_low": 15.78,
+        "advt_cr": 34.97,
+        "liquidity_band": "liquid",
+        "sessions": 24,
+        "days_to_exit_1cr": 0.1,
+        "days_to_exit_5cr": 0.7,
+        "industry_share_pct": 27.58,
+        "industry_peer_count": 7,
+        "peer_share_pct": 48.1,
+        "peer_share_change_pp": -3.0,
+        "peer_share_lookback": 4,
+        "peer_group_size": 3,
+        "revenue_yoy_pct": 3.9,
+        "revenue_ttm_growth_pct": 1.9,
+        "revenue_cagr_pct": 8.3,
+        "revenue_growth_quality": "ok",
+        "graham_intrinsic_value": 88.2,
+        "owner_earnings": 171.2,
+        "retained_earnings_ratio": 2.86,
+        "moat_status": "Weak/None",
+        "is_bargain": false,
+        "net_current_assets": null,
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Fails P/E Screen (P/E 53.2 > 15 & Price > Intrinsic)"
+        ],
+        "industry_pe": 53.2,
+        "pe_vs_peers": "In line with peers"
+      },
+      "score": {
+        "overall_score": -2,
+        "fundamental_score": -3,
+        "momentum_score": 1,
+        "confidence": "High",
+        "reasons": [
+          "Sector benefits from macro policy tailwinds (Fallback)",
+          "Operating Margin Expansion (+3.0%)",
+          "Liquid (Rs 35 Cr traded daily)"
+        ],
+        "risks": [
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Fails P/E Screen (P/E 53.2 > 15 & Price > Intrinsic)"
+        ],
+        "recommendations": [
+          "Avoid / High Risk"
+        ]
+      },
+      "fundamental_value": 88.2,
+      "estimate_method": "Analyst Consensus"
     }
   ],
   "surveillance_security": [
     {
       "ticker": "CPPLUS",
       "name": "Aditya Infotech (CP PLUS)",
-      "price": "3843.00",
+      "price": "3735.90",
       "target": "3800.00",
-      "growth_pct": "-1.1%",
+      "growth_pct": "+1.7%",
       "catalyst": "CCTV market leader (35%+ share) newly listed, scaling domestic camera manufacturing under PLI.",
       "rating": "None",
       "revenue_growth": "+45.5%",
@@ -8945,65 +9104,65 @@
       "target_low": "3044.00",
       "rec_score": 1.2,
       "screener": {
-        "market_cap": 45601.0,
-        "current_price": 3855.0,
-        "pe_ratio": 124.0,
+        "market_cap": 44260.0,
+        "current_price": 3741.0,
+        "pe_ratio": 92.7,
         "dividend_yield": 0.04,
         "roce": 28.6,
         "roe": 25.4,
-        "q_sales": 1422.0,
-        "qoq_sales_growth": 24.85,
+        "q_sales": 1402.0,
+        "qoq_sales_growth": -1.41,
         "quarterly_revenue_growth": [
-          740.0,
           920.0,
           1139.0,
-          1422.0
+          1422.0,
+          1402.0
         ],
         "sales_trend": [
-          636.0,
           669.0,
           830.0,
           977.0,
           740.0,
           920.0,
           1139.0,
-          1422.0
+          1422.0,
+          1402.0
         ],
-        "q_opm": 18.0,
+        "q_opm": 15.0,
         "quarterly_ebitda_margin": [
-          8.0,
           12.0,
           12.0,
-          18.0
+          18.0,
+          15.0
         ],
-        "opm_expansion": 6.0,
-        "q_eps": 14.36,
+        "opm_expansion": -3.0,
+        "q_eps": 12.07,
         "eps_trend": [
-          2.2,
           21.28,
           3.66,
           5.01,
           2.99,
           5.97,
           8.17,
-          14.36
+          14.36,
+          12.07
         ],
-        "ttm_eps": 31.49,
-        "q_net_profit": 169.0,
+        "ttm_eps": 40.57,
+        "q_net_profit": 142.0,
         "operating_margin_trend": [
-          8.0,
           7.0,
           8.0,
           8.0,
-          13.0
+          13.0,
+          15.0
         ],
         "annual_sales_trend": [
-          1149.0,
           1646.0,
           2285.0,
           2782.0,
           3112.0,
-          4221.0
+          4221.0,
+          4883.0
         ],
         "debt_trend": [
           190.0,
@@ -9019,7 +9178,7 @@
           27.0,
           13.0
         ],
-        "capex": 284.4,
+        "capex": 280.4,
         "rd_pct": 1.5,
         "roce_trend": [
           35.0,
@@ -9036,80 +9195,82 @@
         "dii_change": -1.14,
         "isin": "INE819V01029",
         "week52_low": 1056.57,
-        "week52_high": 3843.6,
-        "pct_above_low": 263.78,
-        "advt_cr": 58.52,
+        "week52_high": 3738.8,
+        "pct_above_low": 253.86,
+        "advt_cr": 70.29,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.1,
         "days_to_exit_5cr": 0.4,
-        "peer_share_pct": 75.1,
-        "peer_share_change_pp": 3.65,
+        "peer_share_pct": 74.9,
+        "peer_share_change_pp": 9.37,
         "peer_share_lookback": 4,
         "peer_group_size": 4,
-        "revenue_yoy_pct": 45.5,
-        "revenue_ttm_growth_pct": 35.6,
-        "revenue_cagr_pct": 29.7,
+        "revenue_yoy_pct": 89.5,
+        "revenue_ttm_growth_pct": 51.8,
+        "revenue_cagr_pct": 24.3,
         "revenue_growth_quality": "ok",
-        "graham_intrinsic_value": 762.1,
-        "owner_earnings": 412.1,
+        "graham_intrinsic_value": 981.8,
+        "owner_earnings": 308.1,
         "retained_earnings_ratio": 2.86,
         "moat_status": "Strong (Wide Moat)",
         "is_bargain": false,
         "net_current_assets": null,
-        "hyper_growth_warning": false,
+        "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 124.0 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 92.7 > 15 & Price > Intrinsic)",
+          "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 91.0,
-        "pe_vs_peers": "36% above peers"
+        "industry_pe": 91.9,
+        "pe_vs_peers": "In line with peers"
       },
       "score": {
-        "overall_score": 9,
-        "fundamental_score": 5,
+        "overall_score": 5,
+        "fundamental_score": 1,
         "momentum_score": 4,
         "confidence": "High",
         "reasons": [
           "Policy Notification: Aditya Infotech (CPPLUS) Q1 25/26 earnings summary",
-          "Strong revenue growth (TTM +35.6%)",
-          "Operating Margin Expansion (+6.0%)",
+          "Strong revenue growth (TTM +51.8%)",
           "High Return on Capital (ROCE: 28.6%)",
           "High Return on Equity (ROE: 25.4%)",
-          "Liquid (Rs 59 Cr traded daily)",
+          "Liquid (Rs 70 Cr traded daily)",
           "FII Accumulation (+0.63%)",
           "Wide Economic Moat (Sustained Margin Expansion)"
         ],
         "risks": [
+          "Operating margin contracted (-3.0pp)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 124.0 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 92.7 > 15 & Price > Intrinsic)",
+          "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
           "Hold / Monitor"
         ]
       },
       "estimate_method": "Analyst Consensus",
-      "fundamental_value": 762.1
+      "fundamental_value": 981.8
     },
     {
       "ticker": "ADSL",
       "name": "Allied Digital Services",
-      "price": "113.50",
+      "price": "114.44",
       "target": "125.00",
-      "growth_pct": "+10.1%",
+      "growth_pct": "+9.2%",
       "catalyst": "System integrator winning smart/safe city surveillance projects, managing master command centers.",
       "rating": "Buy",
-      "revenue_growth": "+31.0%",
-      "earnings_growth": null,
+      "revenue_growth": "+18.9%",
+      "earnings_growth": "-4.8%",
       "analyst_count": 1,
       "target_median": "125.00",
       "target_high": "125.00",
       "target_low": "125.00",
       "rec_score": 2.0,
       "screener": {
-        "market_cap": 643.0,
-        "current_price": 114.0,
-        "pe_ratio": 16.6,
+        "market_cap": 650.0,
+        "current_price": 115.0,
+        "pe_ratio": 16.7,
         "dividend_yield": 1.31,
         "roce": 7.39,
         "roe": 4.82,
@@ -9199,17 +9360,17 @@
         "isin": "INE102I01027",
         "week52_low": 91.75,
         "week52_high": 198.88,
-        "pct_above_low": 23.71,
-        "advt_cr": 2.11,
+        "pct_above_low": 24.73,
+        "advt_cr": 2.0,
         "liquidity_band": "thin",
-        "sessions": 23,
-        "days_to_exit_1cr": 2.4,
-        "days_to_exit_5cr": 11.8,
-        "industry_share_pct": 2.69,
+        "sessions": 24,
+        "days_to_exit_1cr": 2.5,
+        "days_to_exit_5cr": 12.5,
+        "industry_share_pct": 2.37,
         "industry_peer_count": 8,
-        "industry_share_change_pp": 0.0,
-        "peer_share_pct": 13.7,
-        "peer_share_change_pp": -2.29,
+        "industry_share_change_pp": -0.32,
+        "peer_share_pct": 13.9,
+        "peer_share_change_pp": -5.5,
         "peer_share_lookback": 4,
         "peer_group_size": 4,
         "revenue_yoy_pct": 18.7,
@@ -9226,7 +9387,7 @@
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)"
         ],
-        "industry_pe": 91.0,
+        "industry_pe": 91.9,
         "pe_vs_peers": "82% below peers"
       },
       "score": {
@@ -9241,7 +9402,7 @@
           "Trading below Graham Intrinsic Value (164.1)"
         ],
         "risks": [
-          "Thin: Rs 2.11 Cr traded daily, ~2 sessions to exit Rs 1 Cr",
+          "Thin: Rs 2.00 Cr traded daily, ~2 sessions to exit Rs 1 Cr",
           "Fails Debt Limit (Debt > Net Assets)"
         ],
         "recommendations": [
@@ -9254,9 +9415,9 @@
     {
       "ticker": "IDEAFORGE",
       "name": "IdeaForge Technology",
-      "price": "810.30",
+      "price": "779.25",
       "target": "1031.00",
-      "growth_pct": "+27.2%",
+      "growth_pct": "+32.3%",
       "catalyst": "Pioneer in tactical and mapping drone systems, primary supplier for Indian Army and police borders.",
       "rating": "Strong Buy",
       "revenue_growth": "+452.0%",
@@ -9267,9 +9428,9 @@
       "target_low": "875.00",
       "rec_score": 1.0,
       "screener": {
-        "market_cap": 4021.0,
-        "current_price": 809.0,
-        "pe_ratio": 1023.0,
+        "market_cap": 3897.0,
+        "current_price": 784.0,
+        "pe_ratio": 992.0,
         "dividend_yield": 0.0,
         "roce": -2.81,
         "roe": -3.34,
@@ -9359,17 +9520,17 @@
         "isin": "INE349Y01013",
         "week52_low": 385.25,
         "week52_high": 945.0,
-        "pct_above_low": 110.33,
-        "advt_cr": 14.53,
+        "pct_above_low": 102.27,
+        "advt_cr": 19.66,
         "liquidity_band": "adequate",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.3,
-        "days_to_exit_5cr": 1.7,
-        "industry_share_pct": 0.31,
+        "days_to_exit_5cr": 1.3,
+        "industry_share_pct": 0.49,
         "industry_peer_count": 8,
-        "industry_share_change_pp": 0.01,
-        "peer_share_pct": 3.6,
-        "peer_share_change_pp": 2.69,
+        "industry_share_change_pp": 0.18,
+        "peer_share_pct": 3.7,
+        "peer_share_change_pp": 2.53,
         "peer_share_lookback": 4,
         "peer_group_size": 4,
         "revenue_yoy_pct": 436.7,
@@ -9385,11 +9546,11 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 1023.0 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 992.0 > 15 & Price > Intrinsic)",
           "No Dividend Yield",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 91.0,
+        "industry_pe": 91.9,
         "pe_vs_peers": "Extreme outlier (excluded from peer stats)"
       },
       "score": {
@@ -9398,7 +9559,7 @@
         "momentum_score": 8,
         "confidence": "High",
         "reasons": [
-          "Government Contract/MoU: IdeaForge Q1 Revenue Rises 5X To Rs 68.6 Cr, Loss Narrows 89%",
+          "Government Contract/MoU: Supply chain disruptions push ideaForge into losses in Q1FY27",
           "Government Contract/MoU: IdeaForge Technology Limited Reports Earnings Results for the First Quarter Ended June 30, 2026",
           "Strong revenue growth (TTM +221.1%)",
           "FII Accumulation (+3.38%)",
@@ -9408,7 +9569,7 @@
           "Operating margin contracted (-40.4pp)",
           "Promoters cut their stake (-3.7%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 1023.0 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 992.0 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -9420,9 +9581,9 @@
     {
       "ticker": "ZENTEC",
       "name": "Zen Technologies",
-      "price": "1832.30",
+      "price": "1851.00",
       "target": "1827.50",
-      "growth_pct": "-0.3%",
+      "growth_pct": "-1.3%",
       "catalyst": "Anti-drone systems and combat training simulators, winning repeat Ministry of Defence counter-drone orders.",
       "rating": "Buy",
       "revenue_growth": "-10.5%",
@@ -9433,9 +9594,9 @@
       "target_low": "1600.00",
       "rec_score": 2.0,
       "screener": {
-        "market_cap": 16538.0,
-        "current_price": 1832.0,
-        "pe_ratio": 91.0,
+        "market_cap": 16700.0,
+        "current_price": 1850.0,
+        "pe_ratio": 91.9,
         "dividend_yield": 0.05,
         "roce": 16.2,
         "roe": 10.7,
@@ -9525,17 +9686,17 @@
         "isin": "INE251B01027",
         "week52_low": 1287.6,
         "week52_high": 1997.0,
-        "pct_above_low": 42.3,
-        "advt_cr": 69.37,
+        "pct_above_low": 43.76,
+        "advt_cr": 71.22,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.1,
         "days_to_exit_5cr": 0.4,
-        "industry_share_pct": 0.64,
+        "industry_share_pct": 1.01,
         "industry_peer_count": 8,
-        "industry_share_change_pp": 0.01,
-        "peer_share_pct": 7.5,
-        "peer_share_change_pp": -4.06,
+        "industry_share_change_pp": 0.37,
+        "peer_share_pct": 7.6,
+        "peer_share_change_pp": -6.4,
         "peer_share_lookback": 4,
         "peer_group_size": 4,
         "revenue_yoy_pct": -10.1,
@@ -9551,10 +9712,10 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 91.0 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 91.9 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 91.0,
+        "industry_pe": 91.9,
         "pe_vs_peers": "In line with peers"
       },
       "score": {
@@ -9564,7 +9725,7 @@
         "confidence": "High",
         "reasons": [
           "Sector benefits from macro policy tailwinds (Fallback)",
-          "Liquid (Rs 69 Cr traded daily)",
+          "Liquid (Rs 71 Cr traded daily)",
           "FII Accumulation (+0.48%)",
           "DII Accumulation (+0.36%)",
           "Narrow Economic Moat"
@@ -9572,7 +9733,7 @@
         "risks": [
           "Revenue shrinking (TTM -23.4%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 91.0 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 91.9 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -9587,9 +9748,9 @@
     {
       "ticker": "WELSPUNLIV",
       "name": "Welspun Living",
-      "price": "160.67",
+      "price": "164.20",
       "target": "168.00",
-      "growth_pct": "+4.6%",
+      "growth_pct": "+2.3%",
       "catalyst": "Major beneficiary of textile PLI, expanding home textiles capacity and global export market share.",
       "rating": "None",
       "revenue_growth": "-8.0%",
@@ -9600,9 +9761,9 @@
       "target_low": "145.00",
       "rec_score": 1.6,
       "screener": {
-        "market_cap": 15370.0,
-        "current_price": 160.0,
-        "pe_ratio": 70.6,
+        "market_cap": 15773.0,
+        "current_price": 164.0,
+        "pe_ratio": 72.4,
         "dividend_yield": 0.06,
         "roce": 6.25,
         "roe": 4.47,
@@ -9692,17 +9853,17 @@
         "isin": "INE192B01031",
         "week52_low": 109.25,
         "week52_high": 170.83,
-        "pct_above_low": 47.06,
-        "advt_cr": 26.95,
+        "pct_above_low": 50.29,
+        "advt_cr": 27.4,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.2,
         "days_to_exit_5cr": 0.9,
-        "industry_share_pct": 22.4,
+        "industry_share_pct": 22.1,
         "industry_peer_count": 8,
-        "industry_share_change_pp": -0.41,
-        "peer_share_pct": 30.8,
-        "peer_share_change_pp": -5.61,
+        "industry_share_change_pp": -0.3,
+        "peer_share_pct": 31.0,
+        "peer_share_change_pp": -6.51,
         "peer_share_lookback": 4,
         "peer_group_size": 5,
         "revenue_yoy_pct": -8.0,
@@ -9718,11 +9879,11 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 70.6 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 72.4 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 43.3,
-        "pe_vs_peers": "63% above peers"
+        "industry_pe": 41.4,
+        "pe_vs_peers": "75% above peers"
       },
       "score": {
         "overall_score": 4,
@@ -9740,7 +9901,7 @@
         "risks": [
           "Revenue shrinking (TTM -10.9%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 70.6 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 72.4 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -9753,9 +9914,9 @@
     {
       "ticker": "GOKEX",
       "name": "Gokaldas Exports",
-      "price": "781.05",
+      "price": "766.00",
       "target": "990.00",
-      "growth_pct": "+26.8%",
+      "growth_pct": "+29.2%",
       "catalyst": "Top apparel manufacturer, setting up new fabrics processing mill under textile PLI approval.",
       "rating": "None",
       "revenue_growth": "+5.3%",
@@ -9766,9 +9927,9 @@
       "target_low": "844.00",
       "rec_score": 1.1,
       "screener": {
-        "market_cap": 5725.0,
-        "current_price": 781.0,
-        "pe_ratio": 55.6,
+        "market_cap": 5626.0,
+        "current_price": 768.0,
+        "pe_ratio": 54.6,
         "dividend_yield": 0.0,
         "roce": 8.39,
         "roe": 4.72,
@@ -9858,17 +10019,17 @@
         "isin": "INE887G01027",
         "week52_low": 557.45,
         "week52_high": 937.8,
-        "pct_above_low": 40.11,
-        "advt_cr": 21.92,
+        "pct_above_low": 37.41,
+        "advt_cr": 21.34,
         "liquidity_band": "adequate",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.2,
-        "days_to_exit_5cr": 1.1,
-        "industry_share_pct": 14.76,
+        "days_to_exit_5cr": 1.2,
+        "industry_share_pct": 14.86,
         "industry_peer_count": 7,
-        "industry_share_change_pp": 0.93,
-        "peer_share_pct": 14.6,
-        "peer_share_change_pp": 1.45,
+        "industry_share_change_pp": 0.1,
+        "peer_share_pct": 14.7,
+        "peer_share_change_pp": 1.14,
         "peer_share_lookback": 4,
         "peer_group_size": 5,
         "revenue_yoy_pct": 20.7,
@@ -9884,12 +10045,12 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 55.6 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 54.6 > 15 & Price > Intrinsic)",
           "No Dividend Yield",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 43.3,
-        "pe_vs_peers": "28% above peers"
+        "industry_pe": 41.4,
+        "pe_vs_peers": "32% above peers"
       },
       "score": {
         "overall_score": -5,
@@ -9903,7 +10064,7 @@
         "risks": [
           "FII Selling (-5.39%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 55.6 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 54.6 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -9916,9 +10077,9 @@
     {
       "ticker": "ARVIND",
       "name": "Arvind Ltd",
-      "price": "571.30",
+      "price": "553.25",
       "target": "607.50",
-      "growth_pct": "+6.3%",
+      "growth_pct": "+9.8%",
       "catalyst": "Leading denim manufacturer, investing in technical textiles under recent government schemes.",
       "rating": "None",
       "revenue_growth": "+15.0%",
@@ -9929,65 +10090,65 @@
       "target_low": "400.00",
       "rec_score": 1.0,
       "screener": {
-        "market_cap": 15543.0,
-        "current_price": 571.0,
-        "pe_ratio": 36.5,
-        "dividend_yield": 0.67,
+        "market_cap": 14985.0,
+        "current_price": 551.0,
+        "pe_ratio": 34.2,
+        "dividend_yield": 0.68,
         "roce": 13.8,
         "roe": 10.9,
-        "q_sales": 2553.0,
-        "qoq_sales_growth": 7.59,
+        "q_sales": 2501.0,
+        "qoq_sales_growth": -2.04,
         "quarterly_revenue_growth": [
-          2006.0,
           2371.0,
           2373.0,
-          2553.0
+          2553.0,
+          2501.0
         ],
         "sales_trend": [
-          1831.0,
           2188.0,
           2089.0,
           2221.0,
           2006.0,
           2371.0,
           2373.0,
-          2553.0
+          2553.0,
+          2501.0
         ],
-        "q_opm": 12.0,
+        "q_opm": 10.0,
         "quarterly_ebitda_margin": [
-          9.0,
           10.0,
           11.0,
-          12.0
+          12.0,
+          10.0
         ],
-        "opm_expansion": 1.0,
-        "q_eps": 6.09,
+        "opm_expansion": -2.0,
+        "q_eps": 2.04,
         "eps_trend": [
-          1.5,
           2.28,
           3.95,
           5.77,
           2.03,
           3.94,
           3.72,
-          6.09
+          6.09,
+          2.04
         ],
-        "ttm_eps": 15.78,
-        "q_net_profit": 165.0,
+        "ttm_eps": 15.79,
+        "q_net_profit": 58.0,
         "operating_margin_trend": [
           10.0,
-          10.0,
+          11.0,
           11.0,
           11.0,
           11.0
         ],
         "annual_sales_trend": [
-          5073.0,
           8010.0,
           8382.0,
           7738.0,
           8329.0,
-          9303.0
+          9303.0,
+          9798.0
         ],
         "debt_trend": [
           1865.0,
@@ -10003,7 +10164,7 @@
           763.0,
           867.0
         ],
-        "capex": 510.6,
+        "capex": 500.2,
         "rd_pct": 1.5,
         "roce_trend": [
           13.0,
@@ -10020,26 +10181,26 @@
         "dii_change": 2.9,
         "isin": "INE034A01011",
         "week52_low": 279.6,
-        "week52_high": 571.3,
-        "pct_above_low": 104.33,
-        "advt_cr": 25.05,
+        "week52_high": 569.05,
+        "pct_above_low": 97.87,
+        "advt_cr": 27.79,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.2,
-        "days_to_exit_5cr": 1.0,
-        "industry_share_pct": 32.67,
+        "days_to_exit_5cr": 0.9,
+        "industry_share_pct": 32.22,
         "industry_peer_count": 7,
-        "industry_share_change_pp": -0.36,
-        "peer_share_pct": 32.3,
-        "peer_share_change_pp": 1.74,
+        "industry_share_change_pp": -0.45,
+        "peer_share_pct": 31.9,
+        "peer_share_change_pp": 3.41,
         "peer_share_lookback": 4,
         "peer_group_size": 5,
-        "revenue_yoy_pct": 14.9,
-        "revenue_ttm_growth_pct": 11.7,
-        "revenue_cagr_pct": 12.9,
+        "revenue_yoy_pct": 24.7,
+        "revenue_ttm_growth_pct": 15.2,
+        "revenue_cagr_pct": 4.1,
         "revenue_growth_quality": "ok",
-        "graham_intrinsic_value": 316.3,
-        "owner_earnings": 282.2,
+        "graham_intrinsic_value": 382.1,
+        "owner_earnings": -135.4,
         "retained_earnings_ratio": 2.86,
         "moat_status": "Weak/None",
         "is_bargain": false,
@@ -10047,11 +10208,11 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 36.5 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 34.2 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 43.3,
-        "pe_vs_peers": "16% below peers"
+        "industry_pe": 41.4,
+        "pe_vs_peers": "17% below peers"
       },
       "score": {
         "overall_score": 1,
@@ -10059,16 +10220,18 @@
         "momentum_score": 8,
         "confidence": "High",
         "reasons": [
-          "Government Contract/MoU [material, 5.4% of revenue]: Arvind Limited completes ₹500 crore QIP at ₹505 per share",
+          "Government Contract/MoU [material, 5.1% of revenue]: Arvind Limited completes ₹500 crore QIP at ₹505 per share",
           "Capacity/Product Launch: Nizamabad MP Arvind inaugurates ₹9-crore Jankampet goods shed",
           "Capacity/Product Launch: IBM CEO Arvind Krishna Confirms Quantum Computer For Andhra Pradesh",
-          "Liquid (Rs 25 Cr traded daily)",
+          "Strong revenue growth (TTM +15.2%)",
+          "Liquid (Rs 28 Cr traded daily)",
           "DII Accumulation (+2.9%)"
         ],
         "risks": [
+          "Operating margin contracted (-2.0pp)",
           "Promoters cut their stake (-1.44%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 36.5 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 34.2 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -10076,22 +10239,22 @@
         ]
       },
       "estimate_method": "Analyst Consensus",
-      "fundamental_value": 316.3
+      "fundamental_value": 382.1
     },
     {
       "ticker": "FAZE3Q",
       "name": "Faze Three Limited",
-      "price": "543.05",
+      "price": "506.80",
       "target": "302.70",
-      "growth_pct": "-44.3%",
+      "growth_pct": "-40.3%",
       "catalyst": "Auto-discovered via media radar. Catalyst: Faze Three Secures PLI Approval to Scale Technical Textiles with ₹100 Crore Investment Plan",
       "rating": "None",
-      "revenue_growth": "+31.6%",
-      "earnings_growth": "+12.5%",
+      "revenue_growth": "+10.9%",
+      "earnings_growth": "-24.6%",
       "screener": {
-        "market_cap": 1319.0,
-        "current_price": 542.0,
-        "pe_ratio": 43.3,
+        "market_cap": 1262.0,
+        "current_price": 513.0,
+        "pe_ratio": 41.4,
         "dividend_yield": 0.0,
         "roce": 9.18,
         "roe": 7.7,
@@ -10181,17 +10344,17 @@
         "isin": "INE963C01033",
         "week52_low": 349.8,
         "week52_high": 621.85,
-        "pct_above_low": 55.25,
-        "advt_cr": 0.88,
-        "liquidity_band": "illiquid",
-        "sessions": 23,
-        "days_to_exit_1cr": 5.7,
-        "days_to_exit_5cr": 28.5,
-        "industry_share_pct": 2.11,
+        "pct_above_low": 44.88,
+        "advt_cr": 1.11,
+        "liquidity_band": "thin",
+        "sessions": 24,
+        "days_to_exit_1cr": 4.5,
+        "days_to_exit_5cr": 22.5,
+        "industry_share_pct": 2.08,
         "industry_peer_count": 8,
-        "industry_share_change_pp": -0.49,
+        "industry_share_change_pp": -0.03,
         "peer_share_pct": 2.9,
-        "peer_share_change_pp": -0.01,
+        "peer_share_change_pp": -0.08,
         "peer_share_lookback": 4,
         "peer_group_size": 5,
         "revenue_yoy_pct": 8.2,
@@ -10207,16 +10370,16 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 43.3 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 41.4 > 15 & Price > Intrinsic)",
           "No Dividend Yield",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 43.3,
+        "industry_pe": 41.4,
         "pe_vs_peers": "In line with peers"
       },
       "score": {
-        "overall_score": -7,
-        "fundamental_score": -8,
+        "overall_score": -6,
+        "fundamental_score": -7,
         "momentum_score": 1,
         "confidence": "High",
         "reasons": [
@@ -10225,9 +10388,9 @@
         ],
         "risks": [
           "Operating margin contracted (-2.9pp)",
-          "Illiquid: Rs 0.88 Cr traded daily, ~6 sessions to exit Rs 1 Cr",
+          "Thin: Rs 1.11 Cr traded daily, ~4 sessions to exit Rs 1 Cr",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 43.3 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 41.4 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -10240,9 +10403,9 @@
     {
       "ticker": "PGIL",
       "name": "Pearl Global Ind",
-      "price": "2421.00",
+      "price": "2480.90",
       "target": "2500.00",
-      "growth_pct": "+3.3%",
+      "growth_pct": "+0.8%",
       "catalyst": "Auto-discovered via media radar. Catalyst: Policy tailwinds in the textiles_apparel segment.",
       "rating": "Strong Buy",
       "revenue_growth": "+24.5%",
@@ -10252,10 +10415,10 @@
       "target_high": "3125.00",
       "target_low": "2079.00",
       "screener": {
-        "market_cap": 11176.0,
-        "current_price": 2419.0,
-        "pe_ratio": 35.6,
-        "dividend_yield": 0.59,
+        "market_cap": 11455.0,
+        "current_price": 2480.0,
+        "pe_ratio": 36.5,
+        "dividend_yield": 0.58,
         "roce": 19.9,
         "roe": 21.0,
         "q_sales": 1528.0,
@@ -10343,18 +10506,18 @@
         "dii_change": 0.36,
         "isin": "INE940H01014",
         "week52_low": 1193.21,
-        "week52_high": 2464.1,
-        "pct_above_low": 102.9,
-        "advt_cr": 48.13,
+        "week52_high": 2480.9,
+        "pct_above_low": 107.92,
+        "advt_cr": 46.44,
         "liquidity_band": "liquid",
-        "sessions": 23,
+        "sessions": 24,
         "days_to_exit_1cr": 0.1,
         "days_to_exit_5cr": 0.5,
-        "industry_share_pct": 19.56,
+        "industry_share_pct": 19.69,
         "industry_peer_count": 7,
-        "industry_share_change_pp": -0.21,
-        "peer_share_pct": 19.3,
-        "peer_share_change_pp": 2.44,
+        "industry_share_change_pp": 0.13,
+        "peer_share_pct": 19.5,
+        "peer_share_change_pp": 2.05,
         "peer_share_lookback": 4,
         "peer_group_size": 5,
         "revenue_yoy_pct": 24.4,
@@ -10370,10 +10533,10 @@
         "hyper_growth_warning": false,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 35.6 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 36.5 > 15 & Price > Intrinsic)"
         ],
-        "industry_pe": 43.3,
-        "pe_vs_peers": "18% below peers"
+        "industry_pe": 41.4,
+        "pe_vs_peers": "12% below peers"
       },
       "score": {
         "overall_score": 7,
@@ -10383,14 +10546,14 @@
         "reasons": [
           "Policy Notification: PGIL shares zoom over 12% to hit record high; here's why",
           "High Return on Equity (ROE: 21.0%)",
-          "Liquid (Rs 48 Cr traded daily)",
+          "Liquid (Rs 46 Cr traded daily)",
           "FII Accumulation (+0.34%)",
           "DII Accumulation (+0.36%)",
           "Wide Economic Moat (Sustained Margin Expansion)"
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 35.6 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 36.5 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Hold / Monitor"
