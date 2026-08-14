@@ -8,6 +8,7 @@ import re
 from logger import log
 from config import SECTOR_QUERIES, GLOBAL_EVENT_QUERIES
 from providers.rss import fetch_query_feed_async
+from providers.nse_announcements import fetch_filings as nse_fetch_filings
 from analysis.parsing import title_matches_company
 
 
@@ -407,7 +408,46 @@ async def fetch_advanced_rss_feeds_async(session, watchlist):
 
 
 async def fetch_exchange_filings_async(session, watchlist):
+    """Corporate filings, primary source first.
+
+    NSE's disclosure API is the filing itself — exact symbol, the company's
+    own subject line, the attached PDF. The news search below is what we had
+    before it and is kept as the fallback, because NSE refuses cloud IPs often
+    enough that it cannot be the only path: a blocked exchange must degrade
+    the section, not empty it.
+
+    Both are merged rather than either/or. They surface different things —
+    the exchange publishes filings no one wrote about, the press covers
+    filings under a plainer headline — and NSE records are placed first so
+    the dedupe below keeps the primary version of anything reported twice.
+    """
     log.info("Fetching NSE/BSE corporate filings (Async)...")
+
+    # to_thread because the provider is sync requests (it needs cookie-jar
+    # persistence across the handshake) and this coroutine must not block the
+    # event loop while it sleeps out its rate-limit pauses.
+    exchange_filings = await asyncio.to_thread(nse_fetch_filings, watchlist)
+    news_filings = await _fetch_filing_news_async(session, watchlist)
+
+    # setdefault, not a dict comprehension: the comprehension idiom used
+    # elsewhere in this file keeps the LAST record for a duplicate key, which
+    # here would hand every reported filing back to the weaker news version.
+    # First wins, and NSE goes first.
+    unique = {}
+    for filing in exchange_filings + news_filings:
+        unique.setdefault(filing["filing"], filing)
+    unique_filings = unique.values()
+    log.info(
+        f"Corporate filings: {len(exchange_filings)} from NSE, "
+        f"{len(news_filings)} from news, {len(list(unique_filings))} after dedupe."
+    )
+    return list(unique_filings)[:10]
+
+
+async def _fetch_filing_news_async(session, watchlist):
+    """Filings as reported by the press. The original implementation, now the
+    fallback: it recovers the company by fuzzy title match, so it is strictly
+    weaker identification than NSE's symbol, but it survives an IP block."""
     filings = []
 
     all_tickers = []
@@ -462,6 +502,9 @@ async def fetch_exchange_filings_async(session, watchlist):
 
     await asyncio.gather(*[process_chunk(chunk) for chunk in ticker_chunks])
 
+    # Deduped here as well as in the caller: this half can repeat a headline
+    # across chunks, and the cap keeps a chatty news day from crowding out
+    # the exchange records it gets merged with.
     unique_filings = {f["filing"]: f for f in filings}.values()
     return list(unique_filings)[:10]
 

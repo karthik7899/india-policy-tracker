@@ -168,3 +168,84 @@ def test_clean_news_item_exception_in_date_parsing():
 
     assert result is not None
     assert result["date"] == "10 Jan 2024"
+
+
+# --- corporate filings: exchange primary, news fallback ------------------
+#
+# The merge is the contract worth pinning. NSE refuses cloud IPs often
+# enough that the fallback is not hypothetical, and the failure that would
+# hurt is a silent one: an empty filings section on a day the exchange
+# happened to block us.
+
+
+def _news_filing(name="Reported filing"):
+    return {
+        "company": "Some Co",
+        "filing": name,
+        "industry": "Corporate",
+        "date": "10 Jan 2024",
+        "source": "Economic Times",
+        "link": "http://example.com/news",
+    }
+
+
+def _nse_filing(name="Awarding of Order / Receipt of Order"):
+    return {
+        "company": "Tata Motors",
+        "filing": name,
+        "industry": "Automotive",
+        "date": "10 Jan 2024",
+        "source": "NSE",
+        "link": "https://nsearchives.nseindia.com/corporate/x.pdf",
+    }
+
+
+def _run_filings(nse_result, news_result):
+    import asyncio
+    import scraper
+
+    async def fake_news(session, watchlist):
+        return news_result
+
+    with patch.object(
+        scraper, "nse_fetch_filings", return_value=nse_result
+    ), patch.object(scraper, "_fetch_filing_news_async", fake_news):
+        return asyncio.run(scraper.fetch_exchange_filings_async(None, {}))
+
+
+def test_filings_merge_both_sources():
+    out = _run_filings([_nse_filing()], [_news_filing()])
+    assert len(out) == 2
+    assert {f["source"] for f in out} == {"NSE", "Economic Times"}
+
+
+def test_filings_survive_a_blocked_exchange():
+    """A blocked NSE degrades the section; it must not empty it."""
+    out = _run_filings([], [_news_filing()])
+    assert len(out) == 1
+    assert out[0]["source"] == "Economic Times"
+
+
+def test_filings_work_with_no_news_coverage():
+    out = _run_filings([_nse_filing()], [])
+    assert len(out) == 1
+    assert out[0]["source"] == "NSE"
+
+
+def test_exchange_record_wins_a_duplicate():
+    """Same subject from both sides keeps the primary version — the one with
+    the exact symbol match and the filed PDF."""
+    duplicate = "Awarding of Order / Receipt of Order"
+    out = _run_filings([_nse_filing(duplicate)], [_news_filing(duplicate)])
+    assert len(out) == 1
+    assert out[0]["source"] == "NSE"
+    assert out[0]["industry"] == "Automotive"
+
+
+def test_filings_are_capped():
+    many_nse = [_nse_filing(f"NSE filing {i}") for i in range(8)]
+    many_news = [_news_filing(f"News filing {i}") for i in range(8)]
+    out = _run_filings(many_nse, many_news)
+    assert len(out) == 10
+    # The cap must not spend itself on the weaker source.
+    assert sum(1 for f in out if f["source"] == "NSE") == 8

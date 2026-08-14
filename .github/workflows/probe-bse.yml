@@ -28,6 +28,27 @@ jobs:
       - name: Probe
         run: python scripts/probe_bse.py
 
+  nse-announcements:
+    # Whether NSE's disclosure API answers a cloud runner decides if
+    # providers/nse_announcements.py is the primary filings source or
+    # permanently the fallback. Separate job so its verdict is readable on
+    # its own.
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install requests pydantic
+
+      - name: Probe NSE announcements
+        run: python scripts/probe_nse_announcements.py
+
   network:
     # Reads what BSE's own pages call, which is what DevTools' Network tab
     # shows. Separate job because it needs a browser; the endpoint probe above
