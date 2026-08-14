@@ -1,0 +1,29 @@
+name: Probe BSE endpoints
+
+# Manual only. This is a diagnostic, not part of any briefing: it writes
+# nothing, commits nothing, and sends no mail. It exists because BSE is
+# unreachable from the development sandbox (403 on CONNECT, the same egress
+# policy that blocks Screener and Yahoo), so the only way to establish what
+# their endpoints actually return is to ask from a runner that can reach them.
+#
+# Read the job log for the answer; there is no artifact to collect.
+on:
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install requests
+        run: pip install requests
+
+      - name: Probe
+        run: python scripts/probe_bse.py
