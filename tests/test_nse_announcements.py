@@ -36,7 +36,10 @@ def _response(
 SAMPLE_RECORD = {
     "symbol": "TATAMOTORS",
     "sm_name": "Tata Motors Limited",
-    "desc": "Awarding of Order / Receipt of Order",
+    "attchmntText": "Tata Motors Limited has informed the Exchange regarding "
+    "receipt of an order.",
+    "desc": "Updates",
+    "smIndustry": "Automobiles",
     "an_dt": "14-Aug-2026 17:30:00",
     "attchmntFile": "https://nsearchives.nseindia.com/corporate/TATAMOTORS_1.pdf",
 }
@@ -145,12 +148,40 @@ def test_normalize_maps_a_holding_to_the_filing_shape():
     out = nse.normalize(SAMPLE_RECORD, nse.build_symbol_index(WATCHLIST))
     assert out == {
         "company": "Tata Motors",
+        # Our sector, not NSE's, so the filings table agrees with the rest of
+        # the dashboard.
         "industry": "Automotive",
-        "filing": "Awarding of Order / Receipt of Order",
+        "filing": "Tata Motors Limited has informed the Exchange regarding "
+        "receipt of an order.",
         "date": "14 Aug 2026",
         "source": "NSE",
         "link": "https://nsearchives.nseindia.com/corporate/TATAMOTORS_1.pdf",
     }
+
+
+def test_subject_comes_from_attchmnttext_not_the_desc_category():
+    """Measured in CI: desc is a coarse category ("Updates"), and reading it
+    as the subject rendered every filing identically — which then collapsed
+    the feed, because filings are deduped by their text."""
+    out = nse.normalize(SAMPLE_RECORD, {})
+    assert out["filing"].startswith("Tata Motors Limited has informed")
+    assert out["filing"] != "Updates"
+
+
+def test_desc_still_serves_when_there_is_no_attachment_text():
+    out = nse.normalize({"symbol": "ABC", "desc": "Board Meeting"}, {})
+    assert out["filing"] == "Board Meeting"
+
+
+def test_long_subjects_are_trimmed_visibly():
+    out = nse.normalize({"symbol": "ABC", "attchmntText": "x" * 400}, {})
+    assert len(out["filing"]) == nse._MAX_SUBJECT_CHARS
+    assert out["filing"].endswith("…")
+
+
+def test_non_holdings_take_nses_own_industry_over_the_placeholder():
+    out = nse.normalize(SAMPLE_RECORD, {})
+    assert out["industry"] == "Automobiles"
 
 
 def test_normalize_reads_through_field_aliases():
@@ -231,6 +262,21 @@ def test_fetch_filings_returns_normalized_records():
         out = nse.fetch_filings(WATCHLIST)
     assert len(out) == 1
     assert out[0]["company"] == "Tata Motors"
+
+
+def test_holdings_are_sorted_ahead_of_everyone_else():
+    """A trading day is ~520 announcements and the section shows ten. In
+    source order the slots go to whoever filed first, quite possibly none of
+    ours."""
+    others = [{"symbol": f"OTHER{i}", "attchmntText": f"Filing {i}"} for i in range(20)]
+    raw = others + [SAMPLE_RECORD]
+
+    with patch.object(nse, "fetch_announcements", return_value=raw):
+        out = nse.fetch_filings(WATCHLIST)
+
+    assert out[0]["company"] == "Tata Motors"
+    # And the rest keep NSE's own ordering behind it.
+    assert [f["filing"] for f in out[1:4]] == ["Filing 0", "Filing 1", "Filing 2"]
 
 
 def test_fetch_filings_never_raises_when_nse_blocks():

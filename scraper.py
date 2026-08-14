@@ -429,13 +429,18 @@ async def fetch_exchange_filings_async(session, watchlist):
     exchange_filings = await asyncio.to_thread(nse_fetch_filings, watchlist)
     news_filings = await _fetch_filing_news_async(session, watchlist)
 
+    # Keyed on (company, filing), not filing alone. Two companies file the
+    # same subject constantly — NSE stamps a coarse category on many records
+    # — so a text-only key silently collapses a whole day into one row. This
+    # matches the key main.py already dedupes the merged history on.
+    #
     # setdefault, not a dict comprehension: the comprehension idiom used
     # elsewhere in this file keeps the LAST record for a duplicate key, which
     # here would hand every reported filing back to the weaker news version.
     # First wins, and NSE goes first.
     unique = {}
     for filing in exchange_filings + news_filings:
-        unique.setdefault(filing["filing"], filing)
+        unique.setdefault((filing["company"], filing["filing"]), filing)
     unique_filings = unique.values()
     log.info(
         f"Corporate filings: {len(exchange_filings)} from NSE, "

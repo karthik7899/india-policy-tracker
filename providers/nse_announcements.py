@@ -41,6 +41,19 @@ MEASURED from a GitHub Actions runner, 14 Aug 2026
   it really was JSON — and the schema layer then reported "not valid JSON",
   blaming the parser for a header we sent. Hence no Accept-Encoding here at
   all, and a schema error that names the Content-Encoding.
+
+  Shape, once readable: a bare list (no envelope), 520 records and 361 KB for
+  one day. Fields:
+
+    an_dt attFileSize attchmntFile attchmntText bflag csvName desc difference
+    dt exchdisstime fileSize hasXbrl old_new orgid seq_id smIndustry sm_isin
+    sm_name sort_date symbol
+
+  Two of those are traps. ``desc`` is a coarse CATEGORY ("Updates"), not a
+  subject — the readable sentence is in ``attchmntText``, so that is read
+  first. And 520 records into a ten-row section means ordering decides
+  everything: holdings are sorted ahead of the rest, or the section fills
+  with whoever filed earliest.
 """
 
 import datetime
@@ -250,11 +263,24 @@ def _validate_schema(response):
 _FIELD_ALIASES = {
     "symbol": ("symbol", "SYMBOL", "sym"),
     "company": ("sm_name", "companyName", "comp", "company"),
-    "subject": ("desc", "subject", "attchmntText", "descriptor"),
-    "detail": ("attchmntText", "smIndustry", "desc"),
+    # attchmntText FIRST, and this order is load-bearing. Measured: desc is a
+    # coarse category ("Updates"), not a subject line — the sentence a reader
+    # needs ("... has informed the Exchange regarding 'quarterly financial
+    # results of 30062026'") is in attchmntText. Reading desc first rendered
+    # every filing as "Updates", which also collapsed the feed, since filings
+    # are deduped by their text.
+    "subject": ("attchmntText", "desc", "subject", "descriptor"),
     "date": ("an_dt", "an_date", "exchdisstime", "sort_date", "dt"),
     "attachment": ("attchmntFile", "attachment", "attchmntfile", "fileName"),
+    # NSE's own sector label. Better than the "Corporate" placeholder for a
+    # company we do not hold, and it is the exchange's classification rather
+    # than one we inferred.
+    "industry": ("smIndustry", "industry"),
 }
+
+# attchmntText runs long on occasion. Trimmed for the table cell it renders
+# into, with an ellipsis so a cut is visible as a cut.
+_MAX_SUBJECT_CHARS = 240
 
 
 def _first_present(record, field):
@@ -296,8 +322,14 @@ def normalize(record, symbol_index=None):
     subject = _first_present(record, "subject")
     if not symbol or not subject:
         return None
+    if len(subject) > _MAX_SUBJECT_CHARS:
+        subject = subject[: _MAX_SUBJECT_CHARS - 1].rstrip() + "…"
 
-    name, industry = (symbol_index or {}).get(symbol, ("", "Corporate"))
+    # A holding keeps OUR sector, so the filings table agrees with the rest of
+    # the dashboard. Anything else falls back to NSE's label, then the
+    # placeholder.
+    default_industry = _first_present(record, "industry") or "Corporate"
+    name, industry = (symbol_index or {}).get(symbol, ("", default_industry))
 
     attachment = _first_present(record, "attachment")
     return FilingEvent(
@@ -401,18 +433,24 @@ def fetch_filings(watchlist=None, index=DEFAULT_INDEX, from_date=None, to_date=N
         )
         return []
 
-    filings = []
+    # Holdings first. A full trading day is ~520 announcements and the filings
+    # section shows ten, so insertion order would spend every slot on whichever
+    # companies happened to file first — quite possibly none of ours. Relative
+    # order is preserved within each group, so NSE's own recency ranking still
+    # decides who leads.
+    held, others = [], []
     for record in raw:
         normalized = normalize(record, symbol_index)
-        if normalized:
-            filings.append(normalized)
+        if not normalized:
+            continue
+        symbol = _first_present(record, "symbol").upper()
+        (held if symbol in symbol_index else others).append(normalized)
 
-    held = sum(1 for f in filings if f["industry"] != "Corporate")
     log.info(
-        f"NSE announcements: {len(raw)} published, {len(filings)} usable, "
-        f"{held} from watchlist holdings."
+        f"NSE announcements: {len(raw)} published, {len(held) + len(others)} "
+        f"usable, {len(held)} from watchlist holdings."
     )
-    return filings
+    return held + others
 
 
 def build_symbol_index(watchlist):

@@ -233,10 +233,18 @@ def test_filings_work_with_no_news_coverage():
 
 
 def test_exchange_record_wins_a_duplicate():
-    """Same subject from both sides keeps the primary version — the one with
-    the exact symbol match and the filed PDF."""
+    """Same company AND subject from both sides keeps the primary version —
+    the one with the exact symbol match and the filed PDF.
+
+    Both halves of the key are needed. Subject alone collapses a trading day
+    (see below); it also means cross-source dedupe only fires when the news
+    path's fuzzy title match produced the same company string NSE uses, which
+    is a real limit rather than an oversight. main.py already dedupes the
+    merged history on ["company", "filing"], and disagreeing with it here
+    would only move the duplicate one stage downstream."""
     duplicate = "Awarding of Order / Receipt of Order"
-    out = _run_filings([_nse_filing(duplicate)], [_news_filing(duplicate)])
+    news = dict(_news_filing(duplicate), company="Tata Motors")
+    out = _run_filings([_nse_filing(duplicate)], [news])
     assert len(out) == 1
     assert out[0]["source"] == "NSE"
     assert out[0]["industry"] == "Automotive"
@@ -249,3 +257,14 @@ def test_filings_are_capped():
     assert len(out) == 10
     # The cap must not spend itself on the weaker source.
     assert sum(1 for f in out if f["source"] == "NSE") == 8
+
+
+def test_same_subject_from_two_companies_is_not_collapsed():
+    """NSE stamps a coarse category on many records, so a text-only dedupe
+    key silently reduces a whole trading day to one row."""
+    shared = "Board Meeting Intimation"
+    a = dict(_nse_filing(shared), company="Tata Motors")
+    b = dict(_nse_filing(shared), company="Infosys")
+    out = _run_filings([a, b], [])
+    assert len(out) == 2
+    assert {f["company"] for f in out} == {"Tata Motors", "Infosys"}
