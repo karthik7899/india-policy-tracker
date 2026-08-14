@@ -6,18 +6,58 @@ otherwise be from memory. This runs on the Actions runner, which reaches them,
 and reports measured facts: status, content type, size, and enough of the
 shape to design against.
 
-It writes nothing into the pipeline and is never called by a briefing run. It
-exists to answer three questions the current data gaps turn on:
+It writes nothing into the pipeline and is never called by a briefing run.
 
-  1. Bhavcopy — can one request replace 70 per-holding Yahoo calls, and does
-     it carry the volume needed for turnover and a 52-week range?
-  2. Shareholding pattern — does BSE expose the promoter pledge figure that
-     Screener's page did not yield for any of 69 holdings?
-  3. Announcements — are these real filings with real dates, rather than the
-     Google News RSS query that currently stands in for "Corporate Filings"?
+MEASURED, 14 Aug 2026 (runs 1 and 2). Re-run before trusting any of it; these
+are undocumented endpoints and BSE moves them.
 
-Nothing here is asserted as working. Each probe prints what it got, including
-the failures, because a probe that hides its misses is worse than none.
+  WORKS
+
+  Bhavcopy — whole-market daily OHLCV, ONE request.
+    https://www.bseindia.com/download/BhavCopy/Equity/
+        BhavCopy_BSE_CM_0_0_0_<YYYYMMDD>_F_0000.CSV
+    851 KB, 4,973 rows, application/octet-stream. Columns include TradDt,
+    FinInstrmId (scrip code), ISIN, TckrSymb, OpnPric, HghPric, LwPric,
+    ClsPric, LastPr and a traded-value column. Keyed by ISIN, which we hold
+    for all 70 watchlist holdings.
+    TRAP: asking for *today* before the file is published returns 200 with
+    BSE's Angular shell, not a 404. Run 1 read that as a dead endpoint. Ask
+    for the previous session, and treat an HTML body as a miss whatever the
+    status says.
+
+  ListofScripData — the scrip master, 4,975 active equity scrips.
+    https://api.bseindia.com/BseIndiaAPI/api/ListofScripData/w
+        ?Group=&Scripcode=&industry=&segment=Equity&status=Active
+    1.75 MB JSON. SCRIP_CD, ISIN_NUMBER, scrip_id, Scrip_Name, GROUP,
+    FACE_VALUE, Mktcap. Nearly twice the coverage of our NSE-derived ISIN
+    master and it includes BSE-only listings.
+
+  getScripHeaderData — per-scrip quote.
+    https://api.bseindia.com/BseIndiaAPI/api/getScripHeaderData/w
+        ?Debtflag=&scripcode=<code>&seriesid=
+    Header carries PrevClose/Open/High/Low/LTP; CurrRate carries LTP/Chg/PcChg.
+
+  DOES NOT WORK YET
+
+  Shareholding / promoter pledge. Four endpoint names tried
+  (ShareHoldingPattern, ShpPromoterNGroup with and without Flag,
+  ComShpPromoterNGroup, ShpSecurities); every one returned the same 1,814-byte
+  ASP.NET page, which is BSE's generic miss. The names are wrong rather than
+  the data being absent. Next step is reading what bseindia.com's own
+  shareholding page calls, not more guessing.
+
+  Corporate announcements. AnnGetData answers with JSON but returns
+  "No Record Found!" for every parameter set tried, including a single large
+  scrip over a seven-day window. The endpoint is alive and the query is wrong
+  — a better position than a rejection, and worth one more attempt with the
+  parameter names BSE's own page sends.
+
+  Msnew autocomplete returns HTML, not JSON.
+
+Each probe prints what it got, including the failures, because a probe that
+hides its misses is worse than none. Bodies under 400 bytes print verbatim:
+run 1 summarised an 18-byte response by its keys and hid the one detail that
+said the query was wrong rather than the window empty.
 """
 
 import datetime
