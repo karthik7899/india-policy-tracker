@@ -27,3 +27,25 @@ jobs:
 
       - name: Probe
         run: python scripts/probe_bse.py
+
+  network:
+    # Reads what BSE's own pages call, which is what DevTools' Network tab
+    # shows. Separate job because it needs a browser; the endpoint probe above
+    # must not wait on a Chromium install to report.
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Playwright
+        run: |
+          pip install playwright
+          playwright install --with-deps chromium
+
+      - name: Capture network calls
+        run: python scripts/probe_bse_network.py
