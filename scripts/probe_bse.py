@@ -73,6 +73,12 @@ def _get(label, url, params=None, expect="json"):
         except ValueError:
             print(f"    not JSON. body[:300]={r.text[:300]!r}")
             return None
+        # A small body is the interesting case, not the boring one: the first
+        # run reported an 18-byte 200 from the announcements endpoint and
+        # described only its keys, hiding the one thing that would have said
+        # whether the query was wrong or the window was genuinely empty.
+        if len(r.content) < 400:
+            print(f"    small body, verbatim: {r.text!r}")
         _describe(data)
         return data
 
@@ -103,6 +109,20 @@ def _describe(data, indent="    "):
             print(f"{indent}  sample: {json.dumps(data[0])[:300]}")
 
 
+# Run 1 result: the path below returned a 200 carrying BSE's Angular shell
+# (13,850 bytes of HTML), not a CSV. A 200 that is really a SPA fallback is
+# the shape a stale download path takes on this site, so the pattern is tried
+# alongside the older EQ_ISINCODE form rather than trusted.
+_BHAV_PATTERNS = [
+    (
+        "new F_0000",
+        "https://www.bseindia.com/download/BhavCopy/Equity/BhavCopy_BSE_CM_0_0_0_{ymd}_F_0000.CSV",
+    ),
+    ("legacy zip", "https://www.bseindia.com/download/BhavCopy/Equity/EQ{dmy}_CSV.ZIP"),
+    ("legacy csv", "https://www.bseindia.com/download/BhavCopy/Equity/EQ{dmy}_CSV.csv"),
+]
+
+
 def probe_bhavcopy():
     """Whole-market daily OHLCV in one request.
 
@@ -111,39 +131,46 @@ def probe_bhavcopy():
     the 52-week range are computed from.
     """
     print("\n=== 1. BHAVCOPY (whole-market daily OHLCV) ===")
-    # Walk back to the most recent weekday; a holiday still just 404s, which
-    # is a fine answer.
     today = datetime.date.today()
-    for back in range(0, 6):
+    for back in range(1, 5):
         d = today - datetime.timedelta(days=back)
         if d.weekday() >= 5:
             continue
-        stamp = d.strftime("%Y%m%d")
-        got = _get(
-            f"BhavCopy {d.isoformat()}",
-            f"https://www.bseindia.com/download/BhavCopy/Equity/"
-            f"BhavCopy_BSE_CM_0_0_0_{stamp}_F_0000.CSV",
-            expect="csv",
-        )
-        if got:
-            return
-    print("    no bhavcopy retrieved in the last 6 days")
+        for label, pattern in _BHAV_PATTERNS:
+            url = pattern.format(ymd=d.strftime("%Y%m%d"), dmy=d.strftime("%d%m%y"))
+            got = _get(f"{label} {d.isoformat()}", url, expect="csv")
+            # An HTML shell is a miss even though it arrived as 200.
+            if got and not got.lstrip().lower().startswith("<!doctype"):
+                print("    ^ looks like real CSV")
+                return
+    print("    no usable bhavcopy found")
 
 
 def probe_shareholding():
     """The pledge figure — the gap Screener left at 0 of 69 holdings."""
     print("\n=== 2. SHAREHOLDING / PLEDGE ===")
-    _get(
-        "ShpPromoterNGroup",
-        "https://api.bseindia.com/BseIndiaAPI/api/ShpPromoterNGroup/w",
-        params={"scripcode": SAMPLE_SCRIP, "qtrid": ""},
-    )
-    _get(
-        "Shareholding summary page",
-        "https://www.bseindia.com/corporates/shpPromoterNGroup.aspx",
-        params={"scripcd": SAMPLE_SCRIP},
-        expect="html",
-    )
+    # Run 1: both of these returned HTML, not JSON — the first an ASP.NET
+    # page, the second the SPA shell. So the names are wrong rather than the
+    # data being absent. These are the remaining candidates.
+    for label, path, params in [
+        (
+            "ShareHoldingPattern",
+            "ShareHoldingPattern/w",
+            {"scripcode": SAMPLE_SCRIP, "qtrid": "", "Type": "EQ"},
+        ),
+        (
+            "ShpPromoterNGroup (flag)",
+            "ShpPromoterNGroup/w",
+            {"scripcode": SAMPLE_SCRIP, "qtrid": "", "Flag": "P"},
+        ),
+        (
+            "ComShpPromoterNGroup",
+            "ComShpPromoterNGroup/w",
+            {"scripcode": SAMPLE_SCRIP, "qtrid": ""},
+        ),
+        ("ShpSecurities", "ShpSecurities/w", {"scripcode": SAMPLE_SCRIP, "qtrid": ""}),
+    ]:
+        _get(label, f"https://api.bseindia.com/BseIndiaAPI/api/{path}", params=params)
 
 
 def probe_announcements():
@@ -151,17 +178,36 @@ def probe_announcements():
     print("\n=== 3. CORPORATE ANNOUNCEMENTS ===")
     today = datetime.date.today()
     week_ago = today - datetime.timedelta(days=7)
+    # Run 1: this returned JSON but only 18 bytes — an empty result set, not
+    # a rejection. The endpoint works and the query was wrong, which is a much
+    # better position than a 403. Varying the parameters most likely to be at
+    # fault: the category flag and the scrip filter.
+    base = "https://api.bseindia.com/BseIndiaAPI/api/AnnGetData/w"
+    common = {
+        "strPrevDate": week_ago.strftime("%Y%m%d"),
+        "strToDate": today.strftime("%Y%m%d"),
+        "strType": "C",
+        "pageno": "1",
+    }
     _get(
-        "AnnGetData (all scrips, last 7d)",
-        "https://api.bseindia.com/BseIndiaAPI/api/AnnGetData/w",
+        "AnnGetData strCat=-1, all scrips",
+        base,
+        params={**common, "strCat": "-1", "strSearch": "P", "strscrip": ""},
+    )
+    _get(
+        "AnnGetData blank cat, one scrip",
+        base,
+        params={**common, "strCat": "", "strSearch": "P", "strscrip": SAMPLE_SCRIP},
+    )
+    _get(
+        "AnnGetData subcat blank, one scrip",
+        base,
         params={
-            "strCat": "-1",
-            "strPrevDate": week_ago.strftime("%Y%m%d"),
-            "strToDate": today.strftime("%Y%m%d"),
-            "strSearch": "P",
-            "strscrip": "",
-            "strType": "C",
-            "pageno": "1",
+            **common,
+            "strCat": "",
+            "strSearch": "",
+            "strscrip": SAMPLE_SCRIP,
+            "subcategory": "",
         },
     )
 
