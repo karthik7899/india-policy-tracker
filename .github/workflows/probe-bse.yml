@@ -32,6 +32,11 @@ jobs:
     # Reads what BSE's own pages call, which is what DevTools' Network tab
     # shows. Separate job because it needs a browser; the endpoint probe above
     # must not wait on a Chromium install to report.
+    #
+    # ANSWERED, run 5: it cannot. Akamai serves headless Chromium a 403 on
+    # every bseindia.com page while serving plain requests from the same
+    # runner normally. Kept so the result can be re-measured if BSE changes,
+    # but do not expect it to report anything else today.
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository

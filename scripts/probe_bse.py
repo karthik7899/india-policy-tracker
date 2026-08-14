@@ -43,14 +43,20 @@ are undocumented endpoints and BSE moves them.
   (ShareHoldingPattern, ShpPromoterNGroup with and without Flag,
   ComShpPromoterNGroup, ShpSecurities); every one returned the same 1,814-byte
   ASP.NET page, which is BSE's generic miss. The names are wrong rather than
-  the data being absent. Next step is reading what bseindia.com's own
-  shareholding page calls, not more guessing.
+  the data being absent.
 
   Corporate announcements. AnnGetData answers with JSON but returns
   "No Record Found!" for every parameter set tried, including a single large
-  scrip over a seven-day window. The endpoint is alive and the query is wrong
-  — a better position than a rejection, and worth one more attempt with the
-  parameter names BSE's own page sends.
+  scrip over a seven-day window. The endpoint is alive and the query is wrong.
+
+  Both of the above were to be settled by reading what bseindia.com's own
+  pages call. Run 5 closed that route: www.bseindia.com answers headless
+  Chromium with an Akamai 403 "Access Denied" on every page, while plain
+  requests carrying our UA and Referer are served normally from the same
+  runner. The filter is on browser fingerprint, so the site cannot be read
+  the way a person reads it without evasion tooling — which we are not going
+  to build. See scripts/probe_bse_network.py for the measurement. These two
+  gaps need a source that will have us, not another guess at BSE.
 
   Msnew autocomplete returns HTML, not JSON.
 

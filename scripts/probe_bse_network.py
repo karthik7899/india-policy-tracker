@@ -9,10 +9,37 @@ Runs only on the Actions runner: BSE refuses connections from the development
 sandbox (403 on CONNECT). Writes nothing, and is never called by a briefing
 run.
 
-MEASURED, run 4: every page reported "no API calls captured" and no navigation
-error. So either the pages never loaded what we think they did, or the capture
-was blind. This version resolves that ambiguity before drawing any conclusion,
-because the first version could not tell the two apart:
+ANSWERED, run 5 — THIS APPROACH IS DEAD, AND THE SCRIPT IS KEPT ONLY AS THE
+RECORD OF WHY. All five pages returned:
+
+    landed: HTTP 403 | <the url asked for>
+    title : 'Access Denied'
+    dom   : ~250 chars, 0 tables, 0 rows
+    head  : "Access Denied You don't have permission to access ... "
+            "https://errors.edgesuite.net/"
+    all hosts: {'www.bseindia.com': 1}
+
+One response per page and no JS ever ran, so there was no XHR to capture: the
+browser never received a page. Akamai (errors.edgesuite.net) refuses headless
+Chromium outright.
+
+The load-bearing comparison is with the endpoint probe, which runs on the SAME
+runner and is served normally: plain `requests` carrying the UA and Referer
+from providers/isin_master.py pulled 851 KB of bhavcopy and 1.75 MB of scrip
+master from these hosts in runs 1-3. So the filter is on browser fingerprint,
+not on the UA string or the IP — a spoofed user_agent and
+--disable-blink-features=AutomationControlled changed nothing.
+
+Defeating that means fingerprint-spoofing tooling, which is evasion of a
+control the site is plainly asserting, and would be a fragile thing to hang a
+daily briefing on besides. Do not do it. The shareholding and announcement
+gaps stay open, to be closed from a source that will have us: see the WORKS
+list in probe_bse.py.
+
+Run 4 background, for why the diagnostics below exist: it reported "no API
+calls captured" with no navigation error, which could not be told apart from
+its own filter never matching. The 403 was invisible. This version resolves
+that ambiguity before drawing any conclusion:
 
   * it prints the landing URL, title, top-level HTTP status and a DOM
     fingerprint, so BSE's Angular-shell miss (a 200 carrying no content — the
