@@ -87,15 +87,20 @@ SAMPLE_SCRIP = "500325"
 SAMPLE_TICKER = "RELIANCE"
 
 
-def _get(label, url, params=None, expect="json"):
-    """One probe. Reports what came back rather than raising."""
+def _get(label, url, params=None, expect="json", headers=HEADERS):
+    """One probe. Reports what came back rather than raising.
+
+    ``headers`` is overridable so the bot-filter question can be answered by
+    measurement: pass {} to ask whether an endpoint needs the browser
+    user-agent and Referer at all.
+    """
     print(f"\n--- {label}")
     print(f"    {url}")
     if params:
         print(f"    params: {params}")
     try:
         r = requests.get(
-            url, params=params, headers=HEADERS, timeout=TIMEOUT, allow_redirects=True
+            url, params=params, headers=headers, timeout=TIMEOUT, allow_redirects=True
         )
     except Exception as e:
         print(f"    FAILED: {e.__class__.__name__}: {e}")
@@ -106,6 +111,31 @@ def _get(label, url, params=None, expect="json"):
     if r.status_code != 200 or not r.content:
         print(f"    body[:200]={r.text[:200]!r}")
         return None
+
+    if expect == "binary":
+        # A zip starts PK\x03\x04. Anything else arriving under a .zip URL is
+        # an error page wearing a 200, which is how BSE and NSE both answer a
+        # request for a file that does not exist yet.
+        head = r.content[:4]
+        is_zip = head[:2] == b"PK"
+        print(f"    magic={head!r} looks_like_zip={is_zip}")
+        if is_zip:
+            try:
+                import io
+                import zipfile
+
+                with zipfile.ZipFile(io.BytesIO(r.content)) as z:
+                    names = z.namelist()
+                    print(f"    zip contains: {names[:4]}")
+                    if names:
+                        with z.open(names[0]) as inner:
+                            first = inner.readline().decode("utf-8", "replace")
+                            print(f"    header: {first[:200].strip()}")
+            except Exception as e:
+                print(f"    could not read zip: {e.__class__.__name__}: {e}")
+        else:
+            print(f"    body[:160]={r.text[:160]!r}")
+        return r.content if is_zip else None
 
     if expect == "json":
         try:
@@ -284,6 +314,97 @@ def probe_scrip_master():
     )
 
 
+# --- Archive hosts -------------------------------------------------------
+#
+# nsearchives.nseindia.com is a static file host, not the www.nseindia.com API
+# that needs a cookie/session handshake. providers/isin_master.py already
+# fetches EQUITY_L.csv from it successfully on every production run, which is
+# the evidence that the archive host is the tractable NSE route.
+
+_NSE_HEADERS = {
+    "User-Agent": HEADERS["User-Agent"],
+    "Referer": "https://www.nseindia.com/",
+}
+
+
+def probe_nse_archives():
+    """NSE's static archive host — whole-market files, no session handshake."""
+    print("\n=== 6. NSE ARCHIVES (nsearchives.nseindia.com) ===")
+
+    # Control: the repo already fetches this every run. If it fails, the
+    # problem is the runner or the host, not the URL patterns below.
+    _get(
+        "EQUITY_L.csv (known-good control)",
+        "https://nsearchives.nseindia.com/content/equities/EQUITY_L.csv",
+        expect="csv",
+        headers=_NSE_HEADERS,
+    )
+
+    today = datetime.date.today()
+    for back in range(1, 6):
+        d = today - datetime.timedelta(days=back)
+        if d.weekday() >= 5:
+            continue
+        ymd = d.strftime("%Y%m%d")
+        ddmmyyyy = d.strftime("%d%m%Y")
+        mon = d.strftime("%b").upper()
+        ddmonyyyy = d.strftime("%d%b%Y").upper()
+
+        hit = _get(
+            f"UDiFF bhavcopy {d.isoformat()}",
+            f"https://nsearchives.nseindia.com/content/cm/"
+            f"BhavCopy_NSE_CM_0_0_0_{ymd}_F_0000.csv.zip",
+            expect="binary",
+            headers=_NSE_HEADERS,
+        )
+        legacy = _get(
+            f"legacy bhavcopy {d.isoformat()}",
+            f"https://nsearchives.nseindia.com/content/historical/EQUITIES/"
+            f"{d.year}/{mon}/cm{ddmonyyyy}bhav.csv.zip",
+            expect="binary",
+            headers=_NSE_HEADERS,
+        )
+        # Security-wise delivery data: carries delivery quantity, which is a
+        # better liquidity signal than raw traded volume.
+        deliv = _get(
+            f"sec_bhavdata_full {d.isoformat()}",
+            f"https://nsearchives.nseindia.com/products/content/"
+            f"sec_bhavdata_full_{ddmmyyyy}.csv",
+            expect="csv",
+            headers=_NSE_HEADERS,
+        )
+        if hit or legacy or deliv:
+            return
+    print("    no NSE bhavcopy retrieved")
+
+
+def probe_bot_filter():
+    """Do these hosts actually need the browser user-agent?
+
+    The premise worth testing rather than assuming: static archive paths are
+    often served by a plain file host with no bot filter in front, while the
+    JSON APIs sit behind one. If the archives answer a bare request, the
+    fetching code gets simpler and stops depending on a spoofed header that
+    could be tightened at any time.
+    """
+    print("\n=== 7. IS THE BROWSER HEADER ACTUALLY NEEDED? ===")
+    for label, url, expect in [
+        (
+            "NSE EQUITY_L.csv",
+            "https://nsearchives.nseindia.com/content/equities/EQUITY_L.csv",
+            "csv",
+        ),
+        (
+            "BSE scrip master",
+            "https://api.bseindia.com/BseIndiaAPI/api/ListofScripData/w"
+            "?Group=&Scripcode=&industry=&segment=Equity&status=Active",
+            "json",
+        ),
+    ]:
+        _get(f"{label} — NO custom headers", url, expect=expect, headers={})
+        _get(f"{label} — with browser headers", url, expect=expect)
+
+
 def main():
     print(f"BSE probe — {datetime.datetime.now().isoformat()}")
     print(f"requests {requests.__version__}")
@@ -293,6 +414,8 @@ def main():
         probe_quote,
         probe_shareholding,
         probe_announcements,
+        probe_nse_archives,
+        probe_bot_filter,
     ):
         try:
             probe()
