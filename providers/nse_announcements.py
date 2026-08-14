@@ -23,9 +23,24 @@ trusted traffic. It does not fail cleanly:
 So every layer is checked separately and each failure names itself. And the
 whole thing is wrapped by fetch_filings(), which cannot raise: NSE is an
 upgrade to the filings section, never a precondition for the briefing
-running. Measured behaviour from CI is recorded in
-scripts/probe_nse_announcements.py — do not assume this reaches NSE from a
-runner until that probe says it does.
+running.
+
+MEASURED from a GitHub Actions runner, 14 Aug 2026
+(scripts/probe_nse_announcements.py, re-run it before trusting this):
+
+  The handshake works and NSE serves us. It set AKA_A2, _abck and bm_sz —
+  Akamai bot-manager cookies — and the API then answered HTTP 200 with
+  Content-Type: application/json and 44,674 bytes for a single day of
+  equity announcements. The note in providers/isin_master.py that "NSE's
+  site 403s GitHub runners" holds for per-stock page scraping, not for this
+  endpoint reached through a cookie handshake.
+
+  The first probe still failed, and instructively: BROWSER_HEADERS asked for
+  "gzip, deflate, br", NSE honoured the br, and urllib3 cannot decode Brotli
+  unless the brotli package is installed. Content-type validation passed —
+  it really was JSON — and the schema layer then reported "not valid JSON",
+  blaming the parser for a header we sent. Hence no Accept-Encoding here at
+  all, and a schema error that names the Content-Encoding.
 """
 
 import datetime
@@ -64,7 +79,13 @@ BROWSER_HEADERS = {
     ),
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
     "Accept-Language": "en-IN,en-GB;q=0.9,en;q=0.8",
-    "Accept-Encoding": "gzip, deflate, br",
+    # NO Accept-Encoding. requests sets it from what urllib3 can actually
+    # decode, and overriding it is how the first CI probe broke: this header
+    # read "gzip, deflate, br", NSE honoured the br, and urllib3 handed back
+    # 44 KB of undecodable Brotli. Content-type said application/json and was
+    # telling the truth, so the failure surfaced as "not valid JSON" — a
+    # parse error blamed on the parser, from a header we sent. Never
+    # advertise an encoding this client cannot decode.
     "Connection": "keep-alive",
     "Upgrade-Insecure-Requests": "1",
     "Sec-Fetch-Dest": "document",
@@ -195,7 +216,18 @@ def _validate_schema(response):
     try:
         payload = response.json()
     except ValueError as e:  # json.JSONDecodeError subclasses ValueError
-        raise NSESchemaError(f"Response was not valid JSON: {e}") from e
+        # Name the encoding. When this fired in CI the body was Brotli we had
+        # asked for and could not decode, and the bare message ("Expecting
+        # value: line 1 column 1") pointed at the parser instead of at the
+        # request headers. Anything undecodable here should say what arrived.
+        encoding = response.headers.get("Content-Encoding") or "none"
+        head = repr((response.text or "")[:80])
+        raise NSESchemaError(
+            f"Content-Type claimed JSON but the body did not parse: {e} "
+            f"(Content-Encoding: {encoding}, first bytes: {head}). If the "
+            "encoding is one this client cannot decode, that is the bug — "
+            "check Accept-Encoding, not the parser."
+        ) from e
 
     # NSE has served both a bare list and a {"data": [...]} envelope for this
     # endpoint at different times. Accept either rather than break on a

@@ -103,6 +103,27 @@ def test_undecodable_json_raises_schema_error():
         nse._validate_schema(_response(payload=None))
 
 
+def test_undecodable_body_names_the_content_encoding():
+    """Regression, measured in CI: we advertised Brotli, NSE sent Brotli,
+    urllib3 could not decode it, and the error blamed the parser for a header
+    we sent. The message must point at the encoding."""
+    response = _response(payload=None, text="\x8f\x03\xef\xbf\xbd")
+    response.headers["Content-Encoding"] = "br"
+
+    with pytest.raises(nse.NSESchemaError) as excinfo:
+        nse._validate_schema(response)
+    message = str(excinfo.value)
+    assert "Content-Encoding: br" in message
+    assert "Accept-Encoding" in message
+
+
+def test_we_never_advertise_an_encoding_we_cannot_decode():
+    """The header set must not pin Accept-Encoding at all — requests derives
+    it from what urllib3 can actually decode."""
+    assert "Accept-Encoding" not in nse.BROWSER_HEADERS
+    assert "Accept-Encoding" not in nse.API_HEADERS
+
+
 def test_schema_accepts_bare_list_and_data_envelope():
     assert nse._validate_schema(_response(payload=[SAMPLE_RECORD])) == [SAMPLE_RECORD]
     assert nse._validate_schema(_response(payload={"data": [SAMPLE_RECORD]})) == [
