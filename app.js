@@ -943,6 +943,43 @@ function setupTabToggles() {
     });
 }
 
+// Which nav group each tab belongs to, so the crumb can say "Risk / Early
+// Warnings" rather than just naming the leaf. Read off the same grouping the
+// sidebar renders, because two lists of the same thing drift.
+const _TAB_GROUP = {
+    dashboard: "Overview", holdings: "Overview",
+    earlywarning: "Alerts", caution: "Alerts",
+    sectors: "Intelligence", agreements: "Intelligence", launches: "Intelligence",
+    filings: "Intelligence", institutional: "Intelligence", research: "Intelligence",
+    stocks: "Valuation", valuation: "Valuation", scoring: "Valuation",
+    graham: "Valuation", buffett: "Valuation",
+    system: "System",
+};
+
+/** Where you are, and the way back out.
+ *
+ *  An email link can drop the reader straight into a filtered table or an open
+ *  drawer with nothing on screen saying which section they landed in. The
+ *  crumb is rendered from the router's own state rather than tracked
+ *  separately, so it cannot disagree with what is actually shown. */
+function renderBreadcrumb(tab, extra) {
+    const host = document.getElementById("breadcrumb-bar");
+    if (!host) return;
+    const leaf = (TAB_COPY[tab] || [])[0] || tab;
+    const group = _TAB_GROUP[tab];
+    const parts = [
+        `<button type="button" class="crumb-link" data-tab-target="dashboard">Dashboard</button>`,
+    ];
+    if (group && group !== "Overview") parts.push(`<span class="crumb">${escapeHtml(group)}</span>`);
+    parts.push(`<span class="crumb crumb-current">${escapeHtml(leaf)}</span>`);
+    if (extra) parts.push(`<span class="crumb crumb-current">${escapeHtml(extra)}</span>`);
+
+    host.innerHTML = parts.join(`<span class="crumb-sep" aria-hidden="true">/</span>`);
+    host.querySelectorAll("[data-tab-target]").forEach(btn => {
+        btn.addEventListener("click", () => activateTab(btn.dataset.tabTarget));
+    });
+}
+
 function activateTab(targetTab) {
     const targetPane = document.getElementById(`tab-${targetTab}`);
     if (!targetPane || !TAB_COPY[targetTab]) return;
@@ -960,6 +997,8 @@ function activateTab(targetTab) {
     document.querySelectorAll(".tab-pane").forEach(pane => {
         pane.classList.toggle("active", pane === targetPane);
     });
+
+    renderBreadcrumb(targetTab);
 
     const [title, subtitle] = TAB_COPY[targetTab];
     setText("page-title", title);
@@ -1086,6 +1125,13 @@ function initDashboard(data, isFallback = false) {
     renderRunStatus();
     renderDailyKpis();
     renderWhatsNew(data);
+    renderSectorWatch();
+    // The default tab is marked active in the markup rather than by going
+    // through activateTab, so nothing had rendered the crumb on a cold load —
+    // it only appeared once the reader clicked something.
+    renderBreadcrumb(
+        (document.querySelector(".nav-btn.active") || {}).dataset?.tab || "dashboard"
+    );
     decorateTickerCells(document);
     renderSectorChips(data);
     renderPolicyFeed(data);
@@ -1651,6 +1697,57 @@ function renderSectorBlockHtml(block) {
                 <div>${suppressed}</div>
             </div>
         </div></div>`;
+}
+
+/** Sector Watch: severity-weighted change per sector, one hue.
+ *
+ *  Reuses holdingsSectorDelta rather than re-deriving, so the heatmap, the
+ *  Holdings view and the email's sector ordering cannot disagree about which
+ *  sector moved most. Intensity is scaled against the busiest sector this run,
+ *  not an absolute ceiling — a quiet day would otherwise render uniformly
+ *  blank and look like a broken widget rather than a calm market. */
+function renderSectorWatch() {
+    const host = document.getElementById("sector-watch-body");
+    if (!host || !appData) return;
+
+    const warnings = (appData.briefing || {}).early_warnings || [];
+    const cells = Object.keys(appData.watchlist || {})
+        .filter(k => k !== "macro_indicators" && (appData.sectors || {})[k])
+        .map(k => ({
+            key: k,
+            label: (appData.sectors[k] || {}).label || k,
+            delta: holdingsSectorDelta(k, warnings),
+        }))
+        .sort((a, b) => b.delta - a.delta || a.label.localeCompare(b.label));
+
+    if (!cells.length) {
+        host.innerHTML = `<p class="pane-na">No sectors in this payload.</p>`;
+        return;
+    }
+
+    const peak = Math.max(...cells.map(c => c.delta), 0);
+    host.innerHTML = `<div class="heat-grid">${cells.map(c => {
+        // A sector that genuinely did not move gets the floor tint, not a
+        // proportional one, so "nothing happened" is visibly distinct from
+        // "a little happened".
+        const ratio = peak > 0 ? c.delta / peak : 0;
+        const alpha = c.delta === 0 ? 0.06 : 0.18 + ratio * 0.62;
+        return `<button type="button" class="heat-cell" data-sector-key="${escapeHtml(c.key)}"
+                    style="background: rgba(59,130,246,${alpha.toFixed(3)});"
+                    title="${escapeHtml(c.label)} — changed signal weight ${c.delta}">
+                <span class="heat-label">${escapeHtml(c.label)}</span>
+                <span class="heat-value">${c.delta}</span>
+            </button>`;
+    }).join("")}</div>
+    <p class="pane-note">Weight counts new and escalated signals only, scaled by severity
+       (Critical 4 · High 3 · Medium 2 · Low 1). Peak this run: ${peak}.</p>`;
+
+    host.querySelectorAll("[data-sector-key]").forEach(cell => {
+        cell.addEventListener("click", () => {
+            activateTab("sectors");
+            renderSectorDetail(cell.dataset.sectorKey);
+        });
+    });
 }
 
 // --- Holdings by sector: the email's landing page ----------------------------
@@ -2952,6 +3049,11 @@ function renderRunStatus() {
     };
     set("rs-date", (appData && appData.last_updated) ? appData.last_updated.split(" ")[0] : "—");
     set("rs-completeness", `${completeness}%`, completeness >= 80 ? "rs-ok" : "rs-warn");
+    const bar = document.getElementById("rs-completeness-bar");
+    if (bar) {
+        bar.style.width = `${Math.max(0, Math.min(100, completeness))}%`;
+        bar.className = completeness >= 80 ? "rs-meter-fill rs-ok-bg" : "rs-meter-fill rs-warn-bg";
+    }
     const fresh = (b.freshness || {}).live_prices;
     set("rs-health", fresh && fresh.updated === fresh.total ? "Healthy" : "Degraded",
         fresh && fresh.updated === fresh.total ? "rs-ok" : "rs-warn");
@@ -3018,6 +3120,72 @@ function setupKpiDrilldowns() {
 // System & Audit
 // ---------------------------------------------------------------------------
 
+const _LEDGER_ACTION = {
+    added: ["Added", "badge-success-alert"],
+    rotated_in: ["Rotated in", "badge-success-alert"],
+    rotated_out: ["Rotated out", "badge-danger-alert"],
+    removed: ["Exited", "badge-danger-alert"],
+    deferred: ["Deferred", "badge-warning-alert"],
+};
+
+/** Every watchlist decision, scored or not.
+ *
+ *  The win-rate tile only counts decisions old enough to judge, which on a
+ *  young ledger is none of them — so the audit tab could show a rotation
+ *  engine that had made twenty calls and reported nothing about any of them.
+ *  An unscored row says so rather than rendering a blank or a zero return. */
+function renderRotationLedger() {
+    const host = document.getElementById("rotation-ledger-body");
+    if (!host) return;
+    const rows = ((appData.briefing || {}).watchlist_changes || [])
+        .filter(r => r && r.ticker);
+
+    if (!rows.length) {
+        host.innerHTML = `<p class="pane-na">No decisions recorded in the ledger
+            this run.</p>`;
+        return;
+    }
+
+    const na = '<span class="pane-na">Not available</span>';
+    const num = v => (typeof v === "number") ? escapeHtml(v.toFixed(2)) : na;
+
+    host.innerHTML = `<div class="table-scroll-container"><table class="premium-table">
+        <thead><tr><th>Ticker</th><th>Company</th><th>Action</th><th>Date</th>
+        <th class="num">Price</th><th class="num">Target</th>
+        <th class="num">Realised</th><th>Outcome</th><th>ISIN</th></tr></thead>
+        <tbody>${rows.map(r => {
+            const [label, cls] = _LEDGER_ACTION[String(r.action || "").toLowerCase()]
+                || [String(r.action || "Changed"), "badge-neutral-alert"];
+            const realised = r.realized_return_pct;
+            return `<tr>
+                <td class="t-ticker">${escapeHtml(r.ticker)}</td>
+                <td>${escapeHtml(r.name || "")}</td>
+                <td><span class="${cls}" style="font-size: 9px;">${escapeHtml(label)}</span></td>
+                <td>${escapeHtml(r.date || "")}</td>
+                <td class="num">${num(r.price_at_decision)}</td>
+                <td class="num">${num(r.target_at_decision)}</td>
+                <td class="num">${typeof realised === "number"
+                    ? `<span class="${realised >= 0 ? "pane-pos" : "pane-neg"}">${realised > 0 ? "+" : ""}${escapeHtml(realised.toFixed(1))}%</span>`
+                    : na}</td>
+                <td>${r.outcome
+                    ? escapeHtml(r.outcome)
+                    : `<span class="pane-na">Not yet scored</span>`}</td>
+                <td>${isinBadge(r.ticker)}</td>
+            </tr>`;
+        }).join("")}</tbody></table></div>`;
+}
+
+/** Whether this holding resolved to an ISIN. A decision logged against a
+ *  ticker the master could not key is one the pipeline cannot follow. */
+function isinBadge(ticker) {
+    const holding = allWatchlistStocks()
+        .find(s => String(s.ticker).toUpperCase() === String(ticker).toUpperCase());
+    const isin = holding && (holding.screener || {}).isin;
+    return isin
+        ? `<span class="badge-success-alert" style="font-size: 9px;" title="${escapeHtml(isin)}">keyed</span>`
+        : `<span class="badge-warning-alert" style="font-size: 9px;">no ISIN</span>`;
+}
+
 function renderSystemTab() {
     const holdings = allWatchlistStocks();
     const total = holdings.length;
@@ -3030,6 +3198,8 @@ function renderSystemTab() {
     set("hs-growth", count(s => sc(s).revenue_ttm_growth_pct != null));
     set("hs-turnover", count(s => sc(s).advt_cr != null));
     set("hs-analyst", count(s => s.analyst_count));
+
+    renderRotationLedger();
 
     // Suppressed estimates, with the reason. The model already declines to
     // value a company with no earning power; until now it declined silently.

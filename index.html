@@ -79,7 +79,7 @@
                 <button type="button" class="nav-btn" data-tab="buffett" aria-controls="tab-buffett" aria-selected="false">
                     <span class="btn-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="6"/><polyline points="8.5 13.5 7 22 12 19.5 17 22 15.5 13.5"/></svg></span> Buffett Valuation
                 </button>
-                <p class="nav-group-label">Risk</p>
+                <p class="nav-group-label">Alerts</p>
                 <button type="button" class="nav-btn" data-tab="earlywarning" aria-controls="tab-earlywarning" aria-selected="false">
                     <span class="btn-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span> Early Warnings
                 </button>
@@ -146,10 +146,24 @@
                      thing to establish, so it sits above every number it qualifies. -->
                 <div class="run-status-bar" id="run-status-bar" aria-live="polite">
                     <span class="rs-item"><span class="rs-label">Date</span><strong id="rs-date">-</strong></span>
-                    <span class="rs-item"><span class="rs-label">Data completeness</span><strong id="rs-completeness">-</strong></span>
+                    <span class="rs-item">
+                        <span class="rs-label">Data completeness</span>
+                        <strong id="rs-completeness">-</strong>
+                        <!-- The number alone reads the same at 62% and 96%.
+                             The bar makes the shortfall visible without
+                             having to compare against a remembered figure. -->
+                        <span class="rs-meter" role="img" aria-hidden="true">
+                            <span class="rs-meter-fill" id="rs-completeness-bar"></span>
+                        </span>
+                    </span>
                     <span class="rs-item"><span class="rs-label">Run</span><strong id="rs-health">-</strong></span>
                     <span class="rs-item"><span class="rs-label">Turnover coverage</span><strong id="rs-liquidity">-</strong></span>
                 </div>
+
+                <!-- Breadcrumb. The hash router can land the reader deep in a
+                     drawer or a filtered table from an email link, with no
+                     indication of where they are or how to get back out. -->
+                <nav class="breadcrumb-bar" id="breadcrumb-bar" aria-label="Breadcrumb"></nav>
 
                 <!-- KPI strip: what changed, not what exists. The counters this
                      replaced ("Tracked Sectors", "Watchlist Companies") were
@@ -244,6 +258,18 @@
                     Automated policy and market screening signals. Valuation outputs are analytical estimates, not investment advice.
                 </p>
                 
+                <!-- Sector Watch. A single hue throughout: the eye reads
+                     intensity as magnitude without needing a legend, and a
+                     two-colour scale here would imply a good/bad axis that
+                     severity-weighted change does not have. -->
+                <div class="glass-card" id="sector-watch-card">
+                    <div class="table-header-bar">
+                        <h3>Sector Watch</h3>
+                        <p class="subtitle">Severity-weighted change per sector this run. Darker means more moved; click through to the sector.</p>
+                    </div>
+                    <div id="sector-watch-body"><!-- Populated dynamically --></div>
+                </div>
+
                 <!-- Dashboard Workspace (Grid) -->
                 <div class="dashboard-grid">
                     
@@ -875,6 +901,17 @@
                         <div class="kpi-tile"><span class="kpi-value" id="hs-turnover">-</span><span class="kpi-label">Turnover</span><span class="kpi-sub">tradeability</span></div>
                         <div class="kpi-tile"><span class="kpi-value" id="hs-analyst">-</span><span class="kpi-label">Analyst Cover</span><span class="kpi-sub">consensus target</span></div>
                     </div>
+                </div>
+
+                <!-- Rotation Ledger. The win-rate tile above summarises the
+                     decisions that have been scored; this is the decisions
+                     themselves, including the ones still too young to judge. -->
+                <div class="glass-card">
+                    <div class="table-header-bar">
+                        <h3>Rotation Ledger</h3>
+                        <p class="subtitle">Every watchlist decision with the price it was made at, the reason, and whether it has been scored yet.</p>
+                    </div>
+                    <div id="rotation-ledger-body"><!-- Populated dynamically --></div>
                 </div>
 
                 <div class="glass-card">
