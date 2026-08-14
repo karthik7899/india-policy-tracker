@@ -54,6 +54,40 @@ are undocumented endpoints and BSE moves them.
 
   Msnew autocomplete returns HTML, not JSON.
 
+  NSE ARCHIVES (nsearchives.nseindia.com) — measured 14 Aug 2026, run 3
+
+  sec_bhavdata_full — the best find here.
+    https://nsearchives.nseindia.com/products/content/
+        sec_bhavdata_full_<DDMMYYYY>.csv
+    376 KB, 3,308 rows, text/csv, no zip. Columns: SYMBOL, SERIES, DATE1,
+    PREV_CLOSE, OPEN_PRICE, HIGH_PRICE, LOW_PRICE, LAST_PRICE, CLOSE_PRICE,
+    AVG_PRICE, TTL_TRD_QNTY, TURNOVER_LACS, NO_OF_TRADES, DELIV_QTY,
+    DELIV_PER. It carries TURNOVER and DELIVERY directly, which analysis/
+    liquidity.py currently derives from Yahoo volume times price — and
+    delivery percentage is a better tradeability signal than raw volume,
+    because it excludes intraday churn. Keyed by SYMBOL, which is the ticker
+    our watchlist already uses; no ISIN join needed.
+
+  UDiFF bhavcopy — whole-market OHLCV, zipped.
+    https://nsearchives.nseindia.com/content/cm/
+        BhavCopy_NSE_CM_0_0_0_<YYYYMMDD>_F_0000.csv.zip
+    196 KB zip (verified PK magic), one CSV inside, same UDiFF column set as
+    BSE's: TradDt, FinInstrmId, ISIN, TckrSymb, OpnPric..ClsPric.
+
+  The legacy path is GONE, not merely unfashionable:
+    /content/historical/EQUITIES/<YYYY>/<MON>/cm<DDMONYYYY>bhav.csv.zip
+    returns a genuine 404. Older URLs are not a way around anything here.
+
+  THE BOT FILTER IS ON BOTH HOSTS. Measured directly, same URL twice:
+    NSE archives, no headers  -> ReadTimeout after 20s
+    NSE archives, browser UA  -> 200
+    BSE api, no headers       -> 403 "Access Denied"
+    BSE api, browser UA       -> 200
+  So the archive host is not an unguarded back door; it just fails by hanging
+  rather than by rejecting, which is the more expensive failure of the two —
+  a bare request costs the full timeout. The User-Agent and Referer that
+  providers/isin_master.py already sends are required, not decorative.
+
 Each probe prints what it got, including the failures, because a probe that
 hides its misses is worse than none. Bodies under 400 bytes print verbatim:
 run 1 summarised an 18-byte response by its keys and hid the one detail that
