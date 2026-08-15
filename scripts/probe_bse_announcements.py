@@ -37,7 +37,9 @@ def _try(session, label, params):
     print(f"\n--- {label}")
     print(f"    params: {params}")
     try:
-        rows = bse._get(session, bse.ANNOUNCEMENTS_URL, params)
+        rows = bse._get(
+            session, bse.ANNOUNCEMENTS_URL, params, validator=bse._validate_table
+        )
     except Exception as e:  # noqa: BLE001 - the failure IS the measurement
         print(f"    {type(e).__name__}: {str(e)[:300]}")
         return []
@@ -59,33 +61,62 @@ def probe_announcements(session):
     today = datetime.date.today()
     week_ago = today - datetime.timedelta(days=7)
 
-    canonical = bse.announcement_params(week_ago, today)
     winners = []
 
-    # 1. The canonical set, which is the one this provider ships with.
-    if _try(session, "canonical (subcategory=-1, 7d, all scrips)", canonical):
-        winners.append("canonical")
-
-    # 2. Isolate subcategory — the parameter every earlier attempt omitted.
-    without = {k: v for k, v in canonical.items() if k != "subcategory"}
-    if _try(session, "canonical MINUS subcategory", without):
-        winners.append("no-subcategory")
-
-    # 3. One scrip. If the all-scrips query is what BSE dislikes, this shows it.
+    # The whole point of this run: the two vocabularies over the SAME window.
+    # Announcement volume varies enough day to day that comparing yesterday's
+    # result to today's would prove nothing.
+    #
+    # 1-4: the disclosure vocabulary (scrip_cd / categoryname / type), which
+    # is the untested dimension. If the parameter NAMES were the problem all
+    # along, one of these returns records where thirteen str* sets did not.
     if _try(
         session,
-        "canonical + one scrip",
+        "disclosure vocab, all categories, 7d",
+        bse.announcement_params(week_ago, today),
+    ):
+        winners.append("disclosure-all")
+
+    if _try(
+        session,
+        "disclosure vocab, categoryname=Result",
+        bse.announcement_params(week_ago, today, category="Result"),
+    ):
+        winners.append("disclosure-result")
+
+    if _try(
+        session,
+        "disclosure vocab, one scrip",
         bse.announcement_params(week_ago, today, scrip=SAMPLE_SCRIP),
     ):
-        winners.append("one-scrip")
+        winners.append("disclosure-one-scrip")
 
-    # 4. Today only. A wide window may itself be the rejection.
-    if _try(session, "today only", bse.announcement_params(today, today)):
-        winners.append("today-only")
+    if _try(
+        session,
+        "disclosure vocab, today only",
+        bse.announcement_params(today, today),
+    ):
+        winners.append("disclosure-today")
 
-    # 5. strType=A. C is "company"; if the feed wants "all", C filters it out.
-    if _try(session, "strType=A", {**canonical, "strType": "A"}):
-        winners.append("strType=A")
+    # 5: the str* baseline, so this run says whether the difference is the
+    # vocabulary or the day.
+    legacy = bse.legacy_announcement_params(week_ago, today)
+    if _try(session, "legacy str* vocab (measured baseline)", legacy):
+        winners.append("legacy")
+
+    # 6: date format. Every attempt so far sent YYYYMMDD; if BSE wants
+    # DD/MM/YYYY then all of them matched nothing while answering politely,
+    # which is exactly the behaviour observed.
+    if _try(
+        session,
+        "disclosure vocab, DD/MM/YYYY dates",
+        {
+            **bse.announcement_params(week_ago, today),
+            "fdate": week_ago.strftime("%d/%m/%Y"),
+            "tdate": today.strftime("%d/%m/%Y"),
+        },
+    ):
+        winners.append("dd/mm/yyyy")
 
     print(f"\n=== COMBINATIONS THAT RETURNED RECORDS: {winners or 'NONE'}")
     if not winners:

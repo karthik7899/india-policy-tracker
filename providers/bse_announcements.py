@@ -29,24 +29,25 @@ MEASURED from a GitHub Actions runner, 15 Aug 2026
   ISIN_NUMBER, Scrip_Name, Issuer_Name, Mktcap and scrip_id. The ISIN join
   this provider needs is therefore real and available.
 
-  ANNOUNCEMENTS STILL RETURN NOTHING. Five more parameter combinations were
-  tested — canonical, canonical without subcategory, single scrip, today
-  only, and strType=A — and all five came back "No Record Found!". That is
-  thirteen parameter sets across four probe runs. The endpoint answers
-  every time, so this remains a query problem rather than a block, but the
-  only way left to learn the right query is to read a real request off
-  bseindia.com, and those pages are Akamai-blocked to any browser we can
-  drive (scripts/probe_bse_network.py). Treat BSE announcements as unsolved.
+  ANNOUNCEMENTS RETURNED NOTHING ON THE str* VOCABULARY. Thirteen parameter
+  sets across four probe runs — every one answered HTTP 200 with the bare
+  JSON string "No Record Found!". Note what that rules out: there was no
+  redirect, no cookie rejection and no 403 in any of them. The endpoint
+  talks to us; it just does not like the query.
+
+  So this layer now sends a DIFFERENT PARAMETER VOCABULARY —
+  scrip_cd / categoryname / type / fdate / tdate — which is the one untested
+  dimension left that is not a blind guess at an endpoint name. The str*
+  form is kept as a documented fallback so one run measures both.
 
   Its empty answer is a BARE JSON STRING, not an envelope: an 18-byte body
   parsing to the str "No Record Found!". Guarding only for a dict turned
   that routine reply into a schema error.
 
   Consequence for the pipeline: this provider is wired in and costs one
-  request per run, returning nothing until the query is solved. NSE carries
-  the filings section today. The scrip master fetch is deliberately deferred
-  until announcements actually return rows, so a dead query costs 1.75 MB of
-  nothing.
+  request per run. NSE carries the filings section today. The scrip master
+  fetch is deferred until announcements actually return rows, so a dead
+  query costs 1.75 MB of nothing.
 """
 
 import datetime
@@ -72,8 +73,14 @@ API_BASE = "https://api.bseindia.com/BseIndiaAPI/api"
 ANNOUNCEMENTS_URL = f"{API_BASE}/AnnGetData/w"
 SCRIP_MASTER_URL = f"{API_BASE}/ListofScripData/w"
 
-HOME_URL = "https://www.bseindia.com/"
-REFERER_PAGE = "https://www.bseindia.com/corporates/ann.html"
+# The apex host, deliberately: the disclosures frame is served from it and
+# the API checks Referer/Origin against it. Requests to the apex are
+# redirected to www by BSE itself, which is benign and must NOT be mistaken
+# for a firewall intercept — see _validate_redirects.
+HOME_URL = "https://bseindia.com/"
+# The disclosures landing frame. Handshaking here rather than at the bare
+# host establishes the cookie scope the announcements XHR is issued under.
+REFERER_PAGE = "https://bseindia.com/corporates/ann.html"
 
 # Attachments come back as a bare filename; this is the directory they live in.
 ATTACHMENT_BASE = "https://www.bseindia.com/xml-data/corpfiling/AttachLive/"
@@ -82,11 +89,19 @@ ATTACHMENT_BASE = "https://www.bseindia.com/xml-data/corpfiling/AttachLive/"
 # filter — stated so a future reader does not conclude the endpoint is broken.
 API_HEADERS = {
     "Accept": "application/json, text/plain, */*",
+    # Referer AND Origin. The API host is a different subdomain from the page
+    # the XHR is issued from, so a browser sends both; sending only Referer
+    # leaves the request looking unlike anything the site itself makes.
     "Referer": HOME_URL,
+    "Origin": "https://bseindia.com",
     "Sec-Fetch-Dest": "empty",
     "Sec-Fetch-Mode": "cors",
     "Sec-Fetch-Site": "same-site",
 }
+
+# Paths BSE bounces unauthenticated or filtered traffic to. Landing on one of
+# these means we were intercepted, whatever status code came back.
+_INTERCEPT_MARKERS = ("showinterest.aspx", "/members", "login.aspx")
 
 REQUEST_TIMEOUT_S = 20
 
@@ -113,6 +128,20 @@ class BSESchemaError(ExchangeSchemaError, BSEAnnouncementsError):
     """Parsed, but not the shape written against."""
 
 
+class BSEFirewallIntercept(BSEBlockedError):
+    """We were redirected away from the data endpoint.
+
+    Distinct from a 403: the request was not refused, it was *diverted*, and
+    the response body will look like a perfectly valid page from somewhere
+    else entirely. Parsing that as data is how a block becomes a silent
+    wrong answer rather than a loud failure.
+    """
+
+
+class BSEStructuralError(BSESchemaError):
+    """JSON arrived and parsed, but carries no 'Table' payload key."""
+
+
 # Undocumented and prone to renaming, so every spelling seen is listed.
 # HEADLINE before NEWSSUB: NEWSSUB is often the coarse category, the same trap
 # NSE's `desc` turned out to be.
@@ -134,20 +163,31 @@ _MAX_SUBJECT_CHARS = 240
 
 
 def handshake(session):
-    """Best-effort cookie harvest. Unlike NSE this is not a precondition —
-    the API host has served us with no cookies at all — so a failure is logged
-    and the call proceeds anyway."""
-    try:
-        response = session.get(HOME_URL, timeout=REQUEST_TIMEOUT_S)
-        log.debug(f"BSE handshake {HOME_URL} -> {response.status_code}")
-        polite_pause()
-        return bool(session.cookies)
-    except Exception as e:  # noqa: BLE001 - best effort by definition
-        log.info(
-            f"BSE handshake skipped ({type(e).__name__}); the API host has "
-            "served us without cookies before, so continuing."
-        )
-        return False
+    """Establish domain-aware tracking from the disclosures frame itself.
+
+    Points at corporates/ann.html rather than the bare host: that is the page
+    the announcements XHR is issued from, so it is the scope any cookie the
+    API cares about gets minted under. The apex host is requested first so
+    domain-level cookies land before the path-level ones.
+
+    Best-effort by design. Unlike NSE this is not a precondition — the API
+    host has served us with no cookies at all — so a failure is logged and
+    the call proceeds anyway.
+    """
+    for url in (HOME_URL, REFERER_PAGE):
+        try:
+            response = session.get(url, timeout=REQUEST_TIMEOUT_S)
+            log.debug(
+                f"BSE handshake {url} -> {response.status_code} "
+                f"(landed {response.url})"
+            )
+            polite_pause()
+        except Exception as e:  # noqa: BLE001 - best effort by definition
+            log.info(
+                f"BSE handshake step {url} skipped ({type(e).__name__}); the "
+                "API host has served us without cookies before, so continuing."
+            )
+    return bool(session.cookies)
 
 
 def _parse_date(raw):
@@ -211,23 +251,86 @@ def normalize(record, scrip_index=None):
     ).model_dump()
 
 
-@retry_network(max_retries=3, base_delay=2.0)
-def _get(session, url, params):
-    """One validated API call. Backoff belongs to the decorator, which already
-    separates transient failures from real ones."""
-    response = session.get(
-        url, params=params, headers=API_HEADERS, timeout=REQUEST_TIMEOUT_S
-    )
-    validate_http(response, blocked_hint=_BLOCKED_HINT, blocked_exc=BSEBlockedError)
-    validate_content_type(response, exc=BSEContentTypeError)
-    payload = parse_json(response, exc=BSESchemaError)
+def _validate_redirects(response):
+    """Catch a diversion, and only a diversion.
 
-    # "No Record Found!" is BSE's empty answer, not an error. Measured: it
-    # arrives as a BARE JSON STRING, not an envelope — an 18-byte body that
-    # parses to the str "No Record Found!". The first version of this guard
-    # only checked for a dict, so the routine empty answer came back as
-    # "Expected a dict or list, got str", a schema error for a perfectly
-    # well-formed reply.
+    A literal "any redirect is an intercept" rule cannot be used here: we
+    address the apex host deliberately, and BSE redirects apex -> www on
+    every single request. That hop is benign and firing on it would mean the
+    module never completes a call.
+
+    What actually matters is WHERE we landed. A hop onto an interstitial —
+    showinterest.aspx, /members, a login page — or off the bseindia.com
+    domain entirely means the response body is some other page, and parsing
+    it as data turns a block into a silent wrong answer.
+    """
+    landed = (response.url or "").lower()
+
+    for marker in _INTERCEPT_MARKERS:
+        if marker in landed:
+            hops = " -> ".join(r.url for r in response.history) or "(none)"
+            raise BSEFirewallIntercept(
+                f"Redirected to an interstitial: {response.url!r} matches "
+                f"{marker!r}. Redirect chain: {hops}. The body is that page, "
+                "not announcement data, so it is refused rather than parsed."
+            )
+
+    if "bseindia.com" not in landed:
+        hops = " -> ".join(r.url for r in response.history) or "(none)"
+        raise BSEFirewallIntercept(
+            f"Redirected off the BSE domain entirely, to {response.url!r}. "
+            f"Redirect chain: {hops}."
+        )
+
+    if response.history:
+        # Benign, and worth seeing exactly once when diagnosing: the apex to
+        # www hop is expected and is not an interception.
+        hops = " -> ".join(r.url for r in response.history)
+        log.debug(f"BSE redirect (benign, still on-domain): {hops} -> {response.url}")
+
+
+def _validate_table(payload):
+    """The payload contract: a dict carrying 'Table'.
+
+    Three outcomes, deliberately distinguished, because they call for
+    different reactions and a single "no data" would hide which one happened:
+      * bare string       -> BSE's measured empty answer, a miss, not a fault
+      * 'Table' missing   -> structural failure, the contract changed
+      * 'Table' empty     -> the query matched nothing
+    """
+    if isinstance(payload, str):
+        log.info(f"BSE data payload empty: {payload[:200]!r} (query matched nothing)")
+        return []
+
+    if not isinstance(payload, dict):
+        raise BSEStructuralError(
+            f"Expected a dict carrying 'Table', got {type(payload).__name__}"
+        )
+
+    if "Table" not in payload:
+        raise BSEStructuralError(
+            "DATA PAYLOAD STRUCTURAL FAILURE: no 'Table' key. Top-level keys "
+            f"were {sorted(payload.keys())[:12]}. The response parsed as JSON, "
+            "so this is a contract change at BSE, not a transport problem."
+        )
+
+    table = payload["Table"]
+    if isinstance(table, str):
+        log.info(f"BSE data payload empty: Table={table[:200]!r}")
+        return []
+    if not isinstance(table, list):
+        raise BSEStructuralError(
+            f"'Table' should hold a list of records, got {type(table).__name__}"
+        )
+    if not table:
+        log.info("BSE data payload structural note: 'Table' present but empty.")
+    return table
+
+
+def _default_rows(payload):
+    """Envelope-tolerant record extraction, for endpoints that are not the
+    announcements feed. The scrip master returns a BARE LIST, so the strict
+    'Table' contract cannot be applied to every call on this host."""
     if isinstance(payload, str):
         log.info(f"BSE returned no records: {payload[:200]!r}")
         return []
@@ -239,12 +342,56 @@ def _get(session, url, params):
     return rows_from(payload, envelope_keys=_ENVELOPE_KEYS, exc=BSESchemaError)
 
 
-def announcement_params(from_date, to_date, scrip="", page=1):
-    """The parameter set bseindia.com's own announcements page sends.
+@retry_network(max_retries=3, base_delay=2.0)
+def _get(session, url, params, validator=None):
+    """One validated API call. Backoff belongs to the decorator, which already
+    separates transient failures from real ones.
 
-    Every field is required. Earlier probes omitted ``subcategory`` and got
-    "No Record Found!" back for a window that certainly had filings in it,
-    which is the single likeliest cause of that miss.
+    ``validator`` turns the parsed body into rows. Injected rather than fixed
+    because the announcements feed owes us a 'Table' envelope while the scrip
+    master answers with a bare list, and holding both to one contract would
+    break whichever endpoint lost the argument.
+    """
+    response = session.get(
+        url, params=params, headers=API_HEADERS, timeout=REQUEST_TIMEOUT_S
+    )
+    # Diversion is checked FIRST. An intercepted response can carry a 200 and
+    # a perfectly valid body, so every check after this one would pass while
+    # describing the wrong page.
+    _validate_redirects(response)
+    validate_http(response, blocked_hint=_BLOCKED_HINT, blocked_exc=BSEBlockedError)
+    validate_content_type(response, exc=BSEContentTypeError)
+    payload = parse_json(response, exc=BSESchemaError)
+    return (validator or _default_rows)(payload)
+
+
+def announcement_params(from_date, to_date, scrip="", category="Select", type_="A"):
+    """The disclosure-endpoint vocabulary: scrip_cd / categoryname / type.
+
+    Thirteen attempts on the str* vocabulary below returned "No Record
+    Found!" with no redirect and no refusal, which points at the parameter
+    NAMES rather than their values — an ASP.NET action binds what it
+    recognises and quietly filters on the rest.
+
+    Defaults: all companies, all categories, all update types, today.
+    ``categoryname="Result"`` narrows to results; "Select" is the site's
+    own all-categories sentinel.
+    """
+    return {
+        "scrip_cd": scrip,
+        "categoryname": category,
+        "type": type_,
+        "fdate": from_date.strftime("%Y%m%d"),
+        "tdate": to_date.strftime("%Y%m%d"),
+    }
+
+
+def legacy_announcement_params(from_date, to_date, scrip="", page=1):
+    """The str* vocabulary, kept because it is the measured baseline.
+
+    Retained so a single probe run compares both against the same window
+    rather than across days — announcement volume varies enough that
+    comparing yesterday's result to today's proves nothing.
     """
     return {
         "pageno": str(page),
@@ -258,17 +405,23 @@ def announcement_params(from_date, to_date, scrip="", page=1):
     }
 
 
-def fetch_announcements(session=None, from_date=None, to_date=None, scrip=""):
-    """Raw announcement records for a date window. Raises on failure."""
+def fetch_announcements(
+    session=None, from_date=None, to_date=None, scrip="", params=None
+):
+    """Raw announcement records for a date window. Raises on failure.
+
+    The 'Table' contract is enforced here specifically — this endpoint is the
+    one that owes us that envelope.
+    """
     today = datetime.date.today()
-    params = announcement_params(from_date or today, to_date or today, scrip)
+    params = params or announcement_params(from_date or today, to_date or today, scrip)
 
     owns_session = session is None
     session = session or build_session()
     try:
         handshake(session)
         polite_pause()
-        return _get(session, ANNOUNCEMENTS_URL, params)
+        return _get(session, ANNOUNCEMENTS_URL, params, validator=_validate_table)
     finally:
         if owns_session:
             session.close()

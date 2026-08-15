@@ -58,23 +58,31 @@ def _no_sleeping():
 # --- parameters ----------------------------------------------------------
 
 
-def test_params_carry_every_field_bses_own_page_sends():
-    """Earlier probes omitted subcategory and got "No Record Found!" for a
-    window that certainly had filings in it."""
+def test_params_use_the_disclosure_vocabulary():
+    """Thirteen attempts on the str* names returned "No Record Found!" with no
+    redirect and no refusal, which points at the parameter NAMES."""
     import datetime
 
     day = datetime.date(2026, 8, 14)
-    params = bse.announcement_params(day, day)
-    assert params == {
-        "pageno": "1",
-        "strCat": "-1",
-        "strPrevDate": "20260814",
-        "strToDate": "20260814",
-        "strScrip": "",
-        "strSearch": "P",
-        "strType": "C",
-        "subcategory": "-1",
+    assert bse.announcement_params(day, day) == {
+        "scrip_cd": "",
+        "categoryname": "Select",
+        "type": "A",
+        "fdate": "20260814",
+        "tdate": "20260814",
     }
+
+
+def test_legacy_params_are_kept_as_the_measured_baseline():
+    """Retained so one probe run compares both vocabularies over the same
+    window — announcement volume varies enough that comparing across days
+    proves nothing."""
+    import datetime
+
+    day = datetime.date(2026, 8, 14)
+    legacy = bse.legacy_announcement_params(day, day)
+    assert legacy["strPrevDate"] == "20260814"
+    assert legacy["subcategory"] == "-1"
 
 
 # --- validation ----------------------------------------------------------
@@ -124,10 +132,109 @@ def test_a_failed_handshake_does_not_stop_the_call():
     session = MagicMock()
     session.cookies = {}
     session.get.side_effect = [
-        Exception("home page refused"),
+        Exception("apex refused"),
+        Exception("disclosures frame refused"),
         _response(payload={"Table": [SAMPLE_RECORD]}),
     ]
     assert bse.fetch_announcements(session=session) == [SAMPLE_RECORD]
+
+
+def test_handshake_visits_the_disclosures_frame_not_just_the_host():
+    """The XHR is issued from ann.html, so that is the scope any cookie the
+    API cares about is minted under."""
+    session = MagicMock()
+    session.cookies = {"x": "1"}
+    session.get.return_value = _response(payload={"Table": []})
+    assert bse.handshake(session) is True
+    assert [c.args[0] for c in session.get.call_args_list] == [
+        bse.HOME_URL,
+        bse.REFERER_PAGE,
+    ]
+
+
+def test_api_headers_carry_referer_and_origin():
+    """The API host is a different subdomain from the page the XHR comes
+    from, so a browser sends both."""
+    assert bse.API_HEADERS["Referer"] == "https://bseindia.com/"
+    assert bse.API_HEADERS["Origin"] == "https://bseindia.com"
+
+
+# --- firewall interception ------------------------------------------------
+
+
+def _redirected(landed, history=("https://bseindia.com/x",)):
+    response = _response(payload={"Table": []})
+    response.url = landed
+    response.history = [MagicMock(url=u) for u in history]
+    return response
+
+
+def test_an_interstitial_redirect_is_an_intercept():
+    session = MagicMock()
+    session.get.return_value = _redirected(
+        "https://www.bseindia.com/members/showinterest.aspx"
+    )
+    with pytest.raises(bse.BSEFirewallIntercept) as excinfo:
+        bse._get(session, bse.ANNOUNCEMENTS_URL, {})
+    assert "showinterest.aspx" in str(excinfo.value)
+
+
+def test_a_redirect_off_the_domain_is_an_intercept():
+    session = MagicMock()
+    session.get.return_value = _redirected("https://errors.edgesuite.net/18.c50")
+    with pytest.raises(bse.BSEFirewallIntercept):
+        bse._get(session, bse.ANNOUNCEMENTS_URL, {})
+
+
+def test_the_apex_to_www_hop_is_not_an_intercept():
+    """We address the apex deliberately and BSE redirects apex -> www on every
+    request. Treating that as an interception would mean the module never
+    completes a call."""
+    session = MagicMock()
+    response = _redirected("https://www.bseindia.com/BseIndiaAPI/api/AnnGetData/w")
+    response.json.return_value = {"Table": [SAMPLE_RECORD]}
+    session.get.return_value = response
+    assert bse._get(session, bse.ANNOUNCEMENTS_URL, {}) == [SAMPLE_RECORD]
+
+
+def test_interception_is_checked_before_anything_parses():
+    """An intercepted response can carry a 200 and a valid body, so every
+    later check would pass while describing the wrong page."""
+    session = MagicMock()
+    response = _redirected("https://www.bseindia.com/members/login.aspx")
+    session.get.return_value = response
+    with pytest.raises(bse.BSEFirewallIntercept):
+        bse._get(session, bse.ANNOUNCEMENTS_URL, {})
+    response.json.assert_not_called()
+
+
+# --- the Table contract ---------------------------------------------------
+
+
+def test_missing_table_key_is_a_structural_failure():
+    with pytest.raises(bse.BSEStructuralError) as excinfo:
+        bse._validate_table({"SomethingElse": []})
+    assert "STRUCTURAL FAILURE" in str(excinfo.value)
+    assert "SomethingElse" in str(excinfo.value)
+
+
+def test_empty_table_is_logged_not_raised():
+    assert bse._validate_table({"Table": []}) == []
+
+
+def test_table_holding_a_string_is_an_empty_result():
+    assert bse._validate_table({"Table": "No Record Found!"}) == []
+
+
+def test_table_holding_the_wrong_type_is_structural():
+    with pytest.raises(bse.BSEStructuralError):
+        bse._validate_table({"Table": {"not": "a list"}})
+
+
+def test_the_scrip_master_is_not_held_to_the_table_contract():
+    """It answers with a bare list. One contract for both endpoints would
+    break whichever lost the argument."""
+    assert bse._default_rows([{"SCRIP_CD": "1"}]) == [{"SCRIP_CD": "1"}]
 
 
 # --- normalisation -------------------------------------------------------
