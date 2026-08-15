@@ -118,7 +118,18 @@ from providers.exchange_api import (
 from utils import retry_network
 
 API_BASE = "https://api.bseindia.com/BseIndiaAPI/api"
-ANNOUNCEMENTS_URL = f"{API_BASE}/AnnGetData/w"
+# AnnSubCategoryGetData, NOT AnnGetData. Captured from Chrome's Network tab
+# on the live announcements page, 15 Aug 2026 — the full Request URL was:
+#
+#   https://api.bseindia.com/BseIndiaAPI/api/AnnSubCategoryGetData/w
+#     ?pageno=1&strCat=-1&strPrevDate=20260815&strScrip=&strSearch=P
+#     &strToDate=20260815&strType=C&subcategory=-1
+#
+# Thirty-two attempts failed on AnnGetData while sending exactly these
+# parameters. The query was right the whole time and the path was an
+# assumption nobody had checked, because DevTools' Name column shows only
+# the last segment and every BSE endpoint ends in /w.
+ANNOUNCEMENTS_URL = f"{API_BASE}/AnnSubCategoryGetData/w"
 SCRIP_MASTER_URL = f"{API_BASE}/ListofScripData/w"
 
 # www, NOT the apex. Measured 15 Aug 2026, four header variants against the
@@ -422,41 +433,20 @@ def _get(session, url, params, validator=None):
     return (validator or _default_rows)(payload)
 
 
-def announcement_params(from_date, to_date, scrip="", category="Select", type_="A"):
-    """The disclosure-endpoint vocabulary: scrip_cd / categoryname / type.
+def announcement_params(from_date, to_date, scrip="", page=1):
+    """The exact query BSE's own announcements page sends.
 
-    Thirteen attempts on the str* vocabulary below returned "No Record
-    Found!" with no redirect and no refusal, which points at the parameter
-    NAMES rather than their values — an ASP.NET action binds what it
-    recognises and quietly filters on the rest.
-
-    Defaults: all companies, all categories, all update types, today.
-    ``categoryname="Result"`` narrows to results; "Select" is the site's
-    own all-categories sentinel.
-    """
-    return {
-        "scrip_cd": scrip,
-        "categoryname": category,
-        "type": type_,
-        "fdate": from_date.strftime("%Y%m%d"),
-        "tdate": to_date.strftime("%Y%m%d"),
-    }
-
-
-def legacy_announcement_params(from_date, to_date, scrip="", page=1):
-    """The str* vocabulary, kept because it is the measured baseline.
-
-    Retained so a single probe run compares both against the same window
-    rather than across days — announcement volume varies enough that
-    comparing yesterday's result to today's proves nothing.
+    Captured, not guessed. Every field below appeared in the real request;
+    none is optional until measured otherwise. Note both dates are the same
+    day in the observed call — the page asks for one day at a time.
     """
     return {
         "pageno": str(page),
         "strCat": "-1",
         "strPrevDate": from_date.strftime("%Y%m%d"),
-        "strToDate": to_date.strftime("%Y%m%d"),
         "strScrip": scrip,
         "strSearch": "P",
+        "strToDate": to_date.strftime("%Y%m%d"),
         "strType": "C",
         "subcategory": "-1",
     }

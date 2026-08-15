@@ -58,31 +58,34 @@ def _no_sleeping():
 # --- parameters ----------------------------------------------------------
 
 
-def test_params_use_the_disclosure_vocabulary():
-    """Thirteen attempts on the str* names returned "No Record Found!" with no
-    redirect and no refusal, which points at the parameter NAMES."""
+def test_params_match_the_captured_request_exactly():
+    """Captured from Chrome on the live page, not guessed:
+
+      .../AnnSubCategoryGetData/w?pageno=1&strCat=-1&strPrevDate=20260815
+        &strScrip=&strSearch=P&strToDate=20260815&strType=C&subcategory=-1
+
+    Every field is pinned because thirty-two attempts sent these exact
+    parameters to the wrong path, and a silent drift in either would put us
+    back there."""
     import datetime
 
-    day = datetime.date(2026, 8, 14)
+    day = datetime.date(2026, 8, 15)
     assert bse.announcement_params(day, day) == {
-        "scrip_cd": "",
-        "categoryname": "Select",
-        "type": "A",
-        "fdate": "20260814",
-        "tdate": "20260814",
+        "pageno": "1",
+        "strCat": "-1",
+        "strPrevDate": "20260815",
+        "strScrip": "",
+        "strSearch": "P",
+        "strToDate": "20260815",
+        "strType": "C",
+        "subcategory": "-1",
     }
 
 
-def test_legacy_params_are_kept_as_the_measured_baseline():
-    """Retained so one probe run compares both vocabularies over the same
-    window — announcement volume varies enough that comparing across days
-    proves nothing."""
-    import datetime
-
-    day = datetime.date(2026, 8, 14)
-    legacy = bse.legacy_announcement_params(day, day)
-    assert legacy["strPrevDate"] == "20260814"
-    assert legacy["subcategory"] == "-1"
+def test_the_endpoint_is_annsubcategorygetdata():
+    """AnnGetData is alive and answers "No Record Found!" to this very query.
+    It is the wrong door, and it fails quietly rather than loudly."""
+    assert bse.ANNOUNCEMENTS_URL.endswith("/AnnSubCategoryGetData/w")
 
 
 # --- validation ----------------------------------------------------------
