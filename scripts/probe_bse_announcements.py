@@ -271,6 +271,64 @@ def probe_referer_paths():
                 session.close()
 
 
+def probe_browser_observed(session):
+    """Reconstruct the call BSE's own page makes, from a DevTools screenshot.
+
+    Observed in Chrome on the live announcements page, one row returning
+    4.4 kB of data:
+
+        w?pageno=1&strCat=-1&strPrevDate=20260815&strScrip...rch=P&s...
+
+    Two things that settles. The vocabulary IS str* — the names were right
+    all along. And strPrevDate is TODAY, where every legacy attempt here
+    sent a seven-day window.
+
+    Checking the matrix against that: today-only was tested with the
+    disclosure vocabulary, and the seven-day window with the legacy one.
+    Legacy + today-only is the single cell never run. These variants close
+    it, and strip the parameters the visible URL does not obviously contain,
+    since an ASP.NET action can filter on one it does not expect.
+    """
+    print("\n=== BROWSER-OBSERVED RECONSTRUCTION (legacy vocab, today)")
+    today = datetime.date.today()
+    d = today.strftime("%Y%m%d")
+
+    base = {
+        "pageno": "1",
+        "strCat": "-1",
+        "strPrevDate": d,
+        "strToDate": d,
+        "strScrip": "",
+        "strSearch": "P",
+    }
+
+    variants = [
+        ("as observed (no strType, no subcategory)", dict(base)),
+        ("observed + strType=C", {**base, "strType": "C"}),
+        ("observed + subcategory=-1", {**base, "subcategory": "-1"}),
+        ("observed + both", {**base, "strType": "C", "subcategory": "-1"}),
+        (
+            "observed, strScrip omitted entirely",
+            {k: v for k, v in base.items() if k != "strScrip"},
+        ),
+        ("observed, strCat=Corp. Action", {**base, "strCat": "Corp. Action"}),
+        (
+            "observed, yesterday->today",
+            {
+                **base,
+                "strPrevDate": (today - datetime.timedelta(days=1)).strftime("%Y%m%d"),
+            },
+        ),
+    ]
+
+    winners = []
+    for label, params in variants:
+        if _try(session, label, params):
+            winners.append(label)
+    print(f"\n=== BROWSER-OBSERVED WINNERS: {winners or 'NONE'}")
+    return winners
+
+
 def probe_scrip_master(session):
     """The ISIN join. Without it BSE announcements cannot name a holding."""
     print("\n=== SCRIP MASTER (the SCRIP_CD <-> ISIN join)")
@@ -295,6 +353,7 @@ def main():
         print(
             f"=== HANDSHAKE: cookies={got_cookies} -> {sorted(session.cookies.keys())}"
         )
+        probe_browser_observed(session)
         probe_announcements(session)
         probe_scrip_master(session)
     finally:
