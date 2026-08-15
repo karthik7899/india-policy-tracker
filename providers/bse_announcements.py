@@ -49,10 +49,18 @@ MEASURED from a GitHub Actions runner, 15 Aug 2026
   type / fdate / tdate, with the str* form kept as
   legacy_announcement_params so one run compares both over the same window.
 
-  That comparison has NOT yet produced a clean result: the run that
-  introduced the new vocabulary also introduced the apex Referer, so every
-  announcement call in it was diverted before reaching BSE's query logic.
-  The vocabulary question is still open.
+  That comparison has now run cleanly, with working headers and no
+  interception, and the answer is negative. Both vocabularies, both date
+  formats, all-categories and categoryname=Result, all scrips and one
+  scrip, seven days and one day: every combination returned
+  "No Record Found!" with HTTP 200. Nineteen parameter sets in total.
+
+  So the parameter NAMES were not the problem either. What is left is a
+  dimension none of these probes can reach: the query BSE's own page sends,
+  which can only be read off a real request — and those pages are
+  Akamai-blocked to every browser we can drive. Treat BSE announcements as
+  closed unless someone can capture that request from an ordinary desktop
+  browser and paste the query string.
 
   The empty answer is a BARE JSON STRING, not an envelope: an 18-byte body
   parsing to the str "No Record Found!". Guarding only for a dict turned
