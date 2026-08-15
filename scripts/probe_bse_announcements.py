@@ -128,21 +128,84 @@ def probe_announcements(session):
         )
 
 
+_SCRIP_PARAMS = {
+    "Group": "",
+    "Scripcode": "",
+    "industry": "",
+    "segment": "Equity",
+    "status": "Active",
+}
+
+
+def probe_header_variants():
+    """Which Referer/Origin form does BSE accept? Decided in ONE run.
+
+    The scrip master is the control: it returned 4,975 records with
+    Referer=https://www.bseindia.com/ and no Origin, then began redirecting to
+    /members/showinterest after the header set changed to the apex form. That
+    is a causal claim, so it gets tested rather than assumed — same endpoint,
+    same parameters, same minute, only the headers differ.
+    """
+    print("\n=== HEADER VARIANTS (control: the scrip master, known to work)")
+    variants = [
+        (
+            "www Referer, no Origin (the form that returned 4,975)",
+            {"Referer": "https://www.bseindia.com/"},
+        ),
+        (
+            "apex Referer + apex Origin (the current header set)",
+            {"Referer": "https://bseindia.com/", "Origin": "https://bseindia.com"},
+        ),
+        (
+            "www Referer + www Origin",
+            {
+                "Referer": "https://www.bseindia.com/",
+                "Origin": "https://www.bseindia.com",
+            },
+        ),
+        ("apex Referer, no Origin", {"Referer": "https://bseindia.com/"}),
+    ]
+
+    for label, headers in variants:
+        print(f"\n--- {label}")
+        session = build_session()
+        try:
+            # Rebuilt from scratch, not merged over API_HEADERS: "no Origin"
+            # has to mean the header is absent, and merging would leave the
+            # module's own Origin in place and test nothing.
+            merged = {
+                k: v
+                for k, v in bse.API_HEADERS.items()
+                if k not in ("Referer", "Origin")
+            }
+            merged.update(headers)
+            response = session.get(
+                bse.SCRIP_MASTER_URL,
+                params=_SCRIP_PARAMS,
+                headers=merged,
+                timeout=bse.REQUEST_TIMEOUT_S,
+            )
+            print(f"    status : {response.status_code}")
+            print(f"    landed : {response.url[:120]}")
+            print(f"    hops   : {len(response.history)}")
+            body = response.text or ""
+            if "showinterest" in (response.url or ""):
+                print("    VERDICT: INTERCEPTED")
+            elif response.status_code == 200 and body.startswith("["):
+                print(f"    VERDICT: OK — {len(body)} bytes of JSON list")
+            else:
+                print(f"    VERDICT: unexpected — first 120 bytes {body[:120]!r}")
+        except Exception as e:  # noqa: BLE001
+            print(f"    {type(e).__name__}: {str(e)[:200]}")
+        finally:
+            session.close()
+
+
 def probe_scrip_master(session):
     """The ISIN join. Without it BSE announcements cannot name a holding."""
     print("\n=== SCRIP MASTER (the SCRIP_CD <-> ISIN join)")
     try:
-        rows = bse._get(
-            session,
-            bse.SCRIP_MASTER_URL,
-            {
-                "Group": "",
-                "Scripcode": "",
-                "industry": "",
-                "segment": "Equity",
-                "status": "Active",
-            },
-        )
+        rows = bse._get(session, bse.SCRIP_MASTER_URL, _SCRIP_PARAMS)
     except Exception as e:  # noqa: BLE001
         print(f"    {type(e).__name__}: {str(e)[:300]}")
         return
@@ -154,6 +217,7 @@ def probe_scrip_master(session):
 
 
 def main():
+    probe_header_variants()
     session = build_session(bse.API_HEADERS)
     try:
         got_cookies = bse.handshake(session)
