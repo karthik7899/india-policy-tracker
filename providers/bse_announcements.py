@@ -22,10 +22,31 @@ www.bseindia.com's HTML pages, which Akamai refuses to any browser we can
 drive (see scripts/probe_bse_network.py). This file covers the announcements
 feed only, which is on the API host and reachable.
 
-MEASURED: see scripts/probe_bse_announcements.py. AnnGetData has answered
-"No Record Found!" to every parameter set tried so far, so the parameters
-below are the canonical ones the site itself uses and the probe tests a
-matrix around them. Re-run it before trusting this.
+MEASURED from a GitHub Actions runner, 15 Aug 2026
+(scripts/probe_bse_announcements.py — re-run it before trusting any of this):
+
+  THE SCRIP MASTER WORKS. 4,975 active equity scrips carrying SCRIP_CD,
+  ISIN_NUMBER, Scrip_Name, Issuer_Name, Mktcap and scrip_id. The ISIN join
+  this provider needs is therefore real and available.
+
+  ANNOUNCEMENTS STILL RETURN NOTHING. Five more parameter combinations were
+  tested — canonical, canonical without subcategory, single scrip, today
+  only, and strType=A — and all five came back "No Record Found!". That is
+  thirteen parameter sets across four probe runs. The endpoint answers
+  every time, so this remains a query problem rather than a block, but the
+  only way left to learn the right query is to read a real request off
+  bseindia.com, and those pages are Akamai-blocked to any browser we can
+  drive (scripts/probe_bse_network.py). Treat BSE announcements as unsolved.
+
+  Its empty answer is a BARE JSON STRING, not an envelope: an 18-byte body
+  parsing to the str "No Record Found!". Guarding only for a dict turned
+  that routine reply into a schema error.
+
+  Consequence for the pipeline: this provider is wired in and costs one
+  request per run, returning nothing until the query is solved. NSE carries
+  the filings section today. The scrip master fetch is deliberately deferred
+  until announcements actually return rows, so a dead query costs 1.75 MB of
+  nothing.
 """
 
 import datetime
@@ -201,14 +222,19 @@ def _get(session, url, params):
     validate_content_type(response, exc=BSEContentTypeError)
     payload = parse_json(response, exc=BSESchemaError)
 
-    # "No Record Found!" is BSE's empty answer, not an error. Reported as an
-    # empty list so the caller logs a miss rather than raising — the endpoint
-    # is alive and the query simply matched nothing.
+    # "No Record Found!" is BSE's empty answer, not an error. Measured: it
+    # arrives as a BARE JSON STRING, not an envelope — an 18-byte body that
+    # parses to the str "No Record Found!". The first version of this guard
+    # only checked for a dict, so the routine empty answer came back as
+    # "Expected a dict or list, got str", a schema error for a perfectly
+    # well-formed reply.
+    if isinstance(payload, str):
+        log.info(f"BSE returned no records: {payload[:200]!r}")
+        return []
     if isinstance(payload, dict) and not any(
         isinstance(payload.get(k), list) for k in _ENVELOPE_KEYS
     ):
-        message = str(payload)[:200]
-        log.info(f"BSE returned no records: {message}")
+        log.info(f"BSE returned no records: {str(payload)[:200]}")
         return []
     return rows_from(payload, envelope_keys=_ENVELOPE_KEYS, exc=BSESchemaError)
 
@@ -318,8 +344,15 @@ def fetch_filings(watchlist=None, from_date=None, to_date=None):
     """
     session = build_session()
     try:
-        scrip_index = build_scrip_index(watchlist, session=session)
+        # Announcements FIRST, and the scrip master only if there is something
+        # to name. That join costs 1.75 MB, and AnnGetData currently answers
+        # "No Record Found!" to every parameter set tried (13 across four probe
+        # runs), so paying for it up front would buy nothing on most days.
         raw = fetch_announcements(session=session, from_date=from_date, to_date=to_date)
+        if not raw:
+            log.info("BSE announcements: none returned; skipping the ISIN join.")
+            return []
+        scrip_index = build_scrip_index(watchlist, session=session)
     except BSEAnnouncementsError as e:
         log.warning(f"BSE announcements unavailable ({type(e).__name__}): {e}")
         return []

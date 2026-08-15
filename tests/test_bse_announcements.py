@@ -243,3 +243,23 @@ def test_holdings_are_sorted_ahead_of_everyone_else():
 
     assert out[0]["company"] == "Reliance"
     assert [f["filing"] for f in out[1:3]] == ["Filing 0", "Filing 1"]
+
+
+def test_no_record_found_arrives_as_a_bare_string():
+    """Measured: BSE's empty answer is an 18-byte body parsing to the str
+    "No Record Found!", not an envelope. Guarding only for a dict turned a
+    routine reply into a schema error."""
+    session = MagicMock()
+    session.get.return_value = _response(payload="No Record Found!")
+    assert bse._get(session, bse.ANNOUNCEMENTS_URL, {}) == []
+
+
+def test_the_isin_join_is_skipped_when_there_is_nothing_to_name():
+    """The scrip master costs 1.75 MB. AnnGetData answers "No Record Found!"
+    to every parameter set tried so far, so paying for it up front would buy
+    nothing on most days."""
+    with patch.object(bse, "fetch_announcements", return_value=[]), patch.object(
+        bse, "build_scrip_index"
+    ) as index:
+        assert bse.fetch_filings(WATCHLIST) == []
+    index.assert_not_called()
