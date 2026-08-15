@@ -57,14 +57,25 @@ MEASURED from a GitHub Actions runner, 14 Aug 2026
 """
 
 import datetime
-import random
-import time
 
 import requests
 
 from logger import log
 from models.core import FilingEvent
-from utils import TransientNetworkError, retry_network
+from providers.exchange_api import (
+    ExchangeAPIError,
+    ExchangeBlockedError,
+    ExchangeContentTypeError,
+    ExchangeSchemaError,
+    build_session as _build_session,
+    first_present,
+    parse_json,
+    polite_pause,
+    rows_from,
+    validate_content_type,
+    validate_http,
+)
+from utils import retry_network
 
 BASE_URL = "https://www.nseindia.com"
 
@@ -82,25 +93,12 @@ API_URL = f"{BASE_URL}/api/corporate-announcements"
 # error — a silent miss, which is the worst kind.
 DEFAULT_INDEX = "equities"
 
-# A full desktop Chrome header set. The point is not disguise — it is that
-# NSE's edge rejects requests missing the headers every browser sends, and a
-# bare python-requests fingerprint is refused outright.
+# What a page load looks like, on top of the shared browser headers. NSE's
+# edge rejects requests missing the headers every browser sends, and a bare
+# python-requests fingerprint is refused outright. Note the shared set
+# deliberately pins no Accept-Encoding — see providers/exchange_api.py.
 BROWSER_HEADERS = {
-    "User-Agent": (
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-        "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
-    ),
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-    "Accept-Language": "en-IN,en-GB;q=0.9,en;q=0.8",
-    # NO Accept-Encoding. requests sets it from what urllib3 can actually
-    # decode, and overriding it is how the first CI probe broke: this header
-    # read "gzip, deflate, br", NSE honoured the br, and urllib3 handed back
-    # 44 KB of undecodable Brotli. Content-type said application/json and was
-    # telling the truth, so the failure surfaced as "not valid JSON" — a
-    # parse error blamed on the parser, from a header we sent. Never
-    # advertise an encoding this client cannot decode.
-    "Connection": "keep-alive",
-    "Upgrade-Insecure-Requests": "1",
     "Sec-Fetch-Dest": "document",
     "Sec-Fetch-Mode": "navigate",
     "Sec-Fetch-Site": "none",
@@ -117,41 +115,35 @@ API_HEADERS = {
     "Sec-Fetch-Site": "same-origin",
 }
 
-# Human-paced. Two requests fired back to back from a datacentre IP is the
-# signature rate limiters look for, and the whole fetch happens once per run
-# so a few seconds costs nothing.
-MIN_PAUSE_S = 2.0
-MAX_PAUSE_S = 5.0
-
 REQUEST_TIMEOUT_S = 20
 
-# Retried by the exchange's own admission that it is having a moment.
-_TRANSIENT_STATUSES = (408, 429, 500, 502, 503, 504)
-# Not transient — the session is wrong, and only a fresh handshake can fix it.
-_AUTH_STATUSES = (401, 403)
+_BLOCKED_HINT = (
+    "Check, in order: (1) the handshake ran and cookies were set, (2) the "
+    "Referer is the announcements page, (3) whether this IP is a cloud range "
+    "NSE refuses outright — in which case no amount of header work will help "
+    "and the data needs another source."
+)
 
 
-class NSEAnnouncementsError(Exception):
+class NSEAnnouncementsError(ExchangeAPIError):
     """Base for every way this provider can decide it has no usable data."""
 
 
-class NSEBlockedError(NSEAnnouncementsError):
-    """NSE refused us. Carries what to check, because from a CI log this is
-    indistinguishable from a code fault otherwise."""
+class NSEBlockedError(ExchangeBlockedError, NSEAnnouncementsError):
+    """NSE refused us."""
 
 
-class NSEContentTypeError(NSEAnnouncementsError):
-    """Served something other than JSON — a bot-challenge page, typically,
-    delivered with HTTP 200. Raised BEFORE any parse is attempted."""
+class NSEContentTypeError(ExchangeContentTypeError, NSEAnnouncementsError):
+    """Served something other than JSON, typically delivered with HTTP 200."""
 
 
-class NSESchemaError(NSEAnnouncementsError):
+class NSESchemaError(ExchangeSchemaError, NSEAnnouncementsError):
     """Parsed as JSON but is not the shape this provider was written against."""
 
 
 def _polite_pause():
-    """Random, not fixed: a constant interval is itself a fingerprint."""
-    time.sleep(random.uniform(MIN_PAUSE_S, MAX_PAUSE_S))
+    """Delegates to the shared pause so both exchanges are paced alike."""
+    polite_pause()
 
 
 def build_session():
@@ -159,9 +151,7 @@ def build_session():
 
     Kept separate from the handshake so tests can inject a fake.
     """
-    session = requests.Session()
-    session.headers.update(BROWSER_HEADERS)
-    return session
+    return _build_session(BROWSER_HEADERS)
 
 
 def handshake(session):
@@ -189,72 +179,26 @@ def handshake(session):
     return True
 
 
+# The three validation layers now live in providers/exchange_api.py, where BSE
+# reads them too. They stay wrapped here under their own names because each
+# lesson they encode was paid for by a CI failure, and a caller should be able
+# to test them one at a time.
+
+
 def _validate_http(response):
     """Status first: an auth refusal and a rate limit need opposite reactions."""
-    status = response.status_code
-    if status in _AUTH_STATUSES:
-        raise NSEBlockedError(
-            f"NSE returned HTTP {status} for {response.url}. This is the bot "
-            "filter, not a bad query. Check, in order: (1) the handshake ran "
-            "and cookies were set, (2) the Referer is the announcements page, "
-            "(3) whether this IP is a cloud range NSE refuses outright — "
-            "GitHub-hosted runners have been blocked before, in which case no "
-            "amount of header work will help and the data needs another source."
-        )
-    if status in _TRANSIENT_STATUSES:
-        # Handed to retry_network, which owns the exponential backoff.
-        raise TransientNetworkError(f"HTTP {status} for {response.url}")
-    if status != 200:
-        raise NSEAnnouncementsError(f"NSE returned HTTP {status} for {response.url}")
+    validate_http(response, blocked_hint=_BLOCKED_HINT, blocked_exc=NSEBlockedError)
 
 
 def _validate_content_type(response):
-    """The check that matters most: a block arrives as HTML with a 200 on it.
-
-    Stopping here means the log says "served text/html" instead of a
-    JSONDecodeError pointing at column 1, which has sent people looking for a
-    parser bug that was never there.
-    """
-    content_type = (response.headers.get("Content-Type") or "").lower()
-    if "application/json" not in content_type:
-        body = (response.text or "")[:200].replace("\n", " ")
-        raise NSEContentTypeError(
-            f"Expected application/json, got {content_type or 'no Content-Type'} "
-            f"(HTTP {response.status_code}). First 200 bytes: {body!r}"
-        )
+    """The check that matters most: a block arrives as HTML with a 200 on it."""
+    validate_content_type(response, exc=NSEContentTypeError)
 
 
 def _validate_schema(response):
     """Parse, then confirm the shape before anything downstream trusts it."""
-    try:
-        payload = response.json()
-    except ValueError as e:  # json.JSONDecodeError subclasses ValueError
-        # Name the encoding. When this fired in CI the body was Brotli we had
-        # asked for and could not decode, and the bare message ("Expecting
-        # value: line 1 column 1") pointed at the parser instead of at the
-        # request headers. Anything undecodable here should say what arrived.
-        encoding = response.headers.get("Content-Encoding") or "none"
-        head = repr((response.text or "")[:80])
-        raise NSESchemaError(
-            f"Content-Type claimed JSON but the body did not parse: {e} "
-            f"(Content-Encoding: {encoding}, first bytes: {head}). If the "
-            "encoding is one this client cannot decode, that is the bug — "
-            "check Accept-Encoding, not the parser."
-        ) from e
-
-    # NSE has served both a bare list and a {"data": [...]} envelope for this
-    # endpoint at different times. Accept either rather than break on a
-    # wrapper change.
-    if isinstance(payload, dict):
-        rows = payload.get("data", payload.get("rows", []))
-    elif isinstance(payload, list):
-        rows = payload
-    else:
-        raise NSESchemaError(f"Expected a dict or list, got {type(payload).__name__}")
-
-    if not isinstance(rows, list):
-        raise NSESchemaError(f"Expected a list of records, got {type(rows).__name__}")
-    return rows
+    payload = parse_json(response, exc=NSESchemaError)
+    return rows_from(payload, envelope_keys=("data", "rows"), exc=NSESchemaError)
 
 
 # The API is undocumented and its keys have moved. Each logical field lists
@@ -285,11 +229,7 @@ _MAX_SUBJECT_CHARS = 240
 
 def _first_present(record, field):
     """Safe .get() across every known alias; '' when the field is absent."""
-    for key in _FIELD_ALIASES[field]:
-        value = record.get(key)
-        if value not in (None, ""):
-            return str(value).strip()
-    return ""
+    return first_present(record, _FIELD_ALIASES[field])
 
 
 def _parse_date(raw):

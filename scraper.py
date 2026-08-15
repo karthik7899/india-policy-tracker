@@ -9,6 +9,7 @@ from logger import log
 from config import SECTOR_QUERIES, GLOBAL_EVENT_QUERIES
 from providers.rss import fetch_query_feed_async
 from providers.nse_announcements import fetch_filings as nse_fetch_filings
+from providers.bse_announcements import fetch_filings as bse_fetch_filings
 from analysis.parsing import title_matches_company
 
 
@@ -410,24 +411,30 @@ async def fetch_advanced_rss_feeds_async(session, watchlist):
 async def fetch_exchange_filings_async(session, watchlist):
     """Corporate filings, primary source first.
 
-    NSE's disclosure API is the filing itself — exact symbol, the company's
-    own subject line, the attached PDF. The news search below is what we had
-    before it and is kept as the fallback, because NSE refuses cloud IPs often
-    enough that it cannot be the only path: a blocked exchange must degrade
-    the section, not empty it.
+    The exchange APIs give the filing itself — exact identifier, the
+    company's own subject line, the attached PDF. The news search below is
+    what we had before them and is kept as the fallback, because either
+    exchange can refuse a cloud IP on any given day: a block must degrade the
+    section, not empty it.
 
-    Both are merged rather than either/or. They surface different things —
-    the exchange publishes filings no one wrote about, the press covers
-    filings under a plainer headline — and NSE records are placed first so
-    the dedupe below keeps the primary version of anything reported twice.
+    All three are merged rather than either/or. They surface different things
+    — an exchange publishes filings no one wrote about, the press covers them
+    under a plainer headline, and BSE carries listings NSE does not — and
+    exchange records are placed first so the dedupe below keeps the primary
+    version of anything reported twice.
     """
     log.info("Fetching NSE/BSE corporate filings (Async)...")
 
-    # to_thread because the provider is sync requests (it needs cookie-jar
+    # to_thread because both providers are sync requests (they need cookie-jar
     # persistence across the handshake) and this coroutine must not block the
-    # event loop while it sleeps out its rate-limit pauses.
-    exchange_filings = await asyncio.to_thread(nse_fetch_filings, watchlist)
-    news_filings = await _fetch_filing_news_async(session, watchlist)
+    # event loop while they sleep out their rate-limit pauses. Gathered so the
+    # two exchanges' pauses overlap instead of adding up.
+    nse_filings, bse_filings, news_filings = await asyncio.gather(
+        asyncio.to_thread(nse_fetch_filings, watchlist),
+        asyncio.to_thread(bse_fetch_filings, watchlist),
+        _fetch_filing_news_async(session, watchlist),
+    )
+    exchange_filings = nse_filings + bse_filings
 
     # Keyed on (company, filing), not filing alone. Two companies file the
     # same subject constantly — NSE stamps a coarse category on many records
@@ -443,8 +450,9 @@ async def fetch_exchange_filings_async(session, watchlist):
         unique.setdefault((filing["company"], filing["filing"]), filing)
     unique_filings = unique.values()
     log.info(
-        f"Corporate filings: {len(exchange_filings)} from NSE, "
-        f"{len(news_filings)} from news, {len(list(unique_filings))} after dedupe."
+        f"Corporate filings: {len(nse_filings)} from NSE, {len(bse_filings)} "
+        f"from BSE, {len(news_filings)} from news, {len(list(unique_filings))} "
+        "after dedupe."
     )
     return list(unique_filings)[:10]
 

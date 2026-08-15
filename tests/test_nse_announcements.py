@@ -12,6 +12,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 import requests
 
+from providers import exchange_api
 from providers import nse_announcements as nse
 
 
@@ -52,8 +53,11 @@ WATCHLIST = {
 @pytest.fixture(autouse=True)
 def _no_sleeping():
     """The provider deliberately sleeps 2-5s between requests. Real in
-    production, intolerable in a suite that runs in under two seconds."""
-    with patch.object(nse.time, "sleep"):
+    production, intolerable in a suite that runs in under two seconds.
+
+    Patched on the shared module, which owns the pacing for both exchanges.
+    """
+    with patch.object(exchange_api.time, "sleep"):
         yield
 
 

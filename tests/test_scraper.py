@@ -200,7 +200,10 @@ def _nse_filing(name="Awarding of Order / Receipt of Order"):
     }
 
 
-def _run_filings(nse_result, news_result):
+def _run_filings(nse_result, news_result, bse_result=None):
+    """Every source must be stubbed. Leaving one unpatched sends the suite to
+    the real exchange: that mistake took this file from 1.7s to 116s, and in
+    CI it would read as a flaky test rather than a live network call."""
     import asyncio
     import scraper
 
@@ -209,7 +212,11 @@ def _run_filings(nse_result, news_result):
 
     with patch.object(
         scraper, "nse_fetch_filings", return_value=nse_result
-    ), patch.object(scraper, "_fetch_filing_news_async", fake_news):
+    ), patch.object(
+        scraper, "bse_fetch_filings", return_value=bse_result or []
+    ), patch.object(
+        scraper, "_fetch_filing_news_async", fake_news
+    ):
         return asyncio.run(scraper.fetch_exchange_filings_async(None, {}))
 
 
@@ -268,3 +275,35 @@ def test_same_subject_from_two_companies_is_not_collapsed():
     out = _run_filings([a, b], [])
     assert len(out) == 2
     assert {f["company"] for f in out} == {"Tata Motors", "Infosys"}
+
+
+def _bse_filing(name="BSE-only filing"):
+    return {
+        "company": "Some BSE Co",
+        "filing": name,
+        "industry": "Corporate",
+        "date": "10 Jan 2024",
+        "source": "BSE",
+        "link": "https://www.bseindia.com/x.pdf",
+    }
+
+
+def test_all_three_sources_merge():
+    out = _run_filings([_nse_filing()], [_news_filing()], [_bse_filing()])
+    assert {f["source"] for f in out} == {"NSE", "BSE", "Economic Times"}
+
+
+def test_bse_carries_the_section_when_nse_is_blocked():
+    """Either exchange can refuse a cloud IP on any given day."""
+    out = _run_filings([], [], [_bse_filing()])
+    assert len(out) == 1
+    assert out[0]["source"] == "BSE"
+
+
+def test_exchanges_outrank_news_for_the_cap():
+    many_nse = [_nse_filing(f"NSE {i}") for i in range(6)]
+    many_bse = [_bse_filing(f"BSE {i}") for i in range(6)]
+    many_news = [_news_filing(f"News {i}") for i in range(6)]
+    out = _run_filings(many_nse, many_news, many_bse)
+    assert len(out) == 10
+    assert all(f["source"] in ("NSE", "BSE") for f in out)

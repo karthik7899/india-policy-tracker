@@ -49,6 +49,9 @@ jobs:
       - name: Probe NSE announcements
         run: python scripts/probe_nse_announcements.py
 
+      - name: Probe BSE announcements
+        run: python scripts/probe_bse_announcements.py
+
   network:
     # Reads what BSE's own pages call, which is what DevTools' Network tab
     # shows. Separate job because it needs a browser; the endpoint probe above
