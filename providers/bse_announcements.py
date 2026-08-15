@@ -532,18 +532,27 @@ def build_scrip_index(watchlist, session=None):
     never raises.
     """
     wanted = {}
+    # Ticker fallback, keyed alongside ISIN. MEASURED 15 Aug 2026: 125 symbols
+    # (2.51%) carry a different ISIN on each exchange — same issuer code,
+    # different security suffix, which is what a face-value split leaves
+    # behind. BAJFINANCE is INE296A01024 on NSE and INE296A01032 on BSE.
+    # An ISIN-only join drops every one of those holdings to "Corporate"
+    # while looking like it worked, so BSE's scrip_id (its ticker, usually
+    # identical to the NSE symbol) catches what the ISIN misses.
+    wanted_tickers = {}
     for sector, stocks in (watchlist or {}).items():
         for stock in stocks or []:
             if not isinstance(stock, dict):
                 continue
+            label = (stock.get("name") or stock.get("ticker"), sector)
             screener = stock.get("screener") or {}
             isin = screener.get("isin") if isinstance(screener, dict) else None
             if isin:
-                wanted[str(isin).upper()] = (
-                    stock.get("name") or stock.get("ticker"),
-                    sector,
-                )
-    if not wanted:
+                wanted[str(isin).upper()] = label
+            ticker = str(stock.get("ticker") or "").upper()
+            if ticker:
+                wanted_tickers[ticker] = label
+    if not wanted and not wanted_tickers:
         log.info("BSE scrip index skipped: no holding carries an ISIN yet.")
         return {}
 
@@ -553,15 +562,30 @@ def build_scrip_index(watchlist, session=None):
         return {}
 
     index = {}
+    by_isin = by_ticker = 0
     for row in rows:
         if not isinstance(row, dict):
             continue
-        isin = first_present(row, ("ISIN_NUMBER", "isin", "ISIN")).upper()
         code = first_present(row, ("SCRIP_CD", "Scrip_Cd", "scrip_cd"))
-        if isin in wanted and code:
-            index[code] = wanted[isin]
+        if not code:
+            continue
+        isin = first_present(row, ("ISIN_NUMBER", "isin", "ISIN")).upper()
+        scrip_id = first_present(row, ("scrip_id", "SCRIP_ID")).upper()
 
-    log.info(f"BSE scrip index: {len(index)} of {len(wanted)} holdings resolved.")
+        # ISIN first: it identifies the security, where a ticker only names
+        # it, and two exchanges can spell the same ticker for different
+        # companies. The fallback is second precisely because it is weaker.
+        if isin and isin in wanted:
+            index[code] = wanted[isin]
+            by_isin += 1
+        elif scrip_id and scrip_id in wanted_tickers:
+            index[code] = wanted_tickers[scrip_id]
+            by_ticker += 1
+
+    log.info(
+        f"BSE scrip index: {len(index)} holdings resolved "
+        f"({by_isin} by ISIN, {by_ticker} by ticker fallback)."
+    )
     return index
 
 
