@@ -18,6 +18,19 @@ So this provider is offline-first:
     a transient bad row must not corrupt known-good identity data). If
     the archive host also blocks CI, the committed snapshot simply keeps
     serving; the auto-commit workflow persists whatever was learned.
+  - BSE's scrip master is merged after NSE's, for the same reason and under
+    the same rule. It carries ~4,975 active equity scrips against NSE's
+    ~2,000 and includes BSE-only listings, so it is the larger source of
+    new identities.
+
+A CAUTION ABOUT THE BSE MERGE. NSE's SYMBOL and BSE's scrip_id are both
+ticker-like codes and usually agree for a dual-listed company, but they are
+different namespaces: nothing guarantees that a BSE-only scrip_id is not
+also some other company's NSE symbol. NSE is merged first and existing
+entries are never overwritten, so a collision cannot corrupt a mapping we
+already trust — it can only decline to add one. Collisions are counted and
+logged rather than assumed rare, because that count is the only evidence of
+whether the risk is real.
 """
 
 import csv
@@ -83,42 +96,120 @@ def parse_equity_csv(text):
     return mapping
 
 
-async def refresh_isin_master_async(session, master, path=MASTER_PATH):
-    """Single fail-safe attempt to merge NEW listings from NSE's live
-    equity list into the master. Mutates ``master`` in place and persists
-    when anything was learned. Never raises; returns the count of added
-    symbols. Existing entries are never overwritten — ISINs don't change,
-    so a divergent live row is more likely a feed glitch than news.
+def fetch_scrip_master_sync():
+    """Indirection so tests can stub the network at one obvious seam, rather
+    than reaching the real exchange from a unit test."""
+    from providers.bse_announcements import fetch_scrip_master
+
+    return fetch_scrip_master()
+
+
+def parse_bse_scrip_rows(rows):
+    """BSE scrip master rows -> scrip_id→ISIN. Keyed on scrip_id because that
+    is BSE's ticker; SCRIP_CD is a numeric code the watchlist never uses."""
+    mapping = {}
+    for row in rows or []:
+        if not isinstance(row, dict):
+            continue
+        symbol = str(row.get("scrip_id") or "").strip().upper()
+        isin = str(row.get("ISIN_NUMBER") or "").strip().upper()
+        if symbol and _valid_isin(isin):
+            mapping[symbol] = isin
+    return mapping
+
+
+def merge_new_symbols(master, fetched, source):
+    """Adds only symbols the master lacks. Returns (added, conflicts).
+
+    A conflict is the same symbol carrying a different ISIN. It is never
+    applied — ISINs do not change, so a divergent row is more likely a feed
+    glitch or a cross-namespace ticker collision than news — but it is
+    counted, because that number is the only way to learn whether merging a
+    second exchange's ticker namespace is safe.
     """
+    added = conflicts = 0
+    for symbol, isin in fetched.items():
+        existing = master.get(symbol)
+        if existing is None:
+            master[symbol] = isin
+            added += 1
+        elif existing != isin:
+            conflicts += 1
+    if conflicts:
+        log.warning(
+            f"ISIN master: {conflicts} symbol(s) from {source} disagree with "
+            "the existing mapping and were NOT applied. A high count here "
+            "means the two ticker namespaces collide and this merge needs "
+            "rethinking."
+        )
+    return added, conflicts
+
+
+async def refresh_bse_scrips(master):
+    """Merge BSE's scrip master. Never raises; returns the count added.
+
+    to_thread because the BSE provider is sync requests (it needs cookie-jar
+    persistence) and this must not block the event loop.
+    """
+    import asyncio
+
+    try:
+        rows = await asyncio.to_thread(fetch_scrip_master_sync)
+        added, _conflicts = merge_new_symbols(master, parse_bse_scrip_rows(rows), "BSE")
+        log.info(f"ISIN master: {added} new listings from BSE ({len(rows)} scrips).")
+        return added
+    except Exception as e:  # noqa: BLE001 - an enrichment must not end a run
+        log.info(
+            f"BSE ISIN merge skipped ({type(e).__name__}: {str(e)[:120]}); "
+            "the NSE-derived master still serves."
+        )
+        return 0
+
+
+async def refresh_isin_master_async(session, master, path=MASTER_PATH):
+    """Merge NEW listings from NSE's equity list and BSE's scrip master.
+
+    Mutates ``master`` in place and persists once, after both sources, so a
+    run costs a single write rather than one per exchange. Never raises;
+    returns the total count added. Existing entries are never overwritten —
+    ISINs don't change, so a divergent live row is more likely a feed glitch
+    than news.
+
+    NSE goes first deliberately: it is the namespace the watchlist speaks, so
+    where the two exchanges disagree on a ticker, the NSE mapping is the one
+    that must survive.
+    """
+    added = 0
     try:
         async with session.get(
             _NSE_EQUITY_LIST_URL, headers=_HEADERS, timeout=15, allow_redirects=False
         ) as response:
             if response.status != 200:
                 log.info(
-                    f"ISIN master refresh skipped: NSE archive returned "
-                    f"{response.status} (committed snapshot still serves)."
+                    f"ISIN master: NSE archive returned {response.status} "
+                    "(committed snapshot still serves)."
                 )
-                return 0
-            text = await response.text()
-        fetched = parse_equity_csv(text)
-        added = 0
-        for symbol, isin in fetched.items():
-            if symbol not in master:
-                master[symbol] = isin
-                added += 1
-        if added:
-            atomic_write_json(dict(sorted(master.items())), path)
-            log.info(f"ISIN master refreshed: {added} new listings added.")
-        else:
-            log.info("ISIN master refresh: no new listings.")
-        return added
+            else:
+                text = await response.text()
+                nse_added, _ = merge_new_symbols(master, parse_equity_csv(text), "NSE")
+                added += nse_added
+                log.info(f"ISIN master: {nse_added} new listings from NSE.")
     except Exception as e:
         log.info(
-            f"ISIN master refresh skipped ({type(e).__name__}: {str(e)[:120]}); "
-            "committed snapshot still serves."
+            f"ISIN master NSE refresh skipped ({type(e).__name__}: "
+            f"{str(e)[:120]}); committed snapshot still serves."
         )
-        return 0
+
+    added += await refresh_bse_scrips(master)
+
+    if added:
+        atomic_write_json(dict(sorted(master.items())), path)
+        log.info(
+            f"ISIN master refreshed: {added} new listings added, {len(master)} total."
+        )
+    else:
+        log.info(f"ISIN master refresh: no new listings ({len(master)} total).")
+    return added
 
 
 def annotate_watchlist_isins(watchlist, master):

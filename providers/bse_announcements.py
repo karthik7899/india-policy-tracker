@@ -496,6 +496,33 @@ def _page_count(rows):
         return 1
 
 
+SCRIP_MASTER_PARAMS = {
+    "Group": "",
+    "Scripcode": "",
+    "industry": "",
+    "segment": "Equity",
+    "status": "Active",
+}
+
+
+def fetch_scrip_master(session=None):
+    """Every active BSE equity scrip: SCRIP_CD, ISIN_NUMBER, scrip_id, name.
+
+    ~4,975 rows, 1.75 MB. Never raises — every caller treats this as an
+    enrichment, so an outage costs coverage rather than a run.
+    """
+    owns_session = session is None
+    session = session or build_session()
+    try:
+        return _get(session, SCRIP_MASTER_URL, SCRIP_MASTER_PARAMS)
+    except Exception as e:  # noqa: BLE001 - an enrichment must not end a run
+        log.info(f"BSE scrip master unavailable ({type(e).__name__}: {str(e)[:120]}).")
+        return []
+    finally:
+        if owns_session:
+            session.close()
+
+
 def build_scrip_index(watchlist, session=None):
     """SCRIP_CD -> (display name, sector) for holdings, joined through ISIN.
 
@@ -520,29 +547,10 @@ def build_scrip_index(watchlist, session=None):
         log.info("BSE scrip index skipped: no holding carries an ISIN yet.")
         return {}
 
-    owns_session = session is None
-    session = session or build_session()
-    try:
-        rows = _get(
-            session,
-            SCRIP_MASTER_URL,
-            {
-                "Group": "",
-                "Scripcode": "",
-                "industry": "",
-                "segment": "Equity",
-                "status": "Active",
-            },
-        )
-    except Exception as e:  # noqa: BLE001 - the index is an enrichment
-        log.info(
-            f"BSE scrip index unavailable ({type(e).__name__}: {str(e)[:120]}); "
-            "announcements will be labelled Corporate."
-        )
+    rows = fetch_scrip_master(session)
+    if not rows:
+        log.info("BSE scrip index empty; announcements will be labelled Corporate.")
         return {}
-    finally:
-        if owns_session:
-            session.close()
 
     index = {}
     for row in rows:
