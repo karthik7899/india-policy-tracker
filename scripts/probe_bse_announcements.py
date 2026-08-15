@@ -201,6 +201,73 @@ def probe_header_variants():
             session.close()
 
 
+def probe_referer_paths():
+    """Does AnnGetData care WHICH PAGE the request claims to come from?
+
+    Nineteen parameter sets have now returned "No Record Found!" with a clean
+    200, and the header work established that this host checks the Referer's
+    HOST (apex diverts, www serves). What no attempt has varied is the
+    Referer's PATH: every one sent the bare host root.
+
+    If BSE gates this endpoint on the referring page rather than the origin,
+    the observed behaviour is exactly what you would expect — a polite empty
+    answer to a request that did not come from the announcements screen.
+    That is cheap to test and is the last dimension available without
+    capturing a real request.
+
+    Each variant handshakes through the page it then claims to come from,
+    because a Referer naming a page the session never visited is not what a
+    browser produces.
+    """
+    print("\n=== REFERER PATH VARIANTS (the last untested dimension)")
+    today = datetime.date.today()
+    week_ago = today - datetime.timedelta(days=7)
+
+    referers = [
+        ("host root (every attempt so far)", "https://www.bseindia.com/"),
+        ("the announcements page", "https://www.bseindia.com/corporates/ann"),
+        ("announcements page, .html", "https://www.bseindia.com/corporates/ann.html"),
+    ]
+    param_sets = [
+        ("disclosure vocab", bse.announcement_params(week_ago, today)),
+        ("legacy str* vocab", bse.legacy_announcement_params(week_ago, today)),
+    ]
+
+    for ref_label, referer in referers:
+        for param_label, params in param_sets:
+            print(f"\n--- Referer={referer}  |  {param_label}")
+            session = build_session()
+            try:
+                # Visit the page first: a Referer naming somewhere the session
+                # has never been is not a state a browser can be in.
+                if referer != "https://www.bseindia.com/":
+                    session.get(referer, headers=bse.API_HEADERS, timeout=15)
+                headers = {**bse.API_HEADERS, "Referer": referer}
+                response = session.get(
+                    bse.ANNOUNCEMENTS_URL,
+                    params=params,
+                    headers=headers,
+                    timeout=bse.REQUEST_TIMEOUT_S,
+                )
+                body = (response.text or "")[:160]
+                print(
+                    f"    status : {response.status_code}  hops: {len(response.history)}"
+                )
+                if "showinterest" in (response.url or ""):
+                    print("    VERDICT: INTERCEPTED")
+                elif "No Record Found" in body:
+                    print(f"    VERDICT: empty — {body!r}")
+                else:
+                    print(
+                        f"    VERDICT: *** DIFFERENT *** {len(response.text or '')} bytes"
+                    )
+                    print(f"    body   : {body!r}")
+            except Exception as e:  # noqa: BLE001
+                print(f"    {type(e).__name__}: {str(e)[:200]}")
+            finally:
+                session.close()
+
+
 def probe_scrip_master(session):
     """The ISIN join. Without it BSE announcements cannot name a holding."""
     print("\n=== SCRIP MASTER (the SCRIP_CD <-> ISIN join)")
@@ -218,6 +285,7 @@ def probe_scrip_master(session):
 
 def main():
     probe_header_variants()
+    probe_referer_paths()
     session = build_session(bse.API_HEADERS)
     try:
         got_cookies = bse.handshake(session)
