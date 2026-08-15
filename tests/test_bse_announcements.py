@@ -382,3 +382,67 @@ def test_the_isin_join_is_skipped_when_there_is_nothing_to_name():
     ) as index:
         assert bse.fetch_filings(WATCHLIST) == []
     index.assert_not_called()
+
+
+# --- pagination -----------------------------------------------------------
+
+
+def _page(n, total, count=2):
+    return [
+        {
+            "SCRIP_CD": f"{n}{i}",
+            "HEADLINE": f"page {n} item {i}",
+            "TotalPageCnt": total,
+        }
+        for i in range(count)
+    ]
+
+
+def test_all_pages_are_read():
+    """A full trading day runs to hundreds of announcements. A holding whose
+    filing sits on page two is invisible to holdings-first ordering."""
+    session = MagicMock()
+    session.cookies = {"x": "1"}
+    session.get.side_effect = [
+        _response(payload={"Table": []}),  # handshake: apex
+        _response(payload={"Table": []}),  # handshake: ann page
+        _response(payload={"Table": _page(1, 3)}),
+        _response(payload={"Table": _page(2, 3)}),
+        _response(payload={"Table": _page(3, 3)}),
+    ]
+    rows = bse.fetch_announcements(session=session)
+    assert len(rows) == 6
+    assert [r["HEADLINE"] for r in rows][-1] == "page 3 item 1"
+
+
+def test_pagination_is_capped():
+    """An enrichment, not a crawl."""
+    session = MagicMock()
+    session.cookies = {"x": "1"}
+    session.get.side_effect = [
+        _response(payload={"Table": []}),
+        _response(payload={"Table": []}),
+    ] + [_response(payload={"Table": _page(n, 999)}) for n in range(1, 40)]
+
+    rows = bse.fetch_announcements(session=session)
+    assert len(rows) == bse.MAX_PAGES * 2
+
+
+def test_a_single_page_makes_one_request():
+    session = MagicMock()
+    session.cookies = {"x": "1"}
+    session.get.side_effect = [
+        _response(payload={"Table": []}),
+        _response(payload={"Table": []}),
+        _response(payload={"Table": _page(1, 1)}),
+    ]
+    assert len(bse.fetch_announcements(session=session)) == 2
+
+
+def test_a_missing_page_count_is_treated_as_one_page():
+    """Undocumented like everything else here: a bad value must not turn a
+    working fetch into a crash or a crawl."""
+    assert bse._page_count([{"HEADLINE": "x"}]) == 1
+    assert bse._page_count([{"TotalPageCnt": "not a number"}]) == 1
+    assert bse._page_count([]) == 1
+    assert bse._page_count([{"TotalPageCnt": 4}]) == 4

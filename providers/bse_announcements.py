@@ -25,77 +25,59 @@ feed only, which is on the API host and reachable.
 MEASURED from a GitHub Actions runner, 15 Aug 2026
 (scripts/probe_bse_announcements.py — re-run it before trusting any of this):
 
-  THE REFERER MUST BE www. Four header variants, same endpoint, same
-  parameters, same minute:
+  IT WORKS. 17 records for a part-day window, every normalized field
+  populated:
+
+    {'company': 'Sri Chakra Cement Ltd', 'industry': 'Corporate',
+     'filing': 'Intimation for appointment of Chief Financial Officer (CFO)',
+     'date': '15 Aug 2026', 'source': 'BSE',
+     'link': '...AttachLive/bf926f4a-...pdf'}
+
+  Record fields: AGENDA_ID ANNOUNCEMENT_TYPE ATTACHMENTNAME AUDIO_VIDEO_FILE
+  BSENEWSID CATEGORYNAME CRITICALNEWS DT_TM DataInsDate DissemDT FILESTATUS
+  Fld_Attachsize HEADLINE INVESTOR_PRESENTATION MORE NEWSID NEWSSUB NEWS_DT
+  NSURL News_submission_dt OLD PDFFLAG QUARTER_ID RECORDID RN SCRIP_CD
+  SLONGNAME SUBCATNAME TimeDiff TotalPageCnt XML_NAME
+
+  HEADLINE is the readable line ("Intimation for appointment of CFO");
+  NEWSSUB is boilerplate ("Sri Chakra Cement Ltd - 518053 - Announcement
+  under Regulation 30 (LODR)..."). Same trap as NSE's `desc`, hence the
+  alias order. Note SCRIP_CD arrives as an INT here and as a STRING in the
+  scrip master; first_present() normalises both through str(), which is what
+  makes the ISIN join work.
+
+  THE SCRIP MASTER WORKS: 4,975 active equity scrips with SCRIP_CD,
+  ISIN_NUMBER, Scrip_Name, Issuer_Name, Mktcap and scrip_id.
+
+  HOW THIS WAS FOUND, because the failure mode is worth remembering.
+  Thirty-two attempts against BseIndiaAPI/api/AnnGetData/w all returned
+  HTTP 200 with the bare JSON string "No Record Found!" — across endpoint
+  names, parameter names and values, date formats, cookies, Referer host and
+  path, and Origin. The parameters were correct the entire time. The PATH
+  was wrong, and it had been an assumption since the first probe: DevTools'
+  Name column shows only the last segment and every BSE endpoint ends in /w,
+  so AnnGetData and AnnSubCategoryGetData are indistinguishable there.
+  AnnGetData is a real endpoint that answers this exact query with a polite
+  empty result, which presents as a data problem for as long as you are
+  willing to look, and every hypothesis it invites is about the query.
+  Resolved only by reading the full Request URL off a real browser.
+
+  THE REFERER MUST BE www. Four header variants against the scrip master,
+  same minute:
 
     www Referer,  no Origin    -> 200, 1,746,280 bytes of JSON
     www Referer + www Origin   -> 200, 1,746,280 bytes of JSON
     apex Referer + apex Origin -> redirected to /members/showinterest
     apex Referer, no Origin    -> redirected to /members/showinterest
 
-  The apex form diverts EVERY endpoint on this host — the scrip master
-  included, twenty minutes after it had returned 4,975 records. Origin makes
-  no difference either way. This is a one-token change that silently kills
-  all BSE access, so a test pins it.
+  The apex form diverts EVERY endpoint on this host. Origin is irrelevant.
+  The captured response carried Access-Control-Allow-Origin:
+  https://www.bseindia.com, which corroborates it independently. A test
+  pins this: it is one token, and it silently kills all BSE access.
 
-  THE SCRIP MASTER WORKS. 4,975 active equity scrips carrying SCRIP_CD,
-  ISIN_NUMBER, Scrip_Name, Issuer_Name, Mktcap and scrip_id. The ISIN join
-  this provider needs is real and available.
-
-  ANNOUNCEMENTS: thirteen str* parameter sets each answered HTTP 200 with
-  the bare JSON string "No Record Found!" — no redirect, no cookie
-  rejection, no 403. The endpoint talks to us and dislikes the query. This
-  layer therefore sends a different vocabulary, scrip_cd / categoryname /
-  type / fdate / tdate, with the str* form kept as
-  legacy_announcement_params so one run compares both over the same window.
-
-  That comparison has now run cleanly, with working headers and no
-  interception, and the answer is negative. Both vocabularies, both date
-  formats, all-categories and categoryname=Result, all scrips and one
-  scrip, seven days and one day: every combination returned
-  "No Record Found!" with HTTP 200. Nineteen parameter sets in total.
-
-  So the parameter NAMES were not the problem either. Nor is the Referer's
-  PATH: six further combinations sent Referer as the host root, as
-  /corporates/ann, and as /corporates/ann.html, each against both
-  vocabularies and each visiting the page before claiming to come from it.
-  All six returned "No Record Found!".
-
-  Twenty-five attempts, across every dimension reachable from here: endpoint
-  names, parameter names, parameter values, date formats, cookies, Referer
-  host, Referer path, Origin. The endpoint answers politely every time and
-  yields nothing.
-
-  A DevTools capture of the live page then showed a row returning 4.4 kB:
-
-      w?pageno=1&strCat=-1&strPrevDate=20260815&strScrip...rch=P&s...
-
-  So the str* names were right from the start, and strPrevDate is TODAY
-  where the legacy attempts here used a seven-day window. Seven
-  reconstructions closed that gap — today-only, with and without strType
-  and subcategory, strScrip omitted, strCat=Corp. Action, yesterday->today.
-  All seven returned "No Record Found!".
-
-  THE PARAMETERS ARE NOT THE PROBLEM. They now match the observed request
-  as closely as a truncated URL allows, and the answer is unchanged. The
-  remaining difference is the ENDPOINT PATH: DevTools' Name column shows
-  only the last segment, and BSE has many endpoints ending in /w — the
-  same capture shows w?env=1, w?searchString=S&Type=SS and
-  w?categoryname=Corp.%20Action, all different endpoints. AnnGetData/w was
-  an assumption, and it is probably the wrong door with the right key.
-
-  CLOSED pending one thing, and only this thing: the full Request URL from
-  that row, which names the path. Do not guess at endpoint names again —
-  eight such guesses have already failed.
-
-  The empty answer is a BARE JSON STRING, not an envelope: an 18-byte body
+  The empty answer is a BARE JSON STRING, not an envelope — an 18-byte body
   parsing to the str "No Record Found!". Guarding only for a dict turned
   that routine reply into a schema error.
-
-  Consequence for the pipeline: this provider is wired in and costs one
-  request per run. NSE carries the filings section today. The scrip master
-  fetch is deferred until announcements actually return rows, so a dead
-  query costs 1.75 MB of nothing.
 """
 
 import datetime
@@ -228,6 +210,12 @@ _ENVELOPE_KEYS = ("Table", "data", "rows")
 # Long headlines trim for the table cell, with an ellipsis so a cut reads as
 # a cut.
 _MAX_SUBJECT_CHARS = 240
+
+# Each record carries TotalPageCnt. Page one held 17 records at 08:42 IST; a
+# full trading day runs to hundreds, and a holding whose filing sits on page
+# two is invisible to the holdings-first ordering that makes this section
+# worth reading. Capped because this is an enrichment, not a crawl.
+MAX_PAGES = 6
 
 
 def handshake(session):
@@ -468,10 +456,44 @@ def fetch_announcements(
     try:
         handshake(session)
         polite_pause()
-        return _get(session, ANNOUNCEMENTS_URL, params, validator=_validate_table)
+        rows = _get(session, ANNOUNCEMENTS_URL, params, validator=_validate_table)
+
+        # Read the page count off the data rather than assuming one page.
+        total = _page_count(rows)
+        for page in range(2, min(total, MAX_PAGES) + 1):
+            polite_pause()
+            more = _get(
+                session,
+                ANNOUNCEMENTS_URL,
+                announcement_params(from_date or today, to_date or today, scrip, page),
+                validator=_validate_table,
+            )
+            if not more:
+                break
+            rows += more
+        if total > MAX_PAGES:
+            log.info(
+                f"BSE announcements: {total} pages available, read {MAX_PAGES}. "
+                "Raise MAX_PAGES if holdings are being missed."
+            )
+        return rows
     finally:
         if owns_session:
             session.close()
+
+
+def _page_count(rows):
+    """TotalPageCnt off the first record; 1 when absent or unparseable.
+
+    Defensive because the field is undocumented like everything else here,
+    and a bad value must not turn a working fetch into a crash or a crawl.
+    """
+    if not rows or not isinstance(rows[0], dict):
+        return 1
+    try:
+        return max(1, int(rows[0].get("TotalPageCnt") or 1))
+    except (TypeError, ValueError):
+        return 1
 
 
 def build_scrip_index(watchlist, session=None):
