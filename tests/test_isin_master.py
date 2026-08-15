@@ -4,15 +4,31 @@ import asyncio
 import json
 import os
 import sys
+from unittest.mock import patch
+
+import pytest
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
+from providers import isin_master as im  # noqa: E402
 from providers.isin_master import (  # noqa: E402
     annotate_watchlist_isins,
     load_isin_master,
+    merge_new_symbols,
+    parse_bse_scrip_rows,
     parse_equity_csv,
     refresh_isin_master_async,
 )
+
+
+@pytest.fixture(autouse=True)
+def _no_live_bse():
+    """The refresh now merges BSE's scrip master too. Left unstubbed these
+    tests reach the real exchange — which took this file from under a second
+    to 46s, and in CI would read as flakiness rather than a live request."""
+    with patch.object(im, "fetch_scrip_master_sync", return_value=[]):
+        yield
+
 
 _REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
@@ -156,3 +172,98 @@ def test_refresh_blocked_or_broken_never_raises(tmp_path):
     assert asyncio.run(refresh_isin_master_async(exploding, master, path=path)) == 0
     assert master == {"TATAPOWER": "INE245A01021"}
     assert not os.path.exists(path)  # nothing learned, nothing written
+
+
+# --- BSE scrip master merge ----------------------------------------------
+
+
+_BSE_ROWS = [
+    {"SCRIP_CD": "500325", "scrip_id": "RELIANCE", "ISIN_NUMBER": "INE002A01018"},
+    {"SCRIP_CD": "500002", "scrip_id": "ABB", "ISIN_NUMBER": "INE117A01022"},
+    {"SCRIP_CD": "999999", "scrip_id": "BSEONLY", "ISIN_NUMBER": "INE999Z01011"},
+    {"SCRIP_CD": "111111", "scrip_id": "JUNK", "ISIN_NUMBER": "NOT-AN-ISIN"},
+    {"SCRIP_CD": "222222", "scrip_id": "", "ISIN_NUMBER": "INE888Z01011"},
+    "not a dict",
+]
+
+
+def test_bse_rows_are_keyed_on_scrip_id_not_scrip_code():
+    """scrip_id is BSE's ticker. SCRIP_CD is a numeric code the watchlist
+    never speaks, so keying on it would produce a master nothing can look
+    anything up in."""
+    assert parse_bse_scrip_rows(_BSE_ROWS) == {
+        "RELIANCE": "INE002A01018",
+        "ABB": "INE117A01022",
+        "BSEONLY": "INE999Z01011",
+    }
+
+
+def test_bse_rows_survive_junk():
+    assert parse_bse_scrip_rows(None) == {}
+    assert parse_bse_scrip_rows([]) == {}
+
+
+def test_merge_adds_only_what_is_missing():
+    master = {"RELIANCE": "INE002A01018"}
+    added, conflicts = merge_new_symbols(
+        master, {"RELIANCE": "INE002A01018", "BSEONLY": "INE999Z01011"}, "BSE"
+    )
+    assert (added, conflicts) == (1, 0)
+    assert master["BSEONLY"] == "INE999Z01011"
+
+
+def test_a_disagreeing_symbol_is_counted_and_never_applied():
+    """The cross-namespace risk: NSE's SYMBOL and BSE's scrip_id are different
+    namespaces, so the same ticker can mean different companies. The existing
+    mapping must win, and the collision must be visible."""
+    master = {"XYZ": "INE111A01011"}
+    added, conflicts = merge_new_symbols(master, {"XYZ": "INE222B01022"}, "BSE")
+    assert (added, conflicts) == (0, 1)
+    assert master["XYZ"] == "INE111A01011"
+
+
+def test_bse_merge_never_raises():
+    with patch.object(im, "fetch_scrip_master_sync", side_effect=RuntimeError("down")):
+        assert asyncio.run(im.refresh_bse_scrips({})) == 0
+
+
+def test_refresh_merges_nse_first_then_bse(tmp_path):
+    """NSE wins a tie because it is the namespace the watchlist speaks."""
+    path = str(tmp_path / "master.json")
+    master = {}
+    session = _FakeSession(response=_FakeResponse(200, _EQUITY_CSV))
+
+    with patch.object(
+        im,
+        "fetch_scrip_master_sync",
+        return_value=[
+            {"scrip_id": "RELIANCE", "ISIN_NUMBER": "INE999Z01011"},
+            {"scrip_id": "BSEONLY", "ISIN_NUMBER": "INE888Z01011"},
+        ],
+    ):
+        added = asyncio.run(refresh_isin_master_async(session, master, path=path))
+
+    assert added == 3
+    # NSE's mapping survived the BSE row that disagreed with it.
+    assert master["RELIANCE"] == "INE002A01018"
+    assert master["BSEONLY"] == "INE888Z01011"
+    with open(path, encoding="utf-8") as f:
+        assert json.load(f)["RELIANCE"] == "INE002A01018"
+
+
+def test_bse_still_merges_when_nse_is_blocked(tmp_path):
+    """Either source failing must not stop the other."""
+    path = str(tmp_path / "master.json")
+    master = {}
+    with patch.object(
+        im,
+        "fetch_scrip_master_sync",
+        return_value=[{"scrip_id": "BSEONLY", "ISIN_NUMBER": "INE999Z01011"}],
+    ):
+        added = asyncio.run(
+            refresh_isin_master_async(
+                _FakeSession(response=_FakeResponse(403, "")), master, path=path
+            )
+        )
+    assert added == 1
+    assert master == {"BSEONLY": "INE999Z01011"}
