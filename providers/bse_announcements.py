@@ -55,12 +55,23 @@ MEASURED from a GitHub Actions runner, 15 Aug 2026
   scrip, seven days and one day: every combination returned
   "No Record Found!" with HTTP 200. Nineteen parameter sets in total.
 
-  So the parameter NAMES were not the problem either. What is left is a
-  dimension none of these probes can reach: the query BSE's own page sends,
-  which can only be read off a real request — and those pages are
-  Akamai-blocked to every browser we can drive. Treat BSE announcements as
-  closed unless someone can capture that request from an ordinary desktop
-  browser and paste the query string.
+  So the parameter NAMES were not the problem either. Nor is the Referer's
+  PATH: six further combinations sent Referer as the host root, as
+  /corporates/ann, and as /corporates/ann.html, each against both
+  vocabularies and each visiting the page before claiming to come from it.
+  All six returned "No Record Found!".
+
+  Twenty-five attempts, across every dimension reachable from here: endpoint
+  names, parameter names, parameter values, date formats, cookies, Referer
+  host, Referer path, Origin. The endpoint answers politely every time and
+  yields nothing.
+
+  CLOSED. What remains is the query BSE's own page sends, which can only be
+  read off a real request — and those pages are Akamai-blocked to every
+  browser we can drive (scripts/probe_bse_network.py). Do not add a
+  twenty-sixth guess. If someone can open the announcements page in an
+  ordinary desktop browser, filter DevTools' Network tab to AnnGetData and
+  copy the request URL, that closes it in one round; nothing else will.
 
   The empty answer is a BARE JSON STRING, not an envelope: an 18-byte body
   parsing to the str "No Record Found!". Guarding only for a dict turned

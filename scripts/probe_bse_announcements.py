@@ -121,10 +121,13 @@ def probe_announcements(session):
     print(f"\n=== COMBINATIONS THAT RETURNED RECORDS: {winners or 'NONE'}")
     if not winners:
         print(
-            "    Every combination came back empty. The endpoint answers, so\n"
-            "    this is still a query problem — but the next step is reading\n"
-            "    the parameters off a real request, and BSE's HTML pages are\n"
-            "    Akamai-blocked to any browser we can drive. Prefer NSE."
+            "    Every combination came back empty. Twenty-five attempts now\n"
+            "    span endpoint names, parameter names and values, date\n"
+            "    formats, cookies, Referer host and path, and Origin. The\n"
+            "    endpoint answers politely every time and yields nothing.\n"
+            "    Do not add another guess: the only thing left is the query\n"
+            "    BSE's own page sends, and that needs a capture from an\n"
+            "    ordinary desktop browser. NSE carries filings meanwhile."
         )
 
 
