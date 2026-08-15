@@ -320,11 +320,43 @@ def test_scrip_index_joins_holdings_through_isin():
     assert index == {"500325": ("Reliance Industries", "Energy")}
 
 
-def test_scrip_index_is_empty_when_no_holding_has_an_isin():
+def test_a_holding_without_an_isin_still_resolves_by_ticker():
+    """MEASURED: 125 symbols (2.51%) carry a different ISIN on each exchange —
+    same issuer code, different security suffix, which is what a face-value
+    split leaves behind. An ISIN-only join drops every one of those holdings
+    to "Corporate" while looking like it worked."""
     session = MagicMock()
-    index = bse.build_scrip_index({"Energy": [{"ticker": "X", "name": "X"}]}, session)
-    assert index == {}
-    # And it did not spend a request finding that out.
+    session.get.return_value = _response(
+        payload=[
+            {"SCRIP_CD": "500325", "ISIN_NUMBER": "INE_OTHER", "scrip_id": "RELIANCE"}
+        ]
+    )
+    index = bse.build_scrip_index(
+        {"Energy": [{"ticker": "RELIANCE", "name": "Reliance"}]}, session
+    )
+    assert index == {"500325": ("Reliance", "Energy")}
+
+
+def test_isin_wins_over_the_ticker_fallback():
+    """ISIN identifies the security; a ticker only names it, and two
+    exchanges can spell the same ticker for different companies."""
+    session = MagicMock()
+    session.get.return_value = _response(
+        payload=[
+            {
+                "SCRIP_CD": "500325",
+                "ISIN_NUMBER": "INE002A01018",
+                "scrip_id": "SOMETHINGELSE",
+            }
+        ]
+    )
+    index = bse.build_scrip_index(WATCHLIST, session=session)
+    assert index == {"500325": ("Reliance Industries", "Energy")}
+
+
+def test_an_empty_watchlist_spends_no_request():
+    session = MagicMock()
+    assert bse.build_scrip_index({}, session) == {}
     session.get.assert_not_called()
 
 
