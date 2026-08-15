@@ -155,8 +155,17 @@ def test_handshake_visits_the_disclosures_frame_not_just_the_host():
 def test_api_headers_carry_referer_and_origin():
     """The API host is a different subdomain from the page the XHR comes
     from, so a browser sends both."""
-    assert bse.API_HEADERS["Referer"] == "https://bseindia.com/"
-    assert bse.API_HEADERS["Origin"] == "https://bseindia.com"
+    assert bse.API_HEADERS["Referer"] == "https://www.bseindia.com/"
+    assert bse.API_HEADERS["Origin"] == "https://www.bseindia.com"
+
+
+def test_the_referer_is_never_the_apex_form():
+    """Measured: Referer: https://bseindia.com/ diverts EVERY endpoint on this
+    host to /members/showinterest, including the scrip master, which had been
+    returning 1.75 MB minutes earlier. Origin makes no difference either way.
+    This is a one-character regression that silently kills all BSE access."""
+    for value in (bse.API_HEADERS["Referer"], bse.HOME_URL, bse.REFERER_PAGE):
+        assert value.startswith("https://www.bseindia.com")
 
 
 # --- firewall interception ------------------------------------------------

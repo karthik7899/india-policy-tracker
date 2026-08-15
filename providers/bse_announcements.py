@@ -25,22 +25,36 @@ feed only, which is on the API host and reachable.
 MEASURED from a GitHub Actions runner, 15 Aug 2026
 (scripts/probe_bse_announcements.py — re-run it before trusting any of this):
 
+  THE REFERER MUST BE www. Four header variants, same endpoint, same
+  parameters, same minute:
+
+    www Referer,  no Origin    -> 200, 1,746,280 bytes of JSON
+    www Referer + www Origin   -> 200, 1,746,280 bytes of JSON
+    apex Referer + apex Origin -> redirected to /members/showinterest
+    apex Referer, no Origin    -> redirected to /members/showinterest
+
+  The apex form diverts EVERY endpoint on this host — the scrip master
+  included, twenty minutes after it had returned 4,975 records. Origin makes
+  no difference either way. This is a one-token change that silently kills
+  all BSE access, so a test pins it.
+
   THE SCRIP MASTER WORKS. 4,975 active equity scrips carrying SCRIP_CD,
   ISIN_NUMBER, Scrip_Name, Issuer_Name, Mktcap and scrip_id. The ISIN join
-  this provider needs is therefore real and available.
+  this provider needs is real and available.
 
-  ANNOUNCEMENTS RETURNED NOTHING ON THE str* VOCABULARY. Thirteen parameter
-  sets across four probe runs — every one answered HTTP 200 with the bare
-  JSON string "No Record Found!". Note what that rules out: there was no
-  redirect, no cookie rejection and no 403 in any of them. The endpoint
-  talks to us; it just does not like the query.
+  ANNOUNCEMENTS: thirteen str* parameter sets each answered HTTP 200 with
+  the bare JSON string "No Record Found!" — no redirect, no cookie
+  rejection, no 403. The endpoint talks to us and dislikes the query. This
+  layer therefore sends a different vocabulary, scrip_cd / categoryname /
+  type / fdate / tdate, with the str* form kept as
+  legacy_announcement_params so one run compares both over the same window.
 
-  So this layer now sends a DIFFERENT PARAMETER VOCABULARY —
-  scrip_cd / categoryname / type / fdate / tdate — which is the one untested
-  dimension left that is not a blind guess at an endpoint name. The str*
-  form is kept as a documented fallback so one run measures both.
+  That comparison has NOT yet produced a clean result: the run that
+  introduced the new vocabulary also introduced the apex Referer, so every
+  announcement call in it was diverted before reaching BSE's query logic.
+  The vocabulary question is still open.
 
-  Its empty answer is a BARE JSON STRING, not an envelope: an 18-byte body
+  The empty answer is a BARE JSON STRING, not an envelope: an 18-byte body
   parsing to the str "No Record Found!". Guarding only for a dict turned
   that routine reply into a schema error.
 
@@ -73,14 +87,21 @@ API_BASE = "https://api.bseindia.com/BseIndiaAPI/api"
 ANNOUNCEMENTS_URL = f"{API_BASE}/AnnGetData/w"
 SCRIP_MASTER_URL = f"{API_BASE}/ListofScripData/w"
 
-# The apex host, deliberately: the disclosures frame is served from it and
-# the API checks Referer/Origin against it. Requests to the apex are
-# redirected to www by BSE itself, which is benign and must NOT be mistaken
-# for a firewall intercept — see _validate_redirects.
-HOME_URL = "https://bseindia.com/"
+# www, NOT the apex. Measured 15 Aug 2026, four header variants against the
+# scrip master back to back:
+#
+#   www Referer,  no Origin   -> 200, 1,746,280 bytes of JSON
+#   www Referer + www Origin  -> 200, 1,746,280 bytes of JSON
+#   apex Referer + apex Origin-> redirected to /members/showinterest
+#   apex Referer, no Origin   -> redirected to /members/showinterest
+#
+# So the apex form of the Referer is the sole trigger and Origin is
+# irrelevant to it. Sending Referer: https://bseindia.com/ diverts EVERY
+# endpoint on this host, including ones that were working minutes earlier.
+HOME_URL = "https://www.bseindia.com/"
 # The disclosures landing frame. Handshaking here rather than at the bare
 # host establishes the cookie scope the announcements XHR is issued under.
-REFERER_PAGE = "https://bseindia.com/corporates/ann.html"
+REFERER_PAGE = "https://www.bseindia.com/corporates/ann.html"
 
 # Attachments come back as a bare filename; this is the directory they live in.
 ATTACHMENT_BASE = "https://www.bseindia.com/xml-data/corpfiling/AttachLive/"
@@ -89,11 +110,13 @@ ATTACHMENT_BASE = "https://www.bseindia.com/xml-data/corpfiling/AttachLive/"
 # filter — stated so a future reader does not conclude the endpoint is broken.
 API_HEADERS = {
     "Accept": "application/json, text/plain, */*",
-    # Referer AND Origin. The API host is a different subdomain from the page
-    # the XHR is issued from, so a browser sends both; sending only Referer
-    # leaves the request looking unlike anything the site itself makes.
+    # Referer AND Origin, both in www form. The API host is a different
+    # subdomain from the page the XHR is issued from, so a browser sends
+    # both. Origin is measured to make no difference to whether BSE serves
+    # us; it is kept because it is what a browser would send, and dropping it
+    # would be a change with no evidence behind it either way.
     "Referer": HOME_URL,
-    "Origin": "https://bseindia.com",
+    "Origin": "https://www.bseindia.com",
     "Sec-Fetch-Dest": "empty",
     "Sec-Fetch-Mode": "cors",
     "Sec-Fetch-Site": "same-site",
