@@ -69,6 +69,14 @@ class CompanyFinancials(BaseModel):
     # so the scorer would read None no matter what the fetcher attached.
     advt_cr: Optional[float] = None
     liquidity_band: Optional[str] = None
+    # Delivery, from NSE's daily security file. Declared here for exactly the
+    # reason the fields above are: anything absent from this model is dropped
+    # on coercion, so the scorer would read None no matter what the fetcher
+    # attached. turnover_cr_last is ONE session and is deliberately named
+    # apart from advt_cr, which is a multi-session average.
+    deliv_pct: Optional[float] = None
+    delivery_band: Optional[str] = None
+    turnover_cr_last: Optional[float] = None
     days_to_exit_1cr: Optional[float] = None
     days_to_exit_5cr: Optional[float] = None
     sessions: Optional[int] = None

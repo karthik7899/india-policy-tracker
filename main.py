@@ -28,6 +28,7 @@ from analysis.market_share import (
     snapshot_prior_industry_shares,
 )
 from entities import find_duplicate_holdings
+from providers.nse_delivery import apply_delivery, fetch_delivery_async
 from providers.isin_master import (
     load_isin_master,
     refresh_isin_master_async,
@@ -136,6 +137,15 @@ async def run_pipeline():
     # the dict it lives in.
     liquidity_applied = apply_liquidity(watchlist)
     log.info(f"Liquidity: turnover attached to {liquidity_applied} holding(s).")
+
+    # Delivery percentage separates real accumulation from intraday churn,
+    # which volume-derived turnover cannot. Fetched and applied here, after
+    # the Screener rebuild, for the same reason turnover is: that fetch
+    # replaces the dict wholesale.
+    async with aiohttp.ClientSession() as delivery_session:
+        delivery_rows = await fetch_delivery_async(delivery_session)
+    delivery_applied = apply_delivery(watchlist, delivery_rows)
+    log.info(f"Delivery: attached to {delivery_applied} holding(s).")
 
     # True industry market share: each holding's slice of its FULL Screener
     # industry peer group's quarterly sales, not just the watchlist subset.
