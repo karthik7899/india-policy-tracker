@@ -168,3 +168,142 @@ def test_clean_news_item_exception_in_date_parsing():
 
     assert result is not None
     assert result["date"] == "10 Jan 2024"
+
+
+# --- corporate filings: exchange primary, news fallback ------------------
+#
+# The merge is the contract worth pinning. NSE refuses cloud IPs often
+# enough that the fallback is not hypothetical, and the failure that would
+# hurt is a silent one: an empty filings section on a day the exchange
+# happened to block us.
+
+
+def _news_filing(name="Reported filing"):
+    return {
+        "company": "Some Co",
+        "filing": name,
+        "industry": "Corporate",
+        "date": "10 Jan 2024",
+        "source": "Economic Times",
+        "link": "http://example.com/news",
+    }
+
+
+def _nse_filing(name="Awarding of Order / Receipt of Order"):
+    return {
+        "company": "Tata Motors",
+        "filing": name,
+        "industry": "Automotive",
+        "date": "10 Jan 2024",
+        "source": "NSE",
+        "link": "https://nsearchives.nseindia.com/corporate/x.pdf",
+    }
+
+
+def _run_filings(nse_result, news_result, bse_result=None):
+    """Every source must be stubbed. Leaving one unpatched sends the suite to
+    the real exchange: that mistake took this file from 1.7s to 116s, and in
+    CI it would read as a flaky test rather than a live network call."""
+    import asyncio
+    import scraper
+
+    async def fake_news(session, watchlist):
+        return news_result
+
+    with patch.object(
+        scraper, "nse_fetch_filings", return_value=nse_result
+    ), patch.object(
+        scraper, "bse_fetch_filings", return_value=bse_result or []
+    ), patch.object(
+        scraper, "_fetch_filing_news_async", fake_news
+    ):
+        return asyncio.run(scraper.fetch_exchange_filings_async(None, {}))
+
+
+def test_filings_merge_both_sources():
+    out = _run_filings([_nse_filing()], [_news_filing()])
+    assert len(out) == 2
+    assert {f["source"] for f in out} == {"NSE", "Economic Times"}
+
+
+def test_filings_survive_a_blocked_exchange():
+    """A blocked NSE degrades the section; it must not empty it."""
+    out = _run_filings([], [_news_filing()])
+    assert len(out) == 1
+    assert out[0]["source"] == "Economic Times"
+
+
+def test_filings_work_with_no_news_coverage():
+    out = _run_filings([_nse_filing()], [])
+    assert len(out) == 1
+    assert out[0]["source"] == "NSE"
+
+
+def test_exchange_record_wins_a_duplicate():
+    """Same company AND subject from both sides keeps the primary version —
+    the one with the exact symbol match and the filed PDF.
+
+    Both halves of the key are needed. Subject alone collapses a trading day
+    (see below); it also means cross-source dedupe only fires when the news
+    path's fuzzy title match produced the same company string NSE uses, which
+    is a real limit rather than an oversight. main.py already dedupes the
+    merged history on ["company", "filing"], and disagreeing with it here
+    would only move the duplicate one stage downstream."""
+    duplicate = "Awarding of Order / Receipt of Order"
+    news = dict(_news_filing(duplicate), company="Tata Motors")
+    out = _run_filings([_nse_filing(duplicate)], [news])
+    assert len(out) == 1
+    assert out[0]["source"] == "NSE"
+    assert out[0]["industry"] == "Automotive"
+
+
+def test_filings_are_capped():
+    many_nse = [_nse_filing(f"NSE filing {i}") for i in range(8)]
+    many_news = [_news_filing(f"News filing {i}") for i in range(8)]
+    out = _run_filings(many_nse, many_news)
+    assert len(out) == 10
+    # The cap must not spend itself on the weaker source.
+    assert sum(1 for f in out if f["source"] == "NSE") == 8
+
+
+def test_same_subject_from_two_companies_is_not_collapsed():
+    """NSE stamps a coarse category on many records, so a text-only dedupe
+    key silently reduces a whole trading day to one row."""
+    shared = "Board Meeting Intimation"
+    a = dict(_nse_filing(shared), company="Tata Motors")
+    b = dict(_nse_filing(shared), company="Infosys")
+    out = _run_filings([a, b], [])
+    assert len(out) == 2
+    assert {f["company"] for f in out} == {"Tata Motors", "Infosys"}
+
+
+def _bse_filing(name="BSE-only filing"):
+    return {
+        "company": "Some BSE Co",
+        "filing": name,
+        "industry": "Corporate",
+        "date": "10 Jan 2024",
+        "source": "BSE",
+        "link": "https://www.bseindia.com/x.pdf",
+    }
+
+
+def test_all_three_sources_merge():
+    out = _run_filings([_nse_filing()], [_news_filing()], [_bse_filing()])
+    assert {f["source"] for f in out} == {"NSE", "BSE", "Economic Times"}
+
+
+def test_bse_carries_the_section_when_nse_is_blocked():
+    """Either exchange can refuse a cloud IP on any given day."""
+    out = _run_filings([], [], [_bse_filing()])
+    assert len(out) == 1
+    assert out[0]["source"] == "BSE"
+
+
+def test_exchanges_outrank_news_for_the_cap():
+    many_nse = [_nse_filing(f"NSE {i}") for i in range(6)]
+    many_bse = [_bse_filing(f"BSE {i}") for i in range(6)]
+    many_news = [_news_filing(f"News {i}") for i in range(6)]
+    out = _run_filings(many_nse, many_news, many_bse)
+    assert len(out) == 10
+    assert all(f["source"] in ("NSE", "BSE") for f in out)
