@@ -44,13 +44,16 @@ jobs:
           python-version: "3.12"
 
       - name: Install dependencies
-        run: pip install requests pydantic
+        run: pip install requests pydantic aiohttp
 
       - name: Probe NSE announcements
         run: python scripts/probe_nse_announcements.py
 
       - name: Probe BSE announcements
         run: python scripts/probe_bse_announcements.py
+
+      - name: Probe the newest sources (delivery, ISIN merge)
+        run: python scripts/probe_new_sources.py
 
   network:
     # Reads what BSE's own pages call, which is what DevTools' Network tab
