@@ -66,12 +66,27 @@ MEASURED from a GitHub Actions runner, 15 Aug 2026
   host, Referer path, Origin. The endpoint answers politely every time and
   yields nothing.
 
-  CLOSED. What remains is the query BSE's own page sends, which can only be
-  read off a real request — and those pages are Akamai-blocked to every
-  browser we can drive (scripts/probe_bse_network.py). Do not add a
-  twenty-sixth guess. If someone can open the announcements page in an
-  ordinary desktop browser, filter DevTools' Network tab to AnnGetData and
-  copy the request URL, that closes it in one round; nothing else will.
+  A DevTools capture of the live page then showed a row returning 4.4 kB:
+
+      w?pageno=1&strCat=-1&strPrevDate=20260815&strScrip...rch=P&s...
+
+  So the str* names were right from the start, and strPrevDate is TODAY
+  where the legacy attempts here used a seven-day window. Seven
+  reconstructions closed that gap — today-only, with and without strType
+  and subcategory, strScrip omitted, strCat=Corp. Action, yesterday->today.
+  All seven returned "No Record Found!".
+
+  THE PARAMETERS ARE NOT THE PROBLEM. They now match the observed request
+  as closely as a truncated URL allows, and the answer is unchanged. The
+  remaining difference is the ENDPOINT PATH: DevTools' Name column shows
+  only the last segment, and BSE has many endpoints ending in /w — the
+  same capture shows w?env=1, w?searchString=S&Type=SS and
+  w?categoryname=Corp.%20Action, all different endpoints. AnnGetData/w was
+  an assumption, and it is probably the wrong door with the right key.
+
+  CLOSED pending one thing, and only this thing: the full Request URL from
+  that row, which names the path. Do not guess at endpoint names again —
+  eight such guesses have already failed.
 
   The empty answer is a BARE JSON STRING, not an envelope: an 18-byte body
   parsing to the str "No Record Found!". Guarding only for a dict turned
