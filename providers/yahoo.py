@@ -17,7 +17,7 @@ def get_cached_ticker(yahoo_ticker):
     return _TICKER_CACHE[yahoo_ticker]
 
 
-def fetch_stock_data(yahoo_ticker, timeout=10):
+def fetch_stock_data(yahoo_ticker, timeout=10, fetch_price=True):
     """
     Fetches stock data from Yahoo Finance and normalizes the fields.
     Returns a dictionary of normalized metrics.
@@ -37,9 +37,10 @@ def fetch_stock_data(yahoo_ticker, timeout=10):
     }
 
     # Fetch price
-    hist = ticker_obj.history(period="1d", timeout=timeout)
-    if not hist.empty:
-        data["price"] = float(hist["Close"].iloc[-1])
+    if fetch_price:
+        hist = ticker_obj.history(period="1d", timeout=timeout)
+        if not hist.empty:
+            data["price"] = float(hist["Close"].iloc[-1])
 
     info = ticker_obj.info
     if info:

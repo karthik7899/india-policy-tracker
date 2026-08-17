@@ -548,7 +548,7 @@ def test_bse_fallback_used_when_nse_has_no_data(monkeypatch):
 
     calls = []
 
-    def fake_fetch(yahoo_ticker, timeout=10):
+    def fake_fetch(yahoo_ticker, timeout=10, fetch_price=True):
         calls.append(yahoo_ticker)
         if yahoo_ticker.endswith(".BO"):
             return {"price": 123.0, "rating": "Buy"}
@@ -568,7 +568,7 @@ def test_bse_fallback_not_used_when_nse_works(monkeypatch):
 
     calls = []
 
-    def fake_fetch(yahoo_ticker, timeout=10):
+    def fake_fetch(yahoo_ticker, timeout=10, fetch_price=True):
         calls.append(yahoo_ticker)
         return {"price": 456.0, "rating": "Buy"}
 
