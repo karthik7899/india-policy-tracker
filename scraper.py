@@ -177,7 +177,8 @@ async def fetch_global_event_feeds_async(session):
 
     items = []
     seen = set()
-    for query in queries:
+
+    async def _fetch_query(query):
         try:
             encoded = urllib.parse.quote(f"{query} when:3d")
             url = (
@@ -185,24 +186,32 @@ async def fetch_global_event_feeds_async(session):
                 f"&hl=en-IN&gl=IN&ceid=IN:en"
             )
             status, xml_data = await fetch_text_async(session, url, timeout=15)
-            if status != 200:
-                continue
-            feed = feedparser.parse(xml_data)
-            for entry in feed.entries[:5]:
-                title = entry.get("title", "").split(" - ")[0].strip()
-                if not title or title.lower() in seen:
-                    continue
-                seen.add(title.lower())
-                items.append(
-                    {
-                        "title": title,
-                        "link": entry.get("link", ""),
-                        "date": entry.get("published", ""),
-                        "source": entry.get("source", {}).get("title", "News"),
-                    }
-                )
+            if status == 200:
+                return feedparser.parse(xml_data)
         except Exception as e:
             log.error(f"Global event feed query failed: {e}")
+        return None
+
+    # ⚡ Bolt Optimization: Batch fetch global event feed queries concurrently to prevent event-loop blocking from sequential IO.
+    feeds = await asyncio.gather(*(_fetch_query(q) for q in queries))
+
+    for feed in feeds:
+        if not feed:
+            continue
+        for entry in feed.entries[:5]:
+            title = entry.get("title", "").split(" - ")[0].strip()
+            if not title or title.lower() in seen:
+                continue
+            seen.add(title.lower())
+            items.append(
+                {
+                    "title": title,
+                    "link": entry.get("link", ""),
+                    "date": entry.get("published", ""),
+                    "source": entry.get("source", {}).get("title", "News"),
+                }
+            )
+
     log.info(f"Global event feed: {len(items)} headlines collected.")
     return items
 
