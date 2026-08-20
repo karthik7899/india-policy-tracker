@@ -87,10 +87,11 @@
         "Filing"
       ],
       "confidence": "M",
-      "status": "counted"
+      "status": "excluded",
+      "exclusion_reason": "aged >120d (121 days old)"
     },
     {
-      "date": "2026-08-19",
+      "date": "2026-08-20",
       "headline": "Mphasis acquires Theory and Practice Business Intelligence Inc., strengthening its 'Decisioning Intelligence' capabilities",
       "source_url": "",
       "source_label": "",
@@ -99,8 +100,7 @@
         "Event"
       ],
       "confidence": "H",
-      "status": "merged",
-      "exclusion_reason": "merged: duplicate phrasing of “Mphasis acquires Theory and Practice Business Intelligence I”"
+      "status": "counted"
     }
   ]
 }
