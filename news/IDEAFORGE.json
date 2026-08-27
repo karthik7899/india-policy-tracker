@@ -289,7 +289,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (160 days old)"
+      "exclusion_reason": "aged >120d (161 days old)"
     },
     {
       "date": "Tue, 28 Apr 2026 07:00:00 GMT",
@@ -300,7 +300,8 @@
         "Launch"
       ],
       "confidence": "M",
-      "status": "counted"
+      "status": "excluded",
+      "exclusion_reason": "aged >120d (121 days old)"
     },
     {
       "date": "Tue, 11 Aug 2026 03:45:17 GMT",
@@ -324,7 +325,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (161 days old)"
+      "exclusion_reason": "aged >120d (162 days old)"
     },
     {
       "date": "Wed, 20 Aug 2025 07:00:00 GMT",
@@ -336,7 +337,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (371 days old)"
+      "exclusion_reason": "aged >120d (372 days old)"
     },
     {
       "date": "Tue, 14 Jul 2026 05:01:20 GMT",
@@ -381,7 +382,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (142 days old)"
+      "exclusion_reason": "aged >120d (143 days old)"
     },
     {
       "date": "Tue, 07 Jul 2026 07:55:00 GMT",
@@ -396,7 +397,7 @@
       "exclusion_reason": "merged: duplicate phrasing of “Paras Defence, ideaForge, other defence stocks slide up to 5”"
     },
     {
-      "date": "2026-08-26",
+      "date": "2026-08-27",
       "headline": "Supply chain disruptions push ideaForge into losses in Q1FY27",
       "source_url": "",
       "source_label": "",
@@ -409,7 +410,7 @@
       "exclusion_reason": "merged: duplicate phrasing of “Supply chain disruptions push ideaForge into losses in Q1FY2”"
     },
     {
-      "date": "2026-08-26",
+      "date": "2026-08-27",
       "headline": "ideaForge lands first US purchase order",
       "source_url": "",
       "source_label": "",
@@ -421,7 +422,7 @@
       "status": "counted"
     },
     {
-      "date": "2026-08-26",
+      "date": "2026-08-27",
       "headline": "ideaForge inks MoU with Japan's DMP to Expand Global Footprint in Next-Gen AI Drones",
       "source_url": "",
       "source_label": "",
@@ -430,8 +431,7 @@
         "Event"
       ],
       "confidence": "H",
-      "status": "merged",
-      "exclusion_reason": "merged: duplicate phrasing of “ideaForge inks MoU with Japan's DMP to Expand Global Footpri”"
+      "status": "counted"
     }
   ]
 }
