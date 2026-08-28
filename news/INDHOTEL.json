@@ -2,9 +2,9 @@
   "ticker": "INDHOTEL",
   "items": [
     {
-      "date": "24 Aug 2026",
-      "headline": "Indian Hotels Company Plans to Acquire Oriental Hotels in 25:117 Share Swap",
-      "source_url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxNd0o1aVVzaWVfWndRY182azR5NVh6TXZHTXIyMndJT0JZOXIySm1GM0Y2U1JOYmktLTl1SHEtd1lvTHFnT2xtSjc4MGZ6ekdJQ1dOU201SFU4SUVOMXBScWl4dnM5NUp5amZJM0hUdVdfQ3ZRb3RScjYxTEVwdHBYeFVUc2RSbHZzTkxwREt4bWkzT3JVMVcyY3J1SXE4d2ZPOUNueTd5dDBaRktuS3c2LURtcHU?oc=5",
+      "date": "28 Aug 2026",
+      "headline": "The Indian Hotels Company Approves Merger with Oriental Hotels in All Stock Deal",
+      "source_url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxOUU5WZmp2eEIydWZNQmNHY290SmZyYlNEbW82TU00STVtdzZyRlFiQXgyVXU3RjZ4UC1FSUxpanc0M0k5LUZSTFVzaWJ0MXNLZHZfSTFJOFozbTRMWlIzYUdmRjhlNERkV3huaVZlUjl6ckR4TzRCX0E1eDRESTVrTnRYSjVsMkhuYVAxVDh1TXlDMU15dWNOaDZsWXAzc1NkY0k5VGlmTGRxQTZyczZpZ1dESFlEU0xvNGNB?oc=5",
       "source_label": "Sahi",
       "event_tags": [
         "Sector news"
@@ -57,6 +57,19 @@
       "status": "counted"
     },
     {
+      "date": "2026-08-28",
+      "headline": "The Indian Hotels Company Approves Merger with Oriental Hotels in All Stock Deal",
+      "source_url": "",
+      "source_label": "",
+      "event_tags": [
+        "acquisition",
+        "Event"
+      ],
+      "confidence": "H",
+      "status": "merged",
+      "exclusion_reason": "merged: duplicate phrasing of “The Indian Hotels Company Approves Merger with Oriental Hote”"
+    },
+    {
       "date": "2026-08-27",
       "headline": "Indian Hotels Company Plans to Acquire Oriental Hotels in 25:117 Share Swap",
       "source_url": "",
@@ -66,8 +79,7 @@
         "Event"
       ],
       "confidence": "H",
-      "status": "merged",
-      "exclusion_reason": "merged: duplicate phrasing of “Indian Hotels Company Plans to Acquire Oriental Hotels in 25”"
+      "status": "counted"
     }
   ]
 }
