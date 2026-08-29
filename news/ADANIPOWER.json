@@ -2,6 +2,17 @@
   "ticker": "ADANIPOWER",
   "items": [
     {
+      "date": "Wed, 26 Aug 2026 22:00:00 GMT",
+      "headline": "Adaniconnex Private Limited completed the acquisition of Chandenvalle Infra Park Limited from Adani Power Limited for INR 5.4 billion.",
+      "source_url": "https://news.google.com/rss/articles/CBMi5wFBVV95cUxQRHlBQ2J1ajNHRTlLMjNtMTV1VHkycnNDZjZMLXhGMXJRVE9jeHBsM0RsLXpVSmNfanFUblFoSDdYX0F1X0lBdlgtbkRERF9VS09yWWpFUjJvc2xubExyZkx6X2p5YUhUM2lTQVI2ZzUtQ3V6Ni1Vbm9UdEdtSmN0dGRmRGZ1YnBJZ0RJTTRURXJ1d1d1VWpXa3FJcmZKeXZNUFlMTXhwRVBFX0xZbHZxMHRlUXpDZ18tcjZmM1JXakYxQkNPWjBLeXVEa1Z4aGg2cFlOTjdnTjZTUHBta21sWHVReGVFT28?oc=5",
+      "source_label": "marketscreener.com",
+      "event_tags": [
+        "Agreement"
+      ],
+      "confidence": "M",
+      "status": "counted"
+    },
+    {
       "date": "27 Aug 2026",
       "headline": "Adani Power Limited has informed the Exchange about Signing of Agreement for sale of a Subsidiary",
       "source_url": "https://nsearchives.nseindia.com/corporate/ADANIPOWER_27082026173638_APLSPACIPL27082026.pdf",
@@ -11,6 +22,19 @@
       ],
       "confidence": "M",
       "status": "counted"
+    },
+    {
+      "date": "2026-08-29",
+      "headline": "Adaniconnex Private Limited completed the acquisition of Chandenvalle Infra Park Limited from Adani Power Limited for INR 5.4 billion.",
+      "source_url": "",
+      "source_label": "",
+      "event_tags": [
+        "acquisition",
+        "Event"
+      ],
+      "confidence": "H",
+      "status": "merged",
+      "exclusion_reason": "merged: duplicate phrasing of “Adaniconnex Private Limited completed the acquisition of Cha”"
     }
   ]
 }
