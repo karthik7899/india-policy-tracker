@@ -2,6 +2,28 @@
   "ticker": "ICICIBANK",
   "items": [
     {
+      "date": "01 Sep 2026",
+      "headline": "ICICI Bank Share Price August 31, 2026: Up 0.38% to ₹1,429.40",
+      "source_url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxNaThhaWpUU1ZUd0QtUEJEZDN6TjhDSTJlTW05amJLYldlbEozOGgyQ2VkQ2lta2JQNlRoc1owdl8wZThvbmRtWW9MT3R4Y3Y1cnJYSnQ3QThQQ09zYnNsVWxiMGdvQUVaZmxoZEp2RENiV0J3N01NOHdkdTV3blo4Zg?oc=5",
+      "source_label": "The Eastern Herald",
+      "event_tags": [
+        "Sector news"
+      ],
+      "confidence": "M",
+      "status": "counted"
+    },
+    {
+      "date": "01 Sep 2026",
+      "headline": "ICICI Bank Limited has informed the Exchange regarding Allotment of 598493  Shares.",
+      "source_url": "https://nsearchives.nseindia.com/corporate/ICICIBANK1_01092026110445_Letter_to_exchange.pdf",
+      "source_label": "NSE",
+      "event_tags": [
+        "Filing"
+      ],
+      "confidence": "M",
+      "status": "counted"
+    },
+    {
       "date": "27 Aug 2026",
       "headline": "ICICI Bank Limited has informed the Exchange regarding Allotment of 48983  Shares.",
       "source_url": "https://nsearchives.nseindia.com/corporate/ICICIBANK1_27082026162709_Lettertoexchange.pdf",
@@ -22,7 +44,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (265 days old)"
+      "exclusion_reason": "aged >120d (266 days old)"
     }
   ]
 }
