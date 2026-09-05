@@ -2,6 +2,17 @@
   "ticker": "ICICIBANK",
   "items": [
     {
+      "date": "05 Sep 2026",
+      "headline": "ICICI Bank Limited has informed the Exchange about Disclosure under Regulation 30 of SEBI (Listing Obligations and Disclosure Requirements) Regulations, 2015",
+      "source_url": "https://nsearchives.nseindia.com/corporate/ICICI2022_05092026114449_NSEBSE_05092026.pdf",
+      "source_label": "NSE",
+      "event_tags": [
+        "Filing"
+      ],
+      "confidence": "M",
+      "status": "counted"
+    },
+    {
       "date": "04 Sep 2026",
       "headline": "ICICI Bank Limited has informed the Exchange regarding Allotment of 38512  Shares.",
       "source_url": "https://nsearchives.nseindia.com/corporate/ICICIBANK1_04092026105925_Lettertoexchange.pdf",
@@ -55,7 +66,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (269 days old)"
+      "exclusion_reason": "aged >120d (270 days old)"
     }
   ]
 }
