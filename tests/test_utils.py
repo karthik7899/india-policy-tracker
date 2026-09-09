@@ -60,3 +60,60 @@ def test_atomic_write_json():
         with open(target_file, "r", encoding="utf-8") as f:
             loaded = json.load(f)
         assert loaded == data
+
+
+from unittest.mock import MagicMock, patch  # noqa: E402
+import pytest  # noqa: E402
+from utils import fetch_text_sync, TransientNetworkError  # noqa: E402
+
+
+def test_fetch_text_sync_success():
+    mock_session = MagicMock()
+    mock_response = MagicMock()
+    mock_response.status_code = 200
+    mock_response.text = "success"
+    mock_session.get.return_value = mock_response
+
+    status, text = fetch_text_sync(mock_session, "http://example.com")
+    assert status == 200
+    assert text == "success"
+    mock_session.get.assert_called_once_with(
+        "http://example.com", headers=None, timeout=15
+    )
+
+
+@patch("utils.time.sleep")
+def test_fetch_text_sync_transient_error(mock_sleep):
+    mock_session = MagicMock()
+    mock_response = MagicMock()
+    mock_response.status_code = 500
+    mock_session.get.return_value = mock_response
+
+    with pytest.raises(TransientNetworkError) as exc_info:
+        fetch_text_sync(mock_session, "http://example.com")
+
+    assert "HTTP 500 for http://example.com" in str(exc_info.value)
+    # 1 initial call + 3 retries = 4 calls total
+    assert mock_session.get.call_count == 4
+    assert mock_sleep.call_count == 3
+
+
+@patch("utils.time.sleep")
+def test_fetch_text_sync_transient_error_recovery(mock_sleep):
+    mock_session = MagicMock()
+
+    bad_response = MagicMock()
+    bad_response.status_code = 502
+
+    good_response = MagicMock()
+    good_response.status_code = 200
+    good_response.text = "recovered"
+
+    mock_session.get.side_effect = [bad_response, good_response]
+
+    status, text = fetch_text_sync(mock_session, "http://example.com")
+
+    assert status == 200
+    assert text == "recovered"
+    assert mock_session.get.call_count == 2
+    assert mock_sleep.call_count == 1
