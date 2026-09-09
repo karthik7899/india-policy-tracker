@@ -1,4 +1,4 @@
-from utils import safe_float, safe_int, safe_percentage  # noqa: E402
+from utils import safe_float, safe_int, safe_percentage, to_float  # noqa: E402
 
 
 def test_safe_float():
@@ -60,3 +60,38 @@ def test_atomic_write_json():
         with open(target_file, "r", encoding="utf-8") as f:
             loaded = json.load(f)
         assert loaded == data
+
+
+def test_to_float():
+    # None and booleans
+    assert to_float(None) is None
+    assert to_float(True) is None
+    assert to_float(False) is None
+
+    # Ints and floats
+    assert to_float(10) == 10.0
+    assert to_float(12.5) == 12.5
+
+    # Strings that are valid numbers
+    assert to_float("482.95") == 482.95
+    assert to_float("1,840.00") == 1840.0
+    assert to_float(" 42 ") == 42.0
+
+    # Strings with formatting
+    assert to_float("+23.0%") == 23.0
+    assert to_float("12.5%") == 12.5
+
+    # "None"-like and empty strings
+    assert to_float("") is None
+    assert to_float(" ") is None
+    assert to_float("N/A") is None
+    assert to_float("na") is None
+    assert to_float("NA") is None
+    assert to_float("-") is None
+    assert to_float("—") is None
+    assert to_float("none") is None
+    assert to_float("NONE") is None
+
+    # Invalid strings
+    assert to_float("invalid") is None
+    assert to_float("12.34 abc") is None
