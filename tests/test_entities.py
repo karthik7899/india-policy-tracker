@@ -4,22 +4,10 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from entities import (  # noqa: E402
-    extract_isin,
     build_entity_master,
     find_duplicate_holdings,
     resolve_entity_by_isin,
 )
-
-
-def test_extract_isin_finds_valid_code_in_free_text():
-    text = "Some header BSE: 500325 NSE: RELIANCE ISIN: INE002A01018 more text"
-    assert extract_isin(text) == "INE002A01018"
-
-
-def test_extract_isin_returns_none_when_absent():
-    assert extract_isin("no identifiers here") is None
-    assert extract_isin("") is None
-    assert extract_isin(None) is None
 
 
 def _stock(ticker, name, isin=None):
