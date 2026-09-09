@@ -120,6 +120,7 @@ class retry_network:
     Decorator for retrying network operations with exponential backoff.
     Retries only on transient network failures, not on parsing/logic errors.
     """
+
     def __init__(self, max_retries=3, base_delay=1.0):
         self.max_retries = max_retries
         self.base_delay = base_delay
