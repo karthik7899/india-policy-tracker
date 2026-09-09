@@ -20,6 +20,7 @@ source is unreachable the pipeline simply records an empty baseline and carries 
 """
 
 import os
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -242,20 +243,35 @@ def build_institutional_baseline(
     session = session or requests.Session()
     baseline: List[Dict[str, Any]] = []
 
+    def process_scheme(theme: str, scheme: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        try:
+            records = fetch_scheme_nav_history(session, scheme["code"])
+            metrics = compute_accumulation_baseline(records)
+            if not metrics:
+                return None
+            return {"theme": theme, "fund_name": scheme["name"], **metrics}
+        except Exception as e:
+            log.error(f"Error processing scheme {scheme['name']}: {e}")
+            return None
+
     try:
         discovered = discover_thematic_schemes(session, max_per_theme=max_per_theme)
-        for theme, schemes in discovered.items():
-            for scheme in schemes:
-                records = fetch_scheme_nav_history(session, scheme["code"])
-                metrics = compute_accumulation_baseline(records)
-                if not metrics:
-                    continue
-                entry = {"theme": theme, "fund_name": scheme["name"], **metrics}
-                baseline.append(entry)
-                log.info(
-                    f"MF baseline [{theme}] {scheme['name']}: "
-                    f"1Y {metrics['return_1y']}% ({metrics['accumulation_trend']})"
-                )
+
+        with ThreadPoolExecutor(max_workers=10) as executor:
+            futures = []
+            for theme, schemes in discovered.items():
+                for scheme in schemes:
+                    futures.append(executor.submit(process_scheme, theme, scheme))
+
+            for future in as_completed(futures):
+                entry = future.result()
+                if entry:
+                    baseline.append(entry)
+                    log.info(
+                        f"MF baseline [{entry['theme']}] {entry['fund_name']}: "
+                        f"1Y {entry['return_1y']}% ({entry['accumulation_trend']})"
+                    )
+
     except Exception as e:  # noqa: BLE001
         log.error(f"Error building institutional baseline: {e}")
     finally:
