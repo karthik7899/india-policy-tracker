@@ -91,3 +91,77 @@ def test_fetch_text_sync_retry_transient(monkeypatch):
     assert status == 200
     assert text == "ok"
     assert session.get.call_count == 2
+
+
+@pytest.mark.anyio
+async def test_retry_network_async_max_retries():
+    from utils import retry_network, TransientNetworkError
+
+    @retry_network(max_retries=2, base_delay=0.1)
+    async def failing_func():
+        raise TransientNetworkError("Always fails")
+
+    with pytest.MonkeyPatch.context() as m:
+        mock_sleep = AsyncMock()
+        m.setattr(asyncio, "sleep", mock_sleep)
+
+        with pytest.raises(TransientNetworkError, match="Always fails"):
+            await failing_func()
+
+        assert mock_sleep.call_count == 2
+        mock_sleep.assert_any_call(0.1)
+        mock_sleep.assert_any_call(0.2)
+
+
+@pytest.mark.anyio
+async def test_retry_network_async_non_transient():
+    from utils import retry_network
+
+    @retry_network(max_retries=2, base_delay=0.1)
+    async def ValueError_func():
+        raise ValueError("Not transient")
+
+    with pytest.MonkeyPatch.context() as m:
+        mock_sleep = AsyncMock()
+        m.setattr(asyncio, "sleep", mock_sleep)
+
+        with pytest.raises(ValueError, match="Not transient"):
+            await ValueError_func()
+
+        assert mock_sleep.call_count == 0
+
+
+def test_retry_network_sync_max_retries(monkeypatch):
+    from utils import retry_network, TransientNetworkError
+    import time
+
+    @retry_network(max_retries=2, base_delay=0.1)
+    def failing_func():
+        raise TransientNetworkError("Always fails")
+
+    mock_sleep = MagicMock()
+    monkeypatch.setattr(time, "sleep", mock_sleep)
+
+    with pytest.raises(TransientNetworkError, match="Always fails"):
+        failing_func()
+
+    assert mock_sleep.call_count == 2
+    mock_sleep.assert_any_call(0.1)
+    mock_sleep.assert_any_call(0.2)
+
+
+def test_retry_network_sync_non_transient(monkeypatch):
+    from utils import retry_network
+    import time
+
+    @retry_network(max_retries=2, base_delay=0.1)
+    def ValueError_func():
+        raise ValueError("Not transient")
+
+    mock_sleep = MagicMock()
+    monkeypatch.setattr(time, "sleep", mock_sleep)
+
+    with pytest.raises(ValueError, match="Not transient"):
+        ValueError_func()
+
+    assert mock_sleep.call_count == 0
