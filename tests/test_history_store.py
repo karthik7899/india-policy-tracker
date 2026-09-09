@@ -1,11 +1,12 @@
 import unittest
+from unittest.mock import patch
 import os
 import tempfile
 import json
 from history.store import HistoryStore
 
 
-class TestHistoryStore(unittest.TestCase):
+class TestDeduplicateAndMerge(unittest.TestCase):
     def setUp(self):
         self.temp_file = tempfile.NamedTemporaryFile(delete=False, mode="w")
         json.dump({}, self.temp_file)
@@ -94,6 +95,46 @@ class TestHistoryStore(unittest.TestCase):
         self.assertEqual(
             merged[1]["title"], "New duplicate because optional_key is None for both"
         )
+
+
+class TestGetHistoricalEvents(unittest.TestCase):
+    """get_historical_events is a one-line getter, but it is the read side of
+    every merge, so its behaviour on a missing category or a corpus with no
+    "briefing" key is what keeps deduplicate_and_merge from raising on a
+    first run or a truncated history file.
+
+    Separate class from the merge tests above because that fixture writes a
+    real temp file, and these deliberately never touch the disk.
+    """
+
+    def setUp(self):
+        with patch("history.store.os.path.exists", return_value=False):
+            self.store = HistoryStore(filepath="dummy.json")
+
+    def test_existing_category(self):
+        self.store.data = {
+            "briefing": {
+                "macro": [
+                    {"title": "Event 1", "date": "2023-01-01"},
+                    {"title": "Event 2", "date": "2023-01-02"},
+                ],
+                "sector": [{"title": "Sector Event"}],
+            }
+        }
+        events = self.store.get_historical_events("macro")
+        self.assertEqual([e["title"] for e in events], ["Event 1", "Event 2"])
+
+    def test_unknown_category_is_empty_not_an_error(self):
+        self.store.data = {"briefing": {"macro": [{"title": "Event 1"}]}}
+        self.assertEqual(self.store.get_historical_events("unknown_category"), [])
+
+    def test_missing_briefing_key_is_empty(self):
+        self.store.data = {"some_other_key": {"macro": [{"title": "Event 1"}]}}
+        self.assertEqual(self.store.get_historical_events("macro"), [])
+
+    def test_empty_data_is_empty(self):
+        self.store.data = {}
+        self.assertEqual(self.store.get_historical_events("macro"), [])
 
 
 if __name__ == "__main__":
