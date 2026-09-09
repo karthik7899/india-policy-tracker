@@ -65,17 +65,12 @@ class Stock(BaseModel):
         "earnings_growth",
         "rec_score",
         "fundamental_value",
+        "analyst_count",
         mode="before",
     )
     @classmethod
     def _coerce_float(cls, value):
         return to_float(value)
-
-    @field_validator("analyst_count", mode="before")
-    @classmethod
-    def _coerce_int(cls, value):
-        as_float = to_float(value)
-        return None if as_float is None else int(as_float)
 
     @field_validator("rating", mode="before")
     @classmethod
