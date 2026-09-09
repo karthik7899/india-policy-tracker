@@ -137,5 +137,27 @@ class TestGetHistoricalEvents(unittest.TestCase):
         self.assertEqual(self.store.get_historical_events("macro"), [])
 
 
+class TestSave(unittest.TestCase):
+    def test_save_nests_the_briefing_and_writes_the_file(self):
+        """save() wraps whatever it is given under a "briefing" key. That
+        nesting is the corpus format every reader assumes, including
+        get_historical_events above."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = os.path.join(tmpdir, "test_history.json")
+            store = HistoryStore(filepath=path)
+            self.assertEqual(store.data, {})  # absent file starts empty
+
+            brief_data = {
+                "market_summary": [{"event": "Market went up"}],
+                "corporate_actions": [{"event": "Dividend declared"}],
+            }
+            store.save(brief_data)
+
+            self.assertTrue(os.path.exists(path))
+            with open(path, "r", encoding="utf-8") as f:
+                loaded = json.load(f)
+            self.assertEqual(loaded["briefing"], brief_data)
+
+
 if __name__ == "__main__":
     unittest.main()
