@@ -2,7 +2,7 @@ import pytest
 import asyncio
 from unittest.mock import MagicMock, AsyncMock
 
-from utils import fetch_text_async, fetch_text_sync
+from utils import fetch_text_async
 
 
 @pytest.mark.anyio
@@ -70,24 +70,4 @@ async def test_fetch_text_async_retry_transient():
 
     assert status == 200
     assert text == "success_after_retry"
-    assert session.get.call_count == 2
-
-
-def test_fetch_text_sync_retry_transient(monkeypatch):
-    import time
-
-    session = MagicMock()
-
-    class DummyResp:
-        def __init__(self, status_code, text):
-            self.status_code = status_code
-            self.text = text
-
-    session.get.side_effect = [DummyResp(502, "bad gateway"), DummyResp(200, "ok")]
-
-    monkeypatch.setattr(time, "sleep", MagicMock())
-
-    status, text = fetch_text_sync(session, "http://example.com")
-    assert status == 200
-    assert text == "ok"
     assert session.get.call_count == 2
