@@ -69,7 +69,7 @@ def test_auth_status_raises_blocked_with_troubleshooting_context():
         nse._validate_http(_response(status=403))
     message = str(excinfo.value)
     # The message is the deliverable: from a CI log, a 403 is otherwise
-    # indistinguishable from a bug in this file.
+    # indistinguishable from a code fault in this file.
     assert "403" in message
     assert "handshake" in message
     assert "cloud range" in message
