@@ -66,7 +66,7 @@ def test_different_company_sharing_first_token_rejected():
 
 
 # ---------------------------------------------------------------------------
-# substring-era latent bugs: short tickers inside longer words
+# substring-era latent issues: short tickers inside longer words
 # ---------------------------------------------------------------------------
 
 
