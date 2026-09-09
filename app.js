@@ -216,7 +216,7 @@ function formatGrowthBadge(growthStr, style = 'inline') {
 
 // Helper: Format potential growth with proper sign and color
 function formatPotential(pctStr) {
-    if (!pctStr) return '—';
+    if (pctStr === null || pctStr === undefined || pctStr === '') return '—';
     const val = parseFloat(String(pctStr).replace('%', ''));
     if (isNaN(val)) return escapeHtml(pctStr);
     const isPositive = typeof pctStr === 'string' ? pctStr.startsWith('+') : val > 0;
@@ -2414,22 +2414,22 @@ function renderStocksTable(filterQuery = "") {
         const sectorKey = s.sectorKey;
         const sectorLabel = s.sectorLabel;
         const sc = s.screener || {};
-        const peVal = sc.pe_ratio ? sc.pe_ratio : '<span style="color: var(--text-muted);">—</span>';
-        const roceVal = sc.roce ? `${sc.roce}%` : '<span style="color: var(--text-muted);">—</span>';
-        const roeVal = sc.roe ? `${sc.roe}%` : '<span style="color: var(--text-muted);">—</span>';
+        const peVal = sc.pe_ratio ? escapeHtml(sc.pe_ratio) : '<span style="color: var(--text-muted);">—</span>';
+        const roceVal = sc.roce ? `${escapeHtml(sc.roce)}%` : '<span style="color: var(--text-muted);">—</span>';
+        const roeVal = sc.roe ? `${escapeHtml(sc.roe)}%` : '<span style="color: var(--text-muted);">—</span>';
 
         // TTM growth, not the sequential quarter-on-quarter figure: that one
         // reported BHEL at -37.5% while the business grew 27% year on year.
         const ttm = sc.revenue_ttm_growth_pct;
         const qoqSalesVal = (ttm !== undefined && ttm !== null)
-            ? `<strong style="color: ${ttm >= 0 ? 'var(--success)' : 'var(--danger)'};">${ttm > 0 ? '+' : ''}${ttm}%</strong>`
+            ? `<strong style="color: ${ttm >= 0 ? 'var(--success)' : 'var(--danger)'};">${ttm > 0 ? '+' : ''}${escapeHtml(ttm)}%</strong>`
             : '<span style="color: var(--text-muted);">—</span>';
         // Tradeability. The cheapest-looking names in this book are
         // consistently the thinnest, and nothing here used to say so.
         const advtVal = formatLiquidity(sc);
-        const capexVal = sc.capex !== undefined ? `₹${Number(sc.capex).toLocaleString('en-IN')}` : '<span style="color: var(--text-muted);">—</span>';
-        const oeVal = sc.owner_earnings !== undefined ? `₹${Number(sc.owner_earnings).toLocaleString('en-IN')}` : '<span style="color: var(--text-muted);">—</span>';
-        const grahamVal = sc.graham_intrinsic_value !== undefined ? `₹${sc.graham_intrinsic_value}` : '<span style="color: var(--text-muted);">—</span>';
+        const capexVal = sc.capex !== undefined ? `₹${escapeHtml(Number(sc.capex).toLocaleString('en-IN'))}` : '<span style="color: var(--text-muted);">—</span>';
+        const oeVal = sc.owner_earnings !== undefined ? `₹${escapeHtml(Number(sc.owner_earnings).toLocaleString('en-IN'))}` : '<span style="color: var(--text-muted);">—</span>';
+        const grahamVal = sc.graham_intrinsic_value !== undefined ? `₹${escapeHtml(sc.graham_intrinsic_value)}` : '<span style="color: var(--text-muted);">—</span>';
         
         let valAlertsHtml = '';
         if (sectorKey === "macro_indicators") {

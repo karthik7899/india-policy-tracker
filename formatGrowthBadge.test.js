@@ -62,38 +62,38 @@ describe('formatGrowthBadge', () => {
     test('should format positive growth correctly inline', () => {
         const result = formatGrowthBadge('+15.5%', 'inline');
         expect(result).toContain('+15.5% YoY');
-        expect(result).toContain('#34d399'); // Green color
+        expect(result).toContain('var(--success)'); // Green color
     });
 
     test('should format positive growth correctly in table', () => {
         const result = formatGrowthBadge('15.5%', 'table');
         expect(result).toContain('+15.5% YoY');
-        expect(result).toContain('#34d399');
+        expect(result).toContain('var(--success)');
         expect(result).toContain('font-weight: 700');
     });
 
     test('should format negative growth correctly inline', () => {
         const result = formatGrowthBadge('-10.2%', 'inline');
         expect(result).toContain('-10.2% YoY');
-        expect(result).toContain('#f87171'); // Red color
+        expect(result).toContain('var(--danger)'); // Red color
     });
 
     test('should format negative growth correctly in table', () => {
         const result = formatGrowthBadge('-10.2%', 'table');
         expect(result).toContain('-10.2% YoY');
-        expect(result).toContain('#f87171');
+        expect(result).toContain('var(--danger)');
     });
 
     test('should format zero growth correctly inline', () => {
         const result = formatGrowthBadge('0.0%', 'inline');
         expect(result).toContain('0.0% YoY');
-        expect(result).toContain('#cbd5e1'); // Gray color
+        expect(result).toContain('var(--text-primary)'); // Gray color
     });
 
     test('should format zero growth correctly in table', () => {
         const result = formatGrowthBadge('0%', 'table');
         expect(result).toContain('0.0% YoY');
-        expect(result).toContain('#cbd5e1');
+        expect(result).toContain('var(--text-primary)');
     });
 
     test('should format small numbers correctly', () => {
