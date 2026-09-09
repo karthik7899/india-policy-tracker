@@ -12,7 +12,7 @@ from analysis.revisions import (  # noqa: E402
     snapshot_prior_estimates,
     compute_revision_momentum,
 )
-from analysis.thesis import compute_thesis_health, thesis_health_sorted  # noqa: E402
+from analysis.thesis import compute_thesis_health  # noqa: E402
 from analysis.variant_perception import compute_variant_perception  # noqa: E402
 from analysis.curve_stage import classify_sector_curve_stage  # noqa: E402
 from analysis import postmortem  # noqa: E402
@@ -170,23 +170,6 @@ def test_thesis_negative_revision_pushes_weakening_to_broken():
 def test_thesis_macro_indicators_skipped():
     wl = {"macro_indicators": [{"ticker": "ETF", "name": "ETF"}]}
     assert compute_thesis_health(wl, []) == {}
-
-
-def test_thesis_health_sorted_broken_first():
-    wl = {
-        "sec": [
-            {"ticker": "GOOD", "name": "Good"},
-            {"ticker": "BAD", "name": "Bad"},
-        ]
-    }
-    warnings = [
-        {"ticker": "BAD", "direction": "risk", "severity": "Critical", "signal": "X"}
-    ]
-    health = compute_thesis_health(wl, warnings)
-    ordered = thesis_health_sorted(health)
-    assert ordered[0]["ticker"] == "BAD"
-    assert ordered[0]["status"] == "Broken"
-    assert ordered[-1]["ticker"] == "GOOD"
 
 
 # ---------------------------------------------------------------------------

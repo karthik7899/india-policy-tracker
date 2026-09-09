@@ -105,8 +105,3 @@ def compute_thesis_health(watchlist, warnings, revisions=None):
         f"{counts[_BROKEN]} broken."
     )
     return results
-
-
-def thesis_health_sorted(health_map):
-    """Broken first, then Weakening, then Intact — the reading order for a briefing."""
-    return sorted(health_map.values(), key=lambda r: (_ORDER[r["status"]], r["ticker"]))
