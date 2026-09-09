@@ -199,11 +199,3 @@ async def fetch_text_async(session, url, headers=None, timeout=15):
         if response.status in (408, 429, 500, 502, 503, 504):
             raise TransientNetworkError(f"HTTP {response.status} for {url}")
         return response.status, await response.text()
-
-
-@retry_network(max_retries=3, base_delay=2.0)
-def fetch_text_sync(session_or_module, url, headers=None, timeout=15):
-    response = session_or_module.get(url, headers=headers, timeout=timeout)
-    if response.status_code in (408, 429, 500, 502, 503, 504):
-        raise TransientNetworkError(f"HTTP {response.status_code} for {url}")
-    return response.status_code, response.text
