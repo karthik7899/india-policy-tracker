@@ -337,9 +337,7 @@ def auto_curate_watchlist(brief_data, watchlist, screened_candidates=None):
             ) as pool:
                 probes = list(
                     pool.map(
-                        lambda c: _probe_candidate(
-                            c[1], c[2], isin_master, snapshot
-                        ),
+                        lambda c: _probe_candidate(c[1], c[2], isin_master, snapshot),
                         chunk,
                     )
                 )
@@ -375,15 +373,10 @@ def auto_curate_watchlist(brief_data, watchlist, screened_candidates=None):
                 )
                 continue
 
-            if (
-                probe["error"] == "watchlisted"
-                and ticker not in watchlisted_tickers
-            ):
+            if probe["error"] == "watchlisted" and ticker not in watchlisted_tickers:
                 # Rotated out earlier in this same batch, so it is a live
                 # candidate again and was never priced. Rare; probe now.
-                probe = _probe_candidate(
-                    name, ticker, isin_master, watchlisted_tickers
-                )
+                probe = _probe_candidate(name, ticker, isin_master, watchlisted_tickers)
 
             if ticker in watchlisted_tickers:
                 log.info(f"Ticker {ticker} is already in watchlist. Skipping.")
@@ -434,9 +427,7 @@ def auto_curate_watchlist(brief_data, watchlist, screened_candidates=None):
                 candidate_qoq_growth = probe["qoq_growth"]
                 candidate_isin = probe["isin"]
 
-                existing_entity = resolve_entity_by_isin(
-                    candidate_isin, entity_master
-                )
+                existing_entity = resolve_entity_by_isin(candidate_isin, entity_master)
                 if existing_entity and existing_entity["ticker"] != ticker:
                     log.info(
                         f"Candidate {ticker} shares ISIN {candidate_isin} with "
@@ -513,9 +504,7 @@ def auto_curate_watchlist(brief_data, watchlist, screened_candidates=None):
                     log.info(
                         f"ADDED: {ticker} to {sector} (Space available: {len(current_watchlist)}/5)"
                     )
-                    rotations_log.append(
-                        f"Added {full_name} ({ticker}) to {sector}"
-                    )
+                    rotations_log.append(f"Added {full_name} ({ticker}) to {sector}")
                     decisions.append(
                         {
                             "action": "added",

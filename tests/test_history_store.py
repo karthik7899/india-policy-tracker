@@ -168,6 +168,7 @@ class TestSave(unittest.TestCase):
 # pytest-style below because these need tmp_path and monkeypatch; the classes
 # above predate them. Both run in the same file so the module has one home.
 
+
 @pytest.fixture
 def store_paths(tmp_path, monkeypatch):
     """Provides isolated history and legacy paths for testing."""

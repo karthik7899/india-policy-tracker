@@ -229,9 +229,22 @@ def test_fractional_analyst_count_truncates_rather_than_failing():
     The validator also reads as dead code to a caller-counting scan — pydantic
     holds the reference and calls it by registration, never by name.
     """
-    assert Stock.model_validate({"ticker": "X", "analyst_count": 12.5}).analyst_count == 12
-    assert Stock.model_validate({"ticker": "X", "analyst_count": "12.5"}).analyst_count == 12
+    assert (
+        Stock.model_validate({"ticker": "X", "analyst_count": 12.5}).analyst_count == 12
+    )
+    assert (
+        Stock.model_validate({"ticker": "X", "analyst_count": "12.5"}).analyst_count
+        == 12
+    )
     # And the ordinary shapes still land where they did.
-    assert Stock.model_validate({"ticker": "X", "analyst_count": "12"}).analyst_count == 12
-    assert Stock.model_validate({"ticker": "X", "analyst_count": None}).analyst_count is None
-    assert Stock.model_validate({"ticker": "X", "analyst_count": "N/A"}).analyst_count is None
+    assert (
+        Stock.model_validate({"ticker": "X", "analyst_count": "12"}).analyst_count == 12
+    )
+    assert (
+        Stock.model_validate({"ticker": "X", "analyst_count": None}).analyst_count
+        is None
+    )
+    assert (
+        Stock.model_validate({"ticker": "X", "analyst_count": "N/A"}).analyst_count
+        is None
+    )

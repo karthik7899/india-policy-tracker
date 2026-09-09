@@ -612,8 +612,10 @@ def test_email_thesis_truncation_keeps_the_worst():
     regression above."""
     from emails.mailer import _build_research_engine_html
 
-    health = {f"W{i}": {"ticker": f"W{i}", "status": "Weakening", "reasons": ["r"]}
-              for i in range(10)}
+    health = {
+        f"W{i}": {"ticker": f"W{i}", "status": "Weakening", "reasons": ["r"]}
+        for i in range(10)
+    }
     health["BROKE"] = {"ticker": "BROKE", "status": "Broken", "reasons": ["r"]}
 
     html = _build_research_engine_html({"thesis_health": health}, caps={"research": 2})
