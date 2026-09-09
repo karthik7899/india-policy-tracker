@@ -23,6 +23,8 @@ import os
 from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple
 
+from concurrent.futures import ThreadPoolExecutor
+
 import requests
 
 from logger import log
@@ -244,18 +246,53 @@ def build_institutional_baseline(
 
     try:
         discovered = discover_thematic_schemes(session, max_per_theme=max_per_theme)
-        for theme, schemes in discovered.items():
-            for scheme in schemes:
+
+        # Flattened first, then fetched concurrently. Each scheme's NAV history
+        # is an independent HTTP round-trip against api.mfapi.in — a host this
+        # pipeline already sees time out — so doing them one after another adds
+        # every scheme's latency together for no reason. The results are sorted
+        # below regardless, so completion order cannot matter.
+        pending = [
+            (theme, scheme)
+            for theme, schemes in discovered.items()
+            for scheme in schemes
+        ]
+
+        def _baseline_for(item):
+            """One scheme. Returns its entry, or None if it yields nothing.
+
+            Exceptions are caught HERE rather than around the whole batch. The
+            sequential version wrapped every scheme in one try, so a single bad
+            response abandoned every scheme after it and returned a partial
+            baseline that looked complete.
+            """
+            theme, scheme = item
+            try:
                 records = fetch_scheme_nav_history(session, scheme["code"])
                 metrics = compute_accumulation_baseline(records)
-                if not metrics:
-                    continue
-                entry = {"theme": theme, "fund_name": scheme["name"], **metrics}
-                baseline.append(entry)
-                log.info(
-                    f"MF baseline [{theme}] {scheme['name']}: "
-                    f"1Y {metrics['return_1y']}% ({metrics['accumulation_trend']})"
+            except Exception as e:  # noqa: BLE001 - one scheme must not end the batch
+                log.warning(
+                    f"MF baseline [{theme}] {scheme.get('name')}: "
+                    f"{type(e).__name__}: {str(e)[:100]}"
                 )
+                return None
+            if not metrics:
+                return None
+            return {"theme": theme, "fund_name": scheme["name"], **metrics}
+
+        # Deliberately modest. requests.Session is thread-safe and pools across
+        # threads, but mfapi.in is a small free API that already times out on
+        # us; the point is to stop serialising, not to hammer it.
+        if pending:
+            with ThreadPoolExecutor(max_workers=min(6, len(pending))) as pool:
+                for entry in pool.map(_baseline_for, pending):
+                    if not entry:
+                        continue
+                    baseline.append(entry)
+                    log.info(
+                        f"MF baseline [{entry['theme']}] {entry['fund_name']}: "
+                        f"1Y {entry['return_1y']}% ({entry['accumulation_trend']})"
+                    )
     except Exception as e:  # noqa: BLE001
         log.error(f"Error building institutional baseline: {e}")
     finally:

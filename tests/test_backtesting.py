@@ -1,3 +1,4 @@
+import time
 import sys
 import os
 
@@ -153,3 +154,78 @@ def test_build_institutional_baseline_end_to_end(monkeypatch):
     assert result[0]["theme"] == "Manufacturing & PLI"
     assert result[0]["fund_name"] == "ABC Manufacturing Fund"
     assert result[0]["accumulation_trend"] == "Accelerating"
+
+
+# --- concurrent NAV fetching ----------------------------------------------
+#
+# From Jules's suggestion at analysis/backtesting.py:249. The premise held:
+# each scheme was an independent HTTP round-trip awaited in sequence, against
+# a host this pipeline already sees time out.
+
+
+def _discovered(n=4):
+    return {f"theme{i}": [{"code": f"C{i}", "name": f"Fund {i}"}] for i in range(n)}
+
+
+def test_schemes_are_fetched_concurrently(monkeypatch):
+    """Serialised fetches add every scheme's latency together. The assertion is
+    on overlap, not on wall-clock speed, which would be a flaky test."""
+    import threading
+    import analysis.backtesting as bt
+
+    live = 0
+    peak = 0
+    lock = threading.Lock()
+
+    def slow_fetch(_session, code):
+        nonlocal live, peak
+        with lock:
+            live += 1
+            peak = max(peak, live)
+        time.sleep(0.05)
+        with lock:
+            live -= 1
+        return [{"date": "01-01-2026", "nav": 10.0}]
+
+    monkeypatch.setattr(bt, "discover_thematic_schemes", lambda s, **k: _discovered(4))
+    monkeypatch.setattr(bt, "fetch_scheme_nav_history", slow_fetch)
+    monkeypatch.setattr(
+        bt,
+        "compute_accumulation_baseline",
+        lambda r: {"return_1y": 5.0, "accumulation_trend": "up"},
+    )
+
+    bt.build_institutional_baseline(session=object())
+    assert peak > 1, "schemes were still fetched one at a time"
+
+
+def test_one_bad_scheme_no_longer_abandons_the_rest(monkeypatch):
+    """The sequential version wrapped every scheme in a single try, so one bad
+    response abandoned every scheme after it and returned a partial baseline
+    that looked complete."""
+    import analysis.backtesting as bt
+
+    def flaky(_session, code):
+        if code == "C1":
+            raise RuntimeError("mfapi timeout")
+        return [{"date": "01-01-2026", "nav": 10.0}]
+
+    monkeypatch.setattr(bt, "discover_thematic_schemes", lambda s, **k: _discovered(4))
+    monkeypatch.setattr(bt, "fetch_scheme_nav_history", flaky)
+    monkeypatch.setattr(
+        bt,
+        "compute_accumulation_baseline",
+        lambda r: {"return_1y": 5.0, "accumulation_trend": "up"},
+    )
+
+    out = bt.build_institutional_baseline(session=object())
+    # Three good schemes survive the one that failed.
+    assert len(out) == 3
+    assert "Fund 1" not in [e["fund_name"] for e in out]
+
+
+def test_no_schemes_is_not_an_error(monkeypatch):
+    import analysis.backtesting as bt
+
+    monkeypatch.setattr(bt, "discover_thematic_schemes", lambda s, **k: {})
+    assert bt.build_institutional_baseline(session=object()) == []
