@@ -91,3 +91,59 @@ def test_fetch_text_sync_retry_transient(monkeypatch):
     assert status == 200
     assert text == "ok"
     assert session.get.call_count == 2
+
+
+def test_sync_wrapper_success():
+    from utils import retry_network
+
+    @retry_network(max_retries=2, base_delay=0.1)
+    def dummy_func():
+        return "success"
+
+    assert dummy_func() == "success"
+
+
+def test_sync_wrapper_retry_transient_then_success(monkeypatch):
+    import time
+    from utils import retry_network, TransientNetworkError
+
+    mock_sleep = MagicMock()
+    monkeypatch.setattr(time, "sleep", mock_sleep)
+
+    call_count = 0
+
+    @retry_network(max_retries=2, base_delay=0.1)
+    def dummy_func():
+        nonlocal call_count
+        call_count += 1
+        if call_count == 1:
+            raise TransientNetworkError("temporary failure")
+        return "success_after_retry"
+
+    result = dummy_func()
+    assert result == "success_after_retry"
+    assert call_count == 2
+    mock_sleep.assert_called_once_with(0.1)
+
+
+def test_sync_wrapper_max_retries_exceeded(monkeypatch):
+    import time
+    import requests
+    from utils import retry_network
+
+    mock_sleep = MagicMock()
+    monkeypatch.setattr(time, "sleep", mock_sleep)
+
+    call_count = 0
+
+    @retry_network(max_retries=2, base_delay=0.1)
+    def dummy_func():
+        nonlocal call_count
+        call_count += 1
+        raise requests.exceptions.ConnectionError("connection failed")
+
+    with pytest.raises(requests.exceptions.ConnectionError):
+        dummy_func()
+
+    assert call_count == 3  # 1 initial call + 2 retries
+    assert mock_sleep.call_count == 2
