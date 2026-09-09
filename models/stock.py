@@ -68,18 +68,18 @@ class Stock(BaseModel):
         mode="before",
     )
     @classmethod
-    def _coerce_float(cls, value):
+    def coerce_float(cls, value):
         return to_float(value)
 
     @field_validator("analyst_count", mode="before")
     @classmethod
-    def _coerce_int(cls, value):
+    def coerce_int(cls, value):
         as_float = to_float(value)
         return None if as_float is None else int(as_float)
 
     @field_validator("rating", mode="before")
     @classmethod
-    def _coerce_rating(cls, value):
+    def coerce_rating(cls, value):
         return "N/A" if value is None else str(value)
 
     def to_wire_values(self) -> Dict[str, Any]:
