@@ -231,7 +231,7 @@ async def run_pipeline():
 
         graph = load_entity_graph()
         events = classify_headlines(data, watchlist)
-        # Re-attribute the merged list with the current rules, so a fix to the
+        # Re-attribute the merged list with the current rules, so an update to the
         # matcher reaches events carried over from earlier runs instead of
         # only applying to today's.
         data["market_events"] = refresh_merged_events(
