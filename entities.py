@@ -20,23 +20,7 @@ fetches succeed; a holding with no ISIN yet simply isn't indexed until it
 is.
 """
 
-import re
 from typing import Any, Dict, List, Optional
-
-# Indian ISINs are always "IN" + a 2-char issuer-type code + 7-char issuer/
-# security code + 1 numeric check digit = 12 chars. A regex scan of raw page
-# text is resilient to markup/DOM changes that would break a CSS-selector
-# approach, at the cost of (very rarely) matching an unrelated 12-char token
-# that happens to fit the shape — acceptable for a best-effort index.
-_ISIN_RE = re.compile(r"\bIN[A-Z0-9]{9}[0-9]\b")
-
-
-def extract_isin(text: str) -> Optional[str]:
-    """Best-effort ISIN extraction from raw page text."""
-    if not text:
-        return None
-    match = _ISIN_RE.search(text)
-    return match.group(0) if match else None
 
 
 def build_entity_master(watchlist: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
