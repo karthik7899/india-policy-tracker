@@ -3409,7 +3409,7 @@ function renderEarlyWarnings() {
 
         // Why this fired, one click away. An alert that states a conclusion
         // without its trigger cannot be argued with — and three separate
-        // bugs this cycle produced confident numbers from broken inputs
+        // issues this cycle produced confident numbers from broken inputs
         // that the alert text alone gave no way to question.
         const detail = document.createElement("tr");
         detail.className = "warning-detail";
