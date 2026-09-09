@@ -102,8 +102,10 @@ def parse_delivery_csv(text, series=READ_SERIES):
                 (k or "").strip().upper(): (v or "").strip() for k, v in row.items()
             }
             symbol = cleaned.get("SYMBOL", "").upper()
-            # EQ only. The same symbol appears under other series (BE, BZ)
-            # with different liquidity, and merging them would misstate both.
+            # The same symbol appears under several series (EQ, BE, BZ) with
+            # different liquidity, so rows are filtered rather than merged —
+            # summing them would misstate both segments. READ_SERIES says
+            # which ones we keep and why.
             row_series = cleaned.get("SERIES", "")
             if series is not None:
                 allowed = (series,) if isinstance(series, str) else series
@@ -234,9 +236,11 @@ def apply_delivery(watchlist, delivery):
     once for the 52-week range — and both times the symptom was a feature
     that reported nothing while looking like it worked.
 
-    NOTE: deliv_pct and turnover_cr must also be declared on
-    models/core.CompanyFinancials, or coercion silently drops them and the
-    scorer reads None no matter what is attached here.
+    NOTE: every key written below — deliv_pct, delivery_band, series and
+    turnover_cr_last — must also be declared on models/core.CompanyFinancials,
+    or coercion silently drops it and the scorer reads None no matter what is
+    attached here. The names must match exactly; turnover_cr_last is not
+    turnover_cr.
     """
     applied = 0
     for _sector, stocks in (watchlist or {}).items():

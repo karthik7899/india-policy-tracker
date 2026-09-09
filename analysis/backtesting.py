@@ -28,6 +28,7 @@ from concurrent.futures import ThreadPoolExecutor
 import requests
 
 from logger import log
+from utils import thread_local_session
 
 # Overridable so the ingestion can target a captn3m0 mirror / self-hosted dataset.
 MF_DATA_BASE_URL = os.environ.get("MF_DATA_BASE_URL", "https://api.mfapi.in")
@@ -268,7 +269,10 @@ def build_institutional_baseline(
             """
             theme, scheme = item
             try:
-                records = fetch_scheme_nav_history(session, scheme["code"])
+                # Own session per thread: requests.Session is not thread-safe.
+                records = fetch_scheme_nav_history(
+                    thread_local_session(), scheme["code"]
+                )
                 metrics = compute_accumulation_baseline(records)
             except Exception as e:  # noqa: BLE001 - one scheme must not end the batch
                 log.warning(
@@ -280,9 +284,13 @@ def build_institutional_baseline(
                 return None
             return {"theme": theme, "fund_name": scheme["name"], **metrics}
 
-        # Deliberately modest. requests.Session is thread-safe and pools across
-        # threads, but mfapi.in is a small free API that already times out on
-        # us; the point is to stop serialising, not to hammer it.
+        # Deliberately modest: mfapi.in is a small free API that already times
+        # out on us, and the point is to stop serialising, not to hammer it.
+        #
+        # Each worker uses its own session (utils.thread_local_session).
+        # requests.Session is NOT thread-safe — an earlier version of this
+        # comment claimed it was and shared one across the pool, which races
+        # on the cookie jar and on per-adapter state.
         if pending:
             with ThreadPoolExecutor(max_workers=min(6, len(pending))) as pool:
                 for entry in pool.map(_baseline_for, pending):

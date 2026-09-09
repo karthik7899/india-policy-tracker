@@ -2,12 +2,11 @@ import re
 from concurrent.futures import ThreadPoolExecutor
 
 from logger import log
-import requests
 from config import save_watchlist
 from entities import build_entity_master, resolve_entity_by_isin
 from providers.isin_master import load_isin_master
 from providers.yahoo import get_cached_ticker
-from utils import to_float
+from utils import thread_local_session, to_float
 from .parsing import resolve_ticker_from_name
 
 
@@ -155,7 +154,7 @@ def _screener_qoq_growth(session, ticker):
     return 0.0
 
 
-def _probe_candidate(session, name, preresolved, isin_master, watchlisted=()):
+def _probe_candidate(name, preresolved, isin_master, watchlisted=()):
     """Every network call for one candidate, and nothing that decides anything.
 
     Split out so these can run concurrently. What stays OUT of here is the
@@ -165,6 +164,10 @@ def _probe_candidate(session, name, preresolved, isin_master, watchlisted=()):
     candidates get admitted. This returns facts; the caller still decides in
     order.
     """
+    # Own session per thread: requests.Session is not thread-safe, and these
+    # run in a pool. See utils.thread_local_session.
+    session = thread_local_session()
+
     probe = {"ticker": None, "full_name": name, "error": None}
 
     if preresolved:
@@ -312,211 +315,247 @@ def auto_curate_watchlist(brief_data, watchlist, screened_candidates=None):
     queue.extend((s, n, t) for s, n, t, _ in screened_queue)
 
     intake = 0
-    with requests.Session() as session:
-        # Batched: probe a handful of candidates concurrently, then decide over
-        # them in queue order. The decision pass is deliberately sequential —
-        # the intake cap, watchlisted_tickers and the per-sector slot count all
-        # change as candidates are admitted, so deciding concurrently would
-        # change WHICH candidates get in, which is a behaviour change dressed
-        # as a speed-up.
-        for offset in range(0, len(queue), PREFETCH_BATCH):
-            chunk = queue[offset : offset + PREFETCH_BATCH]
+    # Batched: probe a handful of candidates concurrently, then decide over
+    # them in queue order. The decision pass is deliberately sequential —
+    # the intake cap, watchlisted_tickers and the per-sector slot count all
+    # change as candidates are admitted, so deciding concurrently would
+    # change WHICH candidates get in, which is a behaviour change dressed
+    # as a speed-up.
+    for offset in range(0, len(queue), PREFETCH_BATCH):
+        chunk = queue[offset : offset + PREFETCH_BATCH]
 
+        if intake >= MAX_INTAKE_PER_RUN:
+            # Cap already reached: defer the rest without a single request,
+            # exactly as the sequential version did.
+            probes = [None] * len(chunk)
+        else:
+            # Snapshot taken before the pool starts, so every probe in a
+            # batch sees the same membership.
+            snapshot = frozenset(watchlisted_tickers)
+            with ThreadPoolExecutor(
+                max_workers=min(PREFETCH_BATCH, len(chunk))
+            ) as pool:
+                probes = list(
+                    pool.map(
+                        lambda c: _probe_candidate(
+                            c[1], c[2], isin_master, snapshot
+                        ),
+                        chunk,
+                    )
+                )
+
+        for (sector, name, preresolved), probe in zip(chunk, probes):
             if intake >= MAX_INTAKE_PER_RUN:
-                # Cap already reached: defer the rest without a single request,
-                # exactly as the sequential version did.
-                probes = [None] * len(chunk)
-            else:
-                # Snapshot taken before the pool starts, so every probe in a
-                # batch sees the same membership.
-                snapshot = frozenset(watchlisted_tickers)
-                with ThreadPoolExecutor(
-                    max_workers=min(PREFETCH_BATCH, len(chunk))
-                ) as pool:
-                    probes = list(
-                        pool.map(
-                            lambda c: _probe_candidate(
-                                session, c[1], c[2], isin_master, snapshot
-                            ),
-                            chunk,
-                        )
+                structured_emerging.setdefault(sector, []).append(
+                    {
+                        "name": name,
+                        "ticker": preresolved,
+                        "status": "Deferred",
+                        "reason": (
+                            f"Run intake cap reached ({MAX_INTAKE_PER_RUN} "
+                            "watchlist changes); will be reconsidered next run."
+                        ),
+                    }
+                )
+                continue
+
+            log.info(f"Evaluating candidate company: {name} in {sector}")
+            ticker = probe["ticker"]
+            full_name = probe["full_name"]
+
+            if probe["error"] == "unresolved":
+                log.info(f"Could not resolve ticker for: {name}. Skipping.")
+                structured_emerging.setdefault(sector, []).append(
+                    {
+                        "name": name,
+                        "ticker": None,
+                        "status": "Unresolved",
+                        "reason": "Could not map company name to a BSE/NSE ticker.",
+                    }
+                )
+                continue
+
+            if (
+                probe["error"] == "watchlisted"
+                and ticker not in watchlisted_tickers
+            ):
+                # Rotated out earlier in this same batch, so it is a live
+                # candidate again and was never priced. Rare; probe now.
+                probe = _probe_candidate(
+                    name, ticker, isin_master, watchlisted_tickers
+                )
+
+            if ticker in watchlisted_tickers:
+                log.info(f"Ticker {ticker} is already in watchlist. Skipping.")
+                structured_emerging.setdefault(sector, []).append(
+                    {
+                        "name": full_name or name,
+                        "ticker": ticker,
+                        "status": "Watchlisted",
+                        "reason": f"Already present in the {sector} watchlist.",
+                    }
+                )
+                continue
+
+            if probe["error"] == "no_market_data":
+                log.info(f"No market data for {ticker}.NS. Skipping candidate.")
+                structured_emerging.setdefault(sector, []).append(
+                    {
+                        "name": full_name or name,
+                        "ticker": ticker,
+                        "status": "Unresolved",
+                        "reason": "BSE/NSE ticker resolved, but no market trading history found.",
+                    }
+                )
+                continue
+
+            if probe["error"] == "fetch_failed":
+                log.error(
+                    f"Error checking financials for {ticker}.NS: "
+                    f"{probe.get('exception')}"
+                )
+                structured_emerging.setdefault(sector, []).append(
+                    {
+                        "name": name,
+                        "ticker": ticker,
+                        "status": "Unresolved",
+                        "reason": f"Error parsing Yahoo Finance info: {probe.get('exception')}",
+                    }
+                )
+                continue
+
+            try:
+                live_price = probe["live_price"]
+                target_price = probe["target_price"]
+                growth_pct_val = probe["growth_pct_val"]
+                rating = probe["rating"]
+                rev_growth_raw = probe["rev_growth_raw"]
+                revenue_growth = probe["revenue_growth"]
+                candidate_qoq_growth = probe["qoq_growth"]
+                candidate_isin = probe["isin"]
+
+                existing_entity = resolve_entity_by_isin(
+                    candidate_isin, entity_master
+                )
+                if existing_entity and existing_entity["ticker"] != ticker:
+                    log.info(
+                        f"Candidate {ticker} shares ISIN {candidate_isin} with "
+                        f"existing holding {existing_entity['ticker']} "
+                        f"({existing_entity['sector']}). Skipping as duplicate."
                     )
-
-            for (sector, name, preresolved), probe in zip(chunk, probes):
-                if intake >= MAX_INTAKE_PER_RUN:
-                    structured_emerging.setdefault(sector, []).append(
-                        {
-                            "name": name,
-                            "ticker": preresolved,
-                            "status": "Deferred",
-                            "reason": (
-                                f"Run intake cap reached ({MAX_INTAKE_PER_RUN} "
-                                "watchlist changes); will be reconsidered next run."
-                            ),
-                        }
-                    )
-                    continue
-
-                log.info(f"Evaluating candidate company: {name} in {sector}")
-                ticker = probe["ticker"]
-                full_name = probe["full_name"]
-
-                if probe["error"] == "unresolved":
-                    log.info(f"Could not resolve ticker for: {name}. Skipping.")
-                    structured_emerging.setdefault(sector, []).append(
-                        {
-                            "name": name,
-                            "ticker": None,
-                            "status": "Unresolved",
-                            "reason": "Could not map company name to a BSE/NSE ticker.",
-                        }
-                    )
-                    continue
-
-                if (
-                    probe["error"] == "watchlisted"
-                    and ticker not in watchlisted_tickers
-                ):
-                    # Rotated out earlier in this same batch, so it is a live
-                    # candidate again and was never priced. Rare; probe now.
-                    probe = _probe_candidate(
-                        session, name, ticker, isin_master, watchlisted_tickers
-                    )
-
-                if ticker in watchlisted_tickers:
-                    log.info(f"Ticker {ticker} is already in watchlist. Skipping.")
                     structured_emerging.setdefault(sector, []).append(
                         {
                             "name": full_name or name,
                             "ticker": ticker,
                             "status": "Watchlisted",
-                            "reason": f"Already present in the {sector} watchlist.",
+                            "reason": (
+                                f"Already tracked as {existing_entity['ticker']} "
+                                f"in {existing_entity['sector']} "
+                                f"(same ISIN {candidate_isin})."
+                            ),
                         }
                     )
                     continue
 
-                if probe["error"] == "no_market_data":
-                    log.info(f"No market data for {ticker}.NS. Skipping candidate.")
+                # Eligibility check:
+                is_eligible = growth_pct_val > 0
+                if rev_growth_raw is not None and rev_growth_raw < 0:
+                    is_eligible = False
+                if candidate_qoq_growth < 15.0:
+                    is_eligible = False
+
+                if not is_eligible:
+                    log.info(
+                        f"Candidate {ticker} did not meet positive growth criteria. Skipping."
+                    )
+                    reason_str = (
+                        "Negative target potential"
+                        if growth_pct_val <= 0
+                        else (
+                            f"Failed growth criteria (YoY revenue {revenue_growth})"
+                            if rev_growth_raw is not None and rev_growth_raw < 0
+                            else f"Failed QoQ growth threshold ({candidate_qoq_growth:.1f}% < 15%)"
+                        )
+                    )
                     structured_emerging.setdefault(sector, []).append(
                         {
                             "name": full_name or name,
                             "ticker": ticker,
-                            "status": "Unresolved",
-                            "reason": "BSE/NSE ticker resolved, but no market trading history found.",
+                            "status": "Growth Divergence",
+                            "reason": reason_str,
                         }
                     )
                     continue
 
-                if probe["error"] == "fetch_failed":
-                    log.error(
-                        f"Error checking financials for {ticker}.NS: "
-                        f"{probe.get('exception')}"
+                related_headline = f"Policy tailwinds in the {sector} segment."
+                name_lower = name.lower()
+                for item in brief_data.get(sector, []):
+                    if name_lower in item["title"].lower():
+                        related_headline = item["title"]
+                        break
+
+                candidate_stock = {
+                    "ticker": ticker,
+                    "name": full_name,
+                    "price": f"{live_price:.2f}",
+                    "target": f"{target_price:.2f}",
+                    "growth_pct": f"{growth_pct_val:.1f}%",
+                    "catalyst": f"Auto-discovered via media radar. Catalyst: {related_headline}",
+                    "rating": rating,
+                    "revenue_growth": revenue_growth,
+                }
+
+                current_watchlist = watchlist[sector]
+                if len(current_watchlist) < 5:
+                    current_watchlist.append(candidate_stock)
+                    watchlisted_tickers.add(ticker)
+                    intake += 1
+                    log.info(
+                        f"ADDED: {ticker} to {sector} (Space available: {len(current_watchlist)}/5)"
+                    )
+                    rotations_log.append(
+                        f"Added {full_name} ({ticker}) to {sector}"
+                    )
+                    decisions.append(
+                        {
+                            "action": "added",
+                            "sector": sector,
+                            "stock": dict(candidate_stock),
+                        }
                     )
                     structured_emerging.setdefault(sector, []).append(
                         {
-                            "name": name,
+                            "name": full_name,
                             "ticker": ticker,
-                            "status": "Unresolved",
-                            "reason": f"Error parsing Yahoo Finance info: {probe.get('exception')}",
+                            "status": "Watchlisted",
+                            "reason": "Added to watchlist (new high-growth pick).",
+                            "qoq_growth": round(candidate_qoq_growth, 1),
                         }
                     )
-                    continue
+                else:
+                    sorted_watchlist = sorted(current_watchlist, key=_get_potential)
+                    weakest_stock = sorted_watchlist[0]
+                    weakest_potential = _get_potential(weakest_stock)
 
-                try:
-                    live_price = probe["live_price"]
-                    target_price = probe["target_price"]
-                    growth_pct_val = probe["growth_pct_val"]
-                    rating = probe["rating"]
-                    rev_growth_raw = probe["rev_growth_raw"]
-                    revenue_growth = probe["revenue_growth"]
-                    candidate_qoq_growth = probe["qoq_growth"]
-                    candidate_isin = probe["isin"]
-
-                    existing_entity = resolve_entity_by_isin(
-                        candidate_isin, entity_master
-                    )
-                    if existing_entity and existing_entity["ticker"] != ticker:
-                        log.info(
-                            f"Candidate {ticker} shares ISIN {candidate_isin} with "
-                            f"existing holding {existing_entity['ticker']} "
-                            f"({existing_entity['sector']}). Skipping as duplicate."
-                        )
-                        structured_emerging.setdefault(sector, []).append(
-                            {
-                                "name": full_name or name,
-                                "ticker": ticker,
-                                "status": "Watchlisted",
-                                "reason": (
-                                    f"Already tracked as {existing_entity['ticker']} "
-                                    f"in {existing_entity['sector']} "
-                                    f"(same ISIN {candidate_isin})."
-                                ),
-                            }
-                        )
-                        continue
-
-                    # Eligibility check:
-                    is_eligible = growth_pct_val > 0
-                    if rev_growth_raw is not None and rev_growth_raw < 0:
-                        is_eligible = False
-                    if candidate_qoq_growth < 15.0:
-                        is_eligible = False
-
-                    if not is_eligible:
-                        log.info(
-                            f"Candidate {ticker} did not meet positive growth criteria. Skipping."
-                        )
-                        reason_str = (
-                            "Negative target potential"
-                            if growth_pct_val <= 0
-                            else (
-                                f"Failed growth criteria (YoY revenue {revenue_growth})"
-                                if rev_growth_raw is not None and rev_growth_raw < 0
-                                else f"Failed QoQ growth threshold ({candidate_qoq_growth:.1f}% < 15%)"
-                            )
-                        )
-                        structured_emerging.setdefault(sector, []).append(
-                            {
-                                "name": full_name or name,
-                                "ticker": ticker,
-                                "status": "Growth Divergence",
-                                "reason": reason_str,
-                            }
-                        )
-                        continue
-
-                    related_headline = f"Policy tailwinds in the {sector} segment."
-                    name_lower = name.lower()
-                    for item in brief_data.get(sector, []):
-                        if name_lower in item["title"].lower():
-                            related_headline = item["title"]
-                            break
-
-                    candidate_stock = {
-                        "ticker": ticker,
-                        "name": full_name,
-                        "price": f"{live_price:.2f}",
-                        "target": f"{target_price:.2f}",
-                        "growth_pct": f"{growth_pct_val:.1f}%",
-                        "catalyst": f"Auto-discovered via media radar. Catalyst: {related_headline}",
-                        "rating": rating,
-                        "revenue_growth": revenue_growth,
-                    }
-
-                    current_watchlist = watchlist[sector]
-                    if len(current_watchlist) < 5:
-                        current_watchlist.append(candidate_stock)
+                    if growth_pct_val > weakest_potential:
+                        watchlist[sector] = [
+                            x
+                            for x in current_watchlist
+                            if x["ticker"] != weakest_stock["ticker"]
+                        ]
+                        watchlist[sector].append(candidate_stock)
+                        watchlisted_tickers.remove(weakest_stock["ticker"])
                         watchlisted_tickers.add(ticker)
                         intake += 1
                         log.info(
-                            f"ADDED: {ticker} to {sector} (Space available: {len(current_watchlist)}/5)"
+                            f"ROTATED: Replaced {weakest_stock['ticker']} with {ticker}"
                         )
                         rotations_log.append(
-                            f"Added {full_name} ({ticker}) to {sector}"
+                            f"Rotated {weakest_stock['name']} out for {full_name} in {sector}"
                         )
                         decisions.append(
                             {
-                                "action": "added",
+                                "action": "rotated_in",
                                 "sector": sector,
                                 "stock": dict(candidate_stock),
                             }
@@ -526,71 +565,34 @@ def auto_curate_watchlist(brief_data, watchlist, screened_candidates=None):
                                 "name": full_name,
                                 "ticker": ticker,
                                 "status": "Watchlisted",
-                                "reason": "Added to watchlist (new high-growth pick).",
+                                "reason": f"Rotated into watchlist replacing {weakest_stock['ticker']}.",
                                 "qoq_growth": round(candidate_qoq_growth, 1),
                             }
                         )
                     else:
-                        sorted_watchlist = sorted(current_watchlist, key=_get_potential)
-                        weakest_stock = sorted_watchlist[0]
-                        weakest_potential = _get_potential(weakest_stock)
+                        log.info(
+                            f"Candidate {ticker} (Upside: {growth_pct_val:.1f}%) did not outperform the weakest watchlist pick {weakest_stock['ticker']} (Upside: {weakest_potential:.1f}%). Skipping rotation."
+                        )
+                        structured_emerging.setdefault(sector, []).append(
+                            {
+                                "name": full_name,
+                                "ticker": ticker,
+                                "status": "Pipeline",
+                                "reason": f"Pipeline candidate (Upside {growth_pct_val:.1f}% vs weakest watchlisted {weakest_potential:.1f}%).",
+                                "qoq_growth": round(candidate_qoq_growth, 1),
+                            }
+                        )
 
-                        if growth_pct_val > weakest_potential:
-                            watchlist[sector] = [
-                                x
-                                for x in current_watchlist
-                                if x["ticker"] != weakest_stock["ticker"]
-                            ]
-                            watchlist[sector].append(candidate_stock)
-                            watchlisted_tickers.remove(weakest_stock["ticker"])
-                            watchlisted_tickers.add(ticker)
-                            intake += 1
-                            log.info(
-                                f"ROTATED: Replaced {weakest_stock['ticker']} with {ticker}"
-                            )
-                            rotations_log.append(
-                                f"Rotated {weakest_stock['name']} out for {full_name} in {sector}"
-                            )
-                            decisions.append(
-                                {
-                                    "action": "rotated_in",
-                                    "sector": sector,
-                                    "stock": dict(candidate_stock),
-                                }
-                            )
-                            structured_emerging.setdefault(sector, []).append(
-                                {
-                                    "name": full_name,
-                                    "ticker": ticker,
-                                    "status": "Watchlisted",
-                                    "reason": f"Rotated into watchlist replacing {weakest_stock['ticker']}.",
-                                    "qoq_growth": round(candidate_qoq_growth, 1),
-                                }
-                            )
-                        else:
-                            log.info(
-                                f"Candidate {ticker} (Upside: {growth_pct_val:.1f}%) did not outperform the weakest watchlist pick {weakest_stock['ticker']} (Upside: {weakest_potential:.1f}%). Skipping rotation."
-                            )
-                            structured_emerging.setdefault(sector, []).append(
-                                {
-                                    "name": full_name,
-                                    "ticker": ticker,
-                                    "status": "Pipeline",
-                                    "reason": f"Pipeline candidate (Upside {growth_pct_val:.1f}% vs weakest watchlisted {weakest_potential:.1f}%).",
-                                    "qoq_growth": round(candidate_qoq_growth, 1),
-                                }
-                            )
-
-                except Exception as e:
-                    log.error(f"Error checking financials for {ticker}.NS: {e}")
-                    structured_emerging.setdefault(sector, []).append(
-                        {
-                            "name": name,
-                            "ticker": ticker,
-                            "status": "Unresolved",
-                            "reason": f"Error parsing Yahoo Finance info: {str(e)}",
-                        }
-                    )
+            except Exception as e:
+                log.error(f"Error checking financials for {ticker}.NS: {e}")
+                structured_emerging.setdefault(sector, []).append(
+                    {
+                        "name": name,
+                        "ticker": ticker,
+                        "status": "Unresolved",
+                        "reason": f"Error parsing Yahoo Finance info: {str(e)}",
+                    }
+                )
 
     if rotations_log:
         save_watchlist(watchlist)

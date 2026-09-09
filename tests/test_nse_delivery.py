@@ -186,17 +186,6 @@ def test_apply_survives_junk_watchlists():
     assert nd.apply_delivery({"S": [None, "x"]}, {"X": {}}) == 0
 
 
-def test_the_model_declares_the_delivery_fields():
-    """Anything absent from CompanyFinancials is dropped on coercion, so the
-    scorer would read None no matter what apply_delivery attached. This
-    pipeline has shipped that exact bug for turnover and the 52-week range."""
-    from models.core import CompanyFinancials
-
-    fields = CompanyFinancials.model_fields
-    for name in ("deliv_pct", "delivery_band", "turnover_cr_last"):
-        assert name in fields, f"{name} would be silently dropped on coercion"
-
-
 def test_turnover_last_is_named_apart_from_advt():
     """advt_cr is a multi-session average; this is one session. Conflating
     them would make the dashboard's own numbers disagree with each other."""
@@ -254,3 +243,32 @@ def test_the_segment_is_stamped_and_declared():
     assert sc["delivery_band"] == "trade-to-trade"
     # Absent from the model means dropped on coercion, whatever we attach.
     assert "series" in CompanyFinancials.model_fields
+
+
+def test_every_field_apply_delivery_writes_is_declared_on_the_model():
+    """The coercion trap this module's NOTE warns about, enforced.
+
+    models/core.CompanyFinancials drops any key it does not declare, silently
+    — the feature then reports None while looking like it works. This repo has
+    shipped that bug twice (turnover, the 52-week range), so the agreement
+    between writer and model is pinned rather than left to a comment.
+    """
+    from models.core import CompanyFinancials
+
+    watchlist = {"sec": [{"ticker": "ACME", "screener": {}}]}
+    delivery = {
+        "ACME": {"deliv_pct": 12.5, "turnover_cr": 8.0, "trades": 100, "series": "EQ"}
+    }
+    assert nd.apply_delivery(watchlist, delivery) == 1
+
+    written = watchlist["sec"][0]["screener"]
+    declared = set(CompanyFinancials.model_fields)
+    missing = set(written) - declared
+    assert not missing, f"apply_delivery writes fields the model drops: {missing}"
+
+    # And the values survive a real coercion round-trip, not just the name check.
+    coerced = CompanyFinancials.model_validate(written)
+    assert coerced.deliv_pct == 12.5
+    assert coerced.turnover_cr_last == 8.0
+    assert coerced.delivery_band == "churn"
+    assert coerced.series == "EQ"
