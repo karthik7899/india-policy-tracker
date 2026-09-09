@@ -208,3 +208,22 @@ def test_turnover_last_is_named_apart_from_advt():
 @pytest.mark.parametrize("bad", [{"deliv_pct": "x"}, {}, None])
 def test_note_tolerates_bad_input(bad):
     assert nd.delivery_note(bad) is None or isinstance(nd.delivery_note(bad), str)
+
+
+def test_series_filter_can_be_widened_for_diagnostics():
+    """Six holdings were missing from an EQ-only read. Whether they are
+    BSE-only or simply trading under BE/BZ is answerable from the file, and
+    guessing between those two has different fixes."""
+    every = nd.parse_delivery_csv(CSV, series=None)
+    assert every["RELIANCE"]["series"] == "BE"  # last row wins when unfiltered
+    assert "NODELIV" in every
+
+    eq_only = nd.parse_delivery_csv(CSV)
+    assert eq_only["RELIANCE"]["series"] == "EQ"
+
+
+def test_the_default_is_still_eq_only():
+    """Widening by accident would merge BE/BZ liquidity into EQ and misstate
+    both."""
+    rows = nd.parse_delivery_csv(CSV)
+    assert all(r["series"] == "EQ" for r in rows.values())

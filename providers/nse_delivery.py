@@ -66,11 +66,16 @@ def url_for(day):
     return f"{BASE_URL}/sec_bhavdata_full_{day.strftime('%d%m%Y')}.csv"
 
 
-def parse_delivery_csv(text):
+def parse_delivery_csv(text, series="EQ"):
     """SYMBOL -> {deliv_pct, turnover_cr, trades}. Empty dict on any problem.
 
     Header names carry stray spaces in the wild — NSE's own files are
     inconsistent about it — so every key is normalised before lookup.
+
+    ``series=None`` keeps every series and records which one each row came
+    from. Only diagnostics use that: six holdings were missing from an EQ-only
+    read and the question of whether they are BSE-only or simply trading under
+    BE/BZ is answerable from the file itself rather than by guessing.
     """
     out = {}
     if not text:
@@ -84,7 +89,8 @@ def parse_delivery_csv(text):
             symbol = cleaned.get("SYMBOL", "").upper()
             # EQ only. The same symbol appears under other series (BE, BZ)
             # with different liquidity, and merging them would misstate both.
-            if not symbol or cleaned.get("SERIES", "") != "EQ":
+            row_series = cleaned.get("SERIES", "")
+            if not symbol or (series is not None and row_series != series):
                 continue
 
             turnover_lacs = to_float(cleaned.get("TURNOVER_LACS"))
@@ -101,6 +107,7 @@ def parse_delivery_csv(text):
                     else None
                 ),
                 "trades": int(to_float(cleaned.get("NO_OF_TRADES")) or 0) or None,
+                "series": row_series,
             }
     except Exception as e:  # noqa: BLE001 - a malformed file is not a crash
         log.warning(f"Could not parse NSE delivery file: {e}")

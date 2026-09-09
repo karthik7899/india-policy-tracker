@@ -20,6 +20,7 @@ Runs against a COPY of the committed master and writes nothing.
 """
 
 import asyncio
+import datetime
 import json
 import os
 import sys
@@ -69,6 +70,7 @@ async def probe_delivery(tickers):
         # Named, not counted: a BSE-only listing legitimately absent from an
         # NSE file is a different problem from a ticker we have spelled wrong.
         print(f"    NOT in the file     : {missing[:15]}")
+        await explain_missing(missing)
 
     # Does the parser actually populate the fields, or silently produce Nones?
     with_pct = [t for t in covered if rows[t].get("deliv_pct") is not None]
@@ -89,6 +91,43 @@ async def probe_delivery(tickers):
     print(f"\n    CHURN band ({len(churn)} holdings) — turnover flatters these:")
     for ticker in churn[:10]:
         print(f"      {ticker}: {nd.delivery_note(rows[ticker])}")
+
+
+async def explain_missing(missing):
+    """Why is each missing holding missing? Answered from the file, not guessed.
+
+    Three possibilities with different fixes: the symbol trades under a
+    non-EQ series (widen the filter), it is BSE-only (expected, no fix), or
+    the ticker is wrong in the watchlist (a data bug worth finding).
+    """
+    print("\n    WHY THEY ARE MISSING (re-read with no series filter):")
+    async with aiohttp.ClientSession() as session:
+        for offset in range(nd.MAX_LOOKBACK_DAYS + 1):
+            day = datetime.date.today() - datetime.timedelta(days=offset)
+            try:
+                async with session.get(
+                    nd.url_for(day), headers=nd.HEADERS, timeout=nd.REQUEST_TIMEOUT_S
+                ) as response:
+                    if response.status != 200:
+                        continue
+                    text = await response.text()
+            except Exception:  # noqa: BLE001
+                continue
+            everything = nd.parse_delivery_csv(text, series=None)
+            for ticker in missing:
+                row = everything.get(ticker)
+                if row:
+                    print(
+                        f"      {ticker:<12} present under SERIES={row['series']!r} "
+                        "— widen the filter, or accept the exclusion"
+                    )
+                else:
+                    print(
+                        f"      {ticker:<12} absent under EVERY series "
+                        "— BSE-only listing, or the watchlist ticker is wrong"
+                    )
+            return
+    print("      could not re-read the file")
 
 
 def probe_isin_merge():
