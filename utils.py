@@ -115,85 +115,92 @@ class TransientNetworkError(Exception):
     pass
 
 
-def retry_network(max_retries=3, base_delay=1.0):
+def retry_network_async(max_retries=3, base_delay=1.0):
     """
-    Decorator for retrying network operations with exponential backoff.
+    Decorator for retrying async network operations with exponential backoff.
     Retries only on transient network failures, not on parsing/logic errors.
     """
 
     def decorator(func):
-        if asyncio.iscoroutinefunction(func):
+        @functools.wraps(func)
+        async def wrapper(*args, **kwargs):
+            import aiohttp
+            import requests
 
-            @functools.wraps(func)
-            async def async_wrapper(*args, **kwargs):
-                import aiohttp
-                import requests
-
-                transient_exceptions = (
-                    TransientNetworkError,
-                    aiohttp.ClientConnectionError,
-                    aiohttp.ClientPayloadError,
-                    aiohttp.ServerDisconnectedError,
-                    asyncio.TimeoutError,
-                    requests.exceptions.ConnectionError,
-                    requests.exceptions.Timeout,
-                    requests.exceptions.ChunkedEncodingError,
-                )
-                retries = 0
-                while True:
-                    try:
-                        return await func(*args, **kwargs)
-                    except transient_exceptions as e:
-                        retries += 1
-                        if retries > max_retries:
-                            log.error(
-                                f"Async network operation failed after {max_retries} retries: {e}"
-                            )
-                            raise
-                        delay = base_delay * (2 ** (retries - 1))
-                        log.warning(
-                            f"Transient network error in {func.__name__}: {e}. Retrying in {delay}s (Attempt {retries}/{max_retries})"
+            transient_exceptions = (
+                TransientNetworkError,
+                aiohttp.ClientConnectionError,
+                aiohttp.ClientPayloadError,
+                aiohttp.ServerDisconnectedError,
+                asyncio.TimeoutError,
+                requests.exceptions.ConnectionError,
+                requests.exceptions.Timeout,
+                requests.exceptions.ChunkedEncodingError,
+            )
+            retries = 0
+            while True:
+                try:
+                    return await func(*args, **kwargs)
+                except transient_exceptions as e:
+                    retries += 1
+                    if retries > max_retries:
+                        log.error(
+                            f"Async network operation failed after {max_retries} retries: {e}"
                         )
-                        await asyncio.sleep(delay)
+                        raise
+                    delay = base_delay * (2 ** (retries - 1))
+                    log.warning(
+                        f"Transient network error in {func.__name__}: {e}. Retrying in {delay}s (Attempt {retries}/{max_retries})"
+                    )
+                    await asyncio.sleep(delay)
 
-            return async_wrapper
-        else:
-
-            @functools.wraps(func)
-            def sync_wrapper(*args, **kwargs):
-                import requests
-                import urllib3
-
-                transient_exceptions = (
-                    TransientNetworkError,
-                    requests.exceptions.ConnectionError,
-                    requests.exceptions.Timeout,
-                    requests.exceptions.ChunkedEncodingError,
-                    urllib3.exceptions.ProtocolError,
-                )
-                retries = 0
-                while True:
-                    try:
-                        return func(*args, **kwargs)
-                    except transient_exceptions as e:
-                        retries += 1
-                        if retries > max_retries:
-                            log.error(
-                                f"Sync network operation failed after {max_retries} retries: {e}"
-                            )
-                            raise
-                        delay = base_delay * (2 ** (retries - 1))
-                        log.warning(
-                            f"Transient network error in {func.__name__}: {e}. Retrying in {delay}s (Attempt {retries}/{max_retries})"
-                        )
-                        time.sleep(delay)
-
-            return sync_wrapper
+        return wrapper
 
     return decorator
 
 
-@retry_network(max_retries=3, base_delay=2.0)
+def retry_network(max_retries=3, base_delay=1.0):
+    """
+    Decorator for retrying sync network operations with exponential backoff.
+    Retries only on transient network failures, not on parsing/logic errors.
+    """
+
+    def decorator(func):
+        @functools.wraps(func)
+        def sync_wrapper(*args, **kwargs):
+            import requests
+            import urllib3
+
+            transient_exceptions = (
+                TransientNetworkError,
+                requests.exceptions.ConnectionError,
+                requests.exceptions.Timeout,
+                requests.exceptions.ChunkedEncodingError,
+                urllib3.exceptions.ProtocolError,
+            )
+            retries = 0
+            while True:
+                try:
+                    return func(*args, **kwargs)
+                except transient_exceptions as e:
+                    retries += 1
+                    if retries > max_retries:
+                        log.error(
+                            f"Sync network operation failed after {max_retries} retries: {e}"
+                        )
+                        raise
+                    delay = base_delay * (2 ** (retries - 1))
+                    log.warning(
+                        f"Transient network error in {func.__name__}: {e}. Retrying in {delay}s (Attempt {retries}/{max_retries})"
+                    )
+                    time.sleep(delay)
+
+        return sync_wrapper
+
+    return decorator
+
+
+@retry_network_async(max_retries=3, base_delay=2.0)
 async def fetch_text_async(session, url, headers=None, timeout=15):
     async with session.get(url, headers=headers, timeout=timeout) as response:
         if response.status in (408, 429, 500, 502, 503, 504):

@@ -3,7 +3,11 @@ import asyncio
 from bs4 import BeautifulSoup
 from logger import log
 from analysis.parsing import extract_row_values, calculate_trend, calculate_growth
-from utils import TransientNetworkError, fetch_text_async, retry_network
+from utils import (
+    TransientNetworkError,
+    fetch_text_async,
+    retry_network_async,
+)
 
 # The pledge row matched nothing on the first live run — 0 of 69 holdings —
 # and from the build sandbox Screener refuses connections, so the real row
@@ -345,7 +349,7 @@ _PEERS_MAX_RETRIES = 2
 _PEERS_BASE_DELAY = 2.0
 
 
-@retry_network(max_retries=_PEERS_MAX_RETRIES, base_delay=_PEERS_BASE_DELAY)
+@retry_network_async(max_retries=_PEERS_MAX_RETRIES, base_delay=_PEERS_BASE_DELAY)
 async def _fetch_peers_once(session, url, headers):
     """One peers request. Raises TransientNetworkError so the decorator retries.
 
