@@ -123,6 +123,12 @@ def parse_delivery_csv(text, series=READ_SERIES):
             # reported. to_float gives None, which stays None: "not reported"
             # and "zero delivery" are different facts.
             deliv_pct = to_float(cleaned.get("DELIV_PER"))
+            # Same rule as DELIV_PER above, and the reason this is not
+            # ``int(x or 0) or None``: that idiom maps a reported zero onto
+            # None, so a security that genuinely did not trade becomes
+            # indistinguishable from one whose count NSE omitted. A suspended
+            # or untraded scrip is exactly the case worth telling apart.
+            trades = to_float(cleaned.get("NO_OF_TRADES"))
 
             out[symbol] = {
                 "deliv_pct": round(deliv_pct, 2) if deliv_pct is not None else None,
@@ -131,7 +137,7 @@ def parse_delivery_csv(text, series=READ_SERIES):
                     if turnover_lacs is not None
                     else None
                 ),
-                "trades": int(to_float(cleaned.get("NO_OF_TRADES")) or 0) or None,
+                "trades": int(trades) if trades is not None else None,
                 "series": row_series,
             }
     except Exception as e:  # noqa: BLE001 - a malformed file is not a crash

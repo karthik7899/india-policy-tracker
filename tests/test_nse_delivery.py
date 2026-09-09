@@ -272,3 +272,30 @@ def test_every_field_apply_delivery_writes_is_declared_on_the_model():
     assert coerced.turnover_cr_last == 8.0
     assert coerced.delivery_band == "churn"
     assert coerced.series == "EQ"
+
+
+def test_a_reported_zero_trade_count_is_not_read_as_unreported():
+    """NO_OF_TRADES follows the same rule DELIV_PER does: "not reported" and
+    "reported as zero" are different facts.
+
+    The idiom this replaced — ``int(x or 0) or None`` — mapped a genuine zero
+    onto None, so a suspended or untraded scrip became indistinguishable from
+    one whose count NSE simply omitted. That is precisely the case worth
+    telling apart: a holding with zero trades is a liquidity finding, while a
+    missing field is a gap in the feed.
+    """
+    csv = (
+        "SYMBOL,SERIES,TURNOVER_LACS,DELIV_PER,NO_OF_TRADES\n"
+        "TRADED,EQ,100,55,1500\n"
+        "UNTRADED,EQ,0,-,0\n"
+        "OMITTED,EQ,0,-,-\n"
+        "BLANK,EQ,0,-,\n"
+    )
+    rows = nd.parse_delivery_csv(csv)
+
+    assert rows["TRADED"]["trades"] == 1500
+    # The distinction: a real zero survives as 0, not as None.
+    assert rows["UNTRADED"]["trades"] == 0
+    assert rows["UNTRADED"]["trades"] is not None
+    assert rows["OMITTED"]["trades"] is None
+    assert rows["BLANK"]["trades"] is None
