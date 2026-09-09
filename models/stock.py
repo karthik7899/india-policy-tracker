@@ -16,9 +16,8 @@ entry instead of exploding mid-pipeline.
 """
 
 from typing import Any, Dict, Optional
-from typing_extensions import Annotated
 
-from pydantic import BaseModel, ConfigDict, field_validator, BeforeValidator
+from pydantic import BaseModel, ConfigDict, field_validator
 
 from utils import to_float
 
@@ -41,19 +40,36 @@ class Stock(BaseModel):
     catalyst: str = ""
     rating: str = "N/A"
 
-    price: Annotated[Optional[float], BeforeValidator(to_float)] = None
-    target: Annotated[Optional[float], BeforeValidator(to_float)] = None
-    target_median: Annotated[Optional[float], BeforeValidator(to_float)] = None
-    target_high: Annotated[Optional[float], BeforeValidator(to_float)] = None
-    target_low: Annotated[Optional[float], BeforeValidator(to_float)] = None
+    price: Optional[float] = None
+    target: Optional[float] = None
+    target_median: Optional[float] = None
+    target_high: Optional[float] = None
+    target_low: Optional[float] = None
 
-    growth_pct: Annotated[Optional[float], BeforeValidator(to_float)] = None
-    revenue_growth: Annotated[Optional[float], BeforeValidator(to_float)] = None
-    earnings_growth: Annotated[Optional[float], BeforeValidator(to_float)] = None
+    growth_pct: Optional[float] = None
+    revenue_growth: Optional[float] = None
+    earnings_growth: Optional[float] = None
 
     analyst_count: Optional[int] = None
-    rec_score: Annotated[Optional[float], BeforeValidator(to_float)] = None
-    fundamental_value: Annotated[Optional[float], BeforeValidator(to_float)] = None
+    rec_score: Optional[float] = None
+    fundamental_value: Optional[float] = None
+
+    @field_validator(
+        "price",
+        "target",
+        "target_median",
+        "target_high",
+        "target_low",
+        "growth_pct",
+        "revenue_growth",
+        "earnings_growth",
+        "rec_score",
+        "fundamental_value",
+        mode="before",
+    )
+    @classmethod
+    def _coerce_float(cls, value):
+        return to_float(value)
 
     @field_validator("analyst_count", mode="before")
     @classmethod
