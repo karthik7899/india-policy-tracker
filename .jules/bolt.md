@@ -36,9 +36,11 @@ banner naming what superseded it.
 **Learning:** For high-performance HTML tag stripping in hot loops (e.g., RSS feed parsing), `BeautifulSoup` introduces significant overhead (taking ~1.8s for 10k parses vs ~0.05s for regex). `BeautifulSoup` should be avoided for simple text extraction where full DOM parsing is unnecessary.
 **Action:** Use regex (`re.sub(r'<[^>]+>', '', text)`) and `html.unescape()` instead of `BeautifulSoup` for massive speedups (50x-100x) when merely stripping tags from strings like RSS titles and summaries.
 
-## 2026-06-25 - Async Ticker Resolution Overhead
-**Learning:** Found an anti-pattern in `scrape_pib_pli_approvals_async` where synchronous `resolve_ticker_from_name` calls were placed inside a loop iterating over candidate competitors, causing event-loop blocking and degrading scraping performance.
-**Action:** When gathering data asynchronously, ensure auxiliary lookups (like ticker resolution) within candidate loops use async HTTP libraries and are gathered concurrently with `asyncio.gather` to preserve the benefits of asynchronous IO.
+## 2026-06-17 / 2026-06-25 - Sequential IO inside async loops
+**Recorded twice**, for two call sites, with the same conclusion.
+
+**Learning:** Synchronous network calls (`requests.get`) inside a loop block the event loop even when the enclosing function is `async`, so the code reads as concurrent and behaves as serial. Measured at ~1.9s vs ~0.27s for ten calls. Seen in ticker resolution generally, and specifically in `scrape_pib_pli_approvals_async`, where `resolve_ticker_from_name` was called synchronously per candidate competitor.
+**Action:** Pre-gather a unique list of targets, use `aiohttp` rather than `requests`, and run them with `asyncio.gather` instead of awaiting one at a time. Applies to auxiliary lookups inside candidate loops too, not just the obvious top-level fetches.
 
 ## 2026-06-25 - Pre-flattening Nested List Checks
 **Learning:** Checking for ticker existence in a dictionary of lists (like `watchlist`) within a loop causes unnecessary O(N) traversal.
@@ -52,25 +54,20 @@ banner naming what superseded it.
 **Learning:** When using `ThreadPoolExecutor` to fetch Yahoo Finance `info` concurrently for multiple tickers (e.g., in `analysis/growth.py`), creating a new underlying HTTP connection per thread incurs high TCP/SSL handshake overhead and increases the likelihood of hitting rate limits. `requests.Session` is thread-safe and pooling works across threads.
 **Action:** Instantiate a single `requests.Session()` before launching the thread pool, and pass this shared session to the worker threads (and ultimately to `yfinance`) to pool connections across concurrent fetches.
 
-## 2026-06-19 - Synchronous HTTP Request Bottleneck in Watchlist Curation
-**Learning:** Found a performance bottleneck in `metrics.py` where `auto_curate_watchlist` was making multiple sequential `requests.get()` calls to Screener.in and Yahoo Finance during loop iterations, causing severe TCP/SSL handshake overhead.
-**Action:** When performing multiple synchronous HTTP requests in a loop, always utilize `requests.Session()` to enable connection pooling.
+## 2026-06-14 → 2026-06-19 - Use requests.Session for synchronous HTTP in loops
+**Rediscovered independently six times** (2024-06-16, 2024-06-17, 2024-10-24,
+2026-06-14, 2026-06-18, 2026-06-19) before anyone noticed it was already
+written down. The repetition is kept as a count rather than as six entries,
+because the fact that it happened six times says something the sixth copy did
+not: this file was being appended to and not read.
 
-## 2026-06-18 - Connection Pooling for Synchronous HTTP Requests
-**Learning:** In a mixed codebase (using `aiohttp` and `requests`), running multiple synchronous HTTP requests sequentially without connection pooling (e.g. inside a loop using `requests.get`) creates a significant performance overhead due to repeated TCP/SSL handshakes.
-**Action:** Always instantiate a `requests.Session()` object when making multiple contiguous, synchronous HTTP requests to reuse the underlying connection.
+**Learning:** Multiple synchronous HTTP requests issued sequentially without connection pooling incur repeated TCP/SSL handshake overhead. Observed in `metrics.py` (`auto_curate_watchlist`, doing ticker resolution and Screener.in lookups in a loop) and against `finance.yahoo.com` and `screener.in` generally, including in mixed codebases that already use `aiohttp` elsewhere.
+**Action:** Instantiate one `requests.Session()` outside the loop and reuse it, so the underlying TCP connection is pooled across requests.
+**Does NOT apply to `yf.Ticker`** — see the 2026-07-02 correction above.
 
 ## 2026-06-17 - Large Function Refactoring Verification
 **Learning:** When refactoring exceptionally large functions that span multiple output truncations, estimating line numbers for replacement blocks often leads to errors and unverified logic assumptions.
 **Action:** Next time, extract helper functions iteratively or use smaller `sed` window commands (e.g., 20-30 lines) to fully map the function boundaries before attempting any large scale code replacement.
-
-## 2026-06-17 - Asynchronous Ticker Resolution Optimization
-**Learning:** Sequential synchronous network calls (`requests.get`) inside loops, even when wrapped in a larger async function, cause significant event-loop blocking and performance degradation. Converting these calls to use `aiohttp.ClientSession` and gathering them concurrently via `asyncio.gather` yields massive speedups (from ~1.9s to ~0.27s for 10 sequential calls).
-**Action:** When refactoring functions that perform HTTP requests inside loops to be asynchronous, pre-gather a unique list of targets and execute all requests concurrently using `asyncio.gather` rather than awaiting them one-by-one inside a loop.
-
-## 2026-06-14 - Python Connection Pooling
-**Learning:** Found an anti-pattern where multiple synchronous HTTP requests were being made sequentially without using connection pooling, incurring significant TCP/SSL handshake overhead for domains like `finance.yahoo.com` and `screener.in`.
-**Action:** When working with multiple synchronous HTTP requests in Python scripts, specifically when repeatedly hitting the same APIs in loops, create a module-level or global `requests.Session()` to enable connection reuse.
 
 ## 2026-06-13 - Rate Limits with yfinance batching and concurrency
 > ⛔ **The closing clause of the Action below is RETRACTED by 2026-07-02** —
@@ -84,24 +81,14 @@ Actually, the reviewer pointed out that changing `ticker_obj.history(period="1d"
 
 ---
 
-The four entries below are dated 2024. Every other entry is 2026, and these
-describe `metrics.py` and `auto_curate_watchlist` work that belongs with the
-2026-06 cluster, so the years are very likely typos. Left as written rather
-than corrected, because guessing at a date is how a record stops being one —
-change them only if you know what they should say.
-
-## 2024-10-24 - Sync HTTP Connection Pooling
-**Learning:** Making multiple synchronous HTTP requests (e.g., in `metrics.py`) without a `requests.Session` causes redundant TCP/SSL handshake overhead.
-**Action:** Always use a `requests.Session()` for connection pooling when making multiple synchronous requests to the same domains, especially in loops like `auto_curate_watchlist`.
+The entry below is dated 2024, as were three of the six folded into the
+pooling entry above. Every other entry is 2026 and they describe the same
+`metrics.py` and `auto_curate_watchlist` work, so the years are very likely
+typos. Left as written rather than corrected, because guessing at a date is
+how a record stops being one — change them only if you know what they should
+say.
 
 ## 2024-06-17 - Watchlist Flattening Optimization
 **Learning:** Optimizing sub-string checks against dictionaries-of-lists can yield ~50% speedup by pre-flattening into tuples and hoisting `.lower()` calls out of loops. Replacing O(N) substring scans with O(1) hash maps is functionally breaking when substring matching is semantically required.
 **Action:** Identify loop invariants in hot paths (like case conversions) and pre-compute flattening operations over read-only data structures outside iteration boundaries.
 
-## 2024-06-17 - Connection Pooling for Repeated HTTP Requests
-**Learning:** Making multiple synchronous HTTP requests (e.g. evaluating candidates in `auto_curate_watchlist` which performs Screener and Yahoo Finance lookups) using `requests.get` incurs repeated TCP/SSL handshake overhead, which acts as a performance bottleneck specific to this kind of iterative loop architecture.
-**Action:** When a loop involves multiple synchronous `requests.get` calls, instantiate a `requests.Session()` outside the loop and reuse the session inside for connection pooling to avoid redundant handshake overhead.
-
-## 2024-06-16 - Synchronous Requests Bottleneck in Auto-Curation
-**Learning:** Found a performance bottleneck in `metrics.py` where `auto_curate_watchlist` was making multiple synchronous API calls using `requests.get()` inside a loop (for both ticker resolution and Screener.in checks). This caused significant overhead due to repeated TCP connection setups and SSL handshakes.
-**Action:** Always instantiate a `requests.Session()` object when making multiple synchronous requests to the same or even different domains to benefit from connection pooling, which reuses the underlying TCP connections.
