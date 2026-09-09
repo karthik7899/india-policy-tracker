@@ -5,7 +5,9 @@ import sys
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from health import check_run_health, summarize_liquidity  # noqa: E402
+from unittest.mock import patch  # noqa: E402
+
+from health import check_run_health, log_run_health, summarize_liquidity  # noqa: E402
 
 
 def _watchlist(n, priced=None, with_screener=None):
@@ -134,3 +136,31 @@ def test_summary_survives_a_malformed_watchlist():
     """The health module must never be the reason a run fails."""
     assert summarize_liquidity({})["total"] == 0
     assert summarize_liquidity({"sec": [None, "junk"]})["total"] == 0
+
+
+# ---------------------------------------------------------------------------
+# log_run_health tests
+# ---------------------------------------------------------------------------
+
+
+@patch("health.log")
+def test_log_run_health_healthy(mock_log):
+    # Pass healthy data
+    ok = log_run_health(_healthy_data(), _watchlist(10))
+    assert ok is True
+    # Verify it logged the success message
+    mock_log.info.assert_any_call("Run health: all coverage checks passed.")
+
+
+@patch("health.log")
+def test_log_run_health_unhealthy(mock_log):
+    # Pass unhealthy data (e.g. empty watchlist)
+    ok = log_run_health(_healthy_data(), {})
+    assert ok is False
+    # Verify it logged the problems
+    mock_log.error.assert_any_call("Run health: watchlist is empty")
+    # Verify it logged the failing job message
+    mock_log.error.assert_any_call(
+        "Run health: briefing was delivered, but this run is degraded — "
+        "failing the job so the breakage is visible."
+    )
