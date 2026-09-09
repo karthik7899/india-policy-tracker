@@ -42,5 +42,28 @@ class TestLoadWatchlist(unittest.TestCase):
                 )
 
 
+class TestSaveWatchlist(unittest.TestCase):
+
+    @patch("utils.atomic_write_json")
+    def test_save_watchlist_success(self, mock_atomic):
+        watchlist = {"test": "data"}
+        result = config.save_watchlist(watchlist)
+        self.assertTrue(result)
+        mock_atomic.assert_called_once()
+        args, _ = mock_atomic.call_args
+        self.assertEqual(args[0], watchlist)
+        self.assertTrue(args[1].endswith("watchlist.json"))
+
+    @patch("utils.atomic_write_json", side_effect=OSError("Disk full"))
+    def test_save_watchlist_oserror(self, mock_atomic):
+        watchlist = {"test": "data"}
+        result = config.save_watchlist(watchlist)
+        self.assertFalse(result)
+        mock_atomic.assert_called_once()
+        args, _ = mock_atomic.call_args
+        self.assertEqual(args[0], watchlist)
+        self.assertTrue(args[1].endswith("watchlist.json"))
+
+
 if __name__ == "__main__":
     unittest.main()
