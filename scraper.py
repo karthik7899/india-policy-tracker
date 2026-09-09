@@ -417,8 +417,41 @@ async def fetch_advanced_rss_feeds_async(session, watchlist):
     return list(unique_agreements)[:10], list(unique_launches)[:10]
 
 
-async def fetch_exchange_filings_async(session, watchlist):
-    """Corporate filings, primary source first.
+def holding_names(watchlist):
+    """Display names of everything we hold.
+
+    Both exchange providers set ``company`` to the watchlist name when they
+    match a holding, so an exact hit here means the filing is about a stock
+    in the book. That is the only holdings signal that survives the merge —
+    each provider sorts its own output holdings-first, but that ordering is
+    invisible once the lists are concatenated.
+    """
+    return {
+        s.get("name")
+        for stocks in (watchlist or {}).values()
+        for s in (stocks or [])
+        if isinstance(s, dict) and s.get("name")
+    }
+
+
+def _interleave(*sources):
+    """Round-robin across sources, preserving each one's internal order.
+
+    Concatenation is what starved BSE: NSE alone returns hundreds of records,
+    so `nse + bse` followed by a ten-row cap meant BSE never reached the
+    section at all. Measured in production on 2026-09-09 — 40 filings, every
+    one from NSE, on a pipeline where the BSE provider was working fine.
+    """
+    from itertools import zip_longest
+
+    out = []
+    for group in zip_longest(*sources):
+        out.extend(item for item in group if item is not None)
+    return out
+
+
+async def fetch_exchange_filings_async(session, watchlist, cap=10):
+    """Corporate filings from both exchanges and the press.
 
     The exchange APIs give the filing itself — exact identifier, the
     company's own subject line, the attached PDF. The news search below is
@@ -426,11 +459,15 @@ async def fetch_exchange_filings_async(session, watchlist):
     exchange can refuse a cloud IP on any given day: a block must degrade the
     section, not empty it.
 
-    All three are merged rather than either/or. They surface different things
-    — an exchange publishes filings no one wrote about, the press covers them
-    under a plainer headline, and BSE carries listings NSE does not — and
-    exchange records are placed first so the dedupe below keeps the primary
-    version of anything reported twice.
+    Ordering decides the whole result, because a full trading day produces
+    hundreds of filings for a section that shows ten. Two rules, in order:
+
+      1. Holdings before everything else. A filing about a stock we own is
+         worth more than one about a company we have never heard of, whoever
+         published it.
+      2. Within each tier, round-robin across sources rather than
+         concatenating. Concatenation lets whichever source answers first
+         consume every slot — which is exactly what happened to BSE.
     """
     log.info("Fetching NSE/BSE corporate filings (Async)...")
 
@@ -443,7 +480,27 @@ async def fetch_exchange_filings_async(session, watchlist):
         asyncio.to_thread(bse_fetch_filings, watchlist),
         _fetch_filing_news_async(session, watchlist),
     )
-    exchange_filings = nse_filings + bse_filings
+
+    held = holding_names(watchlist)
+
+    def split(filings):
+        ours = [f for f in filings if f.get("company") in held]
+        theirs = [f for f in filings if f.get("company") not in held]
+        return ours, theirs
+
+    nse_held, nse_rest = split(nse_filings)
+    bse_held, bse_rest = split(bse_filings)
+    news_held, news_rest = split(news_filings)
+
+    # Exchanges lead each tier: they carry the filing itself, where the news
+    # path carries somebody's account of it and identifies the company by a
+    # fuzzy title match.
+    ordered = (
+        _interleave(nse_held, bse_held)
+        + news_held
+        + _interleave(nse_rest, bse_rest)
+        + news_rest
+    )
 
     # Keyed on (company, filing), not filing alone. Two companies file the
     # same subject constantly — NSE stamps a coarse category on many records
@@ -453,17 +510,20 @@ async def fetch_exchange_filings_async(session, watchlist):
     # setdefault, not a dict comprehension: the comprehension idiom used
     # elsewhere in this file keeps the LAST record for a duplicate key, which
     # here would hand every reported filing back to the weaker news version.
-    # First wins, and NSE goes first.
     unique = {}
-    for filing in exchange_filings + news_filings:
+    for filing in ordered:
         unique.setdefault((filing["company"], filing["filing"]), filing)
-    unique_filings = unique.values()
+    result = list(unique.values())[:cap]
+
+    kept = {}
+    for f in result:
+        kept[f.get("source", "?")] = kept.get(f.get("source", "?"), 0) + 1
     log.info(
         f"Corporate filings: {len(nse_filings)} from NSE, {len(bse_filings)} "
-        f"from BSE, {len(news_filings)} from news, {len(list(unique_filings))} "
-        "after dedupe."
+        f"from BSE, {len(news_filings)} from news; kept {len(result)} — {kept}. "
+        f"{len(nse_held) + len(bse_held) + len(news_held)} concerned holdings."
     )
-    return list(unique_filings)[:10]
+    return result
 
 
 async def _fetch_filing_news_async(session, watchlist):

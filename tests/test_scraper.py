@@ -307,3 +307,63 @@ def test_exchanges_outrank_news_for_the_cap():
     out = _run_filings(many_nse, many_news, many_bse)
     assert len(out) == 10
     assert all(f["source"] in ("NSE", "BSE") for f in out)
+
+
+# --- source starvation and holdings ranking -------------------------------
+#
+# Measured in production on 2026-09-09: dashboard_data.json carried 40
+# corporate filings, every single one from NSE, on a pipeline where the BSE
+# provider was working. Concatenating `nse + bse` and taking the first ten
+# meant NSE's hundreds of records consumed every slot. The section looked
+# healthy the whole time.
+
+
+def test_nse_cannot_starve_bse():
+    """The production bug. NSE returns hundreds of records a day; BSE must
+    still reach a ten-row section."""
+    many_nse = [_nse_filing(f"NSE {i}") for i in range(200)]
+    out = _run_filings(many_nse, [], [_bse_filing("BSE only")])
+    assert any(f["source"] == "BSE" for f in out), "BSE starved by NSE volume"
+
+
+def test_sources_alternate_within_a_tier():
+    out = _run_filings(
+        [_nse_filing(f"NSE {i}") for i in range(5)],
+        [],
+        [_bse_filing(f"BSE {i}") for i in range(5)],
+    )
+    assert [f["source"] for f in out[:4]] == ["NSE", "BSE", "NSE", "BSE"]
+
+
+def test_holdings_outrank_everything_else():
+    """A filing about a stock we own beats one about a company we have never
+    heard of, whichever exchange published it."""
+    import scraper
+
+    watchlist = {"Auto": [{"ticker": "TATAMOTORS", "name": "Tata Motors"}]}
+    ours = dict(_bse_filing("Order received"), company="Tata Motors")
+    theirs = [_nse_filing(f"NSE {i}") for i in range(20)]
+
+    async def fake_news(session, wl):
+        return []
+
+    import asyncio
+    from unittest.mock import patch as _patch
+
+    with _patch.object(
+        scraper, "nse_fetch_filings", return_value=theirs
+    ), _patch.object(scraper, "bse_fetch_filings", return_value=[ours]), _patch.object(
+        scraper, "_fetch_filing_news_async", fake_news
+    ):
+        out = asyncio.run(scraper.fetch_exchange_filings_async(None, watchlist))
+
+    assert out[0]["company"] == "Tata Motors"
+
+
+def test_holding_names_reads_the_watchlist():
+    import scraper
+
+    assert scraper.holding_names(
+        {"A": [{"name": "Tata Motors"}, {"ticker": "X"}], "B": [None, {"name": "Infy"}]}
+    ) == {"Tata Motors", "Infy"}
+    assert scraper.holding_names(None) == set()
