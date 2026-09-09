@@ -2,12 +2,16 @@
 
 import os
 import sys
+from unittest.mock import patch
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from unittest.mock import patch  # noqa: E402
-
-from health import check_run_health, log_run_health, summarize_liquidity  # noqa: E402
+from health import (  # noqa: E402
+    check_run_health,
+    log_liquidity_coverage,
+    log_run_health,
+    summarize_liquidity,
+)
 
 
 def _watchlist(n, priced=None, with_screener=None):
@@ -163,4 +167,30 @@ def test_log_run_health_unhealthy(mock_log):
     mock_log.error.assert_any_call(
         "Run health: briefing was delivered, but this run is degraded — "
         "failing the job so the breakage is visible."
+    )
+
+
+# ---------------------------------------------------------------------------
+# log_liquidity_coverage tests
+# ---------------------------------------------------------------------------
+
+
+@patch("health.log")
+def test_log_liquidity_coverage_logs_summary(mock_log):
+    log_liquidity_coverage(
+        _with_liquidity(5, ["illiquid", "thin", "adequate", "liquid", None])
+    )
+    mock_log.info.assert_called_once_with(
+        "Liquidity: 4/5 holdings priced by turnover "
+        "(1 illiquid, 1 thin, 1 adequate, 1 liquid, 1 unmeasured)."
+    )
+
+
+@patch("health.summarize_liquidity")
+@patch("health.log")
+def test_log_liquidity_coverage_handles_exceptions(mock_log, mock_summarize):
+    mock_summarize.side_effect = Exception("test error")
+    log_liquidity_coverage({})
+    mock_log.warning.assert_called_once_with(
+        "Liquidity coverage summary failed safely: Exception('test error')"
     )
