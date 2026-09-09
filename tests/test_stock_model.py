@@ -150,6 +150,7 @@ def test_normalize_watchlist_keeps_broken_records_raw():
 # to_wire_values formatting coverage
 # ---------------------------------------------------------------------------
 
+
 def test_to_wire_values_all_fields():
     stock = Stock(
         ticker="AAPL",
@@ -166,7 +167,7 @@ def test_to_wire_values_all_fields():
         earnings_growth=10.0,
         analyst_count=35,
         rec_score=1.2,
-        fundamental_value=160.0
+        fundamental_value=160.0,
     )
     wire = stock.to_wire_values()
 
