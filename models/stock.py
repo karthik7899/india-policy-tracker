@@ -65,12 +65,21 @@ class Stock(BaseModel):
         "earnings_growth",
         "rec_score",
         "fundamental_value",
-        "analyst_count",
         mode="before",
     )
     @classmethod
     def _coerce_float(cls, value):
         return to_float(value)
+
+    # Separate from _coerce_float because analyst_count is declared int, and
+    # pydantic refuses a float with a fractional part for an int field. The
+    # sources round-trip this value through floats, so "12.5" reaches us and
+    # has to truncate rather than fail the whole record.
+    @field_validator("analyst_count", mode="before")
+    @classmethod
+    def _coerce_int(cls, value):
+        as_float = to_float(value)
+        return None if as_float is None else int(as_float)
 
     @field_validator("rating", mode="before")
     @classmethod
