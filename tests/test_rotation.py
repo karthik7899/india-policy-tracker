@@ -1,3 +1,5 @@
+import time
+from unittest.mock import patch
 import unittest
 from analysis.rotation import detect_emerging_players
 
@@ -202,3 +204,99 @@ class TestIntakeCap(unittest.TestCase):
         statuses = [e["status"] for e in emerging["sec"]]
         self.assertEqual(statuses, ["Deferred"])
         self.assertIn("next run", emerging["sec"][0]["reason"])
+
+
+class TestCandidateProbeConcurrency(unittest.TestCase):
+    """From Jules's suggestion at analysis/rotation.py:194.
+
+    The mechanism was real but its rationale was not: auto_curate_watchlist is
+    called sequentially from run_pipeline with nothing else in flight, so the
+    blocking calls delayed nothing. The genuine cost is wall-clock, and the
+    genuine hazard is that this loop is stateful — the intake cap, the
+    watchlist membership set and the per-sector slot count all change as
+    candidates are admitted, so deciding concurrently would change WHICH
+    candidates get in.
+    """
+
+    def test_probes_run_concurrently(self):
+        import threading
+        import analysis.rotation as rot
+
+        live = 0
+        peak = 0
+        lock = threading.Lock()
+
+        def slow_probe(session, name, preresolved, isin_master, watchlisted=()):
+            nonlocal live, peak
+            with lock:
+                live += 1
+                peak = max(peak, live)
+            time.sleep(0.05)
+            with lock:
+                live -= 1
+            return {"ticker": None, "full_name": name, "error": "unresolved"}
+
+        watchlist = {"sec": [{"ticker": "OLD", "name": "Old", "growth_pct": "5%"}]}
+        screened = {
+            "sec": [
+                {"name": f"Cand {i}", "ticker": f"C{i}", "growth_pct": "50%"}
+                for i in range(4)
+            ]
+        }
+        with patch.object(rot, "_probe_candidate", slow_probe), patch.object(
+            rot, "save_watchlist", lambda *a, **k: None
+        ):
+            rot.auto_curate_watchlist({}, watchlist, screened_candidates=screened)
+
+        self.assertGreater(peak, 1, "candidate probes were still serialised")
+
+    def test_the_intake_cap_still_stops_the_network(self):
+        """The cap is why this loop is cheap: once reached, every remaining
+        candidate is deferred without a request. Prefetching everything would
+        have traded latency for load on Screener, which already returns 429s."""
+        import analysis.rotation as rot
+
+        probed = []
+
+        def counting_probe(session, name, preresolved, isin_master, watchlisted=()):
+            probed.append(name)
+            return {"ticker": None, "full_name": name, "error": "unresolved"}
+
+        # More candidates than one batch, so the second batch is reachable.
+        screened = {
+            "sec": [
+                {"name": f"Cand {i}", "ticker": f"C{i}", "growth_pct": "50%"}
+                for i in range(rot.PREFETCH_BATCH * 3)
+            ]
+        }
+        watchlist = {"sec": [{"ticker": "OLD", "name": "Old", "growth_pct": "5%"}]}
+
+        with patch.object(rot, "_probe_candidate", counting_probe), patch.object(
+            rot, "save_watchlist", lambda *a, **k: None
+        ):
+            rot.auto_curate_watchlist({}, watchlist, screened_candidates=screened)
+
+        # Every candidate here is unresolved, so intake never rises and all get
+        # probed — the point is that batching did not change the count.
+        self.assertEqual(len(probed), rot.PREFETCH_BATCH * 3)
+
+    def test_a_held_ticker_is_never_priced(self):
+        """Pinned separately from the existing test because batching the
+        resolve and the quote together silently broke it once already."""
+        import analysis.rotation as rot
+
+        priced = []
+
+        def fake_ticker(yahoo_ticker):
+            priced.append(yahoo_ticker)
+            raise AssertionError("must not price a held ticker")
+
+        watchlist = {"sec": [{"ticker": "HELD", "name": "Held", "growth_pct": "5%"}]}
+        screened = {"sec": [{"name": "Held Co", "ticker": "HELD", "growth_pct": "90%"}]}
+
+        with patch.object(rot, "get_cached_ticker", fake_ticker), patch.object(
+            rot, "save_watchlist", lambda *a, **k: None
+        ):
+            rot.auto_curate_watchlist({}, watchlist, screened_candidates=screened)
+
+        self.assertEqual(priced, [])

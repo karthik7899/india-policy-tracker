@@ -213,3 +213,38 @@ def test_to_wire_values_none_fields():
     assert wire["analyst_count"] is None
     assert wire["rec_score"] is None
     assert wire["fundamental_value"] is None
+
+
+def test_fractional_analyst_count_truncates_rather_than_failing():
+    """Regression, merged and caught the same day: analyst_count needs its own
+    validator because the field is declared int, and pydantic rejects a float
+    carrying a fractional part for an int field.
+
+    Folding it into the float validator looks like harmless deduplication and
+    passes every test that existed at the time, because none supplied a
+    fractional count. The cost only shows in production: normalize_stock_record
+    lets ValidationError propagate, so one odd analyst_count discards the whole
+    record rather than one field.
+
+    The validator also reads as dead code to a caller-counting scan — pydantic
+    holds the reference and calls it by registration, never by name.
+    """
+    assert (
+        Stock.model_validate({"ticker": "X", "analyst_count": 12.5}).analyst_count == 12
+    )
+    assert (
+        Stock.model_validate({"ticker": "X", "analyst_count": "12.5"}).analyst_count
+        == 12
+    )
+    # And the ordinary shapes still land where they did.
+    assert (
+        Stock.model_validate({"ticker": "X", "analyst_count": "12"}).analyst_count == 12
+    )
+    assert (
+        Stock.model_validate({"ticker": "X", "analyst_count": None}).analyst_count
+        is None
+    )
+    assert (
+        Stock.model_validate({"ticker": "X", "analyst_count": "N/A"}).analyst_count
+        is None
+    )

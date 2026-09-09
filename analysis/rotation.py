@@ -1,11 +1,12 @@
 import re
+from concurrent.futures import ThreadPoolExecutor
+
 from logger import log
-import requests
 from config import save_watchlist
 from entities import build_entity_master, resolve_entity_by_isin
 from providers.isin_master import load_isin_master
 from providers.yahoo import get_cached_ticker
-from utils import to_float
+from utils import thread_local_session, to_float
 from .parsing import resolve_ticker_from_name
 
 
@@ -111,6 +112,129 @@ def detect_emerging_players(brief_data, watchlist):
 # candidates are re-screened every run and simply arrive later.
 MAX_INTAKE_PER_RUN = 3
 
+# Candidates whose network lookups are issued together before the sequential
+# decision pass runs over them.
+#
+# Batched rather than prefetching the whole queue, because the intake cap is
+# the reason this loop is cheap: once it is reached, every remaining candidate
+# is deferred without a single request. Prefetching everything would trade a
+# latency win for a large increase in load on Screener, which already answers
+# this pipeline with 429s. Wasted lookups are bounded to at most one batch.
+PREFETCH_BATCH = 6
+
+
+def _screener_qoq_growth(session, ticker):
+    """Latest quarter-on-quarter sales growth from Screener, or 0.0.
+
+    Extracted so the whole candidate probe is one call the thread pool can
+    make. Behaviour is unchanged, including swallowing its own errors: a
+    missing Screener page means an unproven candidate, not a failed run.
+    """
+    try:
+        url = f"https://www.screener.in/company/{ticker}/consolidated/"
+        r = session.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=10)
+        if r.status_code != 200:
+            url = f"https://www.screener.in/company/{ticker}/"
+            r = session.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=10)
+        if r.status_code == 200:
+            qs_match = re.search(r'id="quarters"(.*?)(?:</section>)', r.text, re.DOTALL)
+            if qs_match:
+                row_match = re.search(r"Sales.*?</tr>", qs_match.group(1), re.DOTALL)
+                if row_match:
+                    vals = re.findall(
+                        r"<td[^>]*>\s*([\d,\.\-]+)\s*</td>", row_match.group(0)
+                    )
+                    if len(vals) >= 2:
+                        s1 = float(vals[-1].replace(",", ""))
+                        s2 = float(vals[-2].replace(",", ""))
+                        if s2 > 0:
+                            return ((s1 - s2) / s2) * 100
+    except Exception as e:
+        log.error(f"Error checking candidate QoQ growth on Screener: {e}")
+    return 0.0
+
+
+def _probe_candidate(name, preresolved, isin_master, watchlisted=()):
+    """Every network call for one candidate, and nothing that decides anything.
+
+    Split out so these can run concurrently. What stays OUT of here is the
+    point: the intake cap, the watchlist-membership check and the ISIN
+    duplicate check all depend on decisions made about EARLIER candidates in
+    the same run, so evaluating them concurrently would change which
+    candidates get admitted. This returns facts; the caller still decides in
+    order.
+    """
+    # Own session per thread: requests.Session is not thread-safe, and these
+    # run in a pool. See utils.thread_local_session.
+    session = thread_local_session()
+
+    probe = {"ticker": None, "full_name": name, "error": None}
+
+    if preresolved:
+        ticker, full_name = preresolved, name
+    else:
+        ticker, full_name = resolve_ticker_from_name(name, session=session)
+    if not ticker:
+        probe["error"] = "unresolved"
+        return probe
+
+    probe["ticker"] = ticker
+    probe["full_name"] = full_name or name
+    probe["isin"] = isin_master.get(ticker)
+
+    # Stop before the market-data call for something already held. The
+    # sequential version checked this between resolving and pricing, and a
+    # test pins that an existing holding costs zero quote requests — batching
+    # the two calls together quietly broke it. ``watchlisted`` is a snapshot:
+    # it only changes in the decision pass, which runs after this one, and the
+    # caller re-probes if a rotation frees the ticker in between.
+    if ticker in watchlisted:
+        probe["error"] = "watchlisted"
+        return probe
+
+    try:
+        # The pooled session is only for Screener/resolution calls; yfinance
+        # manages its own session (see providers/yahoo.py).
+        ticker_obj = get_cached_ticker(f"{ticker}.NS")
+        hist = ticker_obj.history(period="1d", timeout=10)
+        if hist.empty:
+            probe["error"] = "no_market_data"
+            return probe
+
+        live_price = float(hist["Close"].iloc[-1])
+        info = ticker_obj.info or {}
+
+        consensus_target = info.get("targetMeanPrice")
+        if consensus_target and float(consensus_target) > 0:
+            target_price = float(consensus_target)
+        else:
+            target_price = live_price * 1.25
+
+        rev_growth_raw = info.get("revenueGrowth")
+        probe.update(
+            {
+                "live_price": live_price,
+                "target_price": target_price,
+                "growth_pct_val": ((target_price - live_price) / live_price) * 100,
+                "rating": info.get("recommendationKey", "N/A")
+                .replace("_", " ")
+                .title(),
+                "rev_growth_raw": rev_growth_raw,
+                "revenue_growth": (
+                    f"{float(rev_growth_raw) * 100:.1f}%"
+                    if rev_growth_raw is not None
+                    else None
+                ),
+            }
+        )
+    except Exception as e:  # noqa: BLE001 - reported per candidate, not raised
+        probe["error"] = "fetch_failed"
+        probe["exception"] = str(e)
+        return probe
+
+    probe["qoq_growth"] = _screener_qoq_growth(session, ticker)
+    return probe
+
 
 def _get_potential(stock):
     # to_float handles every historical growth_pct format ("+23.0%", 23.0,
@@ -191,8 +315,34 @@ def auto_curate_watchlist(brief_data, watchlist, screened_candidates=None):
     queue.extend((s, n, t) for s, n, t, _ in screened_queue)
 
     intake = 0
-    with requests.Session() as session:
-        for sector, name, preresolved in queue:
+    # Batched: probe a handful of candidates concurrently, then decide over
+    # them in queue order. The decision pass is deliberately sequential —
+    # the intake cap, watchlisted_tickers and the per-sector slot count all
+    # change as candidates are admitted, so deciding concurrently would
+    # change WHICH candidates get in, which is a behaviour change dressed
+    # as a speed-up.
+    for offset in range(0, len(queue), PREFETCH_BATCH):
+        chunk = queue[offset : offset + PREFETCH_BATCH]
+
+        if intake >= MAX_INTAKE_PER_RUN:
+            # Cap already reached: defer the rest without a single request,
+            # exactly as the sequential version did.
+            probes = [None] * len(chunk)
+        else:
+            # Snapshot taken before the pool starts, so every probe in a
+            # batch sees the same membership.
+            snapshot = frozenset(watchlisted_tickers)
+            with ThreadPoolExecutor(
+                max_workers=min(PREFETCH_BATCH, len(chunk))
+            ) as pool:
+                probes = list(
+                    pool.map(
+                        lambda c: _probe_candidate(c[1], c[2], isin_master, snapshot),
+                        chunk,
+                    )
+                )
+
+        for (sector, name, preresolved), probe in zip(chunk, probes):
             if intake >= MAX_INTAKE_PER_RUN:
                 structured_emerging.setdefault(sector, []).append(
                     {
@@ -206,12 +356,12 @@ def auto_curate_watchlist(brief_data, watchlist, screened_candidates=None):
                     }
                 )
                 continue
+
             log.info(f"Evaluating candidate company: {name} in {sector}")
-            if preresolved:
-                ticker, full_name = preresolved, name
-            else:
-                ticker, full_name = resolve_ticker_from_name(name, session=session)
-            if not ticker:
+            ticker = probe["ticker"]
+            full_name = probe["full_name"]
+
+            if probe["error"] == "unresolved":
                 log.info(f"Could not resolve ticker for: {name}. Skipping.")
                 structured_emerging.setdefault(sector, []).append(
                     {
@@ -223,8 +373,12 @@ def auto_curate_watchlist(brief_data, watchlist, screened_candidates=None):
                 )
                 continue
 
-            already_watchlisted = ticker in watchlisted_tickers
-            if already_watchlisted:
+            if probe["error"] == "watchlisted" and ticker not in watchlisted_tickers:
+                # Rotated out earlier in this same batch, so it is a live
+                # candidate again and was never priced. Rare; probe now.
+                probe = _probe_candidate(name, ticker, isin_master, watchlisted_tickers)
+
+            if ticker in watchlisted_tickers:
                 log.info(f"Ticker {ticker} is already in watchlist. Skipping.")
                 structured_emerging.setdefault(sector, []).append(
                     {
@@ -236,79 +390,42 @@ def auto_curate_watchlist(brief_data, watchlist, screened_candidates=None):
                 )
                 continue
 
-            yahoo_ticker = f"{ticker}.NS"
-            try:
-                # The pooled session is only for Screener/resolution calls;
-                # yfinance manages its own session (see providers/yahoo.py).
-                ticker_obj = get_cached_ticker(yahoo_ticker)
-                hist = ticker_obj.history(period="1d", timeout=10)
-                if hist.empty:
-                    log.info(f"No market data for {yahoo_ticker}. Skipping candidate.")
-                    structured_emerging.setdefault(sector, []).append(
-                        {
-                            "name": full_name or name,
-                            "ticker": ticker,
-                            "status": "Unresolved",
-                            "reason": "BSE/NSE ticker resolved, but no market trading history found.",
-                        }
-                    )
-                    continue
-
-                live_price = float(hist["Close"].iloc[-1])
-                info = ticker_obj.info or {}
-
-                consensus_target = info.get("targetMeanPrice")
-                if consensus_target and float(consensus_target) > 0:
-                    target_price = float(consensus_target)
-                else:
-                    target_price = live_price * 1.25
-
-                growth_pct_val = ((target_price - live_price) / live_price) * 100
-                rating = info.get("recommendationKey", "N/A").replace("_", " ").title()
-
-                rev_growth_raw = info.get("revenueGrowth")
-                revenue_growth = (
-                    f"{float(rev_growth_raw) * 100:.1f}%"
-                    if rev_growth_raw is not None
-                    else None
+            if probe["error"] == "no_market_data":
+                log.info(f"No market data for {ticker}.NS. Skipping candidate.")
+                structured_emerging.setdefault(sector, []).append(
+                    {
+                        "name": full_name or name,
+                        "ticker": ticker,
+                        "status": "Unresolved",
+                        "reason": "BSE/NSE ticker resolved, but no market trading history found.",
+                    }
                 )
+                continue
 
-                # Fetch candidate QoQ growth from Screener (using pooled session)
-                candidate_qoq_growth = 0.0
-                # Candidate identity from the committed symbol→ISIN master
-                # — a Screener page-scan was tried and found nothing in
-                # production (run #73: 0/46).
-                candidate_isin = isin_master.get(ticker)
-                try:
-                    url = f"https://www.screener.in/company/{ticker}/consolidated/"
-                    r = session.get(
-                        url, headers={"User-Agent": "Mozilla/5.0"}, timeout=10
-                    )
-                    if r.status_code != 200:
-                        url = f"https://www.screener.in/company/{ticker}/"
-                        r = session.get(
-                            url, headers={"User-Agent": "Mozilla/5.0"}, timeout=10
-                        )
-                    if r.status_code == 200:
-                        html = r.text
-                        qs_match = re.search(
-                            r'id="quarters"(.*?)(?:</section>)', html, re.DOTALL
-                        )
-                        if qs_match:
-                            qs = qs_match.group(1)
-                            row_match = re.search(r"Sales.*?</tr>", qs, re.DOTALL)
-                            if row_match:
-                                vals = re.findall(
-                                    r"<td[^>]*>\s*([\d,\.\-]+)\s*</td>",
-                                    row_match.group(0),
-                                )
-                                if len(vals) >= 2:
-                                    s1 = float(vals[-1].replace(",", ""))
-                                    s2 = float(vals[-2].replace(",", ""))
-                                    if s2 > 0:
-                                        candidate_qoq_growth = ((s1 - s2) / s2) * 100
-                except Exception as e:
-                    log.error(f"Error checking candidate QoQ growth on Screener: {e}")
+            if probe["error"] == "fetch_failed":
+                log.error(
+                    f"Error checking financials for {ticker}.NS: "
+                    f"{probe.get('exception')}"
+                )
+                structured_emerging.setdefault(sector, []).append(
+                    {
+                        "name": name,
+                        "ticker": ticker,
+                        "status": "Unresolved",
+                        "reason": f"Error parsing Yahoo Finance info: {probe.get('exception')}",
+                    }
+                )
+                continue
+
+            try:
+                live_price = probe["live_price"]
+                target_price = probe["target_price"]
+                growth_pct_val = probe["growth_pct_val"]
+                rating = probe["rating"]
+                rev_growth_raw = probe["rev_growth_raw"]
+                revenue_growth = probe["revenue_growth"]
+                candidate_qoq_growth = probe["qoq_growth"]
+                candidate_isin = probe["isin"]
 
                 existing_entity = resolve_entity_by_isin(candidate_isin, entity_master)
                 if existing_entity and existing_entity["ticker"] != ticker:
@@ -405,7 +522,6 @@ def auto_curate_watchlist(brief_data, watchlist, screened_candidates=None):
                         }
                     )
                 else:
-
                     sorted_watchlist = sorted(current_watchlist, key=_get_potential)
                     weakest_stock = sorted_watchlist[0]
                     weakest_potential = _get_potential(weakest_stock)
@@ -457,7 +573,7 @@ def auto_curate_watchlist(brief_data, watchlist, screened_candidates=None):
                         )
 
             except Exception as e:
-                log.error(f"Error checking financials for {yahoo_ticker}: {e}")
+                log.error(f"Error checking financials for {ticker}.NS: {e}")
                 structured_emerging.setdefault(sector, []).append(
                     {
                         "name": name,

@@ -223,3 +223,37 @@ class TestBadgeAgreesWithSidecar:
             "coverage_count"
         ] == {"X": 2}
         assert build_display_payload({"coverage_count": "junk"})["coverage_count"] == {}
+
+    def test_no_coverage_still_clears_stale_sidecars(self, tmp_path):
+        """A run that produces no coverage at all must not leave yesterday's
+        sidecars behind — the drawer would render stale audit rows as if they
+        were this run's."""
+        from history import store
+
+        original = store.NEWS_DIR
+        store.NEWS_DIR = str(tmp_path / "news")
+        try:
+            os.makedirs(store.NEWS_DIR, exist_ok=True)
+            stale = os.path.join(store.NEWS_DIR, "OLDTICKER.json")
+            with open(stale, "w", encoding="utf-8") as f:
+                json.dump({"ticker": "OLDTICKER", "items": []}, f)
+
+            assert store.write_coverage_sidecars(None) == 0
+            assert not os.path.exists(stale)
+        finally:
+            store.NEWS_DIR = original
+
+    def test_a_failed_write_never_takes_the_run_down(self, tmp_path):
+        """Sidecars are an audit convenience. Losing them is acceptable;
+        losing the briefing because a disk filled up is not."""
+        from unittest.mock import patch
+
+        from history import store
+
+        original = store.NEWS_DIR
+        store.NEWS_DIR = str(tmp_path / "news")
+        try:
+            with patch("history.store.os.makedirs", side_effect=OSError("Disk full")):
+                assert store.write_coverage_sidecars({"AAPL": [{"headline": "x"}]}) == 0
+        finally:
+            store.NEWS_DIR = original

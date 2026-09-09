@@ -246,11 +246,31 @@ function formatLiquidity(sc) {
     const horizon = (days !== undefined && days !== null)
         ? ` · ~${Number(days) < 1 ? '<1' : Math.round(Number(days))} session(s) to exit ₹1 Cr at 20% of volume`
         : '';
+
+    // Delivery qualifies the turnover sitting next to it. Volume counts every
+    // share that changed hands, including intraday churn that never settles,
+    // so a name can look liquid on turnover alone and have almost no real
+    // buyers: WELSPUNLIV traded ₹1,262 Cr at 8% delivery on 14 Aug 2026.
+    // Only the churn band is marked — annotating a healthy 70% would be noise
+    // and would dilute the one case that changes a decision.
+    const deliv = sc.deliv_pct;
+    const hasDeliv = deliv !== undefined && deliv !== null && !isNaN(Number(deliv));
+    const churn = hasDeliv && sc.delivery_band === "churn";
+    const delivNote = hasDeliv
+        ? ` · ${Number(deliv).toFixed(0)}% delivered${churn ? ' — mostly intraday churn, so this turnover flatters the name' : ''}`
+        : '';
     const value = Number(advt) >= 1
         ? `₹${Number(advt).toLocaleString('en-IN', { maximumFractionDigits: 0 })} Cr`
         : `₹${Number(advt).toFixed(2)} Cr`;
-    const title = `${band}${horizon}`;
-    return `<span style="font-weight:600; color:${colour};" title="${escapeHtml(title)}">${value}</span>`;
+    const title = `${band}${horizon}${delivNote}`;
+    // The churn marker overrides the band colour deliberately: a "liquid"
+    // green on a name that delivers 8% is the specific claim this data
+    // disproves.
+    const shown = churn ? 'var(--warning, var(--danger))' : colour;
+    const flag = churn
+        ? `<span style="font-weight:400; opacity:0.85;"> · ${Number(deliv).toFixed(0)}% del</span>`
+        : '';
+    return `<span style="font-weight:600; color:${shown};" title="${escapeHtml(title)}">${value}${flag}</span>`;
 }
 
 // Helper: Format analyst info badge
@@ -309,6 +329,12 @@ function buildStockPane(stock, tab) {
         rows.push(["Debt / equity", val(sc.debt_to_equity)]);
         rows.push(["Turnover", sc.advt_cr != null
             ? `₹${escapeHtml(String(sc.advt_cr))} Cr/day (${escapeHtml(sc.liquidity_band || "unknown")})` : na]);
+        // Stated separately from turnover rather than folded into it: they are
+        // different measurements from different sources, and one session's
+        // delivery must not read as an average.
+        rows.push(["Delivery", sc.deliv_pct != null
+            ? `${escapeHtml(String(sc.deliv_pct))}% of last session's volume (${escapeHtml(sc.delivery_band || "unknown")})`
+            : na]);
         rows.push(["Promoter change", sc.promoter_change != null ? pct(sc.promoter_change) : na]);
     } else if (tab === "score") {
         // Never a single opaque total: BHEL scored 44 as a press-clipping

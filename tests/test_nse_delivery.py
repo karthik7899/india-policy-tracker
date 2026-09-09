@@ -1,0 +1,301 @@
+"""Tests for delivery percentage (providers/nse_delivery.py).
+
+The distinction this module exists to draw is between volume and delivery,
+so the cases below are mostly about not conflating them — and about the two
+ways this pipeline has already lost data of exactly this shape: writing to a
+dict the Screener rebuild later replaces, and attaching a field the Pydantic
+model does not declare.
+"""
+
+import asyncio
+import datetime
+
+import pytest
+
+from providers import nse_delivery as nd
+
+CSV = """SYMBOL,SERIES,DATE1,PREV_CLOSE,OPEN_PRICE,HIGH_PRICE,LOW_PRICE,LAST_PRICE,CLOSE_PRICE,AVG_PRICE,TTL_TRD_QNTY,TURNOVER_LACS,NO_OF_TRADES,DELIV_QTY,DELIV_PER
+RELIANCE,EQ,15-Aug-2026,1400,1405,1420,1395,1410,1412,1408,1000000,14080.00,50000,700000,70.00
+ASMTEC,EQ,15-Aug-2026,100,101,103,99,102,102,101,50000,50.50,900,6000,12.00
+NODELIV,EQ,15-Aug-2026,10,10,10,10,10,10,10,100,0.10,5,-,-
+RELIANCE,BE,15-Aug-2026,1400,1405,1420,1395,1410,1412,1408,10,0.14,2,10,100.00
+T2TCO,BE,15-Aug-2026,50,50,51,49,50,50,50,2000,1.00,40,2000,100.00
+"""
+
+
+class _Resp:
+    def __init__(self, status, text=""):
+        self.status = status
+        self._text = text
+
+    async def text(self):
+        return self._text
+
+    async def __aenter__(self):
+        return self
+
+    async def __aexit__(self, *a):
+        return False
+
+
+class _Session:
+    """Serves a 404 for every URL except the one naming ``good_day``."""
+
+    def __init__(self, good_day=None, text=CSV, exc=None):
+        self.good_day = good_day
+        self.text = text
+        self.exc = exc
+        self.urls = []
+
+    def get(self, url, **kwargs):
+        self.urls.append(url)
+        if self.exc:
+            raise self.exc
+        if self.good_day and nd.url_for(self.good_day) == url:
+            return _Resp(200, self.text)
+        return _Resp(404)
+
+
+# --- parsing --------------------------------------------------------------
+
+
+def test_turnover_converts_lacs_to_crore():
+    """NSE quotes lacs; the dashboard speaks crore. A missed divisor here
+    would overstate every holding's turnover by 100x."""
+    rows = nd.parse_delivery_csv(CSV)
+    assert rows["RELIANCE"]["turnover_cr"] == 140.80
+    assert rows["ASMTEC"]["turnover_cr"] == 0.51
+
+
+def test_delivery_percentage_is_read():
+    rows = nd.parse_delivery_csv(CSV)
+    assert rows["RELIANCE"]["deliv_pct"] == 70.0
+    assert rows["ASMTEC"]["deliv_pct"] == 12.0
+
+
+def test_unreported_delivery_stays_none_rather_than_zero():
+    """NSE writes "-" where delivery is not reported. "Not reported" and
+    "nothing delivered" are different facts and must not collapse."""
+    rows = nd.parse_delivery_csv(CSV)
+    assert rows["NODELIV"]["deliv_pct"] is None
+
+
+def test_only_the_eq_series_is_kept():
+    """The same symbol trades under BE and BZ with different liquidity;
+    merging them would misstate both."""
+    rows = nd.parse_delivery_csv(CSV)
+    # The BE row for RELIANCE must not have overwritten the EQ one.
+    assert rows["RELIANCE"]["turnover_cr"] == 140.80
+
+
+def test_parsing_junk_returns_empty_rather_than_raising():
+    assert nd.parse_delivery_csv("") == {}
+    assert nd.parse_delivery_csv(None) == {}
+
+
+# --- classification -------------------------------------------------------
+
+
+def test_delivery_bands():
+    assert nd.classify_delivery(12.0) == "churn"
+    assert nd.classify_delivery(40.0) == "mixed"
+    assert nd.classify_delivery(70.0) == "delivery-led"
+    assert nd.classify_delivery(None) == "unknown"
+
+
+def test_the_note_fires_only_when_delivery_undercuts_turnover():
+    """Saying "70% delivered" about a healthy stock is noise. Saying
+    "Rs 8 Cr traded but 12% delivered" changes what the turnover means."""
+    assert nd.delivery_note({"deliv_pct": 70.0, "turnover_cr": 140.8}) is None
+    assert nd.delivery_note({"deliv_pct": None}) is None
+
+    note = nd.delivery_note({"deliv_pct": 12.0, "turnover_cr": 0.51})
+    assert "12% delivered" in note
+    assert "intraday churn" in note
+
+
+# --- fetching -------------------------------------------------------------
+
+
+def test_url_uses_ddmmyyyy_not_iso():
+    assert nd.url_for(datetime.date(2026, 8, 15)).endswith(
+        "sec_bhavdata_full_15082026.csv"
+    )
+
+
+def test_walks_back_to_the_last_published_session():
+    """Weekends and holidays have no file, and today's is not published until
+    after the close. A single attempt would return nothing most mornings."""
+    friday = datetime.date(2026, 8, 14)
+    session = _Session(good_day=friday)
+    rows = asyncio.run(nse_fetch(session, day=datetime.date(2026, 8, 16)))  # a Sunday
+    assert rows["RELIANCE"]["deliv_pct"] == 70.0
+    assert len(session.urls) == 3  # Sunday, Saturday, then Friday
+
+
+def nse_fetch(session, day):
+    return nd.fetch_delivery_async(session, day=day)
+
+
+def test_gives_up_after_the_lookback_window():
+    session = _Session(good_day=None)
+    rows = asyncio.run(nd.fetch_delivery_async(session, day=datetime.date(2026, 8, 16)))
+    assert rows == {}
+    assert len(session.urls) == nd.MAX_LOOKBACK_DAYS + 1
+
+
+def test_a_network_failure_is_not_fatal():
+    session = _Session(exc=RuntimeError("archive down"))
+    assert asyncio.run(nd.fetch_delivery_async(session)) == {}
+
+
+# --- application ----------------------------------------------------------
+
+
+def _watchlist():
+    return {
+        "Energy": [{"ticker": "RELIANCE", "name": "Reliance", "screener": {"pe": 20}}],
+        "Tech": [{"ticker": "ASMTEC", "name": "ASM", "screener": {}}],
+        "Other": [{"ticker": "UNKNOWN", "name": "Unlisted"}],
+    }
+
+
+def test_delivery_is_stamped_onto_screener():
+    watchlist = _watchlist()
+    applied = nd.apply_delivery(watchlist, nd.parse_delivery_csv(CSV))
+    assert applied == 2
+
+    reliance = watchlist["Energy"][0]["screener"]
+    assert reliance["deliv_pct"] == 70.0
+    assert reliance["delivery_band"] == "delivery-led"
+    assert reliance["turnover_cr_last"] == 140.80
+    # Existing screener content survives.
+    assert reliance["pe"] == 20
+
+    assert watchlist["Tech"][0]["screener"]["delivery_band"] == "churn"
+
+
+def test_holdings_absent_from_the_file_are_left_alone():
+    watchlist = _watchlist()
+    nd.apply_delivery(watchlist, nd.parse_delivery_csv(CSV))
+    assert "deliv_pct" not in (watchlist["Other"][0].get("screener") or {})
+
+
+def test_apply_survives_junk_watchlists():
+    assert nd.apply_delivery(None, {}) == 0
+    assert nd.apply_delivery({"S": [None, "x"]}, {"X": {}}) == 0
+
+
+def test_turnover_last_is_named_apart_from_advt():
+    """advt_cr is a multi-session average; this is one session. Conflating
+    them would make the dashboard's own numbers disagree with each other."""
+    from models.core import CompanyFinancials
+
+    assert "advt_cr" in CompanyFinancials.model_fields
+    assert "turnover_cr_last" in CompanyFinancials.model_fields
+
+
+@pytest.mark.parametrize("bad", [{"deliv_pct": "x"}, {}, None])
+def test_note_tolerates_bad_input(bad):
+    assert nd.delivery_note(bad) is None or isinstance(nd.delivery_note(bad), str)
+
+
+def test_eq_wins_a_symbol_listed_in_several_segments():
+    """RELIANCE appears as both EQ and BE in the fixture. EQ is where the
+    position would actually be traded, so it must not be overwritten by
+    whichever row happens to come last."""
+    assert nd.parse_delivery_csv(CSV, series=None)["RELIANCE"]["series"] == "EQ"
+    assert nd.parse_delivery_csv(CSV)["RELIANCE"]["series"] == "EQ"
+
+
+def test_trade_to_trade_holdings_are_read_not_dropped():
+    """MEASURED 2026-09-09: STLTECH, DIACABS and MTARTECH were all absent from
+    an EQ-only read and all three sit in BE. They are holdings; their turnover
+    is real and was simply invisible."""
+    rows = nd.parse_delivery_csv(CSV)
+    assert "T2TCO" in rows
+    assert rows["T2TCO"]["series"] == "BE"
+
+
+def test_trade_to_trade_gets_its_own_band_not_a_delivery_score():
+    """Delivery is COMPULSORY in T2T, so ~100% is a trading restriction, not
+    accumulation. Banding it "delivery-led" would manufacture a bullish signal
+    out of a surveillance flag."""
+    assert nd.classify_delivery(99.9, series="BE") == "trade-to-trade"
+    assert nd.classify_delivery(99.9, series="EQ") == "delivery-led"
+
+
+def test_trade_to_trade_never_reads_as_churn():
+    assert (
+        nd.delivery_note({"deliv_pct": 5.0, "turnover_cr": 10.0, "series": "BE"})
+        is None
+    )
+    assert nd.delivery_note({"deliv_pct": 5.0, "turnover_cr": 10.0, "series": "EQ"})
+
+
+def test_the_segment_is_stamped_and_declared():
+    from models.core import CompanyFinancials
+
+    watchlist = {"T": [{"ticker": "T2TCO", "name": "T2T Co", "screener": {}}]}
+    nd.apply_delivery(watchlist, nd.parse_delivery_csv(CSV))
+    sc = watchlist["T"][0]["screener"]
+    assert sc["series"] == "BE"
+    assert sc["delivery_band"] == "trade-to-trade"
+    # Absent from the model means dropped on coercion, whatever we attach.
+    assert "series" in CompanyFinancials.model_fields
+
+
+def test_every_field_apply_delivery_writes_is_declared_on_the_model():
+    """The coercion trap this module's NOTE warns about, enforced.
+
+    models/core.CompanyFinancials drops any key it does not declare, silently
+    — the feature then reports None while looking like it works. This repo has
+    shipped that bug twice (turnover, the 52-week range), so the agreement
+    between writer and model is pinned rather than left to a comment.
+    """
+    from models.core import CompanyFinancials
+
+    watchlist = {"sec": [{"ticker": "ACME", "screener": {}}]}
+    delivery = {
+        "ACME": {"deliv_pct": 12.5, "turnover_cr": 8.0, "trades": 100, "series": "EQ"}
+    }
+    assert nd.apply_delivery(watchlist, delivery) == 1
+
+    written = watchlist["sec"][0]["screener"]
+    declared = set(CompanyFinancials.model_fields)
+    missing = set(written) - declared
+    assert not missing, f"apply_delivery writes fields the model drops: {missing}"
+
+    # And the values survive a real coercion round-trip, not just the name check.
+    coerced = CompanyFinancials.model_validate(written)
+    assert coerced.deliv_pct == 12.5
+    assert coerced.turnover_cr_last == 8.0
+    assert coerced.delivery_band == "churn"
+    assert coerced.series == "EQ"
+
+
+def test_a_reported_zero_trade_count_is_not_read_as_unreported():
+    """NO_OF_TRADES follows the same rule DELIV_PER does: "not reported" and
+    "reported as zero" are different facts.
+
+    The idiom this replaced — ``int(x or 0) or None`` — mapped a genuine zero
+    onto None, so a suspended or untraded scrip became indistinguishable from
+    one whose count NSE simply omitted. That is precisely the case worth
+    telling apart: a holding with zero trades is a liquidity finding, while a
+    missing field is a gap in the feed.
+    """
+    csv = (
+        "SYMBOL,SERIES,TURNOVER_LACS,DELIV_PER,NO_OF_TRADES\n"
+        "TRADED,EQ,100,55,1500\n"
+        "UNTRADED,EQ,0,-,0\n"
+        "OMITTED,EQ,0,-,-\n"
+        "BLANK,EQ,0,-,\n"
+    )
+    rows = nd.parse_delivery_csv(csv)
+
+    assert rows["TRADED"]["trades"] == 1500
+    # The distinction: a real zero survives as 0, not as None.
+    assert rows["UNTRADED"]["trades"] == 0
+    assert rows["UNTRADED"]["trades"] is not None
+    assert rows["OMITTED"]["trades"] is None
+    assert rows["BLANK"]["trades"] is None
