@@ -144,3 +144,65 @@ def test_normalize_watchlist_keeps_broken_records_raw():
     assert result["sec"][1]["price"] == "10.00"
     assert result["sec"][2] == "not-a-dict"
     assert result["not_a_list"] == 42
+
+
+# ---------------------------------------------------------------------------
+# to_wire_values formatting coverage
+# ---------------------------------------------------------------------------
+
+def test_to_wire_values_all_fields():
+    stock = Stock(
+        ticker="AAPL",
+        name="Apple Inc.",
+        catalyst="Earnings",
+        rating="Buy",
+        price=150.25,
+        target=180.0,
+        target_median=175.5,
+        target_high=200.0,
+        target_low=150.0,
+        growth_pct=15.5,
+        revenue_growth=-2.5,
+        earnings_growth=10.0,
+        analyst_count=35,
+        rec_score=1.2,
+        fundamental_value=160.0
+    )
+    wire = stock.to_wire_values()
+
+    assert wire["ticker"] == "AAPL"
+    assert wire["name"] == "Apple Inc."
+    assert wire["catalyst"] == "Earnings"
+    assert wire["rating"] == "Buy"
+    assert wire["price"] == "150.25"
+    assert wire["target"] == "180.00"
+    assert wire["target_median"] == "175.50"
+    assert wire["target_high"] == "200.00"
+    assert wire["target_low"] == "150.00"
+    assert wire["growth_pct"] == "+15.5%"
+    assert wire["revenue_growth"] == "-2.5%"
+    assert wire["earnings_growth"] == "+10.0%"
+    assert wire["analyst_count"] == 35
+    assert wire["rec_score"] == 1.2
+    assert wire["fundamental_value"] == 160.0
+
+
+def test_to_wire_values_none_fields():
+    stock = Stock(ticker="MSFT")
+    wire = stock.to_wire_values()
+
+    assert wire["ticker"] == "MSFT"
+    assert wire["name"] == ""
+    assert wire["catalyst"] == ""
+    assert wire["rating"] == "N/A"
+    assert wire["price"] is None
+    assert wire["target"] is None
+    assert wire["target_median"] is None
+    assert wire["target_high"] is None
+    assert wire["target_low"] is None
+    assert wire["growth_pct"] is None
+    assert wire["revenue_growth"] is None
+    assert wire["earnings_growth"] is None
+    assert wire["analyst_count"] is None
+    assert wire["rec_score"] is None
+    assert wire["fundamental_value"] is None
