@@ -120,6 +120,12 @@ def test_normalize_preserves_key_order_and_absent_keys():
     assert "target_high" not in normalized  # known fields aren't invented
 
 
+def test_normalize_raises_validation_error_on_missing_ticker():
+    record = {"name": "No Ticker Corp", "price": "10.00"}
+    with pytest.raises(ValidationError):
+        normalize_stock_record(record)
+
+
 def test_production_watchlist_roundtrips_byte_identically():
     """The load-bearing regression: normalizing the real committed
     watchlist.json must change nothing, or every auto-commit after this
