@@ -1,40 +1,6 @@
 from typing import Optional, Union  # noqa: E402
 
 
-def _clean_str(val: Union[str, int, float, None]) -> str:
-    if val is None:
-        return ""
-    return str(val).strip()
-
-
-def safe_float(
-    val: Union[str, int, float, None], default: Optional[float] = None
-) -> Optional[float]:
-    """Safely converts a value to float, handling common string artifacts."""
-    s = _clean_str(val)
-    if not s or s in ("-", "N/A", "NA", "None"):
-        return default
-    s = s.replace(",", "")
-    try:
-        return float(s)
-    except ValueError:
-        return default
-
-
-def safe_int(
-    val: Union[str, int, float, None], default: Optional[int] = None
-) -> Optional[int]:
-    """Safely converts a value to int, handling common string artifacts."""
-    s = _clean_str(val)
-    if not s or s in ("-", "N/A", "NA", "None"):
-        return default
-    s = s.replace(",", "")
-    try:
-        return int(float(s))
-    except ValueError:
-        return default
-
-
 def to_float(value: Union[str, int, float, None]) -> Optional[float]:
     """Canonical tolerant numeric coercion for stock-record fields.
 
@@ -57,20 +23,6 @@ def to_float(value: Union[str, int, float, None]) -> Optional[float]:
         except ValueError:
             return None
     return None
-
-
-def safe_percentage(
-    val: Union[str, int, float, None], default: Optional[float] = None
-) -> Optional[float]:
-    """Safely converts a percentage string (e.g. '12.5%') to a float."""
-    s = _clean_str(val)
-    if not s or s in ("-", "N/A", "NA", "None"):
-        return default
-    s = s.replace("%", "").replace(",", "")
-    try:
-        return float(s)
-    except ValueError:
-        return default
 
 
 import json  # noqa: E402

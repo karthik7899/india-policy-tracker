@@ -577,3 +577,44 @@ def test_bse_fallback_not_used_when_nse_works(monkeypatch):
     stock = {"ticker": "TCS", "name": "TCS"}
     assert update_single_stock(stock) is True
     assert calls == ["TCS.NS"]
+
+
+def test_email_thesis_rows_are_ordered_and_truncated_deterministically():
+    """The mailer used to hand-roll this sort with no tiebreak, which left the
+    order of same-status stocks at the mercy of dict insertion order — so which
+    ones survived the caps["research"] truncation could change between runs on
+    identical data. Routing through thesis_health_sorted pins it.
+    """
+    from emails.mailer import _build_research_engine_html
+
+    # BETA is inserted before ALPHA on purpose: a stable sort with no tiebreak
+    # preserves that, so this ordering is what tells the two implementations
+    # apart rather than merely agreeing with both.
+    health = {
+        "ZETA": {"ticker": "ZETA", "status": "Weakening", "reasons": ["r"]},
+        "BETA": {"ticker": "BETA", "status": "Broken", "reasons": ["r"]},
+        "MID": {"ticker": "MID", "status": "Intact", "reasons": []},
+        "ALPHA": {"ticker": "ALPHA", "status": "Broken", "reasons": ["r"]},
+    }
+    html = _build_research_engine_html({"thesis_health": health})
+
+    # Broken before Weakening, and ticker breaks the tie inside Broken.
+    order = [html.index(t) for t in ("ALPHA", "BETA", "ZETA")]
+    assert order == sorted(order)
+    # Intact stocks are counted, not listed.
+    assert "MID" not in html
+    assert "1 intact" in html
+
+
+def test_email_thesis_truncation_keeps_the_worst():
+    """The cap must spend itself on Broken theses. This held under the old
+    hand-rolled sort too — it is here to pin the guarantee, not to catch the
+    regression above."""
+    from emails.mailer import _build_research_engine_html
+
+    health = {f"W{i}": {"ticker": f"W{i}", "status": "Weakening", "reasons": ["r"]}
+              for i in range(10)}
+    health["BROKE"] = {"ticker": "BROKE", "status": "Broken", "reasons": ["r"]}
+
+    html = _build_research_engine_html({"thesis_health": health}, caps={"research": 2})
+    assert "BROKE" in html

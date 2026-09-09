@@ -6,6 +6,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from logger import log
 from config import SECTOR_METADATA, DASHBOARD_URL
+from analysis.thesis import thesis_health_sorted
 from emails.summary import (
     build_summary,
     build_subject,
@@ -475,9 +476,14 @@ def _build_research_engine_html(brief_data, caps=_CAPS_NORMAL):
     sections = ""
 
     # --- Thesis health -----------------------------------------------
-    flagged = [r for r in thesis_health.values() if r.get("status") != "Intact"]
+    # thesis_health_sorted owns the reading order (Broken, Weakening, Intact,
+    # ticker). Sorting the whole map and filtering after is deliberate: the
+    # hand-rolled sort this replaced had no tiebreak, so which stocks survived
+    # the caps["research"] truncation depended on dict insertion order.
+    flagged = [
+        r for r in thesis_health_sorted(thesis_health) if r.get("status") != "Intact"
+    ]
     if thesis_health:
-        flagged.sort(key=lambda r: 0 if r["status"] == "Broken" else 1)
         intact_count = len(thesis_health) - len(flagged)
         rows = ""
         for r in flagged[: caps["research"]]:
