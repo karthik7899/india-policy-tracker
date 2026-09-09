@@ -1,4 +1,4 @@
-from utils import safe_float, safe_int, safe_percentage  # noqa: E402
+from utils import safe_float, safe_int, safe_percentage, to_float  # noqa: E402
 
 
 def test_safe_float():
@@ -41,6 +41,30 @@ def test_safe_percentage():
     assert safe_percentage("invalid") is None
     assert safe_percentage("invalid", default=0.0) == 0.0
     assert safe_percentage("", default=0.0) == 0.0
+
+
+def test_to_float():
+    assert to_float(None) is None
+    assert to_float(True) is None
+    assert to_float(False) is None
+    assert to_float(10) == 10.0
+    assert to_float(10.5) == 10.5
+    assert to_float("") is None
+    assert to_float("   ") is None
+    assert to_float("123.45") == 123.45
+    assert to_float("+123.45") == 123.45
+    assert to_float("-123.45") == -123.45
+    assert to_float("12.5%") == 12.5
+    assert to_float("+12.5%") == 12.5
+    assert to_float("-12.5%") == -12.5
+    assert to_float("1,840.00") == 1840.0
+    assert to_float("N/A") is None
+    assert to_float("NA") is None
+    assert to_float("-") is None
+    assert to_float("—") is None
+    assert to_float("NONE") is None
+    assert to_float("n/a") is None
+    assert to_float("invalid") is None
 
 
 import json  # noqa: E402
