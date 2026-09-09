@@ -11,7 +11,7 @@ from analysis.sector_growth import (  # noqa: E402
     compute_stock_growth,
 )
 
-# HAL's real reported quarterly revenue, the series that exposed the bug: a
+# HAL's real reported quarterly revenue, the series that exposed the previous issue: a
 # March-quarter skew roughly three times the size of the June quarter.
 _SEASONAL = [4348.0, 5976.0, 6957.0, 13700.0, 4819.0, 6629.0, 7699.0, 13942.0]
 
