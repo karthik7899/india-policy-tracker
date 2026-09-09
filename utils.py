@@ -59,20 +59,6 @@ def to_float(value: Union[str, int, float, None]) -> Optional[float]:
     return None
 
 
-def safe_percentage(
-    val: Union[str, int, float, None], default: Optional[float] = None
-) -> Optional[float]:
-    """Safely converts a percentage string (e.g. '12.5%') to a float."""
-    s = _clean_str(val)
-    if not s or s in ("-", "N/A", "NA", "None"):
-        return default
-    s = s.replace("%", "").replace(",", "")
-    try:
-        return float(s)
-    except ValueError:
-        return default
-
-
 import json  # noqa: E402
 import os  # noqa: E402
 import tempfile  # noqa: E402
