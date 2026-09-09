@@ -19,6 +19,7 @@ RELIANCE,EQ,15-Aug-2026,1400,1405,1420,1395,1410,1412,1408,1000000,14080.00,5000
 ASMTEC,EQ,15-Aug-2026,100,101,103,99,102,102,101,50000,50.50,900,6000,12.00
 NODELIV,EQ,15-Aug-2026,10,10,10,10,10,10,10,100,0.10,5,-,-
 RELIANCE,BE,15-Aug-2026,1400,1405,1420,1395,1410,1412,1408,10,0.14,2,10,100.00
+T2TCO,BE,15-Aug-2026,50,50,51,49,50,50,50,2000,1.00,40,2000,100.00
 """
 
 
@@ -210,20 +211,46 @@ def test_note_tolerates_bad_input(bad):
     assert nd.delivery_note(bad) is None or isinstance(nd.delivery_note(bad), str)
 
 
-def test_series_filter_can_be_widened_for_diagnostics():
-    """Six holdings were missing from an EQ-only read. Whether they are
-    BSE-only or simply trading under BE/BZ is answerable from the file, and
-    guessing between those two has different fixes."""
-    every = nd.parse_delivery_csv(CSV, series=None)
-    assert every["RELIANCE"]["series"] == "BE"  # last row wins when unfiltered
-    assert "NODELIV" in every
-
-    eq_only = nd.parse_delivery_csv(CSV)
-    assert eq_only["RELIANCE"]["series"] == "EQ"
+def test_eq_wins_a_symbol_listed_in_several_segments():
+    """RELIANCE appears as both EQ and BE in the fixture. EQ is where the
+    position would actually be traded, so it must not be overwritten by
+    whichever row happens to come last."""
+    assert nd.parse_delivery_csv(CSV, series=None)["RELIANCE"]["series"] == "EQ"
+    assert nd.parse_delivery_csv(CSV)["RELIANCE"]["series"] == "EQ"
 
 
-def test_the_default_is_still_eq_only():
-    """Widening by accident would merge BE/BZ liquidity into EQ and misstate
-    both."""
+def test_trade_to_trade_holdings_are_read_not_dropped():
+    """MEASURED 2026-09-09: STLTECH, DIACABS and MTARTECH were all absent from
+    an EQ-only read and all three sit in BE. They are holdings; their turnover
+    is real and was simply invisible."""
     rows = nd.parse_delivery_csv(CSV)
-    assert all(r["series"] == "EQ" for r in rows.values())
+    assert "T2TCO" in rows
+    assert rows["T2TCO"]["series"] == "BE"
+
+
+def test_trade_to_trade_gets_its_own_band_not_a_delivery_score():
+    """Delivery is COMPULSORY in T2T, so ~100% is a trading restriction, not
+    accumulation. Banding it "delivery-led" would manufacture a bullish signal
+    out of a surveillance flag."""
+    assert nd.classify_delivery(99.9, series="BE") == "trade-to-trade"
+    assert nd.classify_delivery(99.9, series="EQ") == "delivery-led"
+
+
+def test_trade_to_trade_never_reads_as_churn():
+    assert (
+        nd.delivery_note({"deliv_pct": 5.0, "turnover_cr": 10.0, "series": "BE"})
+        is None
+    )
+    assert nd.delivery_note({"deliv_pct": 5.0, "turnover_cr": 10.0, "series": "EQ"})
+
+
+def test_the_segment_is_stamped_and_declared():
+    from models.core import CompanyFinancials
+
+    watchlist = {"T": [{"ticker": "T2TCO", "name": "T2T Co", "screener": {}}]}
+    nd.apply_delivery(watchlist, nd.parse_delivery_csv(CSV))
+    sc = watchlist["T"][0]["screener"]
+    assert sc["series"] == "BE"
+    assert sc["delivery_band"] == "trade-to-trade"
+    # Absent from the model means dropped on coercion, whatever we attach.
+    assert "series" in CompanyFinancials.model_fields

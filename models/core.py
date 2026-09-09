@@ -76,6 +76,10 @@ class CompanyFinancials(BaseModel):
     # apart from advt_cr, which is a multi-session average.
     deliv_pct: Optional[float] = None
     delivery_band: Optional[str] = None
+    # NSE segment: EQ (normal rolling) or BE (trade-to-trade, delivery
+    # compulsory). Declared for the same reason as the rest — absent from
+    # this model means dropped on coercion.
+    series: Optional[str] = None
     turnover_cr_last: Optional[float] = None
     days_to_exit_1cr: Optional[float] = None
     days_to_exit_5cr: Optional[float] = None

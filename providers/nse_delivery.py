@@ -60,22 +60,37 @@ _LACS_PER_CRORE = 100.0
 CHURN_PCT = 25.0
 HEALTHY_PCT = 50.0
 
+# Series we read. EQ is the normal rolling segment. BE is trade-to-trade,
+# where a stock sits under surveillance and intraday netting is not allowed.
+#
+# MEASURED 2026-09-09: STLTECH, DIACABS and MTARTECH were all missing from an
+# EQ-only read and all three are in BE. Including them is right — they are
+# holdings and their turnover is real — but their DELIVERY figure is not
+# comparable. T2T MANDATES delivery, so ~100% there is a rule rather than
+# evidence of accumulation, and banding it "delivery-led" would manufacture a
+# bullish signal out of a trading restriction. Hence a band of its own.
+READ_SERIES = ("EQ", "BE")
+TRADE_TO_TRADE = "BE"
+
 
 def url_for(day):
     """NSE names these files by DDMMYYYY, not the ISO order used elsewhere."""
     return f"{BASE_URL}/sec_bhavdata_full_{day.strftime('%d%m%Y')}.csv"
 
 
-def parse_delivery_csv(text, series="EQ"):
+def parse_delivery_csv(text, series=READ_SERIES):
     """SYMBOL -> {deliv_pct, turnover_cr, trades}. Empty dict on any problem.
 
     Header names carry stray spaces in the wild — NSE's own files are
     inconsistent about it — so every key is normalised before lookup.
 
     ``series=None`` keeps every series and records which one each row came
-    from. Only diagnostics use that: six holdings were missing from an EQ-only
-    read and the question of whether they are BSE-only or simply trading under
-    BE/BZ is answerable from the file itself rather than by guessing.
+    from. Only diagnostics use that: holdings missing from a normal read are
+    either in a segment we do not take, or absent from NSE altogether, and
+    that is answerable from the file rather than by guessing.
+
+    Where a symbol appears in more than one series, EQ wins: it is the
+    segment the position would normally be traded in.
     """
     out = {}
     if not text:
@@ -90,7 +105,15 @@ def parse_delivery_csv(text, series="EQ"):
             # EQ only. The same symbol appears under other series (BE, BZ)
             # with different liquidity, and merging them would misstate both.
             row_series = cleaned.get("SERIES", "")
-            if not symbol or (series is not None and row_series != series):
+            if series is not None:
+                allowed = (series,) if isinstance(series, str) else series
+                if row_series not in allowed:
+                    continue
+            if not symbol:
+                continue
+            # EQ wins a symbol listed in several segments — it is where the
+            # position would actually be traded.
+            if out.get(symbol, {}).get("series") == "EQ" and row_series != "EQ":
                 continue
 
             turnover_lacs = to_float(cleaned.get("TURNOVER_LACS"))
@@ -114,13 +137,20 @@ def parse_delivery_csv(text, series="EQ"):
     return out
 
 
-def classify_delivery(deliv_pct):
+def classify_delivery(deliv_pct, series=None):
     """Plain label for a delivery percentage; 'unknown' when not reported.
+
+    Trade-to-trade gets its own band rather than a number on the same scale.
+    Delivery is compulsory in that segment, so a high figure says the stock is
+    under surveillance, not that anyone is accumulating it — the opposite of
+    what "delivery-led" would imply to a reader.
 
     Coerced rather than trusted: these values travel through screener dicts
     that carry strings, and a comparison against one raises TypeError deep in
     a render rather than here.
     """
+    if series == TRADE_TO_TRADE:
+        return "trade-to-trade"
     deliv_pct = to_float(deliv_pct)
     if deliv_pct is None:
         return "unknown"
@@ -138,8 +168,12 @@ def delivery_note(assessment):
     is noise, whereas "Rs 8 Cr traded but 12% delivered" changes what the
     turnover means.
     """
-    pct = to_float((assessment or {}).get("deliv_pct"))
-    turnover = to_float((assessment or {}).get("turnover_cr"))
+    assessment = assessment or {}
+    if assessment.get("series") == TRADE_TO_TRADE:
+        # Compulsory delivery cannot be churn, and saying so would be noise.
+        return None
+    pct = to_float(assessment.get("deliv_pct"))
+    turnover = to_float(assessment.get("turnover_cr"))
     if pct is None or pct >= CHURN_PCT:
         return None
     traded = f"Rs {turnover:.2f} Cr traded" if turnover else "Turnover"
@@ -178,8 +212,9 @@ async def fetch_delivery_async(session, day=None, lookback=MAX_LOOKBACK_DAYS):
         rows = parse_delivery_csv(text)
         if rows:
             log.info(
-                f"NSE delivery: {len(rows)} EQ securities for "
-                f"{candidate.isoformat()}."
+                f"NSE delivery: {len(rows)} securities "
+                f"({sum(1 for r in rows.values() if r.get('series') == 'BE')} "
+                f"trade-to-trade) for {candidate.isoformat()}."
             )
             return rows
 
@@ -216,7 +251,10 @@ def apply_delivery(watchlist, delivery):
                 screener = {}
                 stock["screener"] = screener
             screener["deliv_pct"] = row.get("deliv_pct")
-            screener["delivery_band"] = classify_delivery(row.get("deliv_pct"))
+            screener["delivery_band"] = classify_delivery(
+                row.get("deliv_pct"), row.get("series")
+            )
+            screener["series"] = row.get("series")
             # Named apart from advt_cr, which is a multi-session average. One
             # session's turnover is a different measurement and conflating
             # them would make the dashboard's own numbers disagree.
