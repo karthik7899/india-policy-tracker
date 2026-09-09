@@ -115,13 +115,16 @@ class TransientNetworkError(Exception):
     pass
 
 
-def retry_network(max_retries=3, base_delay=1.0):
+class retry_network:
     """
     Decorator for retrying network operations with exponential backoff.
     Retries only on transient network failures, not on parsing/logic errors.
     """
+    def __init__(self, max_retries=3, base_delay=1.0):
+        self.max_retries = max_retries
+        self.base_delay = base_delay
 
-    def decorator(func):
+    def __call__(self, func):
         if asyncio.iscoroutinefunction(func):
 
             @functools.wraps(func)
@@ -145,14 +148,14 @@ def retry_network(max_retries=3, base_delay=1.0):
                         return await func(*args, **kwargs)
                     except transient_exceptions as e:
                         retries += 1
-                        if retries > max_retries:
+                        if retries > self.max_retries:
                             log.error(
-                                f"Async network operation failed after {max_retries} retries: {e}"
+                                f"Async network operation failed after {self.max_retries} retries: {e}"
                             )
                             raise
-                        delay = base_delay * (2 ** (retries - 1))
+                        delay = self.base_delay * (2 ** (retries - 1))
                         log.warning(
-                            f"Transient network error in {func.__name__}: {e}. Retrying in {delay}s (Attempt {retries}/{max_retries})"
+                            f"Transient network error in {func.__name__}: {e}. Retrying in {delay}s (Attempt {retries}/{self.max_retries})"
                         )
                         await asyncio.sleep(delay)
 
@@ -177,20 +180,18 @@ def retry_network(max_retries=3, base_delay=1.0):
                         return func(*args, **kwargs)
                     except transient_exceptions as e:
                         retries += 1
-                        if retries > max_retries:
+                        if retries > self.max_retries:
                             log.error(
-                                f"Sync network operation failed after {max_retries} retries: {e}"
+                                f"Sync network operation failed after {self.max_retries} retries: {e}"
                             )
                             raise
-                        delay = base_delay * (2 ** (retries - 1))
+                        delay = self.base_delay * (2 ** (retries - 1))
                         log.warning(
-                            f"Transient network error in {func.__name__}: {e}. Retrying in {delay}s (Attempt {retries}/{max_retries})"
+                            f"Transient network error in {func.__name__}: {e}. Retrying in {delay}s (Attempt {retries}/{self.max_retries})"
                         )
                         time.sleep(delay)
 
             return sync_wrapper
-
-    return decorator
 
 
 @retry_network(max_retries=3, base_delay=2.0)
