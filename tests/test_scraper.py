@@ -367,3 +367,47 @@ def test_holding_names_reads_the_watchlist():
         {"A": [{"name": "Tata Motors"}, {"ticker": "X"}], "B": [None, {"name": "Infy"}]}
     ) == {"Tata Motors", "Infy"}
     assert scraper.holding_names(None) == set()
+
+
+def test_clean_news_item_strips_markup_and_unescapes_entities():
+    """Google News titles arrive with markup and HTML entities in them. Left
+    alone they reach the email as literal <b> tags and &amp;, so the stripping
+    is display correctness rather than tidiness."""
+    entry = DotDict(
+        {
+            "title": "<b>Tech Update</b> &amp; More - NewsSource",
+            "link": "http://example.com",
+            "published": "Tue, 09 Jan 2024 10:00:00 GMT",
+            "published_parsed": (2024, 1, 9, 10, 0, 0, 1, 9, 0),
+            "summary": "<p>A summary with <i>HTML</i> &amp; stuff.</p>",
+        }
+    )
+
+    result = clean_news_item(entry, "Tech")
+
+    assert result["title"] == "Tech Update & More"
+    # The trailing " - NewsSource" is still read as the source, markup or not.
+    assert result["source"] == "NewsSource"
+
+
+def test_clean_news_item_drops_the_read_more_tail_before_sentiment():
+    """Feed summaries end in a truncation marker ("... Read more"). It carries
+    no sentiment but does reach analyze_sentiment, so it is stripped first."""
+    from unittest.mock import patch as _patch
+
+    entry = DotDict(
+        {
+            "title": "Article Title",
+            "link": "http://example.com",
+            "published": "Tue, 09 Jan 2024 10:00:00 GMT",
+            "published_parsed": (2024, 1, 9, 10, 0, 0, 1, 9, 0),
+            "summary": "This is a summary that gets cut off... Read more",
+        }
+    )
+
+    with _patch("providers.rss.analyze_sentiment", return_value="Neutral") as sentiment:
+        clean_news_item(entry, "Article")
+
+    sentiment.assert_called_once_with(
+        "Article Title", "This is a summary that gets cut off"
+    )
