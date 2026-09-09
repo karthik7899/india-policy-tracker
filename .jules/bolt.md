@@ -52,3 +52,7 @@ Actually, the reviewer pointed out that changing `ticker_obj.history(period="1d"
 ## 2026-06-25 - High-Performance HTML Stripping
 **Learning:** For high-performance HTML tag stripping in hot loops (e.g., RSS feed parsing), `BeautifulSoup` introduces significant overhead (taking ~1.8s for 10k parses vs ~0.05s for regex). `BeautifulSoup` should be avoided for simple text extraction where full DOM parsing is unnecessary.
 **Action:** Use regex (`re.sub(r'<[^>]+>', '', text)`) and `html.unescape()` instead of `BeautifulSoup` for massive speedups (50x-100x) when merely stripping tags from strings like RSS titles and summaries.
+
+## 2026-08-17 - Unintended Concurrent API Calls Despite Batching
+**Learning:** Adding `yf.download()` to batch fetch prices improved performance, but it failed to realize its full benefit because the downstream `fetch_stock_data()` function still unconditionally invoked `ticker_obj.history(period="1d")` for each stock independently in a ThreadPoolExecutor. This caused a redundant network request per ticker, essentially neutralizing the batch fetch optimization for prices.
+**Action:** When adding batch fetching optimizations upstream, explicitly pass flags downstream (e.g. `fetch_price=False`) or update the downstream logic to skip the redundant single-item API calls if the data is already pre-fetched.

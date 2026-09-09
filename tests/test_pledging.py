@@ -199,7 +199,9 @@ class TestStagingSurvivesMultipleProducers:
         # update_single_stock always calls out for the quote; the staging
         # behaviour is what is under test, not the fetch.
         monkeypatch.setattr(
-            providers.yahoo, "fetch_stock_data", lambda _t: {"price": 100.0}
+            providers.yahoo,
+            "fetch_stock_data",
+            lambda _t, fetch_price=True, **kwargs: {"price": 100.0},
         )
 
         stock = {"ticker": "X", "price": "100"}
@@ -228,7 +230,9 @@ class TestStagingSurvivesMultipleProducers:
         from analysis.growth import apply_liquidity, update_single_stock
 
         monkeypatch.setattr(
-            providers.yahoo, "fetch_stock_data", lambda _t: {"price": 100.0}
+            providers.yahoo,
+            "fetch_stock_data",
+            lambda _t, fetch_price=True, **kwargs: {"price": 100.0},
         )
         stock = {"ticker": "Y", "price": "100"}
         update_single_stock(

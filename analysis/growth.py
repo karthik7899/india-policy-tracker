@@ -53,21 +53,25 @@ def update_single_stock(stock, prefetched_prices=None, prefetched_liquidity=None
     yahoo_ticker = f"{ticker}.NS"
 
     try:
-        data = fetch_stock_data(yahoo_ticker)
+        # ⚡ Bolt Optimization: Skip redundant API calls to Yahoo Finance
+        # if the price was already batch-fetched via yf.download
+        has_prefetched = (
+            yahoo_ticker in prefetched_prices
+            and prefetched_prices[yahoo_ticker] is not None
+        )
+
+        data = fetch_stock_data(yahoo_ticker, fetch_price=not has_prefetched)
 
         # BSE-only listings 404 under the NSE suffix every run; fall back to
         # the BSE symbol before giving up on the ticker.
-        if data.get("price") is None:
+        if data.get("price") is None and not has_prefetched:
             bse_data = fetch_stock_data(f"{ticker}.BO")
             if bse_data.get("price") is not None:
                 log.info(f"{ticker}: no NSE data, using BSE listing instead.")
                 data = bse_data
 
         # Override price if prefetched
-        if (
-            yahoo_ticker in prefetched_prices
-            and prefetched_prices[yahoo_ticker] is not None
-        ):
+        if has_prefetched:
             data["price"] = float(prefetched_prices[yahoo_ticker])
 
         if data.get("price") is not None:
