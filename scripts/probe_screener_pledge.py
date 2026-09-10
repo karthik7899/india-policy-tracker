@@ -74,6 +74,12 @@ HEADERS = {
 
 # Attributes that carry a URL on an expander. Listed rather than pattern
 # matched so the output says which one hit.
+#
+# onclick is deliberately NOT here. Run 1 of this probe included it, and
+# Screener's expander turned out to be `Company.showShareholders('promoters',
+# 'quarterly', this)` — a JS call, not a URL. Fetching it produced three
+# ConnectionErrors against a hostname made of the function name, which read
+# like a finding and was not. A handler goes to _handlers, not _URL_ATTRS.
 _URL_ATTRS = (
     "hx-get",
     "hx-post",
@@ -82,8 +88,11 @@ _URL_ATTRS = (
     "data-hx-get",
     "href",
     "action",
-    "onclick",
 )
+
+# JS handlers, reported separately: these name the function to chase through
+# the bundle rather than a URL to fetch.
+_HANDLER_ATTRS = ("onclick", "@click", "x-on:click")
 
 _PLEDGE_RE = re.compile(r"pledg", re.I)
 
@@ -116,7 +125,7 @@ def _describe_promoter_row(soup):
         print("      no #shareholding section on the page")
         return []
 
-    found = []
+    urls, handlers = [], []
     for row in section.find_all("tr"):
         cells = row.find_all("td")
         if not cells:
@@ -126,17 +135,69 @@ def _describe_promoter_row(soup):
             continue
 
         print(f"      row: {label!r}")
-        print(f"        <tr> attrs: {dict(row.attrs)}")
         # The expander is usually a button or anchor inside the first cell.
         for el in cells[0].find_all(["button", "a", "span", "div"]):
             attrs = dict(el.attrs)
             if not attrs:
                 continue
-            print(f"        <{el.name}> attrs: {attrs}")
             for key in _URL_ATTRS:
-                if key in attrs and attrs[key]:
-                    found.append(str(attrs[key]))
-    return found
+                if attrs.get(key):
+                    print(f"        URL   {key}={attrs[key]}")
+                    urls.append(str(attrs[key]))
+            for key in _HANDLER_ATTRS:
+                if attrs.get(key):
+                    print(f"        JS    {key}={attrs[key]}")
+                    handlers.append(str(attrs[key]))
+    return urls, handlers
+
+
+_FUNC_RE = re.compile(r"([A-Za-z_$][\w$]*)\s*\(")
+# A URL literal or template inside the bundle, including `/api/${id}/...`
+# forms, which is how the path is normally assembled.
+_URL_IN_JS_RE = re.compile(r"""["'`](/[^"'`\s]{4,120})["'`]""")
+
+
+def _chase_handler_through_js(session, soup, handlers):
+    """Find the function the expander names, in the page's own JS.
+
+    The handler is `Company.showShareholders('promoters', 'quarterly', this)`.
+    The URL it builds lives in a bundle, so the honest way to the endpoint is
+    to fetch the scripts the page loads and read the function.
+    """
+    names = set()
+    for h in handlers:
+        for m in _FUNC_RE.finditer(h):
+            names.add(m.group(1))
+    names.discard("")
+    if not names:
+        print("      no function name parsed out of the handler")
+        return
+    print(f"      chasing: {sorted(names)}")
+
+    srcs = []
+    for tag in soup.find_all("script", src=True):
+        src = tag["src"]
+        srcs.append(src if src.startswith("http") else BASE + src)
+    print(f"      page loads {len(srcs)} script(s)")
+
+    for src in srcs:
+        time.sleep(PAUSE_S)
+        r = _get(session, src, src.rsplit("/", 1)[-1][:60])
+        if r is None:
+            continue
+        body = r.text
+        for name in names:
+            idx = body.find(name)
+            if idx == -1:
+                continue
+            window = body[max(0, idx - 200) : idx + 1200]
+            print(f"        *** {name} DEFINED HERE ***")
+            paths = _URL_IN_JS_RE.findall(window)
+            if paths:
+                print(f"        URL literals near it: {sorted(set(paths))[:8]}")
+            print(f"        source window:\n{window[:900]}")
+            return
+    print("      function not found in any loaded script")
 
 
 def _looks_like_pledge(text):
@@ -165,7 +226,7 @@ def probe(session, ticker):
         print("            the current parser may be looking in the wrong section.")
 
     print("    [1] promoter expander attributes")
-    urls = _describe_promoter_row(soup)
+    urls, handlers = _describe_promoter_row(soup)
 
     if urls:
         print(f"    [2] following {len(urls)} URL(s) the markup names")
@@ -178,7 +239,12 @@ def probe(session, ticker):
                 print(f"        {r.text[:600]}")
         return
 
-    print("    [2] markup named no URL")
+    if handlers:
+        print("    [2] expander is a JS handler; reading the bundle it lives in")
+        _chase_handler_through_js(session, soup, handlers)
+        return
+
+    print("    [2] markup named no URL and no handler")
     print("    [3] conventional paths — GUESSES, a 200 here proves little")
     guesses = [f"/company/{ticker}/shareholding/"]
     if warehouse_id:
