@@ -205,8 +205,16 @@ def _chase_handler_through_js(session, soup, handlers):
         if r is not None:
             bundles[src] = r.text
 
-    def _report(term, label):
-        """Print the source around every occurrence of term, and any URLs."""
+    def _report(term, label, require_url=False, limit=3):
+        """Print the source around occurrences of term, and any URLs.
+
+        ``require_url`` skips windows with no URL literal in them. Run 3
+        needed it: searching for the key "getShareholders" matched the CALL
+        SITE first — Utils.getUrl("getShareholders", context) — and filled
+        the hit limit inside company.customisation.js before ever reaching
+        the registry in utils.js. The call site is the thing we already knew.
+        Only a window containing a path is new information.
+        """
         hits = 0
         for src, body in bundles.items():
             start = 0
@@ -214,34 +222,46 @@ def _chase_handler_through_js(session, soup, handlers):
                 idx = body.find(term, start)
                 if idx == -1:
                     break
-                hits += 1
-                window = body[max(0, idx - 300) : idx + 700]
+                start = idx + len(term)
+                window = body[max(0, idx - 400) : idx + 800]
                 paths = sorted(set(_URL_IN_JS_RE.findall(window)))
+                if require_url and not paths:
+                    continue
+                hits += 1
                 print(f"        {label} in {src.rsplit('/', 1)[-1][:50]}")
                 if paths:
                     print(f"          URL literals: {paths[:8]}")
-                print(f"          {window[:500]}")
-                start = idx + len(term)
-                if hits >= 3:
+                print(f"          {window[:600]}")
+                if hits >= limit:
                     return hits
         return hits
 
     keys = set()
     for name in names:
-        if not _report(name, f"[{name}]"):
-            continue
+        _report(name, f"[{name}]", limit=1)
         # Second hop: whatever registry key the function asks the URL for.
         for body in bundles.values():
             for m in re.finditer(rf"{re.escape(name)}[\s\S]{{0,400}}", body):
                 keys.update(_GETURL_RE.findall(m.group(0)))
 
-    if keys:
-        print(f"      registry key(s) named by the function: {sorted(keys)}")
-        for key in sorted(keys):
-            if not _report(f'"{key}"', f"[key {key}]"):
-                _report(f"'{key}'", f"[key {key}]")
-    else:
+    if not keys:
         print("      function names no getUrl key; the URL may be inline above")
+        return
+
+    print(f"      registry key(s) named by the function: {sorted(keys)}")
+    for key in sorted(keys):
+        found = _report(f'"{key}"', f"[key {key}]", require_url=True)
+        if not found:
+            found = _report(f"'{key}'", f"[key {key}]", require_url=True)
+        if not found:
+            print(f"        no URL-bearing window for {key!r}")
+
+    # Belt and braces: dump the registry itself. If the key lookup above
+    # found nothing, the map is still the place the answer lives, and
+    # printing it is cheaper than another run.
+    print("      [3] the URL registry (getUrl definition)")
+    if not _report("getUrl", "[getUrl def]", require_url=True, limit=2):
+        print("        getUrl not found with a URL nearby in any bundle")
 
 
 def _looks_like_pledge(text):
