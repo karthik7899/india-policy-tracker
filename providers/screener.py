@@ -6,11 +6,19 @@ from analysis.parsing import extract_row_values, calculate_trend, calculate_grow
 from utils import TransientNetworkError, fetch_text_async, retry_network
 
 # The pledge row matched nothing on the first live run — 0 of 69 holdings —
-# and from the build sandbox Screener refuses connections, so the real row
-# label cannot be checked here. Rather than guess at the wording, the first
-# holding that misses it reports the labels the page actually carries. Once
-# per run: the answer is the same for every company, and 69 copies of it
-# would bury the rest of the log.
+# and Screener refuses connections from the build sandbox, so the labels had
+# to be reported from production instead of checked here.
+#
+# It has since been answered: Screener serves no pledge row for anybody
+# (measured across six holdings, run 6 of scripts/probe_screener_pledge.py).
+# This is now a tripwire for Screener changing its mind, not an open
+# investigation.
+#
+# Once per run, but note what that cost the first reading of it: the sample
+# it happened to report was HAL, a government-owned company that cannot carry
+# a promoter pledge, so its missing row was correct output and said nothing
+# about the other 69. A once-per-run diagnostic does not get to choose a
+# representative sample, and its output must not be read as one.
 _shareholding_rows_reported = False
 
 
@@ -19,6 +27,10 @@ def _report_shareholding_rows(soup, ticker):
 
     A no-op after the first call. Purely diagnostic — it reads nothing into
     the payload and cannot change a number.
+
+    The message says "not served" rather than "not matched": the row is known
+    to be absent for every company, so calling it a parse failure would send
+    the next reader after a regex that was never the problem.
     """
     global _shareholding_rows_reported
     if _shareholding_rows_reported:
@@ -26,7 +38,7 @@ def _report_shareholding_rows(soup, ticker):
     try:
         section = soup.find("section", id="shareholding")
         if not section:
-            log.info(f"Pledge row absent for {ticker}: no shareholding section.")
+            log.info(f"No shareholding section for {ticker}.")
             _shareholding_rows_reported = True
             return
         labels = []
@@ -37,8 +49,9 @@ def _report_shareholding_rows(soup, ticker):
                 if label:
                     labels.append(label)
         log.info(
-            f"Pledge row not matched for {ticker}. Shareholding rows present: "
-            f"{labels}"
+            f"Pledge not served by Screener (checked via {ticker}); "
+            f"shareholding rows present: {labels}. This is expected — see "
+            "scripts/probe_screener_pledge.py. Pledge needs another source."
         )
     except Exception as e:  # noqa: BLE001 - a diagnostic must never break a run
         log.warning(f"Could not list shareholding rows for {ticker}: {e!r}")
@@ -234,10 +247,24 @@ async def fetch_screener_async(session, ticker, sector, price):
     # pledged_pct key reads downstream as "not disclosed"; writing 0.0 here
     # would assert an all-clear this parser has not earned.
     #
-    # The label is matched loosely because the exact wording on the page could
-    # not be checked from the build sandbox (Screener refuses the connection
-    # there); "Pledged percentage" is the observed form, and the alternatives
-    # cost nothing to accept.
+    # MEASURED 2026-09-10 (scripts/probe_screener_pledge.py, run 6), and the
+    # answer is that this will never match: Screener does not serve a pledge
+    # row. Six holdings were checked, chosen so a null result would mean
+    # something — HAL as a government-owned control that structurally cannot
+    # pledge, plus SUZLON, ANANTRAJ, OPTIEMUS, ADSL and FAZE3Q, all
+    # promoter-led and several smallcap. Every one carried the same rows
+    # (Promoters, FIIs, DIIs, Public, sometimes Government/Others) and none
+    # carried a pledge row.
+    #
+    # The expander behind "Promoters +" was chased to its endpoint,
+    # /api/3/{companyId}/investors/{classification}/{period}/, which answers
+    # 200 unauthenticated and returns per-shareholder HOLDINGS — names and
+    # their quarterly percentages — not pledge.
+    #
+    # So this is kept only as a cheap tripwire in case Screener starts
+    # publishing it. analysis/pledging.py cannot be fed from here and needs a
+    # different source (the exchanges' shareholding-pattern filings) to do
+    # anything at all.
     pledged = extract_row_values(soup, "shareholding", r"Pledg")
     if pledged:
         sc["pledged_pct"] = pledged[-1]

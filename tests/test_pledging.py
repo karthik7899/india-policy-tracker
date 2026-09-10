@@ -247,10 +247,13 @@ class TestStagingSurvivesMultipleProducers:
 class TestPledgeRowDiagnostic:
     """The pledge row matched nothing on the first live run — 0 of 69.
 
-    Screener refuses connections from the build sandbox, so the real label
-    cannot be checked there. Guessing at the wording would be a change with no
-    evidence behind it; instead the first holding that misses the row reports
-    what the page actually carries, so the next run answers the question.
+    That question is now answered, and the diagnostic has changed job. Screener
+    serves no pledge row for ANY company: six holdings were checked in run 6 of
+    scripts/probe_screener_pledge.py, including four promoter-led smallcaps and
+    a government-owned control, and none carried it. So this is a tripwire for
+    Screener starting to publish pledge, not an open investigation, and the
+    message says "not served" rather than "not matched" — calling it a parse
+    failure would send the next reader after a regex that was never the problem.
     """
 
     HTML = (
@@ -300,7 +303,7 @@ class TestPledgeRowDiagnostic:
         with caplog.at_level(logging.INFO):
             sc._report_shareholding_rows(self._soup("<html></html>"), "NOSEC")
 
-        assert "no shareholding section" in caplog.text
+        assert "No shareholding section" in caplog.text
 
     def test_it_never_raises(self):
         import providers.screener as sc

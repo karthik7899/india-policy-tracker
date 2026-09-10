@@ -22,11 +22,28 @@ generalisation from n=1, on the least informative sample the watchlist
 contains, and it may well be wrong: Screener is understood to print the row
 only for companies that actually carry a pledge.
 
-So this script now dumps the shareholding row labels for SEVERAL holdings,
-chosen so that a null result would mean something. If a promoter-led
-smallcap also lacks the row, the expander theory stands. If any company
-shows it, the fix is a parser change after all and the whole JS chase below
-was solving a problem that did not exist.
+ANSWERED (run 6): no company serves the row. Six holdings were checked —
+HAL as the government-owned control, plus SUZLON, ANANTRAJ, OPTIEMUS, ADSL
+and FAZE3Q, all promoter-led and several smallcap. Every one carried the
+same labels (Promoters, FIIs, DIIs, Public, sometimes Government/Others) and
+none carried a pledge row.
+
+So the first reading reached the right conclusion by unsound means. It is
+now properly evidenced, and the endpoint chase below turns out to answer a
+different question than the one that matters:
+
+    /api/3/{companyId}/investors/promoters/quarterly/  ->  HTTP 200
+
+returns per-shareholder HOLDINGS — {"Ajay Brijlal Anand": {"Sep 2023":
+"31.79", ...}} — not pledge. Unauthenticated, so no account gate; and
+companyId is data-company-id, NOT the data-warehouse-id that
+providers/screener.py extracts, which returns {} here.
+
+VERDICT: Screener does not publish promoter pledge. analysis/pledging.py
+cannot be fed from it at any effort, and the source has to change — the
+exchanges' shareholding-pattern filings carry pledge, Screener does not.
+This script is kept as the record of that, and as a tripwire if Screener
+ever starts.
 
 So the question this script answers is narrow: WHAT URL does that expander
 call? It does not guess. Guessing endpoints is what cost 32 failed attempts
