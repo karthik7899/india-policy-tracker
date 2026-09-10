@@ -19,46 +19,13 @@
 //   * Grid and axes recede; the data is the only thing with weight.
 //   * A hover layer is default, not an extra.
 
-// Chart.js is a pinned dependency, not a CDN global — the build step's most
-// concrete benefit. A blocked CDN used to strip every chart from the page with
-// nothing but a console error to say so.
-//
-// Only the pieces each form needs are registered. The auto-registering entry
-// point pulls in every controller, scale and plugin Chart.js ships; this app
-// draws bars and scatters, and the rest is dead weight in the bundle.
-import {
-  Chart as ChartJS,
-  BarController,
-  BarElement,
-  ScatterController,
-  PointElement,
-  LinearScale,
-  CategoryScale,
-  Tooltip,
-  Legend,
-  Title,
-} from "chart.js";
-
 import { tokens, ordinal, diverging, statusColour } from "./palette.js";
-
-ChartJS.register(
-  BarController,
-  BarElement,
-  ScatterController,
-  PointElement,
-  LinearScale,
-  CategoryScale,
-  Tooltip,
-  Legend,
-  Title,
-);
 
 const registry = new Map();
 
-/** Kept for callers that still branch on it; with a bundled Chart.js it is
- * always true, and the table under every chart is the real fallback. */
+/** Chart.js is a CDN global. Absent, callers fall back to their table view. */
 export function available() {
-  return true;
+  return typeof window !== "undefined" && typeof window.Chart !== "undefined";
 }
 
 function destroy(canvas) {
@@ -136,7 +103,7 @@ export function rankedBar(canvas, { labels, values, suffix = "", horizontal = tr
     return ordinal(Math.round(share * 3), 4);
   });
 
-  const chart = new ChartJS(canvas.getContext("2d"), {
+  const chart = new window.Chart(canvas.getContext("2d"), {
     type: "bar",
     data: {
       labels,
@@ -171,7 +138,7 @@ export function divergingBar(canvas, { labels, values, baseline = 0, suffix = ""
   if (!available() || !canvas) return null;
   destroy(canvas);
   const t = tokens();
-  const chart = new ChartJS(canvas.getContext("2d"), {
+  const chart = new window.Chart(canvas.getContext("2d"), {
     type: "bar",
     data: {
       labels,
@@ -206,7 +173,7 @@ export function statusBand(canvas, { segments }) {
   if (!available() || !canvas) return null;
   destroy(canvas);
   const t = tokens();
-  const chart = new ChartJS(canvas.getContext("2d"), {
+  const chart = new window.Chart(canvas.getContext("2d"), {
     type: "bar",
     data: {
       labels: [""],
@@ -254,7 +221,7 @@ export function scatter(canvas, { points, xLabel, yLabel, marker }) {
   if (!available() || !canvas) return null;
   destroy(canvas);
   const t = tokens();
-  const chart = new ChartJS(canvas.getContext("2d"), {
+  const chart = new window.Chart(canvas.getContext("2d"), {
     type: "scatter",
     data: {
       datasets: [

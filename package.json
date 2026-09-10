@@ -2,11 +2,8 @@
   "name": "app",
   "version": "1.0.0",
   "description": "An automated, cloud-based platform that tracks Indian government policy announcements, evaluates their sector-wise impact, and maps them to a watchlist of high-growth beneficiary stocks.",
-  "main": "src/main.jsx",
+  "main": "src/main.js",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
     "test": "node --test tests/frontend/*.test.mjs"
   },
   "repository": {
@@ -20,13 +17,5 @@
   "bugs": {
     "url": "https://github.com/karthik7899/india-policy-tracker/issues"
   },
-  "homepage": "https://github.com/karthik7899/india-policy-tracker#readme",
-  "devDependencies": {
-    "@preact/preset-vite": "^2.10.6",
-    "vite": "^6.4.3"
-  },
-  "dependencies": {
-    "chart.js": "^4.5.1",
-    "preact": "^10.29.8"
-  }
+  "homepage": "https://github.com/karthik7899/india-policy-tracker#readme"
 }

@@ -1,5 +1,10 @@
-node_modules/
-dist/
 __pycache__/
 *.pyc
-.env
+email_preview.html
+.idea/
+.vscode/
+venv/
+node_modules/
+
+# Personal Claude Code settings (hooks, permissions) — not team config
+.claude/settings.local.json

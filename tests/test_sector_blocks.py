@@ -196,8 +196,7 @@ class TestSingleSourceOfTruth:
 
         src = pathlib.Path(__file__).parent.parent / "src"
         frontend = "\n".join(
-            p.read_text(encoding="utf-8")
-            for p in sorted([*src.rglob("*.js"), *src.rglob("*.jsx")])
+            p.read_text(encoding="utf-8") for p in sorted(src.rglob("*.js"))
         )
         assert "sector_blocks" in frontend
         # It must not carry its own copy of the ranking constants — that is
