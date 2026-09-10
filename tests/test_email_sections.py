@@ -230,11 +230,14 @@ class TestCta:
 class TestDashboardLinksResolve:
     """Every fragment the email links to must name a real dashboard tab.
 
-    app.js routes plain #<tab> fragments now, so a wrong one is a link that
-    visibly does nothing. "#overview" was exactly that — it named no tab, and
-    went unnoticed while the router still ignored fragments entirely. Read out
-    of app.js rather than duplicated here, for the same reason the rule-book
+    The router reads #/<view>, so a wrong one is a link that visibly does
+    nothing. "#overview" was exactly that — it named no tab, and went unnoticed
+    while the router still ignored fragments entirely. Read out of the view
+    registry rather than duplicated here, for the same reason the rule-book
     test reads its categories from source: a copy drifts silently.
+
+    This caught a real break: when sixteen tabs became seven views, three of
+    the email's four fragments stopped resolving.
     """
 
     @staticmethod
@@ -242,17 +245,17 @@ class TestDashboardLinksResolve:
         import pathlib
         import re
 
-        source = (pathlib.Path(__file__).parent.parent / "app.js").read_text(
+        source = (pathlib.Path(__file__).parent.parent / "src" / "main.js").read_text(
             encoding="utf-8"
         )
-        block = re.search(r"const TAB_COPY = \{(.*?)\n\};", source, re.S)
-        assert block, "TAB_COPY not found in app.js — did the tab model change?"
-        return set(re.findall(r"^\s{4}(\w+):", block.group(1), re.M))
+        block = re.search(r"const VIEWS = \{(.*?)\n\};", source, re.S)
+        assert block, "VIEWS not found in src/main.js — did the view model change?"
+        return set(re.findall(r"^\s{2}(\w+):", block.group(1), re.M))
 
     def _fragments(self, html):
         import re
 
-        return set(re.findall(r'href=[\'"][^\'"]*#([A-Za-z0-9_]+)[\'"]', html))
+        return set(re.findall(r'href=[\'"][^\'"]*#/([A-Za-z0-9_]+)[\'"]', html))
 
     def test_every_cta_fragment_is_a_real_tab(self):
         tabs = self._tab_ids()
@@ -262,7 +265,7 @@ class TestDashboardLinksResolve:
     def test_the_landing_fragment_is_a_real_tab(self):
         from emails.sections import LANDING_FRAGMENT
 
-        assert LANDING_FRAGMENT.lstrip("#") in self._tab_ids()
+        assert LANDING_FRAGMENT.lstrip("#/") in self._tab_ids()
 
     def test_the_primary_cta_lands_on_the_holdings_view(self):
         """The reader arrives wanting the companies the email discussed."""

@@ -187,21 +187,23 @@ class TestParity:
 class TestSingleSourceOfTruth:
     """Both surfaces must read the same assembled field.
 
-    The dashboard renders sector_blocks from the payload (app.js
-    sectorBlockFor / renderSectorBlockHtml) and the email ranks from the same
-    list. Neither re-derives ordering, caps or inclusion.
+    The dashboard renders sector_blocks from the payload and the email ranks
+    from the same list. Neither re-derives ordering, caps or inclusion.
     """
 
     def test_the_dashboard_reads_the_payload_field_rather_than_rebuilding(self):
         import pathlib
 
-        app_js = (pathlib.Path(__file__).parent.parent / "app.js").read_text(
-            encoding="utf-8"
+        src = pathlib.Path(__file__).parent.parent / "src"
+        frontend = "\n".join(
+            p.read_text(encoding="utf-8") for p in sorted(src.rglob("*.js"))
         )
-        assert "sector_blocks" in app_js
-        # It must not carry its own copy of the ranking constants.
-        assert "_SEVERITY_WEIGHT" not in app_js
-        assert "severity_weighted" not in app_js
+        assert "sector_blocks" in frontend
+        # It must not carry its own copy of the ranking constants — that is
+        # how the two surfaces drift into disagreeing about which sectors
+        # matter, which is the whole point of assembling them once.
+        assert "_SEVERITY_WEIGHT" not in frontend
+        assert "severity_weighted" not in frontend
 
     def test_blocks_survive_the_payload_trim(self):
         from dashboard.payload import build_display_payload

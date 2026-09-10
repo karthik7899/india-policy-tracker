@@ -27,7 +27,7 @@ MAX_SUPPRESSED = 8
 # arrives wanting to see the holdings the email just talked about, grouped the
 # way the email grouped them; the default Dashboard tab is a chart summary and
 # made them navigate before they could look anything up.
-LANDING_FRAGMENT = "#holdings"
+LANDING_FRAGMENT = "#/holdings"
 
 
 def with_fragment(base: str, fragment: str) -> str:
@@ -358,15 +358,19 @@ def build_cta_html(dashboard_url: str) -> str:
     to choose, which is the one thing the digest exists to save them from.
     """
     base = dashboard_url or ""
-    # Every fragment here must name a real dashboard tab. app.js routes plain
-    # #<tab> links now, so a wrong one is a link that visibly does nothing
-    # rather than one the page quietly ignored -- "#overview" was exactly that
-    # until the router started reading fragments. test_email_sections.py reads
-    # TAB_COPY out of app.js to keep these honest.
+    # Every fragment here must name a real dashboard view. The router reads
+    # #/<view>, so a wrong one is a link that visibly does nothing rather than
+    # one the page quietly ignored -- "#overview" was exactly that until the
+    # router started reading fragments at all.
+    #
+    # These moved when sixteen tabs became seven views: Early Warning folded
+    # into Risk, and the per-sector Policy Logs into Flow. A stale fragment
+    # here is a dead link in every briefing, so test_email_sections.py reads
+    # the view list out of src/main.js rather than keeping a copy.
     secondary = (
-        ("Alerts", with_fragment(base, "#earlywarning")),
-        ("Sectors", with_fragment(base, "#sectors")),
-        ("System health", with_fragment(base, "#system")),
+        ("Alerts", with_fragment(base, "#/risk")),
+        ("Sectors", with_fragment(base, "#/flow")),
+        ("System health", with_fragment(base, "#/system")),
     )
     links = " &nbsp;·&nbsp; ".join(
         f"<a href='{_esc(url)}' style='color: #60a5fa; text-decoration: none;' "

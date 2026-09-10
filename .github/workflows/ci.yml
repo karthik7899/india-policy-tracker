@@ -31,3 +31,14 @@ jobs:
 
       - name: Run tests
         run: python -m pytest tests/
+
+      # The frontend had two jest files that CI never ran — they sat green by
+      # never executing. Node's built-in runner needs no dependency, which
+      # suits a repo that deliberately has no build step.
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Run frontend tests
+        run: npm test
