@@ -265,3 +265,128 @@ def test_events_without_a_company_are_dropped_not_filed_under_nothing():
     reasons = watchlist["sec"][0]["score"]["reasons"]
     assert any("Real MoU signed" in r for r in reasons)
     assert not any("nattributed" in r for r in reasons)
+
+
+# --- delivery qualifies the liquidity credit -----------------------------
+#
+# Turnover counts every share that changed hands; delivery counts the ones
+# that settled. Where they disagree, the score was crediting the wrong one.
+
+
+def test_churn_withdraws_the_liquid_credit_and_states_it_as_a_risk():
+    """The case this exists for. WELSPUNLIV traded Rs 1,262 Cr on 14 Aug 2026
+    and delivered 8% of it: deep by turnover, almost no real buyers. Before
+    this, it earned a green "Liquid" line in the email for exactly that."""
+    honest = calculate_aggregate_score(
+        _company(roce=25.0, liquidity_band="liquid", advt_cr=1262.0, deliv_pct=68.0)
+    )
+    churny = calculate_aggregate_score(
+        _company(
+            roce=25.0,
+            liquidity_band="liquid",
+            advt_cr=1262.0,
+            deliv_pct=8.0,
+            turnover_cr_last=1262.0,
+            series="EQ",
+        )
+    )
+
+    assert any("Liquid" in r for r in honest.reasons)
+    # The credit is withdrawn, not merely annotated.
+    assert not any("Liquid" in r for r in churny.reasons)
+    assert any("intraday churn" in r for r in churny.risks)
+    assert churny.fundamental_score < honest.fundamental_score
+
+
+def test_healthy_delivery_is_not_annotated():
+    """70% delivery is unremarkable. Saying so on every liquid holding would
+    dilute the one case that changes a decision."""
+    scored = calculate_aggregate_score(
+        _company(
+            roce=25.0,
+            liquidity_band="liquid",
+            advt_cr=250.0,
+            deliv_pct=70.0,
+            turnover_cr_last=250.0,
+            series="EQ",
+        )
+    )
+    assert any("Liquid" in r for r in scored.reasons)
+    assert not any("churn" in r for r in scored.risks)
+
+
+def test_trade_to_trade_delivery_cannot_manufacture_a_signal():
+    """Delivery is compulsory in the BE segment, so a low figure there is not
+    comparable and a high one is a surveillance rule rather than evidence.
+    Neither may move the score."""
+    t2t = calculate_aggregate_score(
+        _company(
+            roce=25.0,
+            liquidity_band="liquid",
+            advt_cr=250.0,
+            deliv_pct=5.0,
+            turnover_cr_last=250.0,
+            series="BE",
+        )
+    )
+    assert any("Liquid" in r for r in t2t.reasons)
+    assert not any("churn" in r for r in t2t.risks)
+
+
+def test_holdings_without_delivery_data_score_exactly_as_before():
+    """The regression guard. Delivery is absent for most of the corpus on any
+    given day, and its absence must not change a single score."""
+    before = calculate_aggregate_score(
+        _company(roce=25.0, liquidity_band="liquid", advt_cr=250.0)
+    )
+    assert any("Liquid" in r for r in before.reasons)
+    assert not any("churn" in r for r in before.risks)
+
+
+def test_delivery_survives_the_whole_chain_from_csv_to_score():
+    """End-to-end over the join that keeps silently breaking here.
+
+    apply_delivery writes into stock["screener"]; dashboard/builder.py then
+    rebuilds CompanyFinancials from that dict and scores it. Every hop is a
+    place a renamed field vanishes without an error — the failure this repo
+    shipped for turnover and again for the 52-week range. Asserting the score
+    output is the only version of this test that could catch all of them.
+    """
+    from models.core import CompanyFinancials
+    from providers import nse_delivery
+
+    csv = (
+        "SYMBOL,SERIES,TURNOVER_LACS,DELIV_PER,NO_OF_TRADES\n"
+        "WELSPUNLIV,EQ,126200,8.00,50000\n"
+    )
+    watchlist = {
+        "textiles": [
+            {
+                "ticker": "WELSPUNLIV",
+                "name": "Welspun Living",
+                "screener": {
+                    "roce": 25.0,
+                    "liquidity_band": "liquid",
+                    "advt_cr": 1262.0,
+                },
+            }
+        ]
+    }
+    assert (
+        nse_delivery.apply_delivery(watchlist, nse_delivery.parse_delivery_csv(csv))
+        == 1
+    )
+
+    stock = watchlist["textiles"][0]
+    assert stock["screener"]["delivery_band"] == "churn"
+
+    # The builder's own construction step, verbatim.
+    fin = CompanyFinancials(**stock["screener"])
+    company = Company(ticker="WELSPUNLIV", name="Welspun Living", price=206.39)
+    company.screener = fin
+    company.valuation = CompanyValuation()
+    company.policy_events = []
+
+    scored = calculate_aggregate_score(company)
+    assert any("intraday churn" in r for r in scored.risks), scored.risks
+    assert not any("Liquid" in r for r in scored.reasons), scored.reasons

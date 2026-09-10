@@ -55,6 +55,32 @@ jobs:
       - name: Probe the newest sources (delivery, ISIN merge)
         run: python scripts/probe_new_sources.py
 
+  screener-pledge:
+    # analysis/pledging.py has never graded a holding, because Screener has no
+    # pledge ROW — "Pledged percentage" is a child of the "Promoters +"
+    # expander, so the current parser reads a table that does not contain it.
+    # This reads the expander's own attributes to find the URL it calls,
+    # rather than guessing paths; guessing cost 32 attempts against BSE.
+    #
+    # Separate job so its verdict is readable alone, and because Screener
+    # rate-limits this pipeline — if the probe is 429'd, that is itself the
+    # answer about what shape the fix has to take.
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install requests beautifulsoup4
+
+      - name: Probe Screener for the pledge endpoint
+        run: python scripts/probe_screener_pledge.py
+
   network:
     # Reads what BSE's own pages call, which is what DevTools' Network tab
     # shows. Separate job because it needs a browser; the endpoint probe above
