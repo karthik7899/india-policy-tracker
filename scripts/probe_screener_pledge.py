@@ -36,12 +36,22 @@ three hops, each one measured rather than assumed:
      company.customisation.*.js:
      ``_loadRows(Utils.getUrl("getShareholders", context), ...)``
      — still no URL, but it names a registry key.
-  3. That key in the URL registry, which is where the path finally lives.
+  3. That key in the URL registry. MEASURED (run 4), in utils.*.js:
+     ``getShareholders: "/api/3/{companyId}/investors/{classification}/{period}/"``
+     — the path, at last, and formatted by Screener's own code rather than
+     invented by ours.
 
-If a URL-bearing attribute ever does appear at step 1, it is fetched
-directly and the rest is skipped. Conventional paths are tried only when
-nothing at all is found, and are labelled as guesses: a 200 from a guessed
-path proves the path exists, not that it is the one the page uses.
+The script now CALLS that template first and reports what comes back, which
+settles the two questions left. The template wants ``companyId``, but the
+peers table uses ``warehouseId`` and providers/screener.py only extracts the
+latter — so every id on the page is tried and the response says which is
+right. And the expander buttons carry ``plausible-event-user=unregistered``,
+so a 401/403 would mean the path is correct and the account is the obstacle:
+a different problem, and one to raise rather than route around.
+
+No guessed paths remain. A guess that returns 200 proves the path exists,
+not that it is the one the page uses, and the registry has made guessing
+unnecessary.
 
 Also reported: the HTTP status of every request. Screener answered this
 pipeline with 429s throughout run 147 ("Peer radar: 0 industry table(s)
@@ -271,6 +281,62 @@ def _looks_like_pledge(text):
     return bool(_PLEDGE_RE.search(text))
 
 
+# MEASURED (run 4), from Screener's own URL registry in utils.*.js:
+#
+#     getShareholders: "/api/3/{companyId}/investors/{classification}/{period}/"
+#
+# Not a guess. This is the template the page itself formats and fetches.
+SHAREHOLDERS_TEMPLATE = "/api/3/{company_id}/investors/{classification}/{period}/"
+
+
+def _company_ids(soup, page_text):
+    """Every id on the page that could be the {companyId} the template wants.
+
+    Worth being careful here: the JS passes info.companyId to this endpoint
+    but info.warehouseId to the peers table, so they are not necessarily the
+    same number, and providers/screener.py only ever extracts the warehouse
+    one. Rather than assume, collect the candidates and let the request say
+    which is right.
+    """
+    ids = {}
+    for attr in ("data-company-id", "data-warehouse-id"):
+        el = soup.find(attrs={attr: True})
+        if el and el.get(attr):
+            ids[attr] = el.get(attr)
+    # getInfo() reads these off the DOM; the inline bootstrap sometimes
+    # carries them as plain JS instead.
+    for m in re.finditer(r"companyId\s*[:=]\s*[\"']?(\d{3,12})", page_text):
+        ids.setdefault("inline companyId", m.group(1))
+    return ids
+
+
+def _try_shareholders_endpoint(session, ids):
+    """Call the endpoint the registry named, for each candidate id.
+
+    This is the step that settles the two open questions at once: whether we
+    have the right id, and whether the view is gated. The buttons carry
+    plausible-event-user=unregistered, so a 401/403 here would mean the path
+    is correct and the account is the obstacle — a different problem, and one
+    to raise rather than work around.
+    """
+    for label, cid in ids.items():
+        path = SHAREHOLDERS_TEMPLATE.format(
+            company_id=cid, classification="promoters", period="quarterly"
+        )
+        time.sleep(PAUSE_S)
+        r = _get(session, BASE + path, f"{label}={cid} -> {path}")
+        if r is None:
+            continue
+        if _looks_like_pledge(r.text):
+            print("        *** PLEDGE FIGURE PRESENT — this is the endpoint ***")
+            print(f"        {r.text[:700]}")
+            return True
+        print(
+            f"        200 but no pledge text; first 300 chars:\n        {r.text[:300]}"
+        )
+    return False
+
+
 def probe(session, ticker):
     print(f"\n  {ticker}")
     page = _get(session, f"{BASE}/company/{ticker}/consolidated/", "company page")
@@ -279,9 +345,12 @@ def probe(session, ticker):
 
     soup = BeautifulSoup(page.text, "html.parser")
 
-    warehouse_el = soup.find(attrs={"data-warehouse-id": True})
-    warehouse_id = warehouse_el.get("data-warehouse-id") if warehouse_el else None
-    print(f"      warehouse id: {warehouse_id}")
+    ids = _company_ids(soup, page.text)
+    print(f"      id candidates: {ids}")
+
+    print("    [0] calling the endpoint the registry named")
+    if _try_shareholders_endpoint(session, ids):
+        return
 
     # Does the flat page carry it after all? Cheap to check and it would
     # make everything below unnecessary.
@@ -308,20 +377,10 @@ def probe(session, ticker):
         _chase_handler_through_js(session, soup, handlers)
         return
 
-    print("    [2] markup named no URL and no handler")
-    print("    [3] conventional paths — GUESSES, a 200 here proves little")
-    guesses = [f"/company/{ticker}/shareholding/"]
-    if warehouse_id:
-        guesses += [
-            f"/api/company/{warehouse_id}/shareholding/",
-            f"/api/company/{warehouse_id}/shareholders/",
-        ]
-    for path in guesses:
-        time.sleep(PAUSE_S)
-        r = _get(session, BASE + path, path)
-        if r is not None and _looks_like_pledge(r.text):
-            print("        *** PLEDGE FIGURE PRESENT ***")
-            print(f"        {r.text[:600]}")
+    # No guessed paths any more. Step [0] calls the template Screener's own
+    # registry gave us, so if that fails the answer is a changed registry —
+    # which the JS chase above will show — not a path we have not thought of.
+    print("    [2] markup named no URL and no handler; nothing further to follow")
 
 
 def main():
