@@ -25,17 +25,23 @@ against BSE before a DevTools capture showed the answer was a path we had
 never tried. Here the markup is already in our hands, so the method is to
 READ the expander's attributes and follow whatever they name.
 
-Three things are reported, in order of how much they settle:
+The expander turned out to be neither an HTMX attribute nor a link but a JS
+call, and the function it names does not hold a URL either. So the chase is
+three hops, each one measured rather than assumed:
 
-  1. The raw attributes of the promoter row and anything clickable in it.
-     Screener drives these with HTMX-style attributes, so the URL is
-     normally sitting in one of them.
-  2. The result of fetching whatever URL step 1 names, and whether a pledge
-     figure appears in it.
-  3. Only if step 1 finds nothing: whether a small set of conventional
-     paths respond at all. Clearly labelled as guesses, because a 200 from
-     a guessed path proves the path exists, not that it is the one the page
-     uses.
+  1. The promoter row's attributes. MEASURED (run 1):
+     ``onclick="Company.showShareholders('promoters', 'quarterly', this)"``
+     — a handler, so there is no URL to fetch here.
+  2. The function, in the scripts the page loads. MEASURED (run 2), in
+     company.customisation.*.js:
+     ``_loadRows(Utils.getUrl("getShareholders", context), ...)``
+     — still no URL, but it names a registry key.
+  3. That key in the URL registry, which is where the path finally lives.
+
+If a URL-bearing attribute ever does appear at step 1, it is fetched
+directly and the rest is skipped. Conventional paths are tried only when
+nothing at all is found, and are labelled as guesses: a 200 from a guessed
+path proves the path exists, not that it is the one the page uses.
 
 Also reported: the HTTP status of every request. Screener answered this
 pipeline with 429s throughout run 147 ("Peer radar: 0 industry table(s)
@@ -123,7 +129,7 @@ def _describe_promoter_row(soup):
     section = soup.find("section", id="shareholding")
     if not section:
         print("      no #shareholding section on the page")
-        return []
+        return [], []
 
     urls, handlers = [], []
     for row in section.find_all("tr"):
@@ -155,14 +161,26 @@ _FUNC_RE = re.compile(r"([A-Za-z_$][\w$]*)\s*\(")
 # A URL literal or template inside the bundle, including `/api/${id}/...`
 # forms, which is how the path is normally assembled.
 _URL_IN_JS_RE = re.compile(r"""["'`](/[^"'`\s]{4,120})["'`]""")
+# Utils.getUrl("getShareholders", ...) — the registry key to chase next.
+_GETURL_RE = re.compile(r"""getUrl\s*\(\s*["'`]([\w.-]+)["'`]""")
 
 
 def _chase_handler_through_js(session, soup, handlers):
-    """Find the function the expander names, in the page's own JS.
+    """Follow the expander to the URL, one indirection at a time.
 
-    The handler is `Company.showShareholders('promoters', 'quarterly', this)`.
-    The URL it builds lives in a bundle, so the honest way to the endpoint is
-    to fetch the scripts the page loads and read the function.
+    Run 2 got as far as the function and stopped, because the function does
+    not contain a URL either:
+
+        function showShareholders(classification, period, target) {
+          const context = {companyId: info.companyId, classification, period};
+          _loadRows(Utils.getUrl("getShareholders", context), target, ...);
+        }
+
+    So the path lives in a URL registry under the key "getShareholders", in
+    another bundle. Every script is fetched ONCE into memory and then searched
+    for each hop, rather than refetching per name — Screener rate-limits this
+    pipeline, and a probe that costs a request per lookup is the same mistake
+    the eventual fix has to avoid.
     """
     names = set()
     for h in handlers:
@@ -178,26 +196,52 @@ def _chase_handler_through_js(session, soup, handlers):
     for tag in soup.find_all("script", src=True):
         src = tag["src"]
         srcs.append(src if src.startswith("http") else BASE + src)
-    print(f"      page loads {len(srcs)} script(s)")
+    print(f"      page loads {len(srcs)} script(s); fetching each once")
 
-    for src in srcs:
+    bundles = {}
+    for src in dict.fromkeys(srcs):
         time.sleep(PAUSE_S)
         r = _get(session, src, src.rsplit("/", 1)[-1][:60])
-        if r is None:
+        if r is not None:
+            bundles[src] = r.text
+
+    def _report(term, label):
+        """Print the source around every occurrence of term, and any URLs."""
+        hits = 0
+        for src, body in bundles.items():
+            start = 0
+            while True:
+                idx = body.find(term, start)
+                if idx == -1:
+                    break
+                hits += 1
+                window = body[max(0, idx - 300) : idx + 700]
+                paths = sorted(set(_URL_IN_JS_RE.findall(window)))
+                print(f"        {label} in {src.rsplit('/', 1)[-1][:50]}")
+                if paths:
+                    print(f"          URL literals: {paths[:8]}")
+                print(f"          {window[:500]}")
+                start = idx + len(term)
+                if hits >= 3:
+                    return hits
+        return hits
+
+    keys = set()
+    for name in names:
+        if not _report(name, f"[{name}]"):
             continue
-        body = r.text
-        for name in names:
-            idx = body.find(name)
-            if idx == -1:
-                continue
-            window = body[max(0, idx - 200) : idx + 1200]
-            print(f"        *** {name} DEFINED HERE ***")
-            paths = _URL_IN_JS_RE.findall(window)
-            if paths:
-                print(f"        URL literals near it: {sorted(set(paths))[:8]}")
-            print(f"        source window:\n{window[:900]}")
-            return
-    print("      function not found in any loaded script")
+        # Second hop: whatever registry key the function asks the URL for.
+        for body in bundles.values():
+            for m in re.finditer(rf"{re.escape(name)}[\s\S]{{0,400}}", body):
+                keys.update(_GETURL_RE.findall(m.group(0)))
+
+    if keys:
+        print(f"      registry key(s) named by the function: {sorted(keys)}")
+        for key in sorted(keys):
+            if not _report(f'"{key}"', f"[key {key}]"):
+                _report(f"'{key}'", f"[key {key}]")
+    else:
+        print("      function names no getUrl key; the URL may be inline above")
 
 
 def _looks_like_pledge(text):
