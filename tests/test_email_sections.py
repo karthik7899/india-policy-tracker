@@ -245,11 +245,11 @@ class TestDashboardLinksResolve:
         import pathlib
         import re
 
-        source = (pathlib.Path(__file__).parent.parent / "src" / "main.js").read_text(
+        source = (pathlib.Path(__file__).parent.parent / "src" / "App.jsx").read_text(
             encoding="utf-8"
         )
         block = re.search(r"const VIEWS = \{(.*?)\n\};", source, re.S)
-        assert block, "VIEWS not found in src/main.js — did the view model change?"
+        assert block, "VIEWS not found in src/App.jsx — did the view model change?"
         return set(re.findall(r"^\s{2}(\w+):", block.group(1), re.M))
 
     def _fragments(self, html):

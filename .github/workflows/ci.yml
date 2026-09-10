@@ -33,12 +33,19 @@ jobs:
         run: python -m pytest tests/
 
       # The frontend had two jest files that CI never ran — they sat green by
-      # never executing. Node's built-in runner needs no dependency, which
-      # suits a repo that deliberately has no build step.
+      # never executing. Tests use node's built-in runner; the build is Vite.
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: "22"
+          cache: "npm"
+
+      - name: Install frontend dependencies
+        run: npm ci
 
       - name: Run frontend tests
         run: npm test
+
+      # A build that only breaks at deploy time breaks in front of the user.
+      - name: Build
+        run: npm run build
