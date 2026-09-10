@@ -14,10 +14,19 @@ carries:
     ['Promoters +', 'FIIs +', 'DIIs +', 'Government +', 'Public +',
      'No. of Shareholders', ... repeated for the yearly tab]
 
-There is no pledge row on the page at all. The ``+`` on ``Promoters +`` is
-the tell: it is an expander, and "Pledged percentage" is a child row that
-only exists once expanded. No amount of tuning a row-label pattern will
-find something the document does not contain.
+CAUTION about that output, and about the first reading of it. The diagnostic
+is once-per-run and fired on HAL — a government-owned company, which has no
+promoter pledge and structurally cannot have one. Its missing pledge row is
+CORRECT output. Concluding from it that "Screener has no pledge row" was a
+generalisation from n=1, on the least informative sample the watchlist
+contains, and it may well be wrong: Screener is understood to print the row
+only for companies that actually carry a pledge.
+
+So this script now dumps the shareholding row labels for SEVERAL holdings,
+chosen so that a null result would mean something. If a promoter-led
+smallcap also lacks the row, the expander theory stands. If any company
+shows it, the fix is a parser change after all and the whole JS chase below
+was solving a problem that did not exist.
 
 So the question this script answers is narrow: WHAT URL does that expander
 call? It does not guess. Guessing endpoints is what cost 32 failed attempts
@@ -74,10 +83,13 @@ from bs4 import BeautifulSoup  # noqa: E402
 
 BASE = "https://www.screener.in"
 
-# Real holdings, chosen to span the cases. A promoter-heavy PSU, a private
-# group company, and a smallcap: if pledge disclosure differs by company
-# type, one ticker would not show it.
-TICKERS = ("HAL", "RELIANCE", "SUZLON")
+# Chosen so a null result would MEAN something. HAL is government-owned and
+# structurally cannot carry a promoter pledge, so its missing row is expected
+# and uninformative — exactly the trap the production diagnostic fell into by
+# sampling it alone. It is kept as the control. The rest are promoter-led
+# companies where a pledge is at least possible, including smallcaps where it
+# is common.
+TICKERS = ("HAL", "SUZLON", "ANANTRAJ", "OPTIEMUS", "ADSL", "FAZE3Q")
 
 HEADERS = {
     "User-Agent": (
@@ -140,6 +152,23 @@ def _describe_promoter_row(soup):
     if not section:
         print("      no #shareholding section on the page")
         return [], []
+
+    # Every row label, per ticker. The production diagnostic in
+    # providers/screener.py is once-per-run and happened to fire on HAL — a
+    # government-owned PSU, which has no promoter pledge and never will. Its
+    # missing pledge row is correct output, not evidence about the other 69
+    # holdings, and reading it as "Screener has no pledge row" was a
+    # conclusion from n=1 drawn on the least informative sample available.
+    labels = []
+    for tr in section.find_all("tr"):
+        cells = tr.find_all("td")
+        if cells:
+            text = cells[0].get_text(" ", strip=True)
+            if text:
+                labels.append(text)
+    print(f"      shareholding rows: {labels}")
+    pledge_rows = [x for x in labels if _PLEDGE_RE.search(x)]
+    print(f"      pledge row present: {bool(pledge_rows)} {pledge_rows or ''}")
 
     urls, handlers = [], []
     for row in section.find_all("tr"):
