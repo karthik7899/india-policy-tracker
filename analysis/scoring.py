@@ -28,6 +28,7 @@ import re
 from models.core import Company, CompanyScore
 from config_scoring import SCORING_CONFIG
 from analysis import materiality, liquidity
+from providers import nse_delivery
 
 # News flow is a real signal but a bounded one. Past this, extra coverage says
 # more about a company's press office than its prospects.
@@ -236,7 +237,30 @@ def calculate_aggregate_score(company: Company) -> CompanyScore:
         if warning:
             risks.append(warning)
     elif band == "liquid":
-        reasons.append(f"Liquid (Rs {fin.advt_cr:.0f} Cr traded daily)")
+        # Delivery is checked BEFORE crediting the name as liquid, because the
+        # two disagree about the same number. Turnover counts every share that
+        # changed hands; delivery counts the ones that settled. WELSPUNLIV
+        # traded Rs 1,262 Cr on 14 Aug 2026 and delivered 8% of it — deep by
+        # turnover, and almost none of it real buyers. Crediting that as
+        # "Liquid" is the specific claim this data disproves, so on the churn
+        # band the reason is withheld and stated as a risk instead.
+        #
+        # Only churn is treated this way. Delivery of 70% is unremarkable, and
+        # annotating it would dilute the one case that changes a decision.
+        # delivery_note returns None for trade-to-trade, where delivery is
+        # compulsory and a high figure is a surveillance rule, not evidence.
+        churn = nse_delivery.delivery_note(
+            {
+                "deliv_pct": getattr(fin, "deliv_pct", None),
+                "turnover_cr": getattr(fin, "turnover_cr_last", None),
+                "series": getattr(fin, "series", None),
+            }
+        )
+        if churn:
+            fundamental -= PENALTY_THIN_TRADING
+            risks.append(churn)
+        else:
+            reasons.append(f"Liquid (Rs {fin.advt_cr:.0f} Cr traded daily)")
 
     # Ownership and institutional flow
     if fin.promoter_change is not None and fin.promoter_change <= -1.0:

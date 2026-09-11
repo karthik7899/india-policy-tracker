@@ -46,16 +46,25 @@ def save_data_for_dashboard(brief_data, watchlist):
     sake can shrink what the pipeline computes on.
     """
     from dashboard.payload import build_display_payload
+    from dashboard.sidecars import write_sidecars
     from history.store import HistoryStore
     from utils import atomic_write_json
 
     HistoryStore().save(brief_data)
 
+    # Two steps, kept apart on purpose. build_display_payload is a pure
+    # transform of the corpus into a display copy; write_sidecars puts files on
+    # disk. Folding the write into the builder gave every test that called it a
+    # side effect on the working tree, which is how a "build" function ends up
+    # owning half the I/O in a module.
+    display = build_display_payload(brief_data, watchlist)
+    display, _sidecar_files = write_sidecars(display)
+
     output = {
         "last_updated": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "watchlist": watchlist,
         "sectors": SECTOR_METADATA,
-        "briefing": build_display_payload(brief_data, watchlist),
+        "briefing": display,
     }
     atomic_write_json(output, "dashboard_data.json")
 

@@ -137,6 +137,19 @@ def build_display_payload(
         if blocks:
             payload["sector_blocks"] = blocks
 
+        # Per-sector news keys that sector_blocks already carries. Dropped
+        # only where the duplication is total — see deduplicate_sector_news.
+        # Runs AFTER the blocks are built, since it compares against them.
+        from dashboard.sidecars import deduplicate_sector_news
+
+        sector_keys = [k for k in (watchlist or {}) if k in payload]
+        dropped = deduplicate_sector_news(payload, sector_keys)
+        if dropped:
+            log.info(
+                f"Payload: {dropped} per-sector news key(s) dropped as fully "
+                "carried by sector_blocks."
+            )
+
         warnings = payload.get("early_warnings")
         if isinstance(warnings, list):
             payload["warning_summary"] = summarize_ongoing(warnings)
