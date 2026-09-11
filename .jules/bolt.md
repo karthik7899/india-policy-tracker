@@ -92,3 +92,7 @@ say.
 **Learning:** Optimizing sub-string checks against dictionaries-of-lists can yield ~50% speedup by pre-flattening into tuples and hoisting `.lower()` calls out of loops. Replacing O(N) substring scans with O(1) hash maps is functionally breaking when substring matching is semantically required.
 **Action:** Identify loop invariants in hot paths (like case conversions) and pre-compute flattening operations over read-only data structures outside iteration boundaries.
 
+
+## 2026-08-18 - Concurrent execution of I/O within async loops
+**Learning:** Sequential `await` calls inside a `for` loop block the asynchronous event loop, negating the benefits of using `async`. This was identified in `scrape_pib_pli_approvals_async` where up to 5 HTML article fetches were awaited consecutively.
+**Action:** Extract the body of the loop into an inner async helper function (e.g., `async def process_entry(entry):`) and execute them concurrently using `await asyncio.gather(*[process_entry(e) for e in entries])`.
