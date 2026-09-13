@@ -284,17 +284,50 @@ async def fetch_screener_async(session, ticker, sector, price):
     return ticker, sc, warehouse_id
 
 
+# Header text Screener has used for the company column. "Name" was the
+# original; "Company" appeared by 13 Sep 2026 and emptied the entire channel,
+# because this is the one column the parser cannot proceed without -- it
+# carries the link the peer ticker is read from.
+_NAME_HEADERS = ("name", "company")
+
+
+def _company_column(table):
+    """Locate the company column by its LINK rather than its header text.
+
+    The header is the fragile part. Screener renamed it and every peer table in
+    the pipeline went unreadable overnight -- 66 fetches a day returning a
+    perfectly good 6 KB table that the parser threw away, for at least three
+    runs, because one string stopped matching.
+
+    The link is not fragile: every peer row carries an /company/<ticker>/
+    anchor, and that anchor is what the ticker is actually read from further
+    down. Finding the column structurally means the next rename costs nothing.
+    """
+    for row in table.find_all("tr"):
+        for i, cell in enumerate(row.find_all("td")):
+            link = cell.find("a")
+            href = link.get("href", "") if link else ""
+            parts = [p for p in href.split("/") if p]
+            if len(parts) >= 2 and parts[0] == "company":
+                return i
+    return None
+
+
 def parse_peer_table(html):
     """Parses Screener's peers-API HTML fragment into industry peer rows.
 
     The fragment is a table whose header names the columns; we locate the
-    Name, Mar Cap, absolute quarterly Sales and Sales-variation columns by
+    company, Mar Cap, absolute quarterly Sales and Sales-variation columns by
     header text so a column being added or reordered upstream doesn't
     silently corrupt values. Returns ALL rows — watchlist companies
     included — as {name, ticker, sales_var_pct, market_cap, sales_qtr};
     callers split candidates from holdings. The absolute quarterly sales
     column is what makes a true industry-wide market-share denominator
     possible (analysis/market_share.py).
+
+    The company column is the exception to header matching: it falls back to
+    finding the column by its link, because losing it costs every row rather
+    than one field.
     """
     candidates = []
     soup = BeautifulSoup(html, "lxml")
@@ -302,10 +335,16 @@ def parse_peer_table(html):
     if not table:
         return candidates
 
-    headers = [th.get_text(strip=True).lower() for th in table.find_all("th")]
+    # Joined with a space rather than concatenated: Screener nests units in
+    # their own elements, so strip-only gives "Mar CapRs.Cr." and "Qtr Sales
+    # Var%". The current matchers survive that, but only by luck.
+    headers = [
+        " ".join(th.get_text(" ", strip=True).split()).lower()
+        for th in table.find_all("th")
+    ]
     idx = {}
     for i, h in enumerate(headers):
-        if h.startswith("name"):
+        if h.startswith(_NAME_HEADERS):
             idx["name"] = i
         elif "sales var" in h:
             idx["sales_var"] = i
@@ -322,6 +361,16 @@ def parse_peer_table(html):
         elif h.startswith("roce"):
             idx["roce"] = i
     name_idx = idx.get("name")
+    if name_idx is None:
+        # No header we recognise. Rather than discard a table that is very
+        # likely fine, find the company column the way the rows themselves
+        # identify it.
+        name_idx = _company_column(table)
+        if name_idx is not None:
+            log.info(
+                "Screener peers: no recognised company header in "
+                f"{headers!r}; using column {name_idx} found by its link."
+            )
     if name_idx is None:
         return candidates
 
