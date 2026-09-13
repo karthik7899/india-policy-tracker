@@ -44,9 +44,19 @@ export function route() {
 /**
  * Navigate. Pushing through the hash rather than calling a view directly keeps
  * the back button working, which a tab bar that swaps `display` never did.
+ *
+ * `replace` swaps the current history entry instead of adding one. Search-as-
+ * you-type uses it: without it, typing "SUZLON" leaves six entries behind and
+ * the back button becomes a way to delete one character at a time.
  */
-export function go(view, params = {}) {
-  window.location.hash = href(view, params);
+export function go(view, params = {}, { replace = false } = {}) {
+  const target = href(view, params);
+  if (replace && window.location.replace) {
+    const { href: current } = window.location;
+    window.location.replace(current.split("#")[0] + target);
+  } else {
+    window.location.hash = target;
+  }
 }
 
 /** Focus an entity without leaving the current view. */

@@ -146,6 +146,47 @@ body {
 
 .more-link { display: inline-block; margin-top: 10px; color: var(--series-1); font-size: 13px; }
 
+/* --- filter row -------------------------------------------------------- *
+ * One row, above everything it scopes. Never inside a panel and never per
+ * chart: the whole contract is that the chart, the count in the subtitle and
+ * the table below are all describing the same slice. */
+
+.filter-bar {
+  display: flex; flex-wrap: wrap; align-items: flex-end;
+  justify-content: space-between; gap: 10px var(--gap);
+  padding: 12px 14px; margin-bottom: var(--gap);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.filter-fields { display: flex; flex-wrap: wrap; gap: 10px 12px; align-items: flex-end; }
+.filter-field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.filter-label {
+  color: var(--muted); font-size: 11px;
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.filter-control {
+  font: inherit; font-size: 13px;
+  color: var(--ink); background: var(--plane);
+  border: 1px solid var(--border); border-radius: 8px;
+  padding: 6px 10px; min-height: 34px; max-width: 100%;
+}
+.filter-control:focus-visible {
+  outline: 2px solid var(--series-1); outline-offset: 1px; border-color: var(--series-1);
+}
+.filter-field-search .filter-control { min-width: 190px; }
+
+.filter-status { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.filter-summary { color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+.filter-clear {
+  color: var(--series-1); text-decoration: none; font-size: 12px; font-weight: 600;
+  border: 1px solid var(--border); border-radius: 999px; padding: 5px 11px;
+  white-space: nowrap;
+}
+.filter-clear:hover { border-color: var(--series-1); }
+
+.empty-state .filter-clear { display: inline-block; margin-top: 10px; }
+
 /* --- stat tiles: the form for a headline number ------------------------ */
 
 .stat-row {
@@ -176,6 +217,21 @@ body {
   font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em;
   padding: 8px 10px; border-bottom: 1px solid var(--border); white-space: nowrap;
 }
+.data-table th.th-interactive { padding: 0; }
+.th-sort {
+  display: flex; align-items: center; gap: 5px;
+  padding: 8px 10px; width: 100%;
+  color: inherit; font: inherit; text-decoration: none;
+}
+.data-table th.num .th-sort { justify-content: flex-end; }
+.th-sort:hover { color: var(--ink); }
+.th-sort:focus-visible { outline: 2px solid var(--series-1); outline-offset: -2px; }
+/* The idle indicator is faint so a column that is merely sortable does not
+   compete with the one actually doing the sorting. */
+.sort-mark { opacity: 0.35; font-size: 9px; }
+.th-sorted { color: var(--ink); }
+.th-sorted .sort-mark { opacity: 1; color: var(--series-1); }
+
 .data-table td {
   padding: 9px 10px; border-bottom: 1px solid var(--grid);
   vertical-align: top;
@@ -269,4 +325,10 @@ body {
 @media (max-width: 640px) {
   .view { padding: 14px; }
   .stat-value { font-size: 22px; }
+  /* Each control takes the full row rather than being squeezed to a stub —
+     a 70px-wide sector picker is not usable on a phone. */
+  .filter-bar { flex-direction: column; align-items: stretch; }
+  .filter-fields { flex-direction: column; align-items: stretch; }
+  .filter-field-search .filter-control { min-width: 0; }
+  .filter-status { justify-content: space-between; }
 }

@@ -17,6 +17,7 @@ import * as risk from "./views/risk.js";
 import * as flow from "./views/flow.js";
 import * as network from "./views/network.js";
 import * as system from "./views/system.js";
+import { restoreFocus } from "./views/filterbar.js";
 
 const VIEWS = {
   overview: { label: "Overview", module: overview },
@@ -69,6 +70,11 @@ async function renderRoute(route) {
     // whole product is careful about everywhere else.
     console.error(err);
   }
+
+  // Search re-renders the view on every keystroke, which destroys the input
+  // being typed into. One hook, after the view is in the document, puts the
+  // caret back — without it the search box accepts a single character.
+  restoreFocus();
 }
 
 async function start() {
