@@ -307,6 +307,96 @@ def test_parse_peer_table_tolerates_missing_columns():
     assert row["market_cap"] is None
 
 
+# The shape Screener actually served on 13 Sep 2026, reconstructed from the
+# diagnostic the pipeline logged:
+#
+#   5999 bytes, type='text/html; charset=utf-8', table=yes,
+#   headers=['S.No.', 'Company', 'CMPRs.', 'P/E', 'Mar CapRs.Cr.', 'Div Yld%',
+#            'NP QtrRs.Cr.', 'Qtr Profit Var%', 'Sales QtrRs.Cr.',
+#            'Qtr Sales Var%', 'ROCE%']
+#   text='... 1. Hind.Aeronautics 4905.00 35.19 328034.14 0.92 1589.66 14.88
+#         5515.17 14.45 31.97 2. Bharat Elect'
+#
+# Two things differ from the old fixture: the column is called "Company" now,
+# not "Name", and the units sit in nested elements so a strip-only get_text
+# runs them into the label ("Mar CapRs.Cr."). The first of those emptied the
+# entire channel for at least three runs.
+_PEERS_HTML_RENAMED = """
+<table>
+  <thead>
+    <tr>
+      <th>S.No.</th><th>Company</th><th>CMP<span>Rs.</span></th><th>P/E</th>
+      <th>Mar Cap<span>Rs.Cr.</span></th><th>Div Yld<span>%</span></th>
+      <th>NP Qtr<span>Rs.Cr.</span></th><th>Qtr Profit Var<span>%</span></th>
+      <th>Sales Qtr<span>Rs.Cr.</span></th><th>Qtr Sales Var<span>%</span></th>
+      <th>ROCE<span>%</span></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1.</td><td><a href="/company/HAL/consolidated/">Hind.Aeronautics</a></td>
+      <td>4905.00</td><td>35.19</td><td>328034.14</td><td>0.92</td>
+      <td>1589.66</td><td>14.88</td><td>5515.17</td><td>14.45</td><td>31.97</td>
+    </tr>
+    <tr>
+      <td>2.</td><td><a href="/company/BEL/">Bharat Electron</a></td>
+      <td>404.35</td><td>48.10</td><td>295566.00</td><td>1.20</td>
+      <td>2100.00</td><td>10.00</td><td>4500.00</td><td>12.00</td><td>28.00</td>
+    </tr>
+  </tbody>
+</table>
+"""
+
+
+def test_parse_peer_table_reads_the_renamed_company_column():
+    """Screener renamed Name to Company and the parser returned [] for every
+    holding, every run — a perfectly good 6 KB table thrown away over one
+    string."""
+    rows = parse_peer_table(_PEERS_HTML_RENAMED)
+
+    assert [r["ticker"] for r in rows] == ["HAL", "BEL"]
+    assert rows[0]["name"] == "Hind.Aeronautics"
+    assert rows[0]["market_cap"] == 328034.14
+    assert rows[0]["sales_qtr"] == 5515.17
+    assert rows[0]["sales_var_pct"] == 14.45
+    assert rows[0]["pe_ratio"] == 35.19
+    assert rows[0]["roce"] == 31.97
+    assert rows[0]["np_qtr"] == 1589.66
+    assert rows[0]["profit_var_pct"] == 14.88
+
+
+def test_nested_units_do_not_break_the_numeric_columns():
+    """Units live in their own elements, so a strip-only read gives
+    "Mar CapRs.Cr.". Every numeric column must still land on the right index."""
+    rows = parse_peer_table(_PEERS_HTML_RENAMED)
+    assert rows[1]["market_cap"] == 295566.0
+    assert rows[1]["sales_qtr"] == 4500.0
+    assert rows[1]["roce"] == 28.0
+
+
+def test_an_unrecognised_company_header_falls_back_to_the_link():
+    """The next rename must not cost the channel again.
+
+    The company column is found by its /company/<ticker>/ anchor when no
+    header matches — that anchor is where the ticker comes from anyway, so it
+    cannot be renamed away without breaking the page itself.
+    """
+    renamed_again = _PEERS_HTML_RENAMED.replace(
+        "<th>Company</th>", "<th>Organisation</th>"
+    )
+    rows = parse_peer_table(renamed_again)
+
+    assert [r["ticker"] for r in rows] == ["HAL", "BEL"]
+    # The numeric columns still come from the headers, which are unchanged.
+    assert rows[0]["sales_qtr"] == 5515.17
+
+
+def test_the_old_name_header_still_works():
+    """Screener may serve either; neither spelling may regress the other."""
+    rows = parse_peer_table(_PEERS_HTML)
+    assert [r["ticker"] for r in rows] == ["RIVAL", "TRACKED"]
+
+
 def test_parse_peer_table_handles_garbage():
     assert parse_peer_table("") == []
     assert parse_peer_table("<div>no table here</div>") == []
