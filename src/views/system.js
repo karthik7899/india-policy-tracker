@@ -8,7 +8,48 @@
 import { el, mount } from "../core/dom.js";
 import { dataTable, panel } from "./table.js";
 
-export async function render(container, { payload }) {
+/**
+ * Derived channels worth stating a count for, every run.
+ *
+ * A channel can die completely and leave no mark anywhere else in the product:
+ * its view simply renders an empty table, which looks identical to a quiet
+ * day. That is exactly what happened to the Screener peer radar — competitor
+ * discovery, candidate screening and industry share all returned nothing for
+ * several consecutive runs and nothing on screen said so.
+ *
+ * These are counts, not alarms. Several of them are legitimately zero on a
+ * normal day, and a red badge on a quiet Tuesday teaches the reader to ignore
+ * the panel. The number is the signal; the reader knows which ones should
+ * never be zero.
+ */
+const CHANNELS = [
+  ["peer_competitors", "Competitor radar", "Screener industry peers"],
+  ["candidate_screen", "Candidate screen", "peers that cleared the gates"],
+  ["industry_share", "Industry share", "share within a Screener industry"],
+  ["market_share", "Peer market share", "share among our own holdings"],
+  ["market_events", "Market events", "classified this run"],
+  ["input_cost_shock", "Input cost shocks", "sectors with a material move"],
+  ["sector_growth", "Sector growth", "sectors ranked"],
+  ["institutional_activity", "Institutional activity", "block deals and flows"],
+];
+
+/** Absent (never ran) and empty (ran, found nothing) are different states. */
+function channelRows(briefing) {
+  return CHANNELS.map(([key, label, note]) => {
+    const value = briefing?.[key];
+    const present = briefing && key in briefing;
+    const count =
+      value && typeof value === "object" ? Object.keys(value).length : null;
+    return {
+      label,
+      note,
+      state: !present ? "did not run" : count === 0 ? "nothing" : String(count),
+      _count: present ? (count ?? 0) : -1,
+    };
+  });
+}
+
+export async function render(container, { payload, route }) {
   const b = payload?.briefing || {};
   const watchlist = payload?.watchlist || {};
   const holdings = Object.values(watchlist).flat().filter((s) => s && s.ticker);
@@ -54,6 +95,33 @@ export async function render(container, { payload }) {
           },
         ],
         { empty: "No watchlist loaded." },
+      ),
+    ),
+    panel(
+      "Derived channels",
+      "What each analysis step produced this run. A channel can fail entirely " +
+        "and still leave its view looking like a quiet day — this is where the " +
+        "difference shows. “Did not run” and “nothing” are " +
+        "not the same: the first never executed, the second executed and found " +
+        "no rows.",
+      dataTable(
+        channelRows(b),
+        [
+          { key: "label", label: "Channel" },
+          { key: "note", label: "What it counts", sortable: false },
+          {
+            key: "_count",
+            label: "This run",
+            numeric: true,
+            render: (r) =>
+              el(
+                "span",
+                { class: r._count === 0 ? "cell-bad" : r._count < 0 ? "band-churn" : "" },
+                r.state,
+              ),
+          },
+        ],
+        { view: "system", route, empty: "No briefing loaded." },
       ),
     ),
     panel(

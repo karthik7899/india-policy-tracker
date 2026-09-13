@@ -524,12 +524,16 @@ def test_fetch_skips_holdings_already_covered_by_a_fetched_table():
 
     fetched = []
 
+    import providers.screener as _sc
+
     async def fake_peers(session, ticker, warehouse_id):
         fetched.append(ticker)
         # A and B are industry peers; C sits in a different industry.
         if ticker == "A":
-            return "A", [_row("A", 1.0), _row("B", 1.0)]
-        return ticker, [_row(ticker, 1.0)]
+            rows = [_row("A", 1.0), _row("B", 1.0)]
+        else:
+            rows = [_row(ticker, 1.0)]
+        return _sc.PeerFetch(ticker, rows, _sc.OUTCOME_OK, "")
 
     async def passthrough(coro):
         return await coro
@@ -548,6 +552,73 @@ def test_fetch_skips_holdings_already_covered_by_a_fetched_table():
     assert [t for t, _ in tables] == ["A", "C"]
 
 
+def test_fetch_stops_once_the_channel_is_clearly_down():
+    """A dead channel must not cost one request per holding, every day.
+
+    On 13 Sep every one of 66 peer requests returned a page with no usable
+    table. The loop asked all 66 anyway — 75 seconds, and six 429s drawn from
+    a service already telling us to back off, to learn something the first
+    handful had established.
+    """
+    import asyncio
+
+    import providers.screener as sc
+
+    fetched = []
+
+    async def always_empty(session, ticker, warehouse_id):
+        fetched.append(ticker)
+        return sc.PeerFetch(ticker, [], sc.OUTCOME_NO_ROWS, "0 bytes, table=no")
+
+    async def passthrough(coro):
+        return await coro
+
+    holdings = [(f"T{i}", i) for i in range(40)]
+    original = sc.fetch_peers_async
+    sc.fetch_peers_async = always_empty
+    try:
+        tables = asyncio.run(sc._fetch_industry_tables(holdings, passthrough, None))
+    finally:
+        sc.fetch_peers_async = original
+
+    assert tables == []
+    assert len(fetched) == sc._PEERS_ABORT_AFTER_EMPTY, (
+        f"should stop after {sc._PEERS_ABORT_AFTER_EMPTY} empty holdings, "
+        f"issued {len(fetched)}"
+    )
+
+
+def test_a_run_of_empties_does_not_abort_a_channel_that_is_working():
+    """The counter resets on success, so scattered peerless companies — which
+    are normal — never trip the abort."""
+    import asyncio
+
+    import providers.screener as sc
+
+    fetched = []
+
+    async def mostly_empty(session, ticker, warehouse_id):
+        fetched.append(ticker)
+        # Every 5th holding answers; the rest are genuinely peerless.
+        if int(ticker[1:]) % 5 == 0:
+            return sc.PeerFetch(ticker, [_row(ticker, 1.0)], sc.OUTCOME_OK, "")
+        return sc.PeerFetch(ticker, [], sc.OUTCOME_NO_ROWS, "")
+
+    async def passthrough(coro):
+        return await coro
+
+    holdings = [(f"T{i}", i) for i in range(30)]
+    original = sc.fetch_peers_async
+    sc.fetch_peers_async = mostly_empty
+    try:
+        tables = asyncio.run(sc._fetch_industry_tables(holdings, passthrough, None))
+    finally:
+        sc.fetch_peers_async = original
+
+    assert len(fetched) == 30, "a working channel must not be cut short"
+    assert len(tables) == 6
+
+
 class TestPeersRetry:
     """The 08 Aug run lost seven holdings' peer tables to a single 429.
 
@@ -560,9 +631,13 @@ class TestPeersRetry:
     URL = "https://www.screener.in/api/company/1/peers/"
 
     class _Response:
-        def __init__(self, status, text=""):
+        def __init__(self, status, text="", headers=None):
             self.status = status
             self._text = text
+            # Real aiohttp responses always carry headers, and the 429 path now
+            # reads Retry-After off them. A double without headers would make
+            # this test pass against code that crashes in production.
+            self.headers = headers or {}
 
         async def text(self):
             return self._text
@@ -576,15 +651,16 @@ class TestPeersRetry:
     class _Session:
         """Replays a queue of statuses, one per request."""
 
-        def __init__(self, statuses, body=""):
+        def __init__(self, statuses, body="", response_headers=None):
             self.statuses = list(statuses)
             self.body = body
+            self.response_headers = response_headers or {}
             self.calls = 0
 
         def get(self, url, headers=None, timeout=None):
             self.calls += 1
             status = self.statuses.pop(0) if self.statuses else 200
-            return TestPeersRetry._Response(status, self.body)
+            return TestPeersRetry._Response(status, self.body, self.response_headers)
 
     @staticmethod
     def _run(session, monkeypatch):
@@ -609,20 +685,22 @@ class TestPeersRetry:
         session = self._Session([429, 200], body)
         monkeypatch.setattr(sc, "parse_peer_table", lambda _t: [{"ticker": "PEER"}])
 
-        ticker, rows = self._run(session, monkeypatch)
+        result = self._run(session, monkeypatch)
 
         assert session.calls == 2, "the 429 should have been retried"
-        assert ticker == "HAL"
-        assert rows == [{"ticker": "PEER"}]
+        assert result.ticker == "HAL"
+        assert result.rows == [{"ticker": "PEER"}]
+        assert result.outcome == sc.OUTCOME_OK
 
     def test_it_gives_up_after_the_budget_and_degrades_to_empty(self, monkeypatch):
         import providers.screener as sc
 
         session = self._Session([429, 429, 429, 429, 429])
-        ticker, rows = self._run(session, monkeypatch)
+        result = self._run(session, monkeypatch)
 
-        assert rows == [], "enhancement data must never fail the run"
+        assert result.rows == [], "enhancement data must never fail the run"
         assert session.calls == sc._PEERS_MAX_RETRIES + 1
+        assert result.outcome == sc.OUTCOME_UNREACHABLE
 
     def test_the_budget_stays_tighter_than_the_company_pages(self, monkeypatch):
         """These run sequentially behind the pacer, so every retry costs
@@ -632,14 +710,81 @@ class TestPeersRetry:
 
         assert sc._PEERS_MAX_RETRIES < 3
 
+    # -- the three empty results are not the same empty result --------------
+    #
+    # This is the distinction whose absence let the whole channel return
+    # nothing on three consecutive runs while the log said only "0 industry
+    # table(s)". Each mode now leaves a different trace.
+
+    def test_a_200_that_parses_to_nothing_is_not_a_network_failure(self, monkeypatch):
+        import providers.screener as sc
+
+        session = self._Session([200], "<html><body>Please log in</body></html>")
+        result = self._run(session, monkeypatch)
+
+        assert session.calls == 1, "a 200 is an answer; retrying it is pointless"
+        assert result.rows == []
+        assert result.outcome == sc.OUTCOME_NO_ROWS
+        # And it carries the evidence needed to fix the parser without having
+        # to reach Screener by hand.
+        assert "table=no" in result.detail
+        assert "log in" in result.detail
+
+    def test_retry_after_is_honoured_over_our_own_backoff(self, monkeypatch):
+        """A 429 is the service saying how long to wait. Guessing shorter is
+        what earns the next one."""
+        import asyncio
+
+        import providers.screener as sc
+
+        slept = []
+
+        async def _record(delay):
+            slept.append(delay)
+
+        monkeypatch.setattr(asyncio, "sleep", _record)
+        monkeypatch.setattr(sc, "parse_peer_table", lambda _t: [{"ticker": "P"}])
+        session = self._Session([429, 200], "x", response_headers={"Retry-After": "7"})
+
+        asyncio.run(sc.fetch_peers_async(session, "HAL", 1))
+
+        assert slept, "the retry should have waited"
+        assert slept[0] == 7.0, f"expected Screener's 7s, waited {slept[0]}s"
+
+    def test_an_absurd_retry_after_cannot_stall_the_run(self, monkeypatch):
+        import asyncio
+
+        import providers.screener as sc
+        import utils
+
+        slept = []
+
+        async def _record(delay):
+            slept.append(delay)
+
+        monkeypatch.setattr(asyncio, "sleep", _record)
+        monkeypatch.setattr(sc, "parse_peer_table", lambda _t: [{"ticker": "P"}])
+        session = self._Session(
+            [429, 200], "x", response_headers={"Retry-After": "86400"}
+        )
+
+        asyncio.run(sc.fetch_peers_async(session, "HAL", 1))
+
+        assert slept[0] == utils.MAX_RETRY_AFTER_S
+
     def test_a_404_is_an_answer_and_is_not_retried(self, monkeypatch):
         """This company has no peer table. Re-asking spends the budget on a
-        question already answered."""
+        question already answered — and it is reported as an HTTP error rather
+        than as an industry that happens to be empty."""
+        import providers.screener as sc
+
         session = self._Session([404, 200])
-        _ticker, rows = self._run(session, monkeypatch)
+        result = self._run(session, monkeypatch)
 
         assert session.calls == 1
-        assert rows == []
+        assert result.rows == []
+        assert result.outcome == sc.OUTCOME_HTTP
+        assert result.detail == "HTTP 404"
 
     def test_a_clean_response_makes_one_request(self, monkeypatch):
         import providers.screener as sc
