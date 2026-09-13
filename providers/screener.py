@@ -1,9 +1,15 @@
 import aiohttp
 import asyncio
+from collections import Counter, namedtuple
 from bs4 import BeautifulSoup
 from logger import log
 from analysis.parsing import extract_row_values, calculate_trend, calculate_growth
-from utils import TransientNetworkError, fetch_text_async, retry_network
+from utils import (
+    TransientNetworkError,
+    fetch_text_async,
+    retry_after_of,
+    retry_network,
+)
 
 # The pledge row matched nothing on the first live run — 0 of 69 holdings —
 # and Screener refuses connections from the build sandbox, so the labels had
@@ -371,6 +377,15 @@ def parse_peer_table(html):
 _PEERS_MAX_RETRIES = 2
 _PEERS_BASE_DELAY = 2.0
 
+# Stop once this many holdings in a row come back with no usable table.
+#
+# Eight is comfortably more than any plausible run of genuinely peerless
+# companies -- a holding with no peer table is rare, and eight consecutive is
+# not a coincidence, it is the channel being down. The 13 Sep run spent 75
+# seconds and 66 requests to learn this the slow way, drawing six 429s from a
+# service that was already telling us to back off.
+_PEERS_ABORT_AFTER_EMPTY = 8
+
 
 @retry_network(max_retries=_PEERS_MAX_RETRIES, base_delay=_PEERS_BASE_DELAY)
 async def _fetch_peers_once(session, url, headers):
@@ -379,11 +394,74 @@ async def _fetch_peers_once(session, url, headers):
     Only the transient statuses raise. A 404 is a real answer -- this company
     has no peer table -- and retrying it would spend the budget re-asking a
     question already answered.
+
+    A 429 carries Screener's own Retry-After when it sends one, so the backoff
+    waits as long as the service asked rather than guessing shorter and
+    earning the next 429.
     """
     async with session.get(url, headers=headers, timeout=10) as response:
         if response.status in (408, 429, 500, 502, 503, 504):
-            raise TransientNetworkError(f"HTTP {response.status} for {url}")
-        return response.status, await response.text()
+            raise TransientNetworkError(
+                f"HTTP {response.status} for {url}",
+                retry_after=retry_after_of(response),
+            )
+        # Content-Type travels with the body because it is the cheapest way to
+        # tell "the HTML changed shape" from "this endpoint returns JSON now"
+        # from "we were handed a login page", and this environment cannot
+        # reach Screener to find out by hand.
+        content_type = ""
+        try:
+            content_type = response.headers.get("Content-Type", "") or ""
+        except Exception:  # noqa: BLE001 - diagnostics must never raise
+            content_type = ""
+        return response.status, await response.text(), content_type
+
+
+# One fetch's outcome, kept apart from its rows.
+#
+# The old signature returned a bare list, so "the network died", "Screener
+# said 404" and "we got a page and understood none of it" were all the same
+# empty list. That is why a channel could return nothing for every holding on
+# three consecutive runs and leave no trace in the log saying which of those
+# three things happened -- the information was discarded at the only point it
+# existed.
+PeerFetch = namedtuple("PeerFetch", "ticker rows outcome detail")
+
+OUTCOME_OK = "ok"
+OUTCOME_NO_ROWS = "no_rows"
+OUTCOME_HTTP = "http_error"
+OUTCOME_UNREACHABLE = "unreachable"
+
+
+def describe_fragment(text, content_type="", limit=220):
+    """A bounded description of a response we could not parse.
+
+    This exists to answer, from the log alone, the question that otherwise
+    needs a live request to Screener: what IS the server sending us? It states
+    the size, whether a table is present at all, and the header cells found, so
+    a shape change, an empty body and a login wall are told apart without
+    guessing. Bounded and stripped, because a log line is not a place to paste
+    a web page.
+    """
+    if text is None:
+        return "no body"
+    raw = str(text)
+    try:
+        soup = BeautifulSoup(raw, "lxml")
+        table = soup.find("table")
+        headers = (
+            [th.get_text(strip=True) for th in table.find_all("th")][:12]
+            if table
+            else []
+        )
+        visible = " ".join(soup.get_text(" ", strip=True).split())[:limit]
+    except Exception:  # noqa: BLE001 - diagnostics must never raise
+        table, headers, visible = None, [], raw[:limit]
+    return (
+        f"{len(raw)} bytes, type={content_type or 'unstated'!r}, "
+        f"table={'yes' if table is not None else 'no'}, "
+        f"headers={headers!r}, text={visible!r}"
+    )
 
 
 async def fetch_peers_async(session, ticker, warehouse_id):
@@ -394,22 +472,25 @@ async def fetch_peers_async(session, ticker, warehouse_id):
     row arrives with quarterly sales variation attached, so candidates can be
     growth-screened immediately.
 
-    Enhancement data, so it still degrades to an empty list on any failure --
-    it just no longer gives up on the first rate-limit response.
+    Enhancement data, so it still degrades to no rows on any failure -- but the
+    reason is carried out with it rather than thrown away.
     """
     url = f"https://www.screener.in/api/company/{warehouse_id}/peers/"
     headers = {"X-Requested-With": "XMLHttpRequest"}
     try:
-        status, text = await _fetch_peers_once(session, url, headers)
+        status, text, content_type = await _fetch_peers_once(session, url, headers)
     except Exception as e:
-        # Includes a transient status that survived every retry. Logged as the
-        # data loss it is: this holding's industry goes unscanned this run.
-        log.warning(f"{ticker}: Screener peers fetch failed after retries: {e!r}")
-        return ticker, []
+        return PeerFetch(ticker, [], OUTCOME_UNREACHABLE, repr(e))
     if status != 200:
-        log.warning(f"{ticker}: Screener peers API returned {status}")
-        return ticker, []
-    return ticker, parse_peer_table(text)
+        return PeerFetch(ticker, [], OUTCOME_HTTP, f"HTTP {status}")
+    rows = parse_peer_table(text)
+    if not rows:
+        # A 200 we could not read. Distinct from every other empty result, and
+        # the only one whose cause lives in the response body.
+        return PeerFetch(
+            ticker, [], OUTCOME_NO_ROWS, describe_fragment(text, content_type)
+        )
+    return PeerFetch(ticker, rows, OUTCOME_OK, "")
 
 
 # Screener.in's limiter is rate-based, not concurrency-based: a live run at
@@ -524,21 +605,81 @@ async def _fetch_industry_tables(holdings, throttled, session):
     """
     covered = set()
     tables = []
-    for ticker, warehouse_id in holdings:
+    outcomes = Counter()
+    first_unreadable = None
+    consecutive_empty = 0
+    attempted = 0
+
+    for index, (ticker, warehouse_id) in enumerate(holdings):
         if ticker in covered:
             continue
-        _, rows = await throttled(fetch_peers_async(session, ticker, warehouse_id))
+        result = await throttled(fetch_peers_async(session, ticker, warehouse_id))
         covered.add(ticker)
-        if not rows:
+        attempted += 1
+        outcomes[result.outcome] += 1
+
+        if result.outcome == OUTCOME_NO_ROWS and first_unreadable is None:
+            # Captured once, not per holding: 66 copies of the same diagnostic
+            # is not 66 times the evidence.
+            first_unreadable = (result.ticker, result.detail)
+
+        if not result.rows:
+            consecutive_empty += 1
+            if consecutive_empty >= _PEERS_ABORT_AFTER_EMPTY:
+                # The channel is not answering. Continuing would issue another
+                # fifty requests that cannot succeed, to a service that is
+                # already rate-limiting us — the run gets slower, Screener gets
+                # loaded, and the result is the same empty list.
+                remaining = len(holdings) - (index + 1)
+                log.warning(
+                    f"Peer radar: giving up after {consecutive_empty} consecutive "
+                    f"holdings returned no usable peer table. Skipping the "
+                    f"remaining {remaining} request(s)."
+                )
+                if remaining:
+                    outcomes["skipped"] = remaining
+                break
             continue
-        tables.append((ticker, rows))
+
+        consecutive_empty = 0
+        tables.append((result.ticker, result.rows))
         # Everyone in this table is in the same industry as `ticker`.
-        covered.update(r["ticker"] for r in rows)
-    log.info(
-        f"Peer radar: {len(tables)} industry table(s) fetched for "
-        f"{len(holdings)} holding(s)."
-    )
+        covered.update(r["ticker"] for r in result.rows)
+
+    _log_peer_radar(tables, holdings, attempted, outcomes, first_unreadable)
     return tables
+
+
+def _log_peer_radar(tables, holdings, attempted, outcomes, first_unreadable):
+    """State what the peer channel actually did, in one line per run.
+
+    Previously this was a bare count of tables, which cannot distinguish "every
+    industry was already covered" from "every request failed" — and the second
+    is what had been happening, unnoticed, for at least three runs.
+    """
+    breakdown = ", ".join(
+        f"{count} {name.replace('_', ' ')}" for name, count in sorted(outcomes.items())
+    )
+    summary = (
+        f"Peer radar: {len(tables)} industry table(s) from {attempted} request(s) "
+        f"across {len(holdings)} holding(s)"
+        f"{' — ' + breakdown if breakdown else ''}."
+    )
+
+    # A channel that produced nothing at all is a broken feature, not a quiet
+    # day, and must not be reported at the same level as a normal result.
+    if holdings and not tables:
+        log.warning(summary)
+        log.warning(
+            "Peer radar: competitor discovery, candidate screening and "
+            "industry share all depend on this and will be empty this run."
+        )
+    else:
+        log.info(summary)
+
+    if first_unreadable:
+        ticker, detail = first_unreadable
+        log.warning(f"Peer radar: unreadable response for {ticker} — {detail}")
 
 
 def _assemble_peer_views(peer_results, ticker_to_sector, watchlist_tickers):
