@@ -114,7 +114,23 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add dashboard_data.json history.json watchlist.json rotation_ledger.json isin_master.json entity_graph.json news/
+          # data/ holds the payload sidecars, news/ the coverage sidecars.
+          # Both are tracked, and every run rewrites them — leaving either out
+          # of this list strands them as unstaged changes, which is not a
+          # cosmetic omission: git pull --rebase refuses to run at all, so the
+          # commit below is made and then never pushed.
+          git add dashboard_data.json history.json watchlist.json rotation_ledger.json isin_master.json entity_graph.json news/ data/
+
+          # Anything the run rewrote that is not on that list would fail the
+          # rebase two steps down with "cannot pull with rebase", which says
+          # nothing about the cause. Name it here instead.
+          leftover=$(git diff --name-only)
+          if [ -n "$leftover" ]; then
+            echo "::error::Tracked files were modified but are not in the git add list above:"
+            echo "$leftover"
+            exit 1
+          fi
+
           if git diff --cached --quiet; then
             echo "No changes to commit"
           else
