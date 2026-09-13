@@ -9,13 +9,19 @@
 // and that is a relationship between two measures — the form a two-y-axis bar
 // chart gets wrong, which is why the skill calls dual axes the single most
 // misread chart.
+//
+// The filter row scopes the scatter, the count in the subtitle and the table
+// together. That is the point of putting it above all three rather than inside
+// one panel: there is no arrangement of controls that leaves the chart
+// describing seventy holdings while the table describes nine.
 
 import { el, mount } from "../core/dom.js";
 import { num, crore, pct, bandIndex, BANDS } from "../core/format.js";
 import { resolveTicker, loadCoverage } from "../core/data.js";
+import * as filters from "../core/filters.js";
 import * as charts from "../charts/charts.js";
-import { statusColour } from "../charts/palette.js";
 import { dataTable, panel, chartFrame, tickerLink } from "./table.js";
+import { filterBar, filteredEmpty } from "./filterbar.js";
 
 function flatten(watchlist) {
   const out = [];
@@ -81,14 +87,33 @@ async function drawer(stock, payload) {
 }
 
 export async function render(container, { payload, route }) {
+  const b = payload?.briefing || {};
   const all = flatten(payload?.watchlist);
-  const sectorFilter = route?.params?.sector || null;
-  const rows = sectorFilter ? all.filter((s) => s.sector === sectorFilter) : all;
+  const active = filters.read(route);
+  const thesisByTicker = filters.thesisIndex(b);
+  const rows = filters.applyHoldings(all, active, { thesisByTicker });
+  const params = (route && route.params) || {};
+  const sectors = Object.keys(payload?.watchlist || {}).sort();
 
-  // One series, so the all-pairs colour cap does not apply. Points are marked
-  // by delivery band using the reserved status roles, and the band name is in
-  // every tooltip — colour never carries it alone.
-  const points = rows
+  // Grouped by delivery band, one dataset each, so the legend names every
+  // colour on screen. These are the reserved STATUS roles rather than
+  // categorical hues, which is correct — a band is an ordered judgement about
+  // a holding, not an identity — and status colour never travels without its
+  // label.
+  //
+  // trade-to-trade is `warning` and not `good` on purpose: delivery is
+  // compulsory in that segment, so a high figure there is a surveillance rule
+  // rather than evidence of real buyers, and colouring it like delivery-led
+  // would manufacture a bullish signal out of a trading restriction.
+  const BAND_SERIES = [
+    { band: "delivery-led", label: "Delivery-led", status: "good" },
+    { band: "mixed", label: "Mixed", status: "serious" },
+    { band: "churn", label: "Churn", status: "critical" },
+    { band: "trade-to-trade", label: "Trade-to-trade", status: "warning" },
+    { band: null, label: "Band not reported", status: "unknown" },
+  ];
+
+  const plotted = rows
     .map((s) => {
       const sc = s.screener || {};
       const x = num(sc.advt_cr);
@@ -99,6 +124,17 @@ export async function render(container, { payload, route }) {
     })
     .filter(Boolean);
 
+  const known = new Set(BAND_SERIES.map((s) => s.band).filter(Boolean));
+  const series = BAND_SERIES.map((s) => ({
+    label: s.label,
+    status: s.status,
+    points: plotted.filter((p) =>
+      s.band === null ? !p.band || !known.has(p.band) : p.band === s.band,
+    ),
+  }));
+
+  const filtered = filters.activeCount(active) > 0;
+
   mount(
     container,
     el(
@@ -108,43 +144,60 @@ export async function render(container, { payload, route }) {
       el(
         "p",
         { class: "view-sub" },
-        sectorFilter
-          ? `${rows.length} in ${sectorFilter.replace(/_/g, " ")}`
-          : `${rows.length} holdings across ${Object.keys(payload?.watchlist || {}).length} sectors`,
+        filtered
+          ? `${rows.length} of ${all.length} holdings`
+          : `${all.length} holdings across ${sectors.length} sectors`,
       ),
     ),
 
-    points.length
+    filterBar({
+      view: "holdings",
+      route,
+      filters: active,
+      fields: ["q", "sector", "thesis", "band"],
+      sectors,
+      summary: plotted.length ? `${plotted.length} plotted` : "",
+    }),
+
+    plotted.length
       ? panel(
           "Delivery against turnover",
           "Turnover counts every share that changed hands; delivery counts the " +
             "ones that settled. A name high on the x-axis and low on the y traded " +
-            "heavily and delivered little — deep by turnover, few real buyers.",
-          chartFrame("chart-delivery", 300),
+            "heavily and delivered little — deep by turnover, few real buyers. " +
+            "Holdings missing either figure are absent from the plot rather than " +
+            "drawn at zero, so the count above may be lower than the table's.",
+          chartFrame("chart-delivery", 330),
         )
       : null,
 
     panel(
-      sectorFilter ? "In this sector" : "All holdings",
+      filtered ? "Matching holdings" : "All holdings",
       null,
       dataTable(
         rows,
         [
-          { key: "ticker", label: "Stock", render: (r) => tickerLink(r.ticker, "holdings") },
+          {
+            key: "ticker",
+            label: "Stock",
+            render: (r) => tickerLink(r.ticker, "holdings", params),
+          },
           { key: "name", label: "Name" },
           { key: "sector", label: "Sector", render: (r) => String(r.sector).replace(/_/g, " ") },
           { key: "price", label: "Price", numeric: true },
           { key: "growth_pct", label: "Upside", numeric: true, render: (r) => pct(r.growth_pct) },
           {
-            key: "advt",
+            key: "advt_cr",
             label: "Turnover",
             numeric: true,
+            sortValue: (r) => r.screener?.advt_cr,
             render: (r) => crore(r.screener?.advt_cr),
           },
           {
-            key: "deliv",
+            key: "deliv_pct",
             label: "Delivery",
             numeric: true,
+            sortValue: (r) => r.screener?.deliv_pct,
             render: (r) => {
               const d = num(r.screener?.deliv_pct);
               if (d === null) return "—";
@@ -159,28 +212,23 @@ export async function render(container, { payload, route }) {
             },
           },
         ],
-        { focus: route?.focus, empty: "No holdings match." },
+        {
+          focus: route?.focus,
+          view: "holdings",
+          route,
+          empty: filtered ? filteredEmpty("holdings", params, "holdings") : "No holdings loaded.",
+        },
       ),
     ),
 
     el("div", { id: "holding-drawer" }),
   );
 
-  if (points.length) {
+  if (plotted.length) {
     charts.scatter(document.getElementById("chart-delivery"), {
-      points,
+      series,
       xLabel: "₹ Cr traded/day",
       yLabel: "% delivered",
-      marker: (p) =>
-        statusColour(
-          p.band === "churn"
-            ? "critical"
-            : p.band === "trade-to-trade"
-              ? "warning"
-              : p.band === "delivery-led"
-                ? "good"
-                : "serious",
-        ),
     });
   }
 

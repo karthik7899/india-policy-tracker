@@ -12,7 +12,9 @@
 import { el, mount } from "../core/dom.js";
 import { shortDate } from "../core/format.js";
 import { href } from "../core/router.js";
+import * as filters from "../core/filters.js";
 import { dataTable, panel } from "./table.js";
+import { filterBar, filteredEmpty } from "./filterbar.js";
 
 const STREAMS = [
   ["all", "Everything", null],
@@ -52,24 +54,34 @@ function normalise(item, streamLabel) {
   };
 }
 
+const CAP = 80;
+
 export async function render(container, { payload, route }) {
   const b = payload?.briefing || {};
   const stream = route?.params?.stream || "all";
+  const params = (route && route.params) || {};
+  const active = filters.read(route);
 
-  let rows = [];
+  let all = [];
   if (stream === "all") {
     for (const [, label, key] of STREAMS) {
       if (!key) continue;
-      for (const item of b[key] || []) rows.push(normalise(item, label));
+      for (const item of b[key] || []) all.push(normalise(item, label));
     }
     // Interleaved by date rather than concatenated: concatenation is exactly
     // what let one source consume every slot in the filings section.
-    rows.sort((a, c) => String(c.when).localeCompare(String(a.when)));
-    rows = rows.slice(0, 80);
+    all.sort((a, c) => String(c.when).localeCompare(String(a.when)));
   } else {
     const entry = STREAMS.find(([k]) => k === stream);
-    rows = (b[entry?.[2]] || []).map((i) => normalise(i, entry?.[1]));
+    all = (b[entry?.[2]] || []).map((i) => normalise(i, entry?.[1]));
   }
+
+  // Filter BEFORE the cap, not after. Capping first would search only the
+  // newest eighty items and report "no matches" for something that is
+  // genuinely in the stream, a step behind where the reader is looking.
+  const matched = filters.applyItems(all, active);
+  const rows = matched.slice(0, CAP);
+  const anyFilter = filters.activeCount(active) > 0;
 
   mount(
     container,
@@ -77,8 +89,23 @@ export async function render(container, { payload, route }) {
       "header",
       { class: "view-head" },
       el("h2", { class: "view-title" }, "Flow"),
-      el("p", { class: "view-sub" }, `${rows.length} items`),
+      el(
+        "p",
+        { class: "view-sub" },
+        anyFilter
+          ? `${matched.length} of ${all.length} items`
+          : `${all.length} items`,
+      ),
     ),
+
+    filterBar({
+      view: "flow",
+      route,
+      filters: active,
+      fields: ["q", "days"],
+      summary: matched.length > CAP ? `showing the newest ${CAP}` : "",
+    }),
+
     streamNav(stream, route || { params: {} }),
     panel(
       null,
@@ -91,6 +118,7 @@ export async function render(container, { payload, route }) {
           {
             key: "what",
             label: "What",
+            sortable: false,
             render: (r) =>
               r.link
                 ? el("a", { href: r.link, target: "_blank", rel: "noopener noreferrer" }, r.what)
@@ -98,7 +126,15 @@ export async function render(container, { payload, route }) {
           },
           { key: "source", label: "Source" },
         ],
-        { tickerKey: "who", focus: route?.focus, empty: "Nothing in this stream." },
+        {
+          tickerKey: "who",
+          focus: route?.focus,
+          view: "flow",
+          route,
+          empty: anyFilter
+            ? filteredEmpty("flow", params, "items")
+            : "Nothing in this stream.",
+        },
       ),
     ),
   );

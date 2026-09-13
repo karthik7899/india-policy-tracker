@@ -217,42 +217,74 @@ export function statusBand(canvas, { segments }) {
  * between two numbers, which is what a scatter is for. One series, so the
  * all-pairs colour cap is not in play.
  */
-export function scatter(canvas, { points, xLabel, yLabel, marker }) {
+export function scatter(canvas, { series, xLabel, yLabel }) {
   if (!available() || !canvas) return null;
   destroy(canvas);
   const t = tokens();
+  const groups = (series || []).filter((s) => s.points.length);
   const chart = new window.Chart(canvas.getContext("2d"), {
     type: "scatter",
     data: {
-      datasets: [
-        {
-          data: points,
-          // >=8px markers, with a 2px surface ring so overlapping points stay
-          // countable instead of merging into a blob.
-          pointRadius: 5,
-          pointHoverRadius: 8,
-          pointBorderWidth: 2,
-          pointBorderColor: t.surface,
-          pointBackgroundColor: points.map((p) => marker?.(p) ?? t.muted),
-        },
-      ],
+      // One dataset per band rather than one dataset with per-point colours.
+      // The colours mean something, so they need a key on screen — and a
+      // legend Chart.js derives from real datasets is one the reader can also
+      // click to isolate a band.
+      datasets: groups.map((group) => ({
+        label: group.label,
+        data: group.points,
+        backgroundColor: statusColour(group.status),
+        // >=8px markers, with a 2px surface ring so overlapping points stay
+        // countable instead of merging into a blob.
+        pointRadius: 5,
+        pointHoverRadius: 8,
+        pointBorderWidth: 2,
+        pointBorderColor: t.surface,
+        // The hit target is bigger than the mark. A 10px dot is a pinpoint
+        // nobody lands on; this gives each point a ~24px catch radius, which
+        // is the difference between a chart that answers on hover and one
+        // that looks broken.
+        hitRadius: 12,
+        hoverBorderWidth: 2,
+      })),
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
       animation: { duration: 220 },
+      // Nearest-point in both axes, so the pointer only has to be closest
+      // rather than dead-centre on a dot.
+      interaction: { mode: "nearest", intersect: false },
       plugins: {
-        legend: { display: false },
+        legend: {
+          display: groups.length > 1,
+          position: "bottom",
+          labels: {
+            color: t.inkSecondary,
+            boxWidth: 8,
+            usePointStyle: true,
+            pointStyle: "circle",
+            font: { size: 11 },
+          },
+        },
         tooltip: {
           backgroundColor: t.surface,
           titleColor: t.ink,
           bodyColor: t.inkSecondary,
           borderColor: t.axis,
           borderWidth: 1,
+          padding: 10,
           callbacks: {
+            // The value leads and the label follows: the reader already knows
+            // which dot they are pointing at and wants the numbers.
+            title: (items) => items[0]?.raw?.label ?? "",
             label: (ctx) => {
               const p = ctx.raw;
-              return `${p.label}: ${p.x} ${xLabel}, ${p.y} ${yLabel}`;
+              const lines = [`${p.x} ${xLabel}`, `${p.y} ${yLabel}`];
+              // The band is the reading of the two numbers. The legend already
+              // names it; repeating it here means a reader who is hovering does
+              // not have to look away to the key.
+              if (p.band) lines.push(`band: ${p.band}`);
+              return lines;
             },
           },
         },
@@ -267,6 +299,82 @@ export function scatter(canvas, { points, xLabel, yLabel, marker }) {
           title: { display: true, text: yLabel, color: t.muted, font: { size: 11 } },
           grid: { color: t.grid, drawBorder: false },
           ticks: { color: t.muted, font: { size: 11 } },
+        },
+      },
+    },
+  });
+  registry.set(canvas, chart);
+  return chart;
+}
+
+/**
+ * The same ordered state, broken out across groups — thesis health per sector.
+ *
+ * The single statusBand answers "how much of the book is broken". It cannot
+ * answer "where", and a portfolio with nine broken theses in one sector is a
+ * different situation from nine spread evenly. Same reserved status colours,
+ * same rule that every segment is named in the legend.
+ *
+ * Stacked to 100% would make a one-holding sector look as weighty as a
+ * fifteen-holding one, so these are absolute counts and the bar lengths are
+ * comparable across rows.
+ */
+export function statusByGroup(canvas, { groups, statuses }) {
+  if (!available() || !canvas) return null;
+  destroy(canvas);
+  const t = tokens();
+  const chart = new window.Chart(canvas.getContext("2d"), {
+    type: "bar",
+    data: {
+      labels: groups.map((g) => g.label),
+      datasets: statuses.map((s) => ({
+        label: s.label,
+        data: groups.map((g) => g.counts[s.key] || 0),
+        backgroundColor: statusColour(s.status),
+        borderColor: t.surface,
+        borderWidth: 2,
+        borderRadius: 3,
+        barPercentage: 0.82,
+      })),
+    },
+    options: {
+      indexAxis: "y",
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 220 },
+      plugins: {
+        legend: {
+          display: true,
+          position: "bottom",
+          labels: { color: t.inkSecondary, boxWidth: 10, font: { size: 11 } },
+        },
+        tooltip: {
+          backgroundColor: t.surface,
+          titleColor: t.ink,
+          bodyColor: t.inkSecondary,
+          borderColor: t.axis,
+          borderWidth: 1,
+          padding: 10,
+          // Every series at this row, so the pointer never has to find a
+          // particular segment to read the split.
+          mode: "index",
+          callbacks: {
+            label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.x}`,
+          },
+        },
+      },
+      scales: {
+        x: {
+          stacked: true,
+          grid: { color: t.grid, drawBorder: false },
+          ticks: { color: t.muted, font: { size: 11 }, precision: 0 },
+          border: { color: t.axis },
+        },
+        y: {
+          stacked: true,
+          grid: { display: false },
+          ticks: { color: t.muted, font: { size: 11 } },
+          border: { color: t.axis },
         },
       },
     },
