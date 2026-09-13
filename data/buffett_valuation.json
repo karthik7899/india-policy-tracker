@@ -719,8 +719,8 @@
         "momentum_score": 8,
         "confidence": "High",
         "reasons": [
+          "Policy Notification: Sterlite Technologies Share Price",
           "Policy Notification: Pursuant to Regulation 30 of SEBI (Listing Obligations and Disclosure Requirements) Regulations, 2015, please find enclosed transcript of Analyst/ Investor Meet held on September 3, 2026.",
-          "Policy Notification: STLTECH: Sterlite Technologies Limited has informed the Exchange regarding a press release dated August 27, 2026, titled \"Press Release   Sterlite Technologies Limited ( STL ) takes a major leap towards Decarbonisation; enabling Eco-friend…",
           "Strong revenue growth (TTM +36.2%)",
           "Operating Margin Expansion (+6.0%)",
           "Liquid (Rs 125 Cr traded daily)",
@@ -1926,6 +1926,35 @@
       }
     },
     {
+      "ticker": "GODREJPROP",
+      "name": "Godrej Propert.",
+      "owner_earnings": 2566.3,
+      "moat": "Weak/None",
+      "moat_status": "Weak/None",
+      "retained_earnings_ratio": 2.86,
+      "passed_retained_test": true,
+      "score": {
+        "overall_score": -2,
+        "fundamental_score": -6,
+        "momentum_score": 4,
+        "confidence": "High",
+        "reasons": [
+          "Policy Notification: Godrej Properties GODREJPROP: Gurugram Dispute Settled",
+          "Liquid (Rs 127 Cr traded daily)",
+          "DII Accumulation (+0.84%)"
+        ],
+        "risks": [
+          "Operating margin contracted (-73.0pp)",
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Fails P/E Screen (P/E 32.6 > 15 & Price > Intrinsic)",
+          "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
+        ],
+        "recommendations": [
+          "Avoid / High Risk"
+        ]
+      }
+    },
+    {
       "ticker": "UTLSOLAR",
       "name": "Fujiyama Power",
       "owner_earnings": -25.8,
@@ -2030,35 +2059,6 @@
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
           "Fails P/E Screen (P/E 81.2 > 15 & Price > Intrinsic)",
-          "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
-        ],
-        "recommendations": [
-          "Avoid / High Risk"
-        ]
-      }
-    },
-    {
-      "ticker": "GODREJPROP",
-      "name": "Godrej Propert.",
-      "owner_earnings": 2566.3,
-      "moat": "Weak/None",
-      "moat_status": "Weak/None",
-      "retained_earnings_ratio": 2.86,
-      "passed_retained_test": true,
-      "score": {
-        "overall_score": -5,
-        "fundamental_score": -6,
-        "momentum_score": 1,
-        "confidence": "High",
-        "reasons": [
-          "Sector benefits from macro policy tailwinds (Fallback)",
-          "Liquid (Rs 127 Cr traded daily)",
-          "DII Accumulation (+0.84%)"
-        ],
-        "risks": [
-          "Operating margin contracted (-73.0pp)",
-          "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 32.6 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
