@@ -405,7 +405,16 @@ async def _fetch_peers_once(session, url, headers):
                 f"HTTP {response.status} for {url}",
                 retry_after=retry_after_of(response),
             )
-        return response.status, await response.text()
+        # Content-Type travels with the body because it is the cheapest way to
+        # tell "the HTML changed shape" from "this endpoint returns JSON now"
+        # from "we were handed a login page", and this environment cannot
+        # reach Screener to find out by hand.
+        content_type = ""
+        try:
+            content_type = response.headers.get("Content-Type", "") or ""
+        except Exception:  # noqa: BLE001 - diagnostics must never raise
+            content_type = ""
+        return response.status, await response.text(), content_type
 
 
 # One fetch's outcome, kept apart from its rows.
@@ -424,7 +433,7 @@ OUTCOME_HTTP = "http_error"
 OUTCOME_UNREACHABLE = "unreachable"
 
 
-def describe_fragment(text, limit=180):
+def describe_fragment(text, content_type="", limit=220):
     """A bounded description of a response we could not parse.
 
     This exists to answer, from the log alone, the question that otherwise
@@ -449,7 +458,8 @@ def describe_fragment(text, limit=180):
     except Exception:  # noqa: BLE001 - diagnostics must never raise
         table, headers, visible = None, [], raw[:limit]
     return (
-        f"{len(raw)} bytes, table={'yes' if table is not None else 'no'}, "
+        f"{len(raw)} bytes, type={content_type or 'unstated'!r}, "
+        f"table={'yes' if table is not None else 'no'}, "
         f"headers={headers!r}, text={visible!r}"
     )
 
@@ -468,7 +478,7 @@ async def fetch_peers_async(session, ticker, warehouse_id):
     url = f"https://www.screener.in/api/company/{warehouse_id}/peers/"
     headers = {"X-Requested-With": "XMLHttpRequest"}
     try:
-        status, text = await _fetch_peers_once(session, url, headers)
+        status, text, content_type = await _fetch_peers_once(session, url, headers)
     except Exception as e:
         return PeerFetch(ticker, [], OUTCOME_UNREACHABLE, repr(e))
     if status != 200:
@@ -477,7 +487,9 @@ async def fetch_peers_async(session, ticker, warehouse_id):
     if not rows:
         # A 200 we could not read. Distinct from every other empty result, and
         # the only one whose cause lives in the response body.
-        return PeerFetch(ticker, [], OUTCOME_NO_ROWS, describe_fragment(text))
+        return PeerFetch(
+            ticker, [], OUTCOME_NO_ROWS, describe_fragment(text, content_type)
+        )
     return PeerFetch(ticker, rows, OUTCOME_OK, "")
 
 
