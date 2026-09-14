@@ -1,0 +1,77 @@
+name: Probe upstream source
+
+# Diagnosis, decoupled from delivery.
+#
+# Every upstream this pipeline reads is denied by the development
+# environment's egress policy, so answering "what is Screener serving now?"
+# used to mean firing the daily brief and reading its log. That works, and it
+# costs a merge to main, three minutes, a rewritten dashboard payload and a
+# briefing email to a human who did not ask for one. Six of them went out on
+# 13 September for exactly this reason.
+#
+# This workflow asks one source one question. No email, no commit, no payload.
+# The raw response is uploaded as an artifact so a fixture can be built from
+# the genuine article instead of reconstructed from a log line.
+
+on:
+  workflow_dispatch:
+    inputs:
+      source:
+        description: Which upstream to ask
+        type: choice
+        required: true
+        default: all
+        options:
+          - all
+          - screener-peers
+          - nse-isin
+          - bse-scrips
+          - nse-delivery
+      symbol:
+        description: Ticker for the per-company probes
+        type: string
+        required: false
+        default: HAL
+
+# Read-only. This workflow must never be able to change the repository — that
+# is the whole difference between it and the daily brief.
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Probe
+        env:
+          PROBE_OUT: probe-output
+        run: |
+          python scripts/probe_upstream.py \
+            --source "${{ inputs.source }}" \
+            --symbol "${{ inputs.symbol }}"
+
+      # Uploaded rather than committed: these are third-party responses, and
+      # the repository is not the right home for them. An artifact is fetchable
+      # through the API, which is all a fixture needs.
+      - name: Upload samples
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: upstream-sample-${{ inputs.source }}
+          path: probe-output/
+          retention-days: 7
+          if-no-files-found: ignore
