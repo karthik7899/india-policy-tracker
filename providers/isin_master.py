@@ -26,11 +26,27 @@ So this provider is offline-first:
 A CAUTION ABOUT THE BSE MERGE. NSE's SYMBOL and BSE's scrip_id are both
 ticker-like codes and usually agree for a dual-listed company, but they are
 different namespaces: nothing guarantees that a BSE-only scrip_id is not
-also some other company's NSE symbol. NSE is merged first and existing
-entries are never overwritten, so a collision cannot corrupt a mapping we
-already trust — it can only decline to add one. Collisions are counted and
-logged rather than assumed rare, because that count is the only evidence of
-whether the risk is real.
+also some other company's NSE symbol. Collisions are counted and logged
+rather than assumed rare, because that count is the only evidence of whether
+the risk is real.
+
+The count answered. It sat at exactly 140 NSE and 130 BSE on every run for
+days — far too stable to be feed noise, and the signature of a systematic
+namespace collision. It also exposed that the resolution was not working:
+
+  Merging NSE first was supposed to mean the NSE mapping survives a
+  disagreement. Combined with "never overwrite" and a master that is
+  committed and reloaded, that only holds while the file is empty, which is
+  true exactly once. From the second run onwards NSE was merged into a master
+  already holding BSE-sourced entries and could never correct them, so 140 NSE
+  symbols were refused their own ISIN every single day.
+
+So precedence is now explicit rather than positional: NSE merges as an
+AUTHORITATIVE source and corrects what it disagrees with, because a symbol in
+NSE's equity list is an NSE listing and NSE owns that namespace by
+construction. BSE keeps never-overwrite — it is the side doing the colliding.
+A bound on how much of a feed may be corrected at once keeps the old
+protection against a corrupt fetch rewriting good identity data.
 """
 
 import csv
@@ -118,16 +134,54 @@ def parse_bse_scrip_rows(rows):
     return mapping
 
 
-def merge_new_symbols(master, fetched, source):
-    """Adds only symbols the master lacks. Returns (added, conflicts).
+# A source with authority may correct entries it disagrees with, but not
+# without limit. An exchange's ISINs do not change wholesale overnight, so a
+# fetch that wants to rewrite more than this fraction of what it carries is a
+# corrupt feed rather than news, and applying it would destroy good identity
+# data that the committed snapshot cannot get back.
+#
+# The observed real figure is ~7% (140 of ~2,000 NSE symbols), which is
+# exactly the cross-namespace collision this guard must NOT block.
+MAX_CORRECTION_FRACTION = 0.25
 
-    A conflict is the same symbol carrying a different ISIN. It is never
-    applied — ISINs do not change, so a divergent row is more likely a feed
-    glitch or a cross-namespace ticker collision than news — but it is
-    counted, because that number is the only way to learn whether merging a
-    second exchange's ticker namespace is safe.
+# ...and a fraction is only meaningful once there is enough feed to judge.
+# One row disagreeing out of one is 100% and says nothing; the corruption this
+# guards against is a mass rewrite of a full exchange listing. Below this size
+# the blast radius is small enough that NSE re-asserting the right value on the
+# next run is adequate protection on its own.
+MIN_FETCH_FOR_CORRECTION_GUARD = 50
+
+
+def merge_new_symbols(master, fetched, source, authoritative=False):
+    """Merge a source into the master. Returns (added, conflicts, corrected).
+
+    A conflict is the same symbol carrying a different ISIN.
+
+    For a NON-authoritative source it is never applied — ISINs do not change,
+    so a divergent row is more likely a feed glitch or a cross-namespace
+    ticker collision than news.
+
+    For an AUTHORITATIVE source it is corrected, and that distinction is the
+    point of this function. The module has always intended NSE to win:
+
+        "NSE goes first deliberately: it is the namespace the watchlist
+         speaks, so where the two exchanges disagree on a ticker, the NSE
+         mapping is the one that must survive."
+
+    Ordering alone cannot deliver that, because the master is committed and
+    reloaded. Going first only helps while it is empty, which is true exactly
+    once. From the second run onwards NSE is merged into a master that already
+    holds BSE-sourced entries, and "never overwrite" then means the NSE value
+    can never land — 140 NSE symbols were being refused their own ISIN on
+    every run, with a count so stable across days that it could only be
+    systematic.
+
+    A symbol present in NSE's equity list IS an NSE listing, so NSE is
+    authoritative for it by construction. BSE keeps the never-overwrite rule,
+    because its scrip_id namespace is the one doing the colliding.
     """
-    added = conflicts = 0
+    added = conflicts = corrected = 0
+    divergent = {}
     for symbol, isin in fetched.items():
         existing = master.get(symbol)
         if existing is None:
@@ -135,14 +189,43 @@ def merge_new_symbols(master, fetched, source):
             added += 1
         elif existing != isin:
             conflicts += 1
+            divergent[symbol] = (existing, isin)
+
+    if authoritative and divergent:
+        share = len(divergent) / max(len(fetched), 1)
+        if (
+            len(fetched) >= MIN_FETCH_FOR_CORRECTION_GUARD
+            and share > MAX_CORRECTION_FRACTION
+        ):
+            log.warning(
+                f"ISIN master: {source} disagrees on {len(divergent)} of "
+                f"{len(fetched)} symbols ({share:.0%}). That is too much of the "
+                "feed to be real; declining the whole correction and keeping "
+                "the committed mapping."
+            )
+        else:
+            for symbol, (_old, new) in divergent.items():
+                master[symbol] = new
+            corrected = len(divergent)
+            sample = ", ".join(
+                f"{s} {old}->{new}"
+                for s, (old, new) in list(sorted(divergent.items()))[:5]
+            )
+            log.warning(
+                f"ISIN master: corrected {corrected} symbol(s) to {source}'s "
+                f"mapping — {source} is authoritative for its own namespace and "
+                f"these were held by another. e.g. {sample}"
+            )
+            conflicts = 0
+
     if conflicts:
         log.warning(
             f"ISIN master: {conflicts} symbol(s) from {source} disagree with "
-            "the existing mapping and were NOT applied. A high count here "
-            "means the two ticker namespaces collide and this merge needs "
-            "rethinking."
+            "the existing mapping and were NOT applied. Expected where a BSE "
+            "scrip_id collides with a different company's NSE symbol; NSE "
+            "holds the key and BSE yields."
         )
-    return added, conflicts
+    return added, conflicts, corrected
 
 
 async def refresh_bse_scrips(master):
@@ -155,7 +238,9 @@ async def refresh_bse_scrips(master):
 
     try:
         rows = await asyncio.to_thread(fetch_scrip_master_sync)
-        added, _conflicts = merge_new_symbols(master, parse_bse_scrip_rows(rows), "BSE")
+        added, _conflicts, _corrected = merge_new_symbols(
+            master, parse_bse_scrip_rows(rows), "BSE"
+        )
         log.info(f"ISIN master: {added} new listings from BSE ({len(rows)} scrips).")
         return added
     except Exception as e:  # noqa: BLE001 - an enrichment must not end a run
@@ -180,6 +265,7 @@ async def refresh_isin_master_async(session, master, path=MASTER_PATH):
     that must survive.
     """
     added = 0
+    corrected = 0
     try:
         async with session.get(
             _NSE_EQUITY_LIST_URL, headers=_HEADERS, timeout=15, allow_redirects=False
@@ -191,7 +277,9 @@ async def refresh_isin_master_async(session, master, path=MASTER_PATH):
                 )
             else:
                 text = await response.text()
-                nse_added, _ = merge_new_symbols(master, parse_equity_csv(text), "NSE")
+                nse_added, _conflicts, corrected = merge_new_symbols(
+                    master, parse_equity_csv(text), "NSE", authoritative=True
+                )
                 added += nse_added
                 log.info(f"ISIN master: {nse_added} new listings from NSE.")
     except Exception as e:
@@ -202,13 +290,18 @@ async def refresh_isin_master_async(session, master, path=MASTER_PATH):
 
     added += await refresh_bse_scrips(master)
 
-    if added:
+    # A correction changes the file even when nothing was added, and once the
+    # master is saturated "nothing added" is every run. Persisting only on
+    # `added` would compute the corrected mapping and then throw it away
+    # daily — the fix would appear to work in the log and never reach disk.
+    if added or corrected:
         atomic_write_json(dict(sorted(master.items())), path)
         log.info(
-            f"ISIN master refreshed: {added} new listings added, {len(master)} total."
+            f"ISIN master refreshed: {added} new listing(s) added, "
+            f"{corrected} corrected, {len(master)} total."
         )
     else:
-        log.info(f"ISIN master refresh: no new listings ({len(master)} total).")
+        log.info(f"ISIN master refresh: no changes ({len(master)} total).")
     return added
 
 

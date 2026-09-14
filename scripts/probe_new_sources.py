@@ -146,7 +146,7 @@ def probe_isin_merge():
 
     # A COPY: this is a measurement, not a migration.
     trial = dict(master)
-    added, conflicts = im.merge_new_symbols(trial, fetched, "BSE")
+    added, conflicts, _corrected = im.merge_new_symbols(trial, fetched, "BSE")
     print(f"    would ADD           : {added} new symbols -> {len(trial)} total")
     print(f"    DISAGREEMENTS       : {conflicts}")
 
