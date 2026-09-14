@@ -165,16 +165,66 @@ problem for as long as you care to look.
 
 ---
 
-## BSE endpoint catalogue
+## BSE endpoint catalogue — re-measured, nothing moved
 
-**Measured 2026-08-14** — and **stale**. Re-run
-`scripts/probe_bse.py` (workflow: `probe-bse.yml`) before trusting any of it.
-That script is a deliberate sweep across many endpoints, which is why it is
-kept separate from `scripts/probe_upstream.py`, whose rule is one request per
-source.
+**Measured 2026-09-14**, run 34807288884 (`probe-bse.yml`), re-confirming
+2026-08-14. A month apart, and every endpoint is exactly where it was.
 
-The bhavcopy and scrip master are the two that work and that the pipeline
-depends on; see the script's own `WORKS` list for the measured shapes.
+| Endpoint | Aug 14 | Sep 14 | |
+|---|---|---|---|
+| BSE bhavcopy | 851 KB, 4,973 rows | 857,324 B, 5,008 lines | works |
+| ListofScripData | 1.75 MB, 4,975 scrips | 1,755,863 B, 5,004 | works |
+| getScripHeaderData | works | 200, 1,183 B | works |
+| AnnSubCategoryGetData | works (from 15 Aug) | serves filings | works |
+| NSE EQUITY_L.csv | — | 200, 181,324 B, 2,569 lines | works |
+| NSE UDiFF zip | 196 KB | 204,525 B, PK verified | works |
+| sec_bhavdata_full | 376 KB, 3,308 rows | 394,927 B, 3,486 lines | works |
+| NSE legacy bhavcopy | 404 | 404 | gone for good |
+| Shareholding ×4 names | 1,814 B ASP.NET miss | identical | dead |
+| AnnGetData | `"No Record Found!"` | identical, 18 B | wrong path |
+| Msnew autocomplete | HTML not JSON | identical | dead |
+
+**The scrip master carries more than the August note recorded.** Twelve keys,
+not seven: `SCRIP_CD`, `Scrip_Name`, `Status`, `GROUP`, `FACE_VALUE`,
+`ISIN_NUMBER`, `INDUSTRY`, `scrip_id`, `Segment`, `NSURL`, `Issuer_Name`,
+`Mktcap`. `INDUSTRY` is **null** in the sample, so do not plan on it —
+`Issuer_Name` and `NSURL` are the genuinely new usable fields.
+
+**The bot filter is unchanged, and asymmetric.** Same URL, headers on and off:
+
+```
+NSE archives, no headers  -> ReadTimeout after 20s
+NSE archives, browser UA  -> 200
+BSE api,      no headers  -> 403 "Access Denied" (420 bytes)
+BSE api,      browser UA  -> 200
+```
+
+NSE fails by **hanging** rather than rejecting, which is the more expensive of
+the two — a bare request costs the full timeout. The User-Agent and Referer
+that `providers/isin_master.py` sends are required, not decorative.
+
+### What this run changed in the probe itself
+
+The catalogue was re-litigating settled negatives and would have misled a
+reader:
+
+- It fired **three** parameter variations at `AnnGetData` and reported
+  "No Record Found!" three times — while `providers/bse_announcements.py` had
+  been pulling real filings from `AnnSubCategoryGetData` for a month. A
+  catalogue whose verdict contradicts the running pipeline is worse than no
+  catalogue. It now probes the live path, and keeps **one** `AnnGetData` call
+  as a labelled control, because the pair side by side is the lesson: same
+  parameters, same 200, same content type, one returns filings and one returns
+  a polite empty string.
+- It guessed **four** shareholding endpoint names every run, all returning the
+  identical generic miss, against a question this method cannot answer. Cut to
+  one tripwire.
+- `main()` printed "Probe complete" regardless of outcome — the same
+  "did not raise ≠ answered" error corrected in `probe_upstream.py`. It now
+  reports each endpoint against what is **expected**, so a known-dead endpoint
+  staying dead reads differently from a working one regressing. Without that
+  distinction a real regression hides among the failures that are supposed to
+  be there.
 
 ---
 
