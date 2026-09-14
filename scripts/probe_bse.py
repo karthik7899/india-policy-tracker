@@ -319,11 +319,28 @@ def probe_announcements():
     data problem for as long as you care to look.
     """
     print("\n=== 3. CORPORATE ANNOUNCEMENTS ===")
-    today = datetime.date.today()
-    week_ago = today - datetime.timedelta(days=7)
+
+    # A SINGLE DAY, not a range, and a COMPLETED session rather than today.
+    #
+    # Both halves were learned the expensive way. The first version of this
+    # asked strPrevDate=<7 days ago>&strToDate=<today>, inherited unexamined
+    # from the old AnnGetData probe, and got back `{}` — two bytes. That
+    # looked exactly like a regression and was reported as one, while
+    # production was fetching filings normally: the captured browser request
+    # this endpoint was found from sends strPrevDate == strToDate, one day.
+    # Whatever this endpoint does with a range, it is not what a range means.
+    #
+    # And asking for TODAY conflates "the endpoint is broken" with "it is
+    # 09:00 and nobody has filed yet" — the same trap probe_bhavcopy documents
+    # for the BSE bhavcopy. Walk back to a finished weekday, where an empty
+    # answer means something.
+    day = datetime.date.today() - datetime.timedelta(days=1)
+    while day.weekday() >= 5:
+        day -= datetime.timedelta(days=1)
+    ymd = day.strftime("%Y%m%d")
     common = {
-        "strPrevDate": week_ago.strftime("%Y%m%d"),
-        "strToDate": today.strftime("%Y%m%d"),
+        "strPrevDate": ymd,
+        "strToDate": ymd,
         "strType": "C",
         "pageno": "1",
         "strCat": "-1",
@@ -332,19 +349,38 @@ def probe_announcements():
         "subcategory": "-1",
     }
     live = _get(
-        "AnnSubCategoryGetData (the path production uses)",
+        f"AnnSubCategoryGetData (production's path, single day {day.isoformat()})",
         "https://api.bseindia.com/BseIndiaAPI/api/AnnSubCategoryGetData/w",
         params=common,
     )
     _get(
-        "AnnGetData (CONTROL: known-wrong path, same parameters)",
+        "AnnGetData (CONTROL: known-wrong path, identical parameters)",
         "https://api.bseindia.com/BseIndiaAPI/api/AnnGetData/w",
         params=common,
     )
+
     # A string body is not a record list. "No Record Found!" parses as valid
     # JSON and is truthy, so a bare `if live:` would call this a success.
-    rows = live.get("Table") if isinstance(live, dict) else live
-    return isinstance(rows, list) and bool(rows)
+    rows = None
+    if isinstance(live, dict):
+        rows = next(
+            (
+                live[k]
+                for k in ("Table", "data", "rows")
+                if isinstance(live.get(k), list)
+            ),
+            None,
+        )
+    elif isinstance(live, list):
+        rows = live
+    ok = isinstance(rows, list) and bool(rows)
+    if not ok:
+        print(
+            "    ^ no record list. Check the SHAPE before calling this a BSE\n"
+            "      regression: an empty dict here has meant a malformed query\n"
+            "      more often than a dead endpoint."
+        )
+    return ok
 
 
 def probe_quote():
