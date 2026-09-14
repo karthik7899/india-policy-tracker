@@ -363,3 +363,29 @@ body {
   .filter-field-search .filter-control { min-width: 0; }
   .filter-status { justify-content: space-between; }
 }
+
+/* Native disclosure. A <details> is unstyled by default and reads as raw
+   browser chrome next to the panels, so it gets the same restraint as
+   everything else: muted until you touch it, and a hit target the whole
+   width of the summary rather than the triangle alone — the marker is ~10px,
+   which is a pinpoint on touch. */
+.disclose { margin-top: 10px; }
+.disclose-summary {
+  cursor: pointer;
+  color: var(--ink-2);
+  font-size: 12px;
+  padding: 7px 4px;
+  border-radius: 6px;
+  list-style-position: outside;
+  font-variant-numeric: tabular-nums;
+}
+.disclose-summary:hover { background: var(--plane); color: var(--ink); }
+.disclose-summary:focus-visible {
+  outline: 2px solid var(--series-1);
+  outline-offset: 1px;
+}
+.disclose[open] > .disclose-summary { margin-bottom: 8px; color: var(--ink); }
+/* Inside a table cell the disclosure must not add block spacing, or every
+   row with one grows taller than the rows without. */
+td .disclose { margin-top: 0; }
+td .disclose-summary { padding: 2px 0; }

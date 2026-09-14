@@ -19,11 +19,34 @@ import { filterBar, filteredEmpty } from "./filterbar.js";
 
 const ORDER = { Broken: 0, Weakening: 1, Intact: 2 };
 
+// Short ticker lists stay inline: a disclosure costs a click, and hiding three
+// tickers behind one is worse than showing them. The cut-off is where the list
+// stops being readable at a glance rather than a round number.
+const INLINE_TICKERS = 5;
+
 const SEGMENTS = [
   { key: "Broken", label: "Broken", status: "critical" },
   { key: "Weakening", label: "Weakening", status: "serious" },
   { key: "Intact", label: "Intact", status: "good" },
 ];
+
+/**
+ * A native disclosure. No JS state, no new dependency, keyboard-operable and
+ * announced by screen readers for free — and closed by default, which is the
+ * point: this page was 6,832px tall and most of that was detail nobody had
+ * asked to see yet.
+ *
+ * `summary` must carry the count, not just a verb. "Show" tells a reader
+ * nothing about whether opening it is worth the scroll; "67 holdings" does.
+ */
+function disclosure(summaryText, body) {
+  return el(
+    "details",
+    { class: "disclose" },
+    el("summary", { class: "disclose-summary" }, summaryText),
+    body,
+  );
+}
 
 function statusPill(status) {
   // Icon + label, never colour alone: on the light surface two of the four
@@ -121,6 +144,40 @@ export async function render(container, { payload, route }) {
   const warnings = scope(b.early_warnings);
   const ongoing = b.warning_summary || [];
 
+  // Tiered by severity, most severe open. The sort already runs Broken ->
+  // Weakening -> Intact, so this partitions the same order rather than
+  // re-sorting it: a ticker a reader had in view stays where it was.
+  //
+  // Why tier at all: this panel was 2,959px of the page on its own, and a
+  // reader arriving at Risk wants the contradicted theses first. Broken is
+  // that set. The two tiers below it are real but secondary, and each summary
+  // carries its count so the choice to open is an informed one.
+  const byStatus = (s) => health.filter((h) => h.status === s);
+  const broken = byStatus("Broken");
+  const weakening = byStatus("Weakening");
+  const intact = byStatus("Intact");
+
+  const gradeColumns = [
+    { key: "ticker", label: "Stock", render: (r) => tickerLink(r.ticker, "holdings", params) },
+    {
+      key: "status",
+      label: "Status",
+      sortValue: (r) => ORDER[r.status] ?? 9,
+      render: (r) => statusPill(r.status),
+    },
+    {
+      key: "reasons",
+      label: "Why",
+      sortable: false,
+      render: (r) => (r.reasons || []).join("; ") || "—",
+    },
+  ];
+
+  // One shape for all three tiers, so sorting and focus behave identically
+  // whichever one a reader is in.
+  const gradeTable = (rows, { empty }) =>
+    dataTable(rows, gradeColumns, { focus: route?.focus, view: "risk", route, empty });
+
   mount(
     container,
     el(
@@ -165,32 +222,34 @@ export async function render(container, { payload, route }) {
       : null,
 
     panel(
-      "Every graded holding",
-      null,
-      dataTable(
-        health,
-        [
-          { key: "ticker", label: "Stock", render: (r) => tickerLink(r.ticker, "holdings", params) },
-          {
-            key: "status",
-            label: "Status",
-            sortValue: (r) => ORDER[r.status] ?? 9,
-            render: (r) => statusPill(r.status),
-          },
-          {
-            key: "reasons",
-            label: "Why",
-            sortable: false,
-            render: (r) => (r.reasons || []).join("; ") || "—",
-          },
-        ],
-        {
-          focus: route?.focus,
-          view: "risk",
-          route,
-          empty: filtered ? filteredEmpty("risk", params, "holdings") : "No thesis grades this run.",
-        },
-      ),
+      "Broken theses",
+      broken.length
+        ? "This cycle's evidence contradicts the catalyst that put the holding " +
+          "on the list. Weakening and intact grades are below, collapsed."
+        : null,
+      gradeTable(broken, {
+        empty: filtered ? filteredEmpty("risk", params, "holdings") : "Nothing broken this run.",
+      }),
+
+      weakening.length
+        ? disclosure(
+            `${weakening.length} weakening — evidence softening, not yet contradicting`,
+            gradeTable(weakening, { empty: "None weakening." }),
+          )
+        : null,
+
+      // Intact holdings are graded but carry no reasons — by construction, not
+      // by omission: a thesis stays Intact precisely when nothing contradicted
+      // it, so there is nothing to write in the Why column. Eleven rows of em
+      // dash is not a finding. Kept behind the disclosure rather than dropped,
+      // because "graded and fine" is different from "not graded", and a reader
+      // checking whether a holding was assessed at all must be able to see it.
+      intact.length
+        ? disclosure(
+            `${intact.length} intact — graded, nothing contradicted the catalyst`,
+            gradeTable(intact, { empty: "None intact." }),
+          )
+        : null,
     ),
 
     panel(
@@ -216,20 +275,48 @@ export async function render(container, { payload, route }) {
 
     panel(
       "Standing conditions",
-      "Unchanged since last run, grouped. \"46 holdings carry valuation flags\" " +
-        "is a portfolio characteristic, not 46 decisions. Not scoped by the " +
-        "filters above — these are counted across the whole book.",
+      "Unchanged since last run, grouped: a portfolio characteristic rather " +
+        "than a list of decisions. Warnings outnumber holdings wherever one " +
+        "holding carries the same condition more than once, and a warning " +
+        "that names no holding counts as a warning with nothing in Which. " +
+        "Not scoped by the filters above — these are counted across the " +
+        "whole book.",
       dataTable(
         ongoing,
         [
           { key: "category", label: "Category" },
           { key: "severity", label: "Severity" },
-          { key: "count", label: "Holdings", numeric: true },
+          // Two numbers, because they are two different things and the panel
+          // had been showing one under the other's name. summarize_ongoing
+          // increments `count` once per WARNING, while `tickers` is deduped
+          // per holding and drops any warning it could not attribute — so a
+          // column labelled "Holdings" was reporting warnings. They agree for
+          // 18 of 22 rows, which is why it went unnoticed; where they differ
+          // the gap is the finding. Corporate Move is 53 warnings across 20
+          // holdings, and Input Cost Shock is 3 warnings attributed to none.
           {
             key: "tickers",
+            label: "Holdings",
+            numeric: true,
+            sortValue: (r) => (r.tickers || []).length,
+            render: (r) => String((r.tickers || []).length),
+          },
+          { key: "count", label: "Warnings", numeric: true },
+          {
+            key: "which",
             label: "Which",
             sortable: false,
-            render: (r) => (r.tickers || []).join(", "),
+            // Behind a disclosure rather than inline. These cells carried 345
+            // tickers between them across 22 rows — one of them 67 — which is
+            // a wall of capital letters no one reads and which made this panel
+            // as tall as the whole graded table. The count column already
+            // answers "how many"; this answers "which", on request.
+            render: (r) => {
+              const list = r.tickers || [];
+              if (!list.length) return "—";
+              if (list.length <= INLINE_TICKERS) return list.join(", ");
+              return disclosure(`${list.length} holdings`, el("span", {}, list.join(", ")));
+            },
           },
         ],
         { empty: "No standing conditions." },
