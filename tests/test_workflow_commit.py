@@ -17,6 +17,7 @@ files out of the repo. So the guard is not "stage everything", it is "every
 output path the pipeline persists must be named in the list".
 """
 
+import collections
 import os
 import re
 
@@ -25,8 +26,10 @@ import pytest
 from dashboard.sidecars import DATA_DIR
 from history.store import HISTORY_PATH, NEWS_DIR
 
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 WORKFLOW = os.path.join(
-    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+    ROOT,
     ".github",
     "workflows",
     "daily-brief.yml",
@@ -133,3 +136,39 @@ def test_every_probe_choice_is_a_real_source():
     assert block, "probe.yml lost its source choices"
     options = {line.strip("- \n") for line in block.group(1).splitlines()}
     assert options == set(SOURCES) | {"all"}, options
+
+
+def test_no_one_points_at_a_probe_script_that_was_deleted():
+    """A probe answers its question and then deserves deleting — but the
+    comments citing it as evidence outlive it.
+
+    Five probes were retired at once and left nine dangling citations behind,
+    in provider docstrings, a runtime log message and a test. Each read as a
+    live instruction to go and re-run something that is no longer there, which
+    is worse than no citation at all: it sends the next reader looking for a
+    file rather than to docs/upstream-findings.md, where the answer actually
+    lives. Findings move to the doc; only references to scripts that still
+    exist may name a script.
+    """
+    cited = collections.defaultdict(list)
+    for directory in ("providers", "analysis", "scripts", "tests", "emails", ".github"):
+        for dirpath, _dirs, filenames in os.walk(os.path.join(ROOT, directory)):
+            if "__pycache__" in dirpath:
+                continue
+            for filename in filenames:
+                if not filename.endswith((".py", ".yml", ".yaml")):
+                    continue
+                path = os.path.join(dirpath, filename)
+                with open(path, encoding="utf-8") as handle:
+                    for name in re.findall(r"scripts/(\w+\.py)", handle.read()):
+                        cited[name].append(os.path.relpath(path, ROOT))
+
+    missing = {
+        name: sorted(set(where))
+        for name, where in cited.items()
+        if not os.path.exists(os.path.join(ROOT, "scripts", name))
+    }
+    assert not missing, (
+        "these files cite a scripts/ probe that no longer exists; point them "
+        f"at docs/upstream-findings.md instead: {missing}"
+    )
