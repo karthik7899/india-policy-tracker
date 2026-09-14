@@ -151,16 +151,40 @@ class _FakeSession:
         return self._response
 
 
-def test_refresh_merges_new_symbols_never_overwrites(tmp_path):
+def test_refresh_adds_new_symbols_and_lets_nse_correct_its_own(tmp_path):
+    """This test used to assert that NSE could never overwrite, which was the
+    bug rather than the contract.
+
+    The module always intended the NSE mapping to win a disagreement, and got
+    there by merging NSE first. That works only while the master is empty —
+    true exactly once, because it is committed and reloaded — so from run two
+    onwards NSE met entries it could not correct and 140 of its own symbols
+    were refused their ISIN daily. NSE now merges with authority.
+    """
     path = str(tmp_path / "master.json")
     master = {"TATAPOWER": "INE_LOCAL_TRUTH"}
     session = _FakeSession(response=_FakeResponse(200, _EQUITY_CSV))
     added = asyncio.run(refresh_isin_master_async(session, master, path=path))
-    assert added == 1  # RELIANCE added; TATAPOWER untouched
-    assert master["TATAPOWER"] == "INE_LOCAL_TRUTH"
+
+    assert added == 1  # RELIANCE is the only genuinely new listing
     assert master["RELIANCE"] == "INE002A01018"
+    # TATAPOWER is in NSE's list, so NSE's value is the one that must stand.
+    assert master["TATAPOWER"] == "INE245A01021"
+
     persisted = json.load(open(path))
     assert persisted["RELIANCE"] == "INE002A01018"
+    assert persisted["TATAPOWER"] == "INE245A01021"
+
+
+def test_a_correction_alone_is_still_persisted(tmp_path):
+    """Once the master is saturated, "nothing added" is every run. Persisting
+    only on `added` would compute the corrected mapping and throw it away
+    daily — the fix would look right in the log and never reach disk."""
+    path = str(tmp_path / "master.json")
+    master = {"TATAPOWER": "INE_WRONG", "RELIANCE": "INE002A01018"}
+    session = _FakeSession(response=_FakeResponse(200, _EQUITY_CSV))
+    asyncio.run(refresh_isin_master_async(session, master, path=path))
+    assert json.load(open(path))["TATAPOWER"] == "INE245A01021"
 
 
 def test_refresh_blocked_or_broken_never_raises(tmp_path):
@@ -205,20 +229,101 @@ def test_bse_rows_survive_junk():
 
 def test_merge_adds_only_what_is_missing():
     master = {"RELIANCE": "INE002A01018"}
-    added, conflicts = merge_new_symbols(
+    added, conflicts, corrected = merge_new_symbols(
         master, {"RELIANCE": "INE002A01018", "BSEONLY": "INE999Z01011"}, "BSE"
     )
-    assert (added, conflicts) == (1, 0)
+    assert (added, conflicts, corrected) == (1, 0, 0)
     assert master["BSEONLY"] == "INE999Z01011"
 
 
 def test_a_disagreeing_symbol_is_counted_and_never_applied():
     """The cross-namespace risk: NSE's SYMBOL and BSE's scrip_id are different
-    namespaces, so the same ticker can mean different companies. The existing
-    mapping must win, and the collision must be visible."""
+    namespaces, so the same ticker can mean different companies. BSE has no
+    authority here, so the existing mapping must win and the collision must be
+    visible."""
     master = {"XYZ": "INE111A01011"}
-    added, conflicts = merge_new_symbols(master, {"XYZ": "INE222B01022"}, "BSE")
-    assert (added, conflicts) == (0, 1)
+    added, conflicts, corrected = merge_new_symbols(
+        master, {"XYZ": "INE222B01022"}, "BSE"
+    )
+    assert (added, conflicts, corrected) == (0, 1, 0)
+    assert master["XYZ"] == "INE111A01011"
+
+
+# ---------------------------------------------------------------------------
+# Precedence: NSE owns its own namespace
+# ---------------------------------------------------------------------------
+
+
+def test_an_authoritative_source_corrects_what_it_disagrees_with():
+    """The 140-a-day bug.
+
+    Merging NSE first was meant to mean the NSE mapping survives. With a
+    committed master that is reloaded every run, going first only helps while
+    the file is empty — true exactly once. Afterwards NSE met BSE-sourced
+    entries it could never overwrite, and 140 NSE symbols were refused their
+    own ISIN daily.
+    """
+    master = {"NEWCO": "INE999Z01099"}  # BSE-sourced on an earlier run
+    added, conflicts, corrected = merge_new_symbols(
+        master, {"NEWCO": "INE333C01033"}, "NSE", authoritative=True
+    )
+    assert (added, conflicts, corrected) == (0, 0, 1)
+    assert master["NEWCO"] == "INE333C01033"
+
+
+def test_authority_does_not_extend_to_rewriting_a_whole_feed():
+    """An exchange's ISINs do not change wholesale overnight. A fetch wanting
+    to rewrite most of what it carries is a corrupt feed, and applying it
+    would destroy identity data the snapshot cannot get back."""
+    master = {f"S{i}": "INE111A01011" for i in range(200)}
+    before = dict(master)
+    added, conflicts, corrected = merge_new_symbols(
+        master,
+        {f"S{i}": "INE222B01022" for i in range(200)},  # 100% disagreement
+        "NSE",
+        authoritative=True,
+    )
+    assert corrected == 0
+    assert conflicts == 200
+    assert master == before, "a corrupt feed must change nothing"
+
+
+def test_the_corruption_guard_needs_enough_feed_to_judge():
+    """One row disagreeing out of one is 100% and says nothing. The guard is
+    for a mass rewrite of a full exchange listing, so it does not engage on a
+    fetch too small to be one."""
+    master = {"NEWCO": "INE999Z01099"}
+    _added, _conflicts, corrected = merge_new_symbols(
+        master, {"NEWCO": "INE333C01033"}, "NSE", authoritative=True
+    )
+    assert corrected == 1
+    assert master["NEWCO"] == "INE333C01033"
+
+
+def test_a_realistic_collision_rate_is_under_the_bound():
+    """The observed figure is ~7% (140 of ~2,000). The guard must not block
+    the very case it was built to let through."""
+    master = {f"S{i}": "INE111A01011" for i in range(100)}
+    fetched = {f"S{i}": "INE111A01011" for i in range(100)}
+    for i in range(7):
+        fetched[f"S{i}"] = "INE222B01022"
+    _added, conflicts, corrected = merge_new_symbols(
+        master, fetched, "NSE", authoritative=True
+    )
+    assert (conflicts, corrected) == (0, 7)
+
+
+def test_bse_still_yields_after_nse_has_corrected():
+    """The end-to-end precedence. NSE takes the key; BSE's colliding scrip_id
+    is declined, which is the correct outcome and keeps the collision visible
+    in the count."""
+    master = {"XYZ": "INE999Z01099"}
+    merge_new_symbols(master, {"XYZ": "INE111A01011"}, "NSE", authoritative=True)
+    assert master["XYZ"] == "INE111A01011"
+    _added, conflicts, _corrected = merge_new_symbols(
+        master, {"XYZ": "INE999Z01099"}, "BSE"
+    )
+    assert conflicts == 1
     assert master["XYZ"] == "INE111A01011"
 
 
