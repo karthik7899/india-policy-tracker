@@ -81,3 +81,55 @@ def test_sidecar_directories_are_tracked_not_generated_fresh():
             f"{directory} is gitignored but the dashboard fetches it at "
             "runtime; ignoring it means the sidecars never reach Pages"
         )
+
+
+# ---------------------------------------------------------------------------
+# The probe workflow
+# ---------------------------------------------------------------------------
+
+PROBE = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+    ".github",
+    "workflows",
+    "probe.yml",
+)
+
+
+def _probe_source():
+    with open(PROBE, encoding="utf-8") as handle:
+        return handle.read()
+
+
+def test_the_probe_cannot_write_to_the_repository():
+    """The whole difference between this workflow and the daily brief.
+
+    A diagnosis tool that can commit is a second thing that can corrupt the
+    payload, and it would be dispatched far more often than the brief. It
+    declares read-only permissions and has no git step; both are load-bearing.
+    """
+    source = _probe_source()
+    assert re.search(
+        r"^permissions:\s*\n\s*contents:\s*read\s*$", source, re.M
+    ), "probe.yml must declare contents: read"
+    for forbidden in ("git commit", "git push", "git add"):
+        assert forbidden not in source, f"probe.yml must not run {forbidden!r}"
+
+
+def test_the_probe_does_not_send_email():
+    """Diagnosis was coupled to delivery: six briefing emails went out on 13
+    September purely because that was the only way to read an upstream. The
+    probe must not be able to do that."""
+    source = _probe_source()
+    for forbidden in ("SMTP", "RECEIVER_EMAIL", "main.py"):
+        assert forbidden not in source, f"probe.yml must not reference {forbidden!r}"
+
+
+def test_every_probe_choice_is_a_real_source():
+    """A dispatch option that names nothing runs, prints nothing and looks
+    like a working probe with no findings."""
+    from scripts.probe_upstream import SOURCES
+
+    block = re.search(r"options:\n((?:\s+- .+\n)+)", _probe_source())
+    assert block, "probe.yml lost its source choices"
+    options = {line.strip("- \n") for line in block.group(1).splitlines()}
+    assert options == set(SOURCES) | {"all"}, options

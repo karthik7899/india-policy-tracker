@@ -8,3 +8,7 @@ node_modules/
 
 # Personal Claude Code settings (hooks, permissions) — not team config
 .claude/settings.local.json
+
+# Upstream probe samples (scripts/probe_upstream.py) — third-party responses,
+# kept as CI artifacts rather than committed.
+probe-output/
