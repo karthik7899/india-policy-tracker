@@ -4,9 +4,21 @@ Per-stock ISIN scrapes all failed from CI (Screener doesn't expose it,
 Yahoo's experimental lookup can't handle .NS symbols, NSE's site 403s
 GitHub runners) — but ISIN↔symbol is a *bulk* dataset, not a per-stock
 lookup. NSE publishes one CSV of every listed equity with its ISIN
-(EQUITY_L.csv on its archive host), and because an ISIN never changes for
-the life of a listing, a committed snapshot cannot go stale the way
-prices do — it can only lack listings newer than itself.
+(EQUITY_L.csv on its archive host), so a committed snapshot serves without
+network.
+
+IT CAN GO STALE, THOUGH. This module used to say an ISIN "never changes for
+the life of a listing", and therefore that the snapshot "cannot go stale the
+way prices do — it can only lack listings newer than itself". That is not
+true, and the whole never-overwrite rule was built on it. A corporate action
+that changes the share itself — a split, a face-value change — issues a NEW
+ISIN for the same company: the issuer prefix stays, the issue-series digits
+increment, the check digit follows. INE814H01011 and INE814H01029 are both
+Adani Power, before and after.
+
+So the snapshot drifts every time a holding splits, and a rule that refused
+to overwrite guaranteed the drift was permanent. See the caution below for
+how that was measured.
 
 So this provider is offline-first:
 
@@ -30,23 +42,30 @@ also some other company's NSE symbol. Collisions are counted and logged
 rather than assumed rare, because that count is the only evidence of whether
 the risk is real.
 
-The count answered. It sat at exactly 140 NSE and 130 BSE on every run for
-days — far too stable to be feed noise, and the signature of a systematic
-namespace collision. It also exposed that the resolution was not working:
+The count answered, and the answer was not the collision it was watching for.
 
-  Merging NSE first was supposed to mean the NSE mapping survives a
-  disagreement. Combined with "never overwrite" and a master that is
-  committed and reloaded, that only holds while the file is empty, which is
-  true exactly once. From the second run onwards NSE was merged into a master
-  already holding BSE-sourced entries and could never correct them, so 140 NSE
-  symbols were refused their own ISIN every single day.
+It sat at exactly 140 NSE and 130 BSE on every run for days — too stable to
+be feed noise. Letting NSE apply its 140 and reading the resulting git diff
+settled what they were: in all 140, the ISIN's first nine characters were
+unchanged and only the issue-series digits moved, always upward. Not one was a
+different issuer. They were the SAME companies after a corporate action, and
+the master was holding pre-split values — including six live holdings
+(ADANIPOWER, COFORGE, DIACABS, PERSISTENT, PGIL, VBL).
 
-So precedence is now explicit rather than positional: NSE merges as an
+So the cross-namespace risk this caution was written about remains
+unmeasured; what the counter actually caught was staleness, and the rule
+meant to protect identity data was the thing preserving the stale copy.
+
+Precedence is therefore explicit rather than positional: NSE merges as an
 AUTHORITATIVE source and corrects what it disagrees with, because a symbol in
-NSE's equity list is an NSE listing and NSE owns that namespace by
-construction. BSE keeps never-overwrite — it is the side doing the colliding.
-A bound on how much of a feed may be corrected at once keeps the old
-protection against a corrupt fetch rewriting good identity data.
+NSE's equity list is an NSE listing and NSE publishes its current ISIN. BSE
+keeps never-overwrite, so its 130 remain an honest measure of how much the
+two namespaces really do disagree — now that NSE's side is current, that
+number is worth watching again from a clean baseline.
+
+A bound on how much of a feed may be corrected at once keeps the protection
+the old rule was reaching for: a corrupt fetch still must not rewrite the
+snapshot wholesale.
 """
 
 import csv
@@ -157,9 +176,9 @@ def merge_new_symbols(master, fetched, source, authoritative=False):
 
     A conflict is the same symbol carrying a different ISIN.
 
-    For a NON-authoritative source it is never applied — ISINs do not change,
-    so a divergent row is more likely a feed glitch or a cross-namespace
-    ticker collision than news.
+    For a NON-authoritative source it is never applied: it has no standing to
+    say which of two values is current, so the incumbent stays and the
+    disagreement is counted.
 
     For an AUTHORITATIVE source it is corrected, and that distinction is the
     point of this function. The module has always intended NSE to win:
@@ -170,15 +189,17 @@ def merge_new_symbols(master, fetched, source, authoritative=False):
 
     Ordering alone cannot deliver that, because the master is committed and
     reloaded. Going first only helps while it is empty, which is true exactly
-    once. From the second run onwards NSE is merged into a master that already
-    holds BSE-sourced entries, and "never overwrite" then means the NSE value
-    can never land — 140 NSE symbols were being refused their own ISIN on
-    every run, with a count so stable across days that it could only be
-    systematic.
+    once — afterwards "never overwrite" means the NSE value can never land.
 
-    A symbol present in NSE's equity list IS an NSE listing, so NSE is
-    authoritative for it by construction. BSE keeps the never-overwrite rule,
-    because its scrip_id namespace is the one doing the colliding.
+    That mattered more than a tie-break, because ISINs DO change: a split or
+    face-value change issues a new one for the same company. All 140 symbols
+    NSE was being refused turned out to be exactly that — same issuer, later
+    issue series — so the rule was not protecting identity data, it was
+    pinning it to a pre-split value.
+
+    A symbol present in NSE's equity list IS an NSE listing and NSE publishes
+    its current ISIN, so NSE is authoritative for it by construction. BSE
+    keeps never-overwrite: it cannot arbitrate which value is current either.
     """
     added = conflicts = corrected = 0
     divergent = {}
