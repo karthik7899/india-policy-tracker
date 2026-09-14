@@ -10,7 +10,11 @@ import sys
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from analysis.graham import calculate_graham_intrinsic_value  # noqa: E402
+from analysis.graham import (  # noqa: E402
+    _sustainable_growth,
+    calculate_graham_intrinsic_value,
+    graham_growth_basis,
+)
 from analysis.valuation import generate_valuation_alerts  # noqa: E402
 from models.core import CompanyFinancials  # noqa: E402
 
@@ -211,3 +215,101 @@ class TestAnUnvaluedCompanyIsNotACheapOne:
         alerts = generate_valuation_alerts(fin, price=value * 3)
         pe_alerts = [a for a in alerts if "P/E Screen" in a]
         assert pe_alerts and "Price > Intrinsic" in pe_alerts[0], alerts
+
+
+class TestGrowthIsEarningsOverYearsNotRevenueOverOne:
+    """Graham's ``g`` is EARNINGS growth SUSTAINED over 7-10 years.
+
+    It used to be fed one year of REVENUE growth — the wrong quantity over the
+    wrong span. Revenue flatters any company growing the top line faster than
+    the bottom, and a single year is the opposite of sustained.
+
+    The ranking is: every multi-year basis before any single-year one, earnings
+    before revenue within each. Span outranks quantity because "sustained" is
+    the load-bearing word, and because a single year of EPS growth clamps at
+    one end or the other for two watchlist holdings in three.
+    """
+
+    _FLAT_QUARTERS = [1074.0, 998.0, 1052.0, 1019.0, 1034.0, 1257.0, 1441.0, 1910.0]
+
+    def test_earnings_beat_revenue_when_both_span_years(self):
+        fin = CompanyFinancials(
+            ttm_eps=10.0,
+            annual_eps_trend=[10.0, 11.0, 12.0, 13.0, 14.0],
+            annual_sales_trend=[100.0, 200.0, 400.0, 800.0, 1600.0],
+        )
+        growth, basis = _sustainable_growth(fin)
+        assert basis.startswith("EPS CAGR"), basis
+        assert 8 < growth < 10, growth  # ~8.8%, not the 100% revenue implies
+
+    def test_a_rebound_year_cannot_reprice_a_flat_five_years(self):
+        """STLTECH: 0.7% compounded over five years, +36% on the trailing year.
+
+        The one-year input read the rebound as a trend and handed it the 15%
+        ceiling.
+        """
+        fin = CompanyFinancials(
+            ttm_eps=10.0,
+            annual_sales_trend=[5437.0, 6925.0, 4083.0, 3996.0, 4745.0, 5642.0],
+            sales_trend=self._FLAT_QUARTERS,
+        )
+        growth, basis = _sustainable_growth(fin)
+        assert "floored by trailing year" in basis, basis
+        assert growth < 2.0, growth
+
+    def test_an_old_boom_cannot_reprice_a_shrinking_company(self):
+        """ZENTEC: 70 -> 974 -> 671. First-to-last compounds at 57% a year while
+        revenue is well off its peak, so a CAGR alone would hand a shrinking
+        business the maximum multiple.
+
+        This guards the CAGR-only design that was nearly shipped here, not the
+        original one-year-revenue bug — that one already returned 0.0 for this
+        company, for the unrelated reason that its trailing year is down 23%.
+        Kept because the floor is load-bearing and nothing else pins it.
+        """
+        fin = CompanyFinancials(
+            ttm_eps=10.0,
+            annual_sales_trend=[70.0, 219.0, 440.0, 974.0, 688.0, 671.0],
+            sales_trend=[242.0, 152.0, 325.0, 158.0, 174.0, 178.0, 178.0, 142.0],
+        )
+        growth, basis = _sustainable_growth(fin)
+        assert "floored by trailing year" in basis, basis
+        assert growth == 0.0, growth
+
+    def test_a_multi_year_revenue_cagr_outranks_one_year_of_earnings(self):
+        fin = CompanyFinancials(
+            ttm_eps=10.0,
+            annual_sales_trend=[100.0, 104.0, 108.0, 112.0, 116.0],
+            eps_trend=[1.0] * 4 + [9.0] * 4,  # +800% on the trailing year
+        )
+        growth, basis = _sustainable_growth(fin)
+        assert basis.startswith("revenue CAGR"), basis
+        assert growth < 6.0, growth
+
+    def test_one_year_of_earnings_is_still_better_than_nothing(self):
+        fin = CompanyFinancials(
+            ttm_eps=10.0, eps_trend=[1.0, 1.0, 1.0, 1.0, 1.1, 1.1, 1.1, 1.1]
+        )
+        growth, basis = _sustainable_growth(fin)
+        assert basis == "trailing-year EPS growth", basis
+        assert 9 < growth < 11, growth
+
+    def test_no_usable_series_says_so_rather_than_inventing_a_number(self):
+        growth, basis = _sustainable_growth(CompanyFinancials(ttm_eps=10.0))
+        assert basis == "default (no usable series)"
+        assert growth == 6.0
+
+    def test_the_basis_is_reportable(self):
+        fin = CompanyFinancials(
+            ttm_eps=10.0, annual_eps_trend=[10.0, 11.0, 12.0, 13.0, 14.0]
+        )
+        assert graham_growth_basis(fin).startswith("EPS CAGR")
+
+    def test_a_loss_making_endpoint_does_not_produce_a_growth_rate(self):
+        """A negative endpoint makes the root imaginary, and a company that was
+        losing money is not described by a growth rate anyway."""
+        fin = CompanyFinancials(
+            ttm_eps=10.0, annual_eps_trend=[5.0, 4.0, 3.0, 2.0, -1.0]
+        )
+        _growth, basis = _sustainable_growth(fin)
+        assert "EPS CAGR" not in basis, basis

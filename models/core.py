@@ -33,6 +33,9 @@ class CompanyFinancials(BaseModel):
     # fields so seasonality cancels instead of compounding.
     sales_trend: List[float] = Field(default_factory=list)
     annual_sales_trend: List[float] = Field(default_factory=list)
+    # Annual EPS from the P&L. The only earnings series long enough for a
+    # multi-year CAGR, which is what Graham's growth term actually asks for.
+    annual_eps_trend: List[float] = Field(default_factory=list)
     # Annotated by analysis/sector_growth.py before scoring runs. Declared
     # here so it survives coercion into this model — without it the scorer
     # read None and skipped growth entirely.
