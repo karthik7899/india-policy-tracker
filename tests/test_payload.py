@@ -144,3 +144,100 @@ def test_never_raises_on_junk():
     )
     assert annotate_warning_status(None, None) is None
     assert summarize_ongoing(None) == []
+
+
+class TestEveryWarningIsAccountedFor:
+    """`count` is warnings; `tickers` is holdings. They are not the same number.
+
+    The dashboard printed the first under the second's name, in a column headed
+    "Holdings". They agree whenever each holding carries a condition once, which
+    was 18 of 22 rows in the live payload — so the disagreement went unnoticed
+    until a disclosure put both on screen at once.
+
+    The rest of this class pins the thing that made it confusing: a warning that
+    names no holding is not automatically a failure. A commodity move belongs to
+    a sector, and analysis/input_cost.py sets ticker to "" deliberately and says
+    why. Reading only `ticker` discarded the sector and left three real
+    sector-level alerts rendering as "0 holdings", which is what an attribution
+    bug would look like.
+    """
+
+    def _sector_warning(self, sector, category="Input Cost Shock", severity="Medium"):
+        return {
+            "ticker": "",
+            "name": "",
+            "sector": sector,
+            "category": category,
+            "severity": severity,
+            "direction": "risk",
+            "signal": "copper moved +12.0% over 30 days",
+            "status": "ongoing",
+        }
+
+    def test_warnings_outnumber_holdings_when_one_holding_repeats(self):
+        warnings = [
+            _w("AAA", "Corporate Move", "Low", "ongoing"),
+            _w("AAA", "Corporate Move", "Low", "ongoing"),
+            _w("BBB", "Corporate Move", "Low", "ongoing"),
+        ]
+        (row,) = summarize_ongoing(warnings)
+        assert row["count"] == 3, "three warnings"
+        assert row["tickers"] == ["AAA", "BBB"], "two holdings"
+
+    def test_a_sector_warning_keeps_its_sector_instead_of_vanishing(self):
+        rows = summarize_ongoing(
+            [
+                self._sector_warning("clean_energy"),
+                self._sector_warning("logistics_heavy_capital"),
+            ]
+        )
+        (row,) = rows
+        assert row["count"] == 2
+        assert row["tickers"] == [], "a commodity move names no holding"
+        assert row["sectors"] == ["clean_energy", "logistics_heavy_capital"]
+        assert row["unattributed"] == 0, "naming a sector IS attribution"
+
+    def test_sectors_are_deduplicated_like_tickers(self):
+        (row,) = summarize_ongoing(
+            [self._sector_warning("clean_energy"), self._sector_warning("clean_energy")]
+        )
+        assert row["count"] == 2
+        assert row["sectors"] == ["clean_energy"]
+
+    def test_only_a_warning_naming_neither_counts_as_unattributed(self):
+        (row,) = summarize_ongoing(
+            [
+                {
+                    "ticker": "",
+                    "sector": "",
+                    "category": "Mystery",
+                    "severity": "Low",
+                    "status": "ongoing",
+                }
+            ]
+        )
+        assert row["unattributed"] == 1
+        assert row["tickers"] == [] and row["sectors"] == []
+
+    def test_every_warning_lands_in_exactly_one_bucket(self):
+        """The decomposition has to be exhaustive, or a count goes missing."""
+        warnings = [
+            _w("AAA", "Mixed", "Low", "ongoing"),
+            _w("AAA", "Mixed", "Low", "ongoing"),
+            _w("BBB", "Mixed", "Low", "ongoing"),
+            self._sector_warning("clean_energy", category="Mixed", severity="Low"),
+            {
+                "ticker": "",
+                "sector": "",
+                "category": "Mixed",
+                "severity": "Low",
+                "status": "ongoing",
+            },
+        ]
+        (row,) = summarize_ongoing(warnings)
+        assert row["count"] == 5
+        # Two of the five are a repeat of AAA, so distinct buckets under-sum by
+        # exactly the duplicates — the point is that nothing is silently lost.
+        assert len(row["tickers"]) == 2
+        assert len(row["sectors"]) == 1
+        assert row["unattributed"] == 1
