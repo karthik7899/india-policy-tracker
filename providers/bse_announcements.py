@@ -19,11 +19,11 @@ TWO THINGS DIFFER FROM NSE, both measured rather than assumed:
 
 Note what is NOT here: promoter pledge and shareholding. Those live on
 www.bseindia.com's HTML pages, which Akamai refuses to any browser we can
-drive (see scripts/probe_bse_network.py). This file covers the announcements
+drive (see docs/upstream-findings.md). This file covers the announcements
 feed only, which is on the API host and reachable.
 
 MEASURED from a GitHub Actions runner, 15 Aug 2026
-(scripts/probe_bse_announcements.py — re-run it before trusting any of this):
+(docs/upstream-findings.md — re-measure before trusting any of this):
 
   IT WORKS. 17 records for a part-day window, every normalized field
   populated:

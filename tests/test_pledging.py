@@ -248,9 +248,10 @@ class TestPledgeRowDiagnostic:
     """The pledge row matched nothing on the first live run — 0 of 69.
 
     That question is now answered, and the diagnostic has changed job. Screener
-    serves no pledge row for ANY company: six holdings were checked in run 6 of
-    scripts/probe_screener_pledge.py, including four promoter-led smallcaps and
-    a government-owned control, and none carried it. So this is a tripwire for
+    serves no pledge row for ANY company: six holdings were checked in run 6
+    (recorded in docs/upstream-findings.md), including four promoter-led
+    smallcaps and a government-owned control, and none carried it. So this is
+    a tripwire for
     Screener starting to publish pledge, not an open investigation, and the
     message says "not served" rather than "not matched" — calling it a parse
     failure would send the next reader after a regex that was never the problem.

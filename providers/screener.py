@@ -16,7 +16,7 @@ from utils import (
 # to be reported from production instead of checked here.
 #
 # It has since been answered: Screener serves no pledge row for anybody
-# (measured across six holdings, run 6 of scripts/probe_screener_pledge.py).
+# (measured across six holdings; see docs/upstream-findings.md).
 # This is now a tripwire for Screener changing its mind, not an open
 # investigation.
 #
@@ -57,7 +57,7 @@ def _report_shareholding_rows(soup, ticker):
         log.info(
             f"Pledge not served by Screener (checked via {ticker}); "
             f"shareholding rows present: {labels}. This is expected — see "
-            "scripts/probe_screener_pledge.py. Pledge needs another source."
+            "docs/upstream-findings.md. Pledge needs another source."
         )
     except Exception as e:  # noqa: BLE001 - a diagnostic must never break a run
         log.warning(f"Could not list shareholding rows for {ticker}: {e!r}")
@@ -253,7 +253,7 @@ async def fetch_screener_async(session, ticker, sector, price):
     # pledged_pct key reads downstream as "not disclosed"; writing 0.0 here
     # would assert an all-clear this parser has not earned.
     #
-    # MEASURED 2026-09-10 (scripts/probe_screener_pledge.py, run 6), and the
+    # MEASURED 2026-09-10 (docs/upstream-findings.md), and the
     # answer is that this will never match: Screener does not serve a pledge
     # row. Six holdings were checked, chosen so a null result would mean
     # something — HAL as a government-owned control that structurally cannot

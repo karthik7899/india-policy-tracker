@@ -55,7 +55,7 @@ are undocumented endpoints and BSE moves them.
   requests carrying our UA and Referer are served normally from the same
   runner. The filter is on browser fingerprint, so the site cannot be read
   the way a person reads it without evasion tooling — which we are not going
-  to build. See scripts/probe_bse_network.py for the measurement. These two
+  to build. See docs/upstream-findings.md for the measurement. These two
   gaps need a source that will have us, not another guess at BSE.
 
   Msnew autocomplete returns HTML, not JSON.

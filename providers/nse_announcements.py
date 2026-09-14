@@ -25,8 +25,10 @@ whole thing is wrapped by fetch_filings(), which cannot raise: NSE is an
 upgrade to the filings section, never a precondition for the briefing
 running.
 
-MEASURED from a GitHub Actions runner, 14 Aug 2026
-(scripts/probe_nse_announcements.py, re-run it before trusting this):
+MEASURED from a GitHub Actions runner, 14 Aug 2026. Re-measure before
+trusting this: `probe_upstream.py --source nse-announcements`, which reports
+the handshake, status, content type and ACTUAL field names separately, so
+alias drift is visible as itself rather than as an empty section.
 
   The handshake works and NSE serves us. It set AKA_A2, _abck and bm_sz —
   Akamai bot-manager cookies — and the API then answered HTTP 200 with

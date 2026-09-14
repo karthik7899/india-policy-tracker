@@ -194,11 +194,121 @@ async def probe_nse_delivery():
     return bool(delivery)
 
 
+def probe_nse_announcements():
+    """Is NSE's disclosure API the primary filings source, or the fallback?
+
+    providers/nse_announcements.py is written to survive a refusal, so the
+    pipeline cannot tell you which of the two it is currently living as. Only
+    a runner can.
+
+    Each layer is reported separately because they fail for different reasons
+    and a single pass/fail would hide which one moved: the handshake mints
+    cookies or does not; the API answers 200 or the 401/403 that means the IP
+    is refused; the body is JSON or the challenge page served WITH a 200; and
+    the field names are the part most likely to have quietly drifted. The
+    provider reads through aliases so a rename degrades one field rather than
+    emptying the feed, which is exactly why a rename would otherwise go
+    unnoticed until it cost a section.
+    """
+    import datetime
+
+    from providers import nse_announcements as nse
+    from providers.screener import describe_fragment
+
+    print(f"\n{'=' * 72}\nNSE CORPORATE ANNOUNCEMENTS\n{'=' * 72}")
+    session = nse.build_session()
+    try:
+        ok = nse.handshake(session)
+        cookies = sorted(session.cookies.keys()) if session.cookies else []
+        print(f"  handshake   : {ok} -> cookies {cookies}")
+        if not ok:
+            # Deliberately does NOT name a cause. handshake() swallows its
+            # exception and returns a bare False, which covers two different
+            # worlds: the edge answered and challenged us, or the request
+            # never reached the edge at all. This line used to assert the
+            # first, and said so on a run where the agent proxy had refused
+            # the CONNECT — blaming NSE for a local egress policy. The log
+            # line immediately above carries the real reason; read it.
+            print(
+                "  no cookies minted, so the API call will be refused. Cause "
+                "is NOT established here — the WARNING above says whether the "
+                "edge challenged us or the request never left this machine."
+            )
+
+        today = datetime.date.today()
+        params = {
+            "index": nse.DEFAULT_INDEX,
+            "from_date": today.strftime("%d-%m-%Y"),
+            "to_date": today.strftime("%d-%m-%Y"),
+        }
+        response = session.get(
+            nse.API_URL,
+            params=params,
+            headers=nse.API_HEADERS,
+            timeout=nse.REQUEST_TIMEOUT_S,
+        )
+        ctype = response.headers.get("Content-Type", "")
+        body = response.text or ""
+        print(f"  url         : {nse.API_URL}")
+        print(f"  params      : {params}")
+        print(f"  status      : {response.status_code}")
+        print(f"  content-type: {ctype or 'unstated'}")
+        print(f"  bytes       : {len(body)}")
+
+        if "application/json" not in ctype.lower():
+            # Short bodies print verbatim. An earlier BSE probe described an
+            # 18-byte response by its keys alone and hid the answer in doing so.
+            print(f"  body        : {describe_fragment(body, ctype)}")
+            print("  VERDICT     : refused — HTML where JSON was asked for.")
+            return False
+
+        try:
+            payload = json.loads(body)
+        except ValueError as e:
+            print(f"  body        : {describe_fragment(body, ctype)}")
+            print(f"  VERDICT     : JSON declared but undecodable: {e}")
+            return False
+
+        if isinstance(payload, dict):
+            print(f"  envelope    : dict, keys {sorted(payload.keys())[:12]}")
+            rows = payload.get("data", payload.get("rows", []))
+        else:
+            print(f"  envelope    : {type(payload).__name__}")
+            rows = payload
+
+        count = len(rows) if isinstance(rows, list) else 0
+        print(f"  records     : {count}")
+        _save("nse_announcements.json", body)
+        print(f"  Sample      : {OUT_DIR}/nse_announcements.json")
+
+        if not (isinstance(rows, list) and rows):
+            # Empty is not the same as refused, and saying so matters: on a
+            # holiday or before the day's first filing this is correct output.
+            print(
+                "  VERDICT     : reachable but empty. Before concluding the "
+                "endpoint moved, check this is a trading day and that "
+                "announcements have been published yet today."
+            )
+            return False
+
+        print(f"  FIELD NAMES : {sorted(rows[0].keys())}")
+        normalized = nse.normalize(rows[0])
+        print(f"  NORMALIZED  : {json.dumps(normalized, default=str)[:300]}")
+        empty = [k for k, v in (normalized or {}).items() if not v]
+        if empty:
+            print(f"  EMPTY FIELDS: {empty} — check the aliases")
+        print("  VERDICT     : reachable. NSE can serve as the primary source.")
+        return True
+    finally:
+        session.close()
+
+
 SOURCES = {
     "screener-peers": ("async", probe_screener_peers),
     "nse-isin": ("async-noarg", probe_nse_isin),
     "bse-scrips": ("sync", probe_bse_scrips),
     "nse-delivery": ("async-noarg", probe_nse_delivery),
+    "nse-announcements": ("sync", probe_nse_announcements),
 }
 
 

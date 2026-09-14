@@ -1,4 +1,4 @@
-name: Probe BSE endpoints
+name: Probe BSE endpoint catalogue
 
 # Manual only. This is a diagnostic, not part of any briefing: it writes
 # nothing, commits nothing, and sends no mail. It exists because BSE is
@@ -6,104 +6,42 @@ name: Probe BSE endpoints
 # policy that blocks Screener and Yahoo), so the only way to establish what
 # their endpoints actually return is to ask from a runner that can reach them.
 #
+# Deliberately SEPARATE from probe.yml. That workflow asks one source one
+# question and makes one request; this one sweeps many endpoints to rebuild
+# the catalogue in docs/upstream-findings.md. Merging them would either turn
+# the sweep into a probe or the probe into a sweep, and the two want different
+# blast radii.
+#
 # Read the job log for the answer; there is no artifact to collect.
+#
+# The three jobs that used to live here are gone, each for its own reason,
+# recorded in docs/upstream-findings.md:
+#   * nse-announcements  -> now `probe.yml --source nse-announcements`
+#   * screener-pledge    -> answered; Screener serves no pledge row for anybody
+#   * network (Playwright) -> answered; Akamai refuses headless Chromium, and
+#                             defeating that means evasion tooling we will not
+#                             build
+
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
-  probe:
+  catalogue:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
-          python-version: "3.12"
+          python-version: '3.12'
 
       - name: Install requests
         run: pip install requests
 
       - name: Probe
         run: python scripts/probe_bse.py
-
-  nse-announcements:
-    # Whether NSE's disclosure API answers a cloud runner decides if
-    # providers/nse_announcements.py is the primary filings source or
-    # permanently the fallback. Separate job so its verdict is readable on
-    # its own.
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-
-      - name: Install dependencies
-        run: pip install requests pydantic aiohttp
-
-      - name: Probe NSE announcements
-        run: python scripts/probe_nse_announcements.py
-
-      - name: Probe BSE announcements
-        run: python scripts/probe_bse_announcements.py
-
-      - name: Probe the newest sources (delivery, ISIN merge)
-        run: python scripts/probe_new_sources.py
-
-  screener-pledge:
-    # analysis/pledging.py has never graded a holding, because Screener has no
-    # pledge ROW — "Pledged percentage" is a child of the "Promoters +"
-    # expander, so the current parser reads a table that does not contain it.
-    # This reads the expander's own attributes to find the URL it calls,
-    # rather than guessing paths; guessing cost 32 attempts against BSE.
-    #
-    # Separate job so its verdict is readable alone, and because Screener
-    # rate-limits this pipeline — if the probe is 429'd, that is itself the
-    # answer about what shape the fix has to take.
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-
-      - name: Install dependencies
-        run: pip install requests beautifulsoup4
-
-      - name: Probe Screener for the pledge endpoint
-        run: python scripts/probe_screener_pledge.py
-
-  network:
-    # Reads what BSE's own pages call, which is what DevTools' Network tab
-    # shows. Separate job because it needs a browser; the endpoint probe above
-    # must not wait on a Chromium install to report.
-    #
-    # ANSWERED, run 5: it cannot. Akamai serves headless Chromium a 403 on
-    # every bseindia.com page while serving plain requests from the same
-    # runner normally. Kept so the result can be re-measured if BSE changes,
-    # but do not expect it to report anything else today.
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-
-      - name: Install Playwright
-        run: |
-          pip install playwright
-          playwright install --with-deps chromium
-
-      - name: Capture network calls
-        run: python scripts/probe_bse_network.py

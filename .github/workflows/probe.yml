@@ -27,6 +27,7 @@ on:
           - nse-isin
           - bse-scrips
           - nse-delivery
+          - nse-announcements
       symbol:
         description: Ticker for the per-company probes
         type: string
