@@ -277,10 +277,10 @@ export async function render(container, { payload, route }) {
       "Standing conditions",
       "Unchanged since last run, grouped: a portfolio characteristic rather " +
         "than a list of decisions. Warnings outnumber holdings wherever one " +
-        "holding carries the same condition more than once, and a warning " +
-        "that names no holding counts as a warning with nothing in Which. " +
-        "Not scoped by the filters above — these are counted across the " +
-        "whole book.",
+        "holding carries the same condition twice. A dash under Holdings means " +
+        "the condition is not about holdings — a commodity move belongs to a " +
+        "sector, and Which names the sectors instead. Not scoped by the " +
+        "filters above; these are counted across the whole book.",
       dataTable(
         ongoing,
         [
@@ -299,7 +299,17 @@ export async function render(container, { payload, route }) {
             label: "Holdings",
             numeric: true,
             sortValue: (r) => (r.tickers || []).length,
-            render: (r) => String((r.tickers || []).length),
+            // An em dash, not 0, when the condition is not about holdings at
+            // all. A commodity move belongs to a sector, and printing "0" for
+            // it says the pipeline failed to attribute something it never
+            // tried to — which is exactly the reading this column produced
+            // before sectors were carried through.
+            render: (r) =>
+              (r.tickers || []).length
+                ? String(r.tickers.length)
+                : (r.sectors || []).length
+                  ? "—"
+                  : "0",
           },
           { key: "count", label: "Warnings", numeric: true },
           {
@@ -312,10 +322,29 @@ export async function render(container, { payload, route }) {
             // as tall as the whole graded table. The count column already
             // answers "how many"; this answers "which", on request.
             render: (r) => {
-              const list = r.tickers || [];
-              if (!list.length) return "—";
-              if (list.length <= INLINE_TICKERS) return list.join(", ");
-              return disclosure(`${list.length} holdings`, el("span", {}, list.join(", ")));
+              const tickers = r.tickers || [];
+              const sectors = r.sectors || [];
+              const unattributed = r.unattributed || 0;
+
+              // Holdings first when there are any; otherwise the sectors the
+              // warnings do name. Only a warning naming neither is a gap, and
+              // it says so rather than rendering as an absence.
+              const list = tickers.length
+                ? tickers
+                : sectors.map((s) => String(s).replace(/_/g, " "));
+              if (!list.length) {
+                return unattributed
+                  ? `${unattributed} unattributed`
+                  : "—";
+              }
+              const noun = tickers.length ? "holdings" : "sectors";
+              const body =
+                list.length <= INLINE_TICKERS
+                  ? el("span", {}, list.join(", "))
+                  : disclosure(`${list.length} ${noun}`, el("span", {}, list.join(", ")));
+              if (!unattributed) return body;
+              return el("span", {}, body, el("span", { class: "cell-muted" },
+                ` · ${unattributed} unattributed`));
             },
           },
         ],

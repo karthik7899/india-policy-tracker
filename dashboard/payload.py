@@ -74,6 +74,21 @@ def summarize_ongoing(warnings: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     "46 holdings carry valuation flags" is a portfolio characteristic, not 46
     decisions. The tickers are kept so the condition stays inspectable without
     shipping 46 paragraphs of identical prose.
+
+    ``count`` is warnings; ``tickers`` is the DISTINCT holdings they name. Those
+    are different numbers whenever one holding carries the same condition twice,
+    and the dashboard was printing the first under the second's name.
+
+    Not every warning names a holding, and that is by design rather than by
+    failure. A commodity move is a property of a sector — analysis/input_cost.py
+    says so where it sets ``ticker`` to "" — so those warnings identify
+    themselves by ``sector`` instead. This used to read only ``ticker``, which
+    threw that field away and left the row saying "0 holdings" about three real
+    sector-level alerts, indistinguishable from an attribution failure.
+
+    So every warning now lands in exactly one place: the holding it names, the
+    sector it names when it names no holding, or ``unattributed`` when it names
+    neither. That last count is the only one that means something went wrong.
     """
     grouped: Dict[tuple, Dict[str, Any]] = {}
     for w in warnings or []:
@@ -88,11 +103,21 @@ def summarize_ongoing(warnings: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
                 "direction": w.get("direction"),
                 "count": 0,
                 "tickers": [],
+                "sectors": [],
+                "unattributed": 0,
             },
         )
         row["count"] += 1
-        if w.get("ticker") and w["ticker"] not in row["tickers"]:
-            row["tickers"].append(w["ticker"])
+        ticker = w.get("ticker")
+        sector = w.get("sector")
+        if ticker:
+            if ticker not in row["tickers"]:
+                row["tickers"].append(ticker)
+        elif sector:
+            if sector not in row["sectors"]:
+                row["sectors"].append(sector)
+        else:
+            row["unattributed"] += 1
 
     rows = list(grouped.values())
     rows.sort(key=lambda r: (_SEVERITY_RANK.get(r["severity"], 9), -r["count"]))

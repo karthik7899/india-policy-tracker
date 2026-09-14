@@ -245,6 +245,7 @@ body {
 
 .cell-good { color: var(--good); }
 .cell-bad { color: var(--critical); }
+.cell-muted { color: var(--muted); }
 
 /* Direct labels on the delivery cell — the relief rule from palette
    validation: a mark whose hue sits under 3:1 carries visible text. */
