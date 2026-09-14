@@ -3333,8 +3333,8 @@
         "industry_share_pct": 48.04,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
-        "peer_share_pct": 48.6,
-        "peer_share_change_pp": 7.53,
+        "peer_share_pct": 57.6,
+        "peer_share_change_pp": 11.77,
         "peer_share_lookback": 4,
         "peer_group_size": 4,
         "revenue_yoy_pct": 87.4,
@@ -3353,8 +3353,8 @@
           "Fails P/E Screen (P/E 195.0 > 15 & Price > Intrinsic)",
           "No Dividend Yield"
         ],
-        "industry_pe": 53.8,
-        "pe_vs_peers": "262% above peers"
+        "industry_pe": 34.9,
+        "pe_vs_peers": "459% above peers"
       },
       "score": {
         "overall_score": 7,
@@ -3503,8 +3503,8 @@
         "industry_share_pct": 5.07,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
-        "peer_share_pct": 16.1,
-        "peer_share_change_pp": -7.81,
+        "peer_share_pct": 19.0,
+        "peer_share_change_pp": -7.6,
         "peer_share_lookback": 4,
         "peer_group_size": 4,
         "revenue_yoy_pct": 6.6,
@@ -3523,8 +3523,8 @@
           "Fails P/E Screen (P/E 37.2 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 53.8,
-        "pe_vs_peers": "31% below peers"
+        "industry_pe": 34.9,
+        "pe_vs_peers": "In line with peers"
       },
       "score": {
         "overall_score": 0,
@@ -3670,8 +3670,8 @@
         "industry_share_pct": 4.06,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
-        "peer_share_pct": 12.9,
-        "peer_share_change_pp": -4.66,
+        "peer_share_pct": 15.3,
+        "peer_share_change_pp": -4.31,
         "peer_share_lookback": 4,
         "peer_group_size": 4,
         "revenue_yoy_pct": 16.3,
@@ -3690,8 +3690,8 @@
           "Fails P/E Screen (P/E 32.6 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 53.8,
-        "pe_vs_peers": "39% below peers"
+        "industry_pe": 34.9,
+        "pe_vs_peers": "In line with peers"
       },
       "score": {
         "overall_score": -2,
@@ -3716,164 +3716,155 @@
       "estimate_method": "Analyst Consensus"
     },
     {
-      "ticker": "OPTIEMUS",
-      "name": "Optiemus Infra.",
-      "price": "566.25",
-      "target": "283.12",
-      "growth_pct": "-50.0%",
+      "ticker": "BIRLACABLE",
+      "name": "Birla Cable",
+      "price": "392.35",
+      "target": "372.90",
+      "growth_pct": "-5.0%",
       "catalyst": "Auto-discovered via media radar. Catalyst: Policy tailwinds in the data_center_support segment.",
       "rating": "None",
-      "revenue_growth": "+102.8%",
-      "earnings_growth": "+46.0%",
+      "revenue_growth": "+51.1%",
+      "earnings_growth": "+2173.3%",
       "screener": {
-        "market_cap": 5106.0,
-        "current_price": 566.0,
-        "pe_ratio": 70.3,
-        "dividend_yield": 0.0,
-        "roce": 10.9,
-        "roe": 9.16,
-        "q_sales": 883.0,
-        "qoq_sales_growth": 82.06,
+        "market_cap": 1177.0,
+        "current_price": 392.0,
+        "pe_ratio": 25.5,
+        "dividend_yield": 0.32,
+        "roce": 8.96,
+        "roe": 6.26,
+        "q_sales": 267.0,
+        "qoq_sales_growth": 24.77,
         "quarterly_revenue_growth": [
-          418.0,
-          430.0,
-          485.0,
-          883.0
+          176.0,
+          205.0,
+          214.0,
+          267.0
         ],
         "sales_trend": [
-          477.0,
-          472.0,
-          449.0,
-          435.0,
-          418.0,
-          430.0,
-          485.0,
-          883.0
+          182.0,
+          158.0,
+          156.0,
+          176.0,
+          176.0,
+          205.0,
+          214.0,
+          267.0
         ],
-        "q_opm": 3.4,
+        "q_opm": 17.0,
         "quarterly_ebitda_margin": [
-          8.0,
-          7.0,
-          1.5,
-          3.4
-        ],
-        "opm_expansion": 1.9,
-        "q_eps": 2.39,
-        "eps_trend": [
-          1.6,
-          1.75,
-          2.57,
-          1.67,
-          1.9,
-          1.38,
-          2.53,
-          2.39
-        ],
-        "ttm_eps": 8.2,
-        "q_net_profit": 21.0,
-        "operating_margin_trend": [
-          1.6,
+          4.1,
           5.0,
+          9.0,
+          17.0
+        ],
+        "opm_expansion": 8.0,
+        "q_eps": 10.23,
+        "eps_trend": [
+          0.61,
+          0.48,
+          0.49,
+          0.45,
+          0.24,
+          1.34,
+          3.6,
+          10.23
+        ],
+        "ttm_eps": 15.41,
+        "q_net_profit": 31.0,
+        "operating_margin_trend": [
+          8.0,
           6.0,
+          4.9,
           6.0,
-          4.6
+          10.0
         ],
         "annual_sales_trend": [
-          472.0,
-          1174.0,
-          1528.0,
-          1890.0,
-          1769.0,
-          2216.0
+          792.0,
+          686.0,
+          662.0,
+          771.0,
+          861.0
         ],
         "debt_trend": [
-          43.0,
-          118.0,
-          164.0,
-          198.0,
-          373.0
+          129.0,
+          165.0,
+          111.0,
+          133.0
         ],
         "cash_flow_trend": [
-          28.0,
-          1.0,
-          40.0,
-          -13.0,
-          -12.0
+          -8.0,
+          16.0,
+          112.0,
+          -21.0
         ],
-        "capex": 176.6,
+        "capex": 53.4,
         "rd_pct": 1.5,
         "roce_trend": [
-          2.0,
-          14.0,
-          15.0,
-          14.0,
-          11.0
+          10.0,
+          5.0,
+          9.0
         ],
-        "promoter_pct": 71.4,
-        "promoter_change": -0.77,
-        "fii_pct": 3.31,
-        "fii_change": 0.07,
-        "dii_pct": 2.4,
-        "dii_change": 1.42,
-        "isin": "INE350C01017",
-        "week52_low": 310.85,
-        "week52_high": 681.6,
-        "pct_above_low": 82.64,
-        "advt_cr": 13.81,
+        "promoter_pct": 66.35,
+        "promoter_change": 0.0,
+        "fii_pct": 0.02,
+        "fii_change": 0.02,
+        "dii_pct": 0.01,
+        "dii_change": 0.0,
+        "isin": "INE800A01015",
+        "week52_low": 111.17,
+        "week52_high": 393.35,
+        "pct_above_low": 253.82,
+        "advt_cr": 10.09,
         "liquidity_band": "adequate",
         "sessions": 24,
-        "days_to_exit_1cr": 0.4,
-        "days_to_exit_5cr": 1.8,
-        "deliv_pct": 54.97,
-        "delivery_band": "delivery-led",
+        "days_to_exit_1cr": 0.5,
+        "days_to_exit_5cr": 2.5,
+        "deliv_pct": 42.75,
+        "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 9.48,
-        "industry_share_pct": 22.21,
+        "turnover_cr_last": 38.62,
+        "industry_share_pct": 6.71,
         "industry_peer_count": 7,
-        "peer_share_pct": 22.5,
-        "peer_share_change_pp": 4.93,
+        "peer_share_pct": 8.1,
+        "peer_share_change_pp": 0.14,
         "peer_share_lookback": 4,
         "peer_group_size": 4,
-        "revenue_yoy_pct": 103.0,
-        "revenue_ttm_growth_pct": 20.9,
-        "revenue_cagr_pct": 36.2,
+        "revenue_yoy_pct": 51.7,
+        "revenue_ttm_growth_pct": 28.3,
+        "revenue_cagr_pct": 2.1,
         "revenue_growth_quality": "ok",
-        "graham_intrinsic_value": 198.4,
-        "owner_earnings": -62.8,
+        "graham_intrinsic_value": 372.9,
+        "owner_earnings": 81.2,
         "retained_earnings_ratio": 2.86,
         "moat_status": "Weak/None",
         "is_bargain": false,
         "net_current_assets": null,
         "hyper_growth_warning": false,
         "valuation_alerts": [
-          "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 70.3 > 15 & Price > Intrinsic)",
-          "No Dividend Yield"
+          "Fails Debt Limit (Debt > Net Assets)"
         ],
-        "industry_pe": 53.8,
-        "pe_vs_peers": "31% above peers"
+        "industry_pe": 34.9,
+        "pe_vs_peers": "27% below peers"
       },
       "score": {
-        "overall_score": 8,
-        "fundamental_score": 0,
-        "momentum_score": 8,
+        "overall_score": 3,
+        "fundamental_score": 2,
+        "momentum_score": 1,
         "confidence": "High",
         "reasons": [
-          "PLI Approval / Target: Optiemus Infracom Limited has informed the Exchange about Copy of Newspaper Publication issued by the Company in compliance with MCA Circular Nos. 20/2020 dated May 05, 2020, before sending the Notice of ensuing 33rd Annual General Meeting…",
-          "Policy Notification: Optiemus Infracom Limited has informed the Exchange regarding 'Board comments on fine levied by the Exchange'.",
-          "Strong revenue growth (TTM +20.9%)",
-          "FII Accumulation (+0.07%)",
-          "DII Accumulation (+1.42%)"
+          "Sector benefits from macro policy tailwinds (Fallback)",
+          "Strong revenue growth (TTM +28.3%)",
+          "Operating Margin Expansion (+8.0%)",
+          "FII Accumulation (+0.02%)"
         ],
         "risks": [
-          "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 70.3 > 15 & Price > Intrinsic)"
+          "Fails Debt Limit (Debt > Net Assets)"
         ],
         "recommendations": [
-          "Hold / Monitor"
+          "Avoid / High Risk"
         ]
       },
-      "fundamental_value": 198.4,
+      "fundamental_value": 372.9,
       "estimate_method": "Fundamental Estimate"
     }
   ],
@@ -5522,10 +5513,12 @@
         "delivery_band": "mixed",
         "series": "EQ",
         "turnover_cr_last": 67.55,
-        "peer_share_pct": 60.6,
-        "peer_share_change_pp": -0.35,
+        "industry_share_pct": 16.62,
+        "industry_peer_count": 8,
+        "peer_share_pct": 46.8,
+        "peer_share_change_pp": 0.59,
         "peer_share_lookback": 4,
-        "peer_group_size": 3,
+        "peer_group_size": 4,
         "revenue_yoy_pct": 14.8,
         "revenue_ttm_growth_pct": 13.2,
         "revenue_cagr_pct": 6.5,
@@ -5542,8 +5535,8 @@
           "Fails P/E Screen (P/E 93.7 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 55.4,
-        "pe_vs_peers": "69% above peers"
+        "industry_pe": 67.5,
+        "pe_vs_peers": "39% above peers"
       },
       "score": {
         "overall_score": 8,
@@ -5588,6 +5581,95 @@
       "target_low": "3300.00",
       "rec_score": 2.7,
       "screener": {
+        "market_cap": 43873.0,
+        "current_price": 3682.0,
+        "pe_ratio": 79.7,
+        "dividend_yield": 0.38,
+        "roce": 13.9,
+        "roe": 10.6,
+        "q_sales": 2303.0,
+        "qoq_sales_growth": -32.82,
+        "quarterly_revenue_growth": [
+          2474.0,
+          2635.0,
+          3428.0,
+          2303.0
+        ],
+        "sales_trend": [
+          2616.0,
+          2529.0,
+          3046.0,
+          2158.0,
+          2474.0,
+          2635.0,
+          3428.0,
+          2303.0
+        ],
+        "q_opm": 3.0,
+        "quarterly_ebitda_margin": [
+          7.0,
+          10.0,
+          11.0,
+          3.0
+        ],
+        "opm_expansion": -8.0,
+        "q_eps": 2.12,
+        "eps_trend": [
+          16.54,
+          9.73,
+          17.27,
+          12.79,
+          10.04,
+          17.14,
+          20.5,
+          2.12
+        ],
+        "ttm_eps": 49.8,
+        "q_net_profit": 22.0,
+        "operating_margin_trend": [
+          7.0,
+          9.0,
+          9.0,
+          10.0,
+          8.0
+        ],
+        "annual_sales_trend": [
+          6128.0,
+          8090.0,
+          9323.0,
+          10387.0,
+          10774.0,
+          10839.0
+        ],
+        "debt_trend": [
+          368.0,
+          831.0,
+          1277.0,
+          1718.0,
+          2353.0
+        ],
+        "cash_flow_trend": [
+          325.0,
+          460.0,
+          247.0,
+          1080.0,
+          542.0
+        ],
+        "capex": 460.6,
+        "rd_pct": 1.5,
+        "roce_trend": [
+          12.0,
+          15.0,
+          17.0,
+          14.0,
+          14.0
+        ],
+        "promoter_pct": 61.99,
+        "promoter_change": 0.0,
+        "fii_pct": 11.46,
+        "fii_change": 0.21,
+        "dii_pct": 15.22,
+        "dii_change": -0.27,
         "isin": "INE152A01029",
         "week52_low": 2834.12,
         "week52_high": 4962.43,
@@ -5601,32 +5683,53 @@
         "delivery_band": "mixed",
         "series": "EQ",
         "turnover_cr_last": 30.97,
-        "graham_intrinsic_value": 0.0,
-        "owner_earnings": 0.0,
-        "retained_earnings_ratio": 1.2,
+        "industry_share_pct": 8.12,
+        "industry_peer_count": 8,
+        "peer_share_pct": 22.8,
+        "peer_share_change_pp": -1.41,
+        "peer_share_lookback": 4,
+        "peer_group_size": 4,
+        "revenue_yoy_pct": 6.7,
+        "revenue_ttm_growth_pct": 4.7,
+        "revenue_cagr_pct": 12.1,
+        "revenue_growth_quality": "ok",
+        "graham_intrinsic_value": 563.1,
+        "owner_earnings": -184.4,
+        "retained_earnings_ratio": 2.86,
         "moat_status": "Weak/None",
         "is_bargain": false,
         "net_current_assets": null,
-        "hyper_growth_warning": false,
+        "hyper_growth_warning": true,
         "valuation_alerts": [
-          "No Dividend Yield"
-        ]
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Fails P/E Screen (P/E 79.7 > 15 & Price > Intrinsic)",
+          "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
+        ],
+        "industry_pe": 67.5,
+        "pe_vs_peers": "18% above peers"
       },
       "score": {
-        "overall_score": 1,
-        "fundamental_score": 0,
+        "overall_score": -4,
+        "fundamental_score": -5,
         "momentum_score": 1,
-        "confidence": "Low",
+        "confidence": "High",
         "reasons": [
           "Sector benefits from macro policy tailwinds (Fallback)",
-          "Liquid (Rs 53 Cr traded daily)"
+          "Liquid (Rs 53 Cr traded daily)",
+          "FII Accumulation (+0.21%)"
         ],
-        "risks": [],
+        "risks": [
+          "Operating margin contracted (-8.0pp)",
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Fails P/E Screen (P/E 79.7 > 15 & Price > Intrinsic)",
+          "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
+        ],
         "recommendations": [
           "Avoid / High Risk"
         ]
       },
-      "estimate_method": "Analyst Consensus"
+      "estimate_method": "Analyst Consensus",
+      "fundamental_value": 563.1
     },
     {
       "ticker": "KIRLOSENG",
@@ -5749,10 +5852,10 @@
         "industry_share_pct": 22.31,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
-        "peer_share_pct": 25.7,
-        "peer_share_change_pp": -0.43,
+        "peer_share_pct": 19.8,
+        "peer_share_change_pp": 0.03,
         "peer_share_lookback": 4,
-        "peer_group_size": 3,
+        "peer_group_size": 4,
         "revenue_yoy_pct": 13.5,
         "revenue_ttm_growth_pct": 22.7,
         "revenue_cagr_pct": 14.6,
@@ -5769,8 +5872,8 @@
           "Fails P/E Screen (P/E 55.4 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 55.4,
-        "pe_vs_peers": "In line with peers"
+        "industry_pe": 67.5,
+        "pe_vs_peers": "18% below peers"
       },
       "score": {
         "overall_score": 6,
@@ -5920,10 +6023,10 @@
         "industry_share_pct": 11.85,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
-        "peer_share_pct": 13.7,
+        "peer_share_pct": 10.5,
         "peer_share_change_pp": 0.79,
         "peer_share_lookback": 4,
-        "peer_group_size": 3,
+        "peer_group_size": 4,
         "revenue_yoy_pct": 22.5,
         "revenue_ttm_growth_pct": 15.9,
         "revenue_cagr_pct": 10.4,
@@ -5940,8 +6043,8 @@
           "Fails P/E Screen (P/E 42.2 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 55.4,
-        "pe_vs_peers": "24% below peers"
+        "industry_pe": 67.5,
+        "pe_vs_peers": "37% below peers"
       },
       "score": {
         "overall_score": 9,
@@ -6825,9 +6928,8 @@
         "momentum_score": 8,
         "confidence": "High",
         "reasons": [
-          "Capacity/Product Launch: Rs 1.27 lk cr Semicon 2.0: 1 ships chips, 3 build moats — CG Power, Kaynes, Dixon & Tata Elxsi",
-          "Capacity/Product Launch: Electronics components facilities of Kaynes, Dixon, Wipro, Motherson & others to start operations in few mon..",
-          "Capacity/Product Launch: Gigabyte unveils its first Made-in-India gaming laptop, Gaming A16, in partnership with Dixon Technologies",
+          "Government Contract/MoU: SAM Advises Vivo Mobile India On Strategic Joint Venture With Dixon Technologies",
+          "Government Contract/MoU: Dixon Technologies meets Bajaj Life Insurance in one-on-one session",
           "High Return on Capital (ROCE: 29.2%)",
           "High Return on Equity (ROE: 18.9%)",
           "Liquid (Rs 520 Cr traded daily)",
@@ -7332,8 +7434,8 @@
         "momentum_score": 8,
         "confidence": "High",
         "reasons": [
+          "Government Contract/MoU: Dixon Tech Or Avalon Or Syrma SGS? PL Capital Sees Multi-Year EMS Opportunity, But There's A Catch",
           "Government Contract/MoU: Homegrown PCB manufacturing to drive domestic value add, cut India’s imports: Syrma SGS’ JS Gujral",
-          "Government Contract/MoU: Syrma SGS Elemaster Opens Manufacturing Facility in Bengaluru",
           "Strong revenue growth (TTM +53.0%)",
           "Liquid (Rs 149 Cr traded daily)",
           "FII Accumulation (+0.91%)",
@@ -7622,10 +7724,10 @@
         "industry_share_pct": 2.0,
         "industry_peer_count": 8,
         "industry_share_change_pp": 0.0,
-        "peer_share_pct": 25.1,
-        "peer_share_change_pp": 0.22,
+        "peer_share_pct": 23.8,
+        "peer_share_change_pp": 0.28,
         "peer_share_lookback": 4,
-        "peer_group_size": 4,
+        "peer_group_size": 5,
         "revenue_yoy_pct": 29.1,
         "revenue_ttm_growth_pct": 25.4,
         "revenue_cagr_pct": 22.4,
@@ -7642,8 +7744,8 @@
           "Fails P/E Screen (P/E 43.7 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 34.5,
-        "pe_vs_peers": "27% above peers"
+        "industry_pe": 39.1,
+        "pe_vs_peers": "12% above peers"
       },
       "score": {
         "overall_score": 6,
@@ -7794,10 +7896,10 @@
         "industry_share_pct": 2.55,
         "industry_peer_count": 8,
         "industry_share_change_pp": 0.0,
-        "peer_share_pct": 32.2,
-        "peer_share_change_pp": 4.6,
+        "peer_share_pct": 30.6,
+        "peer_share_change_pp": 4.45,
         "peer_share_lookback": 4,
-        "peer_group_size": 4,
+        "peer_group_size": 5,
         "revenue_yoy_pct": 49.2,
         "revenue_ttm_growth_pct": 35.7,
         "revenue_cagr_pct": 23.1,
@@ -7813,8 +7915,8 @@
           "Fails Debt Limit (Debt > Net Assets)",
           "Fails P/E Screen (P/E 42.7 > 15 & Price > Intrinsic)"
         ],
-        "industry_pe": 34.5,
-        "pe_vs_peers": "24% above peers"
+        "industry_pe": 39.1,
+        "pe_vs_peers": "In line with peers"
       },
       "score": {
         "overall_score": 9,
@@ -7964,10 +8066,10 @@
         "industry_share_pct": 2.03,
         "industry_peer_count": 8,
         "industry_share_change_pp": 0.0,
-        "peer_share_pct": 25.6,
-        "peer_share_change_pp": -2.28,
+        "peer_share_pct": 24.3,
+        "peer_share_change_pp": -2.09,
         "peer_share_lookback": 4,
-        "peer_group_size": 4,
+        "peer_group_size": 5,
         "revenue_yoy_pct": 17.5,
         "revenue_ttm_growth_pct": 13.7,
         "revenue_cagr_pct": 6.7,
@@ -7982,8 +8084,8 @@
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)"
         ],
-        "industry_pe": 34.5,
-        "pe_vs_peers": "34% below peers"
+        "industry_pe": 39.1,
+        "pe_vs_peers": "42% below peers"
       },
       "score": {
         "overall_score": 11,
@@ -8129,10 +8231,10 @@
         "industry_share_pct": 32.56,
         "industry_peer_count": 6,
         "industry_share_change_pp": 0.0,
-        "peer_share_pct": 17.1,
-        "peer_share_change_pp": -2.54,
+        "peer_share_pct": 16.3,
+        "peer_share_change_pp": -2.36,
         "peer_share_lookback": 4,
-        "peer_group_size": 4,
+        "peer_group_size": 5,
         "revenue_yoy_pct": 11.4,
         "revenue_ttm_growth_pct": 10.1,
         "revenue_cagr_pct": 12.0,
@@ -8148,8 +8250,8 @@
           "Fails Debt Limit (Debt > Net Assets)",
           "Fails P/E Screen (P/E 26.3 > 15 & Price > Intrinsic)"
         ],
-        "industry_pe": 34.5,
-        "pe_vs_peers": "24% below peers"
+        "industry_pe": 39.1,
+        "pe_vs_peers": "33% below peers"
       },
       "score": {
         "overall_score": 11,
@@ -8176,6 +8278,176 @@
       },
       "estimate_method": "Analyst Consensus",
       "fundamental_value": 2249.6
+    },
+    {
+      "ticker": "IKS",
+      "name": "Inventurus Knowl",
+      "price": "1740.60",
+      "target": "1970.00",
+      "growth_pct": "+13.2%",
+      "catalyst": "Auto-discovered via media radar. Catalyst: Policy tailwinds in the midcap_it segment.",
+      "rating": "Buy",
+      "revenue_growth": "+20.7%",
+      "earnings_growth": "+27.9%",
+      "analyst_count": 9,
+      "target_median": "1970.00",
+      "target_high": "2170.00",
+      "target_low": "1680.00",
+      "rec_score": 1.7,
+      "screener": {
+        "market_cap": 29880.0,
+        "current_price": 1741.0,
+        "pe_ratio": 39.1,
+        "dividend_yield": 0.0,
+        "roce": 31.5,
+        "roe": 31.4,
+        "q_sales": 894.0,
+        "qoq_sales_growth": 4.2,
+        "quarterly_revenue_growth": [
+          781.0,
+          815.0,
+          858.0,
+          894.0
+        ],
+        "sales_trend": [
+          643.0,
+          657.0,
+          724.0,
+          740.0,
+          781.0,
+          815.0,
+          858.0,
+          894.0
+        ],
+        "q_opm": 32.0,
+        "quarterly_ebitda_margin": [
+          35.0,
+          34.0,
+          34.0,
+          32.0
+        ],
+        "opm_expansion": -2.0,
+        "q_eps": 11.29,
+        "eps_trend": [
+          6.59,
+          7.56,
+          8.61,
+          8.83,
+          10.53,
+          10.68,
+          12.0,
+          11.29
+        ],
+        "ttm_eps": 44.5,
+        "q_net_profit": 194.0,
+        "operating_margin_trend": [
+          38.0,
+          29.0,
+          29.0,
+          34.0,
+          34.0
+        ],
+        "annual_sales_trend": [
+          764.0,
+          1031.0,
+          1818.0,
+          2664.0,
+          3194.0,
+          3347.0
+        ],
+        "debt_trend": [
+          65.0,
+          52.0,
+          1311.0,
+          856.0,
+          753.0
+        ],
+        "cash_flow_trend": [
+          233.0,
+          288.0,
+          210.0,
+          318.0,
+          674.0
+        ],
+        "capex": 178.8,
+        "rd_pct": 1.5,
+        "roce_trend": [
+          47.0,
+          50.0,
+          30.0,
+          27.0,
+          32.0
+        ],
+        "promoter_pct": 63.72,
+        "promoter_change": 0.0,
+        "fii_pct": 8.01,
+        "fii_change": -0.18,
+        "dii_pct": 7.5,
+        "dii_change": 1.1,
+        "isin": "INE115Q01022",
+        "week52_low": 1327.3,
+        "week52_high": 1928.1,
+        "pct_above_low": 30.81,
+        "advt_cr": 23.52,
+        "liquidity_band": "adequate",
+        "sessions": 24,
+        "days_to_exit_1cr": 0.2,
+        "days_to_exit_5cr": 1.1,
+        "deliv_pct": 57.63,
+        "delivery_band": "delivery-led",
+        "series": "EQ",
+        "turnover_cr_last": 14.59,
+        "industry_share_pct": 9.9,
+        "industry_peer_count": 6,
+        "peer_share_pct": 5.0,
+        "peer_share_change_pp": -0.28,
+        "peer_share_lookback": 4,
+        "peer_group_size": 5,
+        "revenue_yoy_pct": 20.8,
+        "revenue_ttm_growth_pct": 21.1,
+        "revenue_cagr_pct": 34.4,
+        "revenue_growth_quality": "ok",
+        "graham_intrinsic_value": 1076.9,
+        "owner_earnings": 657.4,
+        "retained_earnings_ratio": 2.86,
+        "moat_status": "Strong (Wide Moat)",
+        "is_bargain": false,
+        "net_current_assets": null,
+        "hyper_growth_warning": true,
+        "valuation_alerts": [
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Fails P/E Screen (P/E 39.1 > 15 & Price > Intrinsic)",
+          "No Dividend Yield",
+          "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
+        ],
+        "industry_pe": 39.1,
+        "pe_vs_peers": "In line with peers"
+      },
+      "score": {
+        "overall_score": 1,
+        "fundamental_score": 0,
+        "momentum_score": 1,
+        "confidence": "High",
+        "reasons": [
+          "Sector benefits from macro policy tailwinds (Fallback)",
+          "Strong revenue growth (TTM +21.1%)",
+          "High Return on Capital (ROCE: 31.5%)",
+          "High Return on Equity (ROE: 31.4%)",
+          "DII Accumulation (+1.1%)",
+          "Wide Economic Moat (Sustained Margin Expansion)"
+        ],
+        "risks": [
+          "Operating margin contracted (-2.0pp)",
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Fails P/E Screen (P/E 39.1 > 15 & Price > Intrinsic)",
+          "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
+        ],
+        "recommendations": [
+          "Avoid / High Risk"
+        ]
+      },
+      "fundamental_value": 1076.9,
+      "estimate_method": "Analyst Consensus"
     }
   ],
   "semiconductors_equipment": [
@@ -8195,6 +8467,8 @@
       "target_low": null,
       "rec_score": null,
       "screener": {
+        "capex": 0.0,
+        "rd_pct": 8.5,
         "isin": "INE867C01010",
         "graham_intrinsic_value": 0.0,
         "owner_earnings": 0.0,
@@ -8338,10 +8612,10 @@
         "industry_share_pct": 0.04,
         "industry_peer_count": 8,
         "industry_share_change_pp": 0.0,
-        "peer_share_pct": 0.3,
-        "peer_share_change_pp": -0.76,
+        "peer_share_pct": 0.4,
+        "peer_share_change_pp": -0.98,
         "peer_share_lookback": 2,
-        "peer_group_size": 4,
+        "peer_group_size": 3,
         "revenue_yoy_pct": -58.9,
         "revenue_ttm_growth_pct": -32.7,
         "revenue_cagr_pct": -14.9,
@@ -8494,10 +8768,10 @@
         "industry_share_pct": 3.3,
         "industry_peer_count": 8,
         "industry_share_change_pp": 0.0,
-        "peer_share_pct": 28.7,
-        "peer_share_change_pp": -6.06,
+        "peer_share_pct": 33.8,
+        "peer_share_change_pp": -9.89,
         "peer_share_lookback": 2,
-        "peer_group_size": 4,
+        "peer_group_size": 3,
         "revenue_yoy_pct": 128.5,
         "revenue_ttm_growth_pct": 92.6,
         "revenue_cagr_pct": 0.6,
@@ -8515,8 +8789,8 @@
           "No Dividend Yield",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 112.0,
-        "pe_vs_peers": "In line with peers"
+        "industry_pe": 72.5,
+        "pe_vs_peers": "54% above peers"
       },
       "score": {
         "overall_score": 6,
@@ -8562,95 +8836,6 @@
       "target_high": "10040.00",
       "target_low": "7550.00",
       "screener": {
-        "market_cap": 22493.0,
-        "current_price": 7312.0,
-        "pe_ratio": 165.0,
-        "dividend_yield": 0.0,
-        "roce": 15.1,
-        "roe": 12.4,
-        "q_sales": 361.0,
-        "qoq_sales_growth": 17.97,
-        "quarterly_revenue_growth": [
-          136.0,
-          278.0,
-          306.0,
-          361.0
-        ],
-        "sales_trend": [
-          190.0,
-          174.0,
-          183.0,
-          157.0,
-          136.0,
-          278.0,
-          306.0,
-          361.0
-        ],
-        "q_opm": 24.0,
-        "quarterly_ebitda_margin": [
-          13.0,
-          23.0,
-          20.0,
-          24.0
-        ],
-        "opm_expansion": 4.0,
-        "q_eps": 16.33,
-        "eps_trend": [
-          6.1,
-          5.19,
-          4.46,
-          3.51,
-          1.38,
-          11.28,
-          14.4,
-          16.33
-        ],
-        "ttm_eps": 43.39,
-        "q_net_profit": 50.0,
-        "operating_margin_trend": [
-          27.0,
-          19.0,
-          18.0,
-          20.0,
-          21.0
-        ],
-        "annual_sales_trend": [
-          322.0,
-          574.0,
-          581.0,
-          676.0,
-          876.0,
-          1080.0
-        ],
-        "debt_trend": [
-          96.0,
-          143.0,
-          191.0,
-          177.0,
-          377.0
-        ],
-        "cash_flow_trend": [
-          -30.0,
-          7.0,
-          57.0,
-          101.0,
-          197.0
-        ],
-        "capex": 72.2,
-        "rd_pct": 8.5,
-        "roce_trend": [
-          16.0,
-          22.0,
-          11.0,
-          10.0,
-          15.0
-        ],
-        "promoter_pct": 29.35,
-        "promoter_change": -1.09,
-        "fii_pct": 24.8,
-        "fii_change": 7.49,
-        "dii_pct": 22.35,
-        "dii_change": -5.31,
         "isin": "INE864I01014",
         "week52_low": 1678.5,
         "week52_high": 8374.5,
@@ -8667,55 +8852,34 @@
         "industry_share_pct": 1.68,
         "industry_peer_count": 8,
         "industry_share_change_pp": 0.0,
-        "peer_share_pct": 15.0,
-        "peer_share_change_pp": -5.37,
-        "peer_share_lookback": 2,
-        "peer_group_size": 4,
-        "revenue_yoy_pct": 129.9,
-        "revenue_ttm_growth_pct": 53.6,
-        "revenue_cagr_pct": 27.4,
-        "revenue_growth_quality": "ok",
-        "graham_intrinsic_value": 1050.0,
-        "owner_earnings": 158.0,
-        "retained_earnings_ratio": 2.86,
-        "moat_status": "Medium (Narrow Moat)",
+        "graham_intrinsic_value": 0.0,
+        "owner_earnings": 0.0,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Weak/None",
         "is_bargain": false,
         "net_current_assets": null,
         "hyper_growth_warning": false,
         "valuation_alerts": [
-          "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 165.0 > 15 & Price > Intrinsic)",
           "No Dividend Yield"
-        ],
-        "industry_pe": 112.0,
-        "pe_vs_peers": "47% above peers"
+        ]
       },
       "score": {
-        "overall_score": 7,
-        "fundamental_score": -1,
+        "overall_score": 8,
+        "fundamental_score": 0,
         "momentum_score": 8,
-        "confidence": "High",
+        "confidence": "Low",
         "reasons": [
           "Government Contract/MoU: MTAR Technologies Share Price",
           "Policy Notification: The Exchange has received the disclosure under Regulation 29(2) of SEBI (Substantial Acquisition of Shares & Takeovers) Regulations, 2011 for K Shalini & PACs",
-          "Strong revenue growth (TTM +53.6%)",
-          "Operating Margin Expansion (+4.0%)",
-          "Liquid (Rs 73 Cr traded daily)",
-          "FII Accumulation (+7.49%)",
-          "Narrow Economic Moat"
+          "Liquid (Rs 73 Cr traded daily)"
         ],
-        "risks": [
-          "Promoters cut their stake (-1.09%)",
-          "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 165.0 > 15 & Price > Intrinsic)"
-        ],
+        "risks": [],
         "recommendations": [
           "Hold / Monitor"
         ]
       },
       "estimate_method": "Analyst Consensus",
-      "rec_score": 1.0,
-      "fundamental_value": 1050.0
+      "rec_score": 1.0
     },
     {
       "ticker": "UTLSOLAR",
@@ -8808,10 +8972,10 @@
         "industry_share_pct": 6.28,
         "industry_peer_count": 8,
         "industry_share_change_pp": 0.0,
-        "peer_share_pct": 56.0,
-        "peer_share_change_pp": 12.19,
+        "peer_share_pct": 65.8,
+        "peer_share_change_pp": 10.87,
         "peer_share_lookback": 2,
-        "peer_group_size": 4,
+        "peer_group_size": 3,
         "graham_intrinsic_value": 0.0,
         "owner_earnings": -25.8,
         "retained_earnings_ratio": 2.86,
@@ -8824,8 +8988,8 @@
           "Fails P/E Screen (P/E 32.9 > 15 & Price > Intrinsic)",
           "No Dividend Yield"
         ],
-        "industry_pe": 112.0,
-        "pe_vs_peers": "71% below peers"
+        "industry_pe": 72.5,
+        "pe_vs_peers": "55% below peers"
       },
       "score": {
         "overall_score": -2,
