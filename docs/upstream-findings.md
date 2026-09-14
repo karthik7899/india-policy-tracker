@@ -17,6 +17,41 @@ named.
 
 ---
 
+## NSE's announcements API answers a runner — it is the primary source
+
+**Measured 2026-09-14**, run 34806776390
+(`probe_upstream.py --source nse-announcements`).
+
+`providers/nse_announcements.py` is written to survive a refusal, which means
+the pipeline cannot tell you which of the two lives it is leading. It is the
+primary filings source, not the fallback.
+
+```
+handshake   : True -> cookies ['AKA_A2', '_abck', 'bm_sz']
+url         : https://www.nseindia.com/api/corporate-announcements
+params      : index=equities, from_date=14-09-2026, to_date=14-09-2026
+status      : 200
+content-type: application/json; charset=utf-8
+bytes       : 6727      envelope: list      records: 9
+```
+
+The Akamai bot-manager cookies are the same three measured on 14 Aug 2026, so
+the handshake route is stable. Nine records against that date's 44,674 bytes
+is a time-of-day difference, not a decline — this ran at 10:08 IST, minutes
+into the session.
+
+**The envelope arrived as a bare list, not the `{"data": [...]}` dict.** In
+most shapes of code that is a silent empty feed. Here it is not:
+`exchange_api.rows_from` accepts either, and says why — NSE has served both
+for this same endpoint. The alias layer held too: `normalize()` reported no
+empty fields, so none of the twenty keys (`an_dt`, `attchmntText`, `sm_name`,
+`smIndustry`, `symbol`, …) has drifted.
+
+Re-measure rather than trust this: it is an undocumented endpoint behind a
+bot manager, and both of those move.
+
+---
+
 ## Screener serves no promoter pledge row — for anybody
 
 **Measured 2026-09-10** (`scripts/probe_screener_pledge.py`, run 6 — script
