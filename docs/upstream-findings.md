@@ -203,6 +203,37 @@ NSE fails by **hanging** rather than rejecting, which is the more expensive of
 the two — a bare request costs the full timeout. The User-Agent and Referer
 that `providers/isin_master.py` sends are required, not decorative.
 
+### AnnSubCategoryGetData, measured properly
+
+**2026-09-14**, run 34807792940, asking for a single completed session
+(2026-09-11):
+
+```
+envelope: {"Table": [...50 records...], "Table1": [{"ROWCNT": 870}]}
+record keys: NEWSID, SCRIP_CD, XML_NAME, NEWSSUB, DT_TM, NEWS_DT,
+             CRITICALNEWS, ANNOUNCEMENT_TYPE, QUARTER_ID, FILESTATUS,
+             ATTACHMENTNAME, MORE, HEADLINE, CATEGORYNAME, OLD, RN
+```
+
+**870 announcements for one trading day, 50 to a page.** The control now makes
+the August lesson measured rather than narrated: the *same parameters* sent to
+`AnnGetData` return `"No Record Found!"` in 18 bytes, while
+`AnnSubCategoryGetData` returns 870 records. Identical query, identical 200,
+identical content type. Only the path differs.
+
+**The window must be a single day.** `strPrevDate=<7 days ago>` with
+`strToDate=<today>` returns `{}` — two bytes, HTTP 200. Whatever the endpoint
+does with a range, it is not what a range means, and the empty dict is
+indistinguishable from an outage if you are not expecting it.
+
+**Worth a look, not yet changed:** 870 records at 50 a page is 18 pages, and
+`providers/bse_announcements.py` sets `MAX_PAGES = 6`. Production therefore
+reads roughly 300 of 870 on a normal day. That cap is deliberate and the code
+says so ("this is an enrichment, not a crawl", "raise MAX_PAGES if holdings are
+being missed") — but it was set before anyone had counted the day's total, and
+now we have: it sees about a third. Whether that matters depends on whether
+watchlist filings cluster early in BSE's ordering, which is not yet measured.
+
 ### What this run changed in the probe itself
 
 The catalogue was re-litigating settled negatives and would have misled a
