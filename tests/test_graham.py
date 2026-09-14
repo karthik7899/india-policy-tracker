@@ -11,6 +11,7 @@ import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from analysis.graham import calculate_graham_intrinsic_value  # noqa: E402
+from analysis.valuation import generate_valuation_alerts  # noqa: E402
 from models.core import CompanyFinancials  # noqa: E402
 
 # HAL's real quarterly revenue: the March quarter runs ~3x the June quarter.
@@ -129,3 +130,84 @@ def test_an_operating_loss_alone_is_enough_to_stop_it():
 def test_a_profitable_company_is_still_valued():
     fin = CompanyFinancials(ttm_eps=100.0, q_eps=25.0, q_opm=12.0, sales_trend=[])
     assert calculate_graham_intrinsic_value(fin) > 0
+
+
+class TestAnUnvaluedCompanyIsNotACheapOne:
+    """0.0 means "we cannot value this", and it must never be compared.
+
+    calculate_graham_intrinsic_value returns 0.0 as an explicit refusal. Its
+    docstring says callers gate on that, and three of the four did. The fourth
+    wrote `price <= graham_value * 1.2`, which is False for every positive
+    price once the value is 0.0 — so every holding the model declined to value
+    collected "Fails P/E Screen (... & Price > Intrinsic)", asserting a
+    comparison that was never performed against a number that does not exist.
+
+    The verdict was right and does not change here: P/E > 15 with no exemption
+    available still fails. What was wrong is the reason attached to it — six
+    holdings in the payload at the time told the reader a comparison had been
+    made that never was, sending anyone who checked after an intrinsic value
+    the model had explicitly refused to produce.
+    """
+
+    def _declined(self, pe_ratio):
+        # Graham refuses: the latest quarter has swung to an operating loss.
+        return CompanyFinancials(
+            pe_ratio=pe_ratio,
+            current_ratio=2.5,
+            dividend_yield=1.5,
+            net_current_assets=1000.0,
+            debt_trend=[100.0],
+            ttm_eps=39.48,
+            q_eps=1.0,
+            q_opm=-2.7,
+            sales_trend=_SEASONAL_SALES,
+        )
+
+    def test_the_alert_does_not_claim_a_comparison_it_never_made(self):
+        fin = self._declined(28.0)
+        assert calculate_graham_intrinsic_value(fin) == 0.0
+        alerts = generate_valuation_alerts(fin, price=320.0)
+        pe_alerts = [a for a in alerts if "P/E Screen" in a]
+        assert pe_alerts, "P/E > 15 with no intrinsic value still fails the screen"
+        assert "Price > Intrinsic" not in pe_alerts[0], pe_alerts[0]
+        assert "no intrinsic value" in pe_alerts[0], pe_alerts[0]
+
+    def test_a_low_pe_company_is_not_failed_for_being_unvaluable(self):
+        """The exemption is missing, but the rule it exempts from never fired."""
+        fin = self._declined(9.0)
+        alerts = generate_valuation_alerts(fin, price=320.0)
+        assert not [a for a in alerts if "P/E Screen" in a], alerts
+
+    def test_a_valued_company_below_intrinsic_still_passes(self):
+        fin = CompanyFinancials(
+            pe_ratio=28.0,
+            current_ratio=2.5,
+            dividend_yield=1.5,
+            net_current_assets=1000.0,
+            debt_trend=[100.0],
+            ttm_eps=100.0,
+            q_eps=25.0,
+            q_opm=12.0,
+            sales_trend=_SEASONAL_SALES,
+        )
+        value = calculate_graham_intrinsic_value(fin)
+        assert value > 0
+        alerts = generate_valuation_alerts(fin, price=value * 0.5)
+        assert not [a for a in alerts if "P/E Screen" in a], alerts
+
+    def test_a_valued_company_above_intrinsic_still_fails_with_the_real_reason(self):
+        fin = CompanyFinancials(
+            pe_ratio=28.0,
+            current_ratio=2.5,
+            dividend_yield=1.5,
+            net_current_assets=1000.0,
+            debt_trend=[100.0],
+            ttm_eps=100.0,
+            q_eps=25.0,
+            q_opm=12.0,
+            sales_trend=_SEASONAL_SALES,
+        )
+        value = calculate_graham_intrinsic_value(fin)
+        alerts = generate_valuation_alerts(fin, price=value * 3)
+        pe_alerts = [a for a in alerts if "P/E Screen" in a]
+        assert pe_alerts and "Price > Intrinsic" in pe_alerts[0], alerts

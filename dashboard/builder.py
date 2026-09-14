@@ -173,6 +173,12 @@ def build_dashboard_views(data: Dict[str, Any], watchlist: Dict[str, Any]):
             owner_earnings = calculate_owner_earnings(fin)
             moat = score_economic_moat(fin)
             graham_value = calculate_graham_intrinsic_value(fin)
+            # 0.0 is graham.py's refusal to value the company, not a valuation
+            # of zero. Everything downstream — the model, the payload, the
+            # dashboard — should see absence, so that only code which asks
+            # "is there a value?" can answer, and code which asks "what is it?"
+            # gets nothing rather than a number that compares.
+            graham_reported = graham_value if graham_value > 0 else None
             retained_ratio = test_retained_earnings(fin)
             hyper_growth = check_hyper_growth_risk(fin)
             valuation_alerts = generate_valuation_alerts(fin, price)
@@ -180,7 +186,7 @@ def build_dashboard_views(data: Dict[str, Any], watchlist: Dict[str, Any]):
             # Build Valuation Model
             val = CompanyValuation(
                 pe_ratio=fin.pe_ratio,
-                graham_intrinsic_value=graham_value,
+                graham_intrinsic_value=graham_reported,
                 is_bargain=is_bargain,
                 ncav_per_share=ncav,
                 owner_earnings=owner_earnings,
@@ -220,7 +226,7 @@ def build_dashboard_views(data: Dict[str, Any], watchlist: Dict[str, Any]):
             if isinstance(stock.get("screener"), dict):
                 stock["screener"].update(
                     {
-                        "graham_intrinsic_value": graham_value,
+                        "graham_intrinsic_value": graham_reported,
                         "owner_earnings": owner_earnings,
                         "retained_earnings_ratio": retained_ratio,
                         "moat_status": moat,
@@ -247,7 +253,7 @@ def build_dashboard_views(data: Dict[str, Any], watchlist: Dict[str, Any]):
                         "price": comp.price,
                         "pe_ratio": pe_ratio,
                         "ncav": ncav,
-                        "graham_intrinsic_value": graham_value,
+                        "graham_intrinsic_value": graham_reported,
                         "is_bargain": is_bargain,
                         "is_defensive_pass": is_defensive_pass,
                         "score": score_dict,
