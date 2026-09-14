@@ -416,3 +416,70 @@ def test_an_undated_flag_never_outranks_a_real_date():
         today=TODAY,
     )
     assert flags[0]["date"] == TODAY
+
+
+def test_a_material_is_matched_as_a_material_not_as_a_company():
+    """Found on the live feed the day after shipping.
+
+    Materials were matched with the company matcher, whose single-token guard
+    rejects a following capitalised word so that "ITC Hotels" is not read as
+    ITC. Correct for company names, wrong for materials: "DRAM Inventory Falls"
+    is still about DRAM. The headline below — a real one — produced nothing,
+    while the same story phrased "RAM shortage" matched only because the next
+    word happened to be lower case.
+    """
+    from analysis.read_through import material_in
+
+    headline = "HBM4 Shortage: DRAM Inventory Falls Below 10 Days"
+    assert material_in(headline, "DRAM")
+    # HBM4 is HBM: an optional trailing generation number is part of the name.
+    assert material_in(headline, "HBM")
+    assert material_in("higher price on RAM shortage", "RAM")
+
+
+def test_the_material_matcher_keeps_its_word_boundaries():
+    """The generation-number allowance is digits only, so it cannot become the
+    substring matching it replaced."""
+    from analysis.read_through import material_in
+
+    assert not material_in("Government programme faces a shortage", "RAM")
+    assert not material_in("Gurugram dispute settled", "RAM")
+    assert not material_in("Steelcase reports a shortage", "steel")
+    assert not material_in("Ramp-up delayed by shortage", "RAM")
+    assert not material_in("", "RAM")
+    assert not material_in("RAM shortage", "")
+
+
+def test_the_real_dram_headline_reaches_every_exposed_sector():
+    graph = {
+        "edges": [
+            {
+                "src": "DRAM",
+                "dst": "manufacturing_electronics",
+                "type": "input_cost",
+                "evidence": "curated",
+            },
+            {
+                "src": "HBM",
+                "dst": "data_center_support",
+                "type": "input_cost",
+                "evidence": "curated",
+            },
+        ]
+    }
+    watchlist = {
+        "manufacturing_electronics": [{"ticker": "DIXON", "name": "Dixon"}],
+        "data_center_support": [{"ticker": "STLTECH", "name": "Sterlite"}],
+    }
+    flags = compute_read_throughs(
+        [],
+        graph,
+        watchlist,
+        today=TODAY,
+        headlines=["HBM4 Shortage: DRAM Inventory Falls Below 10 Days"],
+    )
+    assert sorted(f["sector"] for f in flags) == [
+        "data_center_support",
+        "manufacturing_electronics",
+    ]
+    assert all(f["direction"] == "risk" for f in flags)
