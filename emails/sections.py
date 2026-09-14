@@ -351,6 +351,61 @@ def build_data_quality_html(
     return _section("Data Quality", body)
 
 
+MAX_READ_THROUGHS = 4
+
+
+def build_read_through_html(read_throughs: Any, limit: int = MAX_READ_THROUGHS) -> str:
+    """Second-order flags, with the chain that produced them.
+
+    The chain travels into the email rather than being left on the dashboard.
+    A line that says "manufacturing electronics at risk" and nothing else is
+    an instruction; the same line with "RAM is scarcer, and our EMS holdings
+    buy RAM" underneath it is an argument, and an argument can be rejected
+    over breakfast without opening a browser.
+
+    Risk rows first, because an opportunity that scrolls off is a missed idea
+    and a risk that scrolls off is a missed position.
+    """
+    rows = [r for r in (read_throughs or []) if isinstance(r, dict)]
+    if not rows:
+        return ""
+
+    rows = sorted(rows, key=lambda r: r.get("direction") != "risk")[:limit]
+    blocks = []
+    for row in rows:
+        colour = "#f87171" if row.get("direction") == "risk" else "#4ade80"
+        mark = "▼" if row.get("direction") == "risk" else "▲"
+        sector = _esc(str(row.get("sector", "")).replace("_", " ")).title()
+        tickers = ", ".join(_esc(t) for t in (row.get("tickers") or [])[:6])
+        chain = "".join(
+            f"<li style='margin-bottom:2px;'>{_esc(step)}</li>"
+            for step in (row.get("chain") or [])
+        )
+        blocks.append(f"""
+        <div style="border-left: 3px solid {colour}; padding: 4px 0 4px 10px;
+                    margin-bottom: 14px;">
+            <div style="font-size: 13px; color: #e5e7eb;">
+                <span style="color: {colour};">{mark}</span>
+                <strong>{sector}</strong>
+                <span style="color: #6b7280; font-size: 11px; text-transform: uppercase;">
+                    {_esc(str(row.get('mechanism', '')).replace('_', ' '))}</span>
+            </div>
+            <p style="font-size: 12px; color: #9ca3af; margin: 4px 0 6px 0;">
+                {_esc(row.get('trigger', ''))}</p>
+            <ol style="font-size: 12px; color: #d1d5db; margin: 0 0 6px 0;
+                       padding-left: 18px;">{chain}</ol>
+            <p style="font-size: 12px; color: #93c5fd; margin: 0;">{tickers}</p>
+        </div>""")
+
+    return _section(
+        "Read-throughs",
+        "".join(blocks),
+        "Events naming nothing we hold, and what they imply for holdings "
+        "downstream of them. Hypotheses with their reasoning attached — they "
+        "do not feed scoring or thesis health.",
+    )
+
+
 def build_cta_html(dashboard_url: str) -> str:
     """One primary action, three secondary. Never more.
 

@@ -26,6 +26,14 @@ const TYPE_LABEL = {
   partner: "Partner",
 };
 
+// Edge types that terminate at something we hold — a sector or a ticker.
+// competitor and supplier_customer relate two OUTSIDE entities to each other;
+// they exist to complete a read-through chain, and grouping the graph by
+// destination without excluding them invents a sector card headed "Google".
+const TERMINAL_TYPES = new Set(["anchor_demand", "input_cost", "partner"]);
+
+const DIRECTION_MARK = { risk: "▼", opportunity: "▲" };
+
 // Type carries meaning, so it is labelled, never colour-only. Three types sits
 // inside the categorical cap, but a label costs nothing and survives both CVD
 // and a greyscale print.
@@ -122,6 +130,81 @@ function crossSectorSummary(edges) {
   );
 }
 
+/**
+ * Read-throughs: what an event about someone else means for what we hold.
+ *
+ * Rendered here rather than in Risk on purpose. Risk grades evidence — a
+ * thesis moves only when this cycle's numbers contradict the catalyst. A
+ * read-through is a hypothesis assembled from curated relationships and a
+ * keyword, and putting it beside graded evidence would let the two be read as
+ * the same kind of claim. It belongs with the graph it was derived from.
+ *
+ * The chain is shown in full, always. A conclusion whose reasoning is hidden
+ * cannot be disagreed with, and this is the one thing in the product that
+ * asserts causation nobody wrote down.
+ */
+function readThroughPanel(rows, params) {
+  if (!Array.isArray(rows) || !rows.length) return null;
+
+  return el(
+    "section",
+    { class: "panel" },
+    el("h3", { class: "section-title" }, "Read-throughs"),
+    el(
+      "p",
+      { class: "section-note" },
+      "Events that name nothing we hold, and what they imply for holdings that " +
+        "sit downstream of them. Each is a hypothesis with its reasoning " +
+        "attached — read the chain before acting on the conclusion. These " +
+        "deliberately do not feed scoring or thesis health.",
+    ),
+    el(
+      "ul",
+      { class: "rt-list" },
+      rows.map((r) =>
+        el(
+          "li",
+          { class: `rt-item rt-${r.direction}` },
+          el(
+            "div",
+            { class: "rt-head" },
+            el(
+              "span",
+              { class: "rt-mark", "aria-hidden": "true" },
+              DIRECTION_MARK[r.direction] || "•",
+            ),
+            el("span", { class: "rt-sector" }, String(r.sector || "").replace(/_/g, " ")),
+            el("span", { class: "rt-mech" }, String(r.mechanism || "").replace(/_/g, " ")),
+            el(
+              "span",
+              { class: "rt-confidence" },
+              r.confidence === "curated" ? "curated links" : "harvested links",
+            ),
+          ),
+          el("p", { class: "rt-trigger" }, r.trigger || ""),
+          el(
+            "ol",
+            { class: "rt-chain" },
+            (r.chain || []).map((step) => el("li", {}, step)),
+          ),
+          el(
+            "p",
+            { class: "rt-tickers" },
+            (r.tickers || []).map((t, i) => [
+              i ? ", " : "",
+              el(
+                "a",
+                { class: "ticker-link", href: href("holdings", { ...params, focus: t }) },
+                t,
+              ),
+            ]),
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
 export async function render(container, { payload, route }) {
   const edges = await loadGraph();
   if (!edges.length) {
@@ -136,8 +219,9 @@ export async function render(container, { payload, route }) {
   }
 
   const sectors = payload?.sectors || {};
+  const terminal = edges.filter((e) => TERMINAL_TYPES.has(e.type));
   const byDst = new Map();
-  for (const e of edges) {
+  for (const e of terminal) {
     if (!byDst.has(e.dst)) byDst.set(e.dst, []);
     byDst.get(e.dst).push(e);
   }
@@ -156,11 +240,12 @@ export async function render(container, { payload, route }) {
           `the demand anchors and input costs outside them.`,
       ),
     ),
+    readThroughPanel(payload?.briefing?.read_throughs, (route && route.params) || {}),
     el(
       "div",
       { class: "net-grid" },
       ordered.map(([key, list]) => sectorCard(key, list, sectors, route?.focus)),
     ),
-    crossSectorSummary(edges),
+    crossSectorSummary(terminal),
   );
 }

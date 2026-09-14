@@ -249,7 +249,7 @@ async def run_pipeline():
         )
 
         graph = load_entity_graph()
-        events = classify_headlines(data, watchlist)
+        events = classify_headlines(data, watchlist, graph)
         # Re-attribute the merged list with the current rules, so a fix to the
         # matcher reaches events carried over from earlier runs instead of
         # only applying to today's.
@@ -258,9 +258,26 @@ async def run_pipeline():
                 "market_events", events, ["headline", "event_type"]
             )[:120],
             watchlist,
+            graph=graph,
         )
         data["supply_stress"] = compute_supply_stress(data["market_events"], graph)
         harvest_partner_edges(data["corporate_agreements"], watchlist, graph)
+
+        # Second-order implications of events that name nobody we hold. Kept
+        # deliberately downstream of attribution and deliberately OUT of
+        # scoring, thesis health and the early-warning engine: those grade
+        # evidence, and a read-through is a hypothesis with its reasoning
+        # attached. See analysis/read_through.py for why that separation is
+        # the whole point.
+        from analysis.competitive_intel import collect_headlines
+        from analysis.read_through import compute_read_throughs
+
+        data["read_throughs"] = compute_read_throughs(
+            data["market_events"],
+            graph,
+            watchlist,
+            headlines=collect_headlines(data, watchlist),
+        )
 
         # The price-based counterpart of supply_stress above. That one counts
         # supply-side headlines, so a quarter where copper quietly rose 18%
