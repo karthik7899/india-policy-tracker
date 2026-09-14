@@ -372,3 +372,38 @@ def test_bse_still_merges_when_nse_is_blocked(tmp_path):
         )
     assert added == 1
     assert master == {"BSEONLY": "INE999Z01011"}
+
+
+def test_a_post_corporate_action_isin_is_a_correction_not_a_collision():
+    """What the 140 actually were.
+
+    The module assumed an ISIN "never changes for the life of a listing" and
+    built never-overwrite on it. It is not true: a split or face-value change
+    issues a new ISIN for the same company — the issuer prefix stays, the
+    issue-series digits increment, the check digit follows.
+
+    Letting NSE apply its 140 and reading the git diff settled it: in all 140
+    the first nine characters were unchanged and the series only ever moved
+    up. Not one was a different issuer. ADANIPOWER below is a real one, and it
+    is a live holding.
+    """
+    master = {"ADANIPOWER": "INE814H01011"}  # pre-split, as committed
+    _added, conflicts, corrected = merge_new_symbols(
+        master, {"ADANIPOWER": "INE814H01029"}, "NSE", authoritative=True
+    )
+    assert (conflicts, corrected) == (0, 1)
+    assert master["ADANIPOWER"] == "INE814H01029"
+    # Same issuer, later series — the signature of a corporate action rather
+    # than of two different companies sharing a ticker.
+    assert "INE814H01011"[:9] == "INE814H01029"[:9]
+
+
+def test_bse_cannot_undo_a_correction_it_has_no_standing_to_make():
+    """BSE cannot arbitrate which value is current, so a stale BSE row must
+    not drag a corrected mapping back."""
+    master = {"ADANIPOWER": "INE814H01029"}
+    _added, conflicts, corrected = merge_new_symbols(
+        master, {"ADANIPOWER": "INE814H01011"}, "BSE"
+    )
+    assert (conflicts, corrected) == (1, 0)
+    assert master["ADANIPOWER"] == "INE814H01029"
