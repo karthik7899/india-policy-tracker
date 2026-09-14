@@ -2,17 +2,6 @@
   "ticker": "MPHASIS",
   "items": [
     {
-      "date": "11 Sep 2026",
-      "headline": "Mphasis Partners With SGBS Unnati Foundation For Bengaluru Initiative; Shares Fall 0.26%",
-      "source_url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxQcl8xVzZpdUhGb1dXQ2FvamhTRmo2VnFMdHJwUzdYNnNDczFzd3hDMUhnWXp2eEpibHY2VnU4dHN3SlkzcTNIMXMtSlk5Yml4Q29FWWhsRHJ0T25CaUpnTzFTUGxSYXVFYjlmTklTWUs3dFhaZGlMck5RWnpZMGotZ0F0Y2Y0UlBEVWRoZHBmS2xQMHdjUWJiaFR3?oc=5",
-      "source_label": "hdfcsky.com",
-      "event_tags": [
-        "Sector news"
-      ],
-      "confidence": "M",
-      "status": "counted"
-    },
-    {
       "date": "Sat, 01 Aug 2026 04:44:17 GMT",
       "headline": "Mphasis awarded EcoVadis Silver Medal with 75 score in FY26",
       "source_url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxQZlBEUjBGeXZzRVpCSmlqOEMzNTdFN3k5SGFaQm5mWkxQZWJqX0pTcTAxNEVpQ09vemx6UDFfUm1PRUpaU0RUTG1vMFV6ZXp5bXZQRHVXVzV4cXpoUDFBUWl5REtCbndzbUFDT2JLZXhOYU0wcHFaaEtfR3lvZC1TUk5hdm9wVDdIYi1wUHBaNXptWVNEZVFUUHl6Qjc5NDBvbC1iekhWVFF3M1Bpb2pCYjVEV3BHVFU?oc=5",
@@ -110,7 +99,19 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (145 days old)"
+      "exclusion_reason": "aged >120d (146 days old)"
+    },
+    {
+      "date": "2026-09-14",
+      "headline": "Mphasis acquires Theory and Practice Business Intelligence Inc., strengthening its 'Decisioning Intelligence' capabilities",
+      "source_url": "",
+      "source_label": "",
+      "event_tags": [
+        "acquisition",
+        "Event"
+      ],
+      "confidence": "H",
+      "status": "counted"
     },
     {
       "date": "2026-09-13",
@@ -119,19 +120,6 @@
       "source_label": "",
       "event_tags": [
         "tie_up",
-        "Event"
-      ],
-      "confidence": "H",
-      "status": "merged",
-      "exclusion_reason": "merged: duplicate phrasing of “Mphasis Partners With SGBS Unnati Foundation For Bengaluru I”"
-    },
-    {
-      "date": "2026-09-13",
-      "headline": "Mphasis acquires Theory and Practice Business Intelligence Inc., strengthening its 'Decisioning Intelligence' capabilities",
-      "source_url": "",
-      "source_label": "",
-      "event_tags": [
-        "acquisition",
         "Event"
       ],
       "confidence": "H",

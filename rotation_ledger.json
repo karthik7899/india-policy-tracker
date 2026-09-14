@@ -127,9 +127,9 @@
     "name": "B P C L",
     "price_at_decision": 318.2,
     "target_at_decision": 344.74,
-    "scored": false,
-    "outcome": null,
-    "realized_return_pct": null
+    "scored": true,
+    "outcome": "Underperforming",
+    "realized_return_pct": -4.3
   },
   {
     "date": "2026-07-31",
@@ -139,9 +139,9 @@
     "name": "MTAR Technologie",
     "price_at_decision": 5726.0,
     "target_at_decision": 7358.25,
-    "scored": false,
-    "outcome": null,
-    "realized_return_pct": null
+    "scored": true,
+    "outcome": "Thesis Playing Out",
+    "realized_return_pct": 27.7
   },
   {
     "date": "2026-08-04",
@@ -487,6 +487,18 @@
     "name": "Optiemus Infra.",
     "price_at_decision": 568.6,
     "target_at_decision": 710.75,
+    "scored": false,
+    "outcome": null,
+    "realized_return_pct": null
+  },
+  {
+    "date": "2026-09-14",
+    "action": "rotated_in",
+    "sector": "data_center_support",
+    "ticker": "BIRLACABLE",
+    "name": "Birla Cable",
+    "price_at_decision": 392.35,
+    "target_at_decision": 490.44,
     "scored": false,
     "outcome": null,
     "realized_return_pct": null
