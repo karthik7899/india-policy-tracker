@@ -8,64 +8,80 @@ shape to design against.
 
 It writes nothing into the pipeline and is never called by a briefing run.
 
-MEASURED, 14 Aug 2026 (runs 1 and 2). Re-run before trusting any of it; these
-are undocumented endpoints and BSE moves them.
+MEASURED 14 Sep 2026 (run 34807288884), re-confirming 14 Aug 2026. Re-run
+before trusting any of it; these are undocumented endpoints and BSE moves
+them. Nothing moved in that month: everything below that worked still works,
+and everything dead is still dead.
 
   WORKS
 
   Bhavcopy — whole-market daily OHLCV, ONE request.
     https://www.bseindia.com/download/BhavCopy/Equity/
         BhavCopy_BSE_CM_0_0_0_<YYYYMMDD>_F_0000.CSV
-    851 KB, 4,973 rows, application/octet-stream. Columns include TradDt,
-    FinInstrmId (scrip code), ISIN, TckrSymb, OpnPric, HghPric, LwPric,
-    ClsPric, LastPr and a traded-value column. Keyed by ISIN, which we hold
-    for all 70 watchlist holdings.
+    857,324 bytes, 5,008 lines, application/octet-stream (Aug: 851 KB,
+    4,973). Columns include TradDt, FinInstrmId (scrip code), ISIN,
+    TckrSymb, OpnPric, HghPric, LwPric, ClsPric, LastPr and a traded-value
+    column. Keyed by ISIN, which we hold for all 70 watchlist holdings.
     TRAP: asking for *today* before the file is published returns 200 with
     BSE's Angular shell, not a 404. Run 1 read that as a dead endpoint. Ask
     for the previous session, and treat an HTML body as a miss whatever the
     status says.
 
-  ListofScripData — the scrip master, 4,975 active equity scrips.
+  ListofScripData — the scrip master, 5,004 active equity scrips.
     https://api.bseindia.com/BseIndiaAPI/api/ListofScripData/w
         ?Group=&Scripcode=&industry=&segment=Equity&status=Active
-    1.75 MB JSON. SCRIP_CD, ISIN_NUMBER, scrip_id, Scrip_Name, GROUP,
-    FACE_VALUE, Mktcap. Nearly twice the coverage of our NSE-derived ISIN
-    master and it includes BSE-only listings.
+    1,755,863 bytes JSON, a bare list (Aug: 1.75 MB, 4,975 scrips). Twelve
+    keys, more than the Aug note recorded: SCRIP_CD, Scrip_Name, Status,
+    GROUP, FACE_VALUE, ISIN_NUMBER, INDUSTRY, scrip_id, Segment, NSURL,
+    Issuer_Name, Mktcap. INDUSTRY is null in the sample, so do not plan on
+    it. Nearly twice the coverage of our NSE-derived ISIN master, and it
+    includes BSE-only listings.
 
-  getScripHeaderData — per-scrip quote.
+  getScripHeaderData — per-scrip quote. 1,183 bytes.
     https://api.bseindia.com/BseIndiaAPI/api/getScripHeaderData/w
         ?Debtflag=&scripcode=<code>&seriesid=
     Header carries PrevClose/Open/High/Low/LTP; CurrRate carries LTP/Chg/PcChg.
 
-  DOES NOT WORK YET
+  AnnSubCategoryGetData — corporate announcements. THE PATH, and the only
+  one. providers/bse_announcements.py has used it in production since 15 Aug.
+    https://api.bseindia.com/BseIndiaAPI/api/AnnSubCategoryGetData/w
+        ?pageno=1&strCat=-1&strPrevDate=<YYYYMMDD>&strScrip=&strSearch=P
+        &strToDate=<YYYYMMDD>&strType=C&subcategory=-1
 
-  Shareholding / promoter pledge. Four endpoint names tried
+  DOES NOT WORK
+
+  Shareholding / promoter pledge. Four endpoint names were tried
   (ShareHoldingPattern, ShpPromoterNGroup with and without Flag,
-  ComShpPromoterNGroup, ShpSecurities); every one returned the same 1,814-byte
+  ComShpPromoterNGroup, ShpSecurities); every one returns the same 1,814-byte
   ASP.NET page, which is BSE's generic miss. The names are wrong rather than
-  the data being absent.
+  the data being absent. Only ONE is still probed, as a tripwire — guessing
+  names is what cost 32 attempts against the announcements feed.
 
-  Corporate announcements. AnnGetData answers with JSON but returns
-  "No Record Found!" for every parameter set tried, including a single large
-  scrip over a seven-day window. The endpoint is alive and the query is wrong.
+  AnnGetData — a real endpoint, and the wrong one. It answers 200 with
+  application/json and the 18-byte body "No Record Found!" for every
+  parameter set, including the parameters that work against
+  AnnSubCategoryGetData. Kept here as a labelled control precisely because
+  the two side by side are the lesson: identical query, identical status and
+  content type, one returns filings and one returns a polite empty string.
 
-  Both of the above were to be settled by reading what bseindia.com's own
-  pages call. Run 5 closed that route: www.bseindia.com answers headless
-  Chromium with an Akamai 403 "Access Denied" on every page, while plain
-  requests carrying our UA and Referer are served normally from the same
-  runner. The filter is on browser fingerprint, so the site cannot be read
-  the way a person reads it without evasion tooling — which we are not going
-  to build. See docs/upstream-findings.md for the measurement. These two
-  gaps need a source that will have us, not another guess at BSE.
+  The route to settle the shareholding gap was to read what bseindia.com's
+  own pages call. Run 5 closed it: www.bseindia.com answers headless Chromium
+  with an Akamai 403 "Access Denied" on every page, while plain requests
+  carrying our UA and Referer are served normally from the same runner. The
+  filter is on browser fingerprint, so the site cannot be read the way a
+  person reads it without evasion tooling — which we are not going to build.
+  See docs/upstream-findings.md. That gap needs a source that will have us,
+  not another guess at BSE.
 
-  Msnew autocomplete returns HTML, not JSON.
+  Msnew autocomplete returns HTML, not JSON. Tripwire only.
 
-  NSE ARCHIVES (nsearchives.nseindia.com) — measured 14 Aug 2026, run 3
+  NSE ARCHIVES (nsearchives.nseindia.com) — re-measured 14 Sep 2026
 
   sec_bhavdata_full — the best find here.
     https://nsearchives.nseindia.com/products/content/
         sec_bhavdata_full_<DDMMYYYY>.csv
-    376 KB, 3,308 rows, text/csv, no zip. Columns: SYMBOL, SERIES, DATE1,
+    394,927 bytes, 3,486 lines, text/csv, no zip (Aug: 376 KB, 3,308 rows).
+    Columns: SYMBOL, SERIES, DATE1,
     PREV_CLOSE, OPEN_PRICE, HIGH_PRICE, LOW_PRICE, LAST_PRICE, CLOSE_PRICE,
     AVG_PRICE, TTL_TRD_QNTY, TURNOVER_LACS, NO_OF_TRADES, DELIV_QTY,
     DELIV_PER. It carries TURNOVER and DELIVERY directly, which analysis/
@@ -77,8 +93,9 @@ are undocumented endpoints and BSE moves them.
   UDiFF bhavcopy — whole-market OHLCV, zipped.
     https://nsearchives.nseindia.com/content/cm/
         BhavCopy_NSE_CM_0_0_0_<YYYYMMDD>_F_0000.csv.zip
-    196 KB zip (verified PK magic), one CSV inside, same UDiFF column set as
-    BSE's: TradDt, FinInstrmId, ISIN, TckrSymb, OpnPric..ClsPric.
+    204,525 bytes zip, verified PK magic (Aug: 196 KB), one CSV inside, same
+    UDiFF column set as BSE's: TradDt, FinInstrmId, ISIN, TckrSymb,
+    OpnPric..ClsPric.
 
   The legacy path is GONE, not merely unfashionable:
     /content/historical/EQUITIES/<YYYY>/<MON>/cm<DDMONYYYY>bhav.csv.zip
@@ -252,91 +269,100 @@ def probe_bhavcopy():
             # An HTML shell is a miss even though it arrived as 200.
             if got and not got.lstrip().lower().startswith("<!doctype"):
                 print("    ^ looks like real CSV")
-                return
+                return True
     print("    no usable bhavcopy found")
+    return False
 
 
 def probe_shareholding():
-    """The pledge figure — the gap Screener left at 0 of 69 holdings."""
-    print("\n=== 2. SHAREHOLDING / PLEDGE ===")
-    # Run 1: both of these returned HTML, not JSON — the first an ASP.NET
-    # page, the second the SPA shell. So the names are wrong rather than the
-    # data being absent. These are the remaining candidates.
-    for label, path, params in [
-        (
-            "ShareHoldingPattern",
-            "ShareHoldingPattern/w",
-            {"scripcode": SAMPLE_SCRIP, "qtrid": "", "Type": "EQ"},
-        ),
-        (
-            "ShpPromoterNGroup (flag)",
-            "ShpPromoterNGroup/w",
-            {"scripcode": SAMPLE_SCRIP, "qtrid": "", "Flag": "P"},
-        ),
-        (
-            "ComShpPromoterNGroup",
-            "ComShpPromoterNGroup/w",
-            {"scripcode": SAMPLE_SCRIP, "qtrid": ""},
-        ),
-        ("ShpSecurities", "ShpSecurities/w", {"scripcode": SAMPLE_SCRIP, "qtrid": ""}),
-    ]:
-        _get(label, f"https://api.bseindia.com/BseIndiaAPI/api/{path}", params=params)
+    """The pledge figure — the gap Screener leaves at 0 of 70 holdings.
+
+    ONE call, not the four this used to make. Four endpoint names were tried
+    across three runs and every one returned the identical 1,814-byte ASP.NET
+    page, which is BSE's generic miss — so the names are wrong rather than the
+    data being absent. The way to learn the right name is to read what the
+    site's own pages call, and that route is closed: Akamai refuses headless
+    Chromium on browser fingerprint (docs/upstream-findings.md).
+
+    Guessing endpoint names is precisely what this project has learned not to
+    do — it cost 32 attempts against the announcements feed before someone
+    checked the path. So the other three guesses are gone and this is a
+    tripwire: if BSE ever serves JSON here, that is worth knowing, and one
+    request a run is a fair price for finding out.
+    """
+    print("\n=== 2. SHAREHOLDING / PLEDGE (tripwire; expected to fail) ===")
+    got = _get(
+        "ShareHoldingPattern",
+        "https://api.bseindia.com/BseIndiaAPI/api/ShareHoldingPattern/w",
+        params={"scripcode": SAMPLE_SCRIP, "qtrid": "", "Type": "EQ"},
+    )
+    if got:
+        print("    ^ THIS CHANGED. BSE is serving JSON here now; re-open the")
+        print("      pledge question — analysis/pledging.py has no source.")
+    return bool(got)
 
 
 def probe_announcements():
-    """Real filings with real dates, vs the current Google News stand-in."""
+    """Real filings with real dates, vs the Google News stand-in.
+
+    Probes the path production actually uses. This used to fire three
+    parameter variations at AnnGetData and report "No Record Found!" three
+    times — a settled negative, re-litigated every run, while
+    providers/bse_announcements.py had been pulling real filings from
+    AnnSubCategoryGetData for a month. A catalogue whose verdict contradicts
+    the running pipeline is worse than no catalogue.
+
+    The dead path is kept as ONE labelled control, because the two side by
+    side are the whole lesson: same parameters, same 200, same JSON
+    content-type, and one returns filings while the other returns a polite
+    empty string. That is the most expensive kind of wrong — it looks like a
+    data problem for as long as you care to look.
+    """
     print("\n=== 3. CORPORATE ANNOUNCEMENTS ===")
     today = datetime.date.today()
     week_ago = today - datetime.timedelta(days=7)
-    # Run 1: this returned JSON but only 18 bytes — an empty result set, not
-    # a rejection. The endpoint works and the query was wrong, which is a much
-    # better position than a 403. Varying the parameters most likely to be at
-    # fault: the category flag and the scrip filter.
-    base = "https://api.bseindia.com/BseIndiaAPI/api/AnnGetData/w"
     common = {
         "strPrevDate": week_ago.strftime("%Y%m%d"),
         "strToDate": today.strftime("%Y%m%d"),
         "strType": "C",
         "pageno": "1",
+        "strCat": "-1",
+        "strSearch": "P",
+        "strScrip": "",
+        "subcategory": "-1",
     }
-    _get(
-        "AnnGetData strCat=-1, all scrips",
-        base,
-        params={**common, "strCat": "-1", "strSearch": "P", "strscrip": ""},
+    live = _get(
+        "AnnSubCategoryGetData (the path production uses)",
+        "https://api.bseindia.com/BseIndiaAPI/api/AnnSubCategoryGetData/w",
+        params=common,
     )
     _get(
-        "AnnGetData blank cat, one scrip",
-        base,
-        params={**common, "strCat": "", "strSearch": "P", "strscrip": SAMPLE_SCRIP},
+        "AnnGetData (CONTROL: known-wrong path, same parameters)",
+        "https://api.bseindia.com/BseIndiaAPI/api/AnnGetData/w",
+        params=common,
     )
-    _get(
-        "AnnGetData subcat blank, one scrip",
-        base,
-        params={
-            **common,
-            "strCat": "",
-            "strSearch": "",
-            "strscrip": SAMPLE_SCRIP,
-            "subcategory": "",
-        },
-    )
+    # A string body is not a record list. "No Record Found!" parses as valid
+    # JSON and is truthy, so a bare `if live:` would call this a success.
+    rows = live.get("Table") if isinstance(live, dict) else live
+    return isinstance(rows, list) and bool(rows)
 
 
 def probe_quote():
     """Header quote — the direct alternative to Yahoo for a single scrip."""
     print("\n=== 4. SCRIP QUOTE ===")
-    _get(
+    got = _get(
         "getScripHeaderData",
         "https://api.bseindia.com/BseIndiaAPI/api/getScripHeaderData/w",
         params={"Debtflag": "", "scripcode": SAMPLE_SCRIP, "seriesid": ""},
     )
+    return isinstance(got, dict) and bool(got.get("Header"))
 
 
 def probe_scrip_master():
     """Ticker -> scrip code. Every other endpoint is keyed by scrip code, so
     without this mapping none of them can be used from our watchlist."""
     print("\n=== 5. SCRIP MASTER (ticker -> code) ===")
-    _get(
+    got = _get(
         "ListofScripData",
         "https://api.bseindia.com/BseIndiaAPI/api/ListofScripData/w",
         params={
@@ -347,11 +373,14 @@ def probe_scrip_master():
             "status": "Active",
         },
     )
+    # Msnew has returned the generic ASP.NET page on every run since Aug 2026.
+    # Kept as a one-request tripwire, not as a live candidate.
     _get(
-        "getScripName autocomplete",
+        "getScripName autocomplete (tripwire; expected to fail)",
         "https://api.bseindia.com/BseIndiaAPI/api/Msnew/w",
         params={"text": SAMPLE_TICKER},
     )
+    return isinstance(got, list) and bool(got)
 
 
 # --- Archive hosts -------------------------------------------------------
@@ -414,8 +443,12 @@ def probe_nse_archives():
             headers=_NSE_HEADERS,
         )
         if hit or legacy or deliv:
-            return
+            # deliv is the one production depends on (providers/nse_delivery.py),
+            # so it decides the verdict. The other two are catalogue entries;
+            # legacy is a confirmed 404 and its absence is not a regression.
+            return bool(deliv)
     print("    no NSE bhavcopy retrieved")
+    return False
 
 
 def probe_bot_filter():
@@ -445,23 +478,94 @@ def probe_bot_filter():
         _get(f"{label} — with browser headers", url, expect=expect)
 
 
+# What each probe is EXPECTED to return, so the summary can tell the two
+# interesting outcomes apart. A known-dead endpoint staying dead is not news;
+# a known-good one going dead is the whole reason to re-run this. Without the
+# expectation, both read as "False" and a regression hides among the four
+# failures that are supposed to be there.
+_EXPECTED = {
+    "scrip master": True,
+    "BSE bhavcopy": True,
+    "scrip quote": True,
+    "shareholding / pledge": False,
+    "corporate announcements": True,
+    "NSE archives (delivery)": True,
+}
+
+
 def main():
     print(f"BSE probe — {datetime.datetime.now().isoformat()}")
     print(f"requests {requests.__version__}")
-    for probe in (
-        probe_scrip_master,
-        probe_bhavcopy,
-        probe_quote,
-        probe_shareholding,
-        probe_announcements,
-        probe_nse_archives,
-        probe_bot_filter,
+    results = {}
+    for name, probe in (
+        ("scrip master", probe_scrip_master),
+        ("BSE bhavcopy", probe_bhavcopy),
+        ("scrip quote", probe_quote),
+        ("shareholding / pledge", probe_shareholding),
+        ("corporate announcements", probe_announcements),
+        ("NSE archives (delivery)", probe_nse_archives),
     ):
         try:
-            probe()
+            results[name] = bool(probe())
         except Exception as e:  # noqa: BLE001 - a probe must report, not crash
+            results[name] = False
             print(f"    PROBE CRASHED: {e.__class__.__name__}: {e}")
-    print("\nProbe complete. Nothing was written; this run changes no data.")
+
+    # Informational only: it answers "are the headers needed", not "does an
+    # endpoint work", so it has no pass/fail and is kept out of the tally.
+    try:
+        probe_bot_filter()
+    except Exception as e:  # noqa: BLE001
+        print(f"    PROBE CRASHED: {e.__class__.__name__}: {e}")
+
+    print(f"\n{'=' * 72}\nSUMMARY\n{'=' * 72}")
+
+    # Nothing at all got through. Per-endpoint verdicts are then not merely
+    # unhelpful, they are WRONG: every line would read "REGRESSED", and the
+    # shareholding line would read "still dead (expected)" while being right
+    # by coincidence — it failed at the local proxy, not at BSE's generic miss
+    # page. From a development sandbox this is the egress policy every time.
+    # Say so and stop, rather than raise five false alarms.
+    if not any(results.values()):
+        for name in results:
+            print(f"  {'unreachable':24} {name}")
+        print(f"\n0/{len(results)} endpoint(s) returned usable data.")
+        print(
+            "  EVERY endpoint failed, so no per-endpoint verdict is meaningful\n"
+            "  here — a blocked CONNECT and a dead endpoint are indistinguishable\n"
+            "  from this side. From a development sandbox that is normally the\n"
+            "  egress policy rather than the upstream. Re-run this on the Actions\n"
+            "  runner (workflow: probe-bse.yml), which can reach these hosts."
+        )
+        print("\nNothing was written; this run changes no data.")
+        return 0
+
+    regressions, fixed = [], []
+    for name, ok in results.items():
+        expected = _EXPECTED[name]
+        if ok and expected:
+            verdict = "WORKS"
+        elif not ok and not expected:
+            verdict = "still dead (expected)"
+        elif ok and not expected:
+            verdict = "NEWLY WORKING — investigate"
+            fixed.append(name)
+        else:
+            verdict = "REGRESSED — was working"
+            regressions.append(name)
+        print(f"  {verdict:24} {name}")
+
+    working = sum(1 for n, ok in results.items() if ok)
+    print(f"\n{working}/{len(results)} endpoint(s) returned usable data.")
+    if regressions:
+        print(f"  REGRESSIONS: {', '.join(regressions)} — production may be affected.")
+    if fixed:
+        print(f"  NEWLY WORKING: {', '.join(fixed)} — a gap may now be closable.")
+    if not regressions and not fixed:
+        print("  Nothing moved since the last measurement.")
+    print("\nNothing was written; this run changes no data.")
+    # Always exit 0: a changed upstream is a FINDING, and failing the job would
+    # make the tool look broken while it is doing its job.
     return 0
 
 
