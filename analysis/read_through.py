@@ -37,9 +37,9 @@ information, because the miss is invisible and the false alarm is not.
 """
 
 import datetime
+import re
 from typing import Any, Dict, List
 
-from analysis.parsing import title_matches_company
 from logger import log
 
 # How many days of events a read-through may be drawn from. Shorter than the
@@ -108,6 +108,36 @@ _EASING_MARKERS = (
 
 # A chain is only as strong as its weakest link.
 _CONFIDENCE_ORDER = {"curated": 2, "harvested": 1}
+
+_MATERIAL_RE_CACHE: Dict[str, Any] = {}
+
+
+def material_in(text, material):
+    """Is this material named in the text?
+
+    A material is not a company, and matching it with the company matcher was
+    wrong in both directions.
+
+    It missed real ones. That matcher guards a single-token match against a
+    following capitalised word, so that "ITC Hotels" is not read as ITC — good
+    for company names, wrong for materials, because "DRAM Inventory Falls" is
+    still about DRAM. A live headline reading "HBM4 Shortage: DRAM Inventory
+    Falls Below 10 Days" produced nothing at all, while the same story phrased
+    "RAM shortage" matched only because the next word happened to be lower
+    case.
+
+    So: a plain word-boundary match, case-insensitive, with one addition —
+    an optional trailing generation number, because HBM4 is HBM and DDR5 is
+    DDR. Digits only, so "RAM" still cannot match "RAMP" or "Gurugram" and
+    "steel" cannot match "Steelcase".
+    """
+    if not material:
+        return False
+    pattern = _MATERIAL_RE_CACHE.get(material)
+    if pattern is None:
+        pattern = re.compile(rf"\b{re.escape(str(material))}\d*\b", re.IGNORECASE)
+        _MATERIAL_RE_CACHE[material] = pattern
+    return bool(pattern.search(str(text or "")))
 
 
 def _edges(graph, etype):
@@ -274,9 +304,9 @@ def _input_squeeze(event, graph, watchlist):
     seen = set()
     for edge in _edges(graph, "input_cost"):
         material = str(edge.get("src", ""))
-        # Word-boundary matched: "RAM" must not fire on "programme", and
-        # "memory" must not fire on "memorial".
-        if not title_matches_company(headline, "", material):
+        # Word-boundary matched: "RAM" must not fire on "programme" or
+        # "Gurugram", and "memory" must not fire on "memorial".
+        if not material_in(headline, material):
             continue
         sector = edge.get("dst")
         if (material.lower(), sector) in seen:
