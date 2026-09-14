@@ -133,10 +133,10 @@ export async function render(container, { payload, route }) {
 
     body = panel(
       "Sector P/E against the all-sector median",
-      "Blue above the median, red below, gray at parity \u2014 the sign is the " +
-        "whole question, and a one-hue ramp would hide it. Compared against the " +
-        "median of all sectors, not each sector\u2019s true industry peer group, " +
-        "which this payload does not carry.",
+      "How far each sector\u2019s median P/E sits from the median of all " +
+        "sectors. That is the benchmark this payload carries \u2014 not each " +
+        "sector\u2019s true industry peer group \u2014 so a sector of expensive " +
+        "businesses reads rich against the book, not against its own industry.",
       rows.length ? chartFrame("chart-val", Math.max(220, rows.length * 24)) : null,
       dataTable(
         rows,
@@ -272,6 +272,7 @@ export async function render(container, { payload, route }) {
         labels: rows.map((r) => r.label || String(r.sector || "").replace(/_/g, " ")),
         values: rows.map((r) => Number(r._v.toFixed(1))),
         suffix: "%",
+        axisLabel: "Sector median P/E vs all-sector median (%)",
       });
     }
   }

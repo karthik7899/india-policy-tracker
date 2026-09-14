@@ -19,7 +19,10 @@
 //   * Grid and axes recede; the data is the only thing with weight.
 //   * A hover layer is default, not an extra.
 
-import { tokens, ordinal, diverging, statusColour } from "./palette.js";
+// `ordinal` is deliberately not imported: no chart here draws an ordered band
+// scale today. palette.js keeps it exported and validated for when one does —
+// the wrong move would be to reach for it again on nominal categories.
+import { tokens, categorical, diverging, statusColour } from "./palette.js";
 
 const registry = new Map();
 
@@ -36,7 +39,18 @@ function destroy(canvas) {
   }
 }
 
-function baseOptions(t, { horizontal = false, valueSuffix = "" } = {}) {
+function baseOptions(
+  t,
+  { horizontal = false, valueSuffix = "", axisLabel = "", meta = null } = {},
+) {
+  // The VALUE axis is x when the bars run horizontally, y when they run up.
+  // Naming it matters: a bare 0-45 scale does not say 45 of what, and the unit
+  // was previously reachable only by hovering — which makes the tooltip the
+  // only way to read the units, and a tooltip must enhance rather than gate.
+  const valueAxis = horizontal ? "x" : "y";
+  const title = axisLabel
+    ? { display: true, text: axisLabel, color: t.muted, font: { size: 11 } }
+    : { display: false };
   return {
     indexAxis: horizontal ? "y" : "x",
     responsive: true,
@@ -57,7 +71,13 @@ function baseOptions(t, { horizontal = false, valueSuffix = "" } = {}) {
         callbacks: {
           label: (ctx) => {
             const v = ctx.parsed[horizontal ? "x" : "y"];
-            return v === null || v === undefined ? "no data" : `${v}${valueSuffix}`;
+            const head =
+              v === null || v === undefined ? "no data" : `${v}${valueSuffix}`;
+            // An extra line per bar for what the value stands on — a median
+            // over one holding and a median over five are not the same claim,
+            // and the bar cannot show the difference.
+            const extra = meta?.[ctx.dataIndex];
+            return extra ? [head, extra] : head;
           },
         },
       },
@@ -72,6 +92,7 @@ function baseOptions(t, { horizontal = false, valueSuffix = "" } = {}) {
         },
         ticks: { color: t.muted, font: { size: 11 } },
         border: { color: t.axis },
+        title: valueAxis === "x" ? title : { display: false },
       },
       y: {
         grid: {
@@ -82,26 +103,35 @@ function baseOptions(t, { horizontal = false, valueSuffix = "" } = {}) {
         },
         ticks: { color: t.muted, font: { size: 11 } },
         border: { color: t.axis },
+        title: valueAxis === "y" ? title : { display: false },
       },
     },
   };
 }
 
 /**
- * Magnitude, low to high. Sequential — one hue, more is darker.
+ * Magnitude, low to high. ONE hue for every bar.
+ *
+ * It used to tint each bar darker-where-bigger off the ordinal ramp, which is
+ * a named anti-pattern on nominal categories: sectors have no inherent order,
+ * so a value-ramp double-encodes bar length as hue and burns the only free
+ * channel on information the chart already shows. Rendered, it was worse than
+ * redundant — fifteen of sixteen sector bars landed on the same step, so the
+ * ramp looked meaningful and carried nothing.
+ *
+ * The ordinal ramp is still right for a genuinely ordered band scale
+ * (liquidity tiers, age buckets). This is not one.
  *
  * Horizontal by default: sector and company names are long, and rotated
  * x-labels are a legibility tax paid to keep a chart vertical for no reason.
  */
-export function rankedBar(canvas, { labels, values, suffix = "", horizontal = true }) {
+export function rankedBar(
+  canvas,
+  { labels, values, suffix = "", horizontal = true, axisLabel = "", meta = null },
+) {
   if (!available() || !canvas) return null;
   destroy(canvas);
   const t = tokens();
-  const max = Math.max(...values.map((v) => Math.abs(Number(v) || 0)), 1);
-  const colours = values.map((v) => {
-    const share = Math.abs(Number(v) || 0) / max;
-    return ordinal(Math.round(share * 3), 4);
-  });
 
   const chart = new window.Chart(canvas.getContext("2d"), {
     type: "bar",
@@ -110,7 +140,7 @@ export function rankedBar(canvas, { labels, values, suffix = "", horizontal = tr
       datasets: [
         {
           data: values,
-          backgroundColor: colours,
+          backgroundColor: categorical(0),
           // 4px rounded data-ends, anchored to the baseline: the rounding goes
           // on the value end only, so the bar still starts flat at zero.
           borderRadius: { topLeft: 0, bottomLeft: 0, topRight: 4, bottomRight: 4 },
@@ -122,7 +152,7 @@ export function rankedBar(canvas, { labels, values, suffix = "", horizontal = tr
         },
       ],
     },
-    options: baseOptions(t, { horizontal, valueSuffix: suffix }),
+    options: baseOptions(t, { horizontal, valueSuffix: suffix, axisLabel, meta }),
   });
   registry.set(canvas, chart);
   return chart;
@@ -134,7 +164,10 @@ export function rankedBar(canvas, { labels, values, suffix = "", horizontal = tr
  * Used where the sign is the story — a sector trading above or below its peer
  * median, a target cut or raised. A sequential ramp here would hide the sign.
  */
-export function divergingBar(canvas, { labels, values, baseline = 0, suffix = "" }) {
+export function divergingBar(
+  canvas,
+  { labels, values, baseline = 0, suffix = "", axisLabel = "" },
+) {
   if (!available() || !canvas) return null;
   destroy(canvas);
   const t = tokens();
@@ -154,7 +187,7 @@ export function divergingBar(canvas, { labels, values, baseline = 0, suffix = ""
       ],
     },
     options: {
-      ...baseOptions(t, { horizontal: true, valueSuffix: suffix }),
+      ...baseOptions(t, { horizontal: true, valueSuffix: suffix, axisLabel }),
     },
   });
   registry.set(canvas, chart);

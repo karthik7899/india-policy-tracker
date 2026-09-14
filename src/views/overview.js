@@ -67,16 +67,18 @@ export async function render(container, { payload, route }) {
 
     panel(
       "Thesis health",
-      "Part-to-whole, so one stacked bar. Status colours are reserved and " +
-        "every segment is named — on a light surface these hues are not " +
-        "allowed to carry the meaning alone.",
+      "Where each holding stands against the catalyst that put it on the " +
+        "list. A thesis is Broken only when this cycle's evidence contradicts " +
+        "it — not when the price fell.",
       chartFrame("chart-thesis", 90),
     ),
 
     panel(
       "Sector growth",
-      "Magnitude low to high, so a single-hue ordinal ramp rather than a " +
-        "colour per sector: the ranking is the message, not sector identity.",
+      "Median trailing-year revenue growth across the holdings in each " +
+        "sector, fastest first. Only holdings whose growth figure was " +
+        "readable count toward a median, so a sector standing on one holding " +
+        "ranks beside one standing on five — hover for the number behind it.",
       chartFrame("chart-growth", Math.max(220, growth.length * 22)),
     ),
 
@@ -114,6 +116,15 @@ export async function render(container, { payload, route }) {
     values: growth.map((s) => Number(s._g.toFixed(1))),
     suffix: "%",
     horizontal: true,
+    axisLabel: "Median trailing-year revenue growth (%)",
+    // What the median stands on. The payload already flags a thin sector;
+    // without this the chart ranks a one-holding median beside a five-holding
+    // one and gives the reader no way to tell.
+    meta: growth.map((s) => {
+      const n = num(s.stock_count);
+      if (n === null) return null;
+      return `median of ${n} holding${n === 1 ? "" : "s"}${s.low_confidence ? " — thin" : ""}`;
+    }),
   });
 }
 

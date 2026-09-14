@@ -18,6 +18,21 @@
 // Playwright is usually a global install, which Node does not resolve from a
 // project directory. Falling back to the global root keeps this runnable from
 // the repo root without adding a dependency the pipeline itself never needs.
+//
+// `import`, not `require`: package.json declares "type": "module", so every
+// .js here is an ES module and require() is not defined. This script has
+// therefore been unable to start at all — it is not in CI, so nothing went
+// red, and the one tool written to catch visual regressions was silently
+// unavailable to anyone who reached for it.
+// createRequire rather than `import`: playwright ships CommonJS, and ESM
+// refuses an absolute DIRECTORY specifier outright (ERR_UNSUPPORTED_DIR_IMPORT),
+// which is exactly the shape the global-install fallback needs. createRequire
+// resolves a bare name through NODE_PATH and an absolute path directly, so one
+// mechanism covers both.
+import { createRequire } from "node:module";
+
+const require = createRequire(import.meta.url);
+
 function loadChromium() {
     for (const id of ["playwright", "/opt/node22/lib/node_modules/playwright"]) {
         try {
@@ -37,10 +52,13 @@ const chromium = loadChromium();
 
 const BASE = process.env.SMOKE_URL || "http://127.0.0.1:8899/index.html";
 
+// The seven views in src/main.js's VIEWS registry. This list was still the
+// sixteen tabs of the pre-ES-module dashboard — every one of them removed or
+// renamed by that rebuild — so every assertion below was being made against a
+// route that no longer exists. Combined with the loader fault above the script
+// could not start, so nobody saw it. Keep in step with VIEWS.
 const TABS = [
-    "dashboard", "holdings", "sectors", "agreements", "launches", "filings",
-    "institutional", "research", "stocks", "valuation", "scoring", "graham",
-    "buffett", "earlywarning", "caution", "system",
+    "overview", "holdings", "valuation", "risk", "flow", "network", "system",
 ];
 
 // Requests the sandbox proxy refuses. They are not page defects, and treating
@@ -84,26 +102,41 @@ async function checkViewport(browser, vp) {
 
     for (const tab of TABS) {
         await page.evaluate(t => {
-            const btn = [...document.querySelectorAll("[data-tab]")]
-                .find(e => e.dataset.tab === t);
-            if (btn) btn.click();
+            const link = [...document.querySelectorAll("#nav a")]
+                .find(a => (a.getAttribute("href") || "").replace(/^#\/?/, "") === t);
+            if (link) link.click();
         }, tab);
-        await page.waitForTimeout(220);
+        await page.waitForTimeout(260);
 
-        const state = await page.evaluate(t => ({
-            active: !!document.querySelector(`#tab-${t}.active`),
-            overflow: document.documentElement.scrollWidth >
-                document.documentElement.clientWidth,
+        // Asserted against the DOM the ES-module rebuild actually produces:
+        // hash-routed nav links marked with aria-selected, and one #view host
+        // that every view renders into. The previous assertions looked for
+        // `#tab-<name>.active` panes and a `#breadcrumb-bar`, neither of which
+        // has existed since that rebuild.
+        const state = await page.evaluate(t => {
             // Read defensively: a missing host must be reported as the
             // regression it is, not thrown as a TypeError that takes the
             // whole check down before it can say anything.
-            crumb: ((document.getElementById("breadcrumb-bar") || {})
-                .textContent || "").trim().length > 0,
-        }), tab);
+            const view = document.getElementById("view");
+            const link = [...document.querySelectorAll("#nav a")]
+                .find(a => (a.getAttribute("href") || "").replace(/^#\/?/, "") === t);
+            return {
+                selected: link ? link.getAttribute("aria-selected") === "true" : false,
+                // "Rendered something" is the weakest honest claim: a view that
+                // throws is replaced with an error state, which has text too,
+                // so the error state is checked for by name rather than
+                // inferred from emptiness.
+                rendered: (view?.textContent || "").trim().length > 0,
+                errored: (view?.textContent || "").includes("This view failed to render"),
+                overflow: document.documentElement.scrollWidth >
+                    document.documentElement.clientWidth,
+            };
+        }, tab);
 
-        if (!state.active) failures.push(`${tab}: pane did not activate`);
+        if (!state.selected) failures.push(`${tab}: nav did not mark the tab selected`);
+        if (!state.rendered) failures.push(`${tab}: view rendered nothing`);
+        if (state.errored) failures.push(`${tab}: view rendered its error state`);
         if (state.overflow) failures.push(`${tab}: horizontal overflow`);
-        if (!state.crumb) failures.push(`${tab}: breadcrumb empty`);
     }
 
     await context.close();
