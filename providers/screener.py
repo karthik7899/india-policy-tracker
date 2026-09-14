@@ -173,6 +173,19 @@ async def fetch_screener_async(session, ticker, sector, price):
     if a_sales:
         sc["annual_sales_trend"] = a_sales[-6:]
 
+    # Annual EPS ("EPS in Rs" in Screener's P&L). Graham's ``g`` is EARNINGS
+    # growth sustained over 7-10 years, and until this existed the multiple was
+    # fed revenue growth over a single year — the right shape of number for the
+    # wrong quantity, twice over. This is the only series in the page that can
+    # carry a multi-year earnings CAGR; the quarterly EPS table tops out at 8.
+    #
+    # The label is a plain text cell rather than one of the <button>-wrapped
+    # expandable rows, which is the case extract_row_values documents as having
+    # always worked.
+    a_eps = extract_row_values(soup, "profit-loss", "EPS")
+    if a_eps:
+        sc["annual_eps_trend"] = a_eps[-6:]
+
     # 4. Balance Sheet (Debt Trend)
     borrowings = extract_row_values(soup, "balance-sheet", "Borrowings")
     if borrowings:

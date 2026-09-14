@@ -23,26 +23,131 @@ _GROWTH_CEILING = 15.0
 _DEFAULT_GROWTH = 6.0
 
 
-def _sustainable_growth(fin: CompanyFinancials) -> float:
-    """The growth rate to feed Graham's multiple, on a seasonally sound basis.
+_MIN_CAGR_PERIODS = 4
 
-    Prefers trailing-twelve-month revenue growth (four quarters against the
-    four before them, so every quarter of the year appears once on each side).
-    Falls back to a conservative default rather than to sequential quarterly
-    growth, which was the previous input: ``qoq_sales_growth`` compares one
-    quarter with the quarter immediately before it, so it measured Indian
-    fiscal-year seasonality more than it measured growth. Its observed range
-    across the watchlist was -37% to +341%, which meant the clamp — not the
-    business — decided the multiple for half the holdings.
+
+def _cagr(values) -> Optional[float]:
+    """Compound annual growth across a series of annual periods, as a percent.
+
+    ``None`` unless there are enough periods and both ends are positive: a
+    negative or zero endpoint makes the root either imaginary or infinite, and
+    a company that was losing money is not described by a growth rate anyway.
+
+    Two things about the series this reads, both measured rather than assumed:
+
+    * Screener's P&L row ends with a TTM column, not a fiscal year. HAL's last
+      annual_sales_trend entry is 33785 and its four trailing quarters sum to
+      exactly 33785. That endpoint is still a full twelve-month period, so it
+      is the right thing to compound to; it just means the span is ``len - 1``
+      years only approximately, since TTM ends wherever the last reported
+      quarter does.
+    * A CAGR sees two points and ignores everything between them, so it is
+      blind to a peak. ZENTEC's revenue ran 70 -> 974 -> 671: first-to-last
+      compounds to 57% a year while the business is in fact well off its high.
+      That is why the caller floors this with the recent trend rather than
+      trusting it alone.
     """
-    series = clean_series(getattr(fin, "sales_trend", None))
-    if len(series) >= 8:
-        prior = sum(series[-8:-4])
-        latest = sum(series[-4:])
-        if prior > 0 and latest > 0:
-            ttm_growth = (latest / prior - 1.0) * 100.0
-            return max(_GROWTH_FLOOR, min(_GROWTH_CEILING, ttm_growth))
-    return _DEFAULT_GROWTH
+    series = clean_series(values)
+    if len(series) < _MIN_CAGR_PERIODS:
+        return None
+    first, last = series[0], series[-1]
+    if first <= 0 or last <= 0:
+        return None
+    return ((last / first) ** (1.0 / (len(series) - 1)) - 1.0) * 100.0
+
+
+def _ttm_growth(values) -> Optional[float]:
+    """Trailing-twelve-month growth: four quarters against the four before.
+
+    Every quarter of the year appears once on each side, so Indian fiscal-year
+    seasonality cancels instead of being read as growth.
+    """
+    series = clean_series(values)
+    if len(series) < 8:
+        return None
+    prior, latest = sum(series[-8:-4]), sum(series[-4:])
+    if prior <= 0 or latest <= 0:
+        return None
+    return (latest / prior - 1.0) * 100.0
+
+
+def _sustainable_growth(fin: CompanyFinancials) -> Tuple[float, str]:
+    """Graham's ``g``, and an honest label for what it was actually measured on.
+
+    Graham's ``g`` is EARNINGS growth expected to be sustained over 7-10 years.
+    This used to be fed one year of REVENUE growth — the wrong quantity over
+    the wrong span, twice removed from what the formula asks for. Revenue
+    growth flatters any company growing the top line faster than the bottom,
+    which is most of them during an expansion.
+
+    Earnings is preferred to revenue, and where both a long record and a recent
+    trend exist the LOWER of the two is taken. Graham does not pay for growth
+    that only one of them can see, and each failure mode is real in this
+    watchlist:
+
+    * STLTECH's revenue is flat across five years (0.7% compounded) but up 36%
+      on the trailing year. The old one-year input priced it at the 15% ceiling
+      — a rebound read as a trend.
+    * ZENTEC compounds at 57% first-to-last, from a base of 70, while its
+      revenue has fallen from a peak of 974 to 671. A CAGR alone would have
+      handed a shrinking company the maximum multiple.
+
+    Taking the minimum answers both: neither a one-year bounce nor an old boom
+    survives a check against the other.
+
+    The basis is returned rather than inferred, because these are not
+    interchangeable and a multiple derived from revenue deserves less weight
+    than one derived from earnings. Nothing downstream could previously tell
+    them apart.
+
+    A note on the clamp, because the numbers invite a wrong conclusion.
+    Measured across the watchlist, roughly half the holdings hit the 15%
+    ceiling on every one of these bases. That is not the clamp misfiring: very
+    few businesses compound earnings above 15% for a decade, and refusing to
+    extrapolate a boom is the conservatism the ceiling exists to impose. What
+    was wrong with the original ``qoq_sales_growth`` input was that its clamp
+    fired on SEASONALITY — noise, not growth. A multi-year earnings CAGR at the
+    ceiling has earned its way there.
+    """
+    families = (
+        ("annual_eps_trend", "eps_trend", "EPS", ""),
+        ("annual_sales_trend", "sales_trend", "revenue", " (earnings proxy)"),
+    )
+
+    # Every multi-year basis is tried before any single-year one, INCLUDING a
+    # multi-year revenue CAGR ahead of single-year earnings growth. "Sustained"
+    # is the load-bearing word in Graham's definition of g, so when only one of
+    # span and quantity can be had, span wins. It is also the steadier of the
+    # two empirically: across this watchlist a single year of EPS growth clamps
+    # at one end or the other for two holdings in three, against under half for
+    # the multi-year revenue CAGR.
+    for annual, quarterly, label, proxy in families:
+        long_run = _cagr(getattr(fin, annual, None))
+        if long_run is None:
+            continue
+        recent = _ttm_growth(getattr(fin, quarterly, None))
+        if recent is not None:
+            return (
+                _clamp(min(long_run, recent)),
+                f"{label} CAGR floored by trailing year{proxy}",
+            )
+        return _clamp(long_run), f"{label} CAGR{proxy}"
+
+    for _annual, quarterly, label, proxy in families:
+        recent = _ttm_growth(getattr(fin, quarterly, None))
+        if recent is not None:
+            return _clamp(recent), f"trailing-year {label} growth{proxy}"
+
+    return _DEFAULT_GROWTH, "default (no usable series)"
+
+
+def _clamp(growth: float) -> float:
+    return max(_GROWTH_FLOOR, min(_GROWTH_CEILING, growth))
+
+
+def graham_growth_basis(fin: CompanyFinancials) -> str:
+    """Which series the multiple's growth term was measured on."""
+    return _sustainable_growth(fin)[1]
 
 
 def _trailing_eps(fin: CompanyFinancials) -> Optional[float]:
@@ -98,7 +203,7 @@ def calculate_graham_intrinsic_value(fin: CompanyFinancials) -> float:
         return 0.0
     if not _earning_power_is_intact(fin):
         return 0.0
-    growth = _sustainable_growth(fin)
+    growth, _basis = _sustainable_growth(fin)
     multiple = (8.5 + 2 * growth) * (_GRAHAM_BASE_YIELD / _CURRENT_BOND_YIELD)
     return round(eps * multiple, 1)
 
