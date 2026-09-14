@@ -435,6 +435,11 @@ _PEERS_BASE_DELAY = 2.0
 # service that was already telling us to back off.
 _PEERS_ABORT_AFTER_EMPTY = 8
 
+# The looser bound for a network that is simply down. Higher than the readable
+# bound because being unreachable is transient and worth more patience, low
+# enough that a genuine outage does not cost sixty pointless requests.
+_PEERS_ABORT_AFTER_UNREACHABLE = 20
+
 
 @retry_network(max_retries=_PEERS_MAX_RETRIES, base_delay=_PEERS_BASE_DELAY)
 async def _fetch_peers_once(session, url, headers):
@@ -657,6 +662,7 @@ async def _fetch_industry_tables(holdings, throttled, session):
     outcomes = Counter()
     first_unreadable = None
     consecutive_empty = 0
+    consecutive_unreachable = 0
     attempted = 0
 
     for index, (ticker, warehouse_id) in enumerate(holdings):
@@ -673,7 +679,35 @@ async def _fetch_industry_tables(holdings, throttled, session):
             first_unreadable = (result.ticker, result.detail)
 
         if not result.rows:
-            consecutive_empty += 1
+            # Only an ANSWER we cannot use counts toward giving up. The abort
+            # exists to stop asking a channel that replies uselessly; a network
+            # failure is not that, it is the retry layer's business and it is
+            # transient by definition.
+            #
+            # The 14 Sep run proved the difference: Screener was unreachable
+            # for about half the holdings, the first eight peer fetches failed
+            # on the network, and the whole channel was abandoned for the day
+            # over an outage that had nothing to do with whether the peer table
+            # is readable. A separate, looser bound still stops a completely
+            # dead network from burning sixty requests.
+            if result.outcome == OUTCOME_UNREACHABLE:
+                consecutive_unreachable += 1
+                consecutive_empty = 0
+            else:
+                consecutive_empty += 1
+                consecutive_unreachable = 0
+
+            if consecutive_unreachable >= _PEERS_ABORT_AFTER_UNREACHABLE:
+                remaining = len(holdings) - (index + 1)
+                log.warning(
+                    f"Peer radar: {consecutive_unreachable} consecutive holdings "
+                    f"were unreachable; the network looks down rather than the "
+                    f"channel. Skipping the remaining {remaining} request(s)."
+                )
+                if remaining:
+                    outcomes["skipped"] = remaining
+                break
+
             if consecutive_empty >= _PEERS_ABORT_AFTER_EMPTY:
                 # The channel is not answering. Continuing would issue another
                 # fifty requests that cannot succeed, to a service that is
@@ -691,6 +725,7 @@ async def _fetch_industry_tables(holdings, throttled, session):
             continue
 
         consecutive_empty = 0
+        consecutive_unreachable = 0
         tables.append((result.ticker, result.rows))
         # Everyone in this table is in the same industry as `ticker`.
         covered.update(r["ticker"] for r in result.rows)

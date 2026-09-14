@@ -523,6 +523,19 @@ def market_event_signals(
         for event in events:
             if not isinstance(event, dict):
                 continue
+
+            # External-only events are read-through material, not warning
+            # material. They exist in the corpus because a headline naming a
+            # graph entity and nothing else is now kept, which is what makes a
+            # second-order chain derivable — but the anchor matching below
+            # would turn a Google/Marvell tie-up into Ecosystem Signals on
+            # every held sector, and that is exactly the hypothesis-into-
+            # evidence leak read_through.py exists to avoid. Before those
+            # events were kept they could not reach here at all; skipping them
+            # restores that boundary rather than inventing a new one.
+            if not (event.get("actors") or event.get("domains")):
+                continue
+
             headline = event.get("headline", "")
             etype = event.get("event_type", "event")
 

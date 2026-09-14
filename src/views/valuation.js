@@ -100,11 +100,16 @@ export async function render(container, { payload, route }) {
     el("p", { class: "view-sub" }, "What it is worth, and against what."),
   );
 
+  // The sector lens has no tickers, so sector, thesis and liquidity cannot
+  // apply to it. Showing them anyway offered a control that produced an
+  // active filter and a "Clear 1 filter" link while the chart and table stayed
+  // exactly as they were — feedback that something happened when nothing did,
+  // which is worse than the control being absent.
   const bar = filterBar({
     view: "valuation",
     route,
     filters: active,
-    fields: ["q", "sector", "thesis", "band"],
+    fields: lens === "sector" ? ["q"] : ["q", "sector", "thesis", "band"],
     sectors,
   });
 

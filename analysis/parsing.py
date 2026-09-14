@@ -136,7 +136,7 @@ def _clean_token(token):
 
 @functools.lru_cache(maxsize=1024)
 def _parse_title(title):
-    matches = list(_TOKEN_RE.finditer(title or ""))
+    matches = [m for m in _TOKEN_RE.finditer(title or "") if _clean_token(m.group(0))]
     tokens = tuple(m.group(0) for m in matches)
     lowered = tuple(_clean_token(t) for t in tokens)
     # Whether each token runs straight into the next with only whitespace
@@ -201,6 +201,19 @@ def title_matches_company(title, ticker, name):
 
     def _single_token_match(candidate):
         candidate = candidate.lower()
+        # An empty candidate must never match. The final line of this function
+        # calls it with `ticker or ""`, and callers that have no ticker to
+        # offer -- match_anchor_edges and the read-through matcher both pass
+        # "" -- were relying on that path returning False.
+        #
+        # It did not. _clean_token can reduce a token to the empty string (a
+        # trailing "..." on a truncated headline is the common one, and RSS
+        # truncates constantly), so `lowered` contained "" and "" == "" matched
+        # it. One ellipsis made every company and every graph entity match a
+        # headline naming none of them: 51 of 74 anchor edges fired on a
+        # headline about Morgan Stanley and Reliance.
+        if not candidate:
+            return False
         for i, tok in enumerate(lowered):
             if tok != candidate:
                 continue

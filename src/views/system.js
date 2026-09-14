@@ -22,31 +22,66 @@ import { dataTable, panel } from "./table.js";
  * the panel. The number is the signal; the reader knows which ones should
  * never be zero.
  */
+// [payload key, label, what the number counts, expected, count?]
+//
+// `expected` says whether zero is a problem. Several of these are legitimately
+// zero on a normal day — no peer clears the screen, nothing is classified on a
+// quiet Sunday — and painting those red teaches the reader to ignore the panel,
+// which costs exactly the signal it exists to carry.
+//
+// `count` is supplied where the payload key is a wrapper rather than the
+// collection itself. input_cost_shock is {sectors, inputs, unmeasured}, so
+// counting its keys reported "3" on every run regardless of what happened.
 const CHANNELS = [
-  ["peer_competitors", "Competitor radar", "Screener industry peers"],
-  ["candidate_screen", "Candidate screen", "peers that cleared the gates"],
-  ["industry_share", "Industry share", "share within a Screener industry"],
-  ["market_share", "Peer market share", "share among our own holdings"],
-  ["market_events", "Market events", "classified this run"],
-  ["input_cost_shock", "Input cost shocks", "sectors with a material move"],
-  ["sector_growth", "Sector growth", "sectors ranked"],
-  ["institutional_activity", "Institutional activity", "block deals and flows"],
+  ["peer_competitors", "Competitor radar", "sectors with peers found", true],
+  ["candidate_screen", "Candidate screen", "sectors with a candidate", false],
+  ["industry_share", "Industry share", "sectors measured", true],
+  ["market_share", "Peer market share", "sectors measured", true],
+  ["market_events", "Market events", "classified this run", false],
+  [
+    "input_cost_shock",
+    "Input cost shocks",
+    "sectors with a material move",
+    false,
+    (v) => Object.keys(v?.sectors || {}).length,
+  ],
+  ["sector_growth", "Sector growth", "sectors ranked", true],
+  ["read_throughs", "Read-throughs", "second-order flags", false],
+  ["institutional_activity", "Institutional activity", "block deals and flows", false],
 ];
+
+const DID_NOT_RUN = -1;
 
 /** Absent (never ran) and empty (ran, found nothing) are different states. */
 function channelRows(briefing) {
-  return CHANNELS.map(([key, label, note]) => {
+  return CHANNELS.map(([key, label, note, expected, count]) => {
     const value = briefing?.[key];
-    const present = briefing && key in briefing;
-    const count =
-      value && typeof value === "object" ? Object.keys(value).length : null;
+    const present = Boolean(briefing) && key in briefing;
+    let n = null;
+    if (present && value && typeof value === "object") {
+      n = count ? count(value) : Object.keys(value).length;
+    }
     return {
       label,
       note,
-      state: !present ? "did not run" : count === 0 ? "nothing" : String(count),
-      _count: present ? (count ?? 0) : -1,
+      expected: Boolean(expected),
+      state: !present ? "did not run" : n === 0 ? "nothing" : String(n ?? 0),
+      _count: present ? (n ?? 0) : DID_NOT_RUN,
     };
   });
+}
+
+/**
+ * Tone for a count.
+ *
+ * "Did not run" is always wrong — the step should have executed. Zero is only
+ * wrong for channels that should always produce something; for the rest it is
+ * an ordinary quiet day and gets no colour at all.
+ */
+function countTone(row) {
+  if (row._count === DID_NOT_RUN) return "band-churn";
+  if (row._count === 0 && row.expected) return "cell-bad";
+  return "";
 }
 
 export async function render(container, { payload, route }) {
@@ -103,7 +138,8 @@ export async function render(container, { payload, route }) {
         "and still leave its view looking like a quiet day — this is where the " +
         "difference shows. “Did not run” and “nothing” are " +
         "not the same: the first never executed, the second executed and found " +
-        "no rows.",
+        "no rows. Only a zero that should never be zero is marked; several of " +
+        "these are legitimately empty on a quiet day.",
       dataTable(
         channelRows(b),
         [
@@ -113,12 +149,7 @@ export async function render(container, { payload, route }) {
             key: "_count",
             label: "This run",
             numeric: true,
-            render: (r) =>
-              el(
-                "span",
-                { class: r._count === 0 ? "cell-bad" : r._count < 0 ? "band-churn" : "" },
-                r.state,
-              ),
+            render: (r) => el("span", { class: countTone(r) }, r.state),
           },
         ],
         { view: "system", route, empty: "No briefing loaded." },
