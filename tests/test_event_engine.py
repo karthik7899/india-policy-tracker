@@ -256,12 +256,51 @@ def test_harvest_partner_edges_from_agreements(tmp_path):
 
 
 def test_committed_graph_is_well_formed():
+    """What a destination may be depends on what the edge means.
+
+    anchor_demand and input_cost both terminate at something we hold — a
+    sector, or a holding by ticker — because their whole job is to route
+    outside news onto the book. competitor and supplier_customer do not: they
+    relate two outside entities to each other, and their destination is a
+    company name. Requiring a sector there was right while those two edge
+    types were declared and unused, and became wrong the moment they carried
+    anything.
+    """
     graph = load_entity_graph(os.path.join(_REPO_ROOT, "entity_graph.json"))
     assert len(graph["edges"]) >= 30
+
+    terminal = {"anchor_demand", "input_cost", "partner"}
+    relational = {"competitor", "supplier_customer"}
+
     for edge in graph["edges"]:
         dst = edge["dst"]
-        # Every destination must be a real sector key or a plausible ticker.
-        assert dst in SECTOR_METADATA or dst == dst.upper(), edge
+        if edge["type"] in terminal:
+            # A real sector key or a plausible ticker.
+            assert dst in SECTOR_METADATA or dst == dst.upper(), edge
+        else:
+            assert edge["type"] in relational, edge
+            # An entity name: non-empty, and not a sector key masquerading as
+            # one, which would mean a relational edge had been mis-typed.
+            assert dst and dst not in SECTOR_METADATA, edge
+
+
+def test_relational_edges_reach_a_sector_in_two_hops():
+    """A competitor or supplier edge that leads nowhere we hold is inert.
+
+    Every one of them exists to complete a read-through chain, and a chain
+    ends at an anchor_demand edge. One that cannot reach a sector is either a
+    typo in an entity name or a relationship nobody can act on; both are worth
+    catching here rather than discovering as a silently missing flag.
+    """
+    graph = load_entity_graph(os.path.join(_REPO_ROOT, "entity_graph.json"))
+    anchored = {
+        str(e["src"]).lower() for e in graph["edges"] if e["type"] == "anchor_demand"
+    }
+    for edge in graph["edges"]:
+        if edge["type"] not in ("competitor", "supplier_customer"):
+            continue
+        ends = {str(edge["src"]).lower(), str(edge["dst"]).lower()}
+        assert ends & anchored, f"neither end anchors to a sector: {edge}"
 
 
 def test_committed_graph_json_parses_raw():

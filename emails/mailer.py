@@ -18,6 +18,7 @@ from emails.sections import (
     build_watchlist_changes_html,
     build_valuation_extremes_html,
     build_data_quality_html,
+    build_read_through_html,
     build_cta_html,
     with_fragment,
     LANDING_FRAGMENT,
@@ -1370,6 +1371,7 @@ def _render_email(brief_data, watchlist, caps):
             suppressed,
             caps.get("extremes", MAX_EXTREMES),
         )
+        + build_read_through_html(brief_data.get("read_throughs"))
         + build_data_quality_html(brief_data, watchlist)
         + build_cta_html(DASHBOARD_URL)
     )

@@ -25,6 +25,9 @@ FEED_CAPS = {
     "emerging_competitors": 30,
     "market_events": 40,
     "global_market_news": 20,
+    # Each row carries a four-step chain, so these are wordy. Twenty-five is
+    # already more second-order hypotheses than anyone acts on in a day.
+    "read_throughs": 25,
 }
 
 # Coverage items per holding. Eight was generous for a card.

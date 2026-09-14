@@ -9,6 +9,14 @@
       "added": "2026-07-10"
     },
     {
+      "src": "Amazon",
+      "dst": "data_center_support",
+      "type": "anchor_demand",
+      "evidence": "curated",
+      "added": "2026-09-13",
+      "note": "Hyperscale datacentre capex anchor"
+    },
+    {
       "src": "AMD",
       "dst": "semiconductors_equipment",
       "type": "anchor_demand",
@@ -57,6 +65,30 @@
       "added": "2026-07-10"
     },
     {
+      "src": "CXMT",
+      "dst": "manufacturing_electronics",
+      "type": "anchor_demand",
+      "evidence": "curated",
+      "added": "2026-09-13",
+      "note": "Memory supply into device assembly"
+    },
+    {
+      "src": "Foxconn",
+      "dst": "manufacturing_electronics",
+      "type": "anchor_demand",
+      "evidence": "curated",
+      "added": "2026-09-13",
+      "note": "Contract assembly anchor in India"
+    },
+    {
+      "src": "Google",
+      "dst": "data_center_support",
+      "type": "anchor_demand",
+      "evidence": "curated",
+      "added": "2026-09-13",
+      "note": "Hyperscale datacentre capex anchor"
+    },
+    {
       "src": "Google",
       "dst": "manufacturing_electronics",
       "type": "anchor_demand",
@@ -81,6 +113,22 @@
       "added": "2026-07-10"
     },
     {
+      "src": "Marvell",
+      "dst": "semiconductors_equipment",
+      "type": "anchor_demand",
+      "evidence": "curated",
+      "added": "2026-09-13",
+      "note": "Custom silicon demand anchor"
+    },
+    {
+      "src": "Meta",
+      "dst": "data_center_support",
+      "type": "anchor_demand",
+      "evidence": "curated",
+      "added": "2026-09-13",
+      "note": "Hyperscale datacentre capex anchor"
+    },
+    {
       "src": "Micron",
       "dst": "manufacturing_electronics",
       "type": "anchor_demand",
@@ -95,6 +143,14 @@
       "note": "Semiconductor demand/capex anchor — ISM ecosystem exposure",
       "evidence": "curated",
       "added": "2026-07-10"
+    },
+    {
+      "src": "Microsoft",
+      "dst": "data_center_support",
+      "type": "anchor_demand",
+      "evidence": "curated",
+      "added": "2026-09-13",
+      "note": "Hyperscale datacentre capex anchor"
     },
     {
       "src": "Nvidia",
@@ -137,6 +193,14 @@
       "added": "2026-07-10"
     },
     {
+      "src": "SK Hynix",
+      "dst": "manufacturing_electronics",
+      "type": "anchor_demand",
+      "evidence": "curated",
+      "added": "2026-09-13",
+      "note": "Memory supply into device assembly"
+    },
+    {
       "src": "Tesla",
       "dst": "clean_energy",
       "type": "anchor_demand",
@@ -167,6 +231,86 @@
       "note": "Global electronics demand anchor — India EMS/PLI ecosystem exposure",
       "evidence": "curated",
       "added": "2026-07-10"
+    },
+    {
+      "src": "AMD",
+      "dst": "Nvidia",
+      "type": "competitor",
+      "evidence": "curated",
+      "added": "2026-09-13",
+      "note": "Datacentre accelerators"
+    },
+    {
+      "src": "CXMT",
+      "dst": "Micron",
+      "type": "competitor",
+      "evidence": "curated",
+      "added": "2026-09-13",
+      "note": "Commodity DRAM; the Chinese entrant filling AI-driven shortage"
+    },
+    {
+      "src": "CXMT",
+      "dst": "Samsung",
+      "type": "competitor",
+      "evidence": "curated",
+      "added": "2026-09-13",
+      "note": "Commodity DRAM"
+    },
+    {
+      "src": "CXMT",
+      "dst": "SK Hynix",
+      "type": "competitor",
+      "evidence": "curated",
+      "added": "2026-09-13",
+      "note": "Commodity DRAM"
+    },
+    {
+      "src": "Intel",
+      "dst": "TSMC",
+      "type": "competitor",
+      "evidence": "curated",
+      "added": "2026-09-13",
+      "note": "Foundry services"
+    },
+    {
+      "src": "Marvell",
+      "dst": "Broadcom",
+      "type": "competitor",
+      "evidence": "curated",
+      "added": "2026-09-13",
+      "note": "Custom silicon and datacentre networking"
+    },
+    {
+      "src": "Marvell",
+      "dst": "Nvidia",
+      "type": "competitor",
+      "evidence": "curated",
+      "added": "2026-09-13",
+      "note": "Datacentre interconnect"
+    },
+    {
+      "src": "Samsung",
+      "dst": "Micron",
+      "type": "competitor",
+      "evidence": "curated",
+      "added": "2026-09-13",
+      "note": "DRAM and NAND"
+    },
+    {
+      "src": "Samsung",
+      "dst": "TSMC",
+      "type": "competitor",
+      "evidence": "curated",
+      "added": "2026-09-13",
+      "note": "Foundry services"
+    },
+    {
+      "src": "SK Hynix",
+      "dst": "Micron",
+      "type": "competitor",
+      "evidence": "curated",
+      "added": "2026-09-13",
+      "note": "DRAM and high-bandwidth memory"
     },
     {
       "src": "copper",
@@ -209,6 +353,13 @@
       "added": "2026-07-10"
     },
     {
+      "src": "DRAM",
+      "dst": "manufacturing_electronics",
+      "type": "input_cost",
+      "evidence": "curated",
+      "added": "2026-09-13"
+    },
+    {
       "src": "freight",
       "dst": "logistics_heavy_capital",
       "type": "input_cost",
@@ -225,6 +376,20 @@
       "added": "2026-07-10"
     },
     {
+      "src": "HBM",
+      "dst": "data_center_support",
+      "type": "input_cost",
+      "evidence": "curated",
+      "added": "2026-09-13"
+    },
+    {
+      "src": "HBM",
+      "dst": "semiconductors_equipment",
+      "type": "input_cost",
+      "evidence": "curated",
+      "added": "2026-09-13"
+    },
+    {
       "src": "lithium",
       "dst": "clean_energy",
       "type": "input_cost",
@@ -233,12 +398,40 @@
       "added": "2026-07-10"
     },
     {
+      "src": "memory",
+      "dst": "data_center_support",
+      "type": "input_cost",
+      "evidence": "curated",
+      "added": "2026-09-13"
+    },
+    {
+      "src": "memory",
+      "dst": "manufacturing_electronics",
+      "type": "input_cost",
+      "evidence": "curated",
+      "added": "2026-09-13"
+    },
+    {
       "src": "memory chip",
       "dst": "manufacturing_electronics",
       "type": "input_cost",
       "note": "memory chip cost exposure",
       "evidence": "curated",
       "added": "2026-07-10"
+    },
+    {
+      "src": "NAND",
+      "dst": "manufacturing_electronics",
+      "type": "input_cost",
+      "evidence": "curated",
+      "added": "2026-09-13"
+    },
+    {
+      "src": "RAM",
+      "dst": "manufacturing_electronics",
+      "type": "input_cost",
+      "evidence": "curated",
+      "added": "2026-09-13"
     },
     {
       "src": "rare earth",
@@ -309,6 +502,86 @@
       "type": "partner",
       "evidence": "Suzlon crosses 1 GW partnership with Tata Power following a DevCo led new 400MW EPC order",
       "added": "2026-07-10"
+    },
+    {
+      "src": "Broadcom",
+      "dst": "Google",
+      "type": "supplier_customer",
+      "evidence": "curated",
+      "added": "2026-09-13",
+      "note": "Custom AI accelerator (TPU) silicon and networking"
+    },
+    {
+      "src": "Broadcom",
+      "dst": "Meta",
+      "type": "supplier_customer",
+      "evidence": "curated",
+      "added": "2026-09-13",
+      "note": "Custom accelerator and networking silicon"
+    },
+    {
+      "src": "Foxconn",
+      "dst": "Apple",
+      "type": "supplier_customer",
+      "evidence": "curated",
+      "added": "2026-09-13",
+      "note": "Contract assembly, including Indian plants"
+    },
+    {
+      "src": "Micron",
+      "dst": "Apple",
+      "type": "supplier_customer",
+      "evidence": "curated",
+      "added": "2026-09-13",
+      "note": "DRAM and NAND supply"
+    },
+    {
+      "src": "Micron",
+      "dst": "Nvidia",
+      "type": "supplier_customer",
+      "evidence": "curated",
+      "added": "2026-09-13",
+      "note": "High-bandwidth memory for datacentre GPUs"
+    },
+    {
+      "src": "Samsung",
+      "dst": "Apple",
+      "type": "supplier_customer",
+      "evidence": "curated",
+      "added": "2026-09-13",
+      "note": "Memory and display supply"
+    },
+    {
+      "src": "SK Hynix",
+      "dst": "Nvidia",
+      "type": "supplier_customer",
+      "evidence": "curated",
+      "added": "2026-09-13",
+      "note": "High-bandwidth memory for datacentre GPUs"
+    },
+    {
+      "src": "TSMC",
+      "dst": "Apple",
+      "type": "supplier_customer",
+      "evidence": "curated",
+      "added": "2026-09-13",
+      "note": "Leading-edge foundry for A-series and M-series silicon"
+    },
+    {
+      "src": "TSMC",
+      "dst": "Nvidia",
+      "type": "supplier_customer",
+      "evidence": "curated",
+      "added": "2026-09-13",
+      "note": "Leading-edge foundry for datacentre GPUs"
+    },
+    {
+      "src": "TSMC",
+      "dst": "Qualcomm",
+      "type": "supplier_customer",
+      "evidence": "curated",
+      "added": "2026-09-13",
+      "note": "Leading-edge foundry"
     }
   ]
 }

@@ -205,16 +205,51 @@ def classify_certainty(text: str) -> str:
     return CERTAINTY_COMPLETED
 
 
+def graph_entities(clause: str, graph: Dict[str, Any]) -> List[str]:
+    """Graph entities named in this clause — Google, Apple, Broadcom, Marvell.
+
+    ``actors`` records only watchlist tickers, which is right for direct
+    attribution and useless for second-order reasoning: a headline about
+    Google tying up with Marvell names nothing we hold, so both names were
+    discarded and there was no way to walk the entity graph from the event.
+    Recording them is what makes a read-through derivable at all.
+
+    input_cost sources are excluded — they are commodity keywords ("copper",
+    "memory chip"), not companies, and read_through matches them separately
+    with vocabulary suited to a material rather than to a corporate name.
+
+    Matched with the same word-boundary and person-guard rules as every other
+    attribution here, so "Mr Apple" or "Broadcom Institute" cannot enrol an
+    entity that is not really the subject.
+    """
+    names = sorted(
+        {
+            str(edge.get("src"))
+            for edge in (graph or {}).get("edges", [])
+            if edge.get("type") != "input_cost" and edge.get("src")
+        }
+        | {
+            str(edge.get("dst"))
+            for edge in (graph or {}).get("edges", [])
+            if edge.get("type") in ("competitor", "supplier_customer")
+            and edge.get("dst")
+        }
+    )
+    return [name for name in names if title_matches_company(clause, "", name)]
+
+
 def classify_headlines(
-    data: Dict[str, Any], watchlist: Dict[str, Any]
+    data: Dict[str, Any], watchlist: Dict[str, Any], graph: Dict[str, Any] = None
 ) -> List[Dict[str, Any]]:
     """Classify every collected headline into typed market events.
 
     Returns [{headline, event_type, phrase, certainty, domains, actors,
-    direction, date}] — ``domains`` are watchlist sectors whose battleground
-    vocabulary the headline touches (Tier 1); ``actors`` are watchlist tickers
-    named in the same clause as the event (direct attribution); ``certainty``
-    is how settled the event is (reported / announced / completed).
+    external, direction, date}] — ``domains`` are watchlist sectors whose
+    battleground vocabulary the headline touches (Tier 1); ``actors`` are
+    watchlist tickers named in the same clause as the event (direct
+    attribution); ``external`` are entity-graph names in that clause, which is
+    what second-order read-throughs are derived from; ``certainty`` is how
+    settled the event is (reported / announced / completed).
     """
     events: List[Dict[str, Any]] = []
     today = datetime.date.today().isoformat()
@@ -235,6 +270,7 @@ def classify_headlines(
             # one clause cancel or claim what belongs to the other.
             event_type = phrase = certainty = None
             actors: List[str] = []
+            external: List[str] = []
             for clause in split_clauses(headline):
                 clause_lower = clause.lower()
                 if any(neg in clause_lower for neg in NEGATION_MARKERS):
@@ -258,6 +294,7 @@ def classify_headlines(
                     for ticker, name in holdings
                     if title_matches_company(clause, ticker, name)
                 ]
+                external = graph_entities(clause, graph)
                 break
             if not event_type:
                 continue
@@ -269,7 +306,13 @@ def classify_headlines(
                 for sector, battleground in SECTOR_BATTLEGROUNDS.items()
                 if any(term in lower for term in battleground)
             ]
-            if not domains and not actors:
+            # An event naming a graph entity is kept even when it touches no
+            # sector vocabulary and none of our tickers. That is exactly the
+            # shape of the events worth reading through — "Google taps Marvell
+            # for custom silicon" mentions nothing we hold, and the whole point
+            # is to derive what it means for what we do hold. Before this, such
+            # a headline was classified and then dropped on this line.
+            if not domains and not actors and not external:
                 continue  # classified, but touches nothing we track
 
             events.append(
@@ -280,6 +323,7 @@ def classify_headlines(
                     "certainty": certainty,
                     "domains": domains,
                     "actors": actors,
+                    "external": external,
                     "direction": _EVENT_DIRECTION.get(event_type, "opportunity"),
                     "date": today,
                 }
@@ -304,7 +348,10 @@ EVENT_RETENTION_DAYS = 45
 
 
 def refresh_merged_events(
-    events: List[Dict[str, Any]], watchlist: Dict[str, Any], today: str = ""
+    events: List[Dict[str, Any]],
+    watchlist: Dict[str, Any],
+    today: str = "",
+    graph: Dict[str, Any] = None,
 ) -> List[Dict[str, Any]]:
     """Re-derive attribution on the accumulated event list, and drop stale rows.
 
@@ -358,13 +405,24 @@ def refresh_merged_events(
                 for ticker, name in holdings
                 if title_matches_company(clause, ticker, name)
             ]
+            # Re-derived for the same reason actors are: an event carried over
+            # from before the graph knew about Marvell would otherwise keep an
+            # empty external list for its whole 45-day retention, and the fix
+            # that taught the graph about Marvell would never reach it.
+            external = (
+                graph_entities(clause, graph)
+                if graph
+                else (event.get("external") or [])
+            )
+
             if actors != (event.get("actors") or []):
                 reattributed += 1
-            if not actors and not (event.get("domains") or []):
+            if not actors and not (event.get("domains") or []) and not external:
                 dropped_orphan += 1
                 continue
 
             event["actors"] = actors
+            event["external"] = external
             if not event.get("certainty"):
                 event["certainty"] = classify_certainty(clause)
             refreshed.append(event)
