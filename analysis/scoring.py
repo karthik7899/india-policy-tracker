@@ -160,7 +160,10 @@ def calculate_aggregate_score(company: Company) -> CompanyScore:
         data_points += 1
     if val and val.moat_status is not None:
         data_points += 1
-    if val and val.graham_intrinsic_value is not None:
+    # Truthiness, not `is not None`: graham.py returns 0.0 for "we cannot value
+    # this company", so `is not None` counted a refusal as a data point and
+    # credited confidence to a holding that has none.
+    if val and val.graham_intrinsic_value:
         data_points += 1
 
     if data_points == 0:
