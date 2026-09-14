@@ -574,6 +574,35 @@
       }
     },
     {
+      "ticker": "OPTIEMUS",
+      "name": "Optiemus Infra.",
+      "owner_earnings": -62.8,
+      "moat": "Weak/None",
+      "moat_status": "Weak/None",
+      "retained_earnings_ratio": 2.86,
+      "passed_retained_test": true,
+      "score": {
+        "overall_score": 8,
+        "fundamental_score": 0,
+        "momentum_score": 8,
+        "confidence": "High",
+        "reasons": [
+          "PLI Approval / Target: Optiemus Infracom Limited has informed the Exchange about Copy of Newspaper Publication issued by the Company in compliance with MCA Circular Nos. 20/2020 dated May 05, 2020, before sending the Notice of ensuing 33rd Annual General Meeting…",
+          "Policy Notification: Optiemus Infracom Limited has informed the Exchange regarding 'Board comments on fine levied by the Exchange'.",
+          "Strong revenue growth (TTM +20.9%)",
+          "FII Accumulation (+0.07%)",
+          "DII Accumulation (+1.42%)"
+        ],
+        "risks": [
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Fails P/E Screen (P/E 70.3 > 15 & Price > Intrinsic)"
+        ],
+        "recommendations": [
+          "Hold / Monitor"
+        ]
+      }
+    },
+    {
       "ticker": "SIEMENS",
       "name": "Siemens Ltd",
       "owner_earnings": 7653.8,
@@ -600,6 +629,35 @@
           "Fails Debt Limit (Debt > Net Assets)",
           "Fails P/E Screen (P/E 93.7 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
+        ],
+        "recommendations": [
+          "Hold / Monitor"
+        ]
+      }
+    },
+    {
+      "ticker": "ADSL",
+      "name": "Allied Digital Services",
+      "owner_earnings": 6.9,
+      "moat": "Weak/None",
+      "moat_status": "Weak/None",
+      "retained_earnings_ratio": 2.86,
+      "passed_retained_test": true,
+      "score": {
+        "overall_score": 8,
+        "fundamental_score": 0,
+        "momentum_score": 8,
+        "confidence": "High",
+        "reasons": [
+          "Policy Notification: ADSL Stock Prediction 2026: Analyst Forecast and Analysis",
+          "Policy Notification: Allied Digital Services (NSE: ADSL): Bull Case, Bear Case Explained",
+          "Strong revenue growth (TTM +19.1%)",
+          "Operating Margin Expansion (+12.8%)",
+          "Trading below Graham Intrinsic Value (164.1)"
+        ],
+        "risks": [
+          "Illiquid: Rs 0.87 Cr traded daily, ~6 sessions to exit Rs 1 Cr",
+          "Fails Debt Limit (Debt > Net Assets)"
         ],
         "recommendations": [
           "Hold / Monitor"
@@ -1301,61 +1359,6 @@
       }
     },
     {
-      "ticker": "ADSL",
-      "name": "Allied Digital Services",
-      "owner_earnings": 6.9,
-      "moat": "Weak/None",
-      "moat_status": "Weak/None",
-      "retained_earnings_ratio": 2.86,
-      "passed_retained_test": true,
-      "score": {
-        "overall_score": 4,
-        "fundamental_score": 0,
-        "momentum_score": 4,
-        "confidence": "High",
-        "reasons": [
-          "Policy Notification: Allied Digital Services (NSE: ADSL): Bull Case, Bear Case Explained",
-          "Strong revenue growth (TTM +19.1%)",
-          "Operating Margin Expansion (+12.8%)",
-          "Trading below Graham Intrinsic Value (164.1)"
-        ],
-        "risks": [
-          "Illiquid: Rs 0.87 Cr traded daily, ~6 sessions to exit Rs 1 Cr",
-          "Fails Debt Limit (Debt > Net Assets)"
-        ],
-        "recommendations": [
-          "Avoid / High Risk"
-        ]
-      }
-    },
-    {
-      "ticker": "BIRLACABLE",
-      "name": "Birla Cable",
-      "owner_earnings": 81.2,
-      "moat": "Weak/None",
-      "moat_status": "Weak/None",
-      "retained_earnings_ratio": 2.86,
-      "passed_retained_test": true,
-      "score": {
-        "overall_score": 3,
-        "fundamental_score": 2,
-        "momentum_score": 1,
-        "confidence": "High",
-        "reasons": [
-          "Sector benefits from macro policy tailwinds (Fallback)",
-          "Strong revenue growth (TTM +28.3%)",
-          "Operating Margin Expansion (+8.0%)",
-          "FII Accumulation (+0.02%)"
-        ],
-        "risks": [
-          "Fails Debt Limit (Debt > Net Assets)"
-        ],
-        "recommendations": [
-          "Avoid / High Risk"
-        ]
-      }
-    },
-    {
       "ticker": "FORTIS",
       "name": "Fortis Healthcare",
       "owner_earnings": 860.8,
@@ -1720,6 +1723,29 @@
       }
     },
     {
+      "ticker": "THERMAX",
+      "name": "Thermax Ltd",
+      "owner_earnings": 0.0,
+      "moat": "Weak/None",
+      "moat_status": "Weak/None",
+      "retained_earnings_ratio": 1.2,
+      "passed_retained_test": true,
+      "score": {
+        "overall_score": 1,
+        "fundamental_score": 0,
+        "momentum_score": 1,
+        "confidence": "Low",
+        "reasons": [
+          "Sector benefits from macro policy tailwinds (Fallback)",
+          "Liquid (Rs 53 Cr traded daily)"
+        ],
+        "risks": [],
+        "recommendations": [
+          "Avoid / High Risk"
+        ]
+      }
+    },
+    {
       "ticker": "BATAINDIA",
       "name": "Bata India",
       "owner_earnings": 171.2,
@@ -2001,35 +2027,6 @@
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
           "Fails P/E Screen (P/E 59.5 > 15 & Price > Intrinsic)",
-          "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
-        ],
-        "recommendations": [
-          "Avoid / High Risk"
-        ]
-      }
-    },
-    {
-      "ticker": "THERMAX",
-      "name": "Thermax Ltd",
-      "owner_earnings": -184.4,
-      "moat": "Weak/None",
-      "moat_status": "Weak/None",
-      "retained_earnings_ratio": 2.86,
-      "passed_retained_test": true,
-      "score": {
-        "overall_score": -4,
-        "fundamental_score": -5,
-        "momentum_score": 1,
-        "confidence": "High",
-        "reasons": [
-          "Sector benefits from macro policy tailwinds (Fallback)",
-          "Liquid (Rs 53 Cr traded daily)",
-          "FII Accumulation (+0.21%)"
-        ],
-        "risks": [
-          "Operating margin contracted (-8.0pp)",
-          "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 79.7 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
