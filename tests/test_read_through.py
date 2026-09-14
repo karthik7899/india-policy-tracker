@@ -350,3 +350,69 @@ def test_email_section_puts_risks_first():
     good = dict(_ROW, direction="opportunity", sector="clean_energy")
     html = build_read_through_html([good, _ROW])
     assert html.index("Semiconductors Equipment") < html.index("Clean Energy")
+
+
+# ---------------------------------------------------------------------------
+# Regressions found in production on 14 Sep
+# ---------------------------------------------------------------------------
+
+
+def test_a_truncated_headline_does_not_match_every_material():
+    """The worst false positive this feature could have.
+
+    A trailing "..." left an empty token in the parsed title, and the matcher's
+    empty-candidate path compared "" == "" and said yes. One Morgan Stanley
+    note on Reliance produced ten risk flags across ten sectors, naming
+    materials the headline never mentioned. RSS truncates constantly, so this
+    was not an edge case.
+    """
+    flags = _run(
+        headlines=[
+            "Morgan Stanley bullish on Reliance Industries, flags AI capex as "
+            "next capital allocation pivot; sees 28%... "
+        ]
+    )
+    assert flags == [], flags
+
+
+def test_capital_allocation_is_not_a_supply_shortage():
+    """ "allocation" alone is ordinary finance writing. Only the phrases that
+    actually mean scarcity count."""
+    assert (
+        _run(headlines=["Board reviews capital allocation policy for RAM unit"]) == []
+    )
+    assert len(_run(headlines=["RAM buyers put on allocation as supply tightens"])) == 1
+
+
+def test_newest_read_through_sorts_first_within_a_tier():
+    """ISO dates ascend, so the obvious sort put the OLDEST first while the
+    comment promised newest. The email shows four rows; a busy run would have
+    buried today's flag behind a ten-day-old one."""
+    old = (datetime.date.today() - datetime.timedelta(days=5)).isoformat()
+    flags = compute_read_throughs(
+        [
+            _event("Google taps Marvell today", external=["Google", "Marvell"]),
+            _event(
+                "Google taps Marvell earlier", external=["Google", "Marvell"], date=old
+            ),
+        ],
+        GRAPH,
+        WATCHLIST,
+        today=TODAY,
+    )
+    assert [f["date"] for f in flags] == [TODAY, old]
+
+
+def test_an_undated_flag_never_outranks_a_real_date():
+    flags = compute_read_throughs(
+        [
+            _event(
+                "Google taps Marvell undated", external=["Google", "Marvell"], date=""
+            ),
+            _event("Google taps Marvell today", external=["Google", "Marvell"]),
+        ],
+        GRAPH,
+        WATCHLIST,
+        today=TODAY,
+    )
+    assert flags[0]["date"] == TODAY

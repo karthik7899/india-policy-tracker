@@ -75,7 +75,12 @@ _SQUEEZE_MARKERS = (
     "supply tightness",
     "constrained",
     "rationing",
-    "allocation",
+    # "allocation" alone is not a supply word. "capital allocation" is
+    # ordinary finance writing, and it turned a Morgan Stanley note on
+    # Reliance into a risk flag against ten sectors at once. Kept only in the
+    # phrase that actually means scarcity.
+    "on allocation",
+    "supply allocation",
     "price hike",
     "price rise",
     "price increase",
@@ -403,15 +408,28 @@ def compute_read_throughs(
             )
 
         flags = _dedupe(flags)
+
         # Risk before opportunity, curated before harvested, then newest.
-        flags.sort(
-            key=lambda f: (
-                f["direction"] != "risk",
-                -_CONFIDENCE_ORDER.get(f["confidence"], 1),
-                str(f.get("date", "")),
-            ),
-            reverse=False,
-        )
+        #
+        # The date has to be inverted rather than sorted as a string: ISO dates
+        # ascend, so the obvious tuple put the OLDEST flag first while the
+        # comment claimed newest. With the dashboard capping the feed and the
+        # email showing four rows, a busy run would have buried today's
+        # read-through behind a ten-day-old one.
+        def _rank(flag):
+            try:
+                recency = -datetime.date.fromisoformat(
+                    str(flag.get("date", ""))
+                ).toordinal()
+            except ValueError:
+                recency = 1  # undated sorts last, never ahead of a real date
+            return (
+                flag["direction"] != "risk",
+                -_CONFIDENCE_ORDER.get(flag["confidence"], 1),
+                recency,
+            )
+
+        flags.sort(key=_rank)
         flags = flags[:limit]
 
         if flags:

@@ -505,3 +505,58 @@ def test_refresh_never_raises_and_returns_input_on_failure():
     assert refresh_merged_events(None, {}) == []
     # Junk rows are skipped, not fatal.
     assert refresh_merged_events([None, "junk"], {"s": []}) == []
+
+
+# ---------------------------------------------------------------------------
+# Regressions found in production on 14 Sep
+# ---------------------------------------------------------------------------
+
+
+def test_a_truncated_headline_matches_no_anchor_edge():
+    """Found via the read-through feature, but this was never about it.
+
+    match_anchor_edges passes an empty ticker, and the matcher's empty
+    candidate compared equal to the empty token a trailing "..." leaves behind.
+    51 of 74 anchor edges matched a headline naming none of them, which had
+    been firing spurious Ecosystem Signal warnings on every truncated headline
+    since long before read-throughs existed.
+    """
+    graph = load_entity_graph(os.path.join(_REPO_ROOT, "entity_graph.json"))
+    truncated = "Morgan Stanley bullish on Reliance Industries, sees 28%... "
+    assert match_anchor_edges(truncated, graph) == []
+
+    # And a headline that really does name an anchor still matches.
+    real = "Apple expands India manufacturing with new supplier agreements"
+    assert any(e["src"] == "Apple" for e in match_anchor_edges(real, graph))
+
+
+def test_external_only_events_do_not_reach_the_warning_engine(monkeypatch):
+    """Read-through material must not become graded evidence.
+
+    A headline naming only graph entities is kept in the corpus so a chain can
+    be derived from it. The warning engine's anchor matching would otherwise
+    turn it into Ecosystem Signals on every held sector — the exact
+    hypothesis-into-evidence leak the separation exists to prevent.
+    """
+    import analysis.entity_graph as eg
+    import analysis.event_engine as ee
+
+    monkeypatch.setattr(eg, "load_entity_graph", lambda path=None: _GRAPH)
+    data = {
+        "market_events": [
+            {
+                "headline": "MegaCorp ties up with a rival for smartphone chips",
+                "event_type": "tie_up",
+                "domains": [],
+                "actors": [],
+                "external": ["MegaCorp"],
+                "direction": "opportunity",
+                "date": _TODAY,
+            }
+        ]
+    }
+    assert ee.market_event_signals(data, _WATCHLIST) == []
+
+    # The same event, once it genuinely touches a sector, still produces one.
+    data["market_events"][0]["domains"] = ["manufacturing_electronics"]
+    assert ee.market_event_signals(data, _WATCHLIST) != []
