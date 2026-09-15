@@ -93,7 +93,9 @@ def _sustainable_growth(fin: CompanyFinancials) -> Tuple[float, str]:
       handed a shrinking company the maximum multiple.
 
     Taking the minimum answers both: neither a one-year bounce nor an old boom
-    survives a check against the other.
+    survives a check against the other. And where no such check is available,
+    the reading is capped at the default rather than trusted — see the note on
+    corroboration in the body, which is the rule that actually decides this.
 
     The basis is returned rather than inferred, because these are not
     interchangeable and a multiple derived from revenue deserves less weight
@@ -109,34 +111,56 @@ def _sustainable_growth(fin: CompanyFinancials) -> Tuple[float, str]:
     fired on SEASONALITY — noise, not growth. A multi-year earnings CAGR at the
     ceiling has earned its way there.
     """
-    families = (
-        ("annual_eps_trend", "eps_trend", "EPS", ""),
-        ("annual_sales_trend", "sales_trend", "revenue", " (earnings proxy)"),
-    )
+    eps_long = _cagr(getattr(fin, "annual_eps_trend", None))
+    eps_recent = _ttm_growth(getattr(fin, "eps_trend", None))
+    rev_long = _cagr(getattr(fin, "annual_sales_trend", None))
+    rev_recent = _ttm_growth(getattr(fin, "sales_trend", None))
 
-    # Every multi-year basis is tried before any single-year one, INCLUDING a
-    # multi-year revenue CAGR ahead of single-year earnings growth. "Sustained"
-    # is the load-bearing word in Graham's definition of g, so when only one of
-    # span and quantity can be had, span wins. It is also the steadier of the
-    # two empirically: across this watchlist a single year of EPS growth clamps
-    # at one end or the other for two holdings in three, against under half for
-    # the multi-year revenue CAGR.
-    for annual, quarterly, label, proxy in families:
-        long_run = _cagr(getattr(fin, annual, None))
-        if long_run is None:
-            continue
-        recent = _ttm_growth(getattr(fin, quarterly, None))
-        if recent is not None:
-            return (
-                _clamp(min(long_run, recent)),
-                f"{label} CAGR floored by trailing year{proxy}",
-            )
-        return _clamp(long_run), f"{label} CAGR{proxy}"
+    # CORROBORATION IS WHAT LICENSES AN ABOVE-DEFAULT g.
+    #
+    # A long record and a recent trend are two independent views of the same
+    # business. Where both exist and agree, the lower of them is evidence.
+    # Where only one exists, it is a claim with nothing to check it against —
+    # and an unchecked CAGR is how a company that lost money for two of six
+    # years ends up at the ceiling. STLTECH: EPS of 1.51 -> 4.98 compounds at
+    # 27%, its two loss years are invisible to a CAGR, and the trailing-year
+    # check that would have caught it cannot run BECAUSE the prior year was a
+    # loss. The guard switched itself off exactly where it was needed.
+    #
+    # So: the best corroborated basis sets g, every other view may only lower
+    # it, and with nothing corroborated at all g cannot exceed the default.
+    if eps_long is not None and eps_recent is not None:
+        # Earnings, corroborated. Graham's actual term, best evidence, done.
+        return _clamp(min(eps_long, eps_recent)), "EPS CAGR floored by trailing year"
 
-    for _annual, quarterly, label, proxy in families:
-        recent = _ttm_growth(getattr(fin, quarterly, None))
-        if recent is not None:
-            return _clamp(recent), f"trailing-year {label} growth{proxy}"
+    if rev_long is not None and rev_recent is not None:
+        # Revenue corroborated, but any uncorroborated EARNINGS view still
+        # pulls it down — a bearish signal from the right quantity outranks a
+        # bullish one from a proxy. ideaForge's earnings are shrinking while
+        # its revenue grows; the earnings reading is the one that matters.
+        floor = [min(rev_long, rev_recent)]
+        floor += [v for v in (eps_long, eps_recent) if v is not None]
+        return (
+            _clamp(min(floor)),
+            "revenue CAGR floored by trailing year (earnings proxy)",
+        )
+
+    views = [
+        (eps_long, "EPS CAGR"),
+        (eps_recent, "trailing-year EPS"),
+        (rev_long, "revenue CAGR"),
+        (rev_recent, "trailing-year revenue"),
+    ]
+    available = [(v, name) for v, name in views if v is not None]
+    if available:
+        # One view, unchecked. It may argue for LESS growth than the default —
+        # pessimism needs no corroboration, since the formula's job is not to
+        # talk anyone out of caution — but it may not argue for more.
+        value, name = min(available, key=lambda pair: pair[0])
+        return (
+            _clamp(min(value, _DEFAULT_GROWTH)),
+            f"{name}, uncorroborated — capped at the default",
+        )
 
     return _DEFAULT_GROWTH, "default (no usable series)"
 
