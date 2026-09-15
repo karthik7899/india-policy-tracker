@@ -56,6 +56,46 @@ def _cagr(values) -> Optional[float]:
     return ((last / first) ** (1.0 / (len(series) - 1)) - 1.0) * 100.0
 
 
+def _comparable_eps(values, price: Optional[float]):
+    """Annual EPS with pre-restructuring periods dropped.
+
+    A CAGR only means something if the per-share basis is constant across the
+    window, and an EPS series does not say when that basis changed. One signal
+    is physical: an annual EPS larger than the whole share price implies a
+    trailing P/E below one, which a listed going concern does not have. It
+    means the figure was struck on a different, much smaller share count.
+
+    Both cases here are recent IPOs, and Screener reports each year on the
+    share count of the day rather than restating for the issue:
+
+        CAMPUS     [-145.00, 741.01, 3947.58, 4.06, 1.77, 3.57]   price 210
+        IDEAFORGE  [4862.98, 14.99, 10.56, -14.46, -3.94, 0.89]   price 714
+
+    Everything up to and INCLUDING the last impossible period is dropped, not
+    merely the leading run of them. A restructuring is a point in time, so if
+    period k cannot be on the current share base then the base changed at or
+    after k and every earlier period is on the old one too. CAMPUS is why this
+    distinction is not academic: its first value is -145, which is inside a
+    210 share price and would stop a leading-run scan dead, leaving 741 and
+    3947 in the series behind it.
+
+    The result stays contiguous, which a CAGR needs — removing offending values
+    individually would punch a hole in the middle and silently shorten the span
+    while ``len - 1`` still counted the gap as a year.
+
+    Without a price this cannot be judged, so the series is returned untouched
+    rather than guessed at.
+    """
+    series = clean_series(values)
+    if not price or price <= 0:
+        return series
+    last_impossible = -1
+    for index, value in enumerate(series):
+        if abs(value) > price:
+            last_impossible = index
+    return series[last_impossible + 1 :]
+
+
 def _ttm_growth(values) -> Optional[float]:
     """Trailing-twelve-month growth: four quarters against the four before.
 
@@ -111,7 +151,13 @@ def _sustainable_growth(fin: CompanyFinancials) -> Tuple[float, str]:
     fired on SEASONALITY — noise, not growth. A multi-year earnings CAGR at the
     ceiling has earned its way there.
     """
-    eps_long = _cagr(getattr(fin, "annual_eps_trend", None))
+    # The EPS series is filtered for a changed share base first; revenue is not
+    # a per-share figure, so the bound does not apply to it.
+    eps_long = _cagr(
+        _comparable_eps(
+            getattr(fin, "annual_eps_trend", None), getattr(fin, "current_price", None)
+        )
+    )
     eps_recent = _ttm_growth(getattr(fin, "eps_trend", None))
     rev_long = _cagr(getattr(fin, "annual_sales_trend", None))
     rev_recent = _ttm_growth(getattr(fin, "sales_trend", None))
