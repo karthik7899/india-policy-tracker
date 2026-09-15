@@ -11,6 +11,7 @@ import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from analysis.graham import (  # noqa: E402
+    _comparable_eps,
     _sustainable_growth,
     calculate_graham_intrinsic_value,
     graham_growth_basis,
@@ -377,3 +378,72 @@ class TestGrowthIsEarningsOverYearsNotRevenueOverOne:
         )
         _growth, basis = _sustainable_growth(fin)
         assert "EPS CAGR" not in basis, basis
+
+
+class TestAnEpsSeriesCanSpanTwoDifferentShareCounts:
+    """A CAGR is meaningless across a capital restructuring.
+
+    Screener reports each year's EPS on the share count of that year, without
+    restating for a later issue. A recent IPO therefore carries pre-listing
+    years struck on a tiny share count, and those figures are not comparable
+    with the ones after it — compounding between them measures the issue, not
+    the business.
+
+    The tell is physical: an annual EPS above the whole share price implies a
+    trailing P/E below one, which a listed going concern does not have.
+
+    Today both live cases sit early in the series, where the artifact DEFLATES
+    a CAGR and is therefore conservative by accident. The guard exists because
+    nothing makes that the only possible arrangement.
+    """
+
+    def test_everything_through_the_last_impossible_period_is_dropped(self):
+        """CAMPUS. Its first value is inside the share price, so a scan that
+        stopped at the first good value would leave 741 and 3947 behind it."""
+        assert _comparable_eps([-145.0, 741.01, 3947.58, 4.06, 1.77, 3.57], 210.30) == [
+            4.06,
+            1.77,
+            3.57,
+        ]
+
+    def test_a_single_leading_artifact_leaves_the_rest_intact(self):
+        """ideaForge. Only the pre-IPO year goes; the loss years after it are
+        real and must survive, because they are the bearish evidence."""
+        assert _comparable_eps(
+            [4862.98, 14.99, 10.56, -14.46, -3.94, 0.89], 714.05
+        ) == [14.99, 10.56, -14.46, -3.94, 0.89]
+
+    def test_an_ordinary_series_is_untouched(self):
+        series = [10.0, 11.0, 12.0, 13.0, 14.0]
+        assert _comparable_eps(series, 300.0) == series
+
+    def test_without_a_price_the_series_is_returned_rather_than_guessed_at(self):
+        series = [4862.98, 14.99, 10.56]
+        assert _comparable_eps(series, None) == series
+        assert _comparable_eps(series, 0) == series
+
+    def test_a_trimmed_series_too_short_to_compound_declines_rather_than_guesses(self):
+        """CAMPUS end to end: three surviving periods is under the minimum, so
+        the earnings basis steps aside for revenue instead of compounding
+        across the issue."""
+        fin = CompanyFinancials(
+            ttm_eps=10.0,
+            current_price=210.30,
+            annual_eps_trend=[-145.0, 741.01, 3947.58, 4.06, 1.77, 3.57],
+            annual_sales_trend=[2.0, 508.0, 595.0, 732.0, 711.0, 1194.0],
+        )
+        _growth, basis = _sustainable_growth(fin)
+        assert "EPS" not in basis, basis
+
+    def test_the_bearish_earnings_signal_survives_the_trim(self):
+        """ideaForge end to end: dropping the pre-IPO year must not dispose of
+        the earnings decline that follows it."""
+        fin = CompanyFinancials(
+            ttm_eps=10.0,
+            current_price=714.05,
+            annual_eps_trend=[4862.98, 14.99, 10.56, -14.46, -3.94, 0.89],
+            annual_sales_trend=[100.0, 110.0, 121.0, 133.0, 146.0],
+            sales_trend=[100.0] * 4 + [112.0] * 4,
+        )
+        growth, _basis = _sustainable_growth(fin)
+        assert growth == 0.0, "earnings fell; growing revenue must not mask it"
