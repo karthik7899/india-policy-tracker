@@ -49,7 +49,15 @@ def test_declines_to_value_without_a_full_trailing_year():
 
 
 def test_ttm_eps_field_is_preferred_when_present():
-    fin = CompanyFinancials(ttm_eps=100.0, sales_trend=_SEASONAL_SALES)
+    # annual_sales_trend is here only so the revenue basis is CORROBORATED and
+    # the growth term is the +6.8% the comment below describes. Without it the
+    # trailing year stands alone and is capped at the default, which is correct
+    # but tests a different thing than this case is about.
+    fin = CompanyFinancials(
+        ttm_eps=100.0,
+        sales_trend=_SEASONAL_SALES,
+        annual_sales_trend=[100.0, 110.0, 121.0, 133.0, 146.0],
+    )
     # Trailing growth on this series is +6.8%, so the multiple is
     # (8.5 + 13.6) * 4.4/7 = 13.9 -> about 1389 on EPS of 100.
     assert 1300 < calculate_graham_intrinsic_value(fin) < 1450
@@ -236,6 +244,9 @@ class TestGrowthIsEarningsOverYearsNotRevenueOverOne:
         fin = CompanyFinancials(
             ttm_eps=10.0,
             annual_eps_trend=[10.0, 11.0, 12.0, 13.0, 14.0],
+            # Corroborates the EPS CAGR at roughly the same rate, so the
+            # earnings basis is the one with two agreeing views behind it.
+            eps_trend=[1.0] * 4 + [1.09] * 4,
             annual_sales_trend=[100.0, 200.0, 400.0, 800.0, 1600.0],
         )
         growth, basis = _sustainable_growth(fin)
@@ -286,13 +297,66 @@ class TestGrowthIsEarningsOverYearsNotRevenueOverOne:
         assert basis.startswith("revenue CAGR"), basis
         assert growth < 6.0, growth
 
-    def test_one_year_of_earnings_is_still_better_than_nothing(self):
+    def test_one_unchecked_view_cannot_argue_for_more_than_the_default(self):
+        """A single view is a claim with nothing to check it against.
+
+        This replaces an assertion that one year of EPS growth was worth taking
+        at face value. It is not: an unchecked reading is exactly how STLTECH
+        reached the 15% ceiling on a company that lost money in two of six
+        years — its CAGR could not be floored by the trailing year BECAUSE the
+        prior year was a loss, so the guard switched itself off at the one
+        moment it mattered.
+        """
         fin = CompanyFinancials(
             ttm_eps=10.0, eps_trend=[1.0, 1.0, 1.0, 1.0, 1.1, 1.1, 1.1, 1.1]
         )
         growth, basis = _sustainable_growth(fin)
-        assert basis == "trailing-year EPS growth", basis
-        assert 9 < growth < 11, growth
+        assert "uncorroborated" in basis, basis
+        assert growth == 6.0, "+10% unchecked is capped at the default, not taken"
+
+    def test_but_an_unchecked_view_may_still_argue_for_less(self):
+        """Pessimism needs no corroboration — the cap is one-directional.
+
+        The formula's job is not to talk anyone out of caution, so a single
+        bearish reading passes through at face value while a single bullish one
+        does not.
+        """
+        fin = CompanyFinancials(
+            ttm_eps=10.0, eps_trend=[1.0, 1.0, 1.0, 1.0, 0.4, 0.4, 0.4, 0.4]
+        )
+        growth, basis = _sustainable_growth(fin)
+        assert "uncorroborated" in basis, basis
+        assert growth == 0.0, growth
+
+    def test_a_corroborated_proxy_outranks_an_unchecked_earnings_reading(self):
+        """STLTECH. EPS compounds at 27% with no trailing year to check it,
+        while revenue has two agreeing views saying 0.7%. The checked pair is
+        the evidence; the unchecked figure is not allowed to overrule it."""
+        fin = CompanyFinancials(
+            ttm_eps=10.0,
+            annual_eps_trend=[1.51, 3.54, -1.28, -2.52, 1.15, 4.98],
+            eps_trend=[-0.29, -0.49, -0.82, 0.2, 0.08, -0.35, 1.21, 4.04],
+            annual_sales_trend=[5437.0, 6925.0, 4083.0, 3996.0, 4745.0, 5642.0],
+            sales_trend=self._FLAT_QUARTERS,
+        )
+        growth, basis = _sustainable_growth(fin)
+        assert basis.startswith("revenue CAGR floored"), basis
+        assert growth < 2.0, growth
+
+    def test_a_bearish_earnings_view_still_lowers_a_corroborated_proxy(self):
+        """ideaForge. Revenue has two agreeing views and grows; earnings are
+        shrinking with no trailing year to confirm it. The earnings reading is
+        the right quantity, so it pulls the proxy down rather than being
+        discarded for lacking a partner."""
+        fin = CompanyFinancials(
+            ttm_eps=10.0,
+            annual_eps_trend=[5.0, 4.0, 3.0, 2.0, 1.0],
+            annual_sales_trend=[100.0, 110.0, 121.0, 133.0, 146.0],
+            sales_trend=[100.0] * 4 + [112.0] * 4,
+        )
+        growth, basis = _sustainable_growth(fin)
+        assert basis.startswith("revenue CAGR floored"), basis
+        assert growth == 0.0, "shrinking earnings outrank growing revenue"
 
     def test_no_usable_series_says_so_rather_than_inventing_a_number(self):
         growth, basis = _sustainable_growth(CompanyFinancials(ttm_eps=10.0))
