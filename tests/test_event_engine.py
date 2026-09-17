@@ -13,6 +13,10 @@ from analysis.entity_graph import (  # noqa: E402
     match_anchor_edges,
     save_entity_graph,
 )
+from analysis.competitive_intel import (  # noqa: E402
+    collect_headlines,
+    collect_sources,
+)
 from analysis.event_engine import (  # noqa: E402
     classify_headlines,
     compute_supply_stress,
@@ -560,3 +564,67 @@ def test_external_only_events_do_not_reach_the_warning_engine(monkeypatch):
     # The same event, once it genuinely touches a sector, still produces one.
     data["market_events"][0]["domains"] = ["manufacturing_electronics"]
     assert ee.market_event_signals(data, _WATCHLIST) != []
+
+
+class TestAClassifiedEventCitesItsArticle:
+    """An event that names a headline but cannot be traced to it is an
+    assertion the reader has to take on faith.
+
+    collect_headlines returned bare strings, so the `link` on every source
+    record was dropped at that exact point — every classified event, every
+    read-through and every headline-derived warning lost its URL there.
+    """
+
+    _WL = {
+        "aerospace_defence": [{"ticker": "BHEL", "name": "Bharat Heavy Electricals"}]
+    }
+
+    def test_the_link_reaches_the_event(self):
+        data = {
+            "corporate_agreements": [
+                {
+                    "title": "BHEL partners with Titagarh on rail maintenance",
+                    "link": "https://example.test/bhel",
+                    "source": "Mint",
+                }
+            ]
+        }
+        (event,) = classify_headlines(data, self._WL)
+        assert event["link"] == "https://example.test/bhel"
+        assert event["source"] == "Mint"
+
+    def test_a_feed_with_no_link_omits_the_key_rather_than_writing_empty(self):
+        """ "No link" and "" are different facts, and a consumer checking for a
+        citation must be able to tell them apart."""
+        data = {
+            "corporate_agreements": [
+                {"title": "BHEL partners with Titagarh on rail maintenance"}
+            ]
+        }
+        (event,) = classify_headlines(data, self._WL)
+        assert "link" not in event
+
+    def test_the_index_is_keyed_to_what_collect_headlines_returns(self):
+        """Not a fuzzy re-match on normalised text: same pass, same key, so a
+        caller holding a headline can always look its citation back up."""
+        data = {
+            "corporate_agreements": [
+                {"title": "  BHEL Partners With Titagarh  ", "link": "https://x.test/1"}
+            ]
+        }
+        headlines = collect_headlines(data, self._WL)
+        sources = collect_sources(data, self._WL)
+        assert headlines == ["BHEL Partners With Titagarh"]
+        assert sources[headlines[0].lower()]["link"] == "https://x.test/1"
+
+    def test_first_writer_wins_matching_the_dedupe_above_it(self):
+        data = {
+            "corporate_agreements": [
+                {"title": "Same story", "link": "https://first.test"},
+                {"title": "same story", "link": "https://second.test"},
+            ]
+        }
+        assert (
+            collect_sources(data, self._WL)["same story"]["link"]
+            == "https://first.test"
+        )

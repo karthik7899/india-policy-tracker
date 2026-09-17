@@ -18,7 +18,11 @@ import datetime
 import re
 from typing import Any, Dict, List
 
-from analysis.competitive_intel import SECTOR_BATTLEGROUNDS, collect_headlines
+from analysis.competitive_intel import (
+    SECTOR_BATTLEGROUNDS,
+    collect_headlines,
+    collect_sources,
+)
 from analysis.parsing import title_matches_company
 from config import SECTOR_METADATA
 from logger import log
@@ -260,6 +264,7 @@ def classify_headlines(
             for s in stocks or []
             if isinstance(s, dict)
         ]
+        sources = collect_sources(data, watchlist)
         for headline in collect_headlines(data, watchlist):
             lower = headline.lower()
 
@@ -315,6 +320,14 @@ def classify_headlines(
             if not domains and not actors and not external:
                 continue  # classified, but touches nothing we track
 
+            # The citation, looked up on the full headline before it is
+            # truncated for storage. An event that names a headline but cannot
+            # be traced back to the article is an assertion the reader has to
+            # take on faith, which is the one thing this pipeline tries never
+            # to ask of them. Absent when the feed carried no link — omitted
+            # rather than written as "", so "no link" and "" stay distinct.
+            citation = sources.get(headline.lower()) or {}
+
             events.append(
                 {
                     "headline": headline[:180],
@@ -326,6 +339,11 @@ def classify_headlines(
                     "external": external,
                     "direction": _EVENT_DIRECTION.get(event_type, "opportunity"),
                     "date": today,
+                    **(
+                        {"link": citation["link"], "source": citation.get("source", "")}
+                        if citation.get("link")
+                        else {}
+                    ),
                 }
             )
         if events:

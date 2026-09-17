@@ -257,3 +257,47 @@ class TestBadgeAgreesWithSidecar:
                 assert store.write_coverage_sidecars({"AAPL": [{"headline": "x"}]}) == 0
         finally:
             store.NEWS_DIR = original
+
+
+class TestAnArticleSaysWhatItIsAndWhereItCameFrom:
+    """`event_type` and `source_kind` answer different questions.
+
+    They were flattened into one `event_tags` list, and the drawer showed that
+    list as badges — so "Thermax Q1 profit plunges 83% as margins collapse"
+    was labelled "Agreement", because the corporate_agreements RSS query is
+    what happened to return it. The feeds are named for their queries, not
+    their contents, and a query for agreements returns ordinary company news
+    too.
+    """
+
+    def _raw(self, **kw):
+        base = {
+            "title": "Thermax Q1 profit plunges 83% as margins collapse",
+            "link": "https://example.test/a",
+            "source": "CNBC TV18",
+            "date": "2026-07-30",
+        }
+        base.update(kw)
+        return base
+
+    def test_the_feed_name_is_provenance_not_a_description(self):
+        item = cov._item("Agreement", self._raw()["title"], self._raw())
+        assert item["source_kind"] == "Agreement"
+        assert item["event_type"] == "", "nothing in this story was classified"
+
+    def test_a_classified_type_is_kept_apart_from_the_feed(self):
+        raw = self._raw(event_type="tie_up")
+        item = cov._item("Agreement", raw["title"], raw)
+        assert item["event_type"] == "tie_up"
+        assert item["source_kind"] == "Agreement"
+
+    def test_event_tags_still_carries_both_for_older_readers(self):
+        raw = self._raw(event_type="tie_up")
+        item = cov._item("Agreement", raw["title"], raw)
+        assert item["event_tags"] == ["tie_up", "Agreement"]
+
+    def test_the_citation_survives(self):
+        raw = self._raw()
+        item = cov._item("Agreement", raw["title"], raw)
+        assert item["source_url"] == "https://example.test/a"
+        assert item["source_label"] == "CNBC TV18"

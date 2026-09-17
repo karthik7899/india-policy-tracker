@@ -141,35 +141,75 @@ _NON_COMPANIES = {
 }
 
 
+def _headline_items(data: Dict[str, Any], watchlist: Dict[str, Any]):
+    """Yield ``(text, item)`` for every headline, whichever feed carried it.
+
+    One walker feeding both collect_headlines and collect_sources, so the text
+    and the record it came from cannot drift apart. They used to be reachable
+    only as bare strings: collect_headlines returned ``List[str]`` and the
+    ``link`` on every one of these items was dropped at this exact point, which
+    is why a classified event could name a headline but never cite it.
+    """
+    for sector in watchlist or {}:
+        for item in data.get(sector, []) or []:
+            if isinstance(item, dict):
+                yield item.get("title"), item
+    for item in data.get("corporate_agreements", []) or []:
+        if isinstance(item, dict):
+            yield item.get("title"), item
+    for item in data.get("product_launches", []) or []:
+        if isinstance(item, dict):
+            yield item.get("product"), item
+    for item in data.get("corporate_filings", []) or []:
+        if isinstance(item, dict):
+            yield item.get("filing"), item
+    for item in data.get("global_market_news", []) or []:
+        if isinstance(item, dict):
+            yield item.get("title"), item
+
+
 def collect_headlines(data: Dict[str, Any], watchlist: Dict[str, Any]) -> List[str]:
     """Every collected headline, whichever feed carried it."""
     seen = set()
     headlines: List[str] = []
-
-    def _add(text):
+    for text, _item in _headline_items(data, watchlist):
         text = str(text or "").strip()
         key = text.lower()
         if text and key not in seen:
             seen.add(key)
             headlines.append(text)
-
-    for sector in watchlist or {}:
-        for item in data.get(sector, []) or []:
-            if isinstance(item, dict):
-                _add(item.get("title"))
-    for item in data.get("corporate_agreements", []) or []:
-        if isinstance(item, dict):
-            _add(item.get("title"))
-    for item in data.get("product_launches", []) or []:
-        if isinstance(item, dict):
-            _add(item.get("product"))
-    for item in data.get("corporate_filings", []) or []:
-        if isinstance(item, dict):
-            _add(item.get("filing"))
-    for item in data.get("global_market_news", []) or []:
-        if isinstance(item, dict):
-            _add(item.get("title"))
     return headlines
+
+
+def collect_sources(
+    data: Dict[str, Any], watchlist: Dict[str, Any]
+) -> Dict[str, Dict[str, str]]:
+    """``{headline_key: {link, source, date}}`` for the same headlines.
+
+    Keyed by the lower-cased text collect_headlines dedupes on, so a caller
+    holding a headline from that list can always look its citation back up.
+    Deliberately NOT a fuzzy match on normalised text: this is built from the
+    same pass over the same records, so the key is the identical string rather
+    than a reconstruction that has to guess at punctuation.
+
+    First writer wins, matching collect_headlines' own dedupe — if two feeds
+    carry the same story, the citation belongs to the one that was counted.
+    """
+    sources: Dict[str, Dict[str, str]] = {}
+    for text, item in _headline_items(data, watchlist):
+        text = str(text or "").strip()
+        key = text.lower()
+        if not text or key in sources:
+            continue
+        link = str(item.get("link") or "").strip()
+        if not link:
+            continue
+        sources[key] = {
+            "link": link,
+            "source": str(item.get("source") or "").strip(),
+            "date": str(item.get("date") or "").strip(),
+        }
+    return sources
 
 
 def _extract_challenger(headline: str, data: Dict[str, Any]) -> str:

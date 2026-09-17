@@ -390,3 +390,40 @@ body {
    row with one grows taller than the rows without. */
 td .disclose { margin-top: 0; }
 td .disclose-summary { padding: 2px 0; }
+
+/* --- evidence: the articles and signals behind a holding ---------------- */
+.evidence { list-style: none; padding-left: 0; margin: 0; }
+.evidence li {
+  padding: 7px 0;
+  border-bottom: 1px solid var(--border);
+  line-height: 1.45;
+}
+.evidence li:last-child { border-bottom: 0; }
+.evidence a { text-decoration: none; }
+.evidence a:hover { text-decoration: underline; }
+.evidence-meta {
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 2px;
+  font-variant-numeric: tabular-nums;
+}
+.evidence-tags { margin-left: 6px; }
+/* A tag is a label, not a status: it says which vocabulary matched, and it
+   must not borrow the reserved good/warning/critical steps to say so. */
+.tag {
+  display: inline-block;
+  font-size: 10px;
+  padding: 1px 6px;
+  margin-right: 4px;
+  border-radius: 999px;
+  background: var(--plane);
+  border: 1px solid var(--border);
+  color: var(--ink-2);
+  text-transform: lowercase;
+  letter-spacing: 0.01em;
+}
+/* Direction IS a judgement, so these two carry meaning and are paired with
+   the words "risk" / "opportunity" rather than relying on colour. */
+.tag-risk { border-color: var(--critical); color: var(--critical); }
+.tag-opp { border-color: var(--good); color: var(--good); }
