@@ -63,6 +63,31 @@ function evidenceKey(text) {
     .trim();
 }
 
+
+/** One sector-news row: headline as link, its kind as a tag, provenance below. */
+function sectorRow(n) {
+  const kind = (n.tags || [])[0] || "";
+  return el(
+    "li",
+    {},
+    n.url
+      ? el("a", { href: n.url, target: "_blank", rel: "noopener noreferrer" }, n.headline || "")
+      : n.headline || "",
+    kind && kind !== "other"
+      ? el(
+          "span",
+          { class: "evidence-tags" },
+          el("span", { class: "tag" }, kind.replace(/_/g, " ")),
+        )
+      : null,
+    el(
+      "span",
+      { class: "evidence-meta" },
+      [n.source, shortDate(n.date)].filter(Boolean).join(" \u00b7 "),
+    ),
+  );
+}
+
 /** The drawer: everything known about one holding, fetched on open. */
 async function drawer(stock, payload) {
   const sc = stock.screener || {};
@@ -81,6 +106,21 @@ async function drawer(stock, payload) {
   const items = coverage || [];
   const setAside = items.filter((c) => (c.status || "counted") !== "counted");
 
+  // What moved in the sector this holding sits in. Coverage above answers
+  // "what was written about THIS company"; a PLI scheme or a cabinet approval
+  // names no company at all and is exactly the thing a reader holding a
+  // beneficiary wants to see. Split by whether the item names this holding,
+  // because "the sector moved" and "you were named in it" are different facts
+  // and collapsing them would overstate the second.
+  const block = (payload?.briefing?.sector_blocks || []).find(
+    (s) => s.id === stock.sector,
+  );
+  const sectorNews = block?.news || [];
+  const namesThis = (n) =>
+    (n.affected_tickers || []).some((t) => String(t).toUpperCase() === key);
+  const sectorDirect = sectorNews.filter(namesThis);
+  const sectorWide = sectorNews.filter((n) => !namesThis(n));
+
   // ONE evidence list, not two. The drawer used to show a "Topics" section
   // beside this one, built from stock_topics — a different code path over the
   // same feeds, rendered as inert text with its links discarded. Measured
@@ -89,7 +129,16 @@ async function drawer(stock, payload) {
   // deliberately set aside. So it was nine tenths duplication and one tenth
   // readmission of excluded stories, and coverage alone is strictly better:
   // it carries the links, and it knows what it excluded and why.
-  const counted = items.filter((c) => (c.status || "counted") === "counted");
+  // Anything already listed above as naming this holding is not repeated
+  // here. The sector feed reaches coverage too, attributed "via sector news",
+  // so without this the same two headlines appear in both sections — the exact
+  // duplication the removal of "Topics" was meant to end.
+  const shownAbove = new Set(sectorDirect.map((n) => evidenceKey(n.headline)));
+  const counted = items.filter(
+    (c) =>
+      (c.status || "counted") === "counted" &&
+      !shownAbove.has(evidenceKey(c.headline || c.title)),
+  );
 
   const rows = [
     ["Price", stock.price ?? "—"],
@@ -144,6 +193,34 @@ async function drawer(stock, payload) {
               ),
             ),
           ),
+        )
+      : null,
+
+    sectorNews.length
+      ? el(
+          "div",
+          { class: "drawer-section" },
+          el("h4", {}, `Sector — ${block?.name || stock.sector || ""}`),
+          sectorDirect.length
+            ? el(
+                "div",
+                {},
+                el("p", { class: "evidence-meta" }, "Names this holding"),
+                el("ul", { class: "evidence" }, sectorDirect.map(sectorRow)),
+              )
+            : null,
+          sectorWide.length
+            ? el(
+                "div",
+                {},
+                el(
+                  "p",
+                  { class: "evidence-meta" },
+                  sectorDirect.length ? "Elsewhere in the sector" : "Sector-wide",
+                ),
+                el("ul", { class: "evidence" }, sectorWide.map(sectorRow)),
+              )
+            : null,
         )
       : null,
 

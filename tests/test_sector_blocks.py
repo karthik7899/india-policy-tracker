@@ -212,3 +212,58 @@ class TestSingleSourceOfTruth:
         brief[_KEYS[0]] = [{"title": "n", "link": "u"}]
         payload = build_display_payload(brief, _watchlist(_KEYS[0]))
         assert payload["sector_blocks"][0]["id"] == _KEYS[0]
+
+
+class TestSectorNewsNamesTheHoldingsItTouches:
+    """`affected_tickers` read a key its own data shape does not have.
+
+    The line was `item.get("actors") or []`, but `actors` belongs to
+    market_events; the per-sector feeds carry title, source, link, date, impact
+    and relevance and nothing else. So the list came back empty on all 67 items
+    of every run — indistinguishable from "the news named no holding", which is
+    the failure mode this codebase spends most of its comments on.
+    """
+
+    _WL = {
+        "clean_energy": [
+            {"ticker": "SUZLON", "name": "Suzlon Energy"},
+            {"ticker": "ACMESOLAR", "name": "ACME Solar"},
+        ]
+    }
+
+    def _brief(self, *titles):
+        return {
+            "clean_energy": [
+                {"title": t, "link": f"https://x.test/{i}", "source": "Wire"}
+                for i, t in enumerate(titles)
+            ]
+        }
+
+    def test_a_headline_naming_a_holding_records_it(self):
+        blocks = build_sector_blocks(
+            self._brief("Suzlon Secures 200 MW Wind Order From Ayana"), self._WL
+        )
+        (news,) = blocks[0]["news"]
+        assert news["affected_tickers"] == ["SUZLON"]
+
+    def test_a_sector_wide_story_names_nobody_and_says_so(self):
+        """A PLI scheme names no company. That is the answer, not a failure."""
+        blocks = build_sector_blocks(
+            self._brief("Cabinet approves PLI scheme for solar manufacturing"), self._WL
+        )
+        (news,) = blocks[0]["news"]
+        assert news["affected_tickers"] == []
+        assert news["tags"] == ["policy"]
+
+    def test_several_holdings_in_one_headline_are_all_recorded(self):
+        blocks = build_sector_blocks(
+            self._brief("Suzlon Energy, ACME Solar: how renewables performed"), self._WL
+        )
+        (news,) = blocks[0]["news"]
+        assert sorted(news["affected_tickers"]) == ["ACMESOLAR", "SUZLON"]
+
+    def test_the_citation_is_carried_through(self):
+        blocks = build_sector_blocks(self._brief("Suzlon wins an order"), self._WL)
+        (news,) = blocks[0]["news"]
+        assert news["url"] == "https://x.test/0"
+        assert news["source"] == "Wire"
