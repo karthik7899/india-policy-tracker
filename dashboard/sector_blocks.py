@@ -17,6 +17,7 @@ more than the fifth tie-up of the week.
 
 from typing import Any, Dict, List
 
+from analysis.parsing import title_matches_company
 from config import SECTOR_METADATA
 
 _SEVERITY_WEIGHT = {"Critical": 4, "High": 3, "Medium": 2, "Low": 1}
@@ -87,7 +88,12 @@ def _news_kind(item: Dict[str, Any], critical_tickers: set) -> str:
     return "other"
 
 
-def _build_news(key: str, brief: Dict[str, Any], critical_tickers: set) -> List[Dict]:
+def _build_news(
+    key: str,
+    brief: Dict[str, Any],
+    critical_tickers: set,
+    holdings: List[tuple] = (),
+) -> List[Dict]:
     rows = []
     for item in brief.get(key) or []:
         if not isinstance(item, dict):
@@ -106,7 +112,19 @@ def _build_news(key: str, brief: Dict[str, Any], critical_tickers: set) -> List[
                 "source": item.get("source") or "",
                 "tags": [kind],
                 "confidence": item.get("confidence") or "M",
-                "affected_tickers": item.get("actors") or [],
+                # Matched against the sector's own holdings, because these
+                # items have no `actors` to read. This line used to say
+                # `item.get("actors") or []` — but `actors` is a field of
+                # market_events, and the per-sector feeds carry title, source,
+                # link, date, impact and relevance and nothing else. So it read
+                # a key this shape never has and the list was empty on all 67
+                # items in every run, which looks identical to "no holding was
+                # named in the news" and is not the same thing at all.
+                "affected_tickers": [
+                    ticker
+                    for ticker, name in holdings
+                    if title_matches_company(headline, ticker, name)
+                ],
             }
         )
     rows.sort(key=lambda r: (_NEWS_RANK.get(r["tags"][0], 9), r["date"]))
@@ -208,7 +226,12 @@ def build_sector_blocks(
                 continue
             warnings = _warnings_for(key, brief)
             delta = sector_delta(key, brief)
-            news = _build_news(key, brief, critical)
+            sector_holdings = [
+                (str(h.get("ticker", "")).upper(), h.get("name") or "")
+                for h in (watchlist or {}).get(key) or []
+                if isinstance(h, dict) and h.get("ticker")
+            ]
+            news = _build_news(key, brief, critical, sector_holdings)
             if not delta and not news:
                 continue
 
