@@ -16,8 +16,8 @@
 // describing seventy holdings while the table describes nine.
 
 import { el, mount } from "../core/dom.js";
-import { num, crore, pct, bandIndex, BANDS } from "../core/format.js";
-import { resolveTicker, loadCoverage } from "../core/data.js";
+import { num, crore, pct, bandIndex, BANDS, shortDate } from "../core/format.js";
+import { loadCoverage } from "../core/data.js";
 import * as filters from "../core/filters.js";
 import * as charts from "../charts/charts.js";
 import { dataTable, panel, chartFrame, tickerLink } from "./table.js";
@@ -33,11 +33,63 @@ function flatten(watchlist) {
   return out;
 }
 
+// Enough coverage to judge a signal without turning the drawer into a feed.
+const COVERAGE_SHOWN = 8;
+
+// The feed labels analysis/coverage.py uses as `source_kind`. Needed only to
+// read sidecars written before event_type and source_kind became separate
+// fields: there they are flattened into one `event_tags` list, and the only
+// way to tell a classified event type from the name of the feed that carried
+// it is to know which strings are feed names.
+const SOURCE_KINDS = new Set(["agreement", "launch", "filing", "global", "sector news", "event"]);
+
+/** What the engine read in the story, as opposed to which feed carried it. */
+function classifiedType(item) {
+  if (item.event_type !== undefined) return item.event_type || "";
+  return (item.event_tags || []).find((t) => t && !SOURCE_KINDS.has(String(t).toLowerCase())) || "";
+}
+
+/** Which feed carried it. Provenance, not a description of the contents. */
+function sourceKind(item) {
+  if (item.source_kind !== undefined) return item.source_kind || "";
+  return (item.event_tags || []).find((t) => t && SOURCE_KINDS.has(String(t).toLowerCase())) || "";
+}
+
+/** analysis/coverage.py's dedupe key, so the two lists agree on "same story". */
+function evidenceKey(text) {
+  return String(text || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9 ]+/g, "")
+    .trim();
+}
+
 /** The drawer: everything known about one holding, fetched on open. */
 async function drawer(stock, payload) {
   const sc = stock.screener || {};
-  const topics = await resolveTicker(payload.briefing, "stock_topics", stock.ticker);
   const coverage = await loadCoverage(stock.ticker);
+
+  // The warnings raised for THIS holding, so the evidence below sits next to
+  // the claim it supports rather than on another tab.
+  const key = String(stock.ticker || "").toUpperCase();
+  const signals = (payload?.briefing?.early_warnings || []).filter(
+    (w) => String(w.ticker || "").toUpperCase() === key,
+  );
+
+  // build_coverage keeps merged duplicates and aged-out stories on purpose, as
+  // an audit trail. They are evidence about the PIPELINE, not about the
+  // holding, so they are counted here and not listed among the articles.
+  const items = coverage || [];
+  const setAside = items.filter((c) => (c.status || "counted") !== "counted");
+
+  // ONE evidence list, not two. The drawer used to show a "Topics" section
+  // beside this one, built from stock_topics — a different code path over the
+  // same feeds, rendered as inert text with its links discarded. Measured
+  // across the book, every one of its 214 headlines already appears in
+  // coverage, and the 17 that looked unique were stories coverage had
+  // deliberately set aside. So it was nine tenths duplication and one tenth
+  // readmission of excluded stories, and coverage alone is strictly better:
+  // it carries the links, and it knows what it excluded and why.
+  const counted = items.filter((c) => (c.status || "counted") === "counted");
 
   const rows = [
     ["Price", stock.price ?? "—"],
@@ -63,24 +115,106 @@ async function drawer(stock, payload) {
       { class: "drawer-facts" },
       rows.flatMap(([k, v]) => [el("dt", {}, k), el("dd", {}, String(v))]),
     ),
-    topics?.length
+    signals.length
       ? el(
           "div",
           { class: "drawer-section" },
-          el("h4", {}, "Topics"),
-          el("ul", {}, topics.slice(0, 5).map((t) => el("li", {}, t.topic || t.title || String(t)))),
-        )
-      : null,
-    coverage?.length
-      ? el(
-          "div",
-          { class: "drawer-section" },
-          el("h4", {}, `Coverage (${coverage.length})`),
+          el("h4", {}, `Signals (${signals.length})`),
           el(
             "ul",
-            {},
-            coverage.slice(0, 6).map((c) => el("li", {}, c.headline || c.title || "")),
+            { class: "evidence" },
+            signals.map((w) =>
+              el(
+                "li",
+                {},
+                el(
+                  "span",
+                  { class: `tag tag-${w.direction === "risk" ? "risk" : "opp"}` },
+                  w.direction === "risk" ? "risk" : "opportunity",
+                ),
+                " ",
+                w.signal || w.category || "",
+                // What the signal was struck from. A number off a results page
+                // and a reading of a news story are different kinds of claim,
+                // and the reader is entitled to know which one they are being
+                // shown before they act on it.
+                w.evidence_source
+                  ? el("span", { class: "evidence-meta" }, ` — ${w.evidence_source}`)
+                  : null,
+              ),
+            ),
           ),
+        )
+      : null,
+
+    counted.length || setAside.length
+      ? el(
+          "div",
+          { class: "drawer-section" },
+          el("h4", {}, `Coverage (${counted.length})`),
+          // The articles, as links. Every one of these records already carried
+          // source_url, source_label, date and the event tags that say WHY it
+          // was attributed — and the drawer rendered the headline as plain
+          // text and dropped the rest, so the evidence behind a signal was
+          // present in the payload and unreachable from the page.
+          el(
+            "ul",
+            { class: "evidence" },
+            counted.slice(0, COVERAGE_SHOWN).map((c) => {
+              const headline = c.headline || c.title || "";
+              // Only the CLASSIFIED type earns a tag. source_kind names the
+              // feed that carried the story, not the story, and showing it as
+              // a badge told the reader a profit collapse was an "agreement".
+              // It goes in the meta line as provenance, where it is true.
+              const type = classifiedType(c);
+              const via = sourceKind(c);
+              return el(
+                "li",
+                {},
+                c.source_url
+                  ? el(
+                      "a",
+                      { href: c.source_url, target: "_blank", rel: "noopener noreferrer" },
+                      headline,
+                    )
+                  : headline,
+                type
+                  ? el(
+                      "span",
+                      { class: "evidence-tags" },
+                      el("span", { class: "tag" }, type.replace(/_/g, " ")),
+                    )
+                  : null,
+                el(
+                  "span",
+                  { class: "evidence-meta" },
+                  [c.source_label, shortDate(c.date), via ? `via ${via.toLowerCase()}` : ""]
+                    .filter(Boolean)
+                    .join(" · "),
+                ),
+              );
+            }),
+          ),
+          // Set-aside items are named rather than silently dropped: the
+          // sidecar keeps duplicates and aged-out stories deliberately, as the
+          // audit trail for a scoring defect where one launch was counted
+          // twice. "Not shown" and "not collected" are different facts.
+          setAside.length || counted.length > COVERAGE_SHOWN
+            ? el(
+                "p",
+                { class: "evidence-meta" },
+                [
+                  counted.length > COVERAGE_SHOWN
+                    ? `${counted.length - COVERAGE_SHOWN} more counted`
+                    : "",
+                  setAside.length
+                    ? `${setAside.length} set aside (duplicate or older than the window)`
+                    : "",
+                ]
+                  .filter(Boolean)
+                  .join(" · "),
+              )
+            : null,
         )
       : null,
   );

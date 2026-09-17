@@ -77,12 +77,29 @@ def _age_days(raw: Any, today: datetime.date) -> Optional[int]:
 
 
 def _item(kind: str, text: str, raw: Dict[str, Any]) -> Dict[str, Any]:
+    """One attributed article.
+
+    ``event_type`` and ``source_kind`` are kept apart because they answer
+    different questions and were being shown as one. ``event_type`` is what the
+    engine read IN the text — tie_up, acquisition, order_win. ``source_kind``
+    is merely which feed carried it, and the feeds are named for the RSS query
+    that found them rather than for their contents: the corporate_agreements
+    query returns ordinary company news too, so "Thermax Q1 profit plunges 83%
+    as margins collapse" arrived tagged ``Agreement`` and the drawer showed
+    that word to the reader as though it described the story.
+
+    ``event_tags`` stays as the flat union both were previously flattened into,
+    so nothing that reads it breaks while the sidecars regenerate.
+    """
+    event_type = raw.get("event_type") or ""
     return {
         "date": raw.get("date") or "",
         "headline": text,
         "source_url": raw.get("link") or "",
         "source_label": raw.get("source") or "",
-        "event_tags": [t for t in [raw.get("event_type"), kind] if t],
+        "event_type": event_type,
+        "source_kind": kind,
+        "event_tags": [t for t in [event_type, kind] if t],
         "confidence": _CONFIDENCE_BY_KIND.get(kind, "M"),
         "status": "counted",
     }
