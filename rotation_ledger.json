@@ -151,9 +151,9 @@
     "name": "Syrma SGS Tech.",
     "price_at_decision": 1393.2,
     "target_at_decision": 1456.69,
-    "scored": false,
-    "outcome": null,
-    "realized_return_pct": null
+    "scored": true,
+    "outcome": "Thesis Playing Out",
+    "realized_return_pct": 24.6
   },
   {
     "date": "2026-08-04",
@@ -163,9 +163,9 @@
     "name": "Pearl Global Ind",
     "price_at_decision": 2111.3,
     "target_at_decision": 2349.29,
-    "scored": false,
-    "outcome": null,
-    "realized_return_pct": null
+    "scored": true,
+    "outcome": "Underperforming",
+    "realized_return_pct": -45.9
   },
   {
     "date": "2026-08-05",
@@ -559,6 +559,18 @@
     "name": "Birla Cable",
     "price_at_decision": 379.05,
     "target_at_decision": 473.81,
+    "scored": false,
+    "outcome": null,
+    "realized_return_pct": null
+  },
+  {
+    "date": "2026-09-18",
+    "action": "rotated_in",
+    "sector": "data_center_support",
+    "ticker": "OPTIEMUS",
+    "name": "Optiemus Infra.",
+    "price_at_decision": 590.35,
+    "target_at_decision": 737.94,
     "scored": false,
     "outcome": null,
     "realized_return_pct": null
