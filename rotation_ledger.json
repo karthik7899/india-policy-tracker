@@ -271,9 +271,9 @@
     "name": "I O C L",
     "price_at_decision": 143.38,
     "target_at_decision": 160.06,
-    "scored": false,
-    "outcome": null,
-    "realized_return_pct": null
+    "scored": true,
+    "outcome": "Underperforming",
+    "realized_return_pct": -4.4
   },
   {
     "date": "2026-08-08",
@@ -283,9 +283,9 @@
     "name": "NTPC Green Ene.",
     "price_at_decision": 91.5,
     "target_at_decision": 104.14,
-    "scored": false,
-    "outcome": null,
-    "realized_return_pct": null
+    "scored": true,
+    "outcome": "Underperforming",
+    "realized_return_pct": 3.0
   },
   {
     "date": "2026-08-08",
@@ -295,8 +295,8 @@
     "name": "M R P L",
     "price_at_decision": 167.01,
     "target_at_decision": 182.5,
-    "scored": false,
-    "outcome": null,
+    "scored": true,
+    "outcome": "Left Watchlist (unscored)",
     "realized_return_pct": null
   },
   {
@@ -571,6 +571,18 @@
     "name": "Optiemus Infra.",
     "price_at_decision": 590.35,
     "target_at_decision": 737.94,
+    "scored": false,
+    "outcome": null,
+    "realized_return_pct": null
+  },
+  {
+    "date": "2026-09-22",
+    "action": "rotated_in",
+    "sector": "data_center_support",
+    "ticker": "BIRLACABLE",
+    "name": "Birla Cable",
+    "price_at_decision": 375.0,
+    "target_at_decision": 468.75,
     "scored": false,
     "outcome": null,
     "realized_return_pct": null
