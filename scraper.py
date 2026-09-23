@@ -231,8 +231,7 @@ async def scrape_pib_pli_approvals_async(session, watchlist):
         if status == 200:
             feed = feedparser.parse(xml_data)
 
-            # We process at most 5 entries to limit network calls
-            for entry in feed.entries[:5]:
+            async def _process_entry(entry):
                 title = entry.get("title", "")
                 link = entry.get("link", "")
                 published = entry.get("published", "")
@@ -262,6 +261,10 @@ async def scrape_pib_pli_approvals_async(session, watchlist):
                         comp["link"] = link
                         emerging_pli_competitors.append(comp)
 
+            # We process at most 5 entries to limit network calls
+            # ⚡ Bolt Optimization: Batch fetch article HTMLs concurrently to prevent event-loop blocking from sequential IO.
+            await asyncio.gather(*[_process_entry(entry) for entry in feed.entries[:5]])
+
     except Exception as e:
         log.error(f"Error scraping PIB PLI approvals: {e}")
 
@@ -271,12 +274,14 @@ async def scrape_pib_pli_approvals_async(session, watchlist):
     from analysis.parsing import resolve_ticker_from_name_async
 
     # Existing names in watchlist to ignore
-    existing_names = set()
-    for sector, stocks in watchlist.items():
-        for s in stocks:
-            existing_names.add(s["name"].lower())
-            if s.get("ticker"):
-                existing_names.add(s["ticker"].lower())
+    existing_names = {
+        s["name"].lower() for stocks in watchlist.values() for s in stocks
+    } | {
+        s["ticker"].lower()
+        for stocks in watchlist.values()
+        for s in stocks
+        if s.get("ticker")
+    }
 
     unique_candidates = []
     for comp in emerging_pli_competitors:
@@ -311,10 +316,7 @@ async def fetch_advanced_rss_feeds_async(session, watchlist):
     agreements = []
     launches = []
 
-    all_tickers = []
-    for sector, stocks in watchlist.items():
-        for s in stocks:
-            all_tickers.append(s["ticker"])
+    all_tickers = [s["ticker"] for stocks in watchlist.values() for s in stocks]
 
     # Combine queries in chunks of 4 to be polite to RSS service
     ticker_chunks = [all_tickers[i : i + 4] for i in range(0, len(all_tickers), 4)]
@@ -532,10 +534,7 @@ async def _fetch_filing_news_async(session, watchlist):
     weaker identification than NSE's symbol, but it survives an IP block."""
     filings = []
 
-    all_tickers = []
-    for sector, stocks in watchlist.items():
-        for s in stocks:
-            all_tickers.append(s["ticker"])
+    all_tickers = [s["ticker"] for stocks in watchlist.values() for s in stocks]
 
     ticker_chunks = [all_tickers[i : i + 4] for i in range(0, len(all_tickers), 4)]
 
