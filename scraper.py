@@ -231,11 +231,11 @@ async def scrape_pib_pli_approvals_async(session, watchlist):
         if status == 200:
             feed = feedparser.parse(xml_data)
 
-            # We process at most 5 entries to limit network calls
-            for entry in feed.entries[:5]:
+            async def process_entry(entry):
                 title = entry.get("title", "")
                 link = entry.get("link", "")
                 published = entry.get("published", "")
+                comps = []
 
                 # Fetch actual article HTML (assuming session handles redirects if possible,
                 # or if Google News RSS returns direct HTML fallback)
@@ -250,7 +250,7 @@ async def scrape_pib_pli_approvals_async(session, watchlist):
                         for comp in extracted:
                             comp["announcement"] = title.split(" - ")[0]
                             comp["link"] = link
-                            emerging_pli_competitors.append(comp)
+                            comps.append(comp)
                 except Exception as ex:
                     log.error(f"Failed to fetch article for PLI extraction: {ex}")
                     # Fallback to extracting from RSS title/summary
@@ -260,7 +260,16 @@ async def scrape_pib_pli_approvals_async(session, watchlist):
                     for comp in extracted:
                         comp["announcement"] = title.split(" - ")[0]
                         comp["link"] = link
-                        emerging_pli_competitors.append(comp)
+                        comps.append(comp)
+                return comps
+
+            # ⚡ Bolt Optimization: Use asyncio.gather to fetch articles concurrently
+            # instead of blocking the event loop with sequential awaits.
+            results = await asyncio.gather(
+                *[process_entry(entry) for entry in feed.entries[:5]]
+            )
+            for res in results:
+                emerging_pli_competitors.extend(res)
 
     except Exception as e:
         log.error(f"Error scraping PIB PLI approvals: {e}")
