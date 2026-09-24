@@ -45,6 +45,13 @@ _CORP_CONTINUATIONS = {
     "share",
     "stock",
     "stocks",
+    # "Titagarh Board Approves BHEL Joint Venture" and "Dixon JV" name BHEL
+    # and Dixon. Without these the guard read them like "ITC Hotels" — a
+    # longer company name starting with our token — and the tie-up was filed
+    # with no actor at all, so its counterparty could never be recorded.
+    "jv",
+    "joint",
+    "consortium",
 }
 
 # Title-Case headlines capitalize verbs too ("Suzlon Wins 300MW Order"), so a

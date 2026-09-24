@@ -23,6 +23,7 @@ import re
 
 import pytest
 
+from analysis.entity_graph import GRAPH_PATH, PROPOSALS_PATH
 from dashboard.sidecars import DATA_DIR
 from history.store import HISTORY_PATH, NEWS_DIR
 
@@ -53,6 +54,9 @@ def _git_add_paths():
         NEWS_DIR,
         HISTORY_PATH,
         "dashboard_data.json",
+        # Absolute in their module, and at the repo root.
+        os.path.basename(GRAPH_PATH),
+        os.path.basename(PROPOSALS_PATH),
     ],
 )
 def test_every_persisted_path_is_staged(path):

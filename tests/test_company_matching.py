@@ -180,6 +180,28 @@ def test_itc_hotels_is_not_itc():
     assert title_matches_company("ITC Ltd shares gain 2%", "ITC", "ITC Ltd")
 
 
+def test_joint_venture_after_a_name_still_names_it():
+    """Regression: "BHEL Joint Venture" was read like "ITC Hotels".
+
+    The live corpus held "Titagarh Rail Systems Board Approves BHEL Joint
+    Venture for Vande Bharat Maintenance" with no actor at all, so a tie-up
+    between a holding and its counterparty was classified and attributed to
+    nobody. "Joint" is corporate vocabulary, not the start of another name.
+    """
+    assert title_matches_company(
+        "Titagarh Rail Systems Board Approves BHEL Joint Venture for Vande Bharat",
+        "BHEL",
+        "Bharat Heavy Electricals",
+    )
+    assert title_matches_company(
+        "Vivo reports production halt after Dixon JV audit",
+        "DIXON",
+        "Dixon Technologies",
+    )
+    # The guard it relaxes is still intact for real longer names.
+    assert title_matches_company("ITC Hotels to acquire GHK", "ITC", "ITC Ltd") is False
+
+
 def test_lt_tech_is_not_lt():
     assert (
         title_matches_company(

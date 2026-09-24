@@ -1,0 +1,351 @@
+{
+  "_how_to_review": "Partner edges proposed from completed tie-up headlines. Nothing here reaches the graph until you set status to 'accepted'; 'rejected' stops the pair being proposed again. You may correct 'counterparty' before accepting (e.g. 'Vivo Mobile' -> 'Vivo') — it is the name the graph will match in future headlines. Leave 'proposed_as' alone: it is how the pipeline recognises the same pair next time.",
+  "proposals": [
+    {
+      "holding": "BHEL",
+      "counterparty": "Titagarh",
+      "proposed_as": "Titagarh",
+      "status": "pending",
+      "first_seen": "2026-09-24",
+      "last_seen": "2026-09-24",
+      "evidence": [
+        {
+          "headline": "Vande Bharat Sleeper trains: BHEL, Titagarh to form joint venture for 35-year maintenance",
+          "date": "2026-09-24",
+          "link": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxOWTY4M3F6N2g5YlRtWUZWV0tpSGR4TnVhUEpPR1FCbW1DZjFHZWxMQU9RTVFzdnQtNFRNVmJvemxLY25Yckx4VG9lUFc4QU5MRjlXZEpJWWxSNm5uR2NHT0d1aHRnMklJWWEteEtSSnZzd1BVdnJJT3NGZ0JPNENoRzFmMUowanc5V0ZmZ3hkQUtnWHJYbXFRZUxXb2w1QnBCWjNGUWRIYXhELWI1WnNqakswVnRMSV9UcjBOWUhpRmVVMTDSAcoBQVVfeXFMTVFfOGR0Vy14T25mSS1MM2h6X056TVBZUmtXM3htdDRocTBWMjhtMTNjLU5jYlBsaVp5WlI5bGtFZzg5dl9wV3htRHJ3cFcwQnJyVkRpc3cwSXNKTkJGU3RqZm9TLWx6bDBXZ0JsV1hBX0JCRVpLQkpIR0tiRnUyWFE1UXczemUzdFpwN0gwZ3g4bk91aE5FQ05ZcHBXcUZTSThYNVpQUXNuY0w5a2ZPUlFZYlNPT01Ba0lJZE5vSC1CM2NVdmVGTWRKdw?oc=5",
+          "source": "The Indian Express"
+        },
+        {
+          "headline": "Titagarh Rail Systems Board Approves BHEL Joint Venture for Vande Bharat Maintenance",
+          "date": "2026-09-24",
+          "link": "https://news.google.com/rss/articles/CBMi9AFBVV95cUxPbF9YbzJWLU53cFNQR0hIcmdlNmt4UV9FeHZwT3JZTEJVcHFGRWZjT21uc3pTU2tuSXEyNkdxNVcwMEVKMUpPQU9Ha0hKdzlidDd4T2RUd3VIQ3A1WHNfc2FzMjJPOTBzY2VfUEdfQ2l4TEtpUWZiSndaamlvMWRhb2xNamdQejhGTE1scXk3aVlETnFvS1Q3MlR4ZVFWRDlRV1lxSjY3UHdJVm9Bci1JemgtZlA4OUFKLXNBdHJzZ0hpeEZ1b0J6TjNweDFMdDdyajRoRi1Gd0hqQ1daNlEwbVZ4ejBWaE4tLXl3TEhCU19BNkJ6?oc=5",
+          "source": "scanx.trade"
+        },
+        {
+          "headline": "BHEL Partners With Titagarh For Vande Bharat Sleeper Maintenance, Backs NTPC-JV With ₹65 Crore",
+          "date": "2026-09-22",
+          "link": "https://news.google.com/rss/articles/CBMilwFBVV95cUxNdDFZVjk4NkNwSjZMRjlXcldONUhCdGswam03bjIweElGLXM4dmxiSF9LQTctZG5ZNEgxRlZXX0IyZENUOXdiZ3UwX3dJdGZtUWlDeXVNNDBZQnZEdlgxVUZqNkRQbWtoLUFfOFZ3bDdQSjBXLUNhUTFrcGRnNWVhaUVfWjhjeHdzaUJ4MV8wTGFVZ0dIZDRJ?oc=5",
+          "source": "Sahi"
+        }
+      ]
+    },
+    {
+      "holding": "DIXON",
+      "counterparty": "Vivo",
+      "proposed_as": "Vivo",
+      "status": "pending",
+      "first_seen": "2026-09-24",
+      "last_seen": "2026-09-24",
+      "evidence": [
+        {
+          "headline": "SAM Advises Vivo Mobile India On Strategic Joint Venture With Dixon Technologies",
+          "date": "2026-09-24",
+          "link": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxPNHM1b3Mya2JSaFdwVGVwdXhBb3N2c0MwWW80dWxYd2xUZFFCWnhVbGNia1ZGdkxhNnU0V1dsY3hHNDdOX05SalVKY0VwaF9sU0FkSktlVC0zMVE1TUFNQXVrczBUa3AzZWdwUnB0LWNXc1JZLUszdXpTakhnV2VSeDBybk93YjRhXzRETE9UcEFhQ1o4V3JaR09ERF9XUFVDdGNJb1NQamlvMkhacGNmOXFqRmpNbVBJ0gG-AUFVX3lxTE96aDdmUjZRRlNvNHhiNjhHOHp1aGhLbTl6ME5OaVhLT2cxaHBuX3JaT3Zic3pGZEdPbnlKY0ZBTklYalRvU25NNFZzOTZ4SzdaZDNIQVhmUzJ5QzZNOUlqQzdjSkRXWXJ1ZGk2ZEMtYTVHUW4tYkpOUklWdTJSMGRXSmxCTmp5ZXJ5S19xQ2tvX25fN0FqNUxmcHBNbWNMWDBLQUJoR1FTakI0RHYtM3V0ZGR2bW8zMDBNRzR3VXc?oc=5",
+          "source": "LawBeat"
+        },
+        {
+          "headline": "Government clears Dixon (India)-Vivo (China) joint venture for manufacturing smartphones",
+          "date": "2026-09-24",
+          "link": "https://news.google.com/rss/articles/CBMi2AFBVV95cUxOVEFvdFVXVkVGRDdvaWJRWWdLVzFjVmFNbFQzbnNVUHo2UkpORVViamhGbE5aVElqemtnRk53RGNrTkpZdzlCak1iR0FENjU2bnVQWHNtdHN6TDR4SGo3aHJpaWo0dzJBOWJNTkJIbklCX3ZqOTBReGxTNm95S2Q4QVZPWGpYajgwSWZlVHpkeFpRLTJBOXNaVlN5ajRTcldxNnlZWHZvbGhjNVE1R2xhRWdZUi1XUFlHYmp1X2NYVTNMRmw2VmR6MUFJdm5Ud2M3OUJGWUR3ZE_SAd8BQVVfeXFMTnVOUm5DQk9WODRWdGVEdjdNbUVqWjNpdXUxNHpwVUtpZm9Yd1N6REdiYUN4eEFpeDV3RzZIQlRrcE5VS19xU2ItdWNmbFdRd1VlU09abVNxeEFqUWxrc0lPX1JyYm1ncGNIeHA1LThrb01jamcwc3dwbG1oTWg2VTJVUGpJRGxCdzd3Sy15MlZzemxYdTdUSTFoaXlDeFpKZWNCdVdNVVNVYXpVUmJ2ZUtTWGtMQlQ3VG1FZC15TEZDUXZnN3lzdHpaWnRIT1g0T21WMkxHS1dtS3ZvSG9Taw?oc=5",
+          "source": "The Indian Express"
+        },
+        {
+          "headline": "Dixon-Vivo joint venture inches close to securing final govt approval",
+          "date": "2026-09-24",
+          "link": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxPbzc4enhtS2gwOUtwTFhteWZtc3Q4RXJjX3RnWUc0U28xdVZGZmhkbndKOFZJY0lqWjcxbHB2ZVlrN21LRFpRNFpFbnRIcWNENUhpTm5ZdFVxRzA5LXJFWEo4bGFTemw4Y1gydDlsTWFrYnctcDYtUHA5cGk1dXFLQlVpYzljUEpWM0VhNEx4SVZrOGJMcEczRmNMbnZRVVZ4M09LTDFzQXRMcGdPQWRXb0htUldTWlA0R2V5bkpiU2pGbXh1YVFsbW9JUkxUc3dYNkstQ9IB2gFBVV95cUxNVW11VTJfSmNzR0hiS3dCeFJtUVlzT2lpQ05qSkxNUm01c19xLXZGMV9zalhYSHpVMEJ5X3k3MWU0UzloV21PQmI2VkhaM2haMzVERTRRVXlabld4ZnJZMXppTnAzbEJpM25Ha2NDMWVlRmdpSk5STkdKNkhWUnVLUU5vOE5DYUJUQlJXblY5bTFLa0ptZFRUeDdrbVZsdWxSa1RubHZJNDNGVW5iLVNpd2t4SUhnME1BV3dpWGhKcjUxb3RIbW9Jd1JZWjRUdUQzLVBMeFFxbVFZdw?oc=5",
+          "source": "Business Standard"
+        }
+      ]
+    },
+    {
+      "holding": "SYRMA",
+      "counterparty": "Kaga Electronics",
+      "proposed_as": "Kaga Electronics",
+      "status": "pending",
+      "first_seen": "2026-09-24",
+      "last_seen": "2026-09-24",
+      "evidence": [
+        {
+          "headline": "Syrma SGS Tech Forms Joint Venture With Kaga Electronics India To Produce PCBs",
+          "date": "2026-09-24",
+          "link": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxPLTl4UnFjbXhUclEtMGltNm5rMi1mNUxidjZndnFVOFBCc2VYWGFjc3dGcUhwZW9EZFNBSjN4VUhLZWR5dG9Fd2NxamJ0Y1ZFS1ZXc3NjZ3BkVk5BWWk2LUNFbi13dWkyS3U4WEhMRmFQaWZxaERHNzNYOEhGRXVMUXlEeFVOZzBhYjVHMzRMNjhtU2M0V1A3dkhTLUxPLURvaGQ4NFZ0c3E5SDFMd1BLOWJiM1dTa1Aw?oc=5",
+          "source": "Sahi"
+        },
+        {
+          "headline": "Syrma SGS Forms PCB Joint Venture With Kaga Electronics",
+          "date": "2026-09-24",
+          "link": "https://news.google.com/rss/articles/CBMijgFBVV95cUxPRUk3ZlFpbk5QUXNxSzBfd2sycTJUNlhVd25sNTg4eHJKSlBRRFdiYVB5a3I3ZUE2OV95MnNEQzkzY0pfVFc4cFB3Tmp2amZNbHhjRHdUMzVpRW1SV2Z1RnVMa2hIOU5IRkRSQ2RZT29DRjJZbm1XYWo5Ylp3NjlWOGxRcE1vMVJHQkxOV3Bn?oc=5",
+          "source": "Equitypandit"
+        },
+        {
+          "headline": "Syrma SGS, Kaga Electronics Form ₹250 Million EMS Joint Venture",
+          "date": "2026-09-24",
+          "link": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxNTHFQNnFCOGFSMks2b3NRcGNlMkUxRVBNdWhIbE1mZkNJNVdEQmdrUExvYjZjbUszUm14QzFTbE1ZYlMxY3EwQnVwSnZNcEFiZHNHaVEzdEZ3NTlleXYzX0VxYWY0cTB6djF4cG91NENWSVRPQjlhQWFDVlpHSHBXZWJPU2pKcVFvY0hnMGdUbllHbWFJTU9pRkQxOFpROGYtWkVxMnVPSmVPV2N2b2xWYlR0OFNXWVA2WFFJ?oc=5",
+          "source": "Electronics For You BUSINESS"
+        }
+      ]
+    },
+    {
+      "holding": "SYRMA",
+      "counterparty": "Elemaster",
+      "proposed_as": "Elemaster",
+      "status": "pending",
+      "first_seen": "2026-09-24",
+      "last_seen": "2026-09-24",
+      "evidence": [
+        {
+          "headline": "Syrma SGS and Elemaster inaugurate joint venture facility in Bengaluru",
+          "date": "2026-09-24",
+          "link": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxQVG41eER5dHZSS1g5QWdUVDAySDgtNU9XcU9tUFRmLXdKLUpzV1IteEF1Q1BXNjJhbm9NUGMyU2VJOEwzM09pX1JuT3VKd2JrVEZOOFpHTlVCU1FwTWl2dUxNSGlxTjhNU0FianlWM0lhTENqUkdsZkdzaE4yX1ZKUjVYYWJlcTlzR1JPcmVTd3VxNEg4WHN3NUhIalVPakhidm90QUdVdHF1QQ?oc=5",
+          "source": "Evertiq"
+        },
+        {
+          "headline": "Syrma SGS-Elemaster joint venture opens electronics manufacturing facility in Bengaluru",
+          "date": "2026-09-05"
+        }
+      ]
+    },
+    {
+      "holding": "TCS",
+      "counterparty": "DGCX",
+      "proposed_as": "DGCX",
+      "status": "pending",
+      "first_seen": "2026-09-24",
+      "last_seen": "2026-09-24",
+      "evidence": [
+        {
+          "headline": "Tata Consultancy Services Limited has informed the Exchange regarding 'Press Release - DGCX partners with TCS to advance and upgrade derivatives market infrastructure'.",
+          "date": "2026-09-24",
+          "link": "https://nsearchives.nseindia.com/corporate/TCS_CORPCS_15092026112128_PR_15Sep26_signed.pdf",
+          "source": "NSE"
+        },
+        {
+          "headline": "Press Release - DGCX partners with TCS to advance and upgrade derivatives market infrastructure",
+          "date": "2026-09-24",
+          "link": "https://www.bseindia.com/xml-data/corpfiling/AttachLive/5a9ce1fd-25b7-41b7-82e4-8b9dac9568ec.pdf",
+          "source": "BSE"
+        }
+      ]
+    },
+    {
+      "holding": "BHEL",
+      "counterparty": "Hystar",
+      "proposed_as": "Hystar",
+      "status": "pending",
+      "first_seen": "2026-09-24",
+      "last_seen": "2026-09-24",
+      "evidence": [
+        {
+          "headline": "BHEL Partners With Hystar To Advance PEM Electrolyzers Technology For Green Hydrogen",
+          "date": "2026-09-24",
+          "link": "https://news.google.com/rss/articles/CBMivgFBVV95cUxQR1NlU0s1VTJtS0RCNTliMnJWMktOaXNIazZJS2owc3J4TEpPOUh4OFlMbEFKLVZhZ2UyQzFnVDNlenkwbkp0TlJ3MUx5Z1B4TVdKVE5DcHBsbGtvMHdseFZjY1BUWUpaMDRtbFZUTFUwRGRWVVQtZkNMNklmSWg3QmpzSjByYmFzOVZMZVVaOUtXUGh1cDYyT09DeDcxUWtfUDdaTGl0UnZveDQxU09XWXl3MmdjcUVxSkZneE53?oc=5",
+          "source": "SolarQuarter"
+        }
+      ]
+    },
+    {
+      "holding": "COFORGE",
+      "counterparty": "Pegasystems",
+      "proposed_as": "Pegasystems",
+      "status": "pending",
+      "first_seen": "2026-09-03",
+      "last_seen": "2026-09-03",
+      "evidence": [
+        {
+          "headline": "Coforge shares hit 52-week high on expanding partnership with Pegasystems; all you need to know",
+          "date": "2026-09-03"
+        }
+      ]
+    },
+    {
+      "holding": "COFORGE",
+      "counterparty": "Sabre",
+      "proposed_as": "Sabre",
+      "status": "pending",
+      "first_seen": "2026-09-24",
+      "last_seen": "2026-09-24",
+      "evidence": [
+        {
+          "headline": "Sabre : launches strategic collaboration with trusted engineering partner Coforge to accelerate pace of product innovation and delivery",
+          "date": "2026-09-24",
+          "link": "https://news.google.com/rss/articles/CBMi5gFBVV95cUxNZWQ5U0p6X0lzV3ZJbnJEc0ppSWhIb2xSQ29BRVZiWld5c095YTNrbkMxcFRZbDh4QlhtVTdDYlB3bmZENHZoMndHTEdSSkpTenBoMzg4aGcza0NHSWlFWVBaM1NmUHJRRXZvaEhDWE03ZmNXRml6UXRPaHZFaE81OHA4YlNVUWo3RkVuV1FINjZBU1djd1huUnZubERONi01Q3NCRnoycGxTRktadnVJTE5qaXVrTTZrWG4ySkFBeUJ5WkxJdGVaRDhzS1FfdFRLS3ZRZ3NOZklUTlpEVkNQWVlzd1ZPUQ?oc=5",
+          "source": "marketscreener.com"
+        }
+      ]
+    },
+    {
+      "holding": "COFORGE",
+      "counterparty": "Zscaler",
+      "proposed_as": "Zscaler",
+      "status": "pending",
+      "first_seen": "2026-09-24",
+      "last_seen": "2026-09-24",
+      "evidence": [
+        {
+          "headline": "Coforge launches AI-Powered zero trust security product in partnership with Zscaler",
+          "date": "2026-09-24",
+          "link": "https://news.google.com/rss/articles/CBMi5AFBVV95cUxOWndfcVFXcy1GaTBNRzdtaXFmcWxJRnZLZHRsTUFKTEhPeWc4cEM4a0trZHpIbTYwc3RWdFYwMzJUWUpsaURRczA2eXFkWEZrYlIwVExQYm4xRkt1M2NXQy1od0NkTzZOOXZFbGZtbW4yUVVzTUREMzdpaE1KbjdveFVQdWxXdUhpLVJqN21DUktoeHdHWEpOQjNTdFd3NFdyZnFEby1DOUVybVkwQzFNaUw0ZHpxT3dGbC1EWlh5WmE1VzlRN1F0SWlCUkNwMEhSY3FXQy14MU1BTHpHNlBVR2tmdmTSAesBQVVfeXFMTklsT1p5YVdHTmh6ZWw4ZFBCZFZtQkltSnNENEZGQWRWbkFWUS1pMDk1dkZfa08xZ3RvTWxrTk5MS0xVZ2YyTUVJZW56QTN3OVh4UjBPVnVkbGFzWVhiWTBvcWNweldMemxncHpLRkRsUERlcFhzRWxxRmFjVU1UQXg0eU9BVHRvYXk4dlpPTjJCYzZFSkpsemFJWUQ5TmhnNEZLbGFWR2VwcU5fTlA0bDVoT2twcVZQRnV6YjhzT0YxS0x1SEp2ejJEcW5OUXdkMFdpS1JQcmdVZk9PRWpxdjRyTEVqWXFRQVJRQQ?oc=5",
+          "source": "BusinessLine"
+        }
+      ]
+    },
+    {
+      "holding": "DIXON",
+      "counterparty": "Gigabyte",
+      "proposed_as": "Gigabyte",
+      "status": "pending",
+      "first_seen": "2026-09-24",
+      "last_seen": "2026-09-24",
+      "evidence": [
+        {
+          "headline": "Gigabyte unveils its first Made-in-India gaming laptop, Gaming A16, in partnership with Dixon Technologies",
+          "date": "2026-09-24",
+          "link": "https://news.google.com/rss/articles/CBMi_wFBVV95cUxOZ1JJNWRQaFo2R1NuWmRrMmpDcXd1TjBXaS1WNGs1RjVJLVV1WnFkcE1reEY4WlBwNGtQNERHZkE3V2hKeDIyLUlXYnRWYTBLUXA3aVdvTFVzeE5LWlNkb0JPbWI2TWlxdUU5N1ZYNzN4emk5VWFNMm44NUF3N09qS18xZjJuWFhQNEZpSDFHdHIwdUFYTmtjV2h2VW9HbDdJOHlHTFlOeEU4bzBzcE14THNiZmNLRHJpRW5fTEtBV0JkbHpnN2JOaVg1LUpxZGluQnpBczlDTXN5dzdJM2RNenRVbDdfWnhWbWNvMFRGMzE3a3BOUEViYmsyWjhPaEnSAf8BQVVfeXFMTmdSSTVkUGhaNkdTblpkazJqQ3F3dU4wV2ktVjRrNUY1SS1VdVpxZHBNa3hGOFpQcDRrUDRER2ZBN1doSngyMi1JV2J0VmEwS1FwN2lXb0xVc3hOS1pTZG9CT21iNk1pcXVFOTdWWDczeHppOVVhTTJuODVBdzdPaktfMWYyblhYUDRGaUgxR3RyMHVBWE5rY1dodlVvR2w3STh5R0xZTnhFOG8wc3BNeExzYmZjS0RyaUVuX0xLQVdCZGx6ZzdiTmlYNS1KcWRpbkJ6QXM5Q01zeXc3STNkTXp0VWw3X1p4Vm1jbzBURjMxN2twTlBFYmJrMlo4T2hJ?oc=5",
+          "source": "Moneycontrol.com"
+        }
+      ]
+    },
+    {
+      "holding": "DIXON",
+      "counterparty": "Longcheer",
+      "proposed_as": "Longcheer",
+      "status": "pending",
+      "first_seen": "2026-08-31",
+      "last_seen": "2026-08-31",
+      "evidence": [
+        {
+          "headline": "Dixon Technologies Finalizes Joint Venture With Longcheer; Invests ₹7.39 Crore",
+          "date": "2026-08-31"
+        }
+      ]
+    },
+    {
+      "holding": "KAYNES",
+      "counterparty": "BOSGAME",
+      "proposed_as": "BOSGAME",
+      "status": "pending",
+      "first_seen": "2026-09-24",
+      "last_seen": "2026-09-24",
+      "evidence": [
+        {
+          "headline": "Kaynes Technology Partners with BOSGAME for India Launch",
+          "date": "2026-09-24",
+          "link": "https://news.google.com/rss/articles/CBMirgFBVV95cUxOcG9NRi14ZG5OZUo1cHZ4YTNFMTJWSm1lT0NfNkxndkg2ZGtNUC1HQjhnTGF3UHNJUmdfamlpdUpBaHdsTDVsbGVPbV9vd3BzZlZMdmQ0bkdSbHJjc1FZR1NTX0s5N0psd1VKTmFOLXg5NG9xVkY3NjZtb083T3RZZld1bjJqOXJIeE9xa1hQWEZubnhwSUFSdGhiczdZbkJPdHhheHpGU1llbkFEZEE?oc=5",
+          "source": "Entrepreneur India"
+        }
+      ]
+    },
+    {
+      "holding": "LTTS",
+      "counterparty": "Anthropic",
+      "proposed_as": "Anthropic",
+      "status": "pending",
+      "first_seen": "2026-09-24",
+      "last_seen": "2026-09-24",
+      "evidence": [
+        {
+          "headline": "LTTS partners with Anthropic to embed Claude AI in engineering",
+          "date": "2026-09-24",
+          "link": "https://news.google.com/rss/articles/CBMi9wFBVV95cUxPQ3FjRWNkRERYSXV5akl3UmRhMnBWVTZwaXpONWVUemNwaWFWbUoyQWpKMENjSkg3MDhwZjUybDF4WVppZ0J2cEhRVXlDVVhQaldBMk56UHZZWEp6NkN5S3B1REREWjR3aWlxczJQdDlxdTZ6MnV1TGdDNUc5Uy10RmlDaklSNU1jbldkSkhaZUZCcmJKN29ZSVBadUUwRXpMR3g4d3dDdlAwQktvQlFlNHNrckdYakV0ajZQTkQzcHREQ3VhYkRNSF9TRC1PZjRpUWJDbGpydjVLdFVBdFVoZG5KT3JFVFhDNFZ3NHhMY24tR0RqR1Bv?oc=5",
+          "source": "MSN"
+        }
+      ]
+    },
+    {
+      "holding": "SUZLON",
+      "counterparty": "Tata Power",
+      "proposed_as": "Tata Power",
+      "status": "pending",
+      "first_seen": "2026-09-24",
+      "last_seen": "2026-09-24",
+      "evidence": [
+        {
+          "headline": "Suzlon crosses 1 GW partnership with Tata Power following a DevCo led new 400MW EPC order",
+          "date": "2026-09-24",
+          "link": "https://news.google.com/rss/articles/CBMi2AFBVV95cUxPNU9iaXpvN2FSZlpkYkl3OVl1Y1RrWEptUV9iVHh0dWpzQ2pIaFhEcmpGUnR0YXk0eE14bWg0T0hnVU85Tng4RkZMV0VwcEgweDcyVzRjSmxEY0w5TmdsYW9aNlU2MUlSdWU1VzJOX0RidjVrWEx4QVVFcU9wR0JLNjBDMkl4aGN5cjFuN3dETzhHaUptbzZBa0Etc2JmZFRGU0QyRG92SEpCc2NaNjBtM3lEaEdnYVZaSURVc2trbEQ5T0pKZFl4YkpMelAybk1mVWpFWXpTTXE?oc=5",
+          "source": "suzlon.com"
+        }
+      ]
+    },
+    {
+      "holding": "TCS",
+      "counterparty": "Aareal Bank",
+      "proposed_as": "Aareal Bank",
+      "status": "pending",
+      "first_seen": "2026-09-24",
+      "last_seen": "2026-09-24",
+      "evidence": [
+        {
+          "headline": "Aareal Bank and TCS forge strategic partnership to accelerate digital transformation",
+          "date": "2026-09-24",
+          "link": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxQb25hT2F4VFdmZGIzdjFtWDZreDBtdWZ0R0xJZDEyMGlnS2VrTGVraVBTcjRIcEdLY0w3QlJlaUZqZXphdV9IZFZCam45LWdLTnVmdXZZREwyWDc1WEhjTjEzV0JHblc2WS1BOElLU0tOWGF2XzlFTXFZQUFXRXBqdkxmb0doVVFhSllycllScVlCY0ZSSlJ6VHd6WDUyZmtHOWtSbUhzRm9OMmRTbGpVaXktb0dfTXRGaHFxU1hNYmlYemkwR1Z2OXdCZC15VHd5ZzhLUw?oc=5",
+          "source": "TradingView"
+        }
+      ]
+    },
+    {
+      "holding": "TCS",
+      "counterparty": "ABB",
+      "proposed_as": "ABB",
+      "status": "pending",
+      "first_seen": "2026-09-24",
+      "last_seen": "2026-09-24",
+      "evidence": [
+        {
+          "headline": "TCS expands strategic partnership with ABB to build ai-driven global network backbone",
+          "date": "2026-09-24",
+          "link": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxPNEMwWkZ3NVlsSDZQcWxSb1QyX2hCdFRsb3RuVFhFbUxfX3hkMV84cThEY2pmVk1ZOE1lX2dCZjk1TmY4NHRKVndGN283eGYwb25rQVdjN0dvWEhaNEJhUGQtUmVEc3VRa0Y5NFp4RUNBYlVGYkstWHNZY1pkSFUzWGYyWkpkWmJ1TzhHMGJSRkRQakw1TXNfemtlazdicXhRT1MxNUZtMThwWEY3aGJKOGZWY2FTNk15dnc5YndKWEFJSnlYR3hDeUVYSVZWQjhiSUszdzNR0gHcAUFVX3lxTE9XM0VGZG5DYkc2bm1HejV5cGktQWxxQUt3Zl9MZFQxVlNUYjlId2ZtenVYa0VURVJTQ29HOXBJS09OUGxXMDJIb3N6ZjdidHZNemJLdml6SXlyUy05MzljcnhGWHVYbnQzMzNOZE04aDFhVy1SQjB5T2FoMjFSTmFlYTZ4Y1JZZjlLSHZXeENhLU93QTJpX0JrbkROZ293eVFmTS0wUzdXelFNN0lDNnFMVWlIQU03SWY2SUxQSlU1MVpsZ1IyTUloOERTcDhFTDdNNl80Wk51Tzl4eGg?oc=5",
+          "source": "Indian Chemical News"
+        }
+      ]
+    },
+    {
+      "holding": "TCS",
+      "counterparty": "DGCE",
+      "proposed_as": "DGCE",
+      "status": "pending",
+      "first_seen": "2026-09-24",
+      "last_seen": "2026-09-24",
+      "evidence": [
+        {
+          "headline": "TCS Partners With DGCE To Advance Derivatives Market Infrastructure; Shares Up 3.3%",
+          "date": "2026-09-24",
+          "link": "https://news.google.com/rss/articles/CBMilwFBVV95cUxNWWVWTnJndUVFdTNkX2tLN3o0T1pWRXR0S0VUdU9aajUxZFVZOUw4cDRKYzhLbHlhSXI4QVR3S2FpN0o0Q294YTJNTTFaTk9VQnBkNFR0ZFJnTzFvRDhsdFlCWEh4MUdJaXdrTzNyemRQSmliQkFGSnA1M0FjSndsb0lsRlRjUW5wTFdRSmxUOUUxbUV3Z0xZ?oc=5",
+          "source": "HDFC Sky"
+        }
+      ]
+    },
+    {
+      "holding": "TCS",
+      "counterparty": "SAS",
+      "proposed_as": "SAS",
+      "status": "pending",
+      "first_seen": "2026-09-24",
+      "last_seen": "2026-09-24",
+      "evidence": [
+        {
+          "headline": "SAS Partners with TCS, AI-driven Cyber Resilience Takes Flight",
+          "date": "2026-09-24",
+          "link": "https://news.google.com/rss/articles/CBMirAFBVV95cUxOOFE1bFFtY1FCd0tZcEltSFRhY3ZycjVTczlWQU1HZzVFMkxvcTBLWmVPNmsyaE9YaVhXTlgxa1Bscl9GdDZwVVhvUHg0dDUxVXN3dU1EdXFkQklXSnd2dGtzcFZwWmd1U3hQaUN6Mml1TzlJYk9yalp3azYtXzBiRHNRejl0THlTdXV5d3VBS3V4ZjF4V0g5SmVHbjNNYlNLYXUxYU52Qm5PdzAt?oc=5",
+          "source": "Tata Consultancy Services"
+        }
+      ]
+    },
+    {
+      "holding": "VBL",
+      "counterparty": "Carlsberg",
+      "proposed_as": "Carlsberg",
+      "status": "pending",
+      "first_seen": "2026-09-24",
+      "last_seen": "2026-09-24",
+      "evidence": [
+        {
+          "headline": "Varun Beverages rises 8.5% as firm announces partnership with Carlsberg for beer business in Africa, Q3...",
+          "date": "2026-09-24",
+          "link": "https://news.google.com/rss/articles/CBMiigJBVV95cUxQM1dMREdBUnFLV011Z3AtTUdrWWdzMXpFS0NOd1loNWJhNUtOSWJyYWxCZkZZOTZNNGNBVW1jNkxrMnYzM1MtdVpNejJoTmNlWW1oRlBKWFV3aVQ2dUpUOGN6SFNXU1pZX0o0Rk16SXpZM2IxelV3cmY2d3F2ejRTdkdsRTVxV1pXbktFenFtU0Vya2ZUM3U1amRqcDRDbExpQzlxWERFWFV5THc5NDRrREtsLVUyek9DeFJGLW9rd1FqaW9BR2V1MzhYSnhadDZITjNCNzV2cVNxSWM3MU9uRi1mN2twVm14cVBRR2VGS3R0Snp2akZWY3lGVHhyU2VLSXZKMU5wMHFEQdIBjwJBVV95cUxQR2FXWHVoQlFlZzZPS05QdzY1dDRMWU5yQkt4TzF6R2Z5RVJBR3Voc3hYbDV0dlZhUVBCSW00UXpMMTlQcU1lNjlhWG5iVzNQM250N0NVNW9FZ2JRSWNIZ1VreVhFZkNadFY2WTJPQ3lzUmZmZG9IOF9UZ2tncGdaakZQNEpvdF96LWJXb2hMYl9hSUJPajNqX1I5LUpkNzBXdFlRMFg0Zi11dkl0YXM2TkJKWGtOckQxVGZreF9PUzlNWUd1RHNEN0djQUZrMllzYm0wSjdwYzNwem81SUxaNXFnbGMwWTBuVE9qVTFUMEJBTFlyamJvVlBGM0xDTjZnRXEweEJYQkZ6djFZOXNB?oc=5",
+          "source": "Moneycontrol.com"
+        }
+      ]
+    }
+  ]
+}

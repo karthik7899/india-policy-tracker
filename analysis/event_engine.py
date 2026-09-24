@@ -242,6 +242,24 @@ def graph_entities(clause: str, graph: Dict[str, Any]) -> List[str]:
     return [name for name in names if title_matches_company(clause, "", name)]
 
 
+def _counterparties(event_type, clause, actors, holdings):
+    """The other side of a tie-up, or None when the question does not apply.
+
+    Only a tie-up has a counterparty in the sense that matters here — a party
+    whose later news reads across to ours. None for every other event type,
+    kept distinct from [] ("a tie-up, and nobody else could be named") so the
+    two are never confused downstream.
+    """
+    if event_type != "tie_up":
+        return None
+    from analysis.counterparty import extract_counterparties
+
+    named = set(actors or [])
+    return extract_counterparties(
+        clause, [(ticker, name) for ticker, name in holdings if ticker in named]
+    )
+
+
 def classify_headlines(
     data: Dict[str, Any], watchlist: Dict[str, Any], graph: Dict[str, Any] = None
 ) -> List[Dict[str, Any]]:
@@ -273,7 +291,7 @@ def classify_headlines(
             # GHK for Rs 155 crore; shares decline 5%" — and matching the
             # event, its actors and any negation against the full string lets
             # one clause cancel or claim what belongs to the other.
-            event_type = phrase = certainty = None
+            event_type = phrase = certainty = counterparties = None
             actors: List[str] = []
             external: List[str] = []
             for clause in split_clauses(headline):
@@ -300,6 +318,7 @@ def classify_headlines(
                     if title_matches_company(clause, ticker, name)
                 ]
                 external = graph_entities(clause, graph)
+                counterparties = _counterparties(event_type, clause, actors, holdings)
                 break
             if not event_type:
                 continue
@@ -337,6 +356,11 @@ def classify_headlines(
                     "domains": domains,
                     "actors": actors,
                     "external": external,
+                    **(
+                        {"counterparties": counterparties}
+                        if counterparties is not None
+                        else {}
+                    ),
                     "direction": _EVENT_DIRECTION.get(event_type, "opportunity"),
                     "date": today,
                     **(
@@ -357,6 +381,20 @@ def classify_headlines(
     except Exception as e:
         log.warning(f"Event engine failed safely: {e!r}")
     return events
+
+
+def event_clause(event: Dict[str, Any]) -> str:
+    """The clause the event was classified from — the whole headline if the
+    stored phrase is no longer found in any one clause."""
+    headline = event.get("headline") or ""
+    return next(
+        (
+            c
+            for c in split_clauses(headline)
+            if event.get("phrase") and event["phrase"] in c.lower()
+        ),
+        headline,
+    )
 
 
 # Events older than this leave the corpus. Without it the list only ever
@@ -409,15 +447,7 @@ def refresh_merged_events(
                 dropped_stale += 1
                 continue
 
-            headline = event.get("headline") or ""
-            clause = next(
-                (
-                    c
-                    for c in split_clauses(headline)
-                    if event.get("phrase") and event["phrase"] in c.lower()
-                ),
-                headline,
-            )
+            clause = event_clause(event)
             actors = [
                 ticker
                 for ticker, name in holdings
@@ -443,6 +473,16 @@ def refresh_merged_events(
             event["external"] = external
             if not event.get("certainty"):
                 event["certainty"] = classify_certainty(clause)
+            # Re-derived like actors, so the 45 days of tie-ups already in the
+            # corpus gain their counterparty on the first run after this
+            # shipped rather than only the ones classified from then on.
+            counterparties = _counterparties(
+                event.get("event_type"), clause, actors, holdings
+            )
+            if counterparties is None:
+                event.pop("counterparties", None)
+            else:
+                event["counterparties"] = counterparties
             refreshed.append(event)
 
         if dropped_stale or dropped_orphan or reattributed:
@@ -455,6 +495,96 @@ def refresh_merged_events(
         log.warning(f"Event corpus refresh failed safely: {e!r}")
         return events
     return refreshed
+
+
+def _financials_by_ticker(watchlist: Dict[str, Any]) -> Dict[str, Any]:
+    from models.core import CompanyFinancials
+
+    fins: Dict[str, Any] = {}
+    for sector, stocks in (watchlist or {}).items():
+        if sector == "macro_indicators":
+            continue
+        for stock in stocks or []:
+            if not isinstance(stock, dict) or not stock.get("ticker"):
+                continue
+            sc = stock.get("screener")
+            if isinstance(sc, dict):
+                try:
+                    fins[str(stock["ticker"]).upper()] = CompanyFinancials(**sc)
+                except Exception:
+                    continue
+    return fins
+
+
+def annotate_event_materiality(
+    events: List[Dict[str, Any]], watchlist: Dict[str, Any]
+) -> List[Dict[str, Any]]:
+    """How big each event is, against the holding it happened to.
+
+    analysis/materiality.py made this argument for scoring and for alerts and
+    was never applied here, so "bags orders worth ₹94 crore" and "₹15,000
+    crore acquisition" reached the event list as indistinguishable rows. Two
+    fields, both ABSENT rather than null when nothing could be measured, so
+    "not sized" never reads as "sized at zero":
+
+      amount_cr     the figure, in crore, once the materiality guards have
+                    agreed it belongs to one company — not a sector budget, a
+                    share-price move or a joint venture's capital
+      materiality   {TICKER: {pct_of_revenue, band}} per actor with revenue
+
+    Measured on the event's own clause, not the whole headline. "X wins Rs
+    500 crore order; stock rallies 5%" is two statements, and the price-move
+    guard in the second would otherwise veto the order in the first — the
+    same clause discipline the classifier already applies.
+
+    Recomputed on every run, like attribution, because revenue moves and the
+    guards get fixed. Never raises.
+    """
+    from analysis import materiality
+
+    sized = 0
+    try:
+        fins = _financials_by_ticker(watchlist)
+        for event in events or []:
+            if not isinstance(event, dict):
+                continue
+            event.pop("amount_cr", None)
+            event.pop("materiality", None)
+
+            clause = event_clause(event)
+            etype = event.get("event_type") or ""
+            if not materiality.is_sized_event(etype, clause):
+                continue
+            amount = materiality.extract_amount_cr(clause)
+            if amount is None:
+                continue
+            event["amount_cr"] = round(amount, 2)
+
+            by_holding = {}
+            for ticker in event.get("actors") or []:
+                verdict = materiality.assess(
+                    clause, etype, fins.get(str(ticker).upper())
+                )
+                if verdict.get("pct_of_revenue") is None:
+                    continue
+                by_holding[str(ticker).upper()] = {
+                    "pct_of_revenue": verdict["pct_of_revenue"],
+                    "band": verdict["band"],
+                }
+            if by_holding:
+                event["materiality"] = by_holding
+                sized += 1
+
+        amounts = sum(
+            1 for e in events or [] if isinstance(e, dict) and "amount_cr" in e
+        )
+        log.info(
+            f"Event materiality: {amounts} event(s) carry an attributable amount; "
+            f"{sized} sized against a holding's revenue."
+        )
+    except Exception as e:  # noqa: BLE001 - an enrichment must never break a run
+        log.warning(f"Event materiality failed safely: {e!r}")
+    return events
 
 
 def compute_supply_stress(
@@ -576,6 +706,26 @@ def market_event_signals(
                         "signal": (
                             f"{etype.replace('_', ' ').title()}{qualifier}: "
                             f"“{headline}”"
+                        ),
+                        # The clause, kept apart from the prose, so the
+                        # order-materiality pass sizes this alert by the same
+                        # rule as every other headline-backed one. Without it a
+                        # Corporate Move stayed Low whatever the deal was
+                        # worth: that pass skips alerts with no source.
+                        #
+                        # Not for reported events. An announced acquisition
+                        # has an agreed price and the market prices it that
+                        # day; a rumoured one has neither, and escalating on
+                        # it would grade speculation as an agreed deal — the
+                        # same line compute_supply_stress draws.
+                        **(
+                            {
+                                "source_headlines": [
+                                    {"title": event_clause(event), "kind": etype}
+                                ]
+                            }
+                            if certainty != "reported"
+                            else {}
                         ),
                     }
                 )

@@ -177,8 +177,21 @@ def _recent(events, window_days, today):
     ]
 
 
-def _flag(event, mechanism, direction, sector, watchlist, chain, confidence, note):
-    tickers = _sector_holdings(watchlist, sector)
+def _flag(
+    event,
+    mechanism,
+    direction,
+    sector,
+    watchlist,
+    chain,
+    confidence,
+    note,
+    tickers=None,
+):
+    # A sector-level chain lands on every holding in the sector; a chain that
+    # ends at one company (a partner edge) lands on that company only, and
+    # widening it to the sector would assert exposure nobody has shown.
+    tickers = tickers or _sector_holdings(watchlist, sector)
     if not tickers:
         # Nothing held in the sector this chain lands on. The reasoning may be
         # perfectly sound and is still not actionable here, and reporting it
@@ -371,8 +384,82 @@ def _anchor_shift(event, graph, watchlist):
     return out
 
 
+def _holding_sectors(watchlist):
+    return {
+        str(s.get("ticker")).upper(): sector
+        for sector, stocks in (watchlist or {}).items()
+        if sector != "macro_indicators"
+        for s in stocks or []
+        if isinstance(s, dict) and s.get("ticker")
+    }
+
+
+def _partner_exposure(event, graph, watchlist):
+    """A holding's partner was hit by something that does not name the holding.
+
+    "Vivo faces export curbs" names Vivo and nobody we hold. Dixon's smartphone
+    joint venture is with Vivo, so the news is Dixon's to read — and nothing
+    else in the pipeline can see that, because the relationship lived in a
+    headline that was classified and forgotten. Partner edges are where it is
+    remembered now (see entity_graph.record_partner_proposals).
+
+    Risk only, like _anchor_shift and for the same reason: a partner's good
+    news is not ours by default — Kaga winning a Japanese order says nothing
+    about the Syrma venture — while its disruption plausibly is. And never
+    when the holding is named: first-order attribution already has that event,
+    and repeating it as a hypothesis would count it twice.
+    """
+    out = []
+    if event.get("direction") != "risk":
+        return out
+    named = event.get("external") or []
+    actors = {str(a).upper() for a in event.get("actors") or []}
+    sectors = _holding_sectors(watchlist)
+    etype = str(event.get("event_type", "")).replace("_", " ")
+
+    for edge in _edges(graph, "partner"):
+        # Undirected: either end may be the holding.
+        for partner, ours in (
+            (edge.get("src"), edge.get("dst")),
+            (edge.get("dst"), edge.get("src")),
+        ):
+            ours = str(ours or "").upper()
+            if ours not in sectors or ours in actors:
+                continue
+            if not (
+                any(_same(partner, n) for n in named)
+                or str(partner or "").upper() in actors
+            ):
+                continue
+            basis = str(edge.get("evidence") or "")
+            chain = [
+                f"{partner} hit by {etype}",
+                f"{partner} is a partner of {ours}"
+                + (
+                    f" (“{basis[:90]}”)"
+                    if basis and basis.lower() != "curated"
+                    else (f" ({edge['note']})" if edge.get("note") else "")
+                ),
+            ]
+            flag = _flag(
+                event,
+                "partner_exposure",
+                "risk",
+                sectors[ours],
+                watchlist,
+                chain,
+                _weakest(edge),
+                f"A shared venture carries its partner's disruptions; the "
+                f"headline does not say whether this one reaches {ours}'s.",
+                tickers=[ours],
+            )
+            if flag:
+                out.append(flag)
+    return out
+
+
 def _dedupe(flags):
-    """One row per (sector, mechanism, trigger).
+    """One row per (sector, mechanism, trigger, tickers).
 
     The same headline can reach one sector by several chains — two suppliers
     to the same customer, say. Showing it four times reads as four problems.
@@ -380,7 +467,16 @@ def _dedupe(flags):
     """
     best = {}
     for flag in flags:
-        key = (flag["sector"], flag["mechanism"], flag["trigger"])
+        # Tickers are part of the key because a partner chain is scoped to one
+        # company: Vivo hitting two EMS holdings' ventures is two rows, and
+        # keying on sector alone would silently keep one and drop the other.
+        # Sector-wide flags carry the whole sector, so nothing changes there.
+        key = (
+            flag["sector"],
+            flag["mechanism"],
+            flag["trigger"],
+            tuple(flag.get("tickers") or ()),
+        )
         current = best.get(key)
         if current is None or _CONFIDENCE_ORDER.get(
             flag["confidence"], 1
@@ -425,6 +521,7 @@ def compute_read_throughs(
             flags.extend(_displacement(event, graph, watchlist))
             flags.extend(_input_squeeze(event, graph, watchlist))
             flags.extend(_anchor_shift(event, graph, watchlist))
+            flags.extend(_partner_exposure(event, graph, watchlist))
 
         # The raw corpus carries no dates — it is this run's collection — so
         # everything in it is today by construction.

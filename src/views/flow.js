@@ -10,7 +10,7 @@
 // and still answers "what did the exchanges publish" for anyone who wants it.
 
 import { el, mount } from "../core/dom.js";
-import { shortDate } from "../core/format.js";
+import { shortDate, crore, sizeLabel } from "../core/format.js";
 import { href } from "../core/router.js";
 import * as filters from "../core/filters.js";
 import { dataTable, panel } from "./table.js";
@@ -43,6 +43,28 @@ function streamNav(active, route) {
   );
 }
 
+/**
+ * What a classified event adds beyond its headline: who was on the other side
+ * of a tie-up, and how big the deal was against the holding it happened to.
+ *
+ * Both are omitted rather than shown as blanks when unknown. An event with no
+ * `amount_cr` is one whose size the guards would not attribute to a single
+ * company — a sector budget, a joint venture's capital, an MoU — and printing
+ * nothing is the honest rendering of "not known"; a dash would read as zero.
+ */
+export function eventDetail(item) {
+  const parts = [];
+  const others = item.counterparties || [];
+  if (others.length) parts.push(`with ${others.join(", ")}`);
+  if (typeof item.amount_cr === "number") parts.push(crore(item.amount_cr));
+  for (const [ticker, m] of Object.entries(item.materiality || {})) {
+    const label = sizeLabel(m && m.pct_of_revenue, m && m.band);
+    if (label) parts.push(`${label.replace("of revenue", `of ${ticker} revenue`)}`);
+  }
+  if (item.certainty && item.certainty !== "completed") parts.push(item.certainty);
+  return parts.join(" \u00b7 ");
+}
+
 /** Normalise the differing shapes into one row. */
 function normalise(item, streamLabel) {
   return {
@@ -51,6 +73,7 @@ function normalise(item, streamLabel) {
     who: item.company || item.ticker || item.name || (item.actors || [])[0] || "",
     source: item.source || streamLabel,
     link: item.link || item.url || "",
+    detail: item.event_type ? eventDetail(item) : "",
   };
 }
 
@@ -119,10 +142,12 @@ export async function render(container, { payload, route }) {
             key: "what",
             label: "What",
             sortable: false,
-            render: (r) =>
+            render: (r) => [
               r.link
                 ? el("a", { href: r.link, target: "_blank", rel: "noopener noreferrer" }, r.what)
                 : r.what,
+              r.detail ? el("span", { class: "evidence-meta flow-detail" }, r.detail) : null,
+            ],
           },
           { key: "source", label: "Source" },
         ],

@@ -241,14 +241,23 @@ async def run_pipeline():
         # Market-event engine: classify WHAT happened across every collected
         # headline, keep a rolling window via the committed history, and let
         # the entity graph grow itself from tie-up headlines.
-        from analysis.entity_graph import load_entity_graph, harvest_partner_edges
+        from analysis.entity_graph import (
+            apply_accepted_proposals,
+            harvest_partner_edges,
+            load_entity_graph,
+            record_partner_proposals,
+        )
         from analysis.event_engine import (
+            annotate_event_materiality,
             classify_headlines,
             compute_supply_stress,
             refresh_merged_events,
         )
 
         graph = load_entity_graph()
+        # Before classification: a partner accepted since the last run must
+        # already be a known entity when today's headlines are read.
+        apply_accepted_proposals(graph)
         events = classify_headlines(data, watchlist, graph)
         # Re-attribute the merged list with the current rules, so a fix to the
         # matcher reaches events carried over from earlier runs instead of
@@ -260,8 +269,12 @@ async def run_pipeline():
             watchlist,
             graph=graph,
         )
+        annotate_event_materiality(data["market_events"], watchlist)
         data["supply_stress"] = compute_supply_stress(data["market_events"], graph)
         harvest_partner_edges(data["corporate_agreements"], watchlist, graph)
+        # Tie-ups with someone we do NOT hold: queued for a person to review,
+        # never written straight into the graph. See the function for why.
+        record_partner_proposals(data["market_events"], graph)
 
         # Second-order implications of events that name nobody we hold. Kept
         # deliberately downstream of attribution and deliberately OUT of

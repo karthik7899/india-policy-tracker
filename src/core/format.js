@@ -26,6 +26,18 @@ export function crore(value) {
   return `₹${n.toFixed(2)} Cr`;
 }
 
+/**
+ * An event's size against the company it happened to: "3.8% of revenue ·
+ * minor". Unsigned — a share of revenue has no direction — and the band is
+ * spelled out because 3.8% means nothing until you know where the lines are.
+ */
+export function sizeLabel(pctOfRevenue, band) {
+  const n = num(pctOfRevenue);
+  if (n === null) return "";
+  const figure = n >= 10 ? n.toFixed(0) : n.toFixed(1);
+  return `${figure}% of revenue${band ? ` \u00b7 ${band}` : ""}`;
+}
+
 /** A signed percentage, always with its sign — the sign is the information. */
 export function pct(value, decimals = 1) {
   const n = num(value);
