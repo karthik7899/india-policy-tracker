@@ -507,6 +507,17 @@ def refresh_merged_events(
                 continue
 
             clause = event_clause(event)
+            if event.get("reader") == "llm":
+                # The LLM's parties, not the matcher's reading of the whole
+                # headline — re-deriving would attribute every holding the
+                # headline mentions. Only pruned to what is still held.
+                held = {str(t).upper() for t, _ in holdings}
+                event["actors"] = [a for a in event.get("actors") or [] if a in held]
+                if event["actors"]:
+                    refreshed.append(event)
+                else:
+                    dropped_orphan += 1
+                continue
             actors = [
                 ticker
                 for ticker, name in holdings
@@ -671,6 +682,8 @@ def compute_supply_stress(
             # built to measure things that actually happened.
             if event.get("certainty") == "reported":
                 continue
+            if event.get("reader") == "llm":
+                continue  # unverified; see analysis/llm_reader.reconcile
             if str(event.get("date", "")) < cutoff:
                 continue
             sectors = set(event.get("domains") or [])
@@ -741,6 +754,9 @@ def market_event_signals(
             # events were kept they could not reach here at all; skipping them
             # restores that boundary rather than inventing a new one.
             if not (event.get("actors") or event.get("domains")):
+                continue
+            # Found only by the LLM reader: shown, never graded as evidence.
+            if event.get("reader") == "llm":
                 continue
 
             headline = event.get("headline", "")

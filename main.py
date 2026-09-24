@@ -259,6 +259,29 @@ async def run_pipeline():
         # already be a known entity when today's headlines are read.
         apply_accepted_proposals(graph)
         events = classify_headlines(data, watchlist, graph)
+
+        # Second reader. Optional: without GEMINI_API_KEY, or on any API
+        # failure, it is skipped and the rules carry the run alone.
+        from analysis.competitive_intel import collect_headlines
+        from analysis.llm_reader import read_headlines, reconcile
+
+        readings, llm_status = read_headlines(collect_headlines(data, watchlist))
+        events, llm_stats = reconcile(events, readings, watchlist, data, graph)
+        if llm_status["skipped"]:
+            log.info(
+                f"LLM reader: skipped ({llm_status['skipped']}); "
+                f"{llm_status['cached']} cached reading(s) used, "
+                f"{llm_status['pending']} headline(s) unread."
+            )
+        else:
+            log.info(
+                f"LLM reader: {llm_status['read']} new, {llm_status['cached']} "
+                f"cached, {llm_status['pending']} left for later runs."
+            )
+        log.info(
+            f"Reconciled: {llm_stats['corroborated']} corroborated, "
+            f"{llm_stats['disagreed']} disputed, {llm_stats['llm_only']} LLM-only."
+        )
         # Re-attribute the merged list with the current rules, so a fix to the
         # matcher reaches events carried over from earlier runs instead of
         # only applying to today's.
@@ -282,7 +305,6 @@ async def run_pipeline():
         # evidence, and a read-through is a hypothesis with its reasoning
         # attached. See analysis/read_through.py for why that separation is
         # the whole point.
-        from analysis.competitive_intel import collect_headlines
         from analysis.read_through import compute_read_throughs
 
         data["read_throughs"] = compute_read_throughs(

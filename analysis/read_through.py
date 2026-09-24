@@ -170,10 +170,14 @@ def _recent(events, window_days, today):
     cutoff = (
         datetime.date.fromisoformat(today) - datetime.timedelta(days=window_days)
     ).isoformat()
+    # An LLM-only event is unverified, and a read-through built on it would be
+    # a hypothesis resting on a hypothesis.
     return [
         e
         for e in events or []
-        if isinstance(e, dict) and str(e.get("date", "")) >= cutoff
+        if isinstance(e, dict)
+        and str(e.get("date", "")) >= cutoff
+        and e.get("reader") != "llm"
     ]
 
 

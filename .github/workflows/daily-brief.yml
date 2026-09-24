@@ -104,8 +104,18 @@ jobs:
           SMTP_PORT: ${{ secrets.SMTP_PORT }}
           SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          # Optional second reader for market events. Unset = rules only.
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL: ${{ vars.GEMINI_MODEL }}
         run: |
           python main.py
+
+      # How the rules and the LLM reader score against eval/event_labels.json,
+      # from cached readings only (no API calls). A readout, never a gate.
+      - name: Score event readers
+        if: steps.gate.outputs.should_run == 'true'
+        continue-on-error: true
+        run: python scripts/eval_events.py --reader all
 
       # Implicitly also requires success(), so a failed or degraded run never
       # overwrites the committed dashboard and watchlist with partial data.
@@ -119,7 +129,7 @@ jobs:
           # of this list strands them as unstaged changes, which is not a
           # cosmetic omission: git pull --rebase refuses to run at all, so the
           # commit below is made and then never pushed.
-          git add dashboard_data.json history.json watchlist.json rotation_ledger.json isin_master.json entity_graph.json entity_graph_proposals.json news/ data/
+          git add dashboard_data.json history.json watchlist.json rotation_ledger.json isin_master.json entity_graph.json entity_graph_proposals.json llm_cache.json news/ data/
 
           # Anything the run rewrote that is not on that list would fail the
           # rebase two steps down with "cannot pull with rebase", which says
