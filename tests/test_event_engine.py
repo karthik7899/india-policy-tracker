@@ -762,3 +762,68 @@ class TestEventMateriality:
             if a["category"] == "Corporate Move"
         ]
         assert "source_headlines" not in alert
+
+
+# ---------------------------------------------------------------------------
+# gap-tolerant vocabulary (found by scoring against eval/event_labels.json)
+# ---------------------------------------------------------------------------
+
+from analysis.event_engine import match_event_type  # noqa: E402
+
+
+@pytest.mark.parametrize(
+    "headline, expected",
+    [
+        (
+            "suzlon bags 306 mw wind turbine orders from yanara in rajasthan",
+            "order_win",
+        ),
+        (
+            "coforge wins $230m ai transformation contract with european client",
+            "order_win",
+        ),
+        ("tcs wins rs 122 crore bid to build ai platform", "order_win"),
+        ("bhel shares in focus after rs 2,500 crore order win", "order_win"),
+        ("bel approves jv with french company safran", "tie_up"),
+        ("titagarh rail systems, bhel to form jv for maintenance", "tie_up"),
+        ("bpcl, cse sign mou to advance biofuels", "tie_up"),
+        ("ltts and anthropic partner to transform engineering", "tie_up"),
+        ("arvind completes 26.60% stake acquisition in torrent urja 21", "acquisition"),
+        ("l&t technology services divests swc business", "acquisition"),
+        (
+            "syrma sgs elemaster opens advanced electronics facility in bengaluru",
+            "capacity_add",
+        ),
+    ],
+)
+def test_words_between_the_verb_and_its_object_no_longer_hide_an_event(
+    headline, expected
+):
+    assert match_event_type(headline)[0] == expected
+
+
+def test_the_gap_is_bounded():
+    """A verb in one phrase must not reach an "order" several phrases later."""
+    assert (
+        match_event_type(
+            "suzlon wins praise from analysts at the annual investor meet despite "
+            "concerns over the order"
+        )[0]
+        is None
+    )
+
+
+def test_an_order_win_from_a_holding_is_not_the_holdings_win():
+    """There the holding is the customer."""
+    assert match_event_type("defence stock jumps 9% on order win from bel")[0] is None
+
+
+def test_the_matched_phrase_can_be_found_in_its_clause_again():
+    """event_clause() re-finds the clause by the stored phrase."""
+    from analysis.event_engine import event_clause
+
+    headline = "Suzlon bags 306 MW wind turbine orders from Yanara; shares rise 3%"
+    etype, phrase = match_event_type(headline.split(";")[0].lower())
+    assert event_clause({"headline": headline, "phrase": phrase}).startswith(
+        "Suzlon bags"
+    )

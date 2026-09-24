@@ -243,3 +243,44 @@ def test_reporting_period_after_ticker_is_not_a_name():
     assert title_matches_company(
         "TCS FY26 guidance raised", "TCS", "Tata Consultancy Services"
     )
+
+
+def test_an_abbreviation_of_our_own_name_still_names_us():
+    """ "Dixon Tech Completes ₹553 Cr Q Tech Deal" went unattributed."""
+    assert title_matches_company(
+        "Dixon Tech Completes ₹553 Cr Q Tech Deal; Stock Falls 4%",
+        "DIXON",
+        "Dixon Technologies",
+    )
+
+
+def test_a_ticker_that_is_an_ordinary_word_is_the_word_in_lower_case():
+    """A data-centre campus is not Campus Activewear."""
+    assert (
+        title_matches_company(
+            "TCC Concept signs MOU for 60 MW data centre campus in Pune",
+            "CAMPUS",
+            "Campus Activewear",
+        )
+        is False
+    )
+    assert title_matches_company("CAMPUS shares rise 4%", "CAMPUS", "Campus Activewear")
+    # An all-lowercase headline carries no case signal, so it still matches.
+    assert title_matches_company(
+        "iks healthcare set to acquire trubridge",
+        "IKS",
+        "Inventurus Knowledge Solutions",
+    )
+
+
+def test_a_plural_subjects_verb_is_not_part_of_a_name():
+    assert title_matches_company(
+        "Hystar and BHEL Partner to Manufacture PEM Electrolysers in India",
+        "BHEL",
+        "Bharat Heavy Electricals",
+    )
+    assert title_matches_company(
+        "Astra Microwave, BEL Sign MoU for Defence Electronics",
+        "BEL",
+        "Bharat Electronics",
+    )

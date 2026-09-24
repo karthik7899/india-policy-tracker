@@ -94,6 +94,13 @@ _HEADLINE_VERBS = {
     "starts",
     "begins",
     "opens",
+    # The bare form a plural subject takes: "Hystar and BHEL Partner to
+    # Manufacture", "Astra Microwave, BEL Sign MoU". Read as the start of a
+    # longer name, these left BHEL and BEL off their own tie-ups.
+    "partner",
+    "sign",
+    "form",
+    "forge",
 }
 
 _TOKEN_RE = re.compile(r"[A-Za-z0-9&.']+")
@@ -135,6 +142,17 @@ _FUNCTION_WORDS = {
     "her",
     "their",
 }
+
+
+def _abbreviates(word, own_name_tokens):
+    """Is ``word`` a shortening of one of the company's own name words?
+
+    Four letters at least, so "Tech" abbreviates "Technologies" but "Co"
+    and "In" abbreviate nothing.
+    """
+    return len(word) >= 4 and any(
+        t != word and t.startswith(word) for t in own_name_tokens
+    )
 
 
 def _clean_token(token):
@@ -206,7 +224,12 @@ def title_matches_company(title, ticker, name):
 
     own_name_tokens, core_tokens, alias_tokens_list = _parse_company_name(name)
 
-    def _single_token_match(candidate):
+    # Whether the headline uses capitals at all. An all-lowercase headline
+    # ("iks healthcare set to acquire trubridge") carries no case signal, so
+    # the ticker rule below cannot apply to it.
+    has_case = any(c.isupper() for c in title or "")
+
+    def _single_token_match(candidate, is_ticker=False):
         candidate = candidate.lower()
         # An empty candidate must never match. The final line of this function
         # calls it with `ticker or ""`, and callers that have no ticker to
@@ -226,12 +249,21 @@ def title_matches_company(title, ticker, name):
                 continue
             if i > 0 and lowered[i - 1] in _PERSON_TITLES:
                 continue  # "CEO Arvind ..." — a person, not the company
+            # A ticker that is also an ordinary word, written in lower case
+            # in a headline that otherwise uses capitals, is the word. "TCC
+            # Concept signs MOU for 60 MW data centre campus in Pune" was
+            # being attributed to Campus Activewear.
+            if is_ticker and has_case and tokens[i].islower():
+                continue
             if i + 1 < len(tokens) and adjacent[i]:
                 nxt_clean = lowered[i + 1]
                 if (
                     tokens[i + 1][0].isupper()
                     and nxt_clean not in _CORP_CONTINUATIONS
                     and nxt_clean not in own_name_tokens
+                    # An abbreviation of our own name: "Dixon Tech" is Dixon
+                    # Technologies, not a different company called that.
+                    and not _abbreviates(nxt_clean, own_name_tokens)
                     and nxt_clean not in _HEADLINE_VERBS
                     and nxt_clean not in _FUNCTION_WORDS
                     and not _PERIOD_RE.match(nxt_clean)
@@ -262,7 +294,7 @@ def title_matches_company(title, ticker, name):
         if _phrase_match(alias_tokens):
             return True
 
-    return _single_token_match(ticker or "")
+    return _single_token_match(ticker or "", is_ticker=True)
 
 
 def _extract_ticker_from_quotes(quotes, company_name):
