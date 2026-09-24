@@ -321,6 +321,7 @@ class _Resp:
         self.status_code = status
         self._body = body
         self.text = text
+        self.headers = {}
 
     def json(self):
         return self._body
@@ -351,12 +352,14 @@ def test_the_request_is_deterministic_and_schema_bound(monkeypatch):
         (404, "set GEMINI_MODEL"),
         (403, "key refused"),
         (429, "rate limit"),
-        (500, "HTTP 500"),
+        (500, r"unavailable \(500\) after 3 attempts"),
+        (418, "HTTP 418"),
     ],
 )
 def test_each_api_failure_explains_itself(monkeypatch, status, phrase):
     import requests
 
+    monkeypatch.setattr(llm_reader.time, "sleep", lambda s: None)
     monkeypatch.setattr(requests, "post", lambda *a, **k: _Resp(status, text="err"))
     with pytest.raises(ReaderUnavailable, match=phrase):
         llm_reader.gemini_transport("k", "m")("prompt")
@@ -401,3 +404,34 @@ def test_the_scorer_grades_the_llm_and_the_combination():
     assert llm["recall"] == 0.5  # caught Nagarro, has no reading for Suzlon
     both = score(labels, WATCHLIST, combined_predictor(readings, WATCHLIST))["holdout"]
     assert both["recall"] == 1.0  # rules catch Suzlon, the LLM catches Nagarro
+
+
+def test_a_busy_model_is_retried_before_the_run_gives_up(monkeypatch):
+    """The first live run lost its whole day to one 503."""
+    import requests
+
+    waits = []
+    monkeypatch.setattr(llm_reader.time, "sleep", waits.append)
+    replies = [
+        _Resp(503, text="high demand"),
+        _Resp(200, {"candidates": [{"content": {"parts": [{"text": "[]"}]}}]}),
+    ]
+    monkeypatch.setattr(requests, "post", lambda *a, **k: replies.pop(0))
+    assert llm_reader.gemini_transport("k", "m")("prompt") == "[]"
+    assert waits == [llm_reader.RETRY_BASE_S]
+
+
+def test_a_model_that_stays_busy_ends_the_pass_cleanly(monkeypatch):
+    import requests
+
+    monkeypatch.setattr(llm_reader.time, "sleep", lambda s: None)
+    calls = []
+
+    def post(*a, **k):
+        calls.append(1)
+        return _Resp(503, text="high demand")
+
+    monkeypatch.setattr(requests, "post", post)
+    with pytest.raises(ReaderUnavailable, match="after 3 attempts; resuming next run"):
+        llm_reader.gemini_transport("k", "m")("prompt")
+    assert len(calls) == llm_reader.RETRY_ATTEMPTS

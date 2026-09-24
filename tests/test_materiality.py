@@ -434,3 +434,35 @@ class TestGuardsFoundOnTheEventPath:
             )
             is None
         )
+
+
+class TestGuardsFoundInTheFirstGeminiRun:
+    """Four of the eight escalations in the 2026-09-24 manual run were money
+    raised, a target, or a shared project total — none of them business won.
+    Across the corpus the guards change nine readings, all of them wrong
+    before; no correct figure is lost."""
+
+    @pytest.mark.parametrize(
+        "title",
+        [
+            "ideaForge secures ₹151 Cr TDB loan for autonomous aerial vehicle project",
+            "Arvind Limited completes ₹500 crore QIP at ₹505 per share",
+            "BPCL board approves ₹5,000 crore fundraising through non-convertible debentures",
+            "Syrma SGS eyes 35%+ revenue growth, targets ₹1,600 crore exports in FY27",
+            "AP Government and Suzlon break ground for 1,325 MW wind projects; "
+            "unlock 10,500 crores investment",
+        ],
+    )
+    def test_money_raised_targets_and_project_totals_are_not_deals(self, title):
+        assert materiality.amount_is_attributable(title) is False
+
+    @pytest.mark.parametrize(
+        "title",
+        [
+            "Receipt of order worth of Rs. 263.25 Crore",
+            "BHEL Shares In Focus After Rs 2,500 Crore Order Win",
+            "Suzlon bags 400 MW wind EPC order worth Rs 2,400 crore",
+        ],
+    )
+    def test_real_orders_are_still_sized(self, title):
+        assert materiality.amount_is_attributable(title)
