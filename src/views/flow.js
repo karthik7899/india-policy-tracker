@@ -62,6 +62,12 @@ export function eventDetail(item) {
     if (label) parts.push(`${label.replace("of revenue", `of ${ticker} revenue`)}`);
   }
   if (item.certainty && item.certainty !== "completed") parts.push(item.certainty);
+  // Which readers found it (analysis/llm_reader.reconcile). Unverified is
+  // spelled out: an LLM-only event is shown but grades nothing, and a reader
+  // who cannot tell that from the row would weigh it like the others.
+  if (item.reader === "llm") parts.push("LLM only \u00b7 unverified");
+  else if (item.corroborated === true) parts.push("corroborated");
+  else if (item.llm_reading) parts.push(`LLM read it as ${String(item.llm_reading.event_type).replace(/_/g, " ")}`);
   return parts.join(" \u00b7 ");
 }
 

@@ -191,7 +191,11 @@ def build_coverage(
             for actor in raw.get("actors") or []:
                 actor = str(actor).upper()
                 if actor in known:
-                    add(actor, _item("Event", text, raw))
+                    item = _item("Event", text, raw)
+                    # Attribution by an unverified reader is not "H".
+                    if raw.get("reader") == "llm":
+                        item["confidence"] = "L"
+                    add(actor, item)
 
         counted = sum(counts_for(items) for items in coverage.values())
         excluded = sum(

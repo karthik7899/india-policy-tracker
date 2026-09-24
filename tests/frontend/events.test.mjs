@@ -53,3 +53,22 @@ test("an event with nothing measured renders no detail at all", () => {
     "",
   );
 });
+
+test("an event only the LLM found says so", () => {
+  assert.match(
+    eventDetail({ event_type: "acquisition", certainty: "completed", reader: "llm" }),
+    /LLM only · unverified/,
+  );
+});
+
+test("agreement and disagreement between readers are both visible", () => {
+  assert.equal(eventDetail({ event_type: "order_win", corroborated: true }), "corroborated");
+  assert.equal(
+    eventDetail({
+      event_type: "tie_up",
+      corroborated: false,
+      llm_reading: { event_type: "order_win", actors: [] },
+    }),
+    "LLM read it as order win",
+  );
+});
