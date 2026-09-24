@@ -307,9 +307,9 @@
     "name": "I O C L",
     "price_at_decision": 141.6,
     "target_at_decision": 160.06,
-    "scored": false,
-    "outcome": null,
-    "realized_return_pct": null
+    "scored": true,
+    "outcome": "Underperforming",
+    "realized_return_pct": -3.6
   },
   {
     "date": "2026-08-13",
@@ -595,6 +595,18 @@
     "name": "Optiemus Infra.",
     "price_at_decision": 811.0,
     "target_at_decision": 1013.75,
+    "scored": false,
+    "outcome": null,
+    "realized_return_pct": null
+  },
+  {
+    "date": "2026-09-24",
+    "action": "rotated_in",
+    "sector": "data_center_support",
+    "ticker": "BIRLACABLE",
+    "name": "Birla Cable",
+    "price_at_decision": 350.0,
+    "target_at_decision": 437.5,
     "scored": false,
     "outcome": null,
     "realized_return_pct": null
