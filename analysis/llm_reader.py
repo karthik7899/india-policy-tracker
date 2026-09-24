@@ -45,10 +45,11 @@ CACHE_PATH = os.path.join(ROOT, "llm_cache.json")
 PROMPT_VERSION = "1"
 
 # The model is configuration, not code: GEMINI_MODEL (a repository variable in
-# the workflow) overrides this. The default is a guess made without access to
-# Google's current model list — if it has been retired the API answers 404 and
-# the log says to set GEMINI_MODEL.
-DEFAULT_MODEL = "gemini-2.5-flash"
+# the workflow) overrides this. Gemini 3.8 Flash is the model the key was
+# issued for; the API ID below was written without access to Google's model
+# list, so if it is wrong the API answers 404 and the log says to set
+# GEMINI_MODEL.
+DEFAULT_MODEL = "gemini-3.8-flash"
 API_URL = (
     "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
 )
