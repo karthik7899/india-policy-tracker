@@ -60,6 +60,23 @@ API_URL = (
 BATCH_SIZE = 40
 MAX_NEW_PER_RUN = 600
 TIMEOUT_S = 60
+# Server-side failures worth retrying, and how.
+_TRANSIENT = {500, 502, 503, 504}
+RETRY_ATTEMPTS = 3
+RETRY_BASE_S = 15
+RETRY_CAP_S = 60
+
+
+def _backoff(resp, attempt: int) -> float:
+    """Seconds before the next attempt: Retry-After if given, else doubling."""
+    try:
+        after = float((resp.headers or {}).get("Retry-After", ""))
+    except (AttributeError, TypeError, ValueError):
+        after = None
+    wait = after if after is not None else RETRY_BASE_S * 2 ** (attempt - 1)
+    return max(0.0, min(wait, RETRY_CAP_S))
+
+
 # Unused cache entries are dropped after this long so the file stays small.
 CACHE_RETENTION_DAYS = 120
 
@@ -137,15 +154,34 @@ def gemini_transport(api_key: str, model: str) -> Transport:
                 "responseSchema": _SCHEMA,
             },
         }
-        try:
-            resp = requests.post(
-                url,
-                headers={"x-goog-api-key": api_key, "Content-Type": "application/json"},
-                json=body,
-                timeout=TIMEOUT_S,
+        # 5xx is Google's side and usually brief: the first live run met
+        # "503 This model is currently experiencing high demand" on its first
+        # batch and, with no retry, skipped the whole day. A few spaced
+        # attempts, honouring Retry-After, then give up until the next run.
+        for attempt in range(1, RETRY_ATTEMPTS + 1):
+            try:
+                resp = requests.post(
+                    url,
+                    headers={
+                        "x-goog-api-key": api_key,
+                        "Content-Type": "application/json",
+                    },
+                    json=body,
+                    timeout=TIMEOUT_S,
+                )
+            except requests.RequestException as e:
+                resp, error = None, f"request failed: {e!r}"
+            else:
+                error = None
+                if resp.status_code not in _TRANSIENT:
+                    break
+                error = f"Gemini unavailable ({resp.status_code})"
+            if attempt < RETRY_ATTEMPTS:
+                time.sleep(_backoff(resp, attempt))
+        else:
+            raise ReaderUnavailable(
+                f"{error} after {RETRY_ATTEMPTS} attempts; resuming next run"
             )
-        except requests.RequestException as e:
-            raise ReaderUnavailable(f"request failed: {e!r}")
         if resp.status_code == 404:
             raise ReaderUnavailable(
                 f"model {model!r} not found (404) — set GEMINI_MODEL to a current model"

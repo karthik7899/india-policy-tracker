@@ -266,12 +266,36 @@ _AGGREGATE_MARKERS = (
     "order book",
     "orderbook",
     "order backlog",
+    # "AP Government and Suzlon break ground for 1,325 MW wind projects;
+    # unlock 10,500 crores investment" — a project's total, shared with the
+    # state, read as 60% of Suzlon's revenue.
+    "unlock",
+    "unlocks",
 )
 
 # A memorandum of understanding is not a transaction. It is non-binding, most
 # never become one, and any rupee figure in the headline is an aspiration —
 # the prospective-marker case above in different words. Matched as a word:
 # the bare letters occur inside "amount", "mounting" and "famous".
+# Money a company RAISES is not business it won. "ideaForge secures ₹151 Cr
+# TDB loan" and "Arvind Limited completes ₹500 crore QIP" were sized as
+# transactions at 54% and 5% of revenue and escalated to High. Borrowing and
+# equity issuance change the balance sheet, not the order book.
+_FINANCING_RE = re.compile(
+    r"\b(?:loans?|term loan|qip|ncds?|debentures?|bonds?|fund ?rais\w*|"
+    r"raises?|raising|rights issue|ipo|borrowings?|credit facility|"
+    r"preferential (?:issue|allotment))\b",
+    re.IGNORECASE,
+)
+
+# A target is not a result. "Syrma SGS eyes 35%+ revenue growth, targets
+# ₹1,600 crore exports" is guidance; it was sized as a ₹1,600 crore deal.
+_GUIDANCE_RE = re.compile(
+    r"\b(?:targets?|targeting|guidance|aims? (?:for|at|to)|expects?|projects)\s+"
+    r"(?:(?:rs\.?|inr|₹)\s*[\d,]|revenue|sales|exports|growth|[\d,]+\s*%)",
+    re.IGNORECASE,
+)
+
 _MOU_RE = re.compile(r"\bmous?\b|memorandum of understanding", re.IGNORECASE)
 
 # Event vocabulary that implies a transaction with a readable size. Anything
@@ -436,6 +460,8 @@ def amount_is_attributable(title: str) -> bool:
     if any(marker in lowered for marker in _AGGREGATE_MARKERS):
         return False
     if _MOU_RE.search(lowered):
+        return False
+    if _FINANCING_RE.search(lowered) or _GUIDANCE_RE.search(lowered):
         return False
     return not _COMPANY_LIST_RE.match(title or "")
 
