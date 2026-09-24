@@ -107,6 +107,70 @@ EVENT_VOCABULARY: Dict[str, tuple] = {
     ),
 }
 
+# Shapes the literal phrases above cannot express, because headlines put
+# words between the verb and its object. "Suzlon bags 306 MW wind turbine
+# orders" and "Coforge Wins $230M AI Transformation Contract" matched nothing:
+# "bags order" and "wins contract" are in the vocabulary, but only as
+# adjacent words. Found by scoring the rules against eval/event_labels.json
+# (see scripts/eval_events.py), where they were the largest single class of
+# miss. Tuned on the 'dev' split only.
+#
+# The gap is bounded — at most six words — so a verb in one statement cannot
+# reach an "order" several phrases later.
+_GAP = r"(?:\W+[\w$₹.%'-]+){0,6}?\W+"
+EVENT_PATTERNS: Dict[str, tuple] = {
+    "tie_up": (
+        re.compile(
+            r"\b(?:forms?|formed|forming|to form)\s+(?:an?\s+)?(?:jv|joint venture)\b"
+        ),
+        re.compile(r"\bjv with\b"),
+        re.compile(r"\b(?:signs?|signed|inks?|inked)\s+(?:an?\s+)?mous?\b"),
+        # "LTTS and Anthropic Partner to Transform Engineering": a plural
+        # subject takes the bare verb, which "partners with" never matches.
+        re.compile(r"\band\s+[\w.&' -]{1,40}?\s+partner\s+(?:to|for|on|in)\b"),
+    ),
+    "acquisition": (
+        re.compile(r"\bstake acquisition\b"),
+        # A divestment is the same transaction seen from the seller.
+        re.compile(r"\b(?:divests?|divested|divestment|stake sale|sells stake)\b"),
+    ),
+    "order_win": (
+        re.compile(
+            r"\b(?:wins?|won|bags?|bagged|secures?|secured|lands?|landed|"
+            r"receives?|received)" + _GAP + r"(?:orders?|contracts?|bid)\b"
+        ),
+        # Not "order win from X": there X is the customer. "Defence stock
+        # jumps... Order win from BEL" is another company's win.
+        re.compile(r"\border win\b(?!\s+from\b)"),
+    ),
+    "capacity_add": (
+        re.compile(
+            r"\b(?:inaugurat\w*|opens|opened)"
+            + _GAP
+            + r"(?:facility|plant|factory|unit)\b"
+        ),
+    ),
+}
+
+
+def match_event_type(clause_lower: str):
+    """``(event_type, phrase)`` for the first type whose vocabulary or
+    pattern appears in the clause, else ``(None, None)``.
+
+    The phrase is the matched text itself, so it can be found in the clause
+    again later (event_clause relies on that).
+    """
+    for etype, vocabulary in EVENT_VOCABULARY.items():
+        hit = next((v for v in vocabulary if v in clause_lower), None)
+        if hit:
+            return etype, hit
+        for pattern in EVENT_PATTERNS.get(etype, ()):
+            m = pattern.search(clause_lower)
+            if m:
+                return etype, m.group(0)
+    return None, None
+
+
 # How settled the event is. The engine used to record every match as though
 # it had happened: "Schneider Electric Announces Intention To Acquire Cognite"
 # and "Dixon Tech Up ... on Reports of Govt Approval Likely to Vivo Joint
@@ -299,12 +363,7 @@ def classify_headlines(
                 if any(neg in clause_lower for neg in NEGATION_MARKERS):
                     continue  # this clause is a denial; others may still count
 
-                hit_type = hit_phrase = None
-                for etype, vocabulary in EVENT_VOCABULARY.items():
-                    hit = next((v for v in vocabulary if v in clause_lower), None)
-                    if hit:
-                        hit_type, hit_phrase = etype, hit
-                        break
+                hit_type, hit_phrase = match_event_type(clause_lower)
                 if not hit_type:
                     continue
 
