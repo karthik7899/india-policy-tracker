@@ -9,7 +9,7 @@
 // Weakening, then Intact, then ticker. The ticker tiebreak matters — without
 // it, which holdings survive a truncation depends on dict insertion order.
 
-import { el, mount } from "../core/dom.js";
+import { el, mount, disclosure } from "../core/dom.js";
 import { thesisStatus } from "../core/format.js";
 import * as filters from "../core/filters.js";
 import * as charts from "../charts/charts.js";
@@ -30,23 +30,6 @@ const SEGMENTS = [
   { key: "Intact", label: "Intact", status: "good" },
 ];
 
-/**
- * A native disclosure. No JS state, no new dependency, keyboard-operable and
- * announced by screen readers for free — and closed by default, which is the
- * point: this page was 6,832px tall and most of that was detail nobody had
- * asked to see yet.
- *
- * `summary` must carry the count, not just a verb. "Show" tells a reader
- * nothing about whether opening it is worth the scroll; "67 holdings" does.
- */
-function disclosure(summaryText, body) {
-  return el(
-    "details",
-    { class: "disclose" },
-    el("summary", { class: "disclose-summary" }, summaryText),
-    body,
-  );
-}
 
 function statusPill(status) {
   // Icon + label, never colour alone: on the light surface two of the four

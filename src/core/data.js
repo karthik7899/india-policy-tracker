@@ -91,6 +91,16 @@ export async function loadGraph() {
 }
 
 /**
+ * Partner edges waiting for a person to accept or reject them. Written by
+ * analysis/entity_graph.record_partner_proposals; [] when the file is absent,
+ * which is the normal state before the first tie-up has been seen.
+ */
+export async function loadProposals() {
+  const body = await fetchJSON("entity_graph_proposals.json");
+  return body && Array.isArray(body.proposals) ? body.proposals : [];
+}
+
+/**
  * Fetch and cache one JSON file.
  *
  * A missing sidecar resolves to null rather than throwing: the data being

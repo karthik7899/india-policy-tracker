@@ -66,9 +66,22 @@ _COMPOUND = {
 _USD_INR = 83.0
 _FOREIGN = ("$", "usd", "us$", "dollar")
 
+# Units an Indian headline uses for rupees and dollars alike. "Crore" and
+# "lakh" are rupee units by usage; "million" and "billion" are not, and a bare
+# one is a currency the headline did not state. "iks healthcare set to acquire
+# trubridge for 600 million" was read as Rs 600 million — Rs 60 crore, filed
+# as immaterial — for a US acquisition that, in dollars, is larger than the
+# acquirer's revenue. An unstated currency is an unknown size, and the module
+# rule is that unknown must not be treated as small.
+_CURRENCY_AMBIGUOUS_UNITS = {"million", "mn", "billion", "bn", "trillion"}
+_DOLLAR_AFTER_RE = re.compile(r"^\s*(?:us\s+)?dollars?\b", re.IGNORECASE)
+_RUPEE_AFTER_RE = re.compile(r"^\s*rupees?\b", re.IGNORECASE)
+
 _UNIT_ALT = "|".join(sorted(_MULTIPLIERS, key=len, reverse=True))
 _AMOUNT_RE = re.compile(
-    r"(?P<cur>(?:rs\.?|inr|₹|usd|us\$|\$)\s*)?"
+    # Word-anchored: unanchored, "rs" matched the end of "users" and
+    # "orders", so "users 600 million" read as a rupee amount.
+    r"(?P<cur>(?:\brs\.?|\binr|₹|\busd|\bus\$|\$)\s*)?"
     r"(?P<num>\d[\d,]*(?:\.\d+)?)"
     r"[\s-]*"
     r"(?P<unit>" + _UNIT_ALT + r")"
@@ -244,7 +257,22 @@ _AGGREGATE_MARKERS = (
     "total investment of",
     "guarantee",
     "guarantees",
+    # An order book is a stock of backlog, not a transaction, and it is often
+    # someone else's. "RITES Signs MOU with CONCOR for Logistics Projects
+    # Expanding ₹5,900 Crore Order Book" is RITES's backlog; it was sized as a
+    # CONCOR deal at 65% of CONCOR's revenue and escalated. And even a
+    # company's own "takes order book to ₹75,000 crore" is the largest figure
+    # in the headline, so it displaced the actual order being reported.
+    "order book",
+    "orderbook",
+    "order backlog",
 )
+
+# A memorandum of understanding is not a transaction. It is non-binding, most
+# never become one, and any rupee figure in the headline is an aspiration —
+# the prospective-marker case above in different words. Matched as a word:
+# the bare letters occur inside "amount", "mounting" and "famous".
+_MOU_RE = re.compile(r"\bmous?\b|memorandum of understanding", re.IGNORECASE)
 
 # Event vocabulary that implies a transaction with a readable size. Anything
 # outside this set is left unweighted -- see the module docstring.
@@ -331,10 +359,26 @@ def extract_amount_cr(text: str) -> Optional[float]:
         amount = value * multiplier
 
         # Dollar amounts convert; the currency marker may sit on the number
-        # itself or immediately before it.
+        # itself, immediately before it, or after the unit ("1.5 billion
+        # dollars").
         window = text[max(0, match.start() - 6) : match.start()].lower()
-        if any(f in marker for f in _FOREIGN) or any(f in window for f in _FOREIGN):
+        dollars = (
+            any(f in marker for f in _FOREIGN)
+            or any(f in window for f in _FOREIGN)
+            or bool(_DOLLAR_AFTER_RE.match(text[match.end() :]))
+        )
+        # The marker group already captures "Rs"/"INR"/"₹" written against
+        # the number; the window is not searched for "rs", which ends "users"
+        # and "orders".
+        rupees = (
+            bool(marker)
+            and not dollars
+            or bool(_RUPEE_AFTER_RE.match(text[match.end() :]))
+        )
+        if dollars:
             amount *= _USD_INR
+        elif not rupees and unit in _CURRENCY_AMBIGUOUS_UNITS and not unit2:
+            continue
 
         if best is None or amount > best:
             best = amount
@@ -390,6 +434,8 @@ def amount_is_attributable(title: str) -> bool:
     if any(marker in lowered for marker in _RESULTS_MARKERS):
         return False
     if any(marker in lowered for marker in _AGGREGATE_MARKERS):
+        return False
+    if _MOU_RE.search(lowered):
         return False
     return not _COMPANY_LIST_RE.match(title or "")
 

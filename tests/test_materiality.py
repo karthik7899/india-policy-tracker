@@ -5,6 +5,8 @@ measured against the shapes it actually meets rather than tidy inventions.
 """
 
 import os
+
+import pytest
 import sys
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -356,3 +358,79 @@ class TestNonTransactions:
             "Transformer Order",
         ):
             assert materiality.amount_is_attributable(title) is True
+
+
+class TestGuardsFoundOnTheEventPath:
+    """Three guards added when materiality was first applied to market events.
+
+    Measured before and after across the whole collected corpus: they change
+    five readings and every one of the five was wrong before. None of them
+    removes a figure that was right.
+    """
+
+    def test_someone_elses_order_book_is_not_our_deal(self):
+        """Sized as a CONCOR transaction at 65% of CONCOR's revenue and
+        escalated to Medium — the ₹5,900 crore is RITES's backlog."""
+        title = (
+            "RITES Signs MOU with CONCOR for Logistics Projects Expanding "
+            "₹5,900 Crore Order Book"
+        )
+        assert materiality.amount_is_attributable(title) is False
+
+    def test_an_order_book_figure_never_stands_in_for_the_order(self):
+        assert (
+            materiality.amount_is_attributable(
+                "BEL bags ₹500 crore order, takes order book to ₹75,000 crore"
+            )
+            is False
+        )
+
+    def test_an_mou_is_not_a_transaction(self):
+        assert (
+            materiality.amount_is_attributable(
+                "State signs MoU for ₹10,000 crore investment in battery plant"
+            )
+            is False
+        )
+
+    def test_mou_is_matched_as_a_word_not_as_letters(self):
+        """ "amount", "mounting" and "famous" all contain the letters."""
+        assert materiality.amount_is_attributable(
+            "Order amount of ₹900 crore awarded to Suzlon"
+        )
+
+    def test_a_bare_million_is_an_unknown_currency_not_rupees(self):
+        """A US acquisition read as ₹60 crore, filed immaterial, when in
+        dollars it is larger than the acquirer's revenue."""
+        assert (
+            materiality.extract_amount_cr(
+                "iks healthcare set to acquire trubridge for 600 million"
+            )
+            is None
+        )
+
+    def test_a_stated_currency_still_converts(self):
+        assert materiality.extract_amount_cr(
+            "Acquires Kenya business for $32 Million"
+        ) == pytest.approx(265.6)
+        assert materiality.extract_amount_cr("Form ₹250 Million EMS venture") == 25.0
+        assert materiality.extract_amount_cr(
+            "order worth 1.5 billion dollars"
+        ) == pytest.approx(12450.0)
+        assert materiality.extract_amount_cr("deal worth 600 million rupees") == 60.0
+
+    def test_a_word_ending_in_rs_is_not_a_rupee_marker(self):
+        """The marker pattern was unanchored, so "users 600 million" read as
+        Rs 600 million."""
+        assert (
+            materiality.extract_amount_cr("platform crosses users 600 million") is None
+        )
+        assert materiality.extract_amount_cr("wins Rs900 crore deal") == 900.0
+
+    def test_counted_things_in_millions_are_not_money(self):
+        assert (
+            materiality.extract_amount_cr(
+                "Pearl Global adds 7 million pieces of garment capacity"
+            )
+            is None
+        )

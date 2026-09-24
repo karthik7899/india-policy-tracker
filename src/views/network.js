@@ -16,9 +16,10 @@
 // can look at is a curiosity; a graph that takes you to the positions it
 // affects is a tool.
 
-import { el, mount, emptyState } from "../core/dom.js";
+import { el, mount, emptyState, disclosure } from "../core/dom.js";
 import { href } from "../core/router.js";
-import { loadGraph } from "../core/data.js";
+import { shortDate } from "../core/format.js";
+import { loadGraph, loadProposals } from "../core/data.js";
 
 const TYPE_LABEL = {
   anchor_demand: "Demand anchor",
@@ -26,11 +27,16 @@ const TYPE_LABEL = {
   partner: "Partner",
 };
 
-// Edge types that terminate at something we hold — a sector or a ticker.
-// competitor and supplier_customer relate two OUTSIDE entities to each other;
-// they exist to complete a read-through chain, and grouping the graph by
-// destination without excluding them invents a sector card headed "Google".
-const TERMINAL_TYPES = new Set(["anchor_demand", "input_cost", "partner"]);
+// Edge types that terminate at a SECTOR. competitor and supplier_customer
+// relate two outside entities to each other; they exist to complete a
+// read-through chain, and grouping the graph by destination without excluding
+// them invents a sector card headed "Google".
+//
+// partner is excluded for the same reason from the other side: it ends at a
+// holding, not a sector, and grouping it here produced cards headed "TCS" and
+// "SUZLON" whose "Holdings →" link filtered on a sector that does not exist.
+// Partners get their own panel, keyed by the holding they belong to.
+const TERMINAL_TYPES = new Set(["anchor_demand", "input_cost"]);
 
 const DIRECTION_MARK = { risk: "▼", opportunity: "▲" };
 
@@ -130,6 +136,156 @@ function crossSectorSummary(edges) {
   );
 }
 
+/** Every held ticker, upper-case — which end of a partner edge is ours. */
+function heldTickers(watchlist) {
+  const out = new Set();
+  for (const stocks of Object.values(watchlist || {})) {
+    for (const s of stocks || []) {
+      if (s && typeof s === "object" && s.ticker) out.add(String(s.ticker).toUpperCase());
+    }
+  }
+  return out;
+}
+
+/**
+ * Partners: who each holding has a live relationship with.
+ *
+ * An undirected edge, so "ours" is whichever end we hold. An edge whose ends
+ * are both unheld is shown too — a holding can leave the watchlist while its
+ * harvested edge stays — and is labelled as such rather than hidden, because a
+ * stale edge still drives read-throughs until someone removes it.
+ */
+function partnersPanel(edges, held, params) {
+  const partner = edges.filter((e) => e.type === "partner");
+  if (!partner.length) return null;
+
+  const byHolding = new Map();
+  for (const e of partner) {
+    const src = String(e.src || "");
+    const dst = String(e.dst || "");
+    const [ours, theirs] = held.has(dst.toUpperCase())
+      ? [dst.toUpperCase(), src]
+      : held.has(src.toUpperCase())
+        ? [src.toUpperCase(), dst]
+        : [dst, src];
+    if (!byHolding.has(ours)) byHolding.set(ours, []);
+    byHolding.get(ours).push({ name: theirs, edge: e });
+  }
+
+  return el(
+    "section",
+    { class: "panel" },
+    el("h3", { class: "section-title" }, `Partners · ${partner.length}`),
+    el(
+      "p",
+      { class: "section-note" },
+      "Joint ventures and tie-ups a holding is party to. A disruption at the " +
+        "partner is read across to the holding in Read-throughs above; the " +
+        "partner's good news is not, because it is not ours by default.",
+    ),
+    el(
+      "ul",
+      { class: "net-shared-list" },
+      [...byHolding.entries()]
+        .sort((a, b) => a[0].localeCompare(b[0]))
+        .map(([ours, list]) =>
+          el(
+            "li",
+            {},
+            held.has(ours)
+              ? el(
+                  "a",
+                  { class: "ticker-link", href: href("holdings", { ...params, focus: ours }) },
+                  ours,
+                )
+              : el("span", {}, ours, el("span", { class: "evidence-meta" }, "no longer held")),
+            " — ",
+            list.map(({ name, edge }, i) => [
+              i ? ", " : "",
+              el("span", { title: edge.note || edge.evidence || "" }, name),
+            ]),
+          ),
+        ),
+    ),
+  );
+}
+
+/**
+ * Where to edit the proposals file, when the page is served from GitHub
+ * Pages — owner.github.io/repo/. Anywhere else (a local preview, the smoke
+ * test) there is no honest link to give, so none is shown.
+ */
+function proposalsEditUrl() {
+  const { hostname, pathname } = window.location;
+  if (!hostname.endsWith(".github.io")) return null;
+  const owner = hostname.split(".")[0];
+  const repo = pathname.split("/").filter(Boolean)[0];
+  if (!owner || !repo) return null;
+  return `https://github.com/${owner}/${repo}/edit/main/entity_graph_proposals.json`;
+}
+
+/**
+ * Proposed partners: tie-ups the pipeline read that a person has not ruled on.
+ *
+ * The review step exists because a wrong edge does not produce a wrong
+ * number, it produces a plausible chain — so this shows the evidence a
+ * reviewer needs to decide in one glance: the pair, how many separate
+ * headlines reported it, and the first of them as a link to the article.
+ */
+function proposalsPanel(proposals) {
+  const pending = (proposals || []).filter((p) => p && p.status === "pending");
+  if (!pending.length) return null;
+  const editUrl = proposalsEditUrl();
+
+  const body = el(
+    "div",
+    {},
+    el(
+      "p",
+      { class: "section-note" },
+      "Nothing here affects any signal until accepted. To decide, set a " +
+        "proposal's status to \u201caccepted\u201d or \u201crejected\u201d in " +
+        "entity_graph_proposals.json; accepted pairs join the graph on the next run. " +
+        "Correct the counterparty's name first if it is wrong.",
+      editUrl
+        ? [" ", el("a", { href: editUrl, target: "_blank", rel: "noopener noreferrer" }, "Edit on GitHub \u2192")]
+        : null,
+    ),
+    el(
+      "ul",
+      { class: "evidence" },
+      pending.map((p) => {
+        const first = (p.evidence || [])[0] || {};
+        const seen = (p.evidence || []).length;
+        return el(
+          "li",
+          {},
+          el("strong", {}, `${p.holding} \u2194 ${p.counterparty}`),
+          el(
+            "span",
+            { class: "evidence-tags" },
+            el("span", { class: "tag" }, `${seen >= 5 ? "5+" : seen} headline${seen === 1 ? "" : "s"}`),
+          ),
+          el(
+            "span",
+            { class: "evidence-meta" },
+            first.link
+              ? el("a", { href: first.link, target: "_blank", rel: "noopener noreferrer" }, first.headline || "")
+              : first.headline || "",
+            first.date ? ` \u00b7 ${shortDate(first.date)}` : "",
+          ),
+        );
+      }),
+    ),
+  );
+
+  return el(
+    "section",
+    { class: "panel" },
+    disclosure(`${pending.length} proposed partner${pending.length === 1 ? "" : "s"} awaiting review`, body),
+  );
+}
+
 /**
  * Read-throughs: what an event about someone else means for what we hold.
  *
@@ -206,7 +362,7 @@ function readThroughPanel(rows, params) {
 }
 
 export async function render(container, { payload, route }) {
-  const edges = await loadGraph();
+  const [edges, proposals] = await Promise.all([loadGraph(), loadProposals()]);
   if (!edges.length) {
     mount(
       container,
@@ -236,7 +392,7 @@ export async function render(container, { payload, route }) {
       el(
         "p",
         { class: "view-sub" },
-        `${edges.length} curated connections between ${ordered.length} sectors and ` +
+        `${edges.length} connections between ${ordered.length} sectors and ` +
           `the demand anchors and input costs outside them.`,
       ),
     ),
@@ -247,5 +403,7 @@ export async function render(container, { payload, route }) {
       ordered.map(([key, list]) => sectorCard(key, list, sectors, route?.focus)),
     ),
     crossSectorSummary(terminal),
+    partnersPanel(edges, heldTickers(payload?.watchlist), (route && route.params) || {}),
+    proposalsPanel(proposals),
   );
 }

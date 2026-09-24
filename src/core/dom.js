@@ -46,6 +46,24 @@ export function el(tag, props = {}, ...children) {
   return node;
 }
 
+/**
+ * A native disclosure. No JS state, no new dependency, keyboard-operable and
+ * announced by screen readers for free — and closed by default, which is the
+ * point: the Risk page was 6,832px tall and most of that was detail nobody had
+ * asked to see yet.
+ *
+ * `summary` must carry the count, not just a verb. "Show" tells a reader
+ * nothing about whether opening it is worth the scroll; "67 holdings" does.
+ */
+export function disclosure(summaryText, body) {
+  return el(
+    "details",
+    { class: "disclose" },
+    el("summary", { class: "disclose-summary" }, summaryText),
+    body,
+  );
+}
+
 /** Replace a container's contents in one operation. */
 export function mount(container, ...nodes) {
   if (!container) return;

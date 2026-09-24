@@ -16,7 +16,7 @@
 // describing seventy holdings while the table describes nine.
 
 import { el, mount } from "../core/dom.js";
-import { num, crore, pct, bandIndex, BANDS, shortDate } from "../core/format.js";
+import { num, crore, pct, bandIndex, BANDS, shortDate, sizeLabel } from "../core/format.js";
 import { loadCoverage } from "../core/data.js";
 import * as filters from "../core/filters.js";
 import * as charts from "../charts/charts.js";
@@ -189,6 +189,16 @@ async function drawer(stock, payload) {
                 // shown before they act on it.
                 w.evidence_source
                   ? el("span", { class: "evidence-meta" }, ` — ${w.evidence_source}`)
+                  : null,
+                // How big it is against this company. Absent when the headline
+                // carried no size the guards would attribute to one company —
+                // which is "not known", never "small", so nothing is printed.
+                typeof w.materiality_pct === "number"
+                  ? el(
+                      "span",
+                      { class: "evidence-meta" },
+                      `Sized at ${sizeLabel(w.materiality_pct, w.materiality_band)}`,
+                    )
                   : null,
               ),
             ),

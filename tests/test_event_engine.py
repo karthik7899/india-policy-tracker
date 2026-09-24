@@ -5,6 +5,8 @@ import json
 import os
 import sys
 
+import pytest
+
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from analysis.entity_graph import (  # noqa: E402
@@ -628,3 +630,135 @@ class TestAClassifiedEventCitesItsArticle:
             collect_sources(data, self._WL)["same story"]["link"]
             == "https://first.test"
         )
+
+
+# ---------------------------------------------------------------------------
+# counterparties and size on the event itself
+# ---------------------------------------------------------------------------
+
+from analysis.event_engine import annotate_event_materiality  # noqa: E402
+
+_EMS = {
+    "manufacturing_electronics": [
+        {
+            "ticker": "SYRMA",
+            "name": "Syrma SGS Tech.",
+            # Rs 4,000 crore TTM
+            "screener": {"sales_trend": [1000.0, 1000.0, 1000.0, 1000.0]},
+        },
+        {"ticker": "DIXON", "name": "Dixon Technologies"},
+    ],
+    "aerospace_defence": [
+        {
+            "ticker": "BEL",
+            "name": "Bharat Electronics",
+            "screener": {"sales_trend": [7000.0, 7000.0, 7000.0, 7000.0]},
+        }
+    ],
+}
+
+
+class TestCounterparties:
+    def test_a_tie_up_records_the_other_party(self):
+        (event,) = classify_headlines(
+            _data("Syrma SGS Forms PCB Joint Venture With Kaga Electronics"), _EMS
+        )
+        assert event["actors"] == ["SYRMA"]
+        assert event["counterparties"] == ["Kaga Electronics"]
+
+    def test_the_field_is_absent_on_events_it_does_not_apply_to(self):
+        """None for an order win, not [] — [] means "a tie-up, and nobody else
+        could be named", which is a different statement."""
+        (event,) = classify_headlines(
+            _data("Bharat Electronics wins order worth ₹1,081 crore"), _EMS
+        )
+        assert "counterparties" not in event
+
+    def test_carried_over_tie_ups_gain_their_counterparty_on_refresh(self):
+        """The 45 days already in the corpus predate the field."""
+        old = {
+            "headline": "Syrma SGS and Elemaster inaugurate joint venture facility",
+            "event_type": "tie_up",
+            "phrase": "joint venture",
+            "domains": [],
+            "actors": ["SYRMA"],
+            "external": [],
+            "date": _TODAY,
+        }
+        (event,) = refresh_merged_events([old], _EMS)
+        assert event["counterparties"] == ["Elemaster"]
+
+
+class TestEventMateriality:
+    def test_an_order_is_sized_against_the_holding_that_won_it(self):
+        events = classify_headlines(
+            _data("Bharat Electronics secures orders worth ₹1,081 crore"), _EMS
+        )
+        (event,) = annotate_event_materiality(events, _EMS)
+        assert event["amount_cr"] == 1081.0
+        assert event["materiality"]["BEL"]["band"] == "minor"
+        assert event["materiality"]["BEL"]["pct_of_revenue"] == pytest.approx(
+            3.86, abs=0.01
+        )
+
+    def test_the_price_move_in_one_clause_does_not_veto_the_order_in_another(self):
+        """Sized on the event's clause. The whole headline trips the
+        price-move guard and would have left a real order unsized."""
+        events = classify_headlines(
+            _data("Syrma SGS wins order worth ₹800 crore; shares jump 6%"), _EMS
+        )
+        (event,) = annotate_event_materiality(events, _EMS)
+        assert event["materiality"]["SYRMA"]["band"] == "transformative"
+
+    def test_a_joint_ventures_capital_is_not_sized(self):
+        """Absent, not zero: unknown is not small."""
+        events = classify_headlines(
+            _data("Syrma SGS, Kaga Electronics Form ₹250 Million EMS Joint Venture"),
+            _EMS,
+        )
+        (event,) = annotate_event_materiality(events, _EMS)
+        assert "amount_cr" not in event and "materiality" not in event
+
+    def test_a_material_corporate_move_is_escalated_by_the_existing_rule(
+        self, monkeypatch
+    ):
+        """The alert carries its clause, so the order-materiality pass sizes it
+        like every other headline-backed alert. Without the source it stayed
+        Low whatever the order was worth."""
+        import analysis.entity_graph as eg
+        from analysis.early_warning import annotate_order_materiality
+
+        monkeypatch.setattr(eg, "load_entity_graph", lambda path=None: {"edges": []})
+        events = classify_headlines(
+            _data("Syrma SGS wins order worth ₹800 crore; shares jump 6%"), _EMS
+        )
+        alerts = [
+            a
+            for a in market_event_signals({"market_events": events}, _EMS)
+            if a["category"] == "Corporate Move"
+        ]
+        annotate_order_materiality(alerts, _EMS)
+        (alert,) = alerts
+        assert alert["severity"] == "Medium"
+        assert alert["materiality_band"] == "transformative"
+
+    def test_a_reported_deal_is_never_escalated(self, monkeypatch):
+        import analysis.entity_graph as eg
+
+        monkeypatch.setattr(eg, "load_entity_graph", lambda path=None: {"edges": []})
+        event = {
+            "headline": "Syrma SGS reportedly wins order worth ₹800 crore",
+            "event_type": "order_win",
+            "phrase": "order worth",
+            "certainty": "reported",
+            "domains": [],
+            "actors": ["SYRMA"],
+            "direction": "opportunity",
+            "date": _TODAY,
+        }
+        (alert,) = [
+            a
+            for a in market_event_signals({"market_events": [event]}, _EMS)
+            if a["category"] == "Corporate Move"
+        ]
+        assert "source_headlines" not in alert
