@@ -281,3 +281,18 @@ def test_a_signal_with_no_sector_is_not_a_sector_moving():
     ]
     summary = build_summary({"early_warnings": warnings}, {})
     assert [k for k, _ in summary["hot_sectors"]] == ["Aerospace & Defence"]
+
+
+def test_a_gist_that_drops_the_company_is_refused():
+    """From the first live run: 33 of 153 gists on holding headlines lost it."""
+    raw = "ideaForge Now Has a Drone Taking Off Every 2 Minutes; Q1 Revenue Reaches ₹68.6 Cr"
+    holdings = [("IDEAFORGE", "IdeaForge Technology")]
+    assert display(raw, {"gist": "Q1 Revenue Reaches ₹68.6 Cr"}, holdings) == raw
+    assert (
+        display(
+            raw,
+            {"gist": "ideaForge Now Has a Drone Taking Off Every 2 Minutes"},
+            holdings,
+        )
+        == "ideaForge Now Has a Drone Taking Off Every 2 Minutes"
+    )
