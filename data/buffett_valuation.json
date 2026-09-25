@@ -514,36 +514,6 @@
       }
     },
     {
-      "ticker": "OPTIEMUS",
-      "name": "Optiemus Infra.",
-      "owner_earnings": -62.8,
-      "moat": "Weak/None",
-      "moat_status": "Weak/None",
-      "retained_earnings_ratio": 2.86,
-      "passed_retained_test": true,
-      "score": {
-        "overall_score": 8,
-        "fundamental_score": 0,
-        "momentum_score": 8,
-        "confidence": "High",
-        "reasons": [
-          "Policy Notification: Optiemus Infracom (NSE: OPTIEMUS) Screen Protector Expansion and Electronics Manufacturing Update",
-          "Policy Notification: Board comments on fine levied by the Exchange",
-          "Strong revenue growth (TTM +20.9%)",
-          "Liquid (Rs 88 Cr traded daily)",
-          "FII Accumulation (+0.07%)",
-          "DII Accumulation (+1.42%)"
-        ],
-        "risks": [
-          "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 97.0 > 15 & Price > Intrinsic)"
-        ],
-        "recommendations": [
-          "Hold / Monitor"
-        ]
-      }
-    },
-    {
       "ticker": "SIEMENS",
       "name": "Siemens Ltd",
       "owner_earnings": 7653.8,
@@ -817,8 +787,8 @@
         "momentum_score": 8,
         "confidence": "High",
         "reasons": [
-          "Government Contract/MoU: CONCOR signs MoU with APEDA to strengthen export cold chain",
           "Government Contract/MoU: CONCOR signs MoU with APEDA to strengthen export cold chain and logistics ecosystem",
+          "Government Contract/MoU: CONCOR signs MoU with APEDA to strengthen export cold chain",
           "Operating Margin Expansion (+2.0%)",
           "Liquid (Rs 69 Cr traded daily)",
           "DII Accumulation (+0.08%)"
@@ -1439,6 +1409,34 @@
         "risks": [
           "Illiquid: Rs 0.86 Cr traded daily, ~6 sessions to exit Rs 1 Cr",
           "Fails Debt Limit (Debt > Net Assets)"
+        ],
+        "recommendations": [
+          "Avoid / High Risk"
+        ]
+      }
+    },
+    {
+      "ticker": "BIRLACABLE",
+      "name": "Birla Cable",
+      "owner_earnings": 81.2,
+      "moat": "Weak/None",
+      "moat_status": "Weak/None",
+      "retained_earnings_ratio": 2.86,
+      "passed_retained_test": true,
+      "score": {
+        "overall_score": 1,
+        "fundamental_score": 0,
+        "momentum_score": 1,
+        "confidence": "High",
+        "reasons": [
+          "Sector benefits from macro policy tailwinds (Fallback)",
+          "Strong revenue growth (TTM +28.3%)",
+          "Operating Margin Expansion (+8.0%)",
+          "FII Accumulation (+0.02%)"
+        ],
+        "risks": [
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Fails P/E Screen (P/E 22.4 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Avoid / High Risk"

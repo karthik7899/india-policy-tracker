@@ -3498,8 +3498,8 @@
         "industry_share_pct": 48.04,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
-        "peer_share_pct": 48.6,
-        "peer_share_change_pp": 7.53,
+        "peer_share_pct": 57.6,
+        "peer_share_change_pp": 11.77,
         "peer_share_lookback": 4,
         "peer_group_size": 4,
         "revenue_yoy_pct": 87.4,
@@ -3518,8 +3518,8 @@
           "Fails P/E Screen (P/E 179.0 > 15 & Price > Intrinsic)",
           "No Dividend Yield"
         ],
-        "industry_pe": 67.9,
-        "pe_vs_peers": "164% above peers"
+        "industry_pe": 35.0,
+        "pe_vs_peers": "411% above peers"
       },
       "score": {
         "overall_score": 3,
@@ -3675,8 +3675,8 @@
         "industry_share_pct": 5.07,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
-        "peer_share_pct": 16.1,
-        "peer_share_change_pp": -7.81,
+        "peer_share_pct": 19.0,
+        "peer_share_change_pp": -7.6,
         "peer_share_lookback": 4,
         "peer_group_size": 4,
         "revenue_yoy_pct": 6.6,
@@ -3695,8 +3695,8 @@
           "Fails P/E Screen (P/E 38.8 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 67.9,
-        "pe_vs_peers": "43% below peers"
+        "industry_pe": 35.0,
+        "pe_vs_peers": "11% above peers"
       },
       "score": {
         "overall_score": 0,
@@ -3850,8 +3850,8 @@
         "industry_share_pct": 4.06,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
-        "peer_share_pct": 12.9,
-        "peer_share_change_pp": -4.66,
+        "peer_share_pct": 15.3,
+        "peer_share_change_pp": -4.31,
         "peer_share_lookback": 4,
         "peer_group_size": 4,
         "revenue_yoy_pct": 16.3,
@@ -3870,8 +3870,8 @@
           "Fails P/E Screen (P/E 31.1 > 15; no intrinsic value to justify it)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 67.9,
-        "pe_vs_peers": "54% below peers"
+        "industry_pe": 35.0,
+        "pe_vs_peers": "11% below peers"
       },
       "score": {
         "overall_score": -2,
@@ -3896,138 +3896,132 @@
       "estimate_method": "Analyst Consensus"
     },
     {
-      "ticker": "OPTIEMUS",
-      "name": "Optiemus Infra.",
-      "price": "781.50",
-      "target": "390.75",
-      "growth_pct": "-50.0%",
+      "ticker": "BIRLACABLE",
+      "name": "Birla Cable",
+      "price": "345.20",
+      "target": "253.60",
+      "growth_pct": "-26.5%",
       "catalyst": "Auto-discovered via media radar. Catalyst: Policy tailwinds in the data_center_support segment.",
       "rating": "None",
-      "revenue_growth": "+102.8%",
-      "earnings_growth": "+46.0%",
+      "revenue_growth": "+51.1%",
+      "earnings_growth": "+2173.3%",
       "screener": {
-        "market_cap": 7047.0,
-        "current_price": 782.0,
-        "pe_ratio": 97.0,
-        "dividend_yield": 0.0,
-        "roce": 10.9,
-        "roe": 9.15,
-        "q_sales": 883.0,
-        "qoq_sales_growth": 82.06,
+        "market_cap": 1036.0,
+        "current_price": 345.0,
+        "pe_ratio": 22.4,
+        "dividend_yield": 0.36,
+        "roce": 8.96,
+        "roe": 6.26,
+        "q_sales": 267.0,
+        "qoq_sales_growth": 24.77,
         "quarterly_revenue_growth": [
-          418.0,
-          430.0,
-          485.0,
-          883.0
+          176.0,
+          205.0,
+          214.0,
+          267.0
         ],
         "sales_trend": [
-          477.0,
-          472.0,
-          449.0,
-          435.0,
-          418.0,
-          430.0,
-          485.0,
-          883.0
+          182.0,
+          158.0,
+          156.0,
+          176.0,
+          176.0,
+          205.0,
+          214.0,
+          267.0
         ],
-        "q_opm": 3.4,
+        "q_opm": 17.0,
         "quarterly_ebitda_margin": [
-          8.0,
-          7.0,
-          1.5,
-          3.4
-        ],
-        "opm_expansion": 1.9,
-        "q_eps": 2.39,
-        "eps_trend": [
-          1.6,
-          1.75,
-          2.57,
-          1.67,
-          1.9,
-          1.38,
-          2.53,
-          2.39
-        ],
-        "ttm_eps": 8.2,
-        "q_net_profit": 21.0,
-        "operating_margin_trend": [
-          1.6,
+          4.1,
           5.0,
+          9.0,
+          17.0
+        ],
+        "opm_expansion": 8.0,
+        "q_eps": 10.23,
+        "eps_trend": [
+          0.61,
+          0.48,
+          0.49,
+          0.45,
+          0.24,
+          1.34,
+          3.6,
+          10.23
+        ],
+        "ttm_eps": 15.41,
+        "q_net_profit": 31.0,
+        "operating_margin_trend": [
+          8.0,
           6.0,
+          4.9,
           6.0,
-          4.6
+          10.0
         ],
         "annual_sales_trend": [
-          472.0,
-          1174.0,
-          1528.0,
-          1890.0,
-          1769.0,
-          2216.0
+          792.0,
+          686.0,
+          662.0,
+          771.0,
+          861.0
         ],
         "annual_eps_trend": [
-          -0.11,
-          4.88,
-          6.61,
-          7.26,
-          7.44,
-          8.2
+          10.98,
+          7.38,
+          1.63,
+          5.63,
+          15.41
         ],
         "debt_trend": [
-          43.0,
-          118.0,
-          164.0,
-          198.0,
-          373.0
+          129.0,
+          165.0,
+          111.0,
+          133.0
         ],
         "cash_flow_trend": [
-          28.0,
-          1.0,
-          40.0,
-          -13.0,
-          -12.0
+          -8.0,
+          16.0,
+          112.0,
+          -21.0
         ],
-        "capex": 176.6,
+        "capex": 53.4,
         "rd_pct": 1.5,
         "roce_trend": [
-          2.0,
-          14.0,
-          15.0,
-          14.0,
-          11.0
+          10.0,
+          5.0,
+          9.0
         ],
-        "promoter_pct": 71.4,
-        "promoter_change": -0.77,
-        "fii_pct": 3.31,
-        "fii_change": 0.07,
-        "dii_pct": 2.4,
-        "dii_change": 1.42,
-        "isin": "INE350C01017",
-        "week52_low": 310.85,
-        "week52_high": 781.5,
-        "pct_above_low": 151.41,
-        "advt_cr": 88.2,
-        "liquidity_band": "liquid",
+        "promoter_pct": 66.35,
+        "promoter_change": 0.0,
+        "fii_pct": 0.02,
+        "fii_change": 0.02,
+        "dii_pct": 0.01,
+        "dii_change": 0.0,
+        "isin": "INE800A01015",
+        "week52_low": 111.17,
+        "week52_high": 409.5,
+        "pct_above_low": 210.51,
+        "advt_cr": 16.23,
+        "liquidity_band": "adequate",
         "sessions": 24,
-        "days_to_exit_1cr": 0.1,
-        "days_to_exit_5cr": 0.3,
-        "deliv_pct": 25.93,
-        "delivery_band": "mixed",
+        "days_to_exit_1cr": 0.3,
+        "days_to_exit_5cr": 1.5,
+        "deliv_pct": 54.96,
+        "delivery_band": "delivery-led",
         "series": "EQ",
-        "turnover_cr_last": 127.97,
-        "industry_share_pct": 22.21,
+        "turnover_cr_last": 13.01,
+        "industry_share_pct": 6.71,
         "industry_peer_count": 7,
-        "peer_share_pct": 22.5,
-        "peer_share_change_pp": 4.93,
+        "peer_share_pct": 8.1,
+        "peer_share_change_pp": 0.14,
         "peer_share_lookback": 4,
         "peer_group_size": 4,
-        "revenue_yoy_pct": 103.0,
-        "revenue_ttm_growth_pct": 20.9,
-        "revenue_cagr_pct": 36.2,
+        "revenue_yoy_pct": 51.7,
+        "revenue_ttm_growth_pct": 28.3,
+        "revenue_cagr_pct": 2.1,
         "revenue_growth_quality": "ok",
-        "graham_intrinsic_value": 126.7,
-        "owner_earnings": -62.8,
+        "graham_intrinsic_value": 253.6,
+        "owner_earnings": 81.2,
         "retained_earnings_ratio": 2.86,
         "moat_status": "Weak/None",
         "is_bargain": false,
@@ -4035,34 +4029,31 @@
         "hyper_growth_warning": false,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 97.0 > 15 & Price > Intrinsic)",
-          "No Dividend Yield"
+          "Fails P/E Screen (P/E 22.4 > 15 & Price > Intrinsic)"
         ],
-        "industry_pe": 67.9,
-        "pe_vs_peers": "43% above peers"
+        "industry_pe": 35.0,
+        "pe_vs_peers": "36% below peers"
       },
       "score": {
-        "overall_score": 8,
+        "overall_score": 1,
         "fundamental_score": 0,
-        "momentum_score": 8,
+        "momentum_score": 1,
         "confidence": "High",
         "reasons": [
-          "Policy Notification: Optiemus Infracom (NSE: OPTIEMUS) Screen Protector Expansion and Electronics Manufacturing Update",
-          "Policy Notification: Board comments on fine levied by the Exchange",
-          "Strong revenue growth (TTM +20.9%)",
-          "Liquid (Rs 88 Cr traded daily)",
-          "FII Accumulation (+0.07%)",
-          "DII Accumulation (+1.42%)"
+          "Sector benefits from macro policy tailwinds (Fallback)",
+          "Strong revenue growth (TTM +28.3%)",
+          "Operating Margin Expansion (+8.0%)",
+          "FII Accumulation (+0.02%)"
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 97.0 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 22.4 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
-          "Hold / Monitor"
+          "Avoid / High Risk"
         ]
       },
-      "fundamental_value": 126.7,
+      "fundamental_value": 253.6,
       "estimate_method": "Fundamental Estimate"
     }
   ],
@@ -6534,8 +6525,8 @@
         "momentum_score": 8,
         "confidence": "High",
         "reasons": [
-          "Government Contract/MoU: CONCOR signs MoU with APEDA to strengthen export cold chain",
           "Government Contract/MoU: CONCOR signs MoU with APEDA to strengthen export cold chain and logistics ecosystem",
+          "Government Contract/MoU: CONCOR signs MoU with APEDA to strengthen export cold chain",
           "Operating Margin Expansion (+2.0%)",
           "Liquid (Rs 69 Cr traded daily)",
           "DII Accumulation (+0.08%)"
