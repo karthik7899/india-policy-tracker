@@ -524,3 +524,77 @@ def test_the_serving_model_is_recorded_with_each_reading(cache):
     with open(cache) as f:
         (entry,) = json.load(f)["entries"].values()
     assert entry["model"] == "b"
+
+
+# ---------------------------------------------------------------------------
+# asking the API which models the key can use
+# ---------------------------------------------------------------------------
+
+
+def _catalogue(names, status=200):
+    return _Resp(
+        status,
+        {
+            "models": [
+                {"name": f"models/{n}", "supportedGenerationMethods": methods}
+                for n, methods in names
+            ]
+        },
+    )
+
+
+def test_discovery_lists_usable_flash_models_newest_first(monkeypatch):
+    """The fixed fallbacks were both retired (404); the key's own list is not."""
+    import requests
+
+    listing = _catalogue(
+        [
+            ("gemini-2.5-flash", ["generateContent"]),
+            ("gemini-3.8-flash-lite", ["generateContent"]),
+            ("gemini-3.8-pro", ["generateContent"]),  # not flash
+            ("text-embedding-004", ["embedContent"]),  # cannot generate
+            ("gemini-3.10-flash-preview", ["generateContent"]),
+            ("gemini-3.10-flash", ["generateContent"]),
+        ]
+    )
+    monkeypatch.setattr(requests, "get", lambda *a, **k: listing)
+    assert llm_reader.discover_models("k") == [
+        "gemini-3.10-flash",
+        "gemini-3.10-flash-preview",
+        "gemini-3.8-flash-lite",
+        "gemini-2.5-flash",
+    ]
+
+
+def test_an_unavailable_list_is_empty_not_an_error(monkeypatch):
+    import requests
+
+    monkeypatch.setattr(requests, "get", lambda *a, **k: _Resp(403, text="no"))
+    assert llm_reader.discover_models("k") == []
+
+
+def test_the_chain_puts_discovered_models_after_the_configured_default(monkeypatch):
+    monkeypatch.setenv("GEMINI_API_KEY", "k")
+    monkeypatch.delenv("GEMINI_MODEL", raising=False)
+    monkeypatch.delenv("GEMINI_FALLBACK_MODELS", raising=False)
+    monkeypatch.setattr(
+        llm_reader,
+        "discover_models",
+        lambda key: ["gemini-3.8-flash", "gemini-3.8-flash-lite"],
+    )
+    _, chain = llm_reader.default_transport()
+    assert chain.split(" → ") == [
+        "gemini-3.8-flash",
+        "gemini-3.8-flash-lite",
+        *llm_reader.FALLBACK_MODELS,
+    ]
+
+
+def test_an_explicit_fallback_list_is_not_second_guessed(monkeypatch):
+    monkeypatch.setenv("GEMINI_API_KEY", "k")
+    monkeypatch.setenv("GEMINI_FALLBACK_MODELS", "mine")
+    monkeypatch.setattr(
+        llm_reader, "discover_models", lambda key: pytest.fail("should not be asked")
+    )
+    _, chain = llm_reader.default_transport()
+    assert chain.endswith("mine")

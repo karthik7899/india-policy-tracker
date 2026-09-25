@@ -292,11 +292,79 @@ def chained_transport(transports: List[Tuple[str, Transport]]) -> Transport:
     return call
 
 
+MODELS_URL = "https://generativelanguage.googleapis.com/v1beta/models"
+
+
+def _version_key(name: str):
+    """Sort key putting the newest model first: gemini-3.8 before gemini-2.5.
+
+    Numbers are compared as numbers, so 3.10 sorts after 3.8. Stable ("-001")
+    and unsuffixed names come before previews and experiments of the same
+    version, which change without notice.
+    """
+    nums = [
+        int(n) for n in re.findall(r"\d+", name.split("-", 2)[1] if "-" in name else "")
+    ]
+    unstable = any(t in name for t in ("preview", "exp", "latest"))
+    return ([-n for n in nums], unstable, name)
+
+
+def discover_models(api_key: str) -> List[str]:
+    """Flash models this key can call, newest first; [] if the list is unavailable.
+
+    The fallback names used to be fixed in code, chosen without access to
+    Google's catalogue, and both turned out retired: the first run with the
+    chain got 404 for gemini-2.5-flash and gemini-2.0-flash. Asking the API
+    which models the key can use replaces the guess with the answer.
+
+    Flash models only: the reader classifies short headlines, and the larger
+    models cost more for no gain on that task. Only models that support
+    generateContent, since that is the method the reader calls.
+    """
+    import requests
+
+    try:
+        resp = requests.get(
+            MODELS_URL,
+            headers={"x-goog-api-key": api_key},
+            params={"pageSize": 200},
+            timeout=TIMEOUT_S,
+        )
+        if resp.status_code != 200:
+            log.info(f"LLM reader: model list unavailable ({resp.status_code}).")
+            return []
+        found = []
+        for m in resp.json().get("models") or []:
+            name = str(m.get("name") or "").removeprefix("models/")
+            methods = m.get("supportedGenerationMethods") or []
+            if "flash" in name and "generateContent" in methods:
+                found.append(name)
+        found.sort(key=_version_key)
+        log.info(
+            "LLM reader: key can use "
+            + (", ".join(found) if found else "no flash models")
+            + "."
+        )
+        return found
+    except Exception as e:  # noqa: BLE001 - discovery is a convenience
+        log.info(f"LLM reader: model list unavailable ({e!r}).")
+        return []
+
+
 def default_transport() -> Tuple[Optional[Transport], str]:
     key = os.environ.get("GEMINI_API_KEY", "").strip()
     if not key:
         return None, "GEMINI_API_KEY not set"
-    chain = model_chain()
+    configured = model_chain()
+    # Configured models first (the default, then any named fallbacks), then
+    # whatever the key can actually use. Asked for only when fallbacks were
+    # not named explicitly: an explicit list is the user's decision.
+    discovered = (
+        []
+        if os.environ.get("GEMINI_FALLBACK_MODELS", "").strip()
+        else discover_models(key)
+    )
+    chain = list(dict.fromkeys(configured[:1] + discovered + configured[1:]))
     transport = chained_transport([(m, gemini_transport(key, m)) for m in chain])
     return transport, " → ".join(chain)
 
