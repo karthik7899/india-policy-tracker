@@ -2,6 +2,19 @@
   "ticker": "SUZLON",
   "items": [
     {
+      "date": "22 Sep 2026",
+      "headline": "Suzlon Energy wins 400 MW EPC order from Tata Power",
+      "source_url": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxOYzF3OFAxY1ZLc05HMVlhLWVHUzVIYnZob0FwZWhfY2lUeFp2cVpvaE5DZTRWNWR0UjBOTFZlNFNaOTJqNUJYY1pncWtyaTVjSlF0VlB4c2RCZ3FaYjVGY2JibnhzTmh6cDFFUXRGNkVkU19UU3VNNWtiY2NOYi1DWE52T2dMOWlLWlV3Qk13T21QdFdYQTJsTEY1a25oeGdZSVIya09WMFZwenhYbFRGd05KTXB3akdmMUpoQWxKQnFWdmc1MldfdzZYY0t2YkU5Sy1TdDEtOEM5cFd0a3RfcnNqS3BfazVzUEE?oc=5",
+      "source_label": "scanx.trade",
+      "event_type": "",
+      "source_kind": "Sector news",
+      "event_tags": [
+        "Sector news"
+      ],
+      "confidence": "M",
+      "status": "counted"
+    },
+    {
       "date": "Tue, 25 Aug 2026 04:28:08 GMT",
       "headline": "Suzlon Energy Secures 250 MW Wind Order From Torrent Green Energy",
       "source_url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxOXy1ibEVacTcwdTFMeGI3SWxHQXNZX1NLRzBjMkkwalN1emdyLWNlVDRBUE85QmZfMUJzcnNLM3lHMTE2YzQ1cXdiZXlwV21wWVhBekw5a25tZHJ4cTJ1dC1sUGYzSzhycTJjdXF1b1Z3VzhpbEl0TXJpX2dMRjZxMTI3UkVrbTd3YTl0dEstMng4cW5ObUpmVmQ2bzNsQ1gxaXR5dVU1dw?oc=5",
@@ -319,7 +332,22 @@
       "exclusion_reason": "aged >120d (200 days old)"
     },
     {
-      "date": "2026-09-25",
+      "date": "2026-09-22",
+      "headline": "Suzlon Energy wins 400 MW EPC order from Tata Power",
+      "source_url": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxOYzF3OFAxY1ZLc05HMVlhLWVHUzVIYnZob0FwZWhfY2lUeFp2cVpvaE5DZTRWNWR0UjBOTFZlNFNaOTJqNUJYY1pncWtyaTVjSlF0VlB4c2RCZ3FaYjVGY2JibnhzTmh6cDFFUXRGNkVkU19UU3VNNWtiY2NOYi1DWE52T2dMOWlLWlV3Qk13T21QdFdYQTJsTEY1a25oeGdZSVIya09WMFZwenhYbFRGd05KTXB3akdmMUpoQWxKQnFWdmc1MldfdzZYY0t2YkU5Sy1TdDEtOEM5cFd0a3RfcnNqS3BfazVzUEE?oc=5",
+      "source_label": "scanx.trade",
+      "event_type": "order_win",
+      "source_kind": "Event",
+      "event_tags": [
+        "order_win",
+        "Event"
+      ],
+      "confidence": "H",
+      "status": "merged",
+      "exclusion_reason": "merged: duplicate phrasing of “Suzlon Energy wins 400 MW EPC order from Tata Power”"
+    },
+    {
+      "date": "2026-08-25",
       "headline": "Suzlon Energy Secures 250 MW Wind Order From Torrent Green Energy",
       "source_url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxOXy1ibEVacTcwdTFMeGI3SWxHQXNZX1NLRzBjMkkwalN1emdyLWNlVDRBUE85QmZfMUJzcnNLM3lHMTE2YzQ1cXdiZXlwV21wWVhBekw5a25tZHJ4cTJ1dC1sUGYzSzhycTJjdXF1b1Z3VzhpbEl0TXJpX2dMRjZxMTI3UkVrbTd3YTl0dEstMng4cW5ObUpmVmQ2bzNsQ1gxaXR5dVU1dw?oc=5",
       "source_label": "Sahi",
@@ -334,52 +362,7 @@
       "exclusion_reason": "merged: duplicate phrasing of “Suzlon Energy Secures 250 MW Wind Order From Torrent Green E”"
     },
     {
-      "date": "2026-09-25",
-      "headline": "Suzlon Energy Secures 201.6 MW Wind Project Order From Waaree Group in Andhra Pradesh",
-      "source_url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxNUWRTblNnMlpMTVkzeEMxY2lvNW1tU0todlFuM3FqSndwQ3dyVTlNQ05IdnFZNEhua1U4RFhXV1c3YU5ZYjRiajk1YTY0anNETmZDTVVKdzY3cE5TbTVKSzZtTUV4ZklibjJhclRNWU9fV2JSTXFsWUlXamVDd2pTejkyZndCSXJLSWlpSlBEb05MVndMbTBFenpNazMzQlgzZHpHZ2NHWHZlelVtTTAydU5CZ2J5MUlueW1pX0NzVDZVUQ?oc=5",
-      "source_label": "Sahi",
-      "event_type": "order_win",
-      "source_kind": "Event",
-      "event_tags": [
-        "order_win",
-        "Event"
-      ],
-      "confidence": "H",
-      "status": "merged",
-      "exclusion_reason": "merged: duplicate phrasing of “Suzlon Energy Secures 201.6 MW Wind Project Order From Waare”"
-    },
-    {
-      "date": "2026-09-25",
-      "headline": "Suzlon crosses 1 GW partnership with Tata Power following a DevCo led new 400MW EPC order",
-      "source_url": "https://news.google.com/rss/articles/CBMi2AFBVV95cUxPNU9iaXpvN2FSZlpkYkl3OVl1Y1RrWEptUV9iVHh0dWpzQ2pIaFhEcmpGUnR0YXk0eE14bWg0T0hnVU85Tng4RkZMV0VwcEgweDcyVzRjSmxEY0w5TmdsYW9aNlU2MUlSdWU1VzJOX0RidjVrWEx4QVVFcU9wR0JLNjBDMkl4aGN5cjFuN3dETzhHaUptbzZBa0Etc2JmZFRGU0QyRG92SEpCc2NaNjBtM3lEaEdnYVZaSURVc2trbEQ5T0pKZFl4YkpMelAybk1mVWpFWXpTTXE?oc=5",
-      "source_label": "suzlon.com",
-      "event_type": "tie_up",
-      "source_kind": "Event",
-      "event_tags": [
-        "tie_up",
-        "Event"
-      ],
-      "confidence": "H",
-      "status": "merged",
-      "exclusion_reason": "merged: duplicate phrasing of “Suzlon crosses 1 GW partnership with Tata Power following a ”"
-    },
-    {
-      "date": "2026-09-25",
-      "headline": "Suzlon bags 400 MW wind EPC order from Tata Power Renewable",
-      "source_url": "https://news.google.com/rss/articles/CBMi1wFBVV95cUxPRnlSY1dlMkZaZU5aLUl0THN2WGZJZWtQejFLb1NtdjJHb1BaaFVPdF9jU0lNR2YtUkM0aTQwaXZ4NzlVblhXbGtqNUJ5VVplOEIwOV9CQkJEZm03X2k0OGxXMmdhMm9aUnF2V1Z2cTBOWnYwNTVKVmxzQ2RreG03V2Z4WU4zU0FHSmxveENXczZ4VDBVRVpIUklzSFFUNzl4RG9NY1VwQjRMdUlhdHNHSDByNGdGYkxaOHE5RHBMNjE5TnZDOXBqT3R2OG5nUmR0dTJaaEhHONIB3AFBVV95cUxNcXZlOFRnaGlaak12aHF3OFdLaDE3N0o4QzJXMUFTbjJJQVdMdlFwV05qN1BFQzJCRGJkUmpQaHVKVFY1bVV2QVdhWktscmhlSnM5UVg2UjhMdkNvZ1JsWmxNZEhLNUtiWGZuaURYR3l3Tl9TQzhjOVJGdzBxYXdpWlVvNmFTQlZHQU13bW4tc3pjS3lGWndtTDRER05sSVp4eW1GajdaYlMyNzNORlVPMHk4VW02elp4MUZiallqUDRaeTNZM0E1VnN5LUxjbUZtdHBocnNhSm1LdVpv?oc=5",
-      "source_label": "ET EnergyWorld",
-      "event_type": "order_win",
-      "source_kind": "Event",
-      "event_tags": [
-        "order_win",
-        "Event"
-      ],
-      "confidence": "H",
-      "status": "merged",
-      "exclusion_reason": "merged: duplicate phrasing of “Suzlon bags 400 MW wind EPC order from Tata Power Renewable”"
-    },
-    {
-      "date": "2026-09-25",
+      "date": "2026-09-08",
       "headline": "Suzlon wins its maiden 200 MW wind energy order from Ayana Renewable Power",
       "source_url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxPQmE2OWZxbUNyaE9abXdWczdqQlIzVGpWemVkTlhGbmFsYkpoZWtWNWhYS2dCZmFnYUFZMW5vU0F4cl9iX250VUN2c2ZUSmIwMl95MThUNGxjNmk4cTdCSS1YQXRhRFpJSWw0R2hIZEg2Szd1TVl4eE9hUTZnZXlqTW52a1pwMVNkZ01QeG1SM1BoMXBFTXdxVl9xTldmWDZyV21ETUNlNXBTcXI1Z2VaaWJVR0pFNkJkSjctTnRFQXp4ZkE?oc=5",
       "source_label": "suzlon.com",
@@ -394,7 +377,7 @@
       "exclusion_reason": "merged: duplicate phrasing of “Suzlon wins its maiden 200 MW wind energy order from Ayana R”"
     },
     {
-      "date": "2026-09-25",
+      "date": "2026-09-08",
       "headline": "Suzlon Energy secures maiden 200 MW wind energy contract from Ayana Renewable Power",
       "source_url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxPUGxSZFlveWVkMzNSbE5tYkRqbHl5aXVjeTZIRURjZnkxeTljNXZOeEVBVkZjMGFya29fdEk4cGV6NzhxeG5ER2tmb2V4bGs1ZVJLZzNfQ3VrLXBTZEdpcTQ2bmlkR3NBLUJ4VWpDMW5wZDBiNDU4WXdET2pKNzVPa3dPTlZmY09IaVZJa2k4bzFNM3NqNFZaalpwdWhzbUNFbmRvNFNaQl9aQm93Umg0dHZiZFZVS1FRSlV0OQ?oc=5",
       "source_label": "Business Upturn",
@@ -407,20 +390,6 @@
       "confidence": "H",
       "status": "merged",
       "exclusion_reason": "merged: duplicate phrasing of “Suzlon Energy secures maiden 200 MW wind energy contract fro”"
-    },
-    {
-      "date": "2026-09-25",
-      "headline": "Suzlon bags 306 MW wind turbine orders from Yanara in Rajasthan",
-      "source_url": "https://news.google.com/rss/articles/CBMi_wFBVV95cUxQMGpJYkVBeDJaeXdHUUF2VHdJb3RTYkJ3LU01aTNiWmdWWjJRb25Sb0NfMWpQb1JXdzJvelhfWko5a2pidEVrQzgyWENCSmZFTEtScVRrdy1IMUJlSVdVOFhUOU1QM1owWVkyTUhPTXpLTlFZd0dTYzBFUnNPaS1KUHVYNHhrdnF3YnBncV9aQ1FLczdKNmstVl9SbTlXb3Rla0lxeXNkTFZ4T3dzT24zVXMta2x0QUMxbmdYV001RWtYMjNwZEdqTDR2ZHRreHBwQnR6WEt6QmR5OWVzM25WUkpRNHlmZ0RFSHlzWUVqXzdLUDFiR2xzZUE4Mm9GUnPSAYQCQVVfeXFMTlRRVGctMGZQeVJ4T1ZoVHRjS0lKNzBKbl9SQm9OUXdnNExtanRRNXA3S0JQUG1WYUlHd0tuU3VQMDBzbTBDN0tDUk5qWmlzV1R5aGlfa2Vud1B5RFpEZ0RpdWdKU001RjNwbTBTQ19OZ2FJdEtjd1k5dnRGVEx0RUNFWlpvOTd4OURKR1FBN2xEMFRoN053N05tR0RRRkpaYjlMM2IxWWphVlR6eDhQUERoZmJYdUlaOHozdVlfTVVvV0wtMHg4elFpWEdubTFOYWZ0clMtTmVHSG5CblMxN2VjS2RLSko3QVdndl94M2tZU28yRTRRNFlWclN6aUlHZlZhLVU?oc=5",
-      "source_label": "ET EnergyWorld",
-      "event_type": "order_win",
-      "source_kind": "Event",
-      "event_tags": [
-        "order_win",
-        "Event"
-      ],
-      "confidence": "H",
-      "status": "counted"
     }
   ]
 }
