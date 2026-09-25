@@ -117,7 +117,9 @@ jobs:
       - name: Score event readers
         if: steps.gate.outputs.should_run == 'true'
         continue-on-error: true
-        run: python scripts/eval_events.py --reader all
+        run: |
+          python scripts/eval_events.py --reader all
+          python scripts/eval_events.py --reader policy
 
       # Implicitly also requires success(), so a failed or degraded run never
       # overwrites the committed dashboard and watchlist with partial data.

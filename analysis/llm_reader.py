@@ -42,7 +42,7 @@ CACHE_PATH = os.path.join(ROOT, "llm_cache.json")
 # Bump when the prompt or schema changes meaning. Cached readings from another
 # version are ignored and re-read, so an improved prompt reaches old
 # headlines instead of only new ones.
-PROMPT_VERSION = "2"
+PROMPT_VERSION = "3"
 
 # The model is configuration, not code: GEMINI_MODEL (a repository variable in
 # the workflow) overrides this. Gemini 3.8 Flash is the model the key was
@@ -96,6 +96,30 @@ EVENT_TYPES = (
 )
 CERTAINTIES = ("completed", "announced", "reported")
 
+POLICY_MEASURES = (
+    "duty_or_tariff",
+    "incentive_scheme",
+    "subsidy_or_funding",
+    "procurement",
+    "regulation",
+    "ban_or_restriction",
+    "tax",
+    "trade_agreement",
+    "approval",
+    "other",
+)
+POLICY_STATUSES = ("proposed", "approved", "in_force")
+DIRECTIONS = ("tailwind", "headwind", "mixed")
+
+
+def _sectors():
+    from config import SECTOR_METADATA
+
+    return {k: v for k, v in SECTOR_METADATA.items() if k != "macro_indicators"}
+
+
+_POLICY_SECTORS = tuple(_sectors())
+
 _INSTRUCTIONS = """You classify Indian business-news headlines for an equity analyst.
 For each headline return one object with:
 
@@ -128,6 +152,23 @@ gist — the shortest part of the headline, copied EXACTLY and contiguously, tha
   "X Limited has informed the Exchange regarding a press release dated ..., titled".
   Use "" if the headline is already that short or has no news.
 
+policy_measure — if a GOVERNMENT or REGULATOR acted (India or abroad), which kind:
+  duty_or_tariff, incentive_scheme, subsidy_or_funding, procurement, regulation,
+  ban_or_restriction, tax, trade_agreement, approval, other.
+  "none" for anything else — including a company's own board approval, market
+  commentary about a policy, a speech, or praise for an old scheme.
+policy_status — proposed (planned, likely, under consideration), approved, or in_force.
+sector_effects — for each sector below that the measure DIRECTLY helps or hurts:
+  sector (key from the list), direction (tailwind, headwind or mixed), and because:
+  the words of the headline naming what is affected, copied EXACTLY.
+  Think about who is on each side: a duty CUT on imported components is a
+  tailwind for assemblers and a headwind for domestic makers of that component;
+  a tariff cut by another country for India's competitors is a headwind.
+  [] when policy_measure is none or no listed sector is directly affected.
+
+SECTORS:
+{sectors}
+
 Answer only from the headline. Do not use outside knowledge to add companies."""
 
 _SCHEMA = {
@@ -142,6 +183,23 @@ _SCHEMA = {
             "amount_text": {"type": "STRING"},
             "material": {"type": "BOOLEAN"},
             "gist": {"type": "STRING"},
+            "policy_measure": {
+                "type": "STRING",
+                "enum": list(POLICY_MEASURES) + ["none"],
+            },
+            "policy_status": {"type": "STRING", "enum": list(POLICY_STATUSES)},
+            "sector_effects": {
+                "type": "ARRAY",
+                "items": {
+                    "type": "OBJECT",
+                    "properties": {
+                        "sector": {"type": "STRING", "enum": list(_POLICY_SECTORS)},
+                        "direction": {"type": "STRING", "enum": list(DIRECTIONS)},
+                        "because": {"type": "STRING"},
+                    },
+                    "required": ["sector", "direction", "because"],
+                },
+            },
         },
         "required": [
             "id",
@@ -151,6 +209,9 @@ _SCHEMA = {
             "amount_text",
             "material",
             "gist",
+            "policy_measure",
+            "policy_status",
+            "sector_effects",
         ],
     },
 }
@@ -449,12 +510,52 @@ def ground(headline: str, raw: Dict[str, Any]) -> Dict[str, Any]:
         # None when the model did not say: unknown is not "immaterial".
         "material": material if isinstance(material, bool) else None,
         "gist": gist,
+        **_ground_policy(headline, raw),
+    }
+
+
+def _ground_policy(headline: str, raw: Dict[str, Any]) -> Dict[str, Any]:
+    """The policy fields, kept only as far as the headline supports them.
+
+    An effect must name one of our sectors and quote the headline for what
+    is affected; one whose ``because`` is not a passage of the headline is
+    the model reasoning from outside knowledge, and is dropped. Unknown
+    measures read as none — the weakest reading.
+    """
+    measure = raw.get("policy_measure")
+    if measure not in POLICY_MEASURES:
+        return {"policy_measure": "none", "policy_status": None, "sector_effects": []}
+    status = raw.get("policy_status")
+    lower = re.sub(r"\s+", " ", (headline or "").lower())
+    effects, seen = [], set()
+    for e in raw.get("sector_effects") or []:
+        if not isinstance(e, dict):
+            continue
+        sector, direction = e.get("sector"), e.get("direction")
+        because = re.sub(r"\s+", " ", str(e.get("because") or "")).strip(" .,;:")
+        if sector not in _POLICY_SECTORS or direction not in DIRECTIONS:
+            continue
+        if not because or because.lower() not in lower:
+            continue
+        if sector in seen:
+            continue
+        seen.add(sector)
+        effects.append({"sector": sector, "direction": direction, "because": because})
+    return {
+        "policy_measure": measure,
+        "policy_status": status if status in POLICY_STATUSES else "proposed",
+        "sector_effects": effects,
     }
 
 
 def _prompt(batch: List[Tuple[int, str]]) -> str:
     lines = "\n".join(f"{i}: {h}" for i, h in batch)
-    return f"{_INSTRUCTIONS}\n\nReturn a JSON array, one object per id.\n\n{lines}"
+    sectors = "\n".join(
+        f"  {k}: {v.get('label', k)} — {v.get('desc', '')}"
+        for k, v in _sectors().items()
+    )
+    instructions = _INSTRUCTIONS.replace("{sectors}", sectors)
+    return f"{instructions}\n\nReturn a JSON array, one object per id.\n\n{lines}"
 
 
 def read_headlines(

@@ -41,14 +41,13 @@ async def fetch_all_feeds_async():
                 seen_titles.add(title_lower)
                 sector_news.append(cleaned)
 
-        # Sort so Positive impacts are highlighted first
-        sector_news.sort(
-            key=lambda x: (
-                1
-                if x["impact"] == "Positive"
-                else (3 if x["impact"] == "Negative" else 2)
-            )
-        )
+        # Newest first. This used to sort "Positive" sentiment first before
+        # keeping four, so an upbeat-sounding story displaced a newer, more
+        # negative one before anyone saw it — a selection bias applied by a
+        # tone score that is not even a reading of policy direction.
+        from analysis.event_evidence import article_date
+
+        sector_news.sort(key=lambda x: article_date(x.get("date")) or "", reverse=True)
         today_brief[sector] = sector_news[:4]  # Store top 4 articles per sector
         log.info(
             f"Aggregated {len(today_brief[sector])} feed items for sector: {sector}"

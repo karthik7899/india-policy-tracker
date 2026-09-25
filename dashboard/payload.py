@@ -28,6 +28,7 @@ FEED_CAPS = {
     # Each row carries a four-step chain, so these are wordy. Twenty-five is
     # already more second-order hypotheses than anyone acts on in a day.
     "read_throughs": 25,
+    "policy_impacts": 30,
 }
 
 # Coverage items per holding. Eight was generous for a card.

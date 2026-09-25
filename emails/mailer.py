@@ -243,6 +243,74 @@ def _feed_rows(items, field, watchlist, holdings_only=False):
         ]
 
 
+_POLICY_BADGE = {
+    "tailwind": ("badge-positive", "▲ Policy tailwind"),
+    "headwind": ("badge-negative", "▼ Policy headwind"),
+    "mixed": ("badge-neutral", "◆ Policy: mixed"),
+}
+
+
+def _policy_badge(policy):
+    """The item's policy direction for its sector, from the LLM reader.
+
+    Replaces the old sentiment badge. Only policy news gets one, and the
+    status travels with it so a proposal is not read as a done deal.
+    """
+    if not isinstance(policy, dict) or not policy.get("direction"):
+        return ""
+    cls, label = _POLICY_BADGE.get(policy["direction"], ("badge-neutral", ""))
+    status = str(policy.get("status") or "").replace("_", " ")
+    extra = (
+        f" <span style='font-size:10px;color:#94a3b8;'>({status})</span>"
+        if status
+        else ""
+    )
+    return f"<span class='badge {cls}'>{label}</span>{extra} | "
+
+
+def _build_policy_direction_html(impacts, caps):
+    """This cycle's policy measures and which way they cut, per sector.
+
+    Measures in force or approved come first; proposals after. Labelled as
+    the LLM's reading because that is what it is — scored against
+    eval/policy_labels.json, not yet reviewed by a person.
+    """
+    rows = [r for r in (impacts or []) if isinstance(r, dict) and r.get("effects")]
+    if not rows:
+        return ""
+    order = {"in_force": 0, "approved": 1, "proposed": 2}
+    rows.sort(key=lambda r: (order.get(r.get("status"), 3), r.get("date", "")))
+    items = ""
+    for r in rows[: caps.get("lists", 5)]:
+        effects = ", ".join(
+            f"{'▲' if e['direction'] == 'tailwind' else '▼' if e['direction'] == 'headwind' else '◆'} "
+            f"{html_lib.escape(_sector_label(e['sector']))}"
+            for e in r["effects"]
+        )
+        head = html_lib.escape(r["headline"])
+        link = r.get("link")
+        title = (
+            f"<a href='{html_lib.escape(link)}' target='_blank' style='color:#e2e8f0;'>{head}</a>"
+            if link
+            else head
+        )
+        items += (
+            f"<li style='margin-bottom:8px;'>{title}<br>"
+            f"<span style='font-size:11px;color:#94a3b8;'>{effects} · "
+            f"{html_lib.escape(str(r.get('status', '')).replace('_', ' '))}</span></li>"
+        )
+    return f"""
+        <div class="section-card">
+            <h3 style="color: #60a5fa; margin-bottom: 6px; font-size: 16px;">Policy Direction</h3>
+            <p style="font-size: 11px; color: #6b7280; margin: 0 0 10px 0;">
+                Government and regulator actions this cycle, and which of our sectors each helps
+                (▲) or hurts (▼). Read by the LLM from the headline; not verified.
+            </p>
+            <ul style="font-size: 13px; line-height: 1.5; padding-left: 18px; color: #cbd5e1;">{items}</ul>
+        </div>
+        """
+
+
 def _alert_key(w):
     """Identity of an alert across the summary and the warning list."""
     return (
@@ -829,7 +897,8 @@ def _sector_block_news_html(block, coverage_counts=None):
         rows.append(
             "<div class='news-item'>"
             f"{title}"
-            f"<div class='meta-line'>{html_lib.escape(str(item.get('source') or 'Source not available'))}"
+            f"<div class='meta-line'>{_policy_badge(item.get('policy'))}"
+            f"{html_lib.escape(str(item.get('source') or 'Source not available'))}"
             f" &middot; {tag}"
             f" &middot; {html_lib.escape(str(item.get('confidence') or 'M'))} confidence"
             f"{' &middot; ' + tickers if tickers else ''}</div></div>"
@@ -974,6 +1043,7 @@ def _render_email(brief_data, watchlist, caps):
     # curve stage, rotation track record — all synthesized from data already
     # computed above, no new fetches.
     body_html += _build_research_engine_html(brief_data, caps)
+    body_html += _build_policy_direction_html(brief_data.get("policy_impacts"), caps)
 
     selected_sectors, eligible_total = _sectors_to_render(brief_data, caps)
     blocks_by_id = {
@@ -997,14 +1067,10 @@ def _render_email(brief_data, watchlist, caps):
             # items the LLM reader judged immaterial, gist where there is one.
             news_items = _feed_rows(news_items, "title", watchlist)
             for item in news_items[: caps["news"]]:
-                # Only a negative reading is worth a badge. The keyword scorer
-                # marked 54 of 72 items "Positive" and none "Negative", so the
-                # badge on every row said nothing.
-                badge = (
-                    "<span class='badge badge-negative'>Negative</span> | "
-                    if item.get("impact") == "Negative"
-                    else ""
-                )
+                # Policy direction for this sector, from the LLM reader. The
+                # keyword scorer marked 54 of 72 items "Positive" and none
+                # "Negative", so its badge on every row said nothing.
+                badge = _policy_badge(item.get("policy"))
                 news_html += f"""
                 <div class="news-item">
                     <a href="{item.get('link', '')}" class="news-title" target="_blank">{item['_shown']}</a>
