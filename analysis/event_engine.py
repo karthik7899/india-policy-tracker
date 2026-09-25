@@ -23,6 +23,7 @@ from analysis.competitive_intel import (
     collect_headlines,
     collect_sources,
 )
+from analysis.event_evidence import article_date, evidence_level
 from analysis.parsing import title_matches_company
 from config import SECTOR_METADATA
 from logger import log
@@ -324,6 +325,17 @@ def _counterparties(event_type, clause, actors, holdings):
     )
 
 
+def _evidence_note(event: Dict[str, Any]) -> str:
+    """How the alert text states its evidence, in words a reader can check."""
+    level = evidence_level(event)
+    if level == "confirmed":
+        c = event["confirmation"]
+        return f"confirmed by {c.get('ticker')}'s {c.get('source')} filing of {c.get('date')}"
+    if level == "multi-source":
+        return f"reported by {event.get('reports')} outlets"
+    return "single report, not yet confirmed"
+
+
 def classify_headlines(
     data: Dict[str, Any], watchlist: Dict[str, Any], graph: Dict[str, Any] = None
 ) -> List[Dict[str, Any]]:
@@ -421,7 +433,11 @@ def classify_headlines(
                         else {}
                     ),
                     "direction": _EVENT_DIRECTION.get(event_type, "opportunity"),
-                    "date": today,
+                    # The article's own date, not the run's. Every run
+                    # re-reads the accumulated news history, so the run date
+                    # re-stamped months-old stories as today's on every run.
+                    "date": article_date(citation.get("date")) or today,
+                    "first_seen": today,
                     **(
                         {"link": citation["link"], "source": citation.get("source", "")}
                         if citation.get("link")
@@ -467,6 +483,7 @@ def refresh_merged_events(
     watchlist: Dict[str, Any],
     today: str = "",
     graph: Dict[str, Any] = None,
+    sources: Dict[str, Dict[str, str]] = None,
 ) -> List[Dict[str, Any]]:
     """Re-derive attribution on the accumulated event list, and drop stale rows.
 
@@ -498,10 +515,23 @@ def refresh_merged_events(
             - datetime.timedelta(days=EVENT_RETENTION_DAYS)
         ).isoformat()
 
-        dropped_stale = dropped_orphan = reattributed = 0
+        dropped_stale = dropped_orphan = reattributed = redated = 0
         for event in events:
             if not isinstance(event, dict):
                 continue
+            # Stored events carry the run date they were last re-classified
+            # on; the article's own date replaces it wherever the feed still
+            # has the article. Done before the retention check, so a story
+            # that was only ever "today" by accident now ages out properly.
+            published = article_date(
+                ((sources or {}).get(str(event.get("headline", "")).lower()) or {}).get(
+                    "date"
+                )
+            )
+            if published and published != event.get("date"):
+                event.setdefault("first_seen", event.get("date"))
+                event["date"] = published
+                redated += 1
             if str(event.get("date", "")) < cutoff:
                 dropped_stale += 1
                 continue
@@ -555,9 +585,10 @@ def refresh_merged_events(
                 event["counterparties"] = counterparties
             refreshed.append(event)
 
-        if dropped_stale or dropped_orphan or reattributed:
+        if dropped_stale or dropped_orphan or reattributed or redated:
             log.info(
                 f"Event corpus refresh: {reattributed} re-attributed, "
+                f"{redated} re-dated to the article's date, "
                 f"{dropped_orphan} no longer touch the watchlist, "
                 f"{dropped_stale} past {EVENT_RETENTION_DAYS}d retention."
             )
@@ -784,7 +815,7 @@ def market_event_signals(
                         "category": "Corporate Move",
                         "signal": (
                             f"{etype.replace('_', ' ').title()}{qualifier}: "
-                            f"“{headline}”"
+                            f"“{headline}” ({_evidence_note(event)})"
                         ),
                         # The clause, kept apart from the prose, so the
                         # order-materiality pass sizes this alert by the same
@@ -792,11 +823,13 @@ def market_event_signals(
                         # Corporate Move stayed Low whatever the deal was
                         # worth: that pass skips alerts with no source.
                         #
-                        # Not for reported events. An announced acquisition
-                        # has an agreed price and the market prices it that
-                        # day; a rumoured one has neither, and escalating on
-                        # it would grade speculation as an agreed deal — the
-                        # same line compute_supply_stress draws.
+                        # Sized, and so escalated, only when the story is
+                        # corroborated: the holding filed it with the
+                        # exchange, or more than one outlet reported it. A
+                        # single report can still be wrong about the amount
+                        # or the company, and escalation is the one place a
+                        # wrong number reaches the top of the email. Never
+                        # for a reported (rumoured) deal.
                         **(
                             {
                                 "source_headlines": [
@@ -804,8 +837,10 @@ def market_event_signals(
                                 ]
                             }
                             if certainty != "reported"
+                            and evidence_level(event) != "single report"
                             else {}
                         ),
+                        "evidence": evidence_level(event),
                     }
                 )
 

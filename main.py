@@ -185,7 +185,10 @@ async def run_pipeline():
         adv_rss_task = fetch_advanced_rss_feeds_async(session, watchlist)
         sebi_task = check_sebi_sid_filings_async(session)
         inst_task = fetch_institutional_activity_async(session, watchlist)
-        filings_task = fetch_exchange_filings_async(session, watchlist)
+        held_exchange_filings: list = []
+        filings_task = fetch_exchange_filings_async(
+            session, watchlist, held_out=held_exchange_filings
+        )
         isin_refresh_task = refresh_isin_master_async(session, isin_master)
         global_events_task = fetch_global_event_feeds_async(session)
 
@@ -262,7 +265,7 @@ async def run_pipeline():
 
         # Second reader. Optional: without GEMINI_API_KEY, or on any API
         # failure, it is skipped and the rules carry the run alone.
-        from analysis.competitive_intel import collect_headlines
+        from analysis.competitive_intel import collect_headlines, collect_sources
         from analysis.llm_reader import read_headlines, reconcile
 
         readings, llm_status = read_headlines(collect_headlines(data, watchlist))
@@ -296,8 +299,34 @@ async def run_pipeline():
             )[:120],
             watchlist,
             graph=graph,
+            sources=collect_sources(data, watchlist),
         )
         annotate_event_materiality(data["market_events"], watchlist)
+
+        # How much to believe each event: how many outlets reported the
+        # story, and whether the holding disclosed it to the exchange.
+        from analysis.event_evidence import (
+            cluster_stories,
+            confirm_with_filings,
+            prune_filings,
+        )
+
+        data["exchange_filings"] = prune_filings(
+            store.deduplicate_and_merge(
+                "exchange_filings",
+                held_exchange_filings,
+                ["ticker", "text", "date"],
+            )
+        )
+        stories = cluster_stories(data["market_events"])
+        confirmed = confirm_with_filings(
+            data["market_events"], data["exchange_filings"]
+        )
+        log.info(
+            f"Event evidence: {len(data['market_events'])} event(s) in {stories} "
+            f"stor(ies); {confirmed} confirmed by an exchange filing "
+            f"({len(data['exchange_filings'])} holding filings on record)."
+        )
         data["supply_stress"] = compute_supply_stress(data["market_events"], graph)
         harvest_partner_edges(data["corporate_agreements"], watchlist, graph)
         # Tie-ups with someone we do NOT hold: queued for a person to review,

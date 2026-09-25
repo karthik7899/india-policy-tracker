@@ -129,6 +129,8 @@ def build_display_payload(
 ) -> Dict[str, Any]:
     """A display copy of the briefing: capped feeds, actionable warnings."""
     payload = dict(brief_data or {})
+    # Kept in the corpus for event confirmation; the page never shows it.
+    payload.pop("exchange_filings", None)
     try:
         for key, cap in FEED_CAPS.items():
             rows = payload.get(key)

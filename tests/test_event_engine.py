@@ -732,6 +732,13 @@ class TestEventMateriality:
         events = classify_headlines(
             _data("Syrma SGS wins order worth ₹800 crore; shares jump 6%"), _EMS
         )
+        # Corroborated by the company's own exchange filing.
+        events[0]["confirmation"] = {
+            "ticker": "SYRMA",
+            "source": "NSE",
+            "filing": "Receipt of order",
+            "date": events[0]["date"],
+        }
         alerts = [
             a
             for a in market_event_signals({"market_events": events}, _EMS)
@@ -741,6 +748,26 @@ class TestEventMateriality:
         (alert,) = alerts
         assert alert["severity"] == "Medium"
         assert alert["materiality_band"] == "transformative"
+        assert "confirmed by SYRMA's NSE filing" in alert["signal"]
+
+    def test_a_single_report_is_not_escalated_however_large(self, monkeypatch):
+        """A lone article can be wrong about the amount or the company; the
+        escalation is where such an error reaches the top of the email."""
+        import analysis.entity_graph as eg
+        from analysis.early_warning import annotate_order_materiality
+
+        monkeypatch.setattr(eg, "load_entity_graph", lambda path=None: {"edges": []})
+        events = classify_headlines(
+            _data("Syrma SGS wins order worth ₹800 crore; shares jump 6%"), _EMS
+        )
+        (alert,) = [
+            a
+            for a in market_event_signals({"market_events": events}, _EMS)
+            if a["category"] == "Corporate Move"
+        ]
+        annotate_order_materiality([alert], _EMS)
+        assert alert["severity"] == "Low"
+        assert "single report" in alert["signal"]
 
     def test_a_reported_deal_is_never_escalated(self, monkeypatch):
         import analysis.entity_graph as eg
