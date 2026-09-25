@@ -72,3 +72,10 @@ test("agreement and disagreement between readers are both visible", () => {
     "LLM read it as order win",
   );
 });
+
+test("an event about a holding states its evidence", () => {
+  const base = { event_type: "order_win", actors: ["SUZLON"] };
+  assert.match(eventDetail({ ...base, confirmation: { source: "NSE" } }), /confirmed by NSE filing/);
+  assert.match(eventDetail({ ...base, reports: 3 }), /3 outlets/);
+  assert.match(eventDetail({ ...base, reports: 1 }), /single report/);
+});

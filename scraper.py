@@ -450,7 +450,7 @@ def _interleave(*sources):
     return out
 
 
-async def fetch_exchange_filings_async(session, watchlist, cap=10):
+async def fetch_exchange_filings_async(session, watchlist, cap=10, held_out=None):
     """Corporate filings from both exchanges and the press.
 
     The exchange APIs give the filing itself — exact identifier, the
@@ -491,6 +491,35 @@ async def fetch_exchange_filings_async(session, watchlist, cap=10):
     nse_held, nse_rest = split(nse_filings)
     bse_held, bse_rest = split(bse_filings)
     news_held, news_rest = split(news_filings)
+
+    # Every exchange filing by a holding, uncapped, for event confirmation
+    # (analysis/event_evidence.confirm_with_filings). The section below keeps
+    # ten; the check needs all of them — the one that confirms an order win is
+    # rarely among the day's first ten. Exchange filings only: the news path
+    # is somebody's account of a filing, which is what gets checked.
+    if held_out is not None:
+        ticker_of = {
+            s.get("name"): str(s.get("ticker", "")).upper()
+            for key, stocks in (watchlist or {}).items()
+            if key != "macro_indicators"
+            for s in stocks or []
+            if isinstance(s, dict) and s.get("ticker")
+        }
+        from analysis.event_evidence import article_date
+
+        for f in nse_held + bse_held:
+            ticker = ticker_of.get(f.get("company"))
+            if not ticker:
+                continue
+            held_out.append(
+                {
+                    "ticker": ticker,
+                    "date": article_date(f.get("date")) or "",
+                    "text": str(f.get("filing") or "")[:240],
+                    "source": f.get("source"),
+                    "link": f.get("link") or "",
+                }
+            )
 
     # Exchanges lead each tier: they carry the filing itself, where the news
     # path carries somebody's account of it and identifies the company by a

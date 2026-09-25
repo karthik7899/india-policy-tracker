@@ -65,6 +65,13 @@ export function eventDetail(item) {
   // Which readers found it (analysis/llm_reader.reconcile). Unverified is
   // spelled out: an LLM-only event is shown but grades nothing, and a reader
   // who cannot tell that from the row would weigh it like the others.
+  // How much to believe it (analysis/event_evidence.py). Only stated for
+  // events about a holding — that is where the check is made.
+  if ((item.actors || []).length) {
+    if (item.confirmation) parts.push(`confirmed by ${item.confirmation.source} filing`);
+    else if ((item.reports || 1) >= 2) parts.push(`${item.reports} outlets`);
+    else parts.push("single report");
+  }
   if (item.reader === "llm") parts.push("LLM only \u00b7 unverified");
   else if (item.corroborated === true) parts.push("corroborated");
   else if (item.llm_reading) parts.push(`LLM read it as ${String(item.llm_reading.event_type).replace(/_/g, " ")}`);
