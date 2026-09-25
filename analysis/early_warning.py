@@ -57,7 +57,8 @@ def _build_policy_map(data: Dict[str, Any]) -> Dict[str, List[str]]:
         nature = classify(title)
         if nature == "routine":
             return
-        shown = display(title, cached_reading(str(title or "")))
+        # The alert is about this company, so a gist must still name it.
+        shown = display(title, cached_reading(str(title or "")), [(name, name)])
         # Kind and title are kept apart. The reader wants them joined, but
         # anything measuring the headline needs the bare title: the "Kind: "
         # prefix introduces a colon that makes a two-company headline look

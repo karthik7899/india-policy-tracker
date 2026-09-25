@@ -148,7 +148,7 @@ def tidy(text: str) -> str:
     if not body:
         return s
     body = _unshout(body)
-    return body[0].upper() + body[1:]
+    return _sentence_start(body) if body != s else body
 
 
 def classify(text: str) -> str:
@@ -173,15 +173,50 @@ def classify(text: str) -> str:
     return "substantive"
 
 
-def display(text: str, reading: dict = None) -> str:
+def display(text: str, reading: dict = None, holdings=()) -> str:
     """What to print for a headline: the LLM's verbatim gist when it has one,
     otherwise the tidied text.
 
     The gist is only ever a passage of the original (llm_reader.ground()
     enforces that), so this shortens without rewording: whatever the reader
     sees, the source said in those words.
+
+    ``holdings`` are the ``(ticker, name)`` pairs the headline names. A gist
+    that drops every one of them is refused: the first live run shortened
+    "ideaForge Now Has a Drone Taking Off Every 2 Minutes; Q1 Revenue Reaches
+    ₹68.6 Cr" to "Q1 Revenue Reaches ₹68.6 Cr", and 33 of 153 gists on
+    holding headlines lost the company that way. A shorter line that no
+    longer says whose news it is costs more than the words it saves.
     """
     gist = (reading or {}).get("gist") or ""
+    if gist and holdings and not any(_mentions(gist, t, n) for t, n in holdings):
+        gist = ""
     if gist:
-        return gist[0].upper() + gist[1:]
+        return _sentence_start(gist)
     return tidy(text)
+
+
+def _mentions(text: str, ticker: str, name: str) -> bool:
+    """Does the line still say whose news it is?
+
+    A plain word match on the ticker or the first word of the name, not the
+    full company matcher: that one reads "ideaForge Now Has ..." as a longer
+    company name starting with ideaForge, which is right for attribution and
+    wrong for asking whether a shortened line kept the company in it.
+    """
+    words = [str(ticker or "")]
+    first = str(name or "").split("(")[0].split()
+    if first and len(first[0]) >= 3:
+        words.append(first[0])
+    return any(
+        w and re.search(rf"\b{re.escape(w)}\b", text, re.IGNORECASE) for w in words
+    )
+
+
+def _sentence_start(text: str) -> str:
+    """Capitalise a line that starts mid-sentence ("acquires land ..."), but
+    never a brand written with an internal capital — "ideaForge", "iPhone"."""
+    first = text.split(" ", 1)[0]
+    if first.islower():
+        return text[0].upper() + text[1:]
+    return text

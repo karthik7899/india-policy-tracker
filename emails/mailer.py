@@ -220,11 +220,14 @@ def _feed_rows(items, field, watchlist, holdings_only=False):
             reading = cached_reading(raw)
             if reading and reading.get("material") is False:
                 continue
-            if holdings_only and not any(
-                title_matches_company(raw, t, html_lib.unescape(n)) for t, n in holdings
-            ):
+            named = [
+                (t, html_lib.unescape(n))
+                for t, n in holdings
+                if title_matches_company(raw, t, html_lib.unescape(n))
+            ]
+            if holdings_only and not named:
                 continue
-            shown = html_lib.escape(display(raw, reading), quote=False)
+            shown = html_lib.escape(display(raw, reading, named), quote=False)
             key = re.sub(r"[^a-z0-9]+", " ", shown.lower()).strip()
             if key in seen:
                 continue
