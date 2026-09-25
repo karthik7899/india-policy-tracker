@@ -435,3 +435,92 @@ def test_a_model_that_stays_busy_ends_the_pass_cleanly(monkeypatch):
     with pytest.raises(ReaderUnavailable, match="after 3 attempts; resuming next run"):
         llm_reader.gemini_transport("k", "m")("prompt")
     assert len(calls) == llm_reader.RETRY_ATTEMPTS
+
+
+# ---------------------------------------------------------------------------
+# model fallback
+# ---------------------------------------------------------------------------
+
+
+def _named(name, outcomes, calls):
+    """A transport whose successive calls raise or return from ``outcomes``."""
+
+    def call(prompt):
+        calls.append(name)
+        outcome = outcomes.pop(0) if outcomes else "[]"
+        if isinstance(outcome, Exception):
+            raise outcome
+        return outcome
+
+    return call
+
+
+def test_a_busy_model_hands_over_to_the_next_and_the_next_one_stays():
+    calls = []
+    busy = ReaderUnavailable(
+        "Gemini unavailable (503) after 3 attempts", model_specific=True
+    )
+    chain = llm_reader.chained_transport(
+        [
+            ("gemini-3.8-flash", _named("gemini-3.8-flash", [busy], calls)),
+            ("gemini-2.5-flash", _named("gemini-2.5-flash", ["[]", "[]"], calls)),
+        ]
+    )
+    assert chain("batch 1") == "[]"
+    assert chain("batch 2") == "[]"
+    assert chain.model == "gemini-2.5-flash"
+    # The busy model is not queued behind again for the second batch.
+    assert calls == ["gemini-3.8-flash", "gemini-2.5-flash", "gemini-2.5-flash"]
+
+
+def test_a_retired_model_is_skipped_like_a_busy_one():
+    calls = []
+    gone = ReaderUnavailable("model 'x' not found (404)", model_specific=True)
+    chain = llm_reader.chained_transport(
+        [("x", _named("x", [gone], calls)), ("y", _named("y", ["[]"], calls))]
+    )
+    assert chain("p") == "[]" and chain.model == "y"
+
+
+def test_a_refused_key_stops_at_once_rather_than_trying_every_model():
+    calls = []
+    refused = ReaderUnavailable("key refused (403)")
+    chain = llm_reader.chained_transport(
+        [("a", _named("a", [refused], calls)), ("b", _named("b", ["[]"], calls))]
+    )
+    with pytest.raises(ReaderUnavailable, match="key refused"):
+        chain("p")
+    assert calls == ["a"]
+
+
+def test_when_every_model_fails_the_log_names_each_one():
+    busy = ReaderUnavailable("busy", model_specific=True)
+    chain = llm_reader.chained_transport(
+        [("a", _named("a", [busy], [])), ("b", _named("b", [busy], []))]
+    )
+    with pytest.raises(
+        ReaderUnavailable, match=r"every model failed — a: busy; b: busy"
+    ):
+        chain("p")
+
+
+def test_the_chain_is_configurable_and_never_repeats_a_model(monkeypatch):
+    monkeypatch.setenv("GEMINI_MODEL", "gemini-2.5-flash")
+    monkeypatch.delenv("GEMINI_FALLBACK_MODELS", raising=False)
+    assert llm_reader.model_chain() == ["gemini-2.5-flash", "gemini-2.0-flash"]
+    monkeypatch.delenv("GEMINI_MODEL")
+    monkeypatch.setenv("GEMINI_FALLBACK_MODELS", "m1, m2")
+    assert llm_reader.model_chain() == [llm_reader.DEFAULT_MODEL, "m1", "m2"]
+
+
+def test_the_serving_model_is_recorded_with_each_reading(cache):
+    busy = ReaderUnavailable("busy", model_specific=True)
+    answer = json.dumps([{"id": 0, **_answer("order_win", ["Suzlon"])}])
+    chain = llm_reader.chained_transport(
+        [("a", _named("a", [busy], [])), ("b", _named("b", [answer], []))]
+    )
+    _, status = read_headlines([SUZLON], transport=chain, cache_path=cache)
+    assert status["model"] == "b"
+    with open(cache) as f:
+        (entry,) = json.load(f)["entries"].values()
+    assert entry["model"] == "b"
