@@ -4012,6 +4012,7 @@
         "turnover_cr_last": 13.01,
         "industry_share_pct": 6.71,
         "industry_peer_count": 7,
+        "industry_share_change_pp": 0.0,
         "peer_share_pct": 8.1,
         "peer_share_change_pp": 0.14,
         "peer_share_lookback": 4,
@@ -9572,103 +9573,6 @@
       "target_low": "1000.00",
       "rec_score": 1.7,
       "screener": {
-        "market_cap": 24114.0,
-        "current_price": 885.0,
-        "pe_ratio": 59.3,
-        "dividend_yield": 0.68,
-        "roce": 20.1,
-        "roe": 22.1,
-        "q_sales": 720.0,
-        "qoq_sales_growth": -6.86,
-        "quarterly_revenue_growth": [
-          651.0,
-          811.0,
-          773.0,
-          720.0
-        ],
-        "sales_trend": [
-          585.0,
-          703.0,
-          643.0,
-          628.0,
-          651.0,
-          811.0,
-          773.0,
-          720.0
-        ],
-        "q_opm": 30.0,
-        "quarterly_ebitda_margin": [
-          26.0,
-          33.0,
-          31.0,
-          30.0
-        ],
-        "opm_expansion": -1.0,
-        "q_eps": 3.44,
-        "eps_trend": [
-          2.56,
-          3.48,
-          3.48,
-          3.62,
-          2.49,
-          4.71,
-          4.28,
-          3.44
-        ],
-        "ttm_eps": 14.92,
-        "q_net_profit": 95.0,
-        "operating_margin_trend": [
-          32.0,
-          30.0,
-          30.0,
-          30.0,
-          30.0
-        ],
-        "annual_sales_trend": [
-          1343.0,
-          2127.0,
-          2357.0,
-          2507.0,
-          2864.0,
-          2956.0
-        ],
-        "annual_eps_trend": [
-          7.79,
-          13.3,
-          15.17,
-          12.88,
-          15.09,
-          14.92
-        ],
-        "debt_trend": [
-          692.0,
-          943.0,
-          1098.0,
-          1227.0,
-          1570.0
-        ],
-        "cash_flow_trend": [
-          220.0,
-          381.0,
-          590.0,
-          698.0,
-          474.0
-        ],
-        "capex": 144.0,
-        "rd_pct": 1.5,
-        "roce_trend": [
-          20.0,
-          24.0,
-          20.0,
-          19.0,
-          20.0
-        ],
-        "promoter_pct": 71.8,
-        "promoter_change": 0.0,
-        "fii_pct": 3.73,
-        "fii_change": -0.04,
-        "dii_pct": 7.68,
-        "dii_change": 0.1,
         "isin": "INE317I01021",
         "week52_low": 884.55,
         "week52_high": 1245.92,
@@ -9682,56 +9586,34 @@
         "delivery_band": "delivery-led",
         "series": "EQ",
         "turnover_cr_last": 5.7,
-        "industry_share_pct": 20.58,
-        "industry_peer_count": 7,
-        "industry_share_change_pp": 0.0,
-        "peer_share_pct": 35.3,
-        "peer_share_change_pp": 1.31,
-        "peer_share_lookback": 4,
-        "peer_group_size": 3,
-        "revenue_yoy_pct": 14.6,
-        "revenue_ttm_growth_pct": 15.5,
-        "revenue_cagr_pct": 17.1,
-        "revenue_growth_quality": "ok",
-        "graham_intrinsic_value": 333.8,
-        "owner_earnings": 361.6,
-        "retained_earnings_ratio": 2.86,
-        "moat_status": "Strong (Wide Moat)",
+        "industry_share_pct": 20.42,
+        "industry_peer_count": 8,
+        "industry_share_change_pp": -0.16,
+        "graham_intrinsic_value": null,
+        "owner_earnings": 0.0,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Weak/None",
         "is_bargain": false,
         "net_current_assets": null,
-        "hyper_growth_warning": true,
+        "hyper_growth_warning": false,
         "valuation_alerts": [
-          "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 59.3 > 15 & Price > Intrinsic)",
-          "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
-        ],
-        "industry_pe": 47.4,
-        "pe_vs_peers": "25% above peers"
+          "No Dividend Yield"
+        ]
       },
       "score": {
-        "overall_score": 2,
-        "fundamental_score": 1,
+        "overall_score": 1,
+        "fundamental_score": 0,
         "momentum_score": 1,
-        "confidence": "High",
+        "confidence": "Low",
         "reasons": [
-          "Sector benefits from macro policy tailwinds (Fallback)",
-          "Strong revenue growth (TTM +15.5%)",
-          "High Return on Capital (ROCE: 20.1%)",
-          "High Return on Equity (ROE: 22.1%)",
-          "DII Accumulation (+0.1%)",
-          "Wide Economic Moat (Sustained Margin Expansion)"
+          "Sector benefits from macro policy tailwinds (Fallback)"
         ],
-        "risks": [
-          "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 59.3 > 15 & Price > Intrinsic)",
-          "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
-        ],
+        "risks": [],
         "recommendations": [
           "Avoid / High Risk"
         ]
       },
-      "estimate_method": "Analyst Consensus",
-      "fundamental_value": 333.8
+      "estimate_method": "Analyst Consensus"
     },
     {
       "ticker": "CAMPUS",
@@ -9853,13 +9735,13 @@
         "delivery_band": "delivery-led",
         "series": "EQ",
         "turnover_cr_last": 7.81,
-        "industry_share_pct": 11.0,
-        "industry_peer_count": 7,
-        "industry_share_change_pp": 0.0,
-        "peer_share_pct": 16.6,
-        "peer_share_change_pp": 1.69,
+        "industry_share_pct": 9.57,
+        "industry_peer_count": 8,
+        "industry_share_change_pp": -1.43,
+        "peer_share_pct": 25.7,
+        "peer_share_change_pp": 3.07,
         "peer_share_lookback": 4,
-        "peer_group_size": 3,
+        "peer_group_size": 2,
         "revenue_yoy_pct": 22.9,
         "revenue_ttm_growth_pct": null,
         "revenue_cagr_pct": 259.1,
@@ -9876,7 +9758,7 @@
           "Fails P/E Screen (P/E 47.4 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 47.4,
+        "industry_pe": 46.9,
         "pe_vs_peers": "In line with peers"
       },
       "score": {
@@ -10006,9 +9888,9 @@
         "delivery_band": "delivery-led",
         "series": "EQ",
         "turnover_cr_last": 4.19,
-        "industry_share_pct": 20.14,
-        "industry_peer_count": 7,
-        "industry_share_change_pp": 0.0,
+        "industry_share_pct": 19.99,
+        "industry_peer_count": 8,
+        "industry_share_change_pp": -0.15,
         "graham_intrinsic_value": null,
         "owner_earnings": 0.0,
         "retained_earnings_ratio": 1.2,
@@ -10163,13 +10045,13 @@
         "delivery_band": "delivery-led",
         "series": "EQ",
         "turnover_cr_last": 5.65,
-        "industry_share_pct": 27.97,
-        "industry_peer_count": 7,
-        "industry_share_change_pp": 0.0,
-        "peer_share_pct": 48.1,
-        "peer_share_change_pp": -3.0,
+        "industry_share_pct": 27.75,
+        "industry_peer_count": 8,
+        "industry_share_change_pp": -0.22,
+        "peer_share_pct": 74.3,
+        "peer_share_change_pp": -3.07,
         "peer_share_lookback": 4,
-        "peer_group_size": 3,
+        "peer_group_size": 2,
         "revenue_yoy_pct": 3.9,
         "revenue_ttm_growth_pct": 1.9,
         "revenue_cagr_pct": 8.3,
@@ -10185,7 +10067,7 @@
           "Fails Debt Limit (Debt > Net Assets)",
           "Fails P/E Screen (P/E 46.4 > 15 & Price > Intrinsic)"
         ],
-        "industry_pe": 47.4,
+        "industry_pe": 46.9,
         "pe_vs_peers": "In line with peers"
       },
       "score": {

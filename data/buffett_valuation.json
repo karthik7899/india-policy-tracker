@@ -1334,37 +1334,6 @@
       }
     },
     {
-      "ticker": "METROBRAND",
-      "name": "Metro Brands Ltd",
-      "owner_earnings": 361.6,
-      "moat": "Strong (Wide Moat)",
-      "moat_status": "Strong (Wide Moat)",
-      "retained_earnings_ratio": 2.86,
-      "passed_retained_test": true,
-      "score": {
-        "overall_score": 2,
-        "fundamental_score": 1,
-        "momentum_score": 1,
-        "confidence": "High",
-        "reasons": [
-          "Sector benefits from macro policy tailwinds (Fallback)",
-          "Strong revenue growth (TTM +15.5%)",
-          "High Return on Capital (ROCE: 20.1%)",
-          "High Return on Equity (ROE: 22.1%)",
-          "DII Accumulation (+0.1%)",
-          "Wide Economic Moat (Sustained Margin Expansion)"
-        ],
-        "risks": [
-          "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 59.3 > 15 & Price > Intrinsic)",
-          "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
-        ],
-        "recommendations": [
-          "Avoid / High Risk"
-        ]
-      }
-    },
-    {
       "ticker": "PAGEIND",
       "name": "Page Industries",
       "owner_earnings": 0.0,
@@ -1512,6 +1481,28 @@
     {
       "ticker": "ASMTEC",
       "name": "ASM Technologies",
+      "owner_earnings": 0.0,
+      "moat": "Weak/None",
+      "moat_status": "Weak/None",
+      "retained_earnings_ratio": 1.2,
+      "passed_retained_test": true,
+      "score": {
+        "overall_score": 1,
+        "fundamental_score": 0,
+        "momentum_score": 1,
+        "confidence": "Low",
+        "reasons": [
+          "Sector benefits from macro policy tailwinds (Fallback)"
+        ],
+        "risks": [],
+        "recommendations": [
+          "Avoid / High Risk"
+        ]
+      }
+    },
+    {
+      "ticker": "METROBRAND",
+      "name": "Metro Brands Ltd",
       "owner_earnings": 0.0,
       "moat": "Weak/None",
       "moat_status": "Weak/None",
