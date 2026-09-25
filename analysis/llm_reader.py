@@ -50,6 +50,12 @@ PROMPT_VERSION = "2"
 # list, so if it is wrong the API answers 404 and the log says to set
 # GEMINI_MODEL.
 DEFAULT_MODEL = "gemini-3.8-flash"
+
+# Tried in order when the default is busy, retired or out of quota; override
+# with GEMINI_FALLBACK_MODELS (comma-separated). Older, widely available
+# models, named without access to Google's current list — one that has been
+# retired answers 404 and the chain simply moves past it.
+FALLBACK_MODELS = ("gemini-2.5-flash", "gemini-2.0-flash")
 API_URL = (
     "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
 )
@@ -151,7 +157,17 @@ _SCHEMA = {
 
 
 class ReaderUnavailable(Exception):
-    """The API cannot be used this run. The message says why, for the log."""
+    """The API cannot be used this run. The message says why, for the log.
+
+    ``model_specific`` marks failures another model might not share — this
+    one busy, retired, or out of its own quota — so the fallback chain moves
+    on. A refused key or a dead network would fail every model the same way,
+    and trying the rest would only spend the run's time.
+    """
+
+    def __init__(self, message: str, model_specific: bool = False):
+        super().__init__(message)
+        self.model_specific = model_specific
 
 
 # A transport takes the prompt text and returns the model's JSON text. Tests
@@ -199,26 +215,80 @@ def gemini_transport(api_key: str, model: str) -> Transport:
                 time.sleep(_backoff(resp, attempt))
         else:
             raise ReaderUnavailable(
-                f"{error} after {RETRY_ATTEMPTS} attempts; resuming next run"
+                f"{error} after {RETRY_ATTEMPTS} attempts; resuming next run",
+                model_specific=resp is not None,
             )
         if resp.status_code == 404:
             raise ReaderUnavailable(
-                f"model {model!r} not found (404) — set GEMINI_MODEL to a current model"
+                f"model {model!r} not found (404) — set GEMINI_MODEL to a current model",
+                model_specific=True,
             )
         if resp.status_code in (401, 403):
             raise ReaderUnavailable(f"key refused ({resp.status_code})")
         if resp.status_code == 429:
+            # Gemini quotas are per model, so another may still have room.
             raise ReaderUnavailable(
-                "quota or rate limit reached (429); resuming next run"
+                "quota or rate limit reached (429); resuming next run",
+                model_specific=True,
             )
         if resp.status_code != 200:
-            raise ReaderUnavailable(f"HTTP {resp.status_code}: {resp.text[:200]}")
+            raise ReaderUnavailable(
+                f"HTTP {resp.status_code}: {resp.text[:200]}", model_specific=True
+            )
         try:
             return resp.json()["candidates"][0]["content"]["parts"][0]["text"]
         except (KeyError, IndexError, ValueError) as e:
             # A blocked or empty candidate. Not worth failing the batch over.
-            raise ReaderUnavailable(f"unexpected response shape: {e!r}")
+            raise ReaderUnavailable(
+                f"unexpected response shape: {e!r}", model_specific=True
+            )
 
+    return call
+
+
+def model_chain() -> List[str]:
+    """Models to try, in order: the configured one, then the fallbacks.
+
+    GEMINI_MODEL replaces the first; GEMINI_FALLBACK_MODELS (comma-separated)
+    replaces the rest. Duplicates are dropped so a model set in both is not
+    tried twice.
+    """
+    first = os.environ.get("GEMINI_MODEL", "").strip() or DEFAULT_MODEL
+    raw = os.environ.get("GEMINI_FALLBACK_MODELS", "").strip()
+    rest = [m.strip() for m in raw.split(",")] if raw else list(FALLBACK_MODELS)
+    return list(dict.fromkeys(m for m in [first, *rest] if m))
+
+
+def chained_transport(transports: List[Tuple[str, Transport]]) -> Transport:
+    """Try each model in turn; keep the first that answers for the whole run.
+
+    Three runs in a row, gemini-3.8-flash answered every attempt with "503
+    high demand" across six hours, and the reader read nothing. A model that
+    fails in its own right (busy, retired, over its quota) hands over to the
+    next; a failure every model would share (a refused key, no network) ends
+    the pass at once. Once a model answers, later batches go straight to it,
+    so a run does not re-queue behind a busy model forty times.
+
+    The model that served is exposed as ``call.model`` for the log line.
+    """
+    state = {"index": 0}
+
+    def call(prompt: str) -> str:
+        failures = []
+        while state["index"] < len(transports):
+            name, transport = transports[state["index"]]
+            try:
+                text = transport(prompt)
+                call.model = name
+                return text
+            except ReaderUnavailable as e:
+                failures.append(f"{name}: {e}")
+                if not e.model_specific:
+                    raise ReaderUnavailable("; ".join(failures))
+                state["index"] += 1
+        raise ReaderUnavailable("every model failed — " + "; ".join(failures))
+
+    call.model = None
     return call
 
 
@@ -226,8 +296,9 @@ def default_transport() -> Tuple[Optional[Transport], str]:
     key = os.environ.get("GEMINI_API_KEY", "").strip()
     if not key:
         return None, "GEMINI_API_KEY not set"
-    model = os.environ.get("GEMINI_MODEL", "").strip() or DEFAULT_MODEL
-    return gemini_transport(key, model), model
+    chain = model_chain()
+    transport = chained_transport([(m, gemini_transport(key, m)) for m in chain])
+    return transport, " → ".join(chain)
 
 
 # ---------------------------------------------------------------------------
@@ -379,11 +450,15 @@ def read_headlines(
                     continue
                 reading = ground(h, raw)
                 readings[h] = reading
+                served_by = getattr(transport, "model", None)
                 entries[cache_key(h)] = {
                     "v": PROMPT_VERSION,
                     "headline": h[:200],
                     "reading": reading,
                     "seen": today,
+                    # Which model said this — readings from a fallback model
+                    # can then be told apart, and re-read, later.
+                    **({"model": served_by} if served_by else {}),
                 }
                 status["read"] += 1
                 changed = True
@@ -393,6 +468,8 @@ def read_headlines(
     except ReaderUnavailable as e:
         status["skipped"] = str(e)
         status["pending"] = len(todo) - status["read"]
+    if getattr(transport, "model", None):
+        status["model"] = transport.model
 
     cutoff = (
         datetime.date.fromisoformat(today)

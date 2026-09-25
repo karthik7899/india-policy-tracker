@@ -279,7 +279,8 @@ async def run_pipeline():
             )
         else:
             log.info(
-                f"LLM reader: {llm_status['read']} new, {llm_status['cached']} "
+                f"LLM reader ({llm_status.get('model') or 'no model answered'}): "
+                f"{llm_status['read']} new, {llm_status['cached']} "
                 f"cached, {llm_status['pending']} left for later runs."
             )
         log.info(

@@ -107,6 +107,8 @@ jobs:
           # Optional second reader for market events. Unset = rules only.
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_MODEL: ${{ vars.GEMINI_MODEL }}
+          # Optional comma-separated models to fall back to, in order.
+          GEMINI_FALLBACK_MODELS: ${{ vars.GEMINI_FALLBACK_MODELS }}
         run: |
           python main.py
 
