@@ -728,11 +728,13 @@ def market_event_signals(
         events = data.get("market_events") or []
         graph = load_entity_graph()
         names = {}
+        sector_of: Dict[str, str] = {}
         by_sector: Dict[str, list] = {}
         for sector, stocks in (watchlist or {}).items():
             for s in stocks or []:
                 if isinstance(s, dict) and s.get("ticker"):
                     names[s["ticker"]] = s.get("name")
+                    sector_of.setdefault(s["ticker"], sector)
                     by_sector.setdefault(sector, []).append(s["ticker"])
 
         emitted_per_sector: Dict[str, int] = {}
@@ -774,7 +776,9 @@ def market_event_signals(
                     {
                         "ticker": ticker,
                         "name": names.get(ticker, ticker),
-                        "sector": "—",
+                        # Its own sector, not "—": the email groups "sectors
+                        # moving" by this field and printed "— (6)".
+                        "sector": sector_label(sector_of.get(ticker, "")) or "—",
                         "severity": "Low",
                         "direction": event.get("direction", "opportunity"),
                         "category": "Corporate Move",

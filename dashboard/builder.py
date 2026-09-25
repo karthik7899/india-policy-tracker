@@ -80,12 +80,26 @@ def build_dashboard_views(data: Dict[str, Any], watchlist: Dict[str, Any]):
     policy_map = {}
     unattributed = 0
 
+    from analysis.headline_text import classify, tidy
+
+    routine = 0
+
     def _add(name, event):
-        nonlocal unattributed
+        nonlocal unattributed, routine
         key = (name or "").strip().upper()
         if not key or key == "UNKNOWN":
             unattributed += 1
             return
+        text = event.get("title") or event.get("product") or event.get("scheme") or ""
+        # Routine disclosure and market commentary earn no momentum. An ESOP
+        # allotment, an analyst-meet schedule and "SBI Stock Leads These 3
+        # Catalyst Picks" were each scoring as a policy event, and printing
+        # as a "tailwind" under the holding's score.
+        if text and classify(text) == "routine":
+            routine += 1
+            return
+        if event.get("title"):
+            event["title"] = tidy(event["title"])
         policy_map.setdefault(key, []).append(event)
 
     for ev in data.get("emerging_competitors", []):
@@ -133,7 +147,8 @@ def build_dashboard_views(data: Dict[str, Any], watchlist: Dict[str, Any]):
     attached = sum(len(v) for v in policy_map.values())
     log.info(
         f"Policy events: {attached} attached to {len(policy_map)} entity key(s); "
-        f"{unattributed} could not be attributed to any company."
+        f"{unattributed} could not be attributed to any company; "
+        f"{routine} routine filing(s) or commentary item(s) not scored."
     )
 
     for sector, stocks in watchlist.items():
