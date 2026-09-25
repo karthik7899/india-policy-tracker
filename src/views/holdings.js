@@ -65,19 +65,33 @@ function evidenceKey(text) {
 
 
 /** One sector-news row: headline as link, its kind as a tag, provenance below. */
+// The LLM reader's direction for this sector, with the measure's status so
+// a proposal is not read as a done deal. Absent when the item is not policy
+// news or the reader has not seen it.
+const POLICY_MARK = { tailwind: "\u25b2 policy tailwind", headwind: "\u25bc policy headwind", mixed: "\u25c6 policy mixed" };
+
+export function policyTag(policy) {
+  const mark = POLICY_MARK[policy?.direction];
+  if (!mark) return "";
+  const status = String(policy.status || "").replace(/_/g, " ");
+  return status ? `${mark} (${status})` : mark;
+}
+
 function sectorRow(n) {
   const kind = (n.tags || [])[0] || "";
+  const policy = policyTag(n.policy);
   return el(
     "li",
     {},
     n.url
       ? el("a", { href: n.url, target: "_blank", rel: "noopener noreferrer" }, n.headline || "")
       : n.headline || "",
-    kind && kind !== "other"
+    (kind && kind !== "other") || policy
       ? el(
           "span",
           { class: "evidence-tags" },
-          el("span", { class: "tag" }, kind.replace(/_/g, " ")),
+          kind && kind !== "other" ? el("span", { class: "tag" }, kind.replace(/_/g, " ")) : null,
+          policy ? el("span", { class: "tag", title: "LLM reading, not verified" }, policy) : null,
         )
       : null,
     el(

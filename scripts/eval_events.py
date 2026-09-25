@@ -33,6 +33,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
 
 LABELS_PATH = os.path.join(ROOT, "eval", "event_labels.json")
+POLICY_LABELS_PATH = os.path.join(ROOT, "eval", "policy_labels.json")
 
 
 def _same_party(a: str, b: str) -> bool:
@@ -152,6 +153,118 @@ def score(
     return out
 
 
+def score_policy(
+    labels: List[Dict[str, Any]], readings: Dict[str, Dict[str, Any]]
+) -> Dict[str, Any]:
+    """Policy detection and per-sector direction against eval/policy_labels.json.
+
+      recall / precision   is this a government or regulator acting at all
+      effect_recall        required (sector, direction) pairs the reader gave
+      effect_precision     pairs the reader gave that are required or listed as
+                           acceptable — an effect on a non-policy headline is
+                           always wrong
+
+    Only rows with a reading are scored; the caller reports coverage.
+    """
+    out: Dict[str, Any] = {}
+    for split in ("dev", "holdout", "all"):
+        rows = [
+            r
+            for r in labels
+            if (split == "all" or r.get("split") == split) and r["headline"] in readings
+        ]
+        tp = fp = fn = 0
+        need = need_hit = given = given_ok = 0
+        misses, false_alarms, wrong_effects = [], [], []
+        for row in rows:
+            reading = readings[row["headline"]]
+            said = reading.get("policy_measure") not in (None, "none")
+            got = {
+                (e["sector"], e["direction"])
+                for e in reading.get("sector_effects") or []
+            }
+            want = {(e["sector"], e["direction"]) for e in row.get("effects") or []}
+            ok = want | {
+                (e["sector"], e["direction"]) for e in row.get("also_acceptable") or []
+            }
+            if row.get("is_policy"):
+                tp += said
+                fn += not said
+                if not said:
+                    misses.append((row, reading))
+            elif said:
+                fp += 1
+                false_alarms.append((row, reading))
+            need += len(want)
+            need_hit += len(want & got)
+            given += len(got)
+            good = got & ok if row.get("is_policy") else set()
+            given_ok += len(good)
+            if (want - got) or (got - good):
+                wrong_effects.append((row, reading))
+
+        def ratio(a, b):
+            return round(a / b, 3) if b else None
+
+        out[split] = {
+            "rows": len(rows),
+            "policy": sum(1 for r in rows if r.get("is_policy")),
+            "recall": ratio(tp, tp + fn),
+            "precision": ratio(tp, tp + fp),
+            "effect_recall": ratio(need_hit, need),
+            "effect_precision": ratio(given_ok, given),
+            "misses": misses,
+            "false_alarms": false_alarms,
+            "wrong_effects": wrong_effects,
+        }
+    return out
+
+
+def _run_policy(args) -> int:
+    from analysis.llm_reader import read_headlines
+
+    with open(POLICY_LABELS_PATH, encoding="utf-8") as f:
+        body = json.load(f)
+    labels = body["labels"]
+    if not body.get("reviewed"):
+        print("NOTE: policy labels are a draft nobody has reviewed yet.\n")
+    headlines = [r["headline"] for r in labels]
+    transport = None if args.live else _no_calls
+    readings, _ = read_headlines(headlines, transport=transport)
+    print(
+        f"LLM readings available for {len(readings)} of {len(labels)} labelled "
+        f"headlines{'' if args.live else ' (cache only; --live to fill the rest)'}.\n"
+    )
+    result = score_policy(labels, readings)
+    for split in ("dev", "holdout", "all"):
+        r = result[split]
+        print(
+            f"policy   {split:8} rows={r['rows']:3}  policy={r['policy']:3}  "
+            f"recall={r['recall']}  precision={r['precision']}  "
+            f"effect_recall={r['effect_recall']}  "
+            f"effect_precision={r['effect_precision']}"
+        )
+    if args.misses:
+        r = result["all"]
+        for title, items in (
+            ("MISSED POLICY", r["misses"]),
+            ("NOT POLICY", r["false_alarms"]),
+            ("EFFECTS DIFFER", r["wrong_effects"]),
+        ):
+            print(f"\n  {title} ({len(items)})")
+            for row, reading in items:
+                got = [
+                    f"{e['sector']}:{e['direction']}"
+                    for e in reading.get("sector_effects") or []
+                ]
+                want = [f"{e['sector']}:{e['direction']}" for e in row["effects"]]
+                print(
+                    f"    [{row.get('split')}] want {want} · got "
+                    f"{reading.get('policy_measure')} {got} | {row['headline'][:90]}"
+                )
+    return 0
+
+
 def _print(result: Dict[str, Any], label: str) -> None:
     for split in ("dev", "holdout", "all"):
         r = result[split]
@@ -169,9 +282,9 @@ def main() -> int:
     parser.add_argument("--misses", action="store_true", help="list disagreements")
     parser.add_argument(
         "--reader",
-        choices=("rules", "llm", "combined", "all"),
+        choices=("rules", "llm", "combined", "all", "policy"),
         default="rules",
-        help="which reader to score (llm/combined use llm_cache.json)",
+        help="which reader to score (llm/combined/policy use llm_cache.json)",
     )
     parser.add_argument(
         "--live",
@@ -181,6 +294,8 @@ def main() -> int:
     args = parser.parse_args()
 
     logging.disable(logging.INFO)
+    if args.reader == "policy":
+        return _run_policy(args)
     with open(LABELS_PATH, encoding="utf-8") as f:
         body = json.load(f)
     with open(os.path.join(ROOT, "watchlist.json"), encoding="utf-8") as f:

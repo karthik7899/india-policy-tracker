@@ -112,6 +112,9 @@ def _build_news(
                 "source": item.get("source") or "",
                 "tags": [kind],
                 "confidence": item.get("confidence") or "M",
+                # The LLM reader's policy direction for this sector, when the
+                # item is policy news (analysis/policy_impact.py).
+                **({"policy": item["policy"]} if item.get("policy") else {}),
                 # Matched against the sector's own holdings, because these
                 # items have no `actors` to read. This line used to say
                 # `item.get("actors") or []` — but `actors` is a field of

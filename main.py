@@ -290,6 +290,25 @@ async def run_pipeline():
             f"Reconciled: {llm_stats['corroborated']} corroborated, "
             f"{llm_stats['disagreed']} disputed, {llm_stats['llm_only']} LLM-only."
         )
+
+        # Which way policy news cuts, per sector — the reader's policy fields.
+        from analysis.policy_impact import (
+            annotate_sector_news,
+            policy_impacts,
+            sector_policy_balance,
+        )
+        from config import SECTOR_METADATA as _SECTORS
+
+        data["policy_impacts"] = policy_impacts(
+            readings, collect_sources(data, watchlist)
+        )
+        data["policy_balance"] = sector_policy_balance(data["policy_impacts"])
+        labelled = annotate_sector_news(data, readings, list(_SECTORS))
+        log.info(
+            f"Policy direction: {len(data['policy_impacts'])} policy headline(s) "
+            f"with a sector effect; {len(data['policy_balance'])} sector(s) touched; "
+            f"{labelled} sector feed item(s) labelled."
+        )
         # Re-attribute the merged list with the current rules, so a fix to the
         # matcher reaches events carried over from earlier runs instead of
         # only applying to today's.
