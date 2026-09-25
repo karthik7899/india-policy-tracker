@@ -25,7 +25,11 @@ def test_build_html_email_success():
             {"source": "Business Today", "title": "Tech Corp Acquires Startup"}
         ],
         "product_launches": [
-            {"source": "Tech Crunch", "title": "New AI Tool Released"}
+            {
+                "source": "Tech Crunch",
+                "company": "Cyber Sec Inc",
+                "title": "New AI Tool Released",
+            }
         ],
         "margin_of_safety": [
             {
@@ -80,7 +84,9 @@ def test_build_html_email_success():
 
     # News checks
     assert "New Cyber Law" in html
-    assert "badge-positive" in html
+    # "Positive Impact" is no longer badged: the keyword scorer marked nearly
+    # every item positive, so the badge carried no information.
+    assert "Positive Impact" not in html
 
     # Stock table checks
     assert "CYB" in html
@@ -91,7 +97,9 @@ def test_build_html_email_success():
     assert "Buy (5)" in html
     assert "+20% YoY" in html
     assert "EPS +15%" in html
-    assert "New government contract." in html
+    # The fixed config description is not repeated in the daily email: it is
+    # identical every morning and lives on the dashboard.
+    assert "New government contract." not in html
 
     # Emerging players check
     assert "Emerging Competitor Radar" in html

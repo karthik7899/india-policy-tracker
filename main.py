@@ -266,6 +266,10 @@ async def run_pipeline():
         from analysis.llm_reader import read_headlines, reconcile
 
         readings, llm_status = read_headlines(collect_headlines(data, watchlist))
+        # The email reads gists from the cache file this just rewrote.
+        from analysis.llm_reader import reset_cached_readings
+
+        reset_cached_readings()
         events, llm_stats = reconcile(events, readings, watchlist, data, graph)
         if llm_status["skipped"]:
             log.info(

@@ -23,6 +23,9 @@ from utils import to_float
 
 # Lower rank sorts first.
 _SEVERITY_RANK = {"Critical": 0, "High": 1, "Medium": 2, "Low": 3}
+
+# Headlines quoted in one catalyst alert before the rest are counted.
+MAX_CATALYST_ITEMS = 3
 _DIRECTION_RANK = {"risk": 0, "opportunity": 1}
 
 
@@ -38,9 +41,23 @@ def _build_policy_map(data: Dict[str, Any]) -> Dict[str, List[str]]:
     """
     policy_map: Dict[str, List[Dict[str, str]]] = {}
 
+    from analysis.headline_text import classify, display
+    from analysis.llm_reader import cached_reading
+
     def _add(name: str, kind: str, title: str) -> None:
         if not name:
             return
+        # Routine disclosure is not a catalyst. A company secretary resigning
+        # and an AGM notice were being joined into "Active policy tailwind"
+        # beside a land acquisition, and "Board comments on fine levied by
+        # the Exchange" — bad news — was being filed as a tailwind too. Adverse
+        # filings are kept, marked, and raised as a risk instead (see
+        # _evaluate_stock). Decided by rules only: the LLM may shorten what is
+        # shown, but it does not decide what counts as evidence.
+        nature = classify(title)
+        if nature == "routine":
+            return
+        shown = display(title, cached_reading(str(title or "")))
         # Kind and title are kept apart. The reader wants them joined, but
         # anything measuring the headline needs the bare title: the "Kind: "
         # prefix introduces a colon that makes a two-company headline look
@@ -48,7 +65,12 @@ def _build_policy_map(data: Dict[str, Any]) -> Dict[str, List[str]]:
         # event kind -- not the alert category -- that says whether a rupee
         # figure belongs in the headline at all.
         policy_map.setdefault(name.upper(), []).append(
-            {"kind": kind, "title": str(title or ""), "label": f"{kind}: {title}"}
+            {
+                "kind": kind,
+                "title": str(title or ""),
+                "label": f"{kind}: {shown}",
+                "nature": nature,
+            }
         )
 
     for ev in data.get("emerging_competitors", []):
@@ -164,6 +186,12 @@ _RULE_BOOK = {
         "A policy or corporate event was attributed to this holding",
         "Low",
         "Headline classification",
+    ),
+    "Regulatory Action": (
+        "An exchange or regulator acted against this holding (fine, penalty, "
+        "show-cause, insolvency)",
+        "Medium",
+        "Exchange filing text",
     ),
     "Momentum Breakout": (
         f"Traded volume at least "
@@ -491,14 +519,31 @@ def _evaluate_stock(
         )
 
     catalysts = policy_map.get(name.upper(), []) + policy_map.get(ticker.upper(), [])
-    if catalysts:
-        unique = list({c["label"]: c for c in catalysts}.values())
+    unique = list({c["label"]: c for c in catalysts}.values())
+    tailwinds = [c for c in unique if c.get("nature") != "adverse"]
+    adverse = [c for c in unique if c.get("nature") == "adverse"]
+    if tailwinds:
+        # Three is enough to judge the signal; the rest are counted, and the
+        # dashboard drawer lists every one.
+        shown = "; ".join(c["label"] for c in tailwinds[:MAX_CATALYST_ITEMS])
+        extra = len(tailwinds) - MAX_CATALYST_ITEMS
         emit(
             "Medium",
             "opportunity",
             "Policy Catalyst",
-            "Active policy tailwind — " + "; ".join(c["label"] for c in unique),
-            sources=unique,
+            "Active policy tailwind — "
+            + shown
+            + (f"; +{extra} more" if extra > 0 else ""),
+            sources=tailwinds,
+        )
+    if adverse:
+        emit(
+            "Low",
+            "risk",
+            "Regulatory Action",
+            "Adverse filing — "
+            + "; ".join(c["label"] for c in adverse[:MAX_CATALYST_ITEMS]),
+            sources=adverse,
         )
 
     if (

@@ -42,7 +42,7 @@ CACHE_PATH = os.path.join(ROOT, "llm_cache.json")
 # Bump when the prompt or schema changes meaning. Cached readings from another
 # version are ignored and re-read, so an improved prompt reaches old
 # headlines instead of only new ones.
-PROMPT_VERSION = "1"
+PROMPT_VERSION = "2"
 
 # The model is configuration, not code: GEMINI_MODEL (a repository variable in
 # the workflow) overrides this. Gemini 3.8 Flash is the model the key was
@@ -112,6 +112,15 @@ certainty — completed (it happened), announced (agreed or intended, e.g. MoU,
   "to acquire", "plans to"), or reported (rumour, "in talks", "likely", "close to").
 amount_text — the deal's money figure copied EXACTLY as written (e.g. "Rs 1,081 crore",
   "$230M"), or "" if none or if the figure is not this deal's value.
+material — true if a long-term shareholder of the company would want to know this:
+  orders, deals, capacity, results, guidance, regulatory action, a CEO/MD change,
+  litigation outcomes. false for routine disclosure (AGM notices, trading windows,
+  share allotments, investor-meet schedules, junior appointments), share-price
+  commentary, stock tips, CSR, awards and marketing events.
+gist — the shortest part of the headline, copied EXACTLY and contiguously, that
+  still states the news, at most 14 words. Drop filing wrappers such as
+  "X Limited has informed the Exchange regarding a press release dated ..., titled".
+  Use "" if the headline is already that short or has no news.
 
 Answer only from the headline. Do not use outside knowledge to add companies."""
 
@@ -125,8 +134,18 @@ _SCHEMA = {
             "parties": {"type": "ARRAY", "items": {"type": "STRING"}},
             "certainty": {"type": "STRING", "enum": list(CERTAINTIES)},
             "amount_text": {"type": "STRING"},
+            "material": {"type": "BOOLEAN"},
+            "gist": {"type": "STRING"},
         },
-        "required": ["id", "event_type", "parties", "certainty", "amount_text"],
+        "required": [
+            "id",
+            "event_type",
+            "parties",
+            "certainty",
+            "amount_text",
+            "material",
+            "gist",
+        ],
     },
 }
 
@@ -270,11 +289,27 @@ def ground(headline: str, raw: Dict[str, Any]) -> Dict[str, Any]:
         certainty = "reported"
     if etype == "none":
         parties, amount = [], ""
+    # The gist must be a passage of the headline, checked the same way as the
+    # parties: a shortened line the source never said would be a misquote in
+    # the reader's briefing. Too short to carry news, or no shorter than the
+    # original, and it is dropped.
+    gist = re.sub(r"\s+", " ", str(raw.get("gist") or "")).strip(" .;:,-")
+    if (
+        not gist
+        or gist.lower() not in re.sub(r"\s+", " ", lower)
+        or len(gist.split()) < 3
+        or len(gist) >= len((headline or "").strip())
+    ):
+        gist = ""
+    material = raw.get("material")
     return {
         "event_type": etype,
         "parties": parties,
         "certainty": certainty,
         "amount_text": amount,
+        # None when the model did not say: unknown is not "immaterial".
+        "material": material if isinstance(material, bool) else None,
+        "gist": gist,
     }
 
 
@@ -503,3 +538,33 @@ def reconcile(
 def is_unverified(event: Dict[str, Any]) -> bool:
     """Found only by the LLM. Downstream consumers that grade evidence skip these."""
     return isinstance(event, dict) and event.get("reader") == "llm"
+
+
+_CACHED: Optional[Dict[str, Any]] = None
+
+
+def cached_reading(headline: str, path: str = CACHE_PATH) -> Optional[Dict[str, Any]]:
+    """The stored reading for a headline, or None — never an API call.
+
+    For display code (the email, the alert labels), which must not spend
+    quota or wait on the network, and must render the same with no key.
+    """
+    global _CACHED
+    if _CACHED is None or path != CACHE_PATH:
+        entries = load_cache(path) or {}
+        if path != CACHE_PATH:
+            entry = entries.get(cache_key(headline))
+            return (
+                entry["reading"] if entry and entry.get("v") == PROMPT_VERSION else None
+            )
+        _CACHED = entries
+    entry = _CACHED.get(cache_key(headline))
+    if entry and entry.get("v") == PROMPT_VERSION:
+        return entry["reading"]
+    return None
+
+
+def reset_cached_readings() -> None:
+    """Forget the in-memory copy; the next cached_reading() reloads the file."""
+    global _CACHED
+    _CACHED = None

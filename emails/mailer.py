@@ -1,4 +1,5 @@
 import os
+import re
 import datetime
 import html as html_lib
 import smtplib
@@ -178,6 +179,76 @@ def _alert_card(w, coverage_counts):
     )
 
 
+def _feed_rows(items, field, watchlist, holdings_only=False):
+    """A news feed as the email should show it.
+
+    - Routine disclosure and market commentary are dropped (rules in
+      analysis/headline_text.classify): AGM notices, trading windows,
+      allotments, junior hires, "stocks to watch".
+    - An item the LLM reader judged immaterial is dropped from the email
+      too. Demoted, not deleted: the dashboard's Flow tab still lists it.
+    - What is printed is the LLM's verbatim gist if there is one, otherwise
+      the filing with its "X Limited has informed the Exchange regarding a
+      press release dated ..., titled" envelope removed.
+    - The same story told twice is printed once.
+
+    Rows keep every original field; the text to print is added as
+    ``_shown``. Never raises: on any problem the feed is returned as it was.
+    """
+    try:
+        from analysis.headline_text import classify, display
+        from analysis.llm_reader import cached_reading
+        from analysis.parsing import title_matches_company
+
+        holdings = [
+            (s.get("ticker", ""), s.get("name", ""))
+            for key, stocks in (watchlist or {}).items()
+            if key != "macro_indicators"
+            for s in stocks or []
+            if isinstance(s, dict) and s.get("ticker")
+        ]
+        out, seen = [], set()
+        for item in items or []:
+            if not isinstance(item, dict):
+                continue
+            # The email escapes brief_data up front; classification, the
+            # cache lookup and the gist all need the text as published, and
+            # only what is printed is escaped again.
+            raw = html_lib.unescape(str(item.get(field) or item.get("title") or ""))
+            if not raw or classify(raw) == "routine":
+                continue
+            reading = cached_reading(raw)
+            if reading and reading.get("material") is False:
+                continue
+            if holdings_only and not any(
+                title_matches_company(raw, t, html_lib.unescape(n)) for t, n in holdings
+            ):
+                continue
+            shown = html_lib.escape(display(raw, reading), quote=False)
+            key = re.sub(r"[^a-z0-9]+", " ", shown.lower()).strip()
+            if key in seen:
+                continue
+            seen.add(key)
+            out.append({**item, "_shown": shown})
+        return out
+    except Exception as e:  # noqa: BLE001 - a display aid must not break the email
+        log.warning(f"Feed filtering failed safely: {e!r}")
+        return [
+            {**i, "_shown": i.get(field) or i.get("title") or ""}
+            for i in items or []
+            if isinstance(i, dict)
+        ]
+
+
+def _alert_key(w):
+    """Identity of an alert across the summary and the warning list."""
+    return (
+        str(w.get("ticker", "")),
+        str(w.get("category", "")),
+        str(w.get("signal", ""))[:120],
+    )
+
+
 def _build_alert_cards_html(summary, coverage_counts=None, caps=_CAPS_NORMAL):
     """Critical alerts and opportunities as separate stacked sections.
 
@@ -259,7 +330,9 @@ def _build_exec_summary_html(summary):
         )
     else:
         if summary["critical_total"]:
-            names = ", ".join(w.get("ticker", "") for w in summary["critical"])
+            names = ", ".join(
+                dict.fromkeys(w.get("ticker", "") for w in summary["critical"])
+            )
             rows.append(
                 f"<strong style='color:#f87171;'>Critical:</strong> "
                 f"{summary['critical_total']} risk signal(s) — {names}."
@@ -271,7 +344,9 @@ def _build_exec_summary_html(summary):
                 f"{len(summary['escalated'])} worsened since the last run — {names}."
             )
         if summary["opportunities_total"]:
-            names = ", ".join(w.get("ticker", "") for w in summary["opportunities"])
+            names = ", ".join(
+                dict.fromkeys(w.get("ticker", "") for w in summary["opportunities"])
+            )
             rows.append(
                 f"<strong style='color:#34d399;'>Catalysts:</strong> "
                 f"{summary['opportunities_total']} positive signal(s) — {names}."
@@ -878,9 +953,18 @@ def _render_email(brief_data, watchlist, caps):
             </div>
     """
 
-    # Early Warning System — the first actionable thing the reader should see
+    # Early Warning System. Alerts already shown as cards above are not
+    # repeated: the table used to reprint every card, so one holding with
+    # three signals appeared six times in the first screen of the email.
+    carded = {
+        _alert_key(w)
+        for w in (summary.get("critical") or [])[: caps["warnings"]]
+        + (summary.get("opportunities") or [])[: caps["warnings"]]
+    }
     body_html += _build_early_warning_html(
-        warnings, caps, brief_data.get("coverage_count")
+        [w for w in warnings if _alert_key(w) not in carded],
+        caps,
+        brief_data.get("coverage_count"),
     )
 
     # Research Engine: thesis health, revision momentum, variant perception,
@@ -906,22 +990,23 @@ def _render_email(brief_data, watchlist, caps):
         if block:
             news_html = _sector_block_news_html(block, brief_data.get("coverage_count"))
         elif news_items:
+            # Same rules as the feed sections: no routine disclosure, no
+            # items the LLM reader judged immaterial, gist where there is one.
+            news_items = _feed_rows(news_items, "title", watchlist)
             for item in news_items[: caps["news"]]:
-                badge_class = (
-                    "badge-positive"
-                    if item["impact"] == "Positive"
-                    else (
-                        "badge-negative"
-                        if item["impact"] == "Negative"
-                        else "badge-neutral"
-                    )
+                # Only a negative reading is worth a badge. The keyword scorer
+                # marked 54 of 72 items "Positive" and none "Negative", so the
+                # badge on every row said nothing.
+                badge = (
+                    "<span class='badge badge-negative'>Negative</span> | "
+                    if item.get("impact") == "Negative"
+                    else ""
                 )
                 news_html += f"""
                 <div class="news-item">
-                    <a href="{item['link']}" class="news-title" target="_blank">{item['title']}</a>
+                    <a href="{item.get('link', '')}" class="news-title" target="_blank">{item['_shown']}</a>
                     <div class="meta-line">
-                        <span class="badge {badge_class}">{item['impact']} Impact</span> |
-                        <span>{item['source']}</span> | <span>{item['date']}</span>
+                        {badge}<span>{item.get('source', '')}</span> | <span>{item.get('date', '')}</span>
                     </div>
                 </div>
                 """
@@ -994,7 +1079,7 @@ def _render_email(brief_data, watchlist, caps):
             analyst_str = f" ({analyst_count})" if analyst_count else ""
             rating_badge = (
                 f"<span class='badge badge-neutral' style='font-size: 8px; margin-left: 6px; background-color: #1e293b; color: #60a5fa;'>{rating_text}{analyst_str}</span>"
-                if rating_text != "N/A"
+                if rating_text and str(rating_text) not in ("N/A", "None")
                 else ""
             )
 
@@ -1009,12 +1094,10 @@ def _render_email(brief_data, watchlist, caps):
                 <td>{target_str}</td>
                 <td class="stock-growth" style="color: {potential_color} !important;">{potential_str}{method_badge}</td>
             </tr>
-            <tr>
-                <td colspan="5" class="stock-catalyst">
-                    <strong>Catalyst:</strong> {s['catalyst']}
-                </td>
-            </tr>
             """
+            # The "Catalyst:" line under each stock was dropped: it is a fixed
+            # description from config, identical every morning. It stays on
+            # the dashboard, where reference text belongs.
 
         # Format emerging players HTML (from dynamic scanner)
         emerging_html = ""
@@ -1026,6 +1109,11 @@ def _render_email(brief_data, watchlist, caps):
             if players:
                 players_list = []
                 for p in players:
+                    # "Shibpur [Unresolved]" was a college, not a competitor:
+                    # a name the scanner could not resolve to a company is
+                    # not worth the reader's attention.
+                    if isinstance(p, dict) and p.get("status") == "Unresolved":
+                        continue
                     if isinstance(p, dict):
                         ticker_str = f" ({p['ticker']})" if p.get("ticker") else ""
                         players_list.append(
@@ -1035,12 +1123,16 @@ def _render_email(brief_data, watchlist, caps):
                         players_list.append(f"<strong>{p}</strong>")
 
                 players_str = ", ".join(players_list)
-                emerging_html = f"""
+                emerging_html = (
+                    ""
+                    if not players_list
+                    else f"""
                 <div style="margin-top: 15px; padding: 12px; background-color: rgba(245, 158, 11, 0.04); border-left: 3px solid #f59e0b; border-radius: 4px; font-size: 11px; color: #94a3b8; line-height: 1.4;">
                     <strong style="color: #f59e0b; text-transform: uppercase; font-size: 10px; display: block; margin-bottom: 4px;">Emerging Competitor Radar</strong>
                     Spotted news mentions of: {players_str}. Mapped as potential new entrants or disruptive competitors in the {meta['label']} sector.
                 </div>
                 """
+                )
 
         hidden_stocks = len(stocks) - len(shown_stocks)
         if hidden_stocks > 0:
@@ -1098,13 +1190,16 @@ def _render_email(brief_data, watchlist, caps):
             "See every sector on the dashboard</a>.</p></div>"
         )
 
-    # Append Corporate Agreements & Product Launches
+    # Append Corporate Agreements & Product Launches. Each list is filtered
+    # and shortened by _feed_rows(); see there for the rules.
     agreements_html = ""
-    agreements = brief_data.get("corporate_agreements", [])
+    agreements = _feed_rows(
+        brief_data.get("corporate_agreements", []), "title", watchlist
+    )
     if agreements:
         items = "".join(
             [
-                f"<li><strong>{a['source']}</strong>: {a['title']}</li>"
+                f"<li><strong>{a['source']}</strong>: {a['_shown']}</li>"
                 for a in agreements[: caps["lists"]]
             ]
         )
@@ -1116,11 +1211,19 @@ def _render_email(brief_data, watchlist, caps):
         """
 
     launches_html = ""
-    launches = brief_data.get("product_launches", [])
+    launches = [
+        item
+        for item in _feed_rows(
+            brief_data.get("product_launches", []), "product", watchlist
+        )
+        # "Unknown (Manufacturing): UNESCO unveils ONE OCEAN installation" —
+        # a launch nobody attributed to a company is not ours to report.
+        if str(item.get("company") or "").strip().lower() not in ("", "unknown")
+    ]
     if launches:
         items = "".join(
             [
-                f"<li><strong>{launch.get('company', 'Unknown')}</strong> ({launch.get('industry', 'Manufacturing')}): {launch.get('product', launch.get('title', ''))} <em style='font-size: 11px; color: #94a3b8;'>[{launch.get('source', 'News')}]</em></li>"
+                f"<li><strong>{launch.get('company', 'Unknown')}</strong> ({launch.get('industry', 'Manufacturing')}): {launch['_shown']} <em style='font-size: 11px; color: #94a3b8;'>[{launch.get('source', 'News')}]</em></li>"
                 for launch in launches[: caps["lists"]]
             ]
         )
@@ -1132,11 +1235,11 @@ def _render_email(brief_data, watchlist, caps):
         """
 
     filings_html = ""
-    filings = brief_data.get("corporate_filings", [])
+    filings = _feed_rows(brief_data.get("corporate_filings", []), "filing", watchlist)
     if filings:
         items = "".join(
             [
-                f"<li><strong>{f.get('company', 'Unknown')}</strong> ({f.get('industry', 'Corporate')}): {f.get('filing', '')} <em style='font-size: 11px; color: #94a3b8;'>[{f.get('source', 'Exchange')}]</em></li>"
+                f"<li><strong>{f.get('company', 'Unknown')}</strong> ({f.get('industry', 'Corporate')}): {f['_shown']} <em style='font-size: 11px; color: #94a3b8;'>[{f.get('source', 'Exchange')}]</em></li>"
                 for f in filings[: caps["lists"]]
             ]
         )
@@ -1184,7 +1287,14 @@ def _render_email(brief_data, watchlist, caps):
 
     # Append Institutional Activity & SEBI Filings
     inst_html = ""
-    inst_activity = brief_data.get("institutional_activity", [])
+    # Only deals in names we hold. Block deals in Pine Labs, Lenskart and
+    # Groww are market news, not a flow signal for this watchlist.
+    inst_activity = _feed_rows(
+        brief_data.get("institutional_activity", []),
+        "headline",
+        watchlist,
+        holdings_only=True,
+    )
     sebi_filings = brief_data.get("sebi_filings", [])
     inst_baseline = brief_data.get("institutional_baseline", [])
 
@@ -1206,7 +1316,7 @@ def _render_email(brief_data, watchlist, caps):
     if inst_activity or sebi_filings or baseline_items:
         inst_items = "".join(
             [
-                f"<li><strong>{i['source']}</strong>: {i['headline']}</li>"
+                f"<li><strong>{i['source']}</strong>: {i['_shown']}</li>"
                 for i in inst_activity[: min(4, caps["lists"])]
             ]
         )
@@ -1366,8 +1476,11 @@ def _render_email(brief_data, watchlist, caps):
         build_watchlist_changes_html(
             brief_data.get("watchlist_changes"), caps.get("changes", MAX_CHANGES)
         )
+        # The cheapest/dearest table repeated Sector Valuation above it
+        # line for line (and double-escaped its labels); only the
+        # "not valued" note is new information, so only that is sent.
         + build_valuation_extremes_html(
-            brief_data.get("sector_valuation"),
+            [],
             suppressed,
             caps.get("extremes", MAX_EXTREMES),
         )

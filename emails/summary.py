@@ -116,7 +116,10 @@ def build_summary(
     # is derived rather than asserted.
     by_sector: Dict[str, int] = {}
     for w in new_signals + escalated:
-        key = w.get("sector") or "unknown"
+        key = w.get("sector") or ""
+        # A signal with no sector is not a sector moving.
+        if not key or key in ("—", "-", "unknown"):
+            continue
         by_sector[key] = by_sector.get(key, 0) + 1
     hot_sectors = sorted(by_sector.items(), key=lambda kv: -kv[1])[:MAX_SECTORS]
 
