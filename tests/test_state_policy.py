@@ -112,6 +112,8 @@ RSS = """<rss><channel>
 <source url="x">Times</source></item>
 <item><title>Gujarat government unveils solar policy - Mint</title>
 <link>https://n.test/2</link><pubDate>Thu, 24 Sep 2026 02:00:00 GMT</pubDate></item>
+<item><title>Gujarat government old textile scheme - Old</title>
+<link>https://n.test/old</link><pubDate>Mon, 01 Jun 2026 02:00:00 GMT</pubDate></item>
 </channel></rss>"""
 
 
@@ -133,9 +135,15 @@ def test_the_state_feed_tags_where_it_looked_and_survives_a_failed_query(monkeyp
         return 200, RSS
 
     monkeypatch.setattr("utils.fetch_text_async", fetch)
-    items = asyncio.run(fetch_state_policy_async(MagicMock()))
+    import datetime
+
+    items = asyncio.run(
+        fetch_state_policy_async(MagicMock(), today=datetime.date(2026, 9, 26))
+    )
     assert len(urls) == 2
     # The same story from two outlets is one item.
     assert [i["title"] for i in items] == ["Gujarat government unveils solar policy"]
     assert items[0]["feed_state"] == "Gujarat"
     assert items[0]["link"] == "https://n.test/1"
+    # Google ignores "when:7d"; a June story must not take a slot.
+    assert all("old textile" not in i["title"] for i in items)

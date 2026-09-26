@@ -42,7 +42,11 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CACHE_PATH = os.path.join(ROOT, "thesis_cache.json")
 
 # Bump when the prompt or schema changes meaning; older readings are re-read.
-PROMPT_VERSION = "1"
+# 2: results and margins count against a thesis only when it names them;
+#    the first live run flagged Mphasis's margin slip against "key
+#    beneficiary of cost-takeout deals" and ideaForge's quarterly loss
+#    against its whole thesis — both false alarms.
+PROMPT_VERSION = "2"
 
 STANCES = ("contradicts", "supports", "unrelated")
 
@@ -54,6 +58,9 @@ MAX_NEW_PER_RUN = 300
 # every day would otherwise take the run's whole budget.
 MAX_PER_HOLDING = 15
 CACHE_RETENTION_DAYS = 120
+
+# The most of the thesis a quoted claim may cover and still be one claim.
+MAX_CLAIM_SHARE = 0.8
 
 _BOILERPLATE = re.compile(r"auto-discovered via media radar", re.IGNORECASE)
 
@@ -81,6 +88,12 @@ claim   — the words of the THESIS the headline bears on, copied EXACTLY and
           contiguously. "" when unrelated.
 because — the words of the HEADLINE that bear on the claim, copied EXACTLY and
           contiguously. "" when unrelated.
+
+Results, margins, profits and losses contradict a thesis ONLY when the thesis
+itself names that measure ("expanding margins", "debt-free", "asset quality").
+A quarterly loss or a margin dip says nothing about a thesis that is about
+market position, orders or policy. The claim must be the specific phrase the
+headline bears on, never the whole thesis.
 
 A falling share price is not evidence against a thesis, and a rising one is
 not evidence for it. Judge only from the thesis and the headline; do not use
@@ -148,6 +161,9 @@ def ground(headline: str, thesis: str, raw: Dict[str, Any]) -> Dict[str, Any]:
         and _norm(because)
         and _norm(claim) in _norm(thesis)
         and _norm(because) in _norm(headline)
+        # A "claim" that is the whole thesis names no claim: the first live
+        # run quoted ideaForge's entire thesis back against a quarterly loss.
+        and len(_norm(claim)) <= MAX_CLAIM_SHARE * len(_norm(thesis))
     ):
         out.update(claim=claim, because=because)
         return out

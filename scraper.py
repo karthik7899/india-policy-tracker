@@ -219,9 +219,13 @@ async def fetch_global_event_feeds_async(session):
 # word, any of our sector words), so the reader, not the query, decides what
 # is policy.
 STATE_ITEMS_PER_QUERY = 6
+# Google News ignores "when:7d" for these queries: the first live run got 54
+# headlines, 39 of them older than the 45-day retention, so stale stories took
+# the slots meant for new ones. Age is checked here, before the slots fill.
+STATE_MAX_AGE_DAYS = 14
 
 
-async def fetch_state_policy_async(session):
+async def fetch_state_policy_async(session, today=None):
     """State-government policy headlines, one Google News query per state.
 
     Each item carries ``feed_state``: the state whose query found it. That is
@@ -230,8 +234,12 @@ async def fetch_state_policy_async(session):
     itself (analysis/policy_impact.state_of). Fail-safe like every feed: a
     query that fails contributes nothing and the run continues.
     """
+    from analysis.event_evidence import article_date
     from config import STATE_POLICY_QUERIES, STATE_POLICY_TOPICS
     from utils import fetch_text_async
+
+    today = today or datetime.date.today()
+    cutoff = (today - datetime.timedelta(days=STATE_MAX_AGE_DAYS)).isoformat()
 
     async def _fetch(state, terms):
         try:
@@ -251,15 +259,27 @@ async def fetch_state_policy_async(session):
     results = await asyncio.gather(
         *(_fetch(s, q) for s, q in STATE_POLICY_QUERIES.items())
     )
-    items, seen, per_state = [], set(), {}
+    items, seen, per_state, stale = [], set(), {}, 0
     for state, feed in results:
         if not feed:
             continue
-        for entry in feed.entries[:STATE_ITEMS_PER_QUERY]:
+        fresh = []
+        for entry in feed.entries:
+            date = article_date(entry.get("published")) or ""
+            if date >= cutoff:
+                fresh.append((date, entry))
+            else:
+                stale += 1
+        fresh.sort(key=lambda d: d[0], reverse=True)
+        taken = 0
+        for _, entry in fresh:
+            if taken >= STATE_ITEMS_PER_QUERY:
+                break
             title = entry.get("title", "").split(" - ")[0].strip()
             if not title or title.lower() in seen:
                 continue
             seen.add(title.lower())
+            taken += 1
             per_state[state] = per_state.get(state, 0) + 1
             items.append(
                 {
@@ -273,7 +293,7 @@ async def fetch_state_policy_async(session):
     log.info(
         f"State policy feed: {len(items)} headline(s) — "
         + (", ".join(f"{s} {n}" for s, n in per_state.items()) or "none")
-        + "."
+        + f"; {stale} older than {STATE_MAX_AGE_DAYS} days skipped."
     )
     return items
 
