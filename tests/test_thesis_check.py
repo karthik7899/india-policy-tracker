@@ -140,7 +140,7 @@ def test_typographic_quotes_do_not_fail_a_faithful_quote():
     headline = "Army cancels ideaForge’s ‘Yeti’ drone contract"
     r = ground(
         headline,
-        "Primary supplier for Indian Army",
+        "Pioneer in tactical drones, primary supplier for Indian Army and police",
         {
             "stance": "contradicts",
             "claim": "primary supplier for Indian Army",
@@ -238,7 +238,9 @@ def test_without_a_key_the_check_is_skipped(cache, monkeypatch):
 def test_the_committed_cache_is_well_formed():
     with open(thesis_check.CACHE_PATH, encoding="utf-8") as f:
         body = json.load(f)
-    assert body["prompt_version"] == thesis_check.PROMPT_VERSION
+    # The header names the version that last wrote the file; entries from an
+    # older version are re-read, not trusted.
+    assert isinstance(body["prompt_version"], str)
     for entry in body["entries"].values():
         assert entry["reading"]["stance"] in thesis_check.STANCES
 
@@ -375,3 +377,41 @@ def test_the_committed_thesis_labels_are_well_formed():
     # Enough of each kind to mean something.
     assert sum(r["stance"] == "contradicts" for r in rows) >= 15
     assert sum(not r.get("synthetic") for r in rows) >= 60
+
+
+def test_a_claim_that_is_the_whole_thesis_is_no_claim():
+    # First live run: ideaForge's quarterly loss was "contradicting" its
+    # entire thesis, quoted back verbatim.
+    thesis = (
+        "Pioneer in tactical and mapping drone systems, primary supplier for "
+        "Indian Army and police borders."
+    )
+    headline = "Supply chain disruptions push ideaForge into losses in Q1FY27"
+    r = ground(
+        headline,
+        thesis,
+        {
+            "stance": "contradicts",
+            "claim": thesis,
+            "because": "push ideaForge into losses",
+        },
+    )
+    assert r["stance"] == "unrelated" and r["downgraded"] == "contradicts"
+    r = ground(
+        headline,
+        thesis,
+        {
+            "stance": "contradicts",
+            "claim": "primary supplier for Indian Army",
+            "because": "push ideaForge into losses",
+        },
+    )
+    assert r["stance"] == "contradicts"  # a specific claim still stands
+
+
+def test_the_prompt_limits_results_to_theses_that_name_them():
+    from analysis.thesis_check import _prompt
+
+    text = _prompt([(0, {"ticker": "X", "name": "X", "thesis": "t", "headline": "h"})])
+    assert "ONLY when the thesis" in text
+    assert thesis_check.PROMPT_VERSION != "1"
