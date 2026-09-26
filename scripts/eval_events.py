@@ -34,6 +34,7 @@ sys.path.insert(0, ROOT)
 
 LABELS_PATH = os.path.join(ROOT, "eval", "event_labels.json")
 POLICY_LABELS_PATH = os.path.join(ROOT, "eval", "policy_labels.json")
+THESIS_LABELS_PATH = os.path.join(ROOT, "eval", "thesis_labels.json")
 
 
 def _same_party(a: str, b: str) -> bool:
@@ -265,6 +266,133 @@ def _run_policy(args) -> int:
     return 0
 
 
+def score_thesis(
+    labels: List[Dict[str, Any]], readings: Dict[str, Dict[str, Any]]
+) -> Dict[str, Any]:
+    """The thesis check against eval/thesis_labels.json.
+
+      challenge_recall     labelled contradictions the check flagged
+      challenge_precision  flags that are labelled (or acceptable) contradictions
+      false_alarms         flags on REAL headlines that are not contradictions —
+                           the number that decides whether the alert is noise
+      support_recall /     the same for "supports"
+      support_precision
+      downgraded           answers refused because a quote was not verbatim
+
+    ``readings`` is keyed by thesis_check.pair_key; unread rows are skipped.
+    """
+    from analysis.thesis_check import pair_key
+
+    out: Dict[str, Any] = {}
+    for split in ("dev", "holdout", "all"):
+        rows = []
+        for r in labels:
+            if split != "all" and r.get("split") != split:
+                continue
+            reading = readings.get(pair_key(r["ticker"], r["thesis"], r["headline"]))
+            if reading is not None:
+                rows.append((r, reading))
+        counts = {
+            k: 0
+            for k in (
+                "c_want",
+                "c_hit",
+                "c_said",
+                "c_ok",
+                "s_want",
+                "s_hit",
+                "s_said",
+                "s_ok",
+                "false_alarms",
+                "real",
+                "downgraded",
+            )
+        }
+        misses, alarms = [], []
+        for r, reading in rows:
+            got = reading["stance"]
+            ok = {r["stance"], *(r.get("also_acceptable") or [])}
+            counts["real"] += not r.get("synthetic")
+            counts["downgraded"] += bool(reading.get("downgraded"))
+            for stance, p in (("contradicts", "c"), ("supports", "s")):
+                if r["stance"] == stance:
+                    counts[f"{p}_want"] += 1
+                    counts[f"{p}_hit"] += got == stance
+                    if got != stance and stance == "contradicts":
+                        misses.append((r, reading))
+                if got == stance:
+                    counts[f"{p}_said"] += 1
+                    counts[f"{p}_ok"] += stance in ok
+            if got == "contradicts" and "contradicts" not in ok:
+                alarms.append((r, reading))
+                counts["false_alarms"] += not r.get("synthetic")
+
+        def ratio(a, b):
+            return round(a / b, 3) if b else None
+
+        out[split] = {
+            "rows": len(rows),
+            "real_rows": counts["real"],
+            "contradictions": counts["c_want"],
+            "challenge_recall": ratio(counts["c_hit"], counts["c_want"]),
+            "challenge_precision": ratio(counts["c_ok"], counts["c_said"]),
+            "false_alarms": counts["false_alarms"],
+            "support_recall": ratio(counts["s_hit"], counts["s_want"]),
+            "support_precision": ratio(counts["s_ok"], counts["s_said"]),
+            "downgraded": counts["downgraded"],
+            "misses": misses,
+            "alarms": alarms,
+        }
+    return out
+
+
+def _run_thesis(args) -> int:
+    from analysis.thesis_check import read_pairs
+
+    with open(THESIS_LABELS_PATH, encoding="utf-8") as f:
+        body = json.load(f)
+    labels = body["labels"]
+    if not body.get("reviewed"):
+        print("NOTE: thesis labels are a draft nobody has reviewed yet.\n")
+    pairs = [{"ticker": r["ticker"], "name": r["ticker"], **r} for r in labels]
+    # Live reads are bounded by the label count: a scoring run can never
+    # spend more than one pass over this file.
+    readings, status = read_pairs(
+        pairs,
+        transport=None if args.live else _no_calls,
+        max_new=len(pairs),
+    )
+    print(
+        f"Thesis readings available for {len(readings)} of {len(labels)} labelled "
+        f"pairs{'' if args.live else ' (cache only; --live to fill the rest)'}."
+        + (f" Skipped: {status['skipped']}" if args.live and status["skipped"] else "")
+        + "\n"
+    )
+    result = score_thesis(labels, readings)
+    for split in ("dev", "holdout", "all"):
+        r = result[split]
+        print(
+            f"thesis   {split:8} rows={r['rows']:3} (real {r['real_rows']:3})  "
+            f"contradictions={r['contradictions']:3}  "
+            f"challenge_recall={r['challenge_recall']}  "
+            f"challenge_precision={r['challenge_precision']}  "
+            f"false_alarms={r['false_alarms']}  support_recall={r['support_recall']}  "
+            f"support_precision={r['support_precision']}  downgraded={r['downgraded']}"
+        )
+    if args.misses:
+        r = result["all"]
+        for title, items in (("MISSED", r["misses"]), ("FALSE ALARM", r["alarms"])):
+            print(f"\n  {title} ({len(items)})")
+            for row, reading in items:
+                print(
+                    f"    [{row.get('split')}{' synthetic' if row.get('synthetic') else ''}] "
+                    f"{row['ticker']} want {row['stance']} · got {reading['stance']}"
+                    f"{' (downgraded from ' + reading['downgraded'] + ')' if reading.get('downgraded') else ''}"
+                    f" | {row['headline'][:90]}"
+                )
+    return 0
+
+
 def _print(result: Dict[str, Any], label: str) -> None:
     for split in ("dev", "holdout", "all"):
         r = result[split]
@@ -282,9 +410,10 @@ def main() -> int:
     parser.add_argument("--misses", action="store_true", help="list disagreements")
     parser.add_argument(
         "--reader",
-        choices=("rules", "llm", "combined", "all", "policy"),
+        choices=("rules", "llm", "combined", "all", "policy", "thesis"),
         default="rules",
-        help="which reader to score (llm/combined/policy use llm_cache.json)",
+        help="which reader to score (llm/combined/policy use llm_cache.json, "
+        "thesis uses thesis_cache.json)",
     )
     parser.add_argument(
         "--live",
@@ -296,6 +425,8 @@ def main() -> int:
     logging.disable(logging.INFO)
     if args.reader == "policy":
         return _run_policy(args)
+    if args.reader == "thesis":
+        return _run_thesis(args)
     with open(LABELS_PATH, encoding="utf-8") as f:
         body = json.load(f)
     with open(os.path.join(ROOT, "watchlist.json"), encoding="utf-8") as f:

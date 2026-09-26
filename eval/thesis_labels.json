@@ -1,0 +1,821 @@
+{
+ "_about": "Hand labels for the thesis check (analysis/thesis_check.py). DRAFT: labelled by Claude, not yet reviewed - correct any row and set reviewed to true. Each row pairs a holding's thesis (its watchlist catalyst at labelling time) with a headline. stance: contradicts = the headline undermines a specific claim in the thesis; supports = concrete progress on one; unrelated = anything else, including price moves, ratings and results that touch no claim. Rows without `synthetic` are real headlines attributed to the holding in the 2026-09-26 corpus. Rows marked synthetic are COUNTERFACTUAL headlines written for this file to test that clear contradictions are caught - they are not news and never enter the pipeline. Score with: python scripts/eval_events.py --reader thesis",
+ "reviewed": false,
+ "labels": [
+  {
+   "ticker": "ADANIGREEN",
+   "thesis": "Developing the world's largest renewable energy park in Khavda, Gujarat (30 GW capacity target).",
+   "headline": "Adani Green Energy Limited Just Missed EPS By 8.7%: Here's What Analysts Think Will Happen Next",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "dev"
+  },
+  {
+   "ticker": "ADANIGREEN",
+   "thesis": "Developing the world's largest renewable energy park in Khavda, Gujarat (30 GW capacity target).",
+   "headline": "Buy, Sell Or Hold: Adani Green Energy, Suzlon Energy, Waaree Energies, KPI Green Energy, Websol Energy System — Analyst Forecast",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "holdout"
+  },
+  {
+   "ticker": "ADSL",
+   "thesis": "System integrator winning smart/safe city surveillance projects, managing master command centers.",
+   "headline": "Allied Digital Services (NSE: ADSL): Bull Case, Bear Case Explained",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "dev"
+  },
+  {
+   "ticker": "ANANTRAJ",
+   "thesis": "Real-estate developer transitioning commercial properties into major data center hubs in NCR.",
+   "headline": "Anant Raj plans ₹25,000 crore data centre bet without fresh funding",
+   "stance": "supports",
+   "also_acceptable": [],
+   "split": "holdout"
+  },
+  {
+   "ticker": "ARVIND",
+   "thesis": "Leading denim manufacturer, investing in technical textiles under recent government schemes.",
+   "headline": "Arvind Ltd’s Q1 profit stays flat despite 25% revenue growth",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "dev"
+  },
+  {
+   "ticker": "ARVIND",
+   "thesis": "Leading denim manufacturer, investing in technical textiles under recent government schemes.",
+   "headline": "Nizamabad MP Arvind inaugurates ₹9-crore Jankampet goods shed",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "dev"
+  },
+  {
+   "ticker": "ARVIND",
+   "thesis": "Leading denim manufacturer, investing in technical textiles under recent government schemes.",
+   "headline": "Arvind acquires stake in two Torrent Urja entities for renewable power",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "dev"
+  },
+  {
+   "ticker": "ARVIND",
+   "thesis": "Leading denim manufacturer, investing in technical textiles under recent government schemes.",
+   "headline": "Arvind unveils AD Denim campaign with actor Raghav Juyal",
+   "stance": "unrelated",
+   "also_acceptable": [
+    "supports"
+   ],
+   "split": "dev"
+  },
+  {
+   "ticker": "ARVIND",
+   "thesis": "Leading denim manufacturer, investing in technical textiles under recent government schemes.",
+   "headline": "CARE Ratings upgrades LT ratings of Arvind to 'AA' with 'stable' outlook",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "dev"
+  },
+  {
+   "ticker": "ASTRAMICRO",
+   "thesis": "High-end microwave sub-systems maker, critical supplier of radars and satellite payloads.",
+   "headline": "Astra Microwave: Defence orders set the stage for growth",
+   "stance": "supports",
+   "also_acceptable": [
+    "unrelated"
+   ],
+   "split": "holdout"
+  },
+  {
+   "ticker": "BEL",
+   "thesis": "Defence electronics leader, securing major naval and surveillance command radar orders.",
+   "headline": "Defence Ministry signs 1950 crore contract with Bharat Electronics Limited",
+   "stance": "supports",
+   "also_acceptable": [
+    "unrelated"
+   ],
+   "split": "dev"
+  },
+  {
+   "ticker": "BEL",
+   "thesis": "Defence electronics leader, securing major naval and surveillance command radar orders.",
+   "headline": "BEL bags additional orders worth Rs 1,081 crore",
+   "stance": "supports",
+   "also_acceptable": [
+    "unrelated"
+   ],
+   "split": "dev"
+  },
+  {
+   "ticker": "BEL",
+   "thesis": "Defence electronics leader, securing major naval and surveillance command radar orders.",
+   "headline": "Motilal Oswal bullish on defence sector; BEL top pick for 20% upside",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "dev"
+  },
+  {
+   "ticker": "BEL",
+   "thesis": "Defence electronics leader, securing major naval and surveillance command radar orders.",
+   "headline": "Buy, Sell Or Hold: HAL, Bharat Electronics, Bharat Dynamics, Mazagon Dock, Data Patterns",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "dev"
+  },
+  {
+   "ticker": "BEL",
+   "thesis": "Defence electronics leader, securing major naval and surveillance command radar orders.",
+   "headline": "Ananth Technologies and BEL sign MoU for defence and aerospace systems",
+   "stance": "unrelated",
+   "also_acceptable": [
+    "supports"
+   ],
+   "split": "holdout"
+  },
+  {
+   "ticker": "BHEL",
+   "thesis": "State-owned heavy power equipment giant, expanding local container manufacturing and green energy grids.",
+   "headline": "BHEL fined ₹11 lakh by exchanges for LODR non-compliance",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "dev"
+  },
+  {
+   "ticker": "BHEL",
+   "thesis": "State-owned heavy power equipment giant, expanding local container manufacturing and green energy grids.",
+   "headline": "Man’s body found stuffed in sack in bushes: 4–5-day-old corpse found near BHEL gate no. 8; severe injury ma...",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "dev"
+  },
+  {
+   "ticker": "BHEL",
+   "thesis": "State-owned heavy power equipment giant, expanding local container manufacturing and green energy grids.",
+   "headline": "BHEL Wins Rs 5,145.6 mn Power Grid Transformer Contract",
+   "stance": "supports",
+   "also_acceptable": [
+    "unrelated"
+   ],
+   "split": "holdout"
+  },
+  {
+   "ticker": "BHEL",
+   "thesis": "State-owned heavy power equipment giant, expanding local container manufacturing and green energy grids.",
+   "headline": "Hystar and BHEL Partner to Manufacture PEM Electrolysers in India",
+   "stance": "unrelated",
+   "also_acceptable": [
+    "supports"
+   ],
+   "split": "dev"
+  },
+  {
+   "ticker": "BHEL",
+   "thesis": "State-owned heavy power equipment giant, expanding local container manufacturing and green energy grids.",
+   "headline": "BHEL shares hit all-time high post strong Q1 show; will profitability concerns weigh on outlook?",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "dev"
+  },
+  {
+   "ticker": "CAMPUS",
+   "thesis": "Dominant direct-to-consumer sports footwear brand in tier-2/3 cities, major beneficiary of fitness trends.",
+   "headline": "TCS' HyperVault Secures 264 Acres For Massive 1GW AI Data Center Campus In Hyderabad",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "dev"
+  },
+  {
+   "ticker": "CAMPUS",
+   "thesis": "Dominant direct-to-consumer sports footwear brand in tier-2/3 cities, major beneficiary of fitness trends.",
+   "headline": "Campus Activewear unveils its first reimagined store in New Delhi",
+   "stance": "unrelated",
+   "also_acceptable": [
+    "supports"
+   ],
+   "split": "dev"
+  },
+  {
+   "ticker": "CHALET",
+   "thesis": "Business-hotel portfolio near airports and office hubs, geared to corporate travel recovery.",
+   "headline": "HDFC Mutual Fund increases stake in Chalet Hotels to 9.11%",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "holdout"
+  },
+  {
+   "ticker": "COFORGE",
+   "thesis": "Mid-tier IT services firm with large deal wins in BFSI and travel verticals, expanding margins via GenAI offerings.",
+   "headline": "Coforge Wins $230M AI Transformation Contract With European Client",
+   "stance": "supports",
+   "also_acceptable": [],
+   "split": "holdout"
+  },
+  {
+   "ticker": "COFORGE",
+   "thesis": "Mid-tier IT services firm with large deal wins in BFSI and travel verticals, expanding margins via GenAI offerings.",
+   "headline": "Coforge shares rise on $5 billion revenue target by FY30; analysts shift focus to execution plans",
+   "stance": "unrelated",
+   "also_acceptable": [
+    "supports"
+   ],
+   "split": "holdout"
+  },
+  {
+   "ticker": "COFORGE",
+   "thesis": "Mid-tier IT services firm with large deal wins in BFSI and travel verticals, expanding margins via GenAI offerings.",
+   "headline": "Coforge named Exceptional Performer in Whitelane 2026 study",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "holdout"
+  },
+  {
+   "ticker": "CONCOR",
+   "thesis": "Dominant railway container carrier, major beneficiary of the ₹10,000 crore container manufacturing scheme.",
+   "headline": "CONCOR appoints Shri Ajit Kumar Panda as CMD effective Aug 1, 2026",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "dev"
+  },
+  {
+   "ticker": "CONCOR",
+   "thesis": "Dominant railway container carrier, major beneficiary of the ₹10,000 crore container manufacturing scheme.",
+   "headline": "CONCOR Q1 Revenue Reaches ₹2,160 Crore as Net Profit Holds at ₹267 Crore",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "holdout"
+  },
+  {
+   "ticker": "CONCOR",
+   "thesis": "Dominant railway container carrier, major beneficiary of the ₹10,000 crore container manufacturing scheme.",
+   "headline": "CONCOR starts double-stack operations on WDFC",
+   "stance": "supports",
+   "also_acceptable": [
+    "unrelated"
+   ],
+   "split": "holdout"
+  },
+  {
+   "ticker": "DIXON",
+   "thesis": "Leader in electronic assembly (mobile, laptop, LED TV), heavily subsidized under manufacturing PLI.",
+   "headline": "Government clears Dixon (India)-Vivo (China) joint venture for manufacturing smartphones",
+   "stance": "supports",
+   "also_acceptable": [],
+   "split": "holdout"
+  },
+  {
+   "ticker": "DIXON",
+   "thesis": "Leader in electronic assembly (mobile, laptop, LED TV), heavily subsidized under manufacturing PLI.",
+   "headline": "The teaser for ‘The Walking Dead: Daryl Dixon’ final season is out and it unveils a new key character",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "holdout"
+  },
+  {
+   "ticker": "DIXON",
+   "thesis": "Leader in electronic assembly (mobile, laptop, LED TV), heavily subsidized under manufacturing PLI.",
+   "headline": "Dixon Tech gains after JM Financial upgrades stock, raises target price by 27%",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "holdout"
+  },
+  {
+   "ticker": "DIXON",
+   "thesis": "Leader in electronic assembly (mobile, laptop, LED TV), heavily subsidized under manufacturing PLI.",
+   "headline": "Explained: Why Jefferies prefers Kaynes Tech shares over Dixon Tech; urges caution on Syrma SGS",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "dev"
+  },
+  {
+   "ticker": "DIXON",
+   "thesis": "Leader in electronic assembly (mobile, laptop, LED TV), heavily subsidized under manufacturing PLI.",
+   "headline": "Gigabyte unveils its first Made-in-India gaming laptop, Gaming A16, in partnership with Dixon Technologies",
+   "stance": "supports",
+   "also_acceptable": [
+    "unrelated"
+   ],
+   "split": "holdout"
+  },
+  {
+   "ticker": "ELGIEQUIP",
+   "thesis": "Global air compressor manufacturer, expanding export-oriented capacity from Indian plants.",
+   "headline": "Elgi Equipments (NSE:ELGIEQUIP): Why Did It Divest Its Stake in Gentex Air Solutions LLC?",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "holdout"
+  },
+  {
+   "ticker": "FORTIS",
+   "thesis": "Hospital and diagnostics network benefiting from insurance penetration and Ayushman Bharat volumes.",
+   "headline": "Fortis Healthcare: IHH Plans To Raise Stake From 31% To 51%",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "holdout"
+  },
+  {
+   "ticker": "FORTIS",
+   "thesis": "Hospital and diagnostics network benefiting from insurance penetration and Ayushman Bharat volumes.",
+   "headline": "Fortis signs O&M agreement for 300-bed hospital, enters Odisha market",
+   "stance": "unrelated",
+   "also_acceptable": [
+    "supports"
+   ],
+   "split": "holdout"
+  },
+  {
+   "ticker": "FORTIS",
+   "thesis": "Hospital and diagnostics network benefiting from insurance penetration and Ayushman Bharat volumes.",
+   "headline": "Buy Fortis Healthcare; target of Rs 1120: Prabhudas Lilladher",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "dev"
+  },
+  {
+   "ticker": "FORTIS",
+   "thesis": "Hospital and diagnostics network benefiting from insurance penetration and Ayushman Bharat volumes.",
+   "headline": "Fortis unveils garden-centred Rosemont apartment development in New Farm",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "holdout"
+  },
+  {
+   "ticker": "HAL",
+   "thesis": "State aerospace major, expanding local fighter jet assembly and benefiting from custom duty exemptions.",
+   "headline": "HAL hands over 2 LCA FOC Twin Seater Trainers & 3 HTT 40 Basic Trainers to IAF and 4 Dhruv NG helicopters to PHL in the presence of Raksha Mantri & Civil Aviation Minister",
+   "stance": "supports",
+   "also_acceptable": [
+    "unrelated"
+   ],
+   "split": "holdout"
+  },
+  {
+   "ticker": "HAL",
+   "thesis": "State aerospace major, expanding local fighter jet assembly and benefiting from custom duty exemptions.",
+   "headline": "ABN AMRO gains momentum in Germany following the integration of Hauck Aufhäuser Lampe (HAL)",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "dev"
+  },
+  {
+   "ticker": "HDFCBANK",
+   "thesis": "Largest private lender; post-merger deposit repricing and a direct read on retail credit demand.",
+   "headline": "Bank Q2 Results FY27: HDFC Bank, Axis Bank, ICICI Bank Announce Results Dates",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "holdout"
+  },
+  {
+   "ticker": "IDEAFORGE",
+   "thesis": "Pioneer in tactical and mapping drone systems, primary supplier for Indian Army and police borders.",
+   "headline": "Supply chain disruptions push ideaForge into losses in Q1FY27",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "dev"
+  },
+  {
+   "ticker": "IDEAFORGE",
+   "thesis": "Pioneer in tactical and mapping drone systems, primary supplier for Indian Army and police borders.",
+   "headline": "ideaForge Technology Promoter Vipul Joshi Pledges 3,70,370 Equity Shares Under SEBI Regulation 31",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "dev"
+  },
+  {
+   "ticker": "IDEAFORGE",
+   "thesis": "Pioneer in tactical and mapping drone systems, primary supplier for Indian Army and police borders.",
+   "headline": "ideaForge gets Rs 151 crore Govt funding to develop ‘Yeti’ drone for high-altitude military logistics",
+   "stance": "supports",
+   "also_acceptable": [
+    "unrelated"
+   ],
+   "split": "dev"
+  },
+  {
+   "ticker": "IDEAFORGE",
+   "thesis": "Pioneer in tactical and mapping drone systems, primary supplier for Indian Army and police borders.",
+   "headline": "IdeaForge Technology unveils mapping drone",
+   "stance": "supports",
+   "also_acceptable": [],
+   "split": "dev"
+  },
+  {
+   "ticker": "INDHOTEL",
+   "thesis": "Taj operator scaling asset-light management contracts against record domestic travel demand.",
+   "headline": "INDHOTEL: Revenue and profit rose year-over-year, driven by hotel segment growth and a key acquisition",
+   "stance": "unrelated",
+   "also_acceptable": [
+    "supports"
+   ],
+   "split": "holdout"
+  },
+  {
+   "ticker": "ITC",
+   "thesis": "Resilient cigarette margins funding rapid expansion of high-margin FMCG brands, direct rural boost play.",
+   "headline": "94% of ITC’s businesses now linked to agri-crops or plantations – Chairman Sanjiv Puri says at ITC AGM",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "dev"
+  },
+  {
+   "ticker": "ITC",
+   "thesis": "Resilient cigarette margins funding rapid expansion of high-margin FMCG brands, direct rural boost play.",
+   "headline": "PDUNASS Inaugurates Joint EPFO–ITC-ILO Training Programme on “Actuarial Practices in Social Security: Strengthening Actuarial Governance at EPFO India”",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "holdout"
+  },
+  {
+   "ticker": "KAYNES",
+   "thesis": "High-end electronics and PCBA manufacturing, setting up a state-of-the-art semiconductor OSAT plant.",
+   "headline": "Kaynes planning potential $1 bn OSAT investment under ISM 2.0: Report",
+   "stance": "supports",
+   "also_acceptable": [],
+   "split": "holdout"
+  },
+  {
+   "ticker": "KAYNES",
+   "thesis": "High-end electronics and PCBA manufacturing, setting up a state-of-the-art semiconductor OSAT plant.",
+   "headline": "Accumulate Kaynes Technology India; target of Rs 4390: Prabhudas Lilladher",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "holdout"
+  },
+  {
+   "ticker": "KAYNES",
+   "thesis": "High-end electronics and PCBA manufacturing, setting up a state-of-the-art semiconductor OSAT plant.",
+   "headline": "Kaynes Technology targets lower metering receivables, better cash flow by FY27-end",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "holdout"
+  },
+  {
+   "ticker": "LEMONTREE",
+   "thesis": "Mid-market chain expanding into tier-2 cities as UDAN air connectivity widens the travel base.",
+   "headline": "Lemon Tree Hotels Limited has informed the Exchange about completion of acquisition of land parcel in Bandra (East), Mumbai by Fleur Hotels Limited, a material subsidiary of the Company",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "holdout"
+  },
+  {
+   "ticker": "LTTS",
+   "thesis": "Engineering R&D services leader, scaling embedded software and semiconductor design-services wins.",
+   "headline": "L&T Technology Services Limited has secured a landmark engagement valued over $ 75 million from a leading global technology enterprise.",
+   "stance": "unrelated",
+   "also_acceptable": [
+    "supports"
+   ],
+   "split": "dev"
+  },
+  {
+   "ticker": "MPHASIS",
+   "thesis": "Direct-core BFS-focused IT services player, key beneficiary of enterprise cloud and cost-takeout deals.",
+   "headline": "Mphasis Posts Q1 EBIT Of 6.48B Rupees With Margin Slipping To 14.78% QoQ",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "dev"
+  },
+  {
+   "ticker": "MPHASIS",
+   "thesis": "Direct-core BFS-focused IT services player, key beneficiary of enterprise cloud and cost-takeout deals.",
+   "headline": "TCS, Mphasis, Infosys, Persistent Systems shares fall, Nifty IT worst sectoral performer; here's why",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "dev"
+  },
+  {
+   "ticker": "PERSISTENT",
+   "thesis": "High-growth digital engineering and enterprise AI services provider, consistently outpacing large-cap IT growth rates.",
+   "headline": "Persistent Systems makes its biggest acquisition ever",
+   "stance": "unrelated",
+   "also_acceptable": [
+    "supports"
+   ],
+   "split": "dev"
+  },
+  {
+   "ticker": "RELIANCE",
+   "thesis": "Consolidating 5G market share, scaling retail stores, and commissioning green energy gigafactories.",
+   "headline": "US President Trump Announces $300 Billion Partnership with Reliance to Build First Major US Refinery in 50 Years",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "dev"
+  },
+  {
+   "ticker": "RELIANCE",
+   "thesis": "Consolidating 5G market share, scaling retail stores, and commissioning green energy gigafactories.",
+   "headline": "Reliance Unveils Comprehensive Clean Energy Strategy Amid India’s Energy 'Supercycle'",
+   "stance": "supports",
+   "also_acceptable": [
+    "unrelated"
+   ],
+   "split": "holdout"
+  },
+  {
+   "ticker": "SCHNEIDER",
+   "thesis": "Critical supplier of electrical distribution, smart grids, and high-efficiency cooling for data centers.",
+   "headline": "Schneider Electric’s Planned Acquisition of Cognite Reinforces the Data Foundation for Industrial AI",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "holdout"
+  },
+  {
+   "ticker": "SCHNEIDER",
+   "thesis": "Critical supplier of electrical distribution, smart grids, and high-efficiency cooling for data centers.",
+   "headline": "Precision Optics Enabling Lunar Navigation: Schneider-Kreuznach’s Role in NASA’s Artemis Missions",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "dev"
+  },
+  {
+   "ticker": "SIEMENS",
+   "thesis": "Diversified capital-goods major, expanding local factory automation and grid equipment manufacturing.",
+   "headline": "Siemens and Samsung Foundry strengthen collaboration to advance silicon design enablement",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "dev"
+  },
+  {
+   "ticker": "SUZLON",
+   "thesis": "Turnaround story, completely debt-free, dominating wind turbine supply with a record order book.",
+   "headline": "Suzlon Share Price Slumps Over 12% In One Month. Here Are Three Key Reasons Why",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "holdout"
+  },
+  {
+   "ticker": "SUZLON",
+   "thesis": "Turnaround story, completely debt-free, dominating wind turbine supply with a record order book.",
+   "headline": "NCLT Ahmedabad Dismisses Insolvency Plea Against Suzlon Energy",
+   "stance": "unrelated",
+   "also_acceptable": [
+    "supports"
+   ],
+   "split": "dev"
+  },
+  {
+   "ticker": "SUZLON",
+   "thesis": "Turnaround story, completely debt-free, dominating wind turbine supply with a record order book.",
+   "headline": "Suzlon bags 400 MW wind EPC order from Tata Power Renewable",
+   "stance": "supports",
+   "also_acceptable": [],
+   "split": "dev"
+  },
+  {
+   "ticker": "SUZLON",
+   "thesis": "Turnaround story, completely debt-free, dominating wind turbine supply with a record order book.",
+   "headline": "Suzlon begins FY27 strong with 23% YoY revenue growth and highest-ever Q1 deliveries",
+   "stance": "supports",
+   "also_acceptable": [
+    "unrelated"
+   ],
+   "split": "dev"
+  },
+  {
+   "ticker": "TCS",
+   "thesis": "Expanding sovereign cloud and secure cyber command centers globally for enterprise clients.",
+   "headline": "TCS Q1 Preview: Wage Hikes Seen Weighing On Margin, Growth Stays Muted",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "dev"
+  },
+  {
+   "ticker": "TCS",
+   "thesis": "Expanding sovereign cloud and secure cyber command centers globally for enterprise clients.",
+   "headline": "SAS Partners with TCS, AI-driven Cyber Resilience Takes Flight",
+   "stance": "supports",
+   "also_acceptable": [
+    "unrelated"
+   ],
+   "split": "dev"
+  },
+  {
+   "ticker": "TCS",
+   "thesis": "Expanding sovereign cloud and secure cyber command centers globally for enterprise clients.",
+   "headline": "As AI slows IT growth, JP Morgan expects TCS and Infosys to outperform Wipro, HCL Tech",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "dev"
+  },
+  {
+   "ticker": "TCS",
+   "thesis": "Expanding sovereign cloud and secure cyber command centers globally for enterprise clients.",
+   "headline": "TCS launches next-gen system-on-chip design services for automotive and semiconductor companies",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "holdout"
+  },
+  {
+   "ticker": "THERMAX",
+   "thesis": "Industrial energy & environment engineering leader, scaling green hydrogen and boiler manufacturing capacity.",
+   "headline": "THERMAX: Revenue up 7% but profit down 85% on project overrun; order book and restructuring boost outlook",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "holdout"
+  },
+  {
+   "ticker": "VBL",
+   "thesis": "PepsiCo's dominant bottler, expanding into newer territories and scaling dairy/juice products.",
+   "headline": "Varun Beverages Acquires Devyani Food Industries Kenya Business For $32 Million",
+   "stance": "supports",
+   "also_acceptable": [],
+   "split": "dev"
+  },
+  {
+   "ticker": "VBL",
+   "thesis": "PepsiCo's dominant bottler, expanding into newer territories and scaling dairy/juice products.",
+   "headline": "Varun Beverages posts 15.5% surge in Q1 net, denies bidding stake in Bira 91",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "holdout"
+  },
+  {
+   "ticker": "SUZLON",
+   "thesis": "Turnaround story, completely debt-free, dominating wind turbine supply with a record order book.",
+   "headline": "Suzlon Energy raises ₹2,500 crore term loan, ending its debt-free status",
+   "stance": "contradicts",
+   "also_acceptable": [],
+   "split": "dev",
+   "synthetic": true
+  },
+  {
+   "ticker": "SUZLON",
+   "thesis": "Turnaround story, completely debt-free, dominating wind turbine supply with a record order book.",
+   "headline": "Suzlon order book shrinks 30% as Tata Power cancels 400 MW wind order",
+   "stance": "contradicts",
+   "also_acceptable": [],
+   "split": "dev",
+   "synthetic": true
+  },
+  {
+   "ticker": "HAL",
+   "thesis": "State aerospace major, expanding local fighter jet assembly and benefiting from custom duty exemptions.",
+   "headline": "Finance Ministry withdraws customs duty exemption on aircraft parts imported by HAL",
+   "stance": "contradicts",
+   "also_acceptable": [],
+   "split": "dev",
+   "synthetic": true
+  },
+  {
+   "ticker": "HAL",
+   "thesis": "State aerospace major, expanding local fighter jet assembly and benefiting from custom duty exemptions.",
+   "headline": "Government shelves plan for second HAL fighter jet assembly line",
+   "stance": "contradicts",
+   "also_acceptable": [],
+   "split": "dev",
+   "synthetic": true
+  },
+  {
+   "ticker": "BEL",
+   "thesis": "Defence electronics leader, securing major naval and surveillance command radar orders.",
+   "headline": "Navy awards command radar contract to Tata Advanced Systems after BEL loses bid",
+   "stance": "contradicts",
+   "also_acceptable": [],
+   "split": "dev",
+   "synthetic": true
+  },
+  {
+   "ticker": "DIXON",
+   "thesis": "Leader in electronic assembly (mobile, laptop, LED TV), heavily subsidized under manufacturing PLI.",
+   "headline": "Government ends smartphone PLI payouts; Dixon's incentive claims rejected",
+   "stance": "contradicts",
+   "also_acceptable": [],
+   "split": "dev",
+   "synthetic": true
+  },
+  {
+   "ticker": "KAYNES",
+   "thesis": "High-end electronics and PCBA manufacturing, setting up a state-of-the-art semiconductor OSAT plant.",
+   "headline": "Kaynes Technology puts semiconductor OSAT plant on hold indefinitely",
+   "stance": "contradicts",
+   "also_acceptable": [],
+   "split": "dev",
+   "synthetic": true
+  },
+  {
+   "ticker": "ADANIGREEN",
+   "thesis": "Developing the world's largest renewable energy park in Khavda, Gujarat (30 GW capacity target).",
+   "headline": "Adani Green cuts Khavda renewable park target to 15 GW",
+   "stance": "contradicts",
+   "also_acceptable": [],
+   "split": "dev",
+   "synthetic": true
+  },
+  {
+   "ticker": "ANANTRAJ",
+   "thesis": "Real-estate developer transitioning commercial properties into major data center hubs in NCR.",
+   "headline": "Anant Raj drops data center plans, to sell NCR commercial properties",
+   "stance": "contradicts",
+   "also_acceptable": [],
+   "split": "dev",
+   "synthetic": true
+  },
+  {
+   "ticker": "CONCOR",
+   "thesis": "Dominant railway container carrier, major beneficiary of the ₹10,000 crore container manufacturing scheme.",
+   "headline": "Government scraps ₹10,000 crore container manufacturing scheme",
+   "stance": "contradicts",
+   "also_acceptable": [],
+   "split": "holdout",
+   "synthetic": true
+  },
+  {
+   "ticker": "ICICIBANK",
+   "thesis": "Retail-led credit growth with sector-leading asset quality and digital lending scale.",
+   "headline": "ICICI Bank's gross NPAs jump to five-year high as retail asset quality worsens",
+   "stance": "contradicts",
+   "also_acceptable": [],
+   "split": "dev",
+   "synthetic": true
+  },
+  {
+   "ticker": "IDEAFORGE",
+   "thesis": "Pioneer in tactical and mapping drone systems, primary supplier for Indian Army and police borders.",
+   "headline": "Indian Army cancels ideaForge drone contract, shifts orders to rival supplier",
+   "stance": "contradicts",
+   "also_acceptable": [],
+   "split": "holdout",
+   "synthetic": true
+  },
+  {
+   "ticker": "ZENTEC",
+   "thesis": "Anti-drone systems and combat training simulators, winning repeat Ministry of Defence counter-drone orders.",
+   "headline": "Defence Ministry bars Zen Technologies from counter-drone tenders",
+   "stance": "contradicts",
+   "also_acceptable": [],
+   "split": "holdout",
+   "synthetic": true
+  },
+  {
+   "ticker": "WELSPUNLIV",
+   "thesis": "Major beneficiary of textile PLI, expanding home textiles capacity and global export market share.",
+   "headline": "Welspun Living dropped from textile PLI after missing investment targets",
+   "stance": "contradicts",
+   "also_acceptable": [],
+   "split": "dev",
+   "synthetic": true
+  },
+  {
+   "ticker": "CPPLUS",
+   "thesis": "CCTV market leader (35%+ share) newly listed, scaling domestic camera manufacturing under PLI.",
+   "headline": "CP Plus loses CCTV market lead as share falls to 18%",
+   "stance": "contradicts",
+   "also_acceptable": [],
+   "split": "dev",
+   "synthetic": true
+  },
+  {
+   "ticker": "COFORGE",
+   "thesis": "Mid-tier IT services firm with large deal wins in BFSI and travel verticals, expanding margins via GenAI offerings.",
+   "headline": "Coforge margins contract for third straight quarter as GenAI deals squeeze pricing",
+   "stance": "contradicts",
+   "also_acceptable": [],
+   "split": "dev",
+   "synthetic": true
+  },
+  {
+   "ticker": "FORTIS",
+   "thesis": "Hospital and diagnostics network benefiting from insurance penetration and Ayushman Bharat volumes.",
+   "headline": "Fortis Healthcare exits Ayushman Bharat scheme over unpaid claims",
+   "stance": "contradicts",
+   "also_acceptable": [],
+   "split": "dev",
+   "synthetic": true
+  },
+  {
+   "ticker": "HAL",
+   "thesis": "State aerospace major, expanding local fighter jet assembly and benefiting from custom duty exemptions.",
+   "headline": "HAL shares tumble 8% as markets sell off on weak global cues",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "dev",
+   "synthetic": true
+  },
+  {
+   "ticker": "SUZLON",
+   "thesis": "Turnaround story, completely debt-free, dominating wind turbine supply with a record order book.",
+   "headline": "Suzlon stock falls for fifth straight session; brokerage cuts target price",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "dev",
+   "synthetic": true
+  },
+  {
+   "ticker": "BEL",
+   "thesis": "Defence electronics leader, securing major naval and surveillance command radar orders.",
+   "headline": "BEL Q2 profit dips 4% on higher employee costs",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "holdout",
+   "synthetic": true
+  },
+  {
+   "ticker": "DIXON",
+   "thesis": "Leader in electronic assembly (mobile, laptop, LED TV), heavily subsidized under manufacturing PLI.",
+   "headline": "Dixon Technologies CFO resigns",
+   "stance": "unrelated",
+   "also_acceptable": [],
+   "split": "dev",
+   "synthetic": true
+  }
+ ]
+}

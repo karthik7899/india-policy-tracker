@@ -236,7 +236,12 @@ class ReaderUnavailable(Exception):
 Transport = Callable[[str], str]
 
 
-def gemini_transport(api_key: str, model: str) -> Transport:
+def gemini_transport(
+    api_key: str, model: str, schema: Optional[Dict[str, Any]] = None
+) -> Transport:
+    """One model's transport. ``schema`` is the response schema — the event
+    reader's by default; the thesis check (analysis/thesis_check.py) passes
+    its own."""
     import requests
 
     url = API_URL.format(model=model)
@@ -247,7 +252,7 @@ def gemini_transport(api_key: str, model: str) -> Transport:
             "generationConfig": {
                 "temperature": 0,
                 "responseMimeType": "application/json",
-                "responseSchema": _SCHEMA,
+                "responseSchema": schema or _SCHEMA,
             },
         }
         # 5xx is Google's side and usually brief: the first live run met
@@ -412,7 +417,9 @@ def discover_models(api_key: str) -> List[str]:
         return []
 
 
-def default_transport() -> Tuple[Optional[Transport], str]:
+def default_transport(
+    schema: Optional[Dict[str, Any]] = None,
+) -> Tuple[Optional[Transport], str]:
     key = os.environ.get("GEMINI_API_KEY", "").strip()
     if not key:
         return None, "GEMINI_API_KEY not set"
@@ -426,7 +433,9 @@ def default_transport() -> Tuple[Optional[Transport], str]:
         else discover_models(key)
     )
     chain = list(dict.fromkeys(configured[:1] + discovered + configured[1:]))
-    transport = chained_transport([(m, gemini_transport(key, m)) for m in chain])
+    transport = chained_transport(
+        [(m, gemini_transport(key, m, schema)) for m in chain]
+    )
     return transport, " → ".join(chain)
 
 
@@ -452,9 +461,11 @@ def load_cache(path: str = CACHE_PATH) -> Optional[Dict[str, Any]]:
         return None
 
 
-def save_cache(entries: Dict[str, Any], path: str = CACHE_PATH) -> None:
+def save_cache(
+    entries: Dict[str, Any], path: str = CACHE_PATH, version: str = PROMPT_VERSION
+) -> None:
     atomic_write_json(
-        {"prompt_version": PROMPT_VERSION, "entries": dict(sorted(entries.items()))},
+        {"prompt_version": version, "entries": dict(sorted(entries.items()))},
         path,
     )
 

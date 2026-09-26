@@ -151,7 +151,9 @@ def build_summary(
 def _sector_label(key: str) -> str:
     from config import SECTOR_METADATA
 
-    return (SECTOR_METADATA.get(key) or {}).get("name") or key.replace("_", " ").title()
+    meta = SECTOR_METADATA.get(key) or {}
+    # The config's field is "label"; "name" is kept for any older shape.
+    return meta.get("label") or meta.get("name") or key.replace("_", " ").title()
 
 
 def build_subject(summary: Dict[str, Any], today) -> str:

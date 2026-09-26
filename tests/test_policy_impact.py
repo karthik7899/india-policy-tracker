@@ -277,3 +277,24 @@ def test_the_sector_block_carries_the_policy_label_to_the_email():
     assert "policy" not in next(r for r in rows if r["headline"] == FMCG)
     html = _sector_block_news_html({"news": rows})
     assert html.count("Policy tailwind") == 1
+
+
+def test_the_policy_section_escapes_once_and_names_the_state():
+    # _render_email escapes all of brief_data at the boundary; the section
+    # escaped again, so "M&M" printed as "M&amp;M" in the inbox.
+    from emails.mailer import _escape_deep
+
+    rows = [
+        {
+            "headline": "Gujarat government extends EV incentive to M&M plant",
+            "measure": "incentive_scheme",
+            "status": "approved",
+            "effects": [{"sector": "aerospace_defence", "direction": "tailwind"}],
+            "state": "Gujarat",
+            "link": "https://news.test/a?b=1&c=2",
+        }
+    ]
+    html = _build_policy_direction_html(_escape_deep(rows), {"lists": 5})
+    assert "M&amp;M plant" in html and "&amp;amp;" not in html
+    assert ">Gujarat</span>" in html
+    assert "Aerospace &amp; Defence" in html  # the config label, escaped here

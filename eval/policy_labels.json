@@ -707,6 +707,59 @@
    "also_acceptable": [],
    "split": "dev",
    "note": "a company's investment approval"
+  },
+  {
+   "headline": "Kerala unveils AI-led governance overhaul to streamline administration, speed up public services",
+   "is_policy": true,
+   "effects": [],
+   "also_acceptable": [],
+   "split": "dev",
+   "note": "state government measure (Kerala); touches none of our sectors directly"
+  },
+  {
+   "headline": "Andhra Pradesh CM Naidu unveils ₹1 lakh crore agribusiness plan",
+   "is_policy": true,
+   "effects": [],
+   "also_acceptable": [
+    {
+     "sector": "fmcg",
+     "direction": "tailwind"
+    }
+   ],
+   "split": "dev",
+   "note": "state plan (Andhra Pradesh)"
+  },
+  {
+   "headline": "Jharkhand Unveils Higher Education Roadmap with AI Courses, Technical Education Clusters",
+   "is_policy": true,
+   "effects": [],
+   "also_acceptable": [],
+   "split": "dev",
+   "note": "state government measure (Jharkhand); no listed sector"
+  },
+  {
+   "headline": "Himachal CM Sukhu Reviews 422 MW Kishau Project MoU",
+   "is_policy": false,
+   "effects": [],
+   "also_acceptable": [],
+   "split": "dev",
+   "note": "a review meeting, not a measure"
+  },
+  {
+   "headline": "Kejriwal, Punjab CM Mann meet Sri Sri Ravi Shankar in Bengaluru",
+   "is_policy": false,
+   "effects": [],
+   "also_acceptable": [],
+   "split": "holdout",
+   "note": "a meeting, not a measure"
+  },
+  {
+   "headline": "\"It is all about 'neeyat'\": Arvind Kejriwal lauds Punjab govt school library",
+   "is_policy": false,
+   "effects": [],
+   "also_acceptable": [],
+   "split": "dev",
+   "note": "praise, not a measure"
   }
  ]
 }

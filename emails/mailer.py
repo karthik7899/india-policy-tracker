@@ -273,7 +273,9 @@ def _build_policy_direction_html(impacts, caps):
 
     Measures in force or approved come first; proposals after. Labelled as
     the LLM's reading because that is what it is — scored against
-    eval/policy_labels.json, not yet reviewed by a person.
+    eval/policy_labels.json, not yet reviewed by a person. ``impacts``
+    arrive escaped with the rest of brief_data, so only the sector label,
+    which comes from config, is escaped here.
     """
     rows = [r for r in (impacts or []) if isinstance(r, dict) and r.get("effects")]
     if not rows:
@@ -287,24 +289,30 @@ def _build_policy_direction_html(impacts, caps):
             f"{html_lib.escape(_sector_label(e['sector']))}"
             for e in r["effects"]
         )
-        head = html_lib.escape(r["headline"])
+        head = r["headline"]
+        # Whose measure: a state's is named, the Centre's is the default.
+        whose = (
+            f"<span class='badge badge-neutral'>{r['state']}</span> "
+            if r.get("state")
+            else ""
+        )
         link = r.get("link")
         title = (
-            f"<a href='{html_lib.escape(link)}' target='_blank' style='color:#e2e8f0;'>{head}</a>"
+            f"<a href='{link}' target='_blank' style='color:#e2e8f0;'>{head}</a>"
             if link
             else head
         )
         items += (
-            f"<li style='margin-bottom:8px;'>{title}<br>"
+            f"<li style='margin-bottom:8px;'>{whose}{title}<br>"
             f"<span style='font-size:11px;color:#94a3b8;'>{effects} · "
-            f"{html_lib.escape(str(r.get('status', '')).replace('_', ' '))}</span></li>"
+            f"{str(r.get('status', '')).replace('_', ' ')}</span></li>"
         )
     return f"""
         <div class="section-card">
             <h3 style="color: #60a5fa; margin-bottom: 6px; font-size: 16px;">Policy Direction</h3>
             <p style="font-size: 11px; color: #6b7280; margin: 0 0 10px 0;">
-                Government and regulator actions this cycle, and which of our sectors each helps
-                (▲) or hurts (▼). Read by the LLM from the headline; not verified.
+                Central, state and regulator actions this cycle, and which of our sectors each
+                helps (▲) or hurts (▼). Read by the LLM from the headline; not verified.
             </p>
             <ul style="font-size: 13px; line-height: 1.5; padding-left: 18px; color: #cbd5e1;">{items}</ul>
         </div>
@@ -604,6 +612,72 @@ _THESIS_BADGE = {
 }
 
 
+def _build_thesis_check_html(check, caps=_CAPS_NORMAL):
+    """Headlines that contradict a holding's written thesis (LLM reading).
+
+    Each challenge quotes both sides — the words of the thesis and the words
+    of the headline — so the reader can judge it in one glance. A prompt to
+    review, never a verdict: it changes no status above. ``check`` arrives
+    escaped with the rest of brief_data.
+    """
+    if not isinstance(check, dict) or not check.get("holdings"):
+        return ""
+    holdings = check["holdings"]
+    challenged = sorted(
+        (r for r in holdings.values() if r.get("challenged")),
+        key=lambda r: r["challenged"][0].get("date", ""),
+        reverse=True,
+    )
+    read = sum(r.get("read", 0) for r in holdings.values())
+    unread = sum(r.get("unread", 0) for r in holdings.values())
+    no_thesis = check.get("no_thesis") or []
+    coverage = (
+        f"{read} headline(s) about {len(holdings)} holding(s) read against their "
+        f"written thesis"
+        + (f"; {unread} not yet read" if unread else "")
+        + (
+            f". {len(no_thesis)} holding(s) have no written thesis "
+            f"(rotation placeholder) and are not checked"
+            if no_thesis
+            else ""
+        )
+        + "."
+    )
+    items = ""
+    for r in challenged[: caps["research"]]:
+        c = r["challenged"][0]
+        head = (
+            f"<a href='{c['link']}' target='_blank' style='color:#e2e8f0;'>{c['headline']}</a>"
+            if c.get("link")
+            else c["headline"]
+        )
+        more = (
+            f" <span style='color:#94a3b8;'>(+{len(r['challenged']) - 1} more)</span>"
+            if len(r["challenged"]) > 1
+            else ""
+        )
+        items += (
+            f"<li style='margin-bottom:8px;'><span class='stock-ticker'>{r['ticker']}</span> "
+            f"{head}{more}<br><span style='font-size:11px;color:#94a3b8;'>"
+            f"&ldquo;{c['because']}&rdquo; against the thesis &ldquo;{c['claim']}&rdquo;"
+            f"</span></li>"
+        )
+    body = (
+        f"<ul style='font-size:12px;line-height:1.5;padding-left:18px;color:#cbd5e1;'>{items}</ul>"
+        if items
+        else "<p style='font-size:12px;color:#94a3b8;margin:0 0 12px 0;'>"
+        "No headline this cycle contradicts a written thesis.</p>"
+    )
+    return f"""
+        <h4 style="margin: 0 0 6px 0; color: #e2e8f0; font-size: 13px; text-transform: uppercase;">Thesis Check</h4>
+        <p style="font-size: 11px; color: #94a3b8; margin: 0 0 10px 0;">
+            {coverage} A challenge is the LLM's reading of one headline &mdash; review it; it does
+            not change the status above.
+        </p>
+        {body}
+        """
+
+
 def _build_research_engine_html(brief_data, caps=_CAPS_NORMAL):
     """Renders the research-engine card: thesis health, estimate-revision
     momentum, variant perception, sector curve stage, and the rotation
@@ -658,6 +732,7 @@ def _build_research_engine_html(brief_data, caps=_CAPS_NORMAL):
             </table>
             """
         sections += thesis_block
+    sections += _build_thesis_check_html(brief_data.get("thesis_check"), caps)
 
     # --- Estimate revision momentum -----------------------------------
     if revisions:
