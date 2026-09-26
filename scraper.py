@@ -215,6 +215,69 @@ async def fetch_global_event_feeds_async(session):
     return items
 
 
+# Headlines kept per state per run. The query is broad on purpose (any policy
+# word, any of our sector words), so the reader, not the query, decides what
+# is policy.
+STATE_ITEMS_PER_QUERY = 6
+
+
+async def fetch_state_policy_async(session):
+    """State-government policy headlines, one Google News query per state.
+
+    Each item carries ``feed_state``: the state whose query found it. That is
+    where the search looked, not whose policy it is — the article can mention
+    a state the headline does not — so jurisdiction is read from the headline
+    itself (analysis/policy_impact.state_of). Fail-safe like every feed: a
+    query that fails contributes nothing and the run continues.
+    """
+    from config import STATE_POLICY_QUERIES, STATE_POLICY_TOPICS
+    from utils import fetch_text_async
+
+    async def _fetch(state, terms):
+        try:
+            query = f"({terms}) {STATE_POLICY_TOPICS} when:7d"
+            url = (
+                "https://news.google.com/rss/search?q="
+                f"{urllib.parse.quote(query)}&hl=en-IN&gl=IN&ceid=IN:en"
+            )
+            status, xml_data = await fetch_text_async(session, url, timeout=15)
+            if status == 200:
+                return state, feedparser.parse(xml_data)
+            log.info(f"State policy feed ({state}): HTTP {status}.")
+        except Exception as e:
+            log.error(f"State policy feed ({state}) failed: {e}")
+        return state, None
+
+    results = await asyncio.gather(
+        *(_fetch(s, q) for s, q in STATE_POLICY_QUERIES.items())
+    )
+    items, seen, per_state = [], set(), {}
+    for state, feed in results:
+        if not feed:
+            continue
+        for entry in feed.entries[:STATE_ITEMS_PER_QUERY]:
+            title = entry.get("title", "").split(" - ")[0].strip()
+            if not title or title.lower() in seen:
+                continue
+            seen.add(title.lower())
+            per_state[state] = per_state.get(state, 0) + 1
+            items.append(
+                {
+                    "title": title,
+                    "link": entry.get("link", ""),
+                    "date": entry.get("published", ""),
+                    "source": entry.get("source", {}).get("title", "News"),
+                    "feed_state": state,
+                }
+            )
+    log.info(
+        f"State policy feed: {len(items)} headline(s) — "
+        + (", ".join(f"{s} {n}" for s, n in per_state.items()) or "none")
+        + "."
+    )
+    return items
+
+
 async def scrape_pib_pli_approvals_async(session, watchlist):
     log.info("Scraping PIB for PLI approval announcements (Async)...")
     query = 'site:pib.gov.in "PLI" AND ("provisionally selected" OR "approved" OR "incentive scheme" OR "applications approved")'

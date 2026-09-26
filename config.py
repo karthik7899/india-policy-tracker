@@ -542,6 +542,37 @@ SECTOR_QUERIES = {
     ],
 }
 
+# State-government policy. The PIB queries above only see the Centre, but
+# land, power tariffs, capital subsidies and EV/electronics/data-centre
+# incentives are largely state policy, and they decide where plants go. One
+# query per state with a large industrial base; the sector words keep the
+# results to measures that can touch our sectors. Which sector each measure
+# helps or hurts is read per headline by the LLM reader, like any policy.
+STATE_POLICY_TOPICS = (
+    "(policy OR incentive OR subsidy OR scheme OR tariff OR approves OR cabinet)"
+    " (solar OR renewable OR EV OR electronics OR semiconductor OR"
+    ' "data centre" OR "data center" OR textile OR defence OR aerospace OR'
+    " manufacturing OR industrial OR logistics OR tourism)"
+)
+STATE_POLICY_QUERIES = {
+    "Gujarat": '"Gujarat government" OR "Gujarat cabinet" OR "Gujarat policy"',
+    "Maharashtra": '"Maharashtra government" OR "Maharashtra cabinet" OR'
+    ' "Maharashtra policy"',
+    "Tamil Nadu": '"Tamil Nadu government" OR "Tamil Nadu cabinet" OR'
+    ' "Tamil Nadu policy" OR "TN govt"',
+    "Karnataka": '"Karnataka government" OR "Karnataka cabinet" OR'
+    ' "Karnataka policy"',
+    "Uttar Pradesh": '"Uttar Pradesh government" OR "UP government" OR'
+    ' "UP cabinet" OR "Uttar Pradesh policy"',
+    "Telangana": '"Telangana government" OR "Telangana cabinet" OR'
+    ' "Telangana policy"',
+    "Andhra Pradesh": '"Andhra Pradesh government" OR "AP government" OR'
+    ' "Andhra Pradesh cabinet" OR "Andhra Pradesh policy"',
+    "Odisha": '"Odisha government" OR "Odisha cabinet" OR "Odisha policy"',
+    "Rajasthan": '"Rajasthan government" OR "Rajasthan cabinet" OR'
+    ' "Rajasthan policy"',
+}
+
 
 def _normalize_watchlist(watchlist):
     """Canonicalize every stock record's typed fields on load (see

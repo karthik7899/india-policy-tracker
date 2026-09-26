@@ -41,6 +41,7 @@ _GLOBAL_SOURCES = (
     ("Launch", "product_launches", "product"),
     ("Filing", "corporate_filings", "filing"),
     ("Global", "global_market_news", "title"),
+    ("State policy", "state_policy", "title"),
 )
 
 _CONFIDENCE_BY_KIND = {
@@ -51,6 +52,7 @@ _CONFIDENCE_BY_KIND = {
     "Launch": "M",
     "Sector news": "M",
     "Global": "L",
+    "State policy": "M",
 }
 
 

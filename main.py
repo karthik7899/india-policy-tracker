@@ -7,6 +7,7 @@ from logger import log
 from scraper import (
     fetch_all_feeds_async,
     fetch_global_event_feeds_async,
+    fetch_state_policy_async,
     scrape_pib_pli_approvals_async,
     fetch_advanced_rss_feeds_async,
     check_sebi_sid_filings_async,
@@ -191,6 +192,7 @@ async def run_pipeline():
         )
         isin_refresh_task = refresh_isin_master_async(session, isin_master)
         global_events_task = fetch_global_event_feeds_async(session)
+        state_policy_task = fetch_state_policy_async(session)
 
         (
             pli_competitors,
@@ -200,6 +202,7 @@ async def run_pipeline():
             corp_filings,
             _isin_added,
             global_market_news,
+            state_policy,
         ) = await asyncio.gather(
             pli_task,
             adv_rss_task,
@@ -208,6 +211,7 @@ async def run_pipeline():
             filings_task,
             isin_refresh_task,
             global_events_task,
+            state_policy_task,
         )
 
         from history.store import HistoryStore
@@ -240,6 +244,14 @@ async def run_pipeline():
         data["institutional_activity"] = merged_inst
         data["corporate_filings"] = merged_filings
         data["global_market_news"] = global_market_news[:30]
+        # State policy accumulates like the other feeds, but only for as long
+        # as the policy balance looks back: an older measure is already
+        # history, and the reader has read it.
+        from analysis.policy_impact import prune_state_policy
+
+        data["state_policy"] = prune_state_policy(
+            store.deduplicate_and_merge("state_policy", state_policy, ["title"])
+        )
 
         # Market-event engine: classify WHAT happened across every collected
         # headline, keep a rolling window via the committed history, and let
@@ -456,6 +468,14 @@ async def run_pipeline():
     data["thesis_health"] = compute_thesis_health(
         watchlist, data["early_warnings"], data["estimate_revisions"]
     )
+
+    # Thesis check: does any headline about a holding contradict the words of
+    # its thesis? An LLM reading, shown beside the health status as a prompt
+    # to review — it changes no status, score or warning.
+    from analysis.thesis_check import annotate_health, run_thesis_check
+
+    data["thesis_check"] = run_thesis_check(watchlist, coverage)
+    annotate_health(data["thesis_health"], data["thesis_check"])
 
     # Save watchlist changes
     save_watchlist(watchlist)

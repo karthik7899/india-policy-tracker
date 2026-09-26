@@ -139,6 +139,7 @@ export async function render(container, { payload, route }) {
   const broken = byStatus("Broken");
   const weakening = byStatus("Weakening");
   const intact = byStatus("Intact");
+  const challenged = health.filter((h) => h.challenges);
 
   const gradeColumns = [
     { key: "ticker", label: "Stock", render: (r) => tickerLink(r.ticker, "holdings", params) },
@@ -152,7 +153,19 @@ export async function render(container, { payload, route }) {
       key: "reasons",
       label: "Why",
       sortable: false,
-      render: (r) => (r.reasons || []).join("; ") || "—",
+      render: (r) => [
+        (r.reasons || []).join("; ") || "\u2014",
+        // Headlines the LLM thesis check read as contradicting the written
+        // thesis. Beside the status, never part of it: a prompt to open the
+        // drawer and judge the quotes, not a grade.
+        r.challenges
+          ? el(
+              "span",
+              { class: "evidence-meta" },
+              `${r.challenges} headline(s) challenge the thesis \u00b7 LLM reading`,
+            )
+          : null,
+      ],
     },
   ];
 
@@ -201,6 +214,20 @@ export async function render(container, { payload, route }) {
             "nine spread across nine sectors is not — these are absolute counts " +
             "so a three-holding sector cannot look as weighty as a fifteen.",
           chartFrame("chart-risk-sector", Math.max(180, groups.length * 30 + 60)),
+        )
+      : null,
+
+    // Holdings whose news the LLM thesis check read as contradicting the
+    // written thesis, whatever their grade. Listed on their own because a
+    // challenged thesis is usually still Intact — the check does not change
+    // grades — and Intact rows are collapsed below, where it would be missed.
+    challenged.length
+      ? panel(
+          "Challenged by the news",
+          "Headlines the LLM read as contradicting a specific claim in the " +
+            "written thesis. A prompt to open the holding and judge the quotes " +
+            "\u2014 it does not change the grade.",
+          gradeTable(challenged, { empty: "" }),
         )
       : null,
 

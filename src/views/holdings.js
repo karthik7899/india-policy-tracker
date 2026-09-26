@@ -102,6 +102,69 @@ function sectorRow(n) {
   );
 }
 
+/**
+ * The holding's written thesis and what the LLM thesis check found against it
+ * (analysis/thesis_check.py). Each item quotes both sides — the headline's
+ * words and the thesis's — so it can be judged here rather than trusted.
+ * "Not checked" and "nothing found" are kept apart: a holding with no written
+ * thesis says so, and one whose headlines are unread says how many.
+ */
+const PLACEHOLDER_THESIS = /auto-discovered via media radar/i;
+
+/** The one-line account of the check, kept apart from the markup so it can be tested. */
+export function thesisSummary(catalyst, check) {
+  if (PLACEHOLDER_THESIS.test(String(catalyst || ""))) {
+    return "No written thesis \u2014 this is the rotation engine's placeholder, so there is nothing to check news against.";
+  }
+  if (!check) return "No attributed headlines to check this cycle.";
+  return [
+    `${check.read || 0} headline(s) read against it`,
+    check.unread ? `${check.unread} not yet read` : "",
+    `${(check.challenged || []).length} challenge(s)`,
+    `${(check.supported || []).length} support(s)`,
+  ]
+    .filter(Boolean)
+    .join(" \u00b7 ");
+}
+
+export function thesisSection(catalyst, check) {
+  const text = String(catalyst || "").trim();
+  if (!text) return null;
+  const quote = (i, verb) =>
+    el(
+      "li",
+      {},
+      el("span", { class: `tag tag-${verb === "challenges" ? "risk" : "opp"}` }, verb),
+      " ",
+      i.link
+        ? el("a", { href: i.link, target: "_blank", rel: "noopener noreferrer" }, i.headline)
+        : i.headline,
+      el(
+        "span",
+        { class: "evidence-meta" },
+        `\u201c${i.because}\u201d \u2192 thesis: \u201c${i.claim}\u201d \u00b7 LLM reading`,
+      ),
+    );
+  const challenged = check?.challenged || [];
+  const supported = check?.supported || [];
+  const summary = thesisSummary(text, check);
+  return el(
+    "div",
+    { class: "drawer-section" },
+    el("h4", {}, "Thesis"),
+    el("p", {}, text),
+    el("p", { class: "evidence-meta" }, summary),
+    challenged.length || supported.length
+      ? el(
+          "ul",
+          { class: "evidence" },
+          challenged.map((i) => quote(i, "challenges")),
+          supported.map((i) => quote(i, "supports")),
+        )
+      : null,
+  );
+}
+
 /** The drawer: everything known about one holding, fetched on open. */
 async function drawer(stock, payload) {
   const sc = stock.screener || {};
@@ -178,6 +241,7 @@ async function drawer(stock, payload) {
       { class: "drawer-facts" },
       rows.flatMap(([k, v]) => [el("dt", {}, k), el("dd", {}, String(v))]),
     ),
+    thesisSection(stock.catalyst, payload?.briefing?.thesis_check?.holdings?.[key]),
     signals.length
       ? el(
           "div",

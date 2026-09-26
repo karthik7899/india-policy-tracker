@@ -166,6 +166,9 @@ def _headline_items(data: Dict[str, Any], watchlist: Dict[str, Any]):
     for item in data.get("global_market_news", []) or []:
         if isinstance(item, dict):
             yield item.get("title"), item
+    for item in data.get("state_policy", []) or []:
+        if isinstance(item, dict):
+            yield item.get("title"), item
 
 
 def collect_headlines(data: Dict[str, Any], watchlist: Dict[str, Any]) -> List[str]:
