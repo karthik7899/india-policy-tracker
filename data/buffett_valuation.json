@@ -35,6 +35,34 @@
       }
     },
     {
+      "ticker": "SBIN",
+      "name": "State Bank of India",
+      "owner_earnings": 100484.0,
+      "moat": "Medium (Narrow Moat)",
+      "moat_status": "Medium (Narrow Moat)",
+      "retained_earnings_ratio": 2.86,
+      "passed_retained_test": true,
+      "score": {
+        "overall_score": 13,
+        "fundamental_score": 5,
+        "momentum_score": 8,
+        "confidence": "Medium",
+        "reasons": [
+          "Policy Notification: State Bank of India has informed the Exchange about investor interaction organised by CITI",
+          "Policy Notification: SBIN: State Bank of India has informed the Exchange about 27.09.2026 (Sunday) being a working day",
+          "High Return on Equity (ROE: 15.4%)",
+          "Liquid (Rs 740 Cr traded daily)",
+          "DII Accumulation (+0.41%)",
+          "Narrow Economic Moat",
+          "Trading below Graham Intrinsic Value (1076.7)"
+        ],
+        "risks": [],
+        "recommendations": [
+          "Buy Candidate"
+        ]
+      }
+    },
+    {
       "ticker": "ADANIPOWER",
       "name": "Adani Power",
       "owner_earnings": 20061.2,
@@ -79,8 +107,8 @@
         "momentum_score": 8,
         "confidence": "High",
         "reasons": [
-          "Government Contract/MoU: Aareal Bank and TCS forge strategic partnership to accelerate digital transformation",
-          "Government Contract/MoU: TCS Partners With DGCE To Advance Derivatives Market Infrastructure; Shares Up 3.3%",
+          "Government Contract/MoU: TCS renews title partnership with Jaguar TCS Racing and expands role as official AI partner ahead of Formula E’s GEN4 era",
+          "Government Contract/MoU: IIEST, Shibpur partners with TCS to launch state-of-the-art centre of excellence in AI",
           "High Return on Capital (ROCE: 63.0%)",
           "High Return on Equity (ROE: 51.8%)",
           "Liquid (Rs 653 Cr traded daily)",
@@ -263,33 +291,6 @@
         "risks": [
           "Fails P/E Screen (P/E 17.0 > 15 & Price > Intrinsic)"
         ],
-        "recommendations": [
-          "Hold / Monitor"
-        ]
-      }
-    },
-    {
-      "ticker": "SBIN",
-      "name": "State Bank of India",
-      "owner_earnings": 100484.0,
-      "moat": "Medium (Narrow Moat)",
-      "moat_status": "Medium (Narrow Moat)",
-      "retained_earnings_ratio": 2.86,
-      "passed_retained_test": true,
-      "score": {
-        "overall_score": 9,
-        "fundamental_score": 5,
-        "momentum_score": 4,
-        "confidence": "Medium",
-        "reasons": [
-          "Policy Notification: SBIN: State Bank of India has informed the Exchange about 27.09.2026 (Sunday) being a working day",
-          "High Return on Equity (ROE: 15.4%)",
-          "Liquid (Rs 740 Cr traded daily)",
-          "DII Accumulation (+0.41%)",
-          "Narrow Economic Moat",
-          "Trading below Graham Intrinsic Value (1076.7)"
-        ],
-        "risks": [],
         "recommendations": [
           "Hold / Monitor"
         ]
@@ -541,36 +542,6 @@
       }
     },
     {
-      "ticker": "OPTIEMUS",
-      "name": "Optiemus Infra.",
-      "owner_earnings": -62.8,
-      "moat": "Weak/None",
-      "moat_status": "Weak/None",
-      "retained_earnings_ratio": 2.86,
-      "passed_retained_test": true,
-      "score": {
-        "overall_score": 8,
-        "fundamental_score": 0,
-        "momentum_score": 8,
-        "confidence": "High",
-        "reasons": [
-          "Policy Notification: Optiemus Infracom (NSE: OPTIEMUS) Screen Protector Expansion and Electronics Manufacturing Update",
-          "Policy Notification: Board comments on fine levied by the Exchange",
-          "Strong revenue growth (TTM +20.9%)",
-          "Liquid (Rs 84 Cr traded daily)",
-          "FII Accumulation (+0.07%)",
-          "DII Accumulation (+1.42%)"
-        ],
-        "risks": [
-          "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 94.1 > 15 & Price > Intrinsic)"
-        ],
-        "recommendations": [
-          "Hold / Monitor"
-        ]
-      }
-    },
-    {
       "ticker": "SIEMENS",
       "name": "Siemens Ltd",
       "owner_earnings": 7653.8,
@@ -598,6 +569,30 @@
           "Fails P/E Screen (P/E 91.8 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
+        "recommendations": [
+          "Hold / Monitor"
+        ]
+      }
+    },
+    {
+      "ticker": "BHEL",
+      "name": "Bharat Heavy Electricals",
+      "owner_earnings": 0.0,
+      "moat": "Weak/None",
+      "moat_status": "Weak/None",
+      "retained_earnings_ratio": 1.2,
+      "passed_retained_test": true,
+      "score": {
+        "overall_score": 8,
+        "fundamental_score": 0,
+        "momentum_score": 8,
+        "confidence": "Low",
+        "reasons": [
+          "Government Contract/MoU: Titagarh Rail Systems and BHEL Sign Long-Term Maintenance Agreement for Vande Bharat Sleeper Trains",
+          "Government Contract/MoU: BHEL approves INR 65 crore investment in NTPC joint venture",
+          "Liquid (Rs 285 Cr traded daily)"
+        ],
+        "risks": [],
         "recommendations": [
           "Hold / Monitor"
         ]
@@ -1024,37 +1019,6 @@
       }
     },
     {
-      "ticker": "BHEL",
-      "name": "Bharat Heavy Electricals",
-      "owner_earnings": 623.4,
-      "moat": "Weak/None",
-      "moat_status": "Weak/None",
-      "retained_earnings_ratio": 2.86,
-      "passed_retained_test": true,
-      "score": {
-        "overall_score": 4,
-        "fundamental_score": -4,
-        "momentum_score": 8,
-        "confidence": "High",
-        "reasons": [
-          "Government Contract/MoU: Vande Bharat Sleeper trains: BHEL, Titagarh to form joint venture for 35-year maintenance",
-          "Government Contract/MoU: BHEL receives LNTP from DVC for 800 MW Durgapur project",
-          "Strong revenue growth (TTM +27.0%)",
-          "Liquid (Rs 285 Cr traded daily)",
-          "FII Accumulation (+2.29%)"
-        ],
-        "risks": [
-          "Operating margin contracted (-7.0pp)",
-          "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 60.0 > 15 & Price > Intrinsic)",
-          "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
-        ],
-        "recommendations": [
-          "Avoid / High Risk"
-        ]
-      }
-    },
-    {
       "ticker": "SYRMA",
       "name": "Syrma SGS Tech.",
       "owner_earnings": 138.2,
@@ -1413,6 +1377,34 @@
           "DII Accumulation (+0.43%)"
         ],
         "risks": [],
+        "recommendations": [
+          "Avoid / High Risk"
+        ]
+      }
+    },
+    {
+      "ticker": "BIRLACABLE",
+      "name": "Birla Cable",
+      "owner_earnings": 81.2,
+      "moat": "Weak/None",
+      "moat_status": "Weak/None",
+      "retained_earnings_ratio": 2.86,
+      "passed_retained_test": true,
+      "score": {
+        "overall_score": 1,
+        "fundamental_score": 0,
+        "momentum_score": 1,
+        "confidence": "High",
+        "reasons": [
+          "Sector benefits from macro policy tailwinds (Fallback)",
+          "Strong revenue growth (TTM +28.3%)",
+          "Operating Margin Expansion (+8.0%)",
+          "FII Accumulation (+0.02%)"
+        ],
+        "risks": [
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Fails P/E Screen (P/E 23.5 > 15 & Price > Intrinsic)"
+        ],
         "recommendations": [
           "Avoid / High Risk"
         ]
