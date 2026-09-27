@@ -45,3 +45,25 @@ test("a central measure carries no state", () => {
   const s = policyDetail({ effects: [{ sector: "clean_energy", direction: "mixed" }], status: "proposed" });
   assert.equal(s, "◆ Clean Energy · proposed · LLM reading");
 });
+
+import { trackSummary } from "../../src/views/overview.js";
+
+test("the track summary counts beats, exits and index comparisons", () => {
+  const s = trackSummary({
+    min_age_days: 30,
+    decisions: [{}],
+    summary: { n: 4, beat_nifty: 2, median_vs_nifty_pct: 5, exited: 1, with_index: 1, beat_index: 0 },
+  });
+  assert.equal(
+    s,
+    "2 of 4 beat the Nifty 50 · median +5.0 pts · 1 since exited, still counted · 0 of 1 ahead of their sector index",
+  );
+});
+
+test("a young ledger says it is too early rather than showing zeros", () => {
+  assert.equal(
+    trackSummary({ min_age_days: 30, decisions: [{}], summary: { n: 0, too_recent: 5 } }),
+    "No pick is 30 days old yet (5 younger).",
+  );
+  assert.equal(trackSummary({ decisions: [] }), "");
+});

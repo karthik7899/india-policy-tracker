@@ -612,6 +612,70 @@ _THESIS_BADGE = {
 }
 
 
+def _build_track_record_html(record, caps=_CAPS_NORMAL):
+    """The rotation engine's picks against the Nifty 50, exits included."""
+    if not isinstance(record, dict) or not record.get("decisions"):
+        return ""
+    s = record.get("summary") or {}
+    min_age = record.get("min_age_days", 30)
+    if s.get("n"):
+        line = (
+            f"{s['beat_nifty']} of {s['n']} picks at least {min_age} days old beat the "
+            f"Nifty 50 since the day they were made (median {s['median_vs_nifty_pct']:+.1f} "
+            f"pts, mean {s['mean_vs_nifty_pct']:+.1f}; picks {s['mean_return_pct']:+.1f}% vs "
+            f"Nifty {s['mean_nifty_pct']:+.1f}% on average)."
+        )
+        if s.get("exited"):
+            line += (
+                f" {s['exited']} have since left the watchlist and are still counted "
+                f"({s['exited_mean_vs_nifty_pct']:+.1f} pts on average)."
+            )
+        if s.get("with_index"):
+            line += (
+                f" Against their own sector index: {s['beat_index']} of "
+                f"{s['with_index']} ahead."
+            )
+    else:
+        line = (
+            f"No pick is {min_age} days old yet ({s.get('too_recent', 0)} younger); "
+            "the comparison starts once one is."
+        )
+    judged = [
+        r
+        for r in record["decisions"]
+        if "vs_nifty_pct" in r and r.get("days", 0) >= min_age
+    ]
+    judged.sort(key=lambda r: r["vs_nifty_pct"])
+    shown = judged[:2] + judged[-2:] if len(judged) > 4 else judged
+    rows = ""
+    for r in shown:
+        color = "#34d399" if r["vs_nifty_pct"] > 0 else "#f87171"
+        rows += f"""
+            <tr>
+                <td class="ew-td"><span class="stock-ticker">{r['ticker']}</span>{'' if r.get('still_held') else ' <span style="font-size:10px;color:#94a3b8;">(exited)</span>'}</td>
+                <td class="ew-td" style="font-size: 11px; color: #94a3b8;">{r['date']}</td>
+                <td class="ew-td num">{r['return_pct']:+.1f}%</td>
+                <td class="ew-td num" style="color: {color}; font-weight: 700;">{r['vs_nifty_pct']:+.1f} pts</td>
+            </tr>
+            """
+    table = (
+        f"""
+        <table class="stock-table" style="margin-bottom: 15px;">
+            <thead><tr><th>Pick</th><th>Since</th><th>Return</th><th>vs Nifty 50</th></tr></thead>
+            <tbody>{rows}</tbody>
+        </table>
+        """
+        if rows
+        else ""
+    )
+    return f"""
+        <h4 style="margin: 15px 0 6px 0; color: #e2e8f0; font-size: 13px; text-transform: uppercase;">Picks vs the Nifty 50</h4>
+        <p style="font-size: 11px; color: #94a3b8; margin: 0 0 10px 0;">{line} Equal-weighted,
+            adjusted closes; weeks of data, so no Sharpe ratio or annualised figure.</p>
+        {table}
+        """
+
+
 def _build_thesis_check_html(check, caps=_CAPS_NORMAL):
     """Headlines that contradict a holding's written thesis (LLM reading).
 
@@ -691,7 +755,16 @@ def _build_research_engine_html(brief_data, caps=_CAPS_NORMAL):
     hit_rate = brief_data.get("rotation_hit_rate") or {}
     recent_outcomes = brief_data.get("rotation_recent_outcomes") or []
 
-    if not any([thesis_health, revisions, variant, curve_stage, recent_outcomes]):
+    if not any(
+        [
+            thesis_health,
+            revisions,
+            variant,
+            curve_stage,
+            recent_outcomes,
+            (brief_data.get("track_record") or {}).get("decisions"),
+        ]
+    ):
         return ""
 
     sections = ""
@@ -835,6 +908,8 @@ def _build_research_engine_html(brief_data, caps=_CAPS_NORMAL):
                 <tbody>{rows}</tbody>
             </table>
             """
+
+    sections += _build_track_record_html(brief_data.get("track_record"), caps)
 
     if not sections:
         return ""

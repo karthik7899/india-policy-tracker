@@ -414,6 +414,11 @@ async def run_pipeline():
     data["rotation_hit_rate"] = postmortem.compute_hit_rate(rotation_ledger)
     data["rotation_recent_outcomes"] = postmortem.recent_outcomes(rotation_ledger)
     data["watchlist_changes"] = postmortem.recent_changes(rotation_ledger)
+    # Every pick against the Nifty 50 (and its sector index) since the day it
+    # was made — exits included, which the target-based post-mortem skips.
+    from analysis.track_record import build_track_record
+
+    data["track_record"] = build_track_record(rotation_ledger, watchlist)
     postmortem.save_ledger(rotation_ledger)
 
     # Sector-relative valuation: annotate stocks with peer-group P/E context
