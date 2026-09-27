@@ -20,6 +20,35 @@ function statTile(label, value, detail, tone) {
   );
 }
 
+/**
+ * The track-record line (analysis/track_record.py): how many picks old enough
+ * to judge beat the Nifty 50 since the day they were made. Exits count — the
+ * summary says how many — because dropping them is what flattered the old
+ * target-based hit rate.
+ */
+/** A difference of two returns: percentage points, not percent. */
+function pts(v) {
+  return pct(v).replace("%", " pts");
+}
+
+export function trackSummary(record) {
+  const s = record?.summary || {};
+  const minAge = record?.min_age_days ?? 30;
+  if (!record?.decisions?.length) return "";
+  if (!s.n) {
+    return `No pick is ${minAge} days old yet (${s.too_recent || 0} younger).`;
+  }
+  const signed = (v) => `${v > 0 ? "+" : ""}${Number(v).toFixed(1)}`;
+  return [
+    `${s.beat_nifty} of ${s.n} beat the Nifty 50`,
+    `median ${signed(s.median_vs_nifty_pct)} pts`,
+    s.exited ? `${s.exited} since exited, still counted` : "",
+    s.with_index ? `${s.beat_index} of ${s.with_index} ahead of their sector index` : "",
+  ]
+    .filter(Boolean)
+    .join(" \u00b7 ");
+}
+
 export async function render(container, { payload, route }) {
   const b = payload?.briefing || {};
   const health = Object.values(b.thesis_health || {});
@@ -32,6 +61,11 @@ export async function render(container, { payload, route }) {
     .sort((a, b2) => b2._g - a._g);
 
   const warnings = b.early_warnings || [];
+  const record = b.track_record || {};
+  const minAge = record.min_age_days ?? 30;
+  const judged = (record.decisions || [])
+    .filter((r) => typeof r.vs_nifty_pct === "number" && r.days >= minAge)
+    .sort((a, c) => c.vs_nifty_pct - a.vs_nifty_pct);
 
   mount(
     container,
@@ -82,6 +116,33 @@ export async function render(container, { payload, route }) {
       chartFrame("chart-growth", Math.max(220, growth.length * 22)),
     ),
 
+    record.decisions?.length
+      ? panel(
+          "Track record",
+          `${trackSummary(record)}. Each rotation pick from the day it was made ` +
+            "to today, against the Nifty 50 over the same days — equal-weighted, " +
+            "adjusted closes. Weeks of data, so no Sharpe ratio.",
+          judged.length ? chartFrame("chart-track", Math.max(180, judged.length * 18 + 60)) : null,
+          dataTable(
+            judged,
+            [
+              { key: "ticker", label: "Pick", render: (r) => tickerLink(r.ticker, "holdings") },
+              { key: "date", label: "Since" },
+              { key: "return_pct", label: "Return", render: (r) => pct(r.return_pct) },
+              { key: "nifty_pct", label: "Nifty 50", render: (r) => pct(r.nifty_pct) },
+              { key: "vs_nifty_pct", label: "vs Nifty", render: (r) => pts(r.vs_nifty_pct) },
+              {
+                key: "vs_index_pct",
+                label: "vs sector index",
+                render: (r) => (typeof r.vs_index_pct === "number" ? `${pts(r.vs_index_pct)} (${r.index})` : "\u2014"),
+              },
+              { key: "still_held", label: "Held", render: (r) => (r.still_held ? "yes" : "exited") },
+            ],
+            { focus: route?.focus, view: "overview", route, empty: "No pick is old enough to judge yet." },
+          ),
+        )
+      : null,
+
     panel(
       "Needs attention",
       warnings.length ? null : "Nothing new or escalated this run.",
@@ -110,6 +171,16 @@ export async function render(container, { payload, route }) {
       { label: "Intact", value: counts.Intact, status: thesisStatus("Intact") },
     ],
   });
+
+  if (judged.length) {
+    charts.rankedBar(document.getElementById("chart-track"), {
+      labels: judged.map((r) => r.ticker),
+      values: judged.map((r) => Number(r.vs_nifty_pct.toFixed(1))),
+      suffix: " pts",
+      horizontal: true,
+      axisLabel: "Return minus the Nifty 50 since the pick (percentage points)",
+    });
+  }
 
   charts.rankedBar(document.getElementById("chart-growth"), {
     labels: growth.map((s) => s.label || String(s.sector || "").replace(/_/g, " ")),
