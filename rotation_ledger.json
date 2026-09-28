@@ -319,9 +319,9 @@
     "name": "B P C L",
     "price_at_decision": 313.0,
     "target_at_decision": 344.9,
-    "scored": false,
-    "outcome": null,
-    "realized_return_pct": null
+    "scored": true,
+    "outcome": "Underperforming",
+    "realized_return_pct": -3.3
   },
   {
     "date": "2026-08-13",
@@ -331,9 +331,9 @@
     "name": "Bata India",
     "price_at_decision": 723.05,
     "target_at_decision": 724.69,
-    "scored": false,
-    "outcome": null,
-    "realized_return_pct": null
+    "scored": true,
+    "outcome": "Underperforming",
+    "realized_return_pct": -13.3
   },
   {
     "date": "2026-08-14",
@@ -343,8 +343,8 @@
     "name": "C P C L",
     "price_at_decision": 1336.1,
     "target_at_decision": 1540.0,
-    "scored": false,
-    "outcome": null,
+    "scored": true,
+    "outcome": "Left Watchlist (unscored)",
     "realized_return_pct": null
   },
   {
@@ -679,6 +679,18 @@
     "name": "Birla Cable",
     "price_at_decision": 362.45,
     "target_at_decision": 453.06,
+    "scored": false,
+    "outcome": null,
+    "realized_return_pct": null
+  },
+  {
+    "date": "2026-09-28",
+    "action": "rotated_in",
+    "sector": "data_center_support",
+    "ticker": "OPTIEMUS",
+    "name": "Optiemus Infra.",
+    "price_at_decision": 785.25,
+    "target_at_decision": 981.56,
     "scored": false,
     "outcome": null,
     "realized_return_pct": null

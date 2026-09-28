@@ -2,10 +2,10 @@
   "ticker": "PERSISTENT",
   "items": [
     {
-      "date": "23 Sep 2026",
-      "headline": "Persistent Systems vs Coforge vs Mphasis: Comparison",
-      "source_url": "https://news.google.com/rss/articles/CBMic0FVX3lxTFBjLVZlalBQMjJQTVFaT1k1RTcwUlZWN1luYU10WjQ4T21TZEtMVUdiRHEyLUV2dm8zQVFCWnoySE9lSnFfbWZGdDA5cmVrNVdKcUM4SzcwZl84Z2dCTjdxSjFNeUpPdXprWkExRks3LTRpeEk?oc=5",
-      "source_label": "Univest",
+      "date": "27 Sep 2026",
+      "headline": "Persistent Systems wins $650M+ order for strategic services",
+      "source_url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxOcUZvZUZFX1NiSEhNVm8zeUhZSWRJQUFZbzMwdHh3ZmZlRUpoN20zaVpOUUgtTlk2QUpZVzluczhNS053VVRhRWg4TGxXb1BhWWpGSkVGUVUxOVI4VWdSeHJZbTBNN2k5dExYUTdGcm9CbDFXR01ZS2FlcGNiWW1iU2h6Z2VrekdwRlBiLVZEYWo5WmsxN21xVHAzdmRTQ29KZFNWWFNFcmhTN1RCVDV3bWhJNDY?oc=5",
+      "source_label": "scanx.trade",
       "event_type": "",
       "source_kind": "Sector news",
       "event_tags": [
@@ -182,6 +182,21 @@
       ],
       "confidence": "M",
       "status": "counted"
+    },
+    {
+      "date": "2026-09-27",
+      "headline": "Persistent Systems wins $650M+ order for strategic services",
+      "source_url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxOcUZvZUZFX1NiSEhNVm8zeUhZSWRJQUFZbzMwdHh3ZmZlRUpoN20zaVpOUUgtTlk2QUpZVzluczhNS053VVRhRWg4TGxXb1BhWWpGSkVGUVUxOVI4VWdSeHJZbTBNN2k5dExYUTdGcm9CbDFXR01ZS2FlcGNiWW1iU2h6Z2VrekdwRlBiLVZEYWo5WmsxN21xVHAzdmRTQ29KZFNWWFNFcmhTN1RCVDV3bWhJNDY?oc=5",
+      "source_label": "scanx.trade",
+      "event_type": "order_win",
+      "source_kind": "Event",
+      "event_tags": [
+        "order_win",
+        "Event"
+      ],
+      "confidence": "H",
+      "status": "merged",
+      "exclusion_reason": "merged: duplicate phrasing of “Persistent Systems wins $650M+ order for strategic services”"
     }
   ]
 }
