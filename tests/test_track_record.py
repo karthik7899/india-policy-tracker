@@ -233,3 +233,68 @@ def test_yahoo_frames_are_read_for_one_symbol_and_for_many(monkeypatch):
     assert track_record.yahoo_closes(["X.BO"], "2026-07-01") == {
         "X.BO": [("2026-07-09", 50.0), ("2026-07-10", 51.0)]
     }
+
+
+def test_an_etf_stands_in_when_the_index_symbol_is_empty(monkeypatch):
+    closes = dict(CLOSES)
+    closes.pop("^NSEBANK")
+    closes["BANKBEES.NS"] = _series(50, 57.5)  # +15%
+
+    def fetch(symbols, start):
+        return {s: closes[s] for s in symbols if s in closes}
+
+    r = _row(build_track_record(LEDGER, WATCHLIST, fetch=fetch, today=TODAY), "BANKY")
+    assert r["index"] == "Nifty Bank (via BANKBEES ETF)"
+    assert r["vs_index_pct"] == -5.0
+
+
+def test_a_missing_index_is_named_on_the_row_and_in_the_log(caplog):
+    closes = dict(CLOSES)
+    closes.pop("^NSEBANK")
+
+    def fetch(symbols, start):
+        return {s: closes[s] for s in symbols if s in closes}
+
+    record = build_track_record(LEDGER, WATCHLIST, fetch=fetch, today=TODAY)
+    r = _row(record, "BANKY")
+    assert "index" not in r
+    assert r["index_unmeasured"] == "Nifty Bank: no data from ^NSEBANK, BANKBEES.NS"
+    # FMCG too: the fake has no series for it, and every judged FMCG pick
+    # says so rather than silently lacking a comparison.
+    assert record["index_failed"] == [
+        "Nifty Bank (^NSEBANK, BANKBEES.NS)",
+        "Nifty FMCG (^CNXFMCG)",
+    ]
+    assert record["summary"]["index_unmeasured"] == 4
+
+
+def test_the_summary_counts_stocks_as_well_as_decisions():
+    ledger = LEDGER + [
+        # WIN picked again well after the first: a second decision, same stock.
+        {
+            "date": "2026-08-01",
+            "sector": "fmcg",
+            "ticker": "WIN",
+            "price_at_decision": 115,
+        },
+    ]
+    s = build_track_record(ledger, WATCHLIST, fetch=fake_fetch(), today=TODAY)[
+        "summary"
+    ]
+    assert s["n"] == 5 and s["stocks"] == 4
+
+
+def test_the_email_names_the_indices_it_could_not_get():
+    from emails.mailer import _build_track_record_html
+
+    closes = dict(CLOSES)
+    closes.pop("^NSEBANK")
+
+    def fetch(symbols, start):
+        return {s: closes[s] for s in symbols if s in closes}
+
+    html = _build_track_record_html(
+        build_track_record(LEDGER, WATCHLIST, fetch=fetch, today=TODAY), {"lists": 5}
+    )
+    assert "No sector-index comparison for 4" in html
+    assert "Nifty Bank (^NSEBANK, BANKBEES.NS)" in html

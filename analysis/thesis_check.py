@@ -46,7 +46,11 @@ CACHE_PATH = os.path.join(ROOT, "thesis_cache.json")
 #    the first live run flagged Mphasis's margin slip against "key
 #    beneficiary of cost-takeout deals" and ideaForge's quarterly loss
 #    against its whole thesis — both false alarms.
-PROMPT_VERSION = "2"
+# 3: a one-claim thesis may be quoted whole. Version 2 also refused any
+#    claim covering over 80% of the thesis; that refused 9 correct answers
+#    on the labels (Adani Green's "30 GW Khavda park" is one claim) while
+#    the prompt change alone had already cleared both false alarms.
+PROMPT_VERSION = "3"
 
 STANCES = ("contradicts", "supports", "unrelated")
 
@@ -58,9 +62,6 @@ MAX_NEW_PER_RUN = 300
 # every day would otherwise take the run's whole budget.
 MAX_PER_HOLDING = 15
 CACHE_RETENTION_DAYS = 120
-
-# The most of the thesis a quoted claim may cover and still be one claim.
-MAX_CLAIM_SHARE = 0.8
 
 _BOILERPLATE = re.compile(r"auto-discovered via media radar", re.IGNORECASE)
 
@@ -92,8 +93,8 @@ because — the words of the HEADLINE that bear on the claim, copied EXACTLY and
 Results, margins, profits and losses contradict a thesis ONLY when the thesis
 itself names that measure ("expanding margins", "debt-free", "asset quality").
 A quarterly loss or a margin dip says nothing about a thesis that is about
-market position, orders or policy. The claim must be the specific phrase the
-headline bears on, never the whole thesis.
+market position, orders or policy. The claim is the specific phrase the
+headline bears on; quote the whole thesis only when it makes a single claim.
 
 A falling share price is not evidence against a thesis, and a rising one is
 not evidence for it. Judge only from the thesis and the headline; do not use
@@ -146,7 +147,8 @@ def ground(headline: str, thesis: str, raw: Dict[str, Any]) -> Dict[str, Any]:
     A stance whose ``because`` is not in the headline, or whose ``claim`` is
     not in the thesis, is the model reasoning rather than reading, and is
     downgraded to "unrelated" — the weakest answer. ``downgraded`` records
-    what it said, so the eval can tell grounding failures from judgement.
+    what it said and ``reason`` which quote failed, so the eval can tell
+    grounding failures from judgement.
     """
     stance = raw.get("stance")
     if stance not in STANCES:
@@ -156,18 +158,23 @@ def ground(headline: str, thesis: str, raw: Dict[str, Any]) -> Dict[str, Any]:
     out: Dict[str, Any] = {"stance": stance, "claim": "", "because": ""}
     if stance == "unrelated":
         return out
-    if (
-        _norm(claim)
-        and _norm(because)
-        and _norm(claim) in _norm(thesis)
-        and _norm(because) in _norm(headline)
-        # A "claim" that is the whole thesis names no claim: the first live
-        # run quoted ideaForge's entire thesis back against a quarterly loss.
-        and len(_norm(claim)) <= MAX_CLAIM_SHARE * len(_norm(thesis))
-    ):
+    if not _norm(claim) or not _norm(because):
+        reason = "no quote given"
+    elif _norm(claim) not in _norm(thesis):
+        reason = "claim not in the thesis"
+    elif _norm(because) not in _norm(headline):
+        reason = "quote not in the headline"
+    else:
         out.update(claim=claim, because=because)
         return out
-    return {"stance": "unrelated", "claim": "", "because": "", "downgraded": stance}
+    return {
+        "stance": "unrelated",
+        "claim": "",
+        "because": "",
+        "downgraded": stance,
+        # Why, so a refused answer can be told from a wrong one.
+        "reason": reason,
+    }
 
 
 def thesis_pairs(

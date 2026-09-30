@@ -620,7 +620,13 @@ def _build_track_record_html(record, caps=_CAPS_NORMAL):
     min_age = record.get("min_age_days", 30)
     if s.get("n"):
         line = (
-            f"{s['beat_nifty']} of {s['n']} picks at least {min_age} days old beat the "
+            f"{s['beat_nifty']} of {s['n']} picks"
+            + (
+                f" ({s['stocks']} stocks)"
+                if s.get("stocks") not in (None, s["n"])
+                else ""
+            )
+            + f" at least {min_age} days old beat the "
             f"Nifty 50 since the day they were made (median {s['median_vs_nifty_pct']:+.1f} "
             f"pts, mean {s['mean_vs_nifty_pct']:+.1f}; picks {s['mean_return_pct']:+.1f}% vs "
             f"Nifty {s['mean_nifty_pct']:+.1f}% on average)."
@@ -634,6 +640,12 @@ def _build_track_record_html(record, caps=_CAPS_NORMAL):
             line += (
                 f" Against their own sector index: {s['beat_index']} of "
                 f"{s['with_index']} ahead."
+            )
+        if s.get("index_unmeasured"):
+            failed = ", ".join(record.get("index_failed") or []) or "see the run log"
+            line += (
+                f" No sector-index comparison for {s['index_unmeasured']} "
+                f"(no data: {failed})."
             )
     else:
         line = (

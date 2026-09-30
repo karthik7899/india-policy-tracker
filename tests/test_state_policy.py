@@ -124,7 +124,10 @@ def test_the_state_feed_tags_where_it_looked_and_survives_a_failed_query(monkeyp
     monkeypatch.setattr(
         config,
         "STATE_POLICY_QUERIES",
-        {"Gujarat": '"Gujarat government"', "Odisha": '"Odisha government"'},
+        {
+            "Gujarat": ['"Gujarat government"', '"Gujarat cabinet"'],
+            "Odisha": ['"Odisha government"'],
+        },
     )
     urls = []
 
@@ -140,8 +143,11 @@ def test_the_state_feed_tags_where_it_looked_and_survives_a_failed_query(monkeyp
     items = asyncio.run(
         fetch_state_policy_async(MagicMock(), today=datetime.date(2026, 9, 26))
     )
-    assert len(urls) == 2
-    # The same story from two outlets is one item.
+    # One simple search per entry, each with the date filter appended.
+    assert len(urls) == 3
+    assert all("when%3A7d" in u for u in urls)
+    assert all("%28" not in u for u in urls)  # no parenthesised OR groups
+    # The same story from two outlets, or from both Gujarat searches, is one.
     assert [i["title"] for i in items] == ["Gujarat government unveils solar policy"]
     assert items[0]["feed_state"] == "Gujarat"
     assert items[0]["link"] == "https://n.test/1"

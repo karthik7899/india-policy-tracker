@@ -45,13 +45,25 @@ NIFTY = "^NSEI"
 # the sector holds; the rest are compared with the Nifty 50 alone rather
 # than with an index that tracks something else (Nifty Pharma is not
 # hospitals, Nifty Auto is not EMS).
+#
+# Each index lists Yahoo symbols to try in order, the first that returns a
+# series winning. The first live run got nothing for ^CNXINFRA or ^CNXENERGY,
+# silently: 14 picks had no sector comparison, most of them oil and energy
+# names where the question "stock or sector?" matters most. An exchange-
+# traded fund tracking the index is the fallback where one is listed; its
+# label says so, since an ETF carries tracking error and fees.
 SECTOR_INDEX = {
-    "banking_financials": ("^NSEBANK", "Nifty Bank"),
-    "midcap_it": ("^CNXIT", "Nifty IT"),
-    "fmcg": ("^CNXFMCG", "Nifty FMCG"),
-    "clean_energy": ("^CNXENERGY", "Nifty Energy"),
-    "big_cap_industries": ("^CNXINFRA", "Nifty Infrastructure"),
-    "logistics_heavy_capital": ("^CNXINFRA", "Nifty Infrastructure"),
+    "banking_financials": ("Nifty Bank", ("^NSEBANK", "BANKBEES.NS")),
+    "midcap_it": ("Nifty IT", ("^CNXIT", "ITBEES.NS")),
+    "fmcg": ("Nifty FMCG", ("^CNXFMCG",)),
+    # No listed ETF tracks Nifty Energy that this could name with confidence;
+    # if ^CNXENERGY stays empty the rows say so rather than guess.
+    "clean_energy": ("Nifty Energy", ("^CNXENERGY",)),
+    "big_cap_industries": ("Nifty Infrastructure", ("^CNXINFRA", "INFRABEES.NS")),
+    "logistics_heavy_capital": (
+        "Nifty Infrastructure",
+        ("^CNXINFRA", "INFRABEES.NS"),
+    ),
 }
 
 # Summary includes only decisions at least this old.
@@ -195,19 +207,30 @@ def _build(ledger, watchlist, fetch: Fetcher, today: datetime.date) -> Dict[str,
     ).isoformat()
 
     tickers = sorted({str(e["ticker"]).upper() for e in decisions})
-    indices = sorted(
-        {NIFTY}
-        | {
-            SECTOR_INDEX[e["sector"]][0]
-            for e in decisions
-            if e.get("sector") in SECTOR_INDEX
-        }
-    )
+    wanted = {
+        SECTOR_INDEX[e["sector"]] for e in decisions if e.get("sector") in SECTOR_INDEX
+    }
+    indices = sorted({NIFTY} | {sym for _, cands in wanted for sym in cands})
     closes = fetch([f"{t}.NS" for t in tickers] + indices, start)
     # BSE listing for anything NSE did not serve (ASMTEC is BSE-only).
     missing = [t for t in tickers if f"{t}.NS" not in closes]
     if missing:
         closes.update(fetch([f"{t}.BO" for t in missing], start))
+
+    # Which symbol served each index — the first candidate with a series.
+    served: Dict[str, Tuple[str, str]] = {}
+    failed: List[str] = []
+    for label, cands in sorted(wanted):
+        hit = next((c for c in cands if closes.get(c)), None)
+        if hit:
+            served[label] = (
+                hit,
+                label if hit.startswith("^") else f"{label} (via {hit[:-3]} ETF)",
+            )
+        else:
+            failed.append(f"{label} ({', '.join(cands)})")
+    if failed:
+        log.warning("Track record: no index data for " + "; ".join(failed) + ".")
 
     held = _held_now(watchlist)
     rows = []
@@ -244,13 +267,23 @@ def _build(ledger, watchlist, fetch: Fetcher, today: datetime.date) -> Dict[str,
                     f"ledger price {logged:g} vs adjusted close {pick[0]:.2f} — "
                     "a split or bonus in between; the adjusted series is used"
                 )
-        index = SECTOR_INDEX.get(row["sector"])
-        if index:
-            sector = _return(closes.get(index[0]), date)
+        mapped = SECTOR_INDEX.get(row["sector"])
+        if mapped:
+            label, cands = mapped
+            symbol, shown = served.get(label, (None, label))
+            sector = _return(closes.get(symbol), date) if symbol else None
             if sector is not None:
-                row["index"] = index[1]
+                row["index"] = shown
                 row["index_pct"] = sector[2]
                 row["vs_index_pct"] = round(pick[2] - sector[2], 2)
+            else:
+                # Said, not left blank: a missing comparison read as "no
+                # index for this sector" hid the failure last time.
+                row["index_unmeasured"] = (
+                    f"{label}: no data from {', '.join(cands)}"
+                    if not symbol
+                    else f"{label}: no close near {date}"
+                )
         rows.append(row)
 
     rows.sort(key=lambda r: (r["date"], r["ticker"]), reverse=True)
@@ -269,6 +302,7 @@ def _build(ledger, watchlist, fetch: Fetcher, today: datetime.date) -> Dict[str,
     return {
         "as_of": today.isoformat(),
         "benchmark": "Nifty 50",
+        "index_failed": failed,
         "min_age_days": MIN_AGE_DAYS,
         "decisions": rows,
         "summary": summary,
@@ -286,6 +320,9 @@ def summarise(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
     exited = [r for r in judged if not r["still_held"]]
     out = {
         "n": len(judged),
+        # A stock picked twice counts twice (two decisions); this says so.
+        "stocks": len({r["ticker"] for r in judged}),
+        "index_unmeasured": sum(1 for r in judged if r.get("index_unmeasured")),
         "too_recent": young,
         "since": min(r["date"] for r in judged),
         "beat_nifty": sum(1 for v in vs if v > 0),

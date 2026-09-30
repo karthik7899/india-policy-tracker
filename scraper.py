@@ -226,45 +226,52 @@ STATE_MAX_AGE_DAYS = 14
 
 
 async def fetch_state_policy_async(session, today=None):
-    """State-government policy headlines, one Google News query per state.
+    """State-government headlines, a few simple Google News searches per state.
 
-    Each item carries ``feed_state``: the state whose query found it. That is
+    Each item carries ``feed_state``: the state whose search found it. That is
     where the search looked, not whose policy it is — the article can mention
     a state the headline does not — so jurisdiction is read from the headline
     itself (analysis/policy_impact.state_of). Fail-safe like every feed: a
-    query that fails contributes nothing and the run continues.
+    search that fails contributes nothing and the run continues.
     """
     from analysis.event_evidence import article_date
-    from config import STATE_POLICY_QUERIES, STATE_POLICY_TOPICS
+    from config import STATE_POLICY_QUERIES
     from utils import fetch_text_async
 
     today = today or datetime.date.today()
     cutoff = (today - datetime.timedelta(days=STATE_MAX_AGE_DAYS)).isoformat()
 
-    async def _fetch(state, terms):
+    async def _fetch(state, query):
         try:
-            query = f"({terms}) {STATE_POLICY_TOPICS} when:7d"
             url = (
                 "https://news.google.com/rss/search?q="
-                f"{urllib.parse.quote(query)}&hl=en-IN&gl=IN&ceid=IN:en"
+                f"{urllib.parse.quote(query + ' when:7d')}&hl=en-IN&gl=IN&ceid=IN:en"
             )
             status, xml_data = await fetch_text_async(session, url, timeout=15)
             if status == 200:
                 return state, feedparser.parse(xml_data)
-            log.info(f"State policy feed ({state}): HTTP {status}.")
+            log.info(f"State policy feed ({state}, {query}): HTTP {status}.")
         except Exception as e:
-            log.error(f"State policy feed ({state}) failed: {e}")
+            log.error(f"State policy feed ({state}, {query}) failed: {e}")
         return state, None
 
     results = await asyncio.gather(
-        *(_fetch(s, q) for s, q in STATE_POLICY_QUERIES.items())
+        *(
+            _fetch(state, query)
+            for state, queries in STATE_POLICY_QUERIES.items()
+            for query in queries
+        )
     )
-    items, seen, per_state, stale = [], set(), {}, 0
+    # One pool per state, so a state's searches share its slots.
+    pools: dict = {}
     for state, feed in results:
-        if not feed:
-            continue
+        if feed:
+            pools.setdefault(state, []).extend(feed.entries)
+    results = list(pools.items())
+    items, seen, per_state, stale = [], set(), {}, 0
+    for state, entries in results:
         fresh = []
-        for entry in feed.entries:
+        for entry in entries:
             date = article_date(entry.get("published")) or ""
             if date >= cutoff:
                 fresh.append((date, entry))
@@ -292,7 +299,7 @@ async def fetch_state_policy_async(session, today=None):
             )
     log.info(
         f"State policy feed: {len(items)} headline(s) — "
-        + (", ".join(f"{s} {n}" for s, n in per_state.items()) or "none")
+        + ", ".join(f"{s} {per_state.get(s, 0)}" for s in STATE_POLICY_QUERIES)
         + f"; {stale} older than {STATE_MAX_AGE_DAYS} days skipped."
     )
     return items
