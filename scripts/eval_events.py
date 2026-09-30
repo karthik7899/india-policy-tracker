@@ -387,7 +387,7 @@ def _run_thesis(args) -> int:
                 print(
                     f"    [{row.get('split')}{' synthetic' if row.get('synthetic') else ''}] "
                     f"{row['ticker']} want {row['stance']} · got {reading['stance']}"
-                    f"{' (downgraded from ' + reading['downgraded'] + ')' if reading.get('downgraded') else ''}"
+                    f"{' (downgraded from ' + reading['downgraded'] + ': ' + reading.get('reason', '?') + ')' if reading.get('downgraded') else ''}"
                     f" | {row['headline'][:90]}"
                 )
     return 0

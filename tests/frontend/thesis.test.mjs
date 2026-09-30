@@ -67,3 +67,14 @@ test("a young ledger says it is too early rather than showing zeros", () => {
   );
   assert.equal(trackSummary({ decisions: [] }), "");
 });
+
+test("the track summary names repeat picks and missing sector indices", () => {
+  const s = trackSummary({
+    decisions: [{}],
+    summary: { n: 27, stocks: 26, beat_nifty: 22, median_vs_nifty_pct: 12.4, index_unmeasured: 14 },
+  });
+  assert.equal(
+    s,
+    "22 of 27 (26 stocks) beat the Nifty 50 \u00b7 median +12.4 pts \u00b7 sector index unavailable for 14",
+  );
+});

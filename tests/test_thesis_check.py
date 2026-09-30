@@ -379,34 +379,42 @@ def test_the_committed_thesis_labels_are_well_formed():
     assert sum(not r.get("synthetic") for r in rows) >= 60
 
 
-def test_a_claim_that_is_the_whole_thesis_is_no_claim():
-    # First live run: ideaForge's quarterly loss was "contradicting" its
-    # entire thesis, quoted back verbatim.
+def test_a_one_claim_thesis_may_be_quoted_whole():
+    # Version 2 refused any claim covering over 80% of the thesis, and so
+    # refused "cuts Khavda target to 15 GW" against a thesis that is that
+    # one claim. The false alarm it was meant to stop is the prompt's job.
     thesis = (
-        "Pioneer in tactical and mapping drone systems, primary supplier for "
-        "Indian Army and police borders."
+        "Developing the world's largest renewable energy park in Khavda, "
+        "Gujarat (30 GW capacity target)."
     )
-    headline = "Supply chain disruptions push ideaForge into losses in Q1FY27"
+    headline = "Adani Green cuts Khavda renewable park target to 15 GW"
     r = ground(
         headline,
         thesis,
         {
             "stance": "contradicts",
             "claim": thesis,
-            "because": "push ideaForge into losses",
+            "because": "cuts Khavda renewable park target to 15 GW",
         },
     )
-    assert r["stance"] == "unrelated" and r["downgraded"] == "contradicts"
+    assert r["stance"] == "contradicts"
+
+
+def test_a_refusal_says_which_quote_failed():
     r = ground(
-        headline,
-        thesis,
-        {
-            "stance": "contradicts",
-            "claim": "primary supplier for Indian Army",
-            "because": "push ideaForge into losses",
-        },
+        LOAN,
+        THESIS,
+        {"stance": "contradicts", "claim": "low leverage", "because": "term loan"},
     )
-    assert r["stance"] == "contradicts"  # a specific claim still stands
+    assert r["reason"] == "claim not in the thesis"
+    r = ground(
+        LOAN,
+        THESIS,
+        {"stance": "contradicts", "claim": "debt-free", "because": "fresh equity"},
+    )
+    assert r["reason"] == "quote not in the headline"
+    r = ground(LOAN, THESIS, {"stance": "supports", "claim": "", "because": ""})
+    assert r["reason"] == "no quote given"
 
 
 def test_the_prompt_limits_results_to_theses_that_name_them():
@@ -414,4 +422,5 @@ def test_the_prompt_limits_results_to_theses_that_name_them():
 
     text = _prompt([(0, {"ticker": "X", "name": "X", "thesis": "t", "headline": "h"})])
     assert "ONLY when the thesis" in text
-    assert thesis_check.PROMPT_VERSION != "1"
+    assert "only when it makes a single claim" in text
+    assert thesis_check.PROMPT_VERSION not in ("1", "2")

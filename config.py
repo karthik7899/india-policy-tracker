@@ -544,33 +544,24 @@ SECTOR_QUERIES = {
 
 # State-government policy. The PIB queries above only see the Centre, but
 # land, power tariffs, capital subsidies and EV/electronics/data-centre
-# incentives are largely state policy, and they decide where plants go. One
-# query per state with a large industrial base; the sector words keep the
-# results to measures that can touch our sectors. Which sector each measure
-# helps or hurts is read per headline by the LLM reader, like any policy.
-STATE_POLICY_TOPICS = (
-    "(policy OR incentive OR subsidy OR scheme OR tariff OR approves OR cabinet)"
-    " (solar OR renewable OR EV OR electronics OR semiconductor OR"
-    ' "data centre" OR "data center" OR textile OR defence OR aerospace OR'
-    " manufacturing OR industrial OR logistics OR tourism)"
-)
+# incentives are largely state policy, and they decide where plants go.
+#
+# Simple searches, several per state. The first version sent one long query
+# per state — three quoted names ORed, then policy words, then sector words —
+# and Google News answered with mostly old articles: on 29 September 508
+# results were older than 14 days and five states returned nothing recent.
+# Which of these headlines is a measure, and which sector it touches, is the
+# LLM reader's job (analysis/policy_impact.py), not the query's.
 STATE_POLICY_QUERIES = {
-    "Gujarat": '"Gujarat government" OR "Gujarat cabinet" OR "Gujarat policy"',
-    "Maharashtra": '"Maharashtra government" OR "Maharashtra cabinet" OR'
-    ' "Maharashtra policy"',
-    "Tamil Nadu": '"Tamil Nadu government" OR "Tamil Nadu cabinet" OR'
-    ' "Tamil Nadu policy" OR "TN govt"',
-    "Karnataka": '"Karnataka government" OR "Karnataka cabinet" OR'
-    ' "Karnataka policy"',
-    "Uttar Pradesh": '"Uttar Pradesh government" OR "UP government" OR'
-    ' "UP cabinet" OR "Uttar Pradesh policy"',
-    "Telangana": '"Telangana government" OR "Telangana cabinet" OR'
-    ' "Telangana policy"',
-    "Andhra Pradesh": '"Andhra Pradesh government" OR "AP government" OR'
-    ' "Andhra Pradesh cabinet" OR "Andhra Pradesh policy"',
-    "Odisha": '"Odisha government" OR "Odisha cabinet" OR "Odisha policy"',
-    "Rajasthan": '"Rajasthan government" OR "Rajasthan cabinet" OR'
-    ' "Rajasthan policy"',
+    "Gujarat": ['"Gujarat government"', '"Gujarat cabinet"'],
+    "Maharashtra": ['"Maharashtra government"', '"Maharashtra cabinet"'],
+    "Tamil Nadu": ['"Tamil Nadu government"', '"TN govt"'],
+    "Karnataka": ['"Karnataka government"', '"Karnataka cabinet"'],
+    "Uttar Pradesh": ['"UP government"', '"Uttar Pradesh government"'],
+    "Telangana": ['"Telangana government"', '"Telangana cabinet"'],
+    "Andhra Pradesh": ['"Andhra Pradesh government"', '"AP government"'],
+    "Odisha": ['"Odisha government"', '"Odisha cabinet"'],
+    "Rajasthan": ['"Rajasthan government"', '"Rajasthan cabinet"'],
 }
 
 

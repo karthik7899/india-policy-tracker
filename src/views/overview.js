@@ -40,10 +40,11 @@ export function trackSummary(record) {
   }
   const signed = (v) => `${v > 0 ? "+" : ""}${Number(v).toFixed(1)}`;
   return [
-    `${s.beat_nifty} of ${s.n} beat the Nifty 50`,
+    `${s.beat_nifty} of ${s.n}${s.stocks && s.stocks !== s.n ? ` (${s.stocks} stocks)` : ""} beat the Nifty 50`,
     `median ${signed(s.median_vs_nifty_pct)} pts`,
     s.exited ? `${s.exited} since exited, still counted` : "",
     s.with_index ? `${s.beat_index} of ${s.with_index} ahead of their sector index` : "",
+    s.index_unmeasured ? `sector index unavailable for ${s.index_unmeasured}` : "",
   ]
     .filter(Boolean)
     .join(" \u00b7 ");
@@ -134,7 +135,12 @@ export async function render(container, { payload, route }) {
               {
                 key: "vs_index_pct",
                 label: "vs sector index",
-                render: (r) => (typeof r.vs_index_pct === "number" ? `${pts(r.vs_index_pct)} (${r.index})` : "\u2014"),
+                render: (r) =>
+                  typeof r.vs_index_pct === "number"
+                    ? `${pts(r.vs_index_pct)} (${r.index})`
+                    : r.index_unmeasured
+                      ? "unavailable"
+                      : "\u2014",
               },
               { key: "still_held", label: "Held", render: (r) => (r.still_held ? "yes" : "exited") },
             ],
