@@ -217,18 +217,22 @@ def _build(ledger, watchlist, fetch: Fetcher, today: datetime.date) -> Dict[str,
     if missing:
         closes.update(fetch([f"{t}.BO" for t in missing], start))
 
-    # Which symbol served each index — the first candidate with a series.
-    served: Dict[str, Tuple[str, str]] = {}
+    # Every candidate's span, logged, and the indices nothing served. A
+    # symbol can return a series that starts after most decisions: on 30
+    # September ^CNXINFRA and ^CNXENERGY did, and choosing "the first symbol
+    # with any data" left 13 picks unmeasured with INFRABEES never tried.
+    # So the choice is made per decision, below, by which series covers it.
     failed: List[str] = []
+    spans = []
     for label, cands in sorted(wanted):
-        hit = next((c for c in cands if closes.get(c)), None)
-        if hit:
-            served[label] = (
-                hit,
-                label if hit.startswith("^") else f"{label} (via {hit[:-3]} ETF)",
-            )
-        else:
+        have = [c for c in cands if closes.get(c)]
+        if not have:
             failed.append(f"{label} ({', '.join(cands)})")
+        for c in have:
+            series = closes[c]
+            spans.append(f"{c} {series[0][0]}..{series[-1][0]} ({len(series)} closes)")
+    if spans:
+        log.info("Track record index data: " + "; ".join(spans) + ".")
     if failed:
         log.warning("Track record: no index data for " + "; ".join(failed) + ".")
 
@@ -270,19 +274,33 @@ def _build(ledger, watchlist, fetch: Fetcher, today: datetime.date) -> Dict[str,
         mapped = SECTOR_INDEX.get(row["sector"])
         if mapped:
             label, cands = mapped
-            symbol, shown = served.get(label, (None, label))
-            sector = _return(closes.get(symbol), date) if symbol else None
-            if sector is not None:
-                row["index"] = shown
+            hit = next(
+                (
+                    (c, r)
+                    for c in cands
+                    for r in [_return(closes.get(c), date)]
+                    if r is not None
+                ),
+                None,
+            )
+            if hit is not None:
+                symbol, sector = hit
+                row["index"] = (
+                    label
+                    if symbol.startswith("^")
+                    else f"{label} (via {symbol[:-3]} ETF)"
+                )
                 row["index_pct"] = sector[2]
                 row["vs_index_pct"] = round(pick[2] - sector[2], 2)
             else:
                 # Said, not left blank: a missing comparison read as "no
-                # index for this sector" hid the failure last time.
+                # index for this sector" hid the failure the first time.
+                have = [c for c in cands if closes.get(c)]
                 row["index_unmeasured"] = (
                     f"{label}: no data from {', '.join(cands)}"
-                    if not symbol
-                    else f"{label}: no close near {date}"
+                    if not have
+                    else f"{label}: no close within {MAX_STALENESS_DAYS} days "
+                    f"before {date} in {', '.join(have)}"
                 )
         rows.append(row)
 

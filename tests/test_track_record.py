@@ -298,3 +298,33 @@ def test_the_email_names_the_indices_it_could_not_get():
     )
     assert "No sector-index comparison for 4" in html
     assert "Nifty Bank (^NSEBANK, BANKBEES.NS)" in html
+
+
+def test_a_short_index_series_falls_through_to_the_etf():
+    # 30 September: ^CNXINFRA returned a series, but one starting after most
+    # decisions, and the first-symbol-with-data rule never tried INFRABEES.
+    closes = dict(CLOSES)
+    closes["^NSEBANK"] = [("2026-09-20", 500.0), ("2026-09-26", 510.0)]
+    closes["BANKBEES.NS"] = _series(50, 57.5)
+
+    def fetch(symbols, start):
+        return {s: closes[s] for s in symbols if s in closes}
+
+    record = build_track_record(LEDGER, WATCHLIST, fetch=fetch, today=TODAY)
+    r = _row(record, "BANKY")
+    assert r["index"] == "Nifty Bank (via BANKBEES ETF)"
+    assert r["vs_index_pct"] == -5.0
+    assert record["index_failed"] == ["Nifty FMCG (^CNXFMCG)"]
+
+
+def test_a_series_that_covers_nothing_says_where_it_looked():
+    closes = dict(CLOSES)
+    closes["^NSEBANK"] = [("2026-09-20", 500.0), ("2026-09-26", 510.0)]
+
+    def fetch(symbols, start):
+        return {s: closes[s] for s in symbols if s in closes}
+
+    r = _row(build_track_record(LEDGER, WATCHLIST, fetch=fetch, today=TODAY), "BANKY")
+    assert r["index_unmeasured"] == (
+        "Nifty Bank: no close within 7 days before 2026-07-10 in ^NSEBANK"
+    )
