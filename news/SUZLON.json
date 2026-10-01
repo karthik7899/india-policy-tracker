@@ -2,6 +2,19 @@
   "ticker": "SUZLON",
   "items": [
     {
+      "date": "30 Sep 2026",
+      "headline": "Suzlon Energy wins 105 MW order from Sunsure Energy for S175 turbines",
+      "source_url": "https://news.google.com/rss/articles/CBMi1wFBVV95cUxOemJPcnhFRGVQNUJQcjZxNzRucHNwbnF6a2sxZF9hUTFVQlQ2R0stOFpqN3U5T093WmFFdDFUclE2M0ZiNnB1MkdyektHa1kzQmdXZkxhdDBja3NyemROdDRfWXphWUFKNU1iNS1xYWNmbnRObFVZWTJ4ejZwLXotZ3BhYkFTVUlvTTdYb1NyRzBaMGVEeTNXcEFFM2hMUzZ4Y1oyYmlaUlo4cVBwZTRrOWhRYmFfVURoUGotcVJpcTZxVmY4cHVOX1ZiTjVXaU1TWFBrVWQ0UQ?oc=5",
+      "source_label": "scanx.trade",
+      "event_type": "",
+      "source_kind": "Sector news",
+      "event_tags": [
+        "Sector news"
+      ],
+      "confidence": "M",
+      "status": "counted"
+    },
+    {
       "date": "Tue, 25 Aug 2026 04:28:08 GMT",
       "headline": "Suzlon Energy Secures 250 MW Wind Order From Torrent Green Energy",
       "source_url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxOXy1ibEVacTcwdTFMeGI3SWxHQXNZX1NLRzBjMkkwalN1emdyLWNlVDRBUE85QmZfMUJzcnNLM3lHMTE2YzQ1cXdiZXlwV21wWVhBekw5a25tZHJ4cTJ1dC1sUGYzSzhycTJjdXF1b1Z3VzhpbEl0TXJpX2dMRjZxMTI3UkVrbTd3YTl0dEstMng4cW5ObUpmVmQ2bzNsQ1gxaXR5dVU1dw?oc=5",
@@ -287,7 +300,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (190 days old)"
+      "exclusion_reason": "aged >120d (191 days old)"
     },
     {
       "date": "Tue, 24 Mar 2026 07:00:00 GMT",
@@ -301,7 +314,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (190 days old)"
+      "exclusion_reason": "aged >120d (191 days old)"
     },
     {
       "date": "Wed, 17 Dec 2025 08:00:00 GMT",
@@ -315,7 +328,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (287 days old)"
+      "exclusion_reason": "aged >120d (288 days old)"
     },
     {
       "date": "Mon, 09 Mar 2026 07:00:00 GMT",
@@ -329,7 +342,22 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (205 days old)"
+      "exclusion_reason": "aged >120d (206 days old)"
+    },
+    {
+      "date": "2026-09-30",
+      "headline": "Suzlon Energy wins 105 MW order from Sunsure Energy for S175 turbines",
+      "source_url": "https://news.google.com/rss/articles/CBMi1wFBVV95cUxOemJPcnhFRGVQNUJQcjZxNzRucHNwbnF6a2sxZF9hUTFVQlQ2R0stOFpqN3U5T093WmFFdDFUclE2M0ZiNnB1MkdyektHa1kzQmdXZkxhdDBja3NyemROdDRfWXphWUFKNU1iNS1xYWNmbnRObFVZWTJ4ejZwLXotZ3BhYkFTVUlvTTdYb1NyRzBaMGVEeTNXcEFFM2hMUzZ4Y1oyYmlaUlo4cVBwZTRrOWhRYmFfVURoUGotcVJpcTZxVmY4cHVOX1ZiTjVXaU1TWFBrVWQ0UQ?oc=5",
+      "source_label": "scanx.trade",
+      "event_type": "order_win",
+      "source_kind": "Event",
+      "event_tags": [
+        "order_win",
+        "Event"
+      ],
+      "confidence": "H",
+      "status": "merged",
+      "exclusion_reason": "merged: duplicate phrasing of “Suzlon Energy wins 105 MW order from Sunsure Energy for S175”"
     },
     {
       "date": "2026-08-25",
