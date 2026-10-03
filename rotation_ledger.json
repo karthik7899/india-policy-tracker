@@ -379,9 +379,9 @@
     "name": "Indo-MIM",
     "price_at_decision": 952.75,
     "target_at_decision": 1190.94,
-    "scored": false,
-    "outcome": null,
-    "realized_return_pct": null
+    "scored": true,
+    "outcome": "Thesis Playing Out",
+    "realized_return_pct": 33.5
   },
   {
     "date": "2026-08-20",
@@ -715,6 +715,18 @@
     "name": "Optiemus Infra.",
     "price_at_decision": 787.05,
     "target_at_decision": 983.81,
+    "scored": false,
+    "outcome": null,
+    "realized_return_pct": null
+  },
+  {
+    "date": "2026-10-03",
+    "action": "rotated_in",
+    "sector": "data_center_support",
+    "ticker": "BIRLACABLE",
+    "name": "Birla Cable",
+    "price_at_decision": 382.0,
+    "target_at_decision": 477.5,
     "scored": false,
     "outcome": null,
     "realized_return_pct": null
