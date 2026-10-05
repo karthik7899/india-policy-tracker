@@ -504,6 +504,19 @@ async def run_pipeline():
     data["thesis_check"] = run_thesis_check(watchlist, coverage)
     annotate_health(data["thesis_health"], data["thesis_check"])
 
+    # One card per holding — its recent activity and the policies touching
+    # its sector — for the dashboard's Companies view.
+    from analysis.company_digest import build_company_digest
+
+    data["company_digest"] = build_company_digest(watchlist, coverage, data)
+    digest = data["company_digest"]["companies"]
+    log.info(
+        f"Company digest: {len(digest)} holding(s); "
+        f"{sum(1 for c in digest if c['activity_count'])} with activity and "
+        f"{sum(1 for c in digest if c['policy_count'])} with a policy touching "
+        f"them in the last {data['company_digest']['window_days']} days."
+    )
+
     # Save watchlist changes
     save_watchlist(watchlist)
 

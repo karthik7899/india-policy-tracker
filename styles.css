@@ -427,3 +427,32 @@ td .disclose-summary { padding: 2px 0; }
    the words "risk" / "opportunity" rather than relying on colour. */
 .tag-risk { border-color: var(--critical); color: var(--critical); }
 .tag-opp { border-color: var(--good); color: var(--good); }
+
+/* Companies view: one card per holding, activity beside policy. */
+.company-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 520px), 1fr));
+  gap: var(--gap);
+  margin-bottom: var(--gap);
+}
+.company-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  min-width: 0;
+}
+.company-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.company-name { font-weight: 600; font-size: 14px; }
+.company-sector { margin: 2px 0 10px; color: var(--muted); font-size: 12px; }
+.company-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.company-cols h4 {
+  margin: 0 0 4px; font-size: 11px; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.company-cols .evidence li { font-size: 13px; overflow-wrap: anywhere; }
+.company-empty { margin: 0; color: var(--muted); font-size: 12px; }
+.company-quiet { margin: 8px 0 0; font-size: 13px; line-height: 1.8; }
+@media (max-width: 640px) {
+  .company-cols { grid-template-columns: 1fr; }
+}
