@@ -5,7 +5,7 @@
       "date": "01 Oct 2026",
       "headline": "Adani Green Energy expands battery storage capacity to 6.63 GWh; accounts for more than 50% of India’s operational Battery Energy Storage System capacity",
       "source_url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPSUZlNXRFUnRQc1hpSndKYkgzZlFXazB3YkZIcXJaQ2IyN1pYbHdaOXhhRGJhbFhSRGpCYmMycTd0a1FFdHpIOFc4aHB3WnMybjF3bVlpeDR4OHVteDFFZWl0cFUxejZwN3dvSk5EV0gyT0ttSEh1UHROaFFHalFMdzZKVGNOdDk5TjhLR0ZLNmZHT1NEOWE0ak1UN2s4aDZGamwyc1FrdmY3dTQ?oc=5",
-      "source_label": "adani.com",
+      "source_label": "Adani",
       "event_type": "",
       "source_kind": "Sector news",
       "event_tags": [
@@ -79,6 +79,21 @@
       ],
       "confidence": "M",
       "status": "counted"
+    },
+    {
+      "date": "2026-10-01",
+      "headline": "Adani Green Energy expands battery storage capacity to 6.63 GWh; accounts for more than 50% of India’s operational Battery Energy Storage System capacity",
+      "source_url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPSUZlNXRFUnRQc1hpSndKYkgzZlFXazB3YkZIcXJaQ2IyN1pYbHdaOXhhRGJhbFhSRGpCYmMycTd0a1FFdHpIOFc4aHB3WnMybjF3bVlpeDR4OHVteDFFZWl0cFUxejZwN3dvSk5EV0gyT0ttSEh1UHROaFFHalFMdzZKVGNOdDk5TjhLR0ZLNmZHT1NEOWE0ak1UN2s4aDZGamwyc1FrdmY3dTQ?oc=5",
+      "source_label": "Adani",
+      "event_type": "capacity_add",
+      "source_kind": "Event",
+      "event_tags": [
+        "capacity_add",
+        "Event"
+      ],
+      "confidence": "L",
+      "status": "merged",
+      "exclusion_reason": "merged: duplicate phrasing of “Adani Green Energy expands battery storage capacity to 6.63 ”"
     }
   ]
 }
