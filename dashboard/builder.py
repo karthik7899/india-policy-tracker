@@ -47,6 +47,7 @@ def _apply_potential_estimate(stock, price, graham_value):
 
     if has_analyst_coverage:
         stock["estimate_method"] = "Analyst Consensus"
+        stock.pop("upside_capped", None)
         return
 
     # Only claim a fundamental estimate when one exists. ASM Technologies was
@@ -55,10 +56,19 @@ def _apply_potential_estimate(stock, price, graham_value):
     # which is worse than an honest blank.
     if not (price > 0 and graham_value and graham_value > 0):
         stock["estimate_method"] = "No Estimate"
+        stock.pop("upside_capped", None)
         return
 
     stock["estimate_method"] = "Fundamental Estimate"
     upside = (graham_value - price) / price * 100
+    # Clamped estimates are marked, so a display can say "below -50%"
+    # rather than print the clamp as if it were the estimate.
+    if upside <= _FUNDAMENTAL_UPSIDE_FLOOR:
+        stock["upside_capped"] = "floor"
+    elif upside >= _FUNDAMENTAL_UPSIDE_CAP:
+        stock["upside_capped"] = "cap"
+    else:
+        stock.pop("upside_capped", None)
     upside = max(_FUNDAMENTAL_UPSIDE_FLOOR, min(_FUNDAMENTAL_UPSIDE_CAP, upside))
     stock["growth_pct"] = f"{'+' if upside >= 0 else ''}{upside:.1f}%"
     stock["target"] = f"{price * (1 + upside / 100):.2f}"
