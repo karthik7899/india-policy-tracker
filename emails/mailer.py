@@ -688,6 +688,105 @@ def _build_track_record_html(record, caps=_CAPS_NORMAL):
         """
 
 
+_CHANGE_LABELS = (
+    ("watchlist", "Watchlist"),
+    ("thesis", "Thesis"),
+    ("events", "Company events"),
+    ("policy", "New policy"),
+    ("warnings", "New or escalated alerts"),
+)
+
+
+def _build_changes_html(changes, per_kind=4):
+    """What is new since the previous run (analysis/changes.py), first.
+
+    Everything else in the email is standing state; this is the part a
+    reader who opened yesterday's needs. ``changes`` arrives escaped.
+    """
+    if not isinstance(changes, dict) or changes.get("first_run"):
+        return ""
+    counts = changes.get("counts") or {}
+    items = changes.get("items") or {}
+    blocks = ""
+    for key, label in _CHANGE_LABELS:
+        n = counts.get(key) or 0
+        if not n:
+            continue
+        rows = ""
+        for i in (items.get(key) or [])[:per_kind]:
+            ticker = (
+                f"<span class='stock-ticker'>{i['ticker']}</span> "
+                if i.get("ticker")
+                else ""
+            )
+            text = (
+                f"<a href='{i['link']}' target='_blank' style='color:#e2e8f0;'>{i['text']}</a>"
+                if i.get("link")
+                else i.get("text", "")
+            )
+            detail = (
+                f"<br><span style='font-size:11px;color:#94a3b8;'>{i['detail']}</span>"
+                if i.get("detail")
+                else ""
+            )
+            rows += f"<li style='margin-bottom:6px;'>{ticker}{text}{detail}</li>"
+        more = (
+            f"<li style='color:#94a3b8;'>+ {n - per_kind} more on the dashboard</li>"
+            if n > per_kind
+            else ""
+        )
+        blocks += (
+            f"<h4 style='margin:10px 0 4px 0;color:#e2e8f0;font-size:12px;"
+            f"text-transform:uppercase;'>{label} ({n})</h4>"
+            f"<ul style='font-size:12px;line-height:1.5;padding-left:18px;"
+            f"color:#cbd5e1;margin:0;'>{rows}{more}</ul>"
+        )
+    body = blocks or (
+        "<p style='font-size:12px;color:#94a3b8;margin:0;'>"
+        "Nothing new since the last run.</p>"
+    )
+    return f"""
+        <div class="section-card">
+            <h3 style="color: #60a5fa; margin-bottom: 6px; font-size: 16px;">Since the Last Run</h3>
+            {body}
+        </div>
+        """
+
+
+def _build_policy_balance_html(balance):
+    """Per-sector tailwinds and headwinds over 30 days, net first."""
+    rows = sorted(
+        (
+            (sector, b)
+            for sector, b in (balance or {}).items()
+            if isinstance(b, dict) and (b.get("tailwind") or b.get("headwind"))
+        ),
+        key=lambda x: (-(x[1].get("net") or 0), x[0]),
+    )
+    if not rows:
+        return ""
+    body = "".join(
+        f"<tr><td class='ew-td'>{html_lib.escape(_sector_label(sector))}</td>"
+        f"<td class='ew-td num' style='color:#34d399;'>&#9650; {b.get('tailwind', 0):g}</td>"
+        f"<td class='ew-td num' style='color:#f87171;'>&#9660; {b.get('headwind', 0):g}</td>"
+        f"<td class='ew-td num'>{(b.get('net') or 0):+g}</td></tr>"
+        for sector, b in rows
+    )
+    return f"""
+        <div class="section-card">
+            <h3 style="color: #60a5fa; margin-bottom: 6px; font-size: 16px;">Policy by Sector (30 days)</h3>
+            <p style="font-size: 11px; color: #6b7280; margin: 0 0 10px 0;">
+                Measures read in the last 30 days, by which way they cut for each sector;
+                a proposal counts half. LLM reading.
+            </p>
+            <table class="stock-table">
+                <thead><tr><th>Sector</th><th>Tailwind</th><th>Headwind</th><th>Net</th></tr></thead>
+                <tbody>{body}</tbody>
+            </table>
+        </div>
+        """
+
+
 def _build_sector_fit_html(fit):
     """Holdings whose own industry does not fit their sector. A note, not an
     action: moving a holding is the owner's call (analysis/sector_fit.py)."""
@@ -1215,6 +1314,8 @@ def _render_email(brief_data, watchlist, caps):
             </div>
     """
 
+    body_html += _build_changes_html(brief_data.get("changes"))
+
     # Early Warning System. Alerts already shown as cards above are not
     # repeated: the table used to reprint every card, so one holding with
     # three signals appeared six times in the first screen of the email.
@@ -1234,6 +1335,7 @@ def _render_email(brief_data, watchlist, caps):
     # computed above, no new fetches.
     body_html += _build_research_engine_html(brief_data, caps)
     body_html += _build_policy_direction_html(brief_data.get("policy_impacts"), caps)
+    body_html += _build_policy_balance_html(brief_data.get("policy_balance"))
 
     selected_sectors, eligible_total = _sectors_to_render(brief_data, caps)
     blocks_by_id = {
@@ -1315,7 +1417,15 @@ def _render_email(brief_data, watchlist, caps):
 
             potential_str = s.get("growth_pct")
             potential_color = "#cbd5e1"
-            if potential_str:
+            if potential_str and s.get("upside_capped"):
+                # The fundamental estimate was clamped at this bound; the
+                # number is the bound, not the estimate (dashboard/builder.py).
+                bound = "&le;" if s["upside_capped"] == "floor" else "&ge;"
+                potential_str = f"{bound} {potential_str} (capped)"
+                potential_color = (
+                    "#f87171" if s["upside_capped"] == "floor" else "#34d399"
+                )
+            elif potential_str:
                 if potential_str.startswith("-"):
                     potential_color = "#f87171"  # red
                 elif potential_str.startswith("+"):

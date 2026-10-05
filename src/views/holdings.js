@@ -165,6 +165,18 @@ export function thesisSection(catalyst, check) {
   );
 }
 
+/**
+ * Upside as text. A fundamental estimate clamped at its bound shows as a
+ * bound — "\u2264 -50.0% (capped)" — not as a precise figure: the number is
+ * where dashboard/builder.py stopped, not what the model estimated.
+ */
+export function upsideText(stock) {
+  const text = pct(stock?.growth_pct);
+  if (stock?.upside_capped === "floor") return `\u2264 ${text} (capped)`;
+  if (stock?.upside_capped === "cap") return `\u2265 ${text} (capped)`;
+  return text;
+}
+
 /** The drawer: everything known about one holding, fetched on open. */
 async function drawer(stock, payload) {
   const sc = stock.screener || {};
@@ -220,7 +232,7 @@ async function drawer(stock, payload) {
   const rows = [
     ["Price", stock.price ?? "—"],
     ["Target", stock.target ?? "—"],
-    ["Upside", pct(stock.growth_pct)],
+    ["Upside", upsideText(stock)],
     ["P/E", sc.pe_ratio ?? "—"],
     ["ROCE", sc.roce !== undefined ? `${sc.roce}%` : "—"],
     ["Turnover", sc.advt_cr ? `${crore(sc.advt_cr)}/day (${sc.liquidity_band ?? "unknown"})` : "—"],
@@ -484,7 +496,7 @@ export async function render(container, { payload, route }) {
           { key: "name", label: "Name" },
           { key: "sector", label: "Sector", render: (r) => String(r.sector).replace(/_/g, " ") },
           { key: "price", label: "Price", numeric: true },
-          { key: "growth_pct", label: "Upside", numeric: true, render: (r) => pct(r.growth_pct) },
+          { key: "growth_pct", label: "Upside", numeric: true, render: (r) => upsideText(r) },
           {
             key: "advt_cr",
             label: "Turnover",

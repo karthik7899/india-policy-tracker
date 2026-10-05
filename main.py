@@ -113,6 +113,15 @@ async def run_pipeline():
         known_symbols=set(isin_master),
     )
 
+    # Holdings before rotation, for the "since the last run" strip.
+    held_before = {
+        str(st.get("ticker")).upper()
+        for sec, stocks in watchlist.items()
+        if sec != "macro_indicators" and isinstance(stocks, list)
+        for st in stocks
+        if isinstance(st, dict) and st.get("ticker")
+    }
+
     # Auto-curate the watchlist (discovers emerging players and rotates stocks)
     emerging, rotation_decisions = auto_curate_watchlist(
         data, watchlist, screened_candidates=candidates_for_rotation(prior_screened)
@@ -509,6 +518,28 @@ async def run_pipeline():
     from analysis.company_digest import build_company_digest
 
     data["company_digest"] = build_company_digest(watchlist, coverage, data)
+
+    # What is new since the previous run, for the top of the dashboard and
+    # the email (analysis/changes.py).
+    from analysis.changes import build_changes
+
+    data["changes"] = build_changes(
+        data,
+        prior,
+        held_before=held_before,
+        held_now={
+            str(st.get("ticker")).upper()
+            for sec, stocks in watchlist.items()
+            if sec != "macro_indicators" and isinstance(stocks, list)
+            for st in stocks
+            if isinstance(st, dict) and st.get("ticker")
+        },
+    )
+    log.info(
+        "Since the last run: "
+        + ", ".join(f"{n} {k}" for k, n in data["changes"]["counts"].items())
+        + "."
+    )
     digest = data["company_digest"]["companies"]
     log.info(
         f"Company digest: {len(digest)} holding(s); "

@@ -50,6 +50,87 @@ export function trackSummary(record) {
     .join(" \u00b7 ");
 }
 
+const CHANGE_GROUPS = [
+  ["watchlist", "Watchlist"],
+  ["thesis", "Thesis"],
+  ["events", "Company events"],
+  ["policy", "New policy"],
+  ["warnings", "New or escalated alerts"],
+];
+
+/**
+ * The non-empty groups of what changed since the last run
+ * (analysis/changes.py), in reading order, each with its full count — the
+ * payload keeps at most eight items per group, so "12 new" must come from
+ * the count rather than the list.
+ */
+export function changeGroups(changes) {
+  if (!changes || changes.first_run) return [];
+  return CHANGE_GROUPS.map(([key, label]) => ({
+    key,
+    label,
+    count: changes.counts?.[key] || 0,
+    items: changes.items?.[key] || [],
+  })).filter((g) => g.count);
+}
+
+/** Sectors by policy balance, net tailwind first, sectors with nothing left out. */
+export function policyRows(balance, labels = {}) {
+  return Object.entries(balance || {})
+    .map(([sector, b]) => ({
+      sector,
+      label: labels[sector]?.label || sector.replace(/_/g, " "),
+      tailwind: b.tailwind || 0,
+      headwind: b.headwind || 0,
+      mixed: b.mixed || 0,
+      net: b.net ?? (b.tailwind || 0) - (b.headwind || 0),
+    }))
+    .filter((r) => r.tailwind || r.headwind || r.mixed)
+    .sort((a, c) => c.net - a.net || c.tailwind - a.tailwind);
+}
+
+function changesPanel(changes) {
+  if (!changes) return null;
+  if (changes.first_run) {
+    return panel("Since the last run", "Nothing to compare against yet; this fills in from the next run.");
+  }
+  const groups = changeGroups(changes);
+  if (!groups.length) return panel("Since the last run", "Nothing new since the last run.");
+  return panel(
+    "Since the last run",
+    "Only what is new: everything else on this page is standing state.",
+    el(
+      "div",
+      { class: "changes-grid" },
+      groups.map((g) =>
+        el(
+          "section",
+          {},
+          el("h4", {}, `${g.label} (${g.count})`),
+          el(
+            "ul",
+            { class: "evidence" },
+            g.items.map((i) =>
+              el(
+                "li",
+                {},
+                i.ticker ? [tickerLink(i.ticker, "companies"), " "] : null,
+                i.link
+                  ? el("a", { href: i.link, target: "_blank", rel: "noopener noreferrer" }, i.text)
+                  : i.text,
+                i.detail ? el("span", { class: "evidence-meta" }, i.detail) : null,
+              ),
+            ),
+          ),
+          g.count > g.items.length
+            ? el("p", { class: "section-note" }, `+ ${g.count - g.items.length} more`)
+            : null,
+        ),
+      ),
+    ),
+  );
+}
+
 export async function render(container, { payload, route }) {
   const b = payload?.briefing || {};
   const health = Object.values(b.thesis_health || {});
@@ -62,6 +143,7 @@ export async function render(container, { payload, route }) {
     .sort((a, b2) => b2._g - a._g);
 
   const warnings = b.early_warnings || [];
+  const policy = policyRows(b.policy_balance, payload?.sectors);
   const record = b.track_record || {};
   const minAge = record.min_age_days ?? 30;
   const judged = (record.decisions || [])
@@ -99,6 +181,36 @@ export async function render(container, { payload, route }) {
         growth.length ? `fastest ${growth[0].label ?? growth[0].sector ?? ""}` : "",
       ),
     ),
+
+    changesPanel(b.changes),
+
+    policy.length
+      ? panel(
+          "Policy by sector",
+          "Policy measures read in the last 30 days, by which way they cut for each " +
+            "sector (\u25b2 tailwind, \u25bc headwind; a proposal counts half). Open a " +
+            "sector to see the companies and the measures behind the count. LLM reading.",
+          dataTable(
+            policy,
+            [
+              {
+                key: "label",
+                label: "Sector",
+                render: (r) =>
+                  el(
+                    "a",
+                    { href: href("companies", { sector: r.sector, sort: r.net < 0 ? "pressure" : "support" }) },
+                    r.label,
+                  ),
+              },
+              { key: "tailwind", label: "\u25b2 Tailwind", numeric: true },
+              { key: "headwind", label: "\u25bc Headwind", numeric: true },
+              { key: "net", label: "Net", numeric: true, render: (r) => `${r.net > 0 ? "+" : ""}${r.net}` },
+            ],
+            { view: "overview", route, empty: "" },
+          ),
+        )
+      : null,
 
     panel(
       "Thesis health",

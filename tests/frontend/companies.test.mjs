@@ -36,3 +36,29 @@ test("a policy line says whose measure, how far along, and who read it", () => {
   );
   assert.match(policyMeta({ status: "proposed", date: "" }), /^central · proposed/);
 });
+
+import { changeGroups, policyRows } from "../../src/views/overview.js";
+import { upsideText } from "../../src/views/holdings.js";
+
+test("change groups keep reading order, full counts, and skip empty or first runs", () => {
+  const groups = changeGroups({
+    counts: { watchlist: 0, thesis: 12, events: 1, policy: 0, warnings: 0 },
+    items: { thesis: [{ text: "a" }], events: [{ text: "b" }] },
+  });
+  assert.deepEqual(groups.map((g) => [g.key, g.count]), [["thesis", 12], ["events", 1]]);
+  assert.deepEqual(changeGroups({ first_run: true, counts: { thesis: 3 } }), []);
+});
+
+test("policy rows sort by net and drop sectors with nothing", () => {
+  const rows = policyRows(
+    { fmcg: { tailwind: 0, headwind: 2, net: -2 }, clean_energy: { tailwind: 3, headwind: 0.5, net: 2.5 }, it: {} },
+    { clean_energy: { label: "Clean Energy" } },
+  );
+  assert.deepEqual(rows.map((r) => [r.label, r.net]), [["Clean Energy", 2.5], ["fmcg", -2]]);
+});
+
+test("a capped upside reads as a bound, an ordinary one as a figure", () => {
+  assert.equal(upsideText({ growth_pct: "-50.0%", upside_capped: "floor" }), "≤ -50.0% (capped)");
+  assert.equal(upsideText({ growth_pct: "+60.0%", upside_capped: "cap" }), "≥ +60.0% (capped)");
+  assert.equal(upsideText({ growth_pct: "+12.3%" }), "+12.3%");
+});

@@ -1,0 +1,157 @@
+"""What changed since the last run.
+
+Most of the briefing is standing state: 357 ongoing warnings collapse into
+20 groups, the thesis grades read the same most mornings, and a policy
+first seen a week ago sits beside one from this morning. "What do I need
+to look at today?" meant comparing against yesterday from memory.
+
+This compares the run with the previous one (history.json's briefing,
+loaded before it is overwritten) and lists only what is new:
+
+  watchlist   holdings added or dropped
+  thesis      grade changes, and thesis-check challenges not seen before
+  events      market events about holdings not seen before
+  policy      policy measures read for the first time
+  warnings    alerts that are new or escalated
+
+Nothing is re-judged; every item is something another step already
+produced, and each says which step.
+"""
+
+from typing import Any, Dict, Iterable, List, Optional
+
+MAX_PER_KIND = 8
+_ORDER = {"Broken": 0, "Weakening": 1, "Intact": 2}
+
+
+def _headlines(rows: Optional[Iterable[Any]], field: str = "headline") -> set:
+    return {
+        str(r.get(field) or "").strip().lower()
+        for r in rows or []
+        if isinstance(r, dict) and r.get(field)
+    }
+
+
+def build_changes(
+    data: Dict[str, Any],
+    prior: Dict[str, Any],
+    held_before: Iterable[str] = (),
+    held_now: Iterable[str] = (),
+) -> Dict[str, Any]:
+    """``{first_run, counts: {kind: n}, items: {kind: [...]}}``."""
+    prior = prior or {}
+    first_run = not prior
+    items: Dict[str, List[Dict[str, Any]]] = {
+        "watchlist": [],
+        "thesis": [],
+        "events": [],
+        "policy": [],
+        "warnings": [],
+    }
+
+    before, now = set(held_before or ()), set(held_now or ())
+    if before:
+        for t in sorted(now - before):
+            items["watchlist"].append({"ticker": t, "text": "added to the watchlist"})
+        for t in sorted(before - now):
+            items["watchlist"].append(
+                {"ticker": t, "text": "dropped from the watchlist"}
+            )
+
+    old_health = prior.get("thesis_health") or {}
+    for ticker, row in sorted((data.get("thesis_health") or {}).items()):
+        was = (old_health.get(ticker) or {}).get("status")
+        status = (row or {}).get("status")
+        if was and status and was != status:
+            worse = _ORDER.get(status, 9) < _ORDER.get(was, 9)
+            items["thesis"].append(
+                {
+                    "ticker": ticker,
+                    "text": f"thesis {was} → {status}",
+                    "direction": "worse" if worse else "better",
+                    **(
+                        {"detail": (row.get("reasons") or [""])[0]}
+                        if row.get("reasons")
+                        else {}
+                    ),
+                }
+            )
+    old_challenges = {
+        (t, c.get("headline"))
+        for t, r in ((prior.get("thesis_check") or {}).get("holdings") or {}).items()
+        for c in (r or {}).get("challenged") or []
+    }
+    for t, r in sorted(
+        ((data.get("thesis_check") or {}).get("holdings") or {}).items()
+    ):
+        for c in (r or {}).get("challenged") or []:
+            if (t, c.get("headline")) not in old_challenges:
+                items["thesis"].append(
+                    {
+                        "ticker": t,
+                        "text": f"thesis challenged: {c.get('headline')}",
+                        "direction": "worse",
+                        "detail": f"against “{c.get('claim')}” (LLM reading)",
+                        **({"link": c["link"]} if c.get("link") else {}),
+                    }
+                )
+
+    seen_events = _headlines(prior.get("market_events"))
+    for e in data.get("market_events") or []:
+        if not isinstance(e, dict) or not e.get("actors"):
+            continue
+        if str(e.get("headline") or "").strip().lower() in seen_events:
+            continue
+        items["events"].append(
+            {
+                "ticker": e["actors"][0],
+                "text": e.get("headline") or "",
+                "detail": str(e.get("event_type") or "").replace("_", " ")
+                + (" · LLM only, unverified" if e.get("reader") == "llm" else ""),
+                **({"link": e["link"]} if e.get("link") else {}),
+            }
+        )
+
+    seen_policy = _headlines(prior.get("policy_impacts"))
+    for p in data.get("policy_impacts") or []:
+        if str(p.get("headline") or "").strip().lower() in seen_policy:
+            continue
+        effects = ", ".join(
+            f"{e.get('sector', '').replace('_', ' ')} {e.get('direction')}"
+            for e in p.get("effects") or []
+        )
+        items["policy"].append(
+            {
+                "text": p.get("headline") or "",
+                "detail": " · ".join(
+                    x
+                    for x in (
+                        effects,
+                        f"{p['state']} government" if p.get("state") else "central",
+                        str(p.get("status") or "").replace("_", " "),
+                    )
+                    if x
+                ),
+                **({"link": p["link"]} if p.get("link") else {}),
+            }
+        )
+
+    for w in data.get("early_warnings") or []:
+        if isinstance(w, dict) and w.get("status") in ("new", "escalated"):
+            items["warnings"].append(
+                {
+                    "ticker": w.get("ticker") or "",
+                    "text": w.get("signal") or w.get("category") or "",
+                    "detail": f"{w.get('severity', '')} {w.get('direction', '')} · {w['status']}".strip(),
+                }
+            )
+
+    if first_run:
+        # Without a previous run everything is "new", which says nothing.
+        items = {k: [] for k in items}
+    counts = {k: len(v) for k, v in items.items()}
+    return {
+        "first_run": first_run,
+        "counts": counts,
+        "items": {k: v[:MAX_PER_KIND] for k, v in items.items()},
+    }

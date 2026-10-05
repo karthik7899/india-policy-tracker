@@ -456,3 +456,15 @@ td .disclose-summary { padding: 2px 0; }
 @media (max-width: 640px) {
   .company-cols { grid-template-columns: 1fr; }
 }
+
+/* Since-the-last-run panel: one column per kind of change. */
+.changes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 16px;
+}
+.changes-grid h4 {
+  margin: 0 0 4px; font-size: 11px; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.changes-grid .evidence li { font-size: 13px; overflow-wrap: anywhere; }
