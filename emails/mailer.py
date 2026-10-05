@@ -688,6 +688,33 @@ def _build_track_record_html(record, caps=_CAPS_NORMAL):
         """
 
 
+def _build_sector_fit_html(fit):
+    """Holdings whose own industry does not fit their sector. A note, not an
+    action: moving a holding is the owner's call (analysis/sector_fit.py)."""
+    misfits = (fit or {}).get("misfits") or []
+    if not misfits:
+        return ""
+    rows = "".join(
+        f"<li><span class='stock-ticker'>{m['ticker']}</span> in "
+        f"{_sector_label(m['sector'])}: {m['industry']}"
+        + (
+            " &mdash; fits " + ", ".join(_sector_label(x) for x in m["suggested"])
+            if m.get("suggested")
+            else " &mdash; fits none of our sectors"
+        )
+        + "</li>"
+        for m in misfits
+    )
+    return f"""
+        <h4 style="margin: 15px 0 6px 0; color: #e2e8f0; font-size: 13px; text-transform: uppercase;">Sector Placement</h4>
+        <p style="font-size: 11px; color: #94a3b8; margin: 0 0 6px 0;">
+            Holdings whose own industry (Yahoo Finance) does not fit the sector they sit in.
+            Not moved automatically &mdash; their sector index, policy tags and peers follow the sector.
+        </p>
+        <ul style="font-size: 12px; line-height: 1.5; padding-left: 18px; color: #cbd5e1;">{rows}</ul>
+        """
+
+
 def _build_thesis_check_html(check, caps=_CAPS_NORMAL):
     """Headlines that contradict a holding's written thesis (LLM reading).
 
@@ -818,6 +845,7 @@ def _build_research_engine_html(brief_data, caps=_CAPS_NORMAL):
             """
         sections += thesis_block
     sections += _build_thesis_check_html(brief_data.get("thesis_check"), caps)
+    sections += _build_sector_fit_html(brief_data.get("sector_fit"))
 
     # --- Estimate revision momentum -----------------------------------
     if revisions:
