@@ -171,6 +171,17 @@ def test_the_email_shows_a_capped_upside_as_a_bound():
         "upside_capped": "floor",
         "estimate_method": "Fundamental Estimate",
     }
-    news = [{"title": "TVS Supply wins contract", "link": "https://n.test/t", "source": "T", "date": "2026-10-01"}]
-    html = _render_email({"logistics_heavy_capital": news}, {"logistics_heavy_capital": [stock]}, _CAPS_NORMAL)
+    news = [
+        {
+            "title": "TVS Supply wins contract",
+            "link": "https://n.test/t",
+            "source": "T",
+            "date": "2026-10-01",
+        }
+    ]
+    html = _render_email(
+        {"logistics_heavy_capital": news},
+        {"logistics_heavy_capital": [stock]},
+        _CAPS_NORMAL,
+    )
     assert "&le; -50.0% (capped)" in html
