@@ -64,6 +64,7 @@ _PROCEDURAL = re.compile(
     r"(?:agm|egm)\s+notice|annual\s+report|book\s+closure|record\s+date|"
     r"credit\s+rating|loss\s+of\s+share\s+certificates?|duplicate\s+share|"
     r"compliance\s+certificate|regulation\s+74\s*\(5\)|"
+    r"certificate\s+under\s+(?:sebi|regulation)|depositories\s+and\s+participants|"
     r"shareholders?\s+meeting|voting\s+results?|scrutini[sz]er|"
     r"intimation\s+of\s+board\s+meeting|board\s+meeting\s+intimation|"
     r"schedules?\s+board\s+meeting|closure\s+of\s+trading|"
