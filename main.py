@@ -477,6 +477,28 @@ async def run_pipeline():
     # Thesis check: does any headline about a holding contradict the words of
     # its thesis? An LLM reading, shown beside the health status as a prompt
     # to review — it changes no status, score or warning.
+    # Sector placement: holdings whose own industry does not fit the sector
+    # they sit in. Reported, never moved — that is the owner's call.
+    from analysis.sector_fit import audit_watchlist
+
+    data["sector_fit"] = audit_watchlist(watchlist)
+    fit = data["sector_fit"]
+    log.info(
+        f"Sector fit: {fit['checked']} holding(s) checked, "
+        f"{len(fit['misfits'])} misfiled"
+        + (
+            " — "
+            + "; ".join(
+                f"{m['ticker']} ({m['industry']}) in {m['sector']}"
+                + (f", fits {'/'.join(m['suggested'])}" if m["suggested"] else "")
+                for m in fit["misfits"]
+            )
+            if fit["misfits"]
+            else ""
+        )
+        + f"; {len(fit['unverified'])} without an industry on record."
+    )
+
     from analysis.thesis_check import annotate_health, run_thesis_check
 
     data["thesis_check"] = run_thesis_check(watchlist, coverage)

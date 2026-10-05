@@ -47,8 +47,24 @@ def fetch_stock_data(yahoo_ticker, timeout=10, fetch_price=True):
         _parse_targets(data, info)
         _parse_recommendations(data, info)
         _parse_growth_metrics(data, info)
+        _parse_profile(data, info)
 
     return data
+
+
+def _parse_profile(data, info):
+    """What the company does, for analysis/sector_fit.py: Yahoo's industry
+    and the keyword groups its business summary carries. The summary itself
+    is not kept — a paragraph per holding would bloat watchlist.json for the
+    sake of a handful of words."""
+    from analysis.sector_fit import keywords
+
+    industry = info.get("industry")
+    if industry:
+        data["yahoo_industry"] = str(industry)
+    summary = info.get("longBusinessSummary")
+    if summary:
+        data["business_keywords"] = keywords(summary)
 
 
 def _parse_targets(data, info):

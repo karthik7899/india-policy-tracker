@@ -211,8 +211,14 @@ def _probe_candidate(name, preresolved, isin_master, watchlisted=()):
             target_price = live_price * 1.25
 
         rev_growth_raw = info.get("revenueGrowth")
+        from analysis.sector_fit import keywords
+
         probe.update(
             {
+                # What the company does, for the sector-fit check in the
+                # decision pass (analysis/sector_fit.py).
+                "industry": info.get("industry"),
+                "keywords": keywords(info.get("longBusinessSummary")),
                 "live_price": live_price,
                 "target_price": target_price,
                 "growth_pct_val": ((target_price - live_price) / live_price) * 100,
@@ -478,6 +484,35 @@ def auto_curate_watchlist(brief_data, watchlist, screened_candidates=None):
                     )
                     continue
 
+                # Sector fit: the candidate inherited the sector of the feed
+                # or peer table that surfaced it, which says nothing about
+                # what it does — Godrej Properties reached Data Center
+                # Support as a real-estate peer of Anant Raj. Keep it where
+                # it fits, move it to the one sector it does fit, or refuse.
+                from analysis.sector_fit import place
+
+                found_in = sector
+                placed, fit_reason = place(
+                    sector, probe.get("industry"), probe.get("keywords"), watchlist
+                )
+                if placed is None:
+                    log.info(f"Candidate {ticker} refused: {fit_reason}.")
+                    structured_emerging.setdefault(found_in, []).append(
+                        {
+                            "name": full_name or name,
+                            "ticker": ticker,
+                            "status": "Sector Mismatch",
+                            "reason": f"Not added: {fit_reason}.",
+                        }
+                    )
+                    continue
+                if placed != found_in:
+                    log.info(
+                        f"Candidate {ticker} found via {found_in} placed in "
+                        f"{placed}: {fit_reason}."
+                    )
+                    sector = placed
+
                 related_headline = f"Policy tailwinds in the {sector} segment."
                 name_lower = name.lower()
                 for item in brief_data.get(sector, []):
@@ -494,6 +529,16 @@ def auto_curate_watchlist(brief_data, watchlist, screened_candidates=None):
                     "catalyst": f"Auto-discovered via media radar. Catalyst: {related_headline}",
                     "rating": rating,
                     "revenue_growth": revenue_growth,
+                    **(
+                        {"yahoo_industry": probe["industry"]}
+                        if probe.get("industry")
+                        else {}
+                    ),
+                    **(
+                        {"business_keywords": probe["keywords"]}
+                        if probe.get("keywords")
+                        else {}
+                    ),
                 }
 
                 current_watchlist = watchlist[sector]
