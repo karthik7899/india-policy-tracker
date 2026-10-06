@@ -211,6 +211,44 @@ def test_direct_actor_gets_corporate_move_signal(monkeypatch):
     assert len(moves) == 1 and moves[0]["ticker"] == "SUZLON"
 
 
+def test_a_partner_edge_does_not_echo_the_headline_that_named_the_holding(
+    monkeypatch,
+):
+    """The tie-up headline that proposed an edge names the holding itself.
+
+    Read down the edge it came back as an Ecosystem Signal on top of the
+    holding's own Corporate Move — the first 23 accepted partners turned 18
+    such headlines into duplicate warnings on the day they went in.
+    """
+    import analysis.entity_graph as eg
+    import analysis.event_engine as ee
+
+    graph = {"edges": [{"src": "Vivo", "dst": "DIXON", "type": "partner"}]}
+    monkeypatch.setattr(eg, "load_entity_graph", lambda path=None: graph)
+    event = {
+        "headline": "Government clears Dixon-Vivo joint venture",
+        "event_type": "tie_up",
+        "domains": ["manufacturing_electronics"],
+        "actors": ["DIXON"],
+        "direction": "opportunity",
+        "date": _TODAY,
+    }
+    signals = ee.market_event_signals({"market_events": [event]}, _WATCHLIST)
+    assert [s["category"] for s in signals] == ["Corporate Move"]
+
+    # News about the partner alone still reaches the holding through it.
+    event = {
+        **event,
+        "headline": "Vivo faces export curbs on smartphone parts",
+        "event_type": "supply_disruption",
+        "actors": [],
+        "direction": "risk",
+    }
+    signals = ee.market_event_signals({"market_events": [event]}, _WATCHLIST)
+    eco = [s for s in signals if s["category"] == "Ecosystem Signal"]
+    assert [s["ticker"] for s in eco] == ["DIXON"]
+
+
 def test_signals_never_raise():
     assert market_event_signals({}, _WATCHLIST) == []
     assert market_event_signals(None, None) == []

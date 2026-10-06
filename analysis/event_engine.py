@@ -845,9 +845,16 @@ def market_event_signals(
                 )
 
             # Tier 2: anchor edges (typed relationships from the graph).
+            # Never back to a holding the headline already names: direct
+            # attribution above has that event, and "Syrma and Elemaster open
+            # a plant" read again down the Elemaster → Syrma partner edge
+            # would count it twice. The same rule as read_through's partner
+            # exposure.
+            named_here = set(event.get("actors") or [])
             for edge in match_anchor_edges(headline, graph):
                 dst = edge.get("dst")
                 dst_tickers = [dst] if dst in names else by_sector.get(dst, [])
+                dst_tickers = [t for t in dst_tickers if t not in named_here]
                 for ticker in dst_tickers[:_MAX_SIGNALS_PER_SECTOR]:
                     alerts.append(
                         {
