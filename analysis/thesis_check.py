@@ -54,7 +54,12 @@ CACHE_PATH = os.path.join(ROOT, "thesis_cache.json")
 #    ("about"). The Companies view showed Siemens AG news under Siemens Ltd,
 #    a TV character named Daryl Dixon under Dixon Technologies and an
 #    Australian Fortis apartment project under Fortis Healthcare.
-PROMPT_VERSION = "4"
+# 5: says every holding is listed in India and that a global parent's own
+#    news is not its subsidiary's. Version 4 caught the TV character and the
+#    Australian Fortis but read all 11 Siemens AG headlines (InnoTrans,
+#    FuelCell Energy, Samsung Foundry) as Siemens Ltd's: told to use no
+#    outside knowledge, it had nothing to tell the two apart.
+PROMPT_VERSION = "5"
 
 STANCES = ("contradicts", "supports", "unrelated")
 
@@ -94,6 +99,14 @@ about   — true if the headline is about this listed company (the one named in
           that shares the name: a foreign parent or namesake, a politician, a
           fictional character. A headline about the company among others is
           true. A false "about" always goes with "unrelated".
+          Every HOLDING is a company listed in India. Some are the Indian arm
+          of a global group that shares their name — Siemens Ltd (Siemens
+          AG), Schneider Electric Infrastructure (Schneider Electric), Cummins
+          India (Cummins Inc.), Oracle Financial Services (Oracle), Bata
+          India (Bata). The group's own deals, acquisitions, products and
+          operations abroad are about the parent: false. True only when the
+          headline names the Indian company itself or an Indian order, plant,
+          customer or market.
 claim   — the words of the THESIS the headline bears on, copied EXACTLY and
           contiguously. "" when unrelated.
 because — the words of the HEADLINE that bear on the claim, copied EXACTLY and
@@ -106,8 +119,9 @@ market position, orders or policy. The claim is the specific phrase the
 headline bears on; quote the whole thesis only when it makes a single claim.
 
 A falling share price is not evidence against a thesis, and a rising one is
-not evidence for it. Judge only from the thesis and the headline; do not use
-outside knowledge."""
+not evidence for it. Judge the stance only from the thesis and the headline;
+do not use outside knowledge. General knowledge of who a company is may be
+used for "about", and for nothing else."""
 
 _SCHEMA = {
     "type": "ARRAY",
@@ -254,7 +268,9 @@ def _prompt(batch: List[Tuple[int, Dict[str, Any]]]) -> str:
     for i, pair in batch:
         if pair["ticker"] != current:
             current = pair["ticker"]
-            lines.append(f"\nHOLDING: {pair['name']} ({pair['ticker']})")
+            lines.append(
+                f"\nHOLDING: {pair['name']} ({pair['ticker']}, listed in India)"
+            )
             lines.append(f"THESIS: {pair['thesis']}")
         lines.append(f"  {i}: {pair['headline']}")
     return (
