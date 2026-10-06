@@ -34,7 +34,7 @@ import json
 import os
 import re
 import time
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 from logger import log
 
@@ -437,6 +437,37 @@ def annotate_health(health: Dict[str, Any], result: Dict[str, Any]) -> int:
             target["challenges"] = len(row["challenged"])
             n += 1
     return n
+
+
+def namesake_headlines(
+    check: Optional[Dict[str, Any]] = None, cache_path: str = CACHE_PATH
+) -> Set[Tuple[str, str]]:
+    """``(TICKER, headline)`` pairs read as being about somebody else.
+
+    "Siemens and FuelCell Energy Partner on Scalable Fuel Cells" is Siemens
+    AG's news, not Siemens Ltd's, and every rule in the pipeline attributes it
+    to SIEMENS because the name matches. This check is the one place that
+    reads it as a namesake. Collected from this run's result when given, and
+    from every reading still in the cache, so a step that runs before today's
+    check (the partner proposals) still knows what earlier runs found.
+
+    Headlines are lower-cased and single-spaced; the cache keeps the first
+    200 characters of each, so compare by prefix.
+    """
+    from analysis.llm_reader import load_cache
+
+    def key(headline: str) -> str:
+        return re.sub(r"\s+", " ", str(headline or "").strip().lower())
+
+    pairs: Set[Tuple[str, str]] = set()
+    for entry in (load_cache(cache_path) or {}).values():
+        if (entry.get("reading") or {}).get("about") is False:
+            if entry.get("ticker") and entry.get("headline"):
+                pairs.add((str(entry["ticker"]).upper(), key(entry["headline"])))
+    for ticker, row in ((check or {}).get("holdings") or {}).items():
+        for headline in (row or {}).get("not_about") or []:
+            pairs.add((str(ticker).upper(), key(headline)))
+    return pairs
 
 
 def run_thesis_check(

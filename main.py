@@ -377,7 +377,13 @@ async def run_pipeline():
         harvest_partner_edges(data["corporate_agreements"], watchlist, graph)
         # Tie-ups with someone we do NOT hold: queued for a person to review,
         # never written straight into the graph. See the function for why.
-        record_partner_proposals(data["market_events"], graph)
+        # Headlines earlier thesis checks read as another company's news are
+        # left out; today's are taken back once today's check has run.
+        from analysis.thesis_check import namesake_headlines
+
+        record_partner_proposals(
+            data["market_events"], graph, namesakes=namesake_headlines()
+        )
 
         # Second-order implications of events that name nobody we hold. Kept
         # deliberately downstream of attribution and deliberately OUT of
@@ -514,10 +520,16 @@ async def run_pipeline():
         + f"; {len(fit['unverified'])} without an industry on record."
     )
 
-    from analysis.thesis_check import annotate_health, run_thesis_check
+    from analysis.entity_graph import drop_namesake_proposals
+    from analysis.thesis_check import (
+        annotate_health,
+        namesake_headlines,
+        run_thesis_check,
+    )
 
     data["thesis_check"] = run_thesis_check(watchlist, coverage)
     annotate_health(data["thesis_health"], data["thesis_check"])
+    drop_namesake_proposals(namesake_headlines(data["thesis_check"]))
 
     # One card per holding — its recent activity and the policies touching
     # its sector — for the dashboard's Companies view.

@@ -19,7 +19,8 @@ consumer to Tier-1 vocabulary routing.
 
 import datetime
 import os
-from typing import Any, Dict, List
+import re
+from typing import Any, Dict, Iterable, List, Tuple
 
 from analysis.parsing import title_matches_company
 from logger import log
@@ -321,11 +322,85 @@ def apply_accepted_proposals(
     return added
 
 
+def _namesake_index(namesakes: Iterable[Tuple[str, str]]) -> Dict[str, List[str]]:
+    index: Dict[str, List[str]] = {}
+    for ticker, headline in namesakes or ():
+        index.setdefault(str(ticker).upper(), []).append(headline)
+    return index
+
+
+def _is_namesake(index: Dict[str, List[str]], holding: str, headline: str) -> bool:
+    """Prefix either way: the thesis cache keeps a headline's first 200
+    characters, the corpus keeps it whole."""
+    h = re.sub(r"\s+", " ", str(headline or "").strip().lower())
+    return bool(h) and any(
+        h.startswith(n) or n.startswith(h) for n in index.get(str(holding).upper(), ())
+    )
+
+
+def _drop_namesake_evidence(proposals, index) -> int:
+    """Strip namesake headlines from pending proposals; drop any left empty.
+
+    Pending only: an accepted or rejected pair is a reviewer's decision, and
+    its evidence is the record of what they decided on.
+    """
+    dropped = 0
+    for p in list(proposals):
+        if p.get("status") != "pending" or not p.get("evidence"):
+            continue
+        kept = [
+            e
+            for e in p["evidence"]
+            if not _is_namesake(index, p.get("holding"), e.get("headline"))
+        ]
+        if len(kept) == len(p["evidence"]):
+            continue
+        if kept:
+            p["evidence"] = kept
+        else:
+            proposals.remove(p)
+            dropped += 1
+    return dropped
+
+
+def drop_namesake_proposals(
+    namesakes: Iterable[Tuple[str, str]], path: str = PROPOSALS_PATH
+) -> int:
+    """After the thesis check: take back what it read as somebody else's news.
+
+    Partner proposals are recorded before the thesis check runs, so a
+    namesake headline first seen today has already been queued once. This
+    removes it again before the queue is committed. From the next run on,
+    record_partner_proposals knows it from the cache and never queues it.
+    Never raises.
+    """
+    try:
+        index = _namesake_index(namesakes)
+        if not index:
+            return 0
+        proposals = load_proposals(path)
+        if not proposals:
+            return 0
+        before = [dict(p, evidence=list(p.get("evidence") or [])) for p in proposals]
+        dropped = _drop_namesake_evidence(proposals, index)
+        if proposals != before:
+            _save_proposals(proposals, path)
+            log.info(
+                f"Partner proposals: {dropped} dropped as another company's news "
+                "(thesis check, LLM reading)."
+            )
+        return dropped
+    except Exception as e:  # noqa: BLE001 - graph growth must never break a run
+        log.warning(f"Dropping namesake proposals failed safely: {e!r}")
+        return 0
+
+
 def record_partner_proposals(
     events: List[Dict[str, Any]],
     graph: Dict[str, Any],
     path: str = PROPOSALS_PATH,
     today: str = "",
+    namesakes: Iterable[Tuple[str, str]] = (),
 ) -> Dict[str, int]:
     """Propose a partner edge for every completed tie-up with a named counterparty.
 
@@ -340,14 +415,31 @@ def record_partner_proposals(
     Only ``completed`` tie-ups. An MoU is announced, not done, and most never
     become anything a share price notices.
 
+    ``namesakes`` are (TICKER, headline) pairs the thesis check read as being
+    about somebody else (thesis_check.namesake_headlines): Siemens AG's deals
+    are not Siemens Ltd's partners. They are never queued, and pending
+    proposals resting on them are taken back.
+
     Returns counts for the log line and tests. Never raises.
     """
-    counts = {"new": 0, "seen_again": 0, "pending": 0, "dropped_stale": 0}
+    counts = {
+        "new": 0,
+        "seen_again": 0,
+        "pending": 0,
+        "dropped_stale": 0,
+        "dropped_namesake": 0,
+    }
     try:
         proposals = load_proposals(path)
         if proposals is None:
             return counts  # unreadable — never overwrite a reviewer's file
         today = today or datetime.date.today().isoformat()
+        elsewhere = _namesake_index(namesakes)
+        evidence_before = sum(len(p.get("evidence") or []) for p in proposals)
+        counts["dropped_namesake"] = _drop_namesake_evidence(proposals, elsewhere)
+        trimmed = (
+            sum(len(p.get("evidence") or []) for p in proposals) != evidence_before
+        )
         by_key = {
             _proposal_key(p.get("holding"), p.get("proposed_as")): p for p in proposals
         }
@@ -362,6 +454,8 @@ def record_partner_proposals(
                 continue
             headline = str(event.get("headline") or "")
             for holding in event.get("actors") or []:
+                if _is_namesake(elsewhere, holding, headline):
+                    continue  # somebody else's deal under our name
                 for name in event.get("counterparties") or []:
                     edge = {"src": name, "dst": holding, "type": "partner"}
                     if _edge_key(edge) in known_edges:
@@ -432,11 +526,12 @@ def record_partner_proposals(
             kept.append(p)
         counts["pending"] = sum(1 for p in kept if p.get("status") == "pending")
 
-        if counts["new"] or counts["seen_again"] or counts["dropped_stale"]:
+        if counts["new"] or counts["seen_again"] or counts["dropped_stale"] or trimmed:
             _save_proposals(kept, path)
         log.info(
             f"Partner proposals: {counts['new']} new, {counts['seen_again']} "
-            f"re-sighted, {counts['dropped_stale']} aged out; "
+            f"re-sighted, {counts['dropped_stale']} aged out, "
+            f"{counts['dropped_namesake']} dropped as another company's news; "
             f"{counts['pending']} awaiting review."
         )
     except Exception as e:  # noqa: BLE001 - graph growth must never break a run
