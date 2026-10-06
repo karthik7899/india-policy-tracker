@@ -119,6 +119,7 @@ def _policies(
                 "names_company": names,
                 **({"state": imp["state"]} if imp.get("state") else {}),
                 **({"link": imp["link"]} if imp.get("link") else {}),
+                **({"outlets": imp["outlets"]} if imp.get("outlets") else {}),
             }
         )
     # The company named outright first, then newest (two stable sorts).
@@ -153,6 +154,21 @@ def build_company_digest(
             ticker = str(stock["ticker"]).upper()
             name = stock.get("name") or ticker
             activity = _activity((coverage or {}).get(ticker), cutoff)
+            # Headlines the thesis check read as being about a namesake —
+            # a foreign parent, a person — are kept but set apart, never
+            # shown as the company's own news.
+            elsewhere = {
+                h.strip().lower()
+                for h in (checks.get(ticker) or {}).get("not_about") or []
+            }
+            namesakes = [
+                a
+                for a in activity
+                if any(
+                    a["text"].lower() in h or h in a["text"].lower() for h in elsewhere
+                )
+            ]
+            activity = [a for a in activity if a not in namesakes]
             policies = _policies(ticker, name, sector, impacts, cutoff)
             thesis = health.get(ticker) or health.get(stock["ticker"]) or {}
             check = checks.get(ticker) or {}
@@ -171,6 +187,7 @@ def build_company_digest(
                     "activity_count": len(activity),
                     "last_activity": activity[0]["date"] if activity else None,
                     "activity": activity[:MAX_ACTIVITY],
+                    **({"namesakes": namesakes[:4]} if namesakes else {}),
                     "policy_count": len(policies),
                     "policies": policies[:MAX_POLICIES],
                     **(

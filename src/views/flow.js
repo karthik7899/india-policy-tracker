@@ -102,6 +102,7 @@ export function policyDetail(item, labels = {}) {
     effects,
     String(item.status || "").replace(/_/g, " "),
     item.state ? `${item.state} government` : "",
+    item.outlets > 1 ? `${item.outlets} outlets` : "",
     "LLM reading",
   ]
     .filter(Boolean)

@@ -158,6 +158,11 @@ export async function render(container, { payload, route }) {
         // Headlines the LLM thesis check read as contradicting the written
         // thesis. Beside the status, never part of it: a prompt to open the
         // drawer and judge the quotes, not a grade.
+        // Kept beside the grade, never part of it (analysis/thesis.py):
+        // ownership flows, valuation, and seasonal quarter-on-quarter falls.
+        r.context?.length
+          ? el("span", { class: "evidence-meta" }, `Not graded: ${r.context.join("; ")}`)
+          : null,
         r.challenges
           ? el(
               "span",

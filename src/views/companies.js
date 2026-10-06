@@ -60,6 +60,7 @@ export function policyMeta(p) {
     p.names_company ? "names this company" : "",
     p.state ? `${p.state} government` : "central",
     String(p.status || "").replace(/_/g, " "),
+    p.outlets > 1 ? `${p.outlets} outlets` : "",
     shortDate(p.date),
     "LLM reading",
   ]
@@ -124,6 +125,18 @@ function card(c, labels, windowDays) {
               ),
             )
           : el("p", { class: "company-empty" }, `No news attributed to it in ${windowDays} days.`),
+        // Headlines the thesis check read as being about a namesake (a
+        // foreign parent, a person): kept for inspection, not shown as news.
+        c.namesakes?.length
+          ? disclosure(
+              `${c.namesakes.length} set aside \u2014 likely about another company or person (LLM reading)`,
+              el(
+                "ul",
+                { class: "evidence" },
+                c.namesakes.map((a) => el("li", {}, link(a.link, a.text))),
+              ),
+            )
+          : null,
       ),
       el(
         "section",

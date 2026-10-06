@@ -247,3 +247,25 @@ def test_the_email_lists_misfits_only_when_there_are_some():
     assert "fits Clean Energy" in html
     assert _build_sector_fit_html({"misfits": []}) == ""
     assert _build_sector_fit_html(None) == ""
+
+
+def test_a_keyword_counts_only_from_industries_where_it_is_credible():
+    asm = (
+        "Information Technology Services",
+        keywords("semiconductor design and engineering services"),
+    )
+    thermax = (
+        "Conglomerates",
+        keywords("boilers and energy systems serving semiconductor plants"),
+    )
+    assert fits("semiconductors_equipment", *asm) is True
+    assert fits("semiconductors_equipment", *thermax) is False
+    assert fits("industrial_manufacturing", *thermax) is True
+
+
+def test_a_client_industry_in_a_summary_does_not_place_a_company():
+    capillary = (
+        "Software - Application",
+        keywords("loyalty software for retail and footwear brands"),
+    )
+    assert fits("sports_athleisure", *capillary) is False

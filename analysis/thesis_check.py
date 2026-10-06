@@ -50,7 +50,11 @@ CACHE_PATH = os.path.join(ROOT, "thesis_cache.json")
 #    claim covering over 80% of the thesis; that refused 9 correct answers
 #    on the labels (Adani Green's "30 GW Khavda park" is one claim) while
 #    the prompt change alone had already cleared both false alarms.
-PROMPT_VERSION = "3"
+# 4: also answers whether the headline is about this company at all
+#    ("about"). The Companies view showed Siemens AG news under Siemens Ltd,
+#    a TV character named Daryl Dixon under Dixon Technologies and an
+#    Australian Fortis apartment project under Fortis Healthcare.
+PROMPT_VERSION = "4"
 
 STANCES = ("contradicts", "supports", "unrelated")
 
@@ -85,6 +89,11 @@ stance — exactly one of:
                targets and tips, stock lists, results that do not touch a
                claim in the thesis, routine filings, and headlines about a
                different company or person with a similar name.
+about   — true if the headline is about this listed company (the one named in
+          HOLDING), false if it is about a different company, person or thing
+          that shares the name: a foreign parent or namesake, a politician, a
+          fictional character. A headline about the company among others is
+          true. A false "about" always goes with "unrelated".
 claim   — the words of the THESIS the headline bears on, copied EXACTLY and
           contiguously. "" when unrelated.
 because — the words of the HEADLINE that bear on the claim, copied EXACTLY and
@@ -109,8 +118,9 @@ _SCHEMA = {
             "stance": {"type": "STRING", "enum": list(STANCES)},
             "claim": {"type": "STRING"},
             "because": {"type": "STRING"},
+            "about": {"type": "BOOLEAN"},
         },
-        "required": ["id", "stance", "claim", "because"],
+        "required": ["id", "stance", "claim", "because", "about"],
     },
 }
 
@@ -153,6 +163,10 @@ def ground(headline: str, thesis: str, raw: Dict[str, Any]) -> Dict[str, Any]:
     stance = raw.get("stance")
     if stance not in STANCES:
         stance = "unrelated"
+    # A headline about somebody else cannot bear on this thesis. Recorded
+    # only when the model says so; absent means "about this company".
+    if raw.get("about") is False:
+        return {"stance": "unrelated", "claim": "", "because": "", "about": False}
     claim = re.sub(r"\s+", " ", str(raw.get("claim") or "")).strip(" .,;:")
     because = re.sub(r"\s+", " ", str(raw.get("because") or "")).strip(" .,;:")
     out: Dict[str, Any] = {"stance": stance, "claim": "", "because": ""}
@@ -384,6 +398,9 @@ def summarise(
             row["unread"] += 1
             continue
         row["read"] += 1
+        if reading.get("about") is False:
+            row.setdefault("not_about", []).append(pair["headline"])
+            continue
         if reading["stance"] == "unrelated":
             continue
         item = {

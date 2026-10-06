@@ -298,3 +298,85 @@ def test_the_policy_section_escapes_once_and_names_the_state():
     assert "M&amp;M plant" in html and "&amp;amp;" not in html
     assert ">Gujarat</span>" in html
     assert "Aerospace &amp; Defence" in html  # the config label, escaped here
+
+
+def test_one_measure_from_several_outlets_is_one_row():
+    from analysis.policy_impact import merge_repeat_policies, sector_policy_balance
+
+    eff = [{"sector": "clean_energy", "direction": "tailwind"}]
+    rows = [
+        {
+            "headline": "Gujarat offers up to 50% tax concession for scrapping old vehicles",
+            "date": "2026-10-01",
+            "status": "approved",
+            "effects": eff,
+            "link": "https://a",
+        },
+        {
+            "headline": "Gujarat govt announces up to 50% motor vehicle tax concession for scrapping old vehicles",
+            "date": "2026-10-01",
+            "status": "approved",
+            "effects": eff,
+            "state": "Gujarat",
+            "link": "https://b",
+        },
+        # Same figure and sector, different words: the AP highway pair.
+        {
+            "headline": "Chilakapalem-Rayagada highway set for Rs 863-crore overhaul under PPP",
+            "date": "2026-10-03",
+            "status": "approved",
+            "effects": eff,
+        },
+        {
+            "headline": "Andhra Pradesh Clears Rs 863-Crore PPP Revamp Of 131-Km Highway",
+            "date": "2026-10-03",
+            "status": "approved",
+            "effects": eff,
+            "state": "Andhra Pradesh",
+        },
+        # Shares only a year with the next: two measures.
+        {
+            "headline": "Karnataka textile policy 2026-31 notified",
+            "date": "2026-10-02",
+            "status": "in_force",
+            "effects": eff,
+            "state": "Karnataka",
+        },
+        {
+            "headline": "Budget 2026: solar subsidy raised",
+            "date": "2026-10-02",
+            "status": "approved",
+            "effects": eff,
+        },
+    ]
+    merged = merge_repeat_policies(rows)
+    assert len(merged) == 4
+    gujarat = next(r for r in merged if "scrapping" in r["headline"])
+    assert gujarat["outlets"] == 2 and gujarat["state"] == "Gujarat"
+    assert len(gujarat["also"]) == 1
+    highway = next(r for r in merged if "863" in r["headline"])
+    assert highway["outlets"] == 2 and highway["state"] == "Andhra Pradesh"
+    # The tally counts measures, not headlines.
+    balance = sector_policy_balance(merged, today="2026-10-05")
+    assert balance["clean_energy"]["tailwind"] == 4.0
+
+
+def test_different_states_are_never_one_measure():
+    from analysis.policy_impact import merge_repeat_policies
+
+    eff = [{"sector": "clean_energy", "direction": "tailwind"}]
+    rows = [
+        {
+            "headline": "Gujarat government notifies rooftop solar subsidy",
+            "date": "2026-10-01",
+            "effects": eff,
+            "state": "Gujarat",
+        },
+        {
+            "headline": "Rajasthan government notifies rooftop solar subsidy",
+            "date": "2026-10-01",
+            "effects": eff,
+            "state": "Rajasthan",
+        },
+    ]
+    assert len(merge_repeat_policies(rows)) == 2
