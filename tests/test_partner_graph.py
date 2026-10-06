@@ -178,6 +178,91 @@ def test_no_holding_means_no_counterparty():
     )
 
 
+# The first review of the queue rejected these. Each test is the headline that
+# put the wrong name in front of the reviewer, and the right reading of it.
+
+LTTS = ("LTTS", "L&T Technology Services")
+BEL = ("BEL", "Bharat Electronics")
+ARVIND = ("ARVIND", "Arvind Ltd")
+
+
+def test_a_place_after_a_comma_is_not_a_second_party():
+    """ "IIEST, Shibpur" is one institute and where it is. With none of ours in
+    the list, a comma list is a name and its qualifier, not two parties."""
+    assert extract_counterparties(
+        "Kaga Electronics, Tokyo partners with Syrma SGS to make PCBs", [SYRMA]
+    ) == ["Kaga Electronics"]
+    # The live headline: and an institute is not a commercial partner at all.
+    assert (
+        extract_counterparties(
+            "IIEST, Shibpur partners with TCS to launch state-of-the-art centre "
+            "of excellence in AI",
+            [TCS],
+        )
+        == []
+    )
+    # A comma list that includes ours is still a list of parties.
+    assert extract_counterparties(
+        "RITES, CONCOR sign MoU for logistics infrastructure consultancy",
+        [("CONCOR", "Container Corporation of India")],
+    ) == ["RITES"]
+
+
+def test_a_nationality_is_a_qualifier_not_the_party():
+    assert extract_counterparties(
+        "BEL approves JV with French company Safran for HAMMER Weapon System", [BEL]
+    ) == ["Safran"]
+
+
+def test_a_piece_of_our_own_name_is_not_a_party():
+    """ "Technology" ends a name run, so "L&T Technology Services" was cut and
+    "L&T" read as somebody else. The second "with" belongs to the purpose
+    clause, not the tie-up."""
+    assert extract_counterparties(
+        "L&T Technology Services Partners with Cognite to Advance Engineering "
+        "Intelligence with Industrial AI",
+        [LTTS],
+    ) == ["Cognite"]
+
+
+def test_our_whole_name_keeps_a_list_together():
+    """The same cut made "Kaynes Technology, BOSGAME" unreadable as a list."""
+    for clause in (
+        "Kaynes Technology, BOSGAME Sign MoU To Expand In India",
+        "Kaynes Technology and BOSGAME sign MoU to expand India market presence",
+    ):
+        assert extract_counterparties(clause, [KAYNES]) == ["BOSGAME"]
+
+
+def test_a_name_built_on_ours_is_not_a_party():
+    """Jaguar TCS Racing is the team TCS sponsors."""
+    assert (
+        extract_counterparties(
+            "TCS renews title partnership with Jaguar TCS Racing and expands role "
+            "as official AI partner",
+            [TCS],
+        )
+        == []
+    )
+
+
+def test_only_the_tie_ups_with_names_a_party():
+    assert extract_counterparties(
+        "TCS partners with ABB to modernise plants with Siemens software", [TCS]
+    ) == ["ABB"]
+
+
+def test_a_person_with_a_middle_initial_is_not_a_partner():
+    assert (
+        extract_counterparties(
+            "Arvind Limited Partners with Ashish N Soni for Lakmē Fashion Week "
+            "2026 Showcase",
+            [ARVIND],
+        )
+        == []
+    )
+
+
 # ---------------------------------------------------------------------------
 # 2. the review queue
 # ---------------------------------------------------------------------------
@@ -274,7 +359,13 @@ def test_the_same_pair_in_three_headlines_is_one_proposal_seen_three_times(tmp_p
     counts = record_partner_proposals(
         events, {"edges": []}, path=str(path), today=TODAY
     )
-    assert counts == {"new": 0, "seen_again": 0, "pending": 1, "dropped_stale": 0}
+    assert counts == {
+        "new": 0,
+        "seen_again": 0,
+        "pending": 1,
+        "dropped_stale": 0,
+        "dropped_namesake": 0,
+    }
     assert len(_proposals(path)[0]["evidence"]) == 3
 
 
@@ -599,3 +690,113 @@ def test_the_shorter_name_wins_unless_a_reviewer_chose_one(tmp_path):
         today=TODAY,
     )
     assert _proposals(path)[0]["counterparty"] == "Vivo Communication Technology"
+
+
+# ---------------------------------------------------------------------------
+# 4. somebody else's deal under our name
+# ---------------------------------------------------------------------------
+
+SIEMENS_AG_DEAL = "Siemens and FuelCell Energy Partner on Scalable Fuel Cells"
+
+
+def _namesake(headline, ticker="SIEMENS"):
+    return {(ticker, headline.lower())}
+
+
+def test_a_namesake_headline_is_never_queued(tmp_path):
+    """Siemens AG's partners are not Siemens Ltd's. The thesis check is the
+    one reader that can tell; what it read as another company's news is left
+    out of the queue."""
+    path = tmp_path / "proposals.json"
+    counts = record_partner_proposals(
+        [_tie_up(SIEMENS_AG_DEAL, ["SIEMENS"], ["FuelCell Energy"])],
+        {"edges": []},
+        path=str(path),
+        today=TODAY,
+        namesakes=_namesake(SIEMENS_AG_DEAL),
+    )
+    assert counts["new"] == 0
+    assert not path.exists() or _proposals(path) == []
+
+
+def test_a_cached_headline_cut_at_200_characters_still_matches(tmp_path):
+    path = tmp_path / "proposals.json"
+    record_partner_proposals(
+        [_tie_up(SIEMENS_AG_DEAL, ["SIEMENS"], ["FuelCell Energy"])],
+        {"edges": []},
+        path=str(path),
+        today=TODAY,
+        namesakes=_namesake(SIEMENS_AG_DEAL[:30]),
+    )
+    assert not path.exists() or _proposals(path) == []
+
+
+def test_today_s_namesakes_are_taken_back_after_the_check(tmp_path):
+    """Proposals are recorded before the thesis check runs, so a namesake
+    first seen today is queued once and must come out before the commit.
+    Decided pairs keep their evidence; a pair with other evidence keeps it."""
+    from analysis.entity_graph import drop_namesake_proposals
+
+    path = tmp_path / "proposals.json"
+    record_partner_proposals(
+        [
+            _tie_up(SIEMENS_AG_DEAL, ["SIEMENS"], ["FuelCell Energy"]),
+            _tie_up("Siemens and P&G Scale Industrial AI", ["SIEMENS"], ["P&G"]),
+            _tie_up("Siemens Ltd partners with P&G India", ["SIEMENS"], ["P&G"]),
+            _tie_up("Dixon forms JV with Vivo", ["DIXON"], ["Vivo"]),
+        ],
+        {"edges": []},
+        path=str(path),
+        today=TODAY,
+    )
+    body = json.loads(path.read_text())
+    for p in body["proposals"]:
+        if p["counterparty"] == "Vivo":
+            p["status"] = "accepted"
+    path.write_text(json.dumps(body))
+
+    dropped = drop_namesake_proposals(
+        _namesake(SIEMENS_AG_DEAL)
+        | _namesake("Siemens and P&G Scale Industrial AI")
+        | _namesake("Dixon forms JV with Vivo", "DIXON"),
+        path=str(path),
+    )
+    assert dropped == 1
+    left = {p["counterparty"]: p for p in _proposals(path)}
+    assert set(left) == {"P&G", "Vivo"}
+    assert [e["headline"] for e in left["P&G"]["evidence"]] == [
+        "Siemens Ltd partners with P&G India"
+    ]
+    assert len(left["Vivo"]["evidence"]) == 1  # a decision is left as made
+
+
+def test_namesakes_come_from_the_cache_and_from_today_s_check(tmp_path):
+    from analysis.thesis_check import namesake_headlines
+
+    cache = tmp_path / "thesis_cache.json"
+    cache.write_text(
+        json.dumps(
+            {
+                "prompt_version": "4",
+                "entries": {
+                    "a": {
+                        "v": "4",
+                        "ticker": "SIEMENS",
+                        "headline": SIEMENS_AG_DEAL,
+                        "reading": {"stance": "unrelated", "about": False},
+                    },
+                    "b": {
+                        "v": "4",
+                        "ticker": "SIEMENS",
+                        "headline": "Siemens Ltd bags Indian Railways order",
+                        "reading": {"stance": "supports"},
+                    },
+                },
+            }
+        )
+    )
+    check = {"holdings": {"ARVIND": {"not_about": ["IBM CEO Arvind Krishna  says"]}}}
+    assert namesake_headlines(check, cache_path=str(cache)) == {
+        ("SIEMENS", SIEMENS_AG_DEAL.lower()),
+        ("ARVIND", "ibm ceo arvind krishna says"),
+    }

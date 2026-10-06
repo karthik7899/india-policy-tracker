@@ -27,15 +27,27 @@ so a miss costs one headline's worth of learning while a wrong name costs a
 reviewer's attention — and, if waved through, a plausible-sounding chain that
 is false. So anything that reads as a person, a place, a regulator, an
 advisor or a charity is dropped rather than proposed.
+
+The first review of the queue (36 proposals) found five ways a wrong name
+got through, each guarded below and pinned in tests/test_partner_graph.py:
+
+    "IIEST, Shibpur partners with TCS"         a place read as a second party
+    "JV with French company Safran"            a nationality read as the party
+    "L&T Technology Services Partners with"    a piece of our own name
+    "... to Advance Engineering Intelligence   a "with" that is not the tie-up's
+     with Industrial AI"
+    "TCS renews title partnership with         a name built on our own
+     Jaguar TCS Racing"
 """
 
 import re
-from typing import Iterable, List, Tuple
+from typing import Iterable, List, Set, Tuple
 
 from analysis.parsing import (
     _FUNCTION_WORDS,
     _HEADLINE_VERBS,
     _PERSON_TITLES,
+    _abbreviates,
     title_matches_company,
 )
 
@@ -150,10 +162,43 @@ _NOT_A_COMPANY = {
     "company",
     "firm",
     "group",
+    # Nationalities and the countries headlines most often qualify a partner
+    # with: "JV with French company Safran" is a JV with Safran.
+    "american",
+    "british",
+    "canadian",
+    "dutch",
+    "european",
+    "french",
+    "german",
+    "israeli",
+    "italian",
+    "korean",
+    "russian",
+    "saudi",
+    "singaporean",
+    "spanish",
+    "swedish",
+    "swiss",
+    "taiwanese",
+    "emirati",
+    "uae",
+    "france",
+    "germany",
+    "israel",
+    "korea",
+    "russia",
+    "singapore",
+    "taiwan",
+    "foreign",
+    "global",
+    "south",
+    "north",
 }
 
-# Charities, universities and research institutes. A CSR partnership or an
-# academic MoU is real, and is not a relationship that moves a share price.
+# Charities, universities, research institutes and industry bodies. A CSR
+# partnership, an academic MoU or a council's showcase is real, and is not a
+# relationship that moves a share price.
 _NON_COMMERCIAL = {
     "foundation",
     "trust",
@@ -162,10 +207,70 @@ _NON_COMMERCIAL = {
     "iit",
     "iim",
     "iisc",
+    "iiit",
+    "iiest",
+    "iiser",
+    "nit",
     "college",
     "school",
     "ngo",
+    "council",
+    "association",
+    "federation",
+    "chamber",
 }
+
+# The word right before "with" when its object is the other party: "partners
+# with", "MoU with", "joint venture with", "ties up with", "joins hands with".
+# Any other "with" belongs to something else in the headline — "to Advance
+# Engineering Intelligence with Industrial AI", "take centre stage with" a
+# designer — and its object is not a party to anything.
+_TIE_UP_BEFORE_WITH = {
+    "partner",
+    "partners",
+    "partnered",
+    "partnering",
+    "partnership",
+    "partnerships",
+    "venture",
+    "ventures",
+    "jv",
+    "jvs",
+    "mou",
+    "mous",
+    "pact",
+    "pacts",
+    "agreement",
+    "agreements",
+    "understanding",
+    "alliance",
+    "alliances",
+    "collaboration",
+    "collaborations",
+    "collaborate",
+    "collaborates",
+    "collaborated",
+    "collaborating",
+    "tie-up",
+    "tie-ups",
+    "tieup",
+    "ties",
+    "up",
+    "hands",
+    "forces",
+    "teams",
+    "teamed",
+    "deal",
+    "deals",
+    "association",
+    "consortium",
+    "cooperation",
+    "co-operation",
+}
+
+# Words that may follow our own name and still be our name: "Siemens Ltd",
+# "Cummins India".
+_OWN_NAME_TAIL = {"ltd", "limited", "india", "inc", "corp", "corporation"}
 
 # Legal and geographic suffixes stripped so that "Kaga Electronics India" and
 # "Kaga Electronics" propose one edge rather than two.
@@ -219,12 +324,53 @@ def _is_name_token(token: str) -> bool:
     return token[0].isdigit() and any(c.isalpha() for c in token)
 
 
-def _runs(text: str) -> List[Tuple[int, int, str]]:
+def _own_spans(text: str, holdings) -> Set[Tuple[int, int]]:
+    """Where the clause names the holdings themselves, as character spans.
+
+    Kept whole when the clause is split into names. Our own name can carry a
+    boundary word — "L&T Technology Services", "Kaynes Technology" — and
+    split there it left "L&T" looking like somebody else, and cut "Kaynes
+    Technology, BOSGAME" into pieces that no longer read as a list.
+
+    Each mention is confirmed with title_matches_company on the words around
+    it, so its guards hold here too: the "TCS" in "Jaguar TCS Racing" is the
+    start of a longer name, not TCS, and is left inside that name.
+    """
+    tokens = list(_TOKEN_RE.finditer(text))
+    spans: Set[Tuple[int, int]] = set()
+    for ticker, company in holdings:
+        core = _TOKEN_RE.findall(str(company or "").split("(")[0])
+        own = {_clean(t) for t in _TOKEN_RE.findall(str(company or ""))}
+        starts = {str(ticker or "").lower(), _clean(core[0]) if core else ""} - {""}
+        for i, match in enumerate(tokens):
+            if _clean(match.group(0)) not in starts:
+                continue
+            j = i
+            while j + 1 < len(tokens):
+                nxt = tokens[j + 1]
+                word = _clean(nxt.group(0))
+                if text[tokens[j].end() : nxt.start()].strip() or not (
+                    word in own or word in _OWN_NAME_TAIL or _abbreviates(word, own)
+                ):
+                    break
+                j += 1
+            start, end = match.start(), tokens[j].end()
+            window_start = tokens[i - 1].start() if i else start
+            window_end = tokens[j + 1].end() if j + 1 < len(tokens) else end
+            if title_matches_company(text[window_start:window_end], ticker, company):
+                spans.add((start, end))
+    return spans
+
+
+def _runs(
+    text: str, own: Set[Tuple[int, int]] = frozenset()
+) -> List[Tuple[int, int, str]]:
     """Maximal name runs as ``(start, end, text)``.
 
     A run breaks on any boundary word and on any punctuation between tokens —
     a comma, a hyphen, a colon — because in headline style those separate
-    names rather than join them ("BHEL, Titagarh", "Dixon-Vivo").
+    names rather than join them ("BHEL, Titagarh", "Dixon-Vivo"). A span in
+    ``own`` (see _own_spans) is one run whatever words it contains.
     """
     runs: List[Tuple[int, int, str]] = []
     current: List[re.Match] = []
@@ -240,7 +386,16 @@ def _runs(text: str) -> List[Tuple[int, int, str]]:
         current.clear()
 
     previous_end = None
+    skip_until = -1
     for match in _TOKEN_RE.finditer(text):
+        if match.start() < skip_until:
+            continue
+        span = next((s for s in own if s[0] <= match.start() < s[1]), None)
+        if span:
+            close()
+            runs.append((span[0], span[1], text[span[0] : span[1]]))
+            skip_until = previous_end = span[1]
+            continue
         token = match.group(0)
         gap = text[previous_end : match.start()] if previous_end is not None else ""
         if current and gap.strip():
@@ -277,8 +432,59 @@ def _acceptable(name: str) -> bool:
         return False
     if all(t in _NOT_A_COMPANY for t in lowered):
         return False
+    # "Ashish N Soni": a given name, a middle initial and a surname is a
+    # person. No title precedes a designer's name for the check above to see.
+    words = name.split()
+    if (
+        len(words) == 3
+        and re.fullmatch(r"[A-Za-z]\.?", words[1])
+        and all(w.isalpha() and len(w) > 1 for w in (words[0], words[2]))
+    ):
+        return False
     # One or two letters is an abbreviation too ambiguous to propose.
     return len(name.replace(" ", "")) >= 3
+
+
+def _builds_on_holding(name: str, holdings: Iterable[Tuple[str, str]]) -> bool:
+    """A name with our ticker or our whole name inside it is ours, not a party.
+
+    "Jaguar TCS Racing" is the team TCS sponsors and "Tata Power Renewable
+    Energy" is Tata Power's own arm: either way not somebody else. The ticker
+    must appear as written, in capitals, so a ticker that is also an
+    ordinary word ("CAMPUS") cannot claim "Google Campus".
+    """
+    words = name.split()
+    lowered = [_clean(w) for w in words]
+    for ticker, company in holdings:
+        if ticker and ticker in words:
+            return True
+        core = [_clean(w) for w in str(company or "").split("(")[0].split()]
+        while len(core) > 1 and core[-1] in _SUFFIXES:
+            core.pop()
+        n = len(core)
+        if n and any(lowered[i : i + n] == core for i in range(len(lowered) - n + 1)):
+            return True
+    return False
+
+
+def _past_qualifier(run, runs, text):
+    """The name a nationality introduces: "French company Safran" -> Safran.
+
+    A run made only of qualifier words, followed by at most three lowercase
+    descriptors and then a name, stands for that name. Anything else is
+    returned unchanged for the usual checks to judge.
+    """
+    if not all(_clean(t) in _NOT_A_COMPANY for t in run[2].split()):
+        return run
+    nxt = next((r for r in runs if r[0] > run[1]), None)
+    if not nxt:
+        return run
+    gap = text[run[1] : nxt[0]].split()
+    if len(gap) <= 3 and all(
+        w.isalpha() and w.islower() and w not in _FUNCTION_WORDS for w in gap
+    ):
+        return nxt
+    return run
 
 
 def _is_holding(name: str, holdings: Iterable[Tuple[str, str]]) -> bool:
@@ -313,9 +519,13 @@ def extract_counterparties(
     # Parentheticals are qualifiers here — "Dixon (India)-Vivo (China)" — and
     # left in they would split into names of their own.
     text = re.sub(r"\([^)]*\)", " ", clause)
-    runs = _runs(text)
+    own = _own_spans(text, holdings)
+    runs = _runs(text, own)
     if not runs:
         return []
+
+    def ours(run) -> bool:
+        return (run[0], run[1]) in own or _is_holding(run[2], holdings)
 
     candidates: List[str] = []
 
@@ -349,6 +559,17 @@ def extract_counterparties(
             break
         subject_runs.append((start, end, name))
 
+    # "BHEL, Titagarh to form JV" lists two parties, one of them ours. "IIEST,
+    # Shibpur partners with TCS" names one party and where it is: with none
+    # of ours in the list and only commas between, the first name is the
+    # party and the rest say where it is.
+    if len(subject_runs) > 1 and not any(ours(r) for r in subject_runs):
+        separators = {
+            text[a[1] : b[0]].strip() for a, b in zip(subject_runs, subject_runs[1:])
+        }
+        if separators == {","}:
+            subject_runs = subject_runs[:1]
+
     advisor = False
     if subject_runs:
         next_word = re.match(r"\s*([A-Za-z]+)", after(subject_runs[-1][1]))
@@ -364,6 +585,9 @@ def extract_counterparties(
     # Object of "with", optionally past a few lowercase descriptors: "with
     # trusted engineering partner Coforge" is a partnership with Coforge.
     for match in re.finditer(r"\bwith\b", text, re.IGNORECASE):
+        before = re.findall(r"[A-Za-z][A-Za-z-]*", text[: match.start()])
+        if not before or before[-1].lower() not in _TIE_UP_BEFORE_WITH:
+            continue
         follow = next((r for r in runs if r[0] >= match.end()), None)
         if not follow:
             continue
@@ -378,6 +602,7 @@ def extract_counterparties(
             nxt = next((r for r in runs if r[0] > follow[1]), None)
             if nxt and not text[follow[1] : nxt[0]].strip():
                 follow = nxt
+        follow = _past_qualifier(follow, runs, text)
         candidates.append(follow[2])
         # "NTPC signs MoU with NHPC, PTC and TCS" — a list after "with".
         last_end = follow[1]
@@ -395,11 +620,18 @@ def extract_counterparties(
         if text[e1:s2].strip() == "-" and _TIE_UP_NOUN_RE.match(text[e2:]):
             candidates.extend([n1, n2])
 
+    own_names = {text[s:e] for s, e in own}
     out: List[str] = []
     seen = set()
     for raw in candidates:
         name = _normalise(raw)
-        if not name or not _acceptable(name) or _is_holding(name, holdings):
+        if (
+            not name
+            or raw in own_names
+            or not _acceptable(name)
+            or _is_holding(name, holdings)
+            or _builds_on_holding(name, holdings)
+        ):
             continue
         key = name.lower()
         if key not in seen:
