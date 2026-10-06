@@ -133,6 +133,7 @@ def build_company_digest(
     coverage: Dict[str, List[Dict[str, Any]]],
     brief: Dict[str, Any],
     today: str = "",
+    prices: Dict[str, List[List[Any]]] = None,
 ) -> Dict[str, Any]:
     """``{as_of, window_days, companies: [...]}``, most recently active first."""
     today = today or datetime.date.today().isoformat()
@@ -188,6 +189,13 @@ def build_company_digest(
                     "last_activity": activity[0]["date"] if activity else None,
                     "activity": activity[:MAX_ACTIVITY],
                     **({"namesakes": namesakes[:4]} if namesakes else {}),
+                    # Weekly closes for the card's price line, so a reader can
+                    # see whether the news and the policies moved the stock.
+                    **(
+                        {"prices": (prices or {})[ticker]}
+                        if (prices or {}).get(ticker)
+                        else {}
+                    ),
                     "policy_count": len(policies),
                     "policies": policies[:MAX_POLICIES],
                     **(

@@ -366,5 +366,7 @@ class TestSectorSelection:
         assert "5 sectors" in html
 
         # Nothing dropped: no note, because there is nothing to account for.
-        full = _render_email(data, watchlist, _CAPS_NORMAL)
+        # (Room for all five: full detail now shows four sectors, since
+        # "Your Holdings" carries the company news.)
+        full = _render_email(data, watchlist, {**_CAPS_NORMAL, "sectors": 6})
         assert "most-changed" not in full

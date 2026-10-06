@@ -10,7 +10,7 @@
 // it, which holdings survive a truncation depends on dict insertion order.
 
 import { el, mount, disclosure } from "../core/dom.js";
-import { thesisStatus } from "../core/format.js";
+import { thesisStatus, LLM_MARK } from "../core/format.js";
 import * as filters from "../core/filters.js";
 import * as charts from "../charts/charts.js";
 import { statusColour } from "../charts/palette.js";
@@ -167,7 +167,7 @@ export async function render(container, { payload, route }) {
           ? el(
               "span",
               { class: "evidence-meta" },
-              `${r.challenges} headline(s) challenge the thesis \u00b7 LLM reading`,
+              `${r.challenges} headline(s) challenge the thesis \u00b7 ${LLM_MARK}`,
             )
           : null,
       ],

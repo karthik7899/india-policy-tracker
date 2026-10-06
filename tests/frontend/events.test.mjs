@@ -57,7 +57,7 @@ test("an event with nothing measured renders no detail at all", () => {
 test("an event only the LLM found says so", () => {
   assert.match(
     eventDetail({ event_type: "acquisition", certainty: "completed", reader: "llm" }),
-    /LLM only · unverified/,
+    /✦ only · unverified/,
   );
 });
 

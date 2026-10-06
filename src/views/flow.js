@@ -10,7 +10,7 @@
 // and still answers "what did the exchanges publish" for anyone who wants it.
 
 import { el, mount } from "../core/dom.js";
-import { shortDate, crore, sizeLabel } from "../core/format.js";
+import { shortDate, crore, sizeLabel, LLM_MARK } from "../core/format.js";
 import { href } from "../core/router.js";
 import * as filters from "../core/filters.js";
 import { dataTable, panel } from "./table.js";
@@ -73,7 +73,7 @@ export function eventDetail(item) {
     else if ((item.reports || 1) >= 2) parts.push(`${item.reports} outlets`);
     else parts.push("single report");
   }
-  if (item.reader === "llm") parts.push("LLM only \u00b7 unverified");
+  if (item.reader === "llm") parts.push(`${LLM_MARK} only \u00b7 unverified`);
   else if (item.corroborated === true) parts.push("corroborated");
   else if (item.llm_reading) parts.push(`LLM read it as ${String(item.llm_reading.event_type).replace(/_/g, " ")}`);
   return parts.join(" \u00b7 ");
@@ -103,7 +103,7 @@ export function policyDetail(item, labels = {}) {
     String(item.status || "").replace(/_/g, " "),
     item.state ? `${item.state} government` : "",
     item.outlets > 1 ? `${item.outlets} outlets` : "",
-    "LLM reading",
+    LLM_MARK,
   ]
     .filter(Boolean)
     .join(" \u00b7 ");

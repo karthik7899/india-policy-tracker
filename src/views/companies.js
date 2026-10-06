@@ -12,11 +12,12 @@
 // visitor downloads does not grow.
 
 import { el, mount, disclosure } from "../core/dom.js";
-import { shortDate, thesisStatus } from "../core/format.js";
+import { shortDate, thesisStatus, LLM_MARK } from "../core/format.js";
 import { href } from "../core/router.js";
 import { resolve } from "../core/data.js";
 import * as filters from "../core/filters.js";
 import { panel, tickerLink } from "./table.js";
+import { sparkline, seriesChange } from "../core/sparkline.js";
 import { filterBar, filteredEmpty } from "./filterbar.js";
 
 const SORTS = [
@@ -62,7 +63,7 @@ export function policyMeta(p) {
     String(p.status || "").replace(/_/g, " "),
     p.outlets > 1 ? `${p.outlets} outlets` : "",
     shortDate(p.date),
-    "LLM reading",
+    LLM_MARK,
   ]
     .filter(Boolean)
     .join(" · ");
@@ -83,6 +84,33 @@ function link(url, text) {
   return url ? el("a", { href: url, target: "_blank", rel: "noopener noreferrer" }, text) : text;
 }
 
+/** Markers for the price line: the card's own news and policies. */
+export function markers(c) {
+  return [
+    ...(c.activity || []).map((a) => ({ date: a.date, kind: "activity", label: a.text })),
+    ...(c.policies || [])
+      .filter((p) => p.direction)
+      .map((p) => ({ date: p.date, kind: p.direction, label: p.headline })),
+  ];
+}
+
+function priceLine(c) {
+  const svg = sparkline(c.prices, markers(c));
+  if (!svg) return null;
+  const change = seriesChange(c.prices);
+  return el(
+    "div",
+    { class: "company-spark" },
+    el("div", { html: svg }),
+    el(
+      "span",
+      { class: "evidence-meta" },
+      `${c.prices.length} weeks ${change >= 0 ? "+" : ""}${change.toFixed(1)}% \u00b7 ` +
+        "dots: news (blue), policy \u25b2 green / \u25bc red \u2014 hover for the headline",
+    ),
+  );
+}
+
 function card(c, labels, windowDays) {
   const sectorName = label(c.sector, labels);
   return el(
@@ -99,6 +127,7 @@ function card(c, labels, windowDays) {
         : null,
     ),
     el("p", { class: "company-sector" }, sectorName),
+    priceLine(c),
     el(
       "div",
       { class: "company-cols" },
@@ -129,7 +158,7 @@ function card(c, labels, windowDays) {
         // foreign parent, a person): kept for inspection, not shown as news.
         c.namesakes?.length
           ? disclosure(
-              `${c.namesakes.length} set aside \u2014 likely about another company or person (LLM reading)`,
+              `${c.namesakes.length} set aside \u2014 likely about another company or person ${LLM_MARK}`,
               el(
                 "ul",
                 { class: "evidence" },

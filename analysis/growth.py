@@ -145,6 +145,29 @@ def _liquidity_from_frame(frame):
         return None
 
 
+# Weekly closes kept per holding for the Companies view's price line: the
+# same 1-year weekly download as the 52-week range, so no extra request.
+WEEKLY_POINTS = 26
+
+
+def _weekly_closes(frame):
+    """The last WEEKLY_POINTS weekly closes as ``[[iso_date, close], ...]``."""
+    import math
+
+    try:
+        if frame is None or "Close" not in frame:
+            return []
+        closes = frame["Close"].dropna()
+        out = [
+            [idx.date().isoformat(), round(float(v), 2)]
+            for idx, v in closes.items()
+            if not math.isnan(float(v))
+        ]
+        return out[-WEEKLY_POINTS:]
+    except Exception:  # noqa: BLE001 - a missing line is not a failed run
+        return []
+
+
 def _range_from_frame(frame):
     """52-week high, low, and where the last close sits between them.
 
@@ -182,7 +205,8 @@ def _range_from_frame(frame):
 def update_live_stock_prices(watchlist):
     """Updates watchlist with live prices from Yahoo Finance.
 
-    Returns a freshness dict {"updated": n, "total": m} so downstream
+    Returns a freshness dict {"updated": n, "total": m, "weekly_closes":
+    {ticker: [[date, close], ...]}} so downstream
     consumers (email, dashboard) can surface how much of the watchlist
     actually got live data instead of silently presenting stale prices.
     """
@@ -191,6 +215,7 @@ def update_live_stock_prices(watchlist):
     )
     all_stocks = []
     yahoo_tickers = []
+    weekly = {}
     for sector, stocks in watchlist.items():
         for stock in stocks:
             all_stocks.append(stock)
@@ -262,11 +287,15 @@ def update_live_stock_prices(watchlist):
             ranged = 0
             for stock in all_stocks:
                 symbol = f"{stock['ticker']}.NS"
-                staged = _range_from_frame(
+                frame = (
                     year[symbol]
                     if (len(yahoo_tickers) > 1 and symbol in year)
                     else (year if len(yahoo_tickers) == 1 else None)
                 )
+                staged = _range_from_frame(frame)
+                series = _weekly_closes(frame)
+                if series:
+                    weekly[str(stock["ticker"]).upper()] = series
                 if staged:
                     # Same staging key discipline as turnover: written to the
                     # stock, merged into screener after the Screener rebuild
@@ -296,4 +325,6 @@ def update_live_stock_prices(watchlist):
 
     total = len(all_stocks)
     log.info(f"Live price update complete: {updated}/{total} stocks refreshed.")
-    return {"updated": updated, "total": total}
+    # Weekly closes ride along for the caller to hand to the company digest;
+    # main.py pops them before storing the rest as freshness.
+    return {"updated": updated, "total": total, "weekly_closes": weekly}

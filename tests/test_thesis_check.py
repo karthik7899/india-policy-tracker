@@ -23,7 +23,9 @@ THESIS = (
 )
 LOAN = "Suzlon Energy raises ₹2,500 crore term loan, ending its debt-free status"
 ORDER = "Suzlon bags 400 MW wind EPC order from Tata Power Renewable"
-PRICE = "Suzlon Share Price Slumps Over 12% In One Month"
+# Unrelated to the thesis but substantive. (A share-price headline would be
+# dropped as commentary before the check reads it.)
+PRICE = "Suzlon unveils new purpose-led brand identity"
 PLACEHOLDER = (
     "Auto-discovered via media radar. Catalyst: Policy tailwinds in the "
     "big_cap_industries segment."
