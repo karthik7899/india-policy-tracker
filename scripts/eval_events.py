@@ -306,6 +306,9 @@ def score_thesis(
                 "false_alarms",
                 "real",
                 "downgraded",
+                "ns_want",
+                "ns_hit",
+                "ns_said",
             )
         }
         misses, alarms = [], []
@@ -313,6 +316,12 @@ def score_thesis(
             got = reading["stance"]
             ok = {r["stance"], *(r.get("also_acceptable") or [])}
             counts["real"] += not r.get("synthetic")
+            # Namesakes: headlines about a different company or person.
+            want_ns = r.get("about") is False
+            said_ns = reading.get("about") is False
+            counts["ns_want"] += want_ns
+            counts["ns_said"] += said_ns
+            counts["ns_hit"] += want_ns and said_ns
             counts["downgraded"] += bool(reading.get("downgraded"))
             for stance, p in (("contradicts", "c"), ("supports", "s")):
                 if r["stance"] == stance:
@@ -340,6 +349,8 @@ def score_thesis(
             "support_recall": ratio(counts["s_hit"], counts["s_want"]),
             "support_precision": ratio(counts["s_ok"], counts["s_said"]),
             "downgraded": counts["downgraded"],
+            "namesake_recall": ratio(counts["ns_hit"], counts["ns_want"]),
+            "namesake_precision": ratio(counts["ns_hit"], counts["ns_said"]),
             "misses": misses,
             "alarms": alarms,
         }
@@ -377,7 +388,9 @@ def _run_thesis(args) -> int:
             f"challenge_recall={r['challenge_recall']}  "
             f"challenge_precision={r['challenge_precision']}  "
             f"false_alarms={r['false_alarms']}  support_recall={r['support_recall']}  "
-            f"support_precision={r['support_precision']}  downgraded={r['downgraded']}"
+            f"support_precision={r['support_precision']}  downgraded={r['downgraded']}  "
+            f"namesake_recall={r['namesake_recall']}  "
+            f"namesake_precision={r['namesake_precision']}"
         )
     if args.misses:
         r = result["all"]

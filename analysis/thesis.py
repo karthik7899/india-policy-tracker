@@ -13,6 +13,26 @@ Three states, deliberately coarse so they're skimmable in an email:
   - Broken:     a critical signal, multiple high-severity signals, or both a
                 risk signal and a negative revision — the kill criteria for a
                 falsifiable thesis, tripped.
+
+Only evidence about the BUSINESS grades a thesis. On 5 October 23 holdings
+were Broken and 38 Weakening, leaving 11 Intact — a grade that is red for
+almost everything says nothing. Three causes, each now handled:
+
+  * Price and ownership are not thesis evidence. A 2.2% promoter stake sale
+    or 3.6% of foreign selling made a thesis "Broken" outright, and 70
+    standing valuation flags fed "Weakening". They are kept, as ``context``
+    on the row, and still raise their warnings elsewhere; they no longer
+    grade whether the reason for owning the business still holds.
+  * A quarter-on-quarter revenue fall is often the calendar. HAL (-60%),
+    BEL (-46%), BHEL (-37%) and Suzlon (-30%) were "contracting" from a
+    March quarter that every capital-goods and defence company books
+    heavily, while growing 14-40% year on year. A QoQ fall counts only
+    when year-on-year revenue is also down, or unknown.
+  * One quarter's margin swing is not a trend. A single-quarter operating
+    margin drop counts as High at most (Weakening on its own); a thesis
+    breaks on the multi-quarter compression the warning engine reports
+    separately ("compressing for 3 straight quarters"), or on a single
+    swing together with other evidence.
 """
 
 from logger import log
@@ -24,6 +44,48 @@ _ORDER = {_BROKEN: 0, _WEAKENING: 1, _INTACT: 2}
 
 # A revision move at least this large counts as a kill-criteria input.
 _MATERIAL_REVISION_PCT = 10.0
+
+# Warning categories that describe price or who is trading, not the business.
+_NOT_THESIS_EVIDENCE = {
+    "Valuation Stretch",
+    "FII Selling",
+    "FII Outflow",
+    "Promoter Selling",
+    "Promoter Exit",
+}
+
+
+def _yoy_revenue(stock):
+    """Year-on-year revenue growth as a number, or None if not known."""
+    raw = str(stock.get("revenue_growth") or "").replace("%", "").strip()
+    try:
+        return float(raw)
+    except ValueError:
+        return None
+
+
+def _grading(stock, risks):
+    """``(evidence, context)``: the risk warnings that grade the thesis, and
+    the ones kept only as context — with why."""
+    evidence, context = [], []
+    yoy = _yoy_revenue(stock)
+    for w in risks:
+        category = w.get("category")
+        if category in _NOT_THESIS_EVIDENCE:
+            context.append(w["signal"])
+        elif category == "Revenue Contraction" and yoy is not None and yoy >= 0:
+            context.append(
+                f"{w['signal']} Seasonal: revenue is up {yoy:.1f}% year on year."
+            )
+        elif (
+            category == "Margin Compression"
+            and w.get("severity") == "Critical"
+            and str(w.get("signal", "")).startswith("Operating margin contracted")
+        ):
+            evidence.append({**w, "severity": "High"})
+        else:
+            evidence.append(w)
+    return evidence, context
 
 
 def _worsen(status):
@@ -56,7 +118,10 @@ def compute_thesis_health(watchlist, warnings, revisions=None):
                 continue
 
             ticker_warnings = by_ticker.get(ticker, [])
-            risks = [w for w in ticker_warnings if w.get("direction") == "risk"]
+            risks, context = _grading(
+                stock,
+                [w for w in ticker_warnings if w.get("direction") == "risk"],
+            )
             critical = [w for w in risks if w.get("severity") == "Critical"]
             high = [w for w in risks if w.get("severity") == "High"]
             other_risk = [w for w in risks if w.get("severity") in ("Medium", "Low")]
@@ -95,6 +160,8 @@ def compute_thesis_health(watchlist, warnings, revisions=None):
                 "sector": sector_label,
                 "status": status,
                 "reasons": reasons[:2],
+                # Shown beside the grade, never part of it.
+                **({"context": context[:3]} if context else {}),
             }
 
     counts = {_BROKEN: 0, _WEAKENING: 0, _INTACT: 0}

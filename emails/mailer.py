@@ -305,7 +305,9 @@ def _build_policy_direction_html(impacts, caps):
         items += (
             f"<li style='margin-bottom:8px;'>{whose}{title}<br>"
             f"<span style='font-size:11px;color:#94a3b8;'>{effects} · "
-            f"{str(r.get('status', '')).replace('_', ' ')}</span></li>"
+            f"{str(r.get('status', '')).replace('_', ' ')}"
+            f"{' &middot; ' + str(r['outlets']) + ' outlets' if (r.get('outlets') or 0) > 1 else ''}"
+            f"</span></li>"
         )
     return f"""
         <div class="section-card">

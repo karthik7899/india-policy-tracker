@@ -1,5 +1,5 @@
 {
- "_about": "Hand labels for the thesis check (analysis/thesis_check.py). DRAFT: labelled by Claude, not yet reviewed - correct any row and set reviewed to true. Each row pairs a holding's thesis (its watchlist catalyst at labelling time) with a headline. stance: contradicts = the headline undermines a specific claim in the thesis; supports = concrete progress on one; unrelated = anything else, including price moves, ratings and results that touch no claim. Rows without `synthetic` are real headlines attributed to the holding in the 2026-09-26 corpus. Rows marked synthetic are COUNTERFACTUAL headlines written for this file to test that clear contradictions are caught - they are not news and never enter the pipeline. Score with: python scripts/eval_events.py --reader thesis",
+ "_about": "Hand labels for the thesis check (analysis/thesis_check.py). DRAFT: labelled by Claude, not yet reviewed - correct any row and set reviewed to true. Each row pairs a holding's thesis (its watchlist catalyst at labelling time) with a headline. stance: contradicts = the headline undermines a specific claim in the thesis; supports = concrete progress on one; unrelated = anything else, including price moves, ratings and results that touch no claim. Rows without `synthetic` are real headlines attributed to the holding in the 2026-09-26 corpus. Rows marked synthetic are COUNTERFACTUAL headlines written for this file to test that clear contradictions are caught - they are not news and never enter the pipeline. Score with: python scripts/eval_events.py --reader thesis `about: false` marks a headline about a different company or person that shares the holding's name (a foreign parent, a namesake); rows without it are about the holding.",
  "reviewed": false,
  "labels": [
   {
@@ -48,7 +48,8 @@
    "headline": "Nizamabad MP Arvind inaugurates ₹9-crore Jankampet goods shed",
    "stance": "unrelated",
    "also_acceptable": [],
-   "split": "dev"
+   "split": "dev",
+   "about": false
   },
   {
    "ticker": "ARVIND",
@@ -182,7 +183,8 @@
    "headline": "TCS' HyperVault Secures 264 Acres For Massive 1GW AI Data Center Campus In Hyderabad",
    "stance": "unrelated",
    "also_acceptable": [],
-   "split": "dev"
+   "split": "dev",
+   "about": false
   },
   {
    "ticker": "CAMPUS",
@@ -268,7 +270,8 @@
    "headline": "The teaser for ‘The Walking Dead: Daryl Dixon’ final season is out and it unveils a new key character",
    "stance": "unrelated",
    "also_acceptable": [],
-   "split": "holdout"
+   "split": "holdout",
+   "about": false
   },
   {
    "ticker": "DIXON",
@@ -336,7 +339,8 @@
    "headline": "Fortis unveils garden-centred Rosemont apartment development in New Farm",
    "stance": "unrelated",
    "also_acceptable": [],
-   "split": "holdout"
+   "split": "holdout",
+   "about": false
   },
   {
    "ticker": "HAL",
@@ -354,7 +358,8 @@
    "headline": "ABN AMRO gains momentum in Germany following the integration of Hauck Aufhäuser Lampe (HAL)",
    "stance": "unrelated",
    "also_acceptable": [],
-   "split": "dev"
+   "split": "dev",
+   "about": false
   },
   {
    "ticker": "HDFCBANK",
@@ -516,7 +521,8 @@
    "headline": "Schneider Electric’s Planned Acquisition of Cognite Reinforces the Data Foundation for Industrial AI",
    "stance": "unrelated",
    "also_acceptable": [],
-   "split": "holdout"
+   "split": "holdout",
+   "about": false
   },
   {
    "ticker": "SCHNEIDER",
@@ -524,7 +530,8 @@
    "headline": "Precision Optics Enabling Lunar Navigation: Schneider-Kreuznach’s Role in NASA’s Artemis Missions",
    "stance": "unrelated",
    "also_acceptable": [],
-   "split": "dev"
+   "split": "dev",
+   "about": false
   },
   {
    "ticker": "SIEMENS",
@@ -532,7 +539,8 @@
    "headline": "Siemens and Samsung Foundry strengthen collaboration to advance silicon design enablement",
    "stance": "unrelated",
    "also_acceptable": [],
-   "split": "dev"
+   "split": "dev",
+   "about": false
   },
   {
    "ticker": "SUZLON",

@@ -46,7 +46,7 @@ KEYWORDS = {
     "semiconductor": r"semiconductor|wafer|chip|osat|integrated circuit",
     "defence": r"defen[cs]e|military|missile|radar|naval",
     "surveillance": r"surveillance|cctv|video security|drone|unmanned|safe city|"
-    r"command and control",
+    r"smart city|smart cities|command and control",
     "footwear": r"footwear|shoe",
 }
 _KEYWORD_RES = {k: re.compile(v, re.IGNORECASE) for k, v in KEYWORDS.items()}
@@ -158,6 +158,9 @@ SECTOR_FIT: Dict[str, Dict[str, Any]] = {
             "metal fabrication",
             "electrical equipment & parts",
             "diversified industrials",
+            # Thermax: Yahoo files the boiler and energy-engineering maker
+            # under Conglomerates.
+            "conglomerates",
             "pollution & treatment controls",
             "industrial distribution",
         ],
@@ -200,7 +203,15 @@ SECTOR_FIT: Dict[str, Dict[str, Any]] = {
             "electronic components",
             "scientific & technical instruments",
         ],
+        # The keyword route only from engineering and IT services (ASM
+        # Technologies' semiconductor design work): summaries also name
+        # their customers' industries, and "serves semiconductor makers"
+        # put Thermax, a conglomerate, here.
         "also_if": ["semiconductor"],
+        "also_if_industries": [
+            "information technology services",
+            "specialty industrial machinery",
+        ],
     },
     "sports_athleisure": {
         "industries": [
@@ -209,7 +220,7 @@ SECTOR_FIT: Dict[str, Dict[str, Any]] = {
             "apparel retail",
             "leisure",
         ],
-        "also_if": ["footwear"],
+        # No keyword route: Capillary's summary names footwear clients.
     },
     "surveillance_security": {
         "industries": [
@@ -246,7 +257,10 @@ def fits(sector: str, industry: Any, groups) -> Optional[bool]:
     if rule is None or not ind:
         return None
     groups = set(groups or ())
-    listed = ind in rule["industries"] or bool(groups & set(rule.get("also_if", ())))
+    keyword_route = bool(groups & set(rule.get("also_if", ()))) and (
+        "also_if_industries" not in rule or ind in rule["also_if_industries"]
+    )
+    listed = ind in rule["industries"] or keyword_route
     if not listed:
         return False
     if rule.get("require") and not groups & set(rule["require"]):

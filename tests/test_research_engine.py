@@ -620,3 +620,66 @@ def test_email_thesis_truncation_keeps_the_worst():
 
     html = _build_research_engine_html({"thesis_health": health}, caps={"research": 2})
     assert "BROKE" in html
+
+
+# --- what counts as evidence against a thesis --------------------------------
+
+
+def _risk(severity, category, signal):
+    return {
+        "ticker": "AAA",
+        "direction": "risk",
+        "severity": severity,
+        "category": category,
+        "signal": signal,
+    }
+
+
+def test_ownership_and_valuation_are_context_not_thesis_evidence():
+    wl = {"sec": [{"ticker": "AAA", "name": "AAA Ltd"}]}
+    warnings = [
+        _risk("Critical", "Promoter Exit", "Promoters cut their stake by 2.23%."),
+        _risk("Critical", "FII Outflow", "Heavy foreign selling (-3.6%)."),
+        _risk("Medium", "Valuation Stretch", "Fails P/E screen."),
+        _risk("Medium", "Valuation Stretch", "Fails debt limit."),
+    ]
+    row = compute_thesis_health(wl, warnings)["AAA"]
+    assert row["status"] == "Intact"
+    assert "Promoters cut their stake by 2.23%." in row["context"]
+
+
+def test_a_seasonal_qoq_fall_does_not_count_when_revenue_grows_year_on_year():
+    growing = {"sec": [{"ticker": "AAA", "name": "AAA", "revenue_growth": "+14.4%"}]}
+    shrinking = {"sec": [{"ticker": "AAA", "name": "AAA", "revenue_growth": "-10.5%"}]}
+    unknown = {"sec": [{"ticker": "AAA", "name": "AAA"}]}
+    warnings = [
+        _risk("High", "Revenue Contraction", "Quarter-on-quarter sales fell 60.4%.")
+    ]
+    row = compute_thesis_health(growing, warnings)["AAA"]
+    assert row["status"] == "Intact"
+    assert row["context"] == [
+        "Quarter-on-quarter sales fell 60.4%. Seasonal: revenue is up 14.4% year on year."
+    ]
+    assert compute_thesis_health(shrinking, warnings)["AAA"]["status"] == "Weakening"
+    assert compute_thesis_health(unknown, warnings)["AAA"]["status"] == "Weakening"
+
+
+def test_one_quarters_margin_swing_weakens_but_a_trend_breaks():
+    wl = {"sec": [{"ticker": "AAA", "name": "AAA Ltd"}]}
+    swing = [
+        _risk(
+            "Critical", "Margin Compression", "Operating margin contracted 73.0pp QoQ."
+        )
+    ]
+    trend = [
+        _risk(
+            "Critical",
+            "Margin Compression",
+            "Operating margin compressing for 3 straight quarters (13% -> 12% -> 10%).",
+        )
+    ]
+    assert compute_thesis_health(wl, swing)["AAA"]["status"] == "Weakening"
+    assert compute_thesis_health(wl, trend)["AAA"]["status"] == "Broken"
+    # A swing together with other business evidence still breaks it.
+    both = swing + [_risk("High", "Revenue Contraction", "Sales fell 34.5%.")]
+    assert compute_thesis_health(wl, both)["AAA"]["status"] == "Broken"

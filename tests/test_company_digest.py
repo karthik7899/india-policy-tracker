@@ -166,3 +166,27 @@ def test_a_sebi_certificate_filing_is_routine():
         )
         == "routine"
     )
+
+
+def test_namesake_headlines_are_set_apart_from_the_companys_news():
+    brief = dict(BRIEF)
+    brief["thesis_check"] = {
+        "holdings": {
+            "SUZLON": {
+                "challenged": [],
+                "not_about": ["Suzlon fined by exchanges for LODR non-compliance"],
+            }
+        }
+    }
+    s = next(
+        c
+        for c in build_company_digest(WATCHLIST, COVERAGE, brief, today="2026-10-03")[
+            "companies"
+        ]
+        if c["ticker"] == "SUZLON"
+    )
+    assert [a["kind"] for a in s["activity"]] == ["order"]
+    assert [a["text"] for a in s["namesakes"]] == [
+        "Suzlon fined by exchanges for LODR non-compliance"
+    ]
+    assert s["activity_count"] == 1

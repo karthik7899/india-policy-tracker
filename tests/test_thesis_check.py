@@ -424,3 +424,68 @@ def test_the_prompt_limits_results_to_theses_that_name_them():
     assert "ONLY when the thesis" in text
     assert "only when it makes a single claim" in text
     assert thesis_check.PROMPT_VERSION not in ("1", "2")
+
+
+def test_a_headline_about_a_namesake_is_unrelated_and_marked():
+    r = ground(
+        "The Walking Dead: Daryl Dixon final season teaser",
+        "Leader in electronic assembly.",
+        {
+            "stance": "contradicts",
+            "claim": "Leader",
+            "because": "final season",
+            "about": False,
+        },
+    )
+    assert r == {"stance": "unrelated", "claim": "", "because": "", "about": False}
+    # Absent means about the company: nothing is recorded.
+    assert "about" not in ground(LOAN, THESIS, ANSWERS[LOAN])
+
+
+def test_the_summary_lists_namesake_headlines_apart(cache):
+    pairs, _ = thesis_pairs(WATCHLIST, COVERAGE)
+    answers = dict(ANSWERS)
+    answers[PRICE] = {"stance": "unrelated", "claim": "", "because": "", "about": False}
+    readings, _ = read_pairs(pairs, fake(answers), cache, today="2026-09-26")
+    row = summarise(pairs, readings)["holdings"]["SUZLON"]
+    assert row["not_about"] == [PRICE]
+    assert [c["headline"] for c in row["challenged"]] == [LOAN]
+
+
+def test_the_prompt_asks_whether_the_headline_is_about_the_company():
+    from analysis.thesis_check import _SCHEMA, _prompt
+
+    text = _prompt([(0, {"ticker": "X", "name": "X", "thesis": "t", "headline": "h"})])
+    assert "about   — true if the headline is about this listed company" in text
+    assert "about" in _SCHEMA["items"]["required"]
+
+
+def test_the_scorer_grades_namesake_detection():
+    from scripts.eval_events import score_thesis
+
+    labels = [
+        {
+            "ticker": "DIXON",
+            "thesis": "t",
+            "headline": "Daryl Dixon",
+            "stance": "unrelated",
+            "about": False,
+            "split": "dev",
+        },
+        {
+            "ticker": "DIXON",
+            "thesis": "t",
+            "headline": "Dixon wins order",
+            "stance": "unrelated",
+            "split": "dev",
+        },
+    ]
+    readings = {
+        pair_key("DIXON", "t", "Daryl Dixon"): {"stance": "unrelated", "about": False},
+        pair_key("DIXON", "t", "Dixon wins order"): {
+            "stance": "unrelated",
+            "about": False,
+        },
+    }
+    r = score_thesis(labels, readings)["dev"]
+    assert r["namesake_recall"] == 1.0 and r["namesake_precision"] == 0.5

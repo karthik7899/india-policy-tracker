@@ -173,6 +173,101 @@ def policy_impacts(
     return out
 
 
+# Two reports of one measure: dated within this many days of each other.
+REPEAT_WINDOW_DAYS = 3
+_FIGURE_RE = re.compile(r"\d[\d,.]{2,}")
+
+
+def _figures(text: str) -> set:
+    """Distinctive numbers in a headline ("863", "1,325", "40,000")."""
+    figures = {
+        f.replace(",", "").rstrip(".")
+        for f in _FIGURE_RE.findall(text or "")
+        if len(f.replace(",", "").replace(".", "")) >= 3
+    }
+    # A year is not a figure: "policy 2026-31" and "Budget 2026" share it
+    # without being one measure.
+    return {f for f in figures if not re.fullmatch(r"(?:19|20)\d\d", f)}
+
+
+def _same_measure(a: Dict[str, Any], b: Dict[str, Any]) -> bool:
+    from analysis.event_evidence import _days_between, _words
+
+    gap = _days_between(str(a.get("date", "")), str(b.get("date", "")))
+    if gap is None or gap > REPEAT_WINDOW_DAYS:
+        return False
+    if a.get("state") and b.get("state") and a["state"] != b["state"]:
+        return False
+    wa, wb = _words(a.get("headline", "")), _words(b.get("headline", ""))
+    if wa and wb and len(wa & wb) / len(wa | wb) >= 0.35:
+        return True
+    sectors_a = {e.get("sector") for e in a.get("effects") or []}
+    sectors_b = {e.get("sector") for e in b.get("effects") or []}
+    return bool(
+        _figures(a.get("headline", "")) & _figures(b.get("headline", ""))
+        and sectors_a & sectors_b
+    )
+
+
+def merge_repeat_policies(impacts: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """One row per measure, however many outlets reported it.
+
+    The same measure reached the reader as two headlines — "Gujarat offers
+    up to 50% tax concession for scrapping old vehicles" and "Gujarat govt
+    announces up to 50% motor vehicle tax concession ..." — and was listed
+    and counted twice, so a sector's tailwind tally double-counted it. Two
+    rows are one measure when they are within REPEAT_WINDOW_DAYS, do not
+    name different states, and share most distinctive words or a specific
+    figure plus an affected sector.
+
+    The row kept is the one with the most sector effects (then the
+    earliest); it gains ``outlets`` and ``also`` (the other reports). Its
+    state is taken from any report that names one.
+    """
+    rows = [r for r in impacts or [] if isinstance(r, dict)]
+    parent = list(range(len(rows)))
+
+    def find(i):
+        while parent[i] != i:
+            parent[i] = parent[parent[i]]
+            i = parent[i]
+        return i
+
+    for i in range(len(rows)):
+        for j in range(i + 1, len(rows)):
+            if _same_measure(rows[i], rows[j]):
+                parent[find(j)] = find(i)
+
+    groups: Dict[int, List[Dict[str, Any]]] = {}
+    for i, r in enumerate(rows):
+        groups.setdefault(find(i), []).append(r)
+
+    out = []
+    for members in groups.values():
+        lead = sorted(
+            members,
+            key=lambda r: (-len(r.get("effects") or []), str(r.get("date", ""))),
+        )[0]
+        merged = dict(lead)
+        if len(members) > 1:
+            merged["outlets"] = len(members)
+            merged["also"] = [
+                {
+                    "headline": r.get("headline", ""),
+                    **({"link": r["link"]} if r.get("link") else {}),
+                    **({"source": r["source"]} if r.get("source") else {}),
+                }
+                for r in members
+                if r is not lead
+            ][:3]
+            state = next((r["state"] for r in members if r.get("state")), None)
+            if state and not merged.get("state"):
+                merged["state"] = state
+        out.append(merged)
+    out.sort(key=lambda r: (r.get("date", ""), r.get("headline", "")), reverse=True)
+    return out
+
+
 def sector_policy_balance(
     impacts: List[Dict[str, Any]],
     today: str = "",
