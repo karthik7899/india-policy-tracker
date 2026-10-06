@@ -219,3 +219,14 @@ def test_ladder_is_monotonically_smaller():
         for _, caps in mailer._CAP_LADDER
     ]
     assert sizes == sorted(sizes, reverse=True), sizes
+
+
+def test_a_small_overrun_costs_a_small_trim(monkeypatch):
+    """A full render that only just misses the budget keeps nearly all of it,
+    rather than falling to compact and losing ~16 KB for a 1 KB overrun."""
+    brief, wl = _bulky_brief(), _bulky_watchlist()
+    full = len(mailer._render_email(brief, wl, mailer._CAPS_NORMAL).encode())
+    trimmed = len(mailer._render_email(brief, wl, mailer._CAPS_TRIMMED).encode())
+    assert trimmed < full
+    monkeypatch.setattr(mailer, "_SIZE_BUDGET_BYTES", full - 1)
+    assert len(mailer.build_html_email(brief, wl).encode()) == trimmed

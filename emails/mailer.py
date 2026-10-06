@@ -99,8 +99,22 @@ _CAPS_MINIMAL = {
     "extremes": 2,
 }
 
+# Full detail with a little less of what repeats. Going straight from full
+# to compact threw away ~16 KB to recover a 1.3 KB overrun (2026-10-06: full
+# was 96.3 KB against 95 KB, compact 79.6 KB), so a day that only just
+# misses keeps nearly everything; compact is for days that miss by a lot.
+_CAPS_TRIMMED = {
+    **_CAPS_NORMAL,
+    "companies": 4,
+    "sectors": 3,
+    "warnings": 10,
+    "lists": 4,
+    "research": 5,
+}
+
 _CAP_LADDER = (
     ("full", _CAPS_NORMAL),
+    ("trimmed", _CAPS_TRIMMED),
     ("compact", _CAPS_COMPACT),
     ("minimal", _CAPS_MINIMAL),
 )
