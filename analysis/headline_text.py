@@ -108,7 +108,9 @@ _COMMENTARY = re.compile(
     r"top\s+(?:gainers?|losers?)|catalyst\s+picks|volume\s+gainers|"
     r"analysts\s+are\s+forecasting|tell\s+the\s+whole\s+story|"
     r"stocks?\s+slide|slides?\s+up\s+to|share\s+price(?:\s+today)?$|"
-    r"stock\s+prediction|bright\s+future|\d+\s+\w+\s+stocks\b)",
+    r"stock\s+prediction|bright\s+future|\d+\s+\w+\s+stocks\b|"
+    r"share\s+price\s+(?:fall|falls|rise|rises|jumps?|slumps?|surges?|"
+    r"drops?|gains?)|straight\s+(?:decline|gain|session)|fall\s+streak)",
     re.IGNORECASE,
 )
 

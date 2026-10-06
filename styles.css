@@ -468,3 +468,12 @@ td .disclose-summary { padding: 2px 0; }
   text-transform: uppercase; letter-spacing: 0.04em;
 }
 .changes-grid .evidence li { font-size: 13px; overflow-wrap: anywhere; }
+
+/* Price line on a company card (src/core/sparkline.js). */
+.company-spark { margin: 0 0 10px; }
+.spark { display: block; overflow: visible; }
+.spark-line { stroke: var(--ink-2); stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+.spark-dot { stroke: var(--surface); stroke-width: 1; }
+.spark-activity { fill: var(--series-1); }
+.spark-tailwind { fill: var(--good); }
+.spark-headwind, .spark-mixed { fill: var(--critical); }

@@ -42,7 +42,14 @@ _SEVERITY_BADGE = {
 _SIZE_BUDGET_BYTES = 95_000
 
 _CAPS_NORMAL = {
-    "sectors": 6,
+    # Holding cards in "Your Holdings", and rows per source feed in the
+    # appendix the per-company view replaced as the main read.
+    "companies": 5,
+    "feed": 3,
+    # Four, not six, since "Your Holdings" carries the company news the
+    # sector blocks used to be the only place for; six no longer fit the
+    # Gmail budget at full detail.
+    "sectors": 4,
     "stocks": 3,
     "news": 3,
     "warnings": 12,
@@ -55,6 +62,10 @@ _CAPS_NORMAL = {
     "extremes": 5,
 }
 _CAPS_COMPACT = {
+    # Holding cards in "Your Holdings", and rows per source feed in the
+    # appendix the per-company view replaced as the main read.
+    "companies": 4,
+    "feed": 2,
     "sectors": 3,
     "stocks": 2,
     "news": 1,
@@ -71,6 +82,10 @@ _CAPS_COMPACT = {
 # enough to say what moved, and small enough that sector growth cannot push
 # the briefing past the clip limit.
 _CAPS_MINIMAL = {
+    # Holding cards in "Your Holdings", and rows per source feed in the
+    # appendix the per-company view replaced as the main read.
+    "companies": 3,
+    "feed": 1,
     "sectors": 2,
     "stocks": 1,
     "news": 1,
@@ -699,7 +714,7 @@ _CHANGE_LABELS = (
 )
 
 
-def _build_changes_html(changes, per_kind=4):
+def _build_changes_html(changes, per_kind=3):
     """What is new since the previous run (analysis/changes.py), first.
 
     Everything else in the email is standing state; this is the part a
@@ -785,6 +800,103 @@ def _build_policy_balance_html(balance):
                 <thead><tr><th>Sector</th><th>Tailwind</th><th>Headwind</th><th>Net</th></tr></thead>
                 <tbody>{body}</tbody>
             </table>
+        </div>
+        """
+
+
+# A holding gets a card when its news or a policy naming it is this recent.
+_COMPANY_RECENT_DAYS = 3
+_THESIS_DOT = {"Broken": "#f87171", "Weakening": "#fb923c", "Intact": "#34d399"}
+
+
+def _build_companies_html(digest, caps=_CAPS_NORMAL):
+    """Your holdings, one card each: what happened and which policy touches it.
+
+    The rest of the email is organised by where data came from, so one
+    company's news was spread over the agreements, filings and launches
+    lists, the sector blocks and the policy list. This regroups the
+    company digest (analysis/company_digest.py) for the holdings with
+    something in the last few days. ``digest`` arrives escaped.
+    """
+    import datetime
+
+    if not isinstance(digest, dict) or not digest.get("companies"):
+        return ""
+    try:
+        as_of = datetime.date.fromisoformat(str(digest.get("as_of")))
+    except ValueError:
+        as_of = datetime.date.today()
+    since = (as_of - datetime.timedelta(days=_COMPANY_RECENT_DAYS)).isoformat()
+
+    cards = []
+    for c in digest["companies"]:
+        fresh = [a for a in c.get("activity") or [] if str(a.get("date", "")) >= since]
+        named = [
+            p
+            for p in c.get("policies") or []
+            if p.get("names_company") and str(p.get("date", "")) >= since
+        ]
+        if not fresh and not named:
+            continue
+        cards.append((c, fresh, named))
+    if not cards:
+        return ""
+
+    shown = cards[: caps["companies"]]
+    blocks = ""
+    for c, fresh, named in shown:
+        dot = _THESIS_DOT.get(c.get("thesis_status"), "#94a3b8")
+        status = c.get("thesis_status") or "ungraded"
+        news = "".join(
+            f"<li>{a['date'][5:]} &middot; "
+            + (
+                f"<a href='{a['link']}' target='_blank' style='color:#e2e8f0;'>{a['text']}</a>"
+                if a.get("link")
+                else a["text"]
+            )
+            + f" <span style='color:#64748b;font-size:10px;'>[{a.get('kind', 'news')}]</span></li>"
+            for a in fresh[:2]
+        )
+        policies = [p for p in c.get("policies") or [] if p.get("direction")][:1]
+        policy = "".join(
+            f"<li>{'&#9650;' if p['direction'] == 'tailwind' else '&#9660;' if p['direction'] == 'headwind' else '&#9670;'} "
+            + (
+                f"<a href='{p['link']}' target='_blank' style='color:#cbd5e1;'>{p['headline']}</a>"
+                if p.get("link")
+                else p["headline"]
+            )
+            + f" <span style='color:#64748b;font-size:10px;'>"
+            + (f"{p['state']} &middot; " if p.get("state") else "")
+            + f"{str(p.get('status', '')).replace('_', ' ')}</span></li>"
+            for p in policies
+        )
+        challenge = (
+            "<div style='font-size:11px;color:#f87171;margin-top:4px;'>Thesis challenged: "
+            f"{c['challenges'][0]['headline']}</div>"
+            if c.get("challenges")
+            else ""
+        )
+        blocks += f"""
+            <div style="border-top: 1px solid #1f2937; padding: 10px 0;">
+                <div><span class="stock-ticker">{c['ticker']}</span>
+                    <span style="color:#e2e8f0;font-weight:600;">{c.get('name', '')}</span>
+                    <span style="color:{dot};font-size:11px;margin-left:6px;">&#9679; {status}</span>
+                    <span style="color:#64748b;font-size:11px;"> &middot; {_sector_label(c.get('sector', ''))}</span></div>
+                <ul style="font-size:12px;line-height:1.5;padding-left:18px;margin:6px 0 0 0;color:#cbd5e1;">{news}</ul>
+                {f'<ul style="font-size:12px;line-height:1.5;padding-left:18px;margin:4px 0 0 0;color:#94a3b8;list-style:none;">{policy}</ul>' if policy else ''}
+                {challenge}
+            </div>
+            """
+    more = len(cards) - len(shown)
+    return f"""
+        <div class="section-card">
+            <h3 style="color: #60a5fa; margin-bottom: 4px; font-size: 16px;">Your Holdings</h3>
+            <p style="font-size: 11px; color: #6b7280; margin: 0 0 6px 0;">
+                Holdings with news in the last {_COMPANY_RECENT_DAYS} days: what happened, and the policy
+                touching each (&#9650; tailwind, &#9660; headwind; LLM reading).
+                {f"+ {more} more on the " if more else "Every holding is on the "}<a href="{DASHBOARD_URL}#/companies" style="color:#60a5fa;" target="_blank">dashboard's Companies view</a>.
+            </p>
+            {blocks}
         </div>
         """
 
@@ -1317,6 +1429,7 @@ def _render_email(brief_data, watchlist, caps):
     """
 
     body_html += _build_changes_html(brief_data.get("changes"))
+    body_html += _build_companies_html(brief_data.get("company_digest"), caps)
 
     # Early Warning System. Alerts already shown as cards above are not
     # repeated: the table used to reprint every card, so one holding with
@@ -1571,7 +1684,7 @@ def _render_email(brief_data, watchlist, caps):
         items = "".join(
             [
                 f"<li><strong>{a['source']}</strong>: {a['_shown']}</li>"
-                for a in agreements[: caps["lists"]]
+                for a in agreements[: caps["feed"]]
             ]
         )
         agreements_html = f"""
@@ -1595,7 +1708,7 @@ def _render_email(brief_data, watchlist, caps):
         items = "".join(
             [
                 f"<li><strong>{launch.get('company', 'Unknown')}</strong> ({launch.get('industry', 'Manufacturing')}): {launch['_shown']} <em style='font-size: 11px; color: #94a3b8;'>[{launch.get('source', 'News')}]</em></li>"
-                for launch in launches[: caps["lists"]]
+                for launch in launches[: caps["feed"]]
             ]
         )
         launches_html = f"""
@@ -1611,7 +1724,7 @@ def _render_email(brief_data, watchlist, caps):
         items = "".join(
             [
                 f"<li><strong>{f.get('company', 'Unknown')}</strong> ({f.get('industry', 'Corporate')}): {f['_shown']} <em style='font-size: 11px; color: #94a3b8;'>[{f.get('source', 'Exchange')}]</em></li>"
-                for f in filings[: caps["lists"]]
+                for f in filings[: caps["feed"]]
             ]
         )
         filings_html = f"""
@@ -1820,9 +1933,19 @@ def _render_email(brief_data, watchlist, caps):
     )
     sector_growth_html = _build_sector_growth_html(brief_data.get("sector_growth", []))
 
+    # The per-source feeds, now an appendix: "Your Holdings" above carries
+    # the same news by company. A few rows each, for what is not a holding.
+    appendix_head = (
+        "<div style='padding: 12px 25px 0 25px; color:#64748b; font-size:11px;"
+        " text-transform:uppercase; letter-spacing:0.05em;'>Appendix &mdash; latest by"
+        " source</div>"
+        if (agreements_html or launches_html or filings_html)
+        else ""
+    )
     body_html += (
         sector_valuation_html
         + sector_growth_html
+        + appendix_head
         + agreements_html
         + launches_html
         + filings_html

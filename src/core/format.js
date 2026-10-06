@@ -7,6 +7,13 @@
 // same idea for the browser: one tolerant coercion, one set of formatters.
 
 /** Tolerant numeric coercion. Mirrors utils.to_float — same accepted forms. */
+/**
+ * Marks a reading made by the LLM (Gemini) rather than taken from a source
+ * or computed. One glyph, explained once in the page footer, instead of the
+ * words "LLM reading" repeated on every line it applies to.
+ */
+export const LLM_MARK = "\u2726";
+
 export function num(value) {
   if (value === null || value === undefined || typeof value === "boolean") return null;
   if (typeof value === "number") return Number.isFinite(value) ? value : null;

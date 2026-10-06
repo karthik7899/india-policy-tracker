@@ -38,12 +38,12 @@ test("a policy row names its sectors, status and state, and says who read it", (
     status: "in_force",
     state: "Gujarat",
   });
-  assert.equal(s, "▲ Clean Energy, ▼ Fmcg · in force · Gujarat government · LLM reading");
+  assert.equal(s, "▲ Clean Energy, ▼ Fmcg · in force · Gujarat government · ✦");
 });
 
 test("a central measure carries no state", () => {
   const s = policyDetail({ effects: [{ sector: "clean_energy", direction: "mixed" }], status: "proposed" });
-  assert.equal(s, "◆ Clean Energy · proposed · LLM reading");
+  assert.equal(s, "◆ Clean Energy · proposed · ✦");
 });
 
 import { trackSummary } from "../../src/views/overview.js";

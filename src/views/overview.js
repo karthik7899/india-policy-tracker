@@ -4,7 +4,7 @@
 // which sectors are growing, and how much of the book has an intact thesis.
 
 import { el, mount } from "../core/dom.js";
-import { num, pct, thesisStatus } from "../core/format.js";
+import { num, pct, thesisStatus, LLM_MARK } from "../core/format.js";
 import { href } from "../core/router.js";
 import * as charts from "../charts/charts.js";
 import { dataTable, panel, chartFrame, tickerLink } from "./table.js";
@@ -189,7 +189,7 @@ export async function render(container, { payload, route }) {
           "Policy by sector",
           "Policy measures read in the last 30 days, by which way they cut for each " +
             "sector (\u25b2 tailwind, \u25bc headwind; a proposal counts half). Open a " +
-            "sector to see the companies and the measures behind the count. LLM reading.",
+            `sector to see the companies and the measures behind the count. ${LLM_MARK}`,
           dataTable(
             policy,
             [

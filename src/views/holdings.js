@@ -16,7 +16,7 @@
 // describing seventy holdings while the table describes nine.
 
 import { el, mount } from "../core/dom.js";
-import { num, crore, pct, bandIndex, BANDS, shortDate, sizeLabel } from "../core/format.js";
+import { num, crore, pct, bandIndex, BANDS, shortDate, sizeLabel, LLM_MARK } from "../core/format.js";
 import { loadCoverage } from "../core/data.js";
 import * as filters from "../core/filters.js";
 import * as charts from "../charts/charts.js";
@@ -142,7 +142,7 @@ export function thesisSection(catalyst, check) {
       el(
         "span",
         { class: "evidence-meta" },
-        `\u201c${i.because}\u201d \u2192 thesis: \u201c${i.claim}\u201d \u00b7 LLM reading`,
+        `\u201c${i.because}\u201d \u2192 thesis: \u201c${i.claim}\u201d \u00b7 ${LLM_MARK}`,
       ),
     );
   const challenged = check?.challenged || [];

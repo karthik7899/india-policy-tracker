@@ -190,3 +190,26 @@ def test_namesake_headlines_are_set_apart_from_the_companys_news():
         "Suzlon fined by exchanges for LODR non-compliance"
     ]
     assert s["activity_count"] == 1
+
+
+def test_weekly_closes_feed_the_card_price_line():
+    import pandas as pd
+
+    from analysis import growth
+
+    idx = pd.to_datetime([f"2026-0{m}-0{d}" for m in (7, 8) for d in (1, 8)])
+    frame = pd.DataFrame({"Close": [100.0, float("nan"), 102.5, 103.0]}, index=idx)
+    assert growth._weekly_closes(frame) == [
+        ["2026-07-01", 100.0],
+        ["2026-08-01", 102.5],
+        ["2026-08-08", 103.0],
+    ]
+    assert growth._weekly_closes(None) == []
+
+    prices = {"SUZLON": [["2026-09-01", 40.0], ["2026-09-08", 42.0]]}
+    d = build_company_digest(
+        WATCHLIST, COVERAGE, BRIEF, today="2026-10-03", prices=prices
+    )
+    by = {c["ticker"]: c for c in d["companies"]}
+    assert by["SUZLON"]["prices"] == prices["SUZLON"]
+    assert "prices" not in by["QUIET"]

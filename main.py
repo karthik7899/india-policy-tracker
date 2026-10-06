@@ -135,7 +135,10 @@ async def run_pipeline():
         )
 
     # Fetch live Yahoo Finance prices
-    data["freshness"] = {"live_prices": update_live_stock_prices(watchlist)}
+    live_prices = update_live_stock_prices(watchlist)
+    # Weekly closes go to the company digest, not into the freshness record.
+    weekly_closes = live_prices.pop("weekly_closes", {}) or {}
+    data["freshness"] = {"live_prices": live_prices}
 
     # Fetch Screener.in fundamentals async; also returns Screener's industry
     # peer tables — a competitor-discovery channel independent of headlines.
@@ -520,7 +523,9 @@ async def run_pipeline():
     # its sector — for the dashboard's Companies view.
     from analysis.company_digest import build_company_digest
 
-    data["company_digest"] = build_company_digest(watchlist, coverage, data)
+    data["company_digest"] = build_company_digest(
+        watchlist, coverage, data, prices=weekly_closes
+    )
 
     # What is new since the previous run, for the top of the dashboard and
     # the email (analysis/changes.py).
