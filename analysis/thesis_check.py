@@ -59,7 +59,13 @@ CACHE_PATH = os.path.join(ROOT, "thesis_cache.json")
 #    Australian Fortis but read all 11 Siemens AG headlines (InnoTrans,
 #    FuelCell Energy, Samsung Foundry) as Siemens Ltd's: told to use no
 #    outside knowledge, it had nothing to tell the two apart.
-PROMPT_VERSION = "5"
+# 6: "supports" must concern what the claim names. On the labels version 5
+#    read Thermax's 85% profit fall as support for "scaling green hydrogen",
+#    TCS's chip-design services for "sovereign cloud" and Varun Beverages'
+#    quarterly profit for "scaling dairy/juice products": 7 supports the
+#    labels do not have, precision 0.79. Bumped before any live headline was
+#    read at version 5 (that run timed out), so it costs no extra re-read.
+PROMPT_VERSION = "6"
 
 STANCES = ("contradicts", "supports", "unrelated")
 
@@ -88,8 +94,12 @@ stance — exactly one of:
                cut or reversed; the thing the thesis states (debt-free, market
                leader, asset quality, margins expanding, order book) is
                reported to be no longer true.
-  supports     the headline reports concrete progress on a specific claim in
-               the THESIS.
+  supports     the headline reports concrete progress on the very thing a
+               specific claim in the THESIS names: the same product,
+               programme, plant, market or measure. Progress in another of
+               the company's businesses, results that do not mention the
+               claim's subject, and a deal whose link to the claim the
+               headline does not state are unrelated.
   unrelated    anything else, including: share-price moves, analyst ratings,
                targets and tips, stock lists, results that do not touch a
                claim in the thesis, routine filings, and headlines about a

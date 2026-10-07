@@ -99,6 +99,15 @@ from providers.exchange_api import (
 )
 from utils import retry_network
 
+# Off since 7 Oct 2026. Every run since mid-September has met BSE's bot
+# filter (HTTP 403 on both the announcements feed and the scrip master), and
+# getting round it would mean defeating an access control BSE put there.
+# Nothing is lost for the watchlist: all 72 holdings are NSE-listed, and
+# SEBI's listing rules have a dual-listed company file the same disclosure
+# on both exchanges, so the NSE feed carries every announcement this one
+# would. Turn back on only with access BSE grants, such as a licensed feed.
+BSE_ENABLED = False
+
 API_BASE = "https://api.bseindia.com/BseIndiaAPI/api"
 # AnnSubCategoryGetData, NOT AnnGetData. Captured from Chrome's Network tab
 # on the live announcements page, 15 Aug 2026 — the full Request URL was:

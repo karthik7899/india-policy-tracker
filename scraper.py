@@ -9,6 +9,7 @@ from logger import log
 from config import SECTOR_QUERIES, GLOBAL_EVENT_QUERIES
 from providers.rss import fetch_query_feed_async
 from providers.nse_announcements import fetch_filings as nse_fetch_filings
+from providers import bse_announcements
 from providers.bse_announcements import fetch_filings as bse_fetch_filings
 from analysis.parsing import title_matches_company
 
@@ -558,7 +559,14 @@ async def fetch_exchange_filings_async(session, watchlist, cap=10, held_out=None
          concatenating. Concatenation lets whichever source answers first
          consume every slot — which is exactly what happened to BSE.
     """
-    log.info("Fetching NSE/BSE corporate filings (Async)...")
+    log.info(
+        "Fetching NSE/BSE corporate filings (Async)..."
+        if bse_announcements.BSE_ENABLED
+        else "Fetching NSE corporate filings (Async); BSE is switched off..."
+    )
+
+    async def no_filings():
+        return []
 
     # to_thread because both providers are sync requests (they need cookie-jar
     # persistence across the handshake) and this coroutine must not block the
@@ -566,7 +574,11 @@ async def fetch_exchange_filings_async(session, watchlist, cap=10, held_out=None
     # two exchanges' pauses overlap instead of adding up.
     nse_filings, bse_filings, news_filings = await asyncio.gather(
         asyncio.to_thread(nse_fetch_filings, watchlist),
-        asyncio.to_thread(bse_fetch_filings, watchlist),
+        (
+            asyncio.to_thread(bse_fetch_filings, watchlist)
+            if bse_announcements.BSE_ENABLED
+            else no_filings()
+        ),
         _fetch_filing_news_async(session, watchlist),
     )
 
@@ -637,8 +649,13 @@ async def fetch_exchange_filings_async(session, watchlist, cap=10, held_out=None
     for f in result:
         kept[f.get("source", "?")] = kept.get(f.get("source", "?"), 0) + 1
     log.info(
-        f"Corporate filings: {len(nse_filings)} from NSE, {len(bse_filings)} "
-        f"from BSE, {len(news_filings)} from news; kept {len(result)} — {kept}. "
+        f"Corporate filings: {len(nse_filings)} from NSE, "
+        + (
+            f"{len(bse_filings)} from BSE, "
+            if bse_announcements.BSE_ENABLED
+            else "BSE off, "
+        )
+        + f"{len(news_filings)} from news; kept {len(result)} — {kept}. "
         f"{len(nse_held) + len(bse_held) + len(news_held)} concerned holdings."
     )
     return result

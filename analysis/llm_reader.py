@@ -259,6 +259,7 @@ def gemini_transport(
         # "503 This model is currently experiencing high demand" on its first
         # batch and, with no retry, skipped the whole day. A few spaced
         # attempts, honouring Retry-After, then give up until the next run.
+        slow = False
         for attempt in range(1, RETRY_ATTEMPTS + 1):
             try:
                 resp = requests.post(
@@ -272,6 +273,12 @@ def gemini_transport(
                 )
             except requests.RequestException as e:
                 resp, error = None, f"request failed: {e!r}"
+                # A read timeout means the connection was made and this model
+                # did not answer in time: busy, like a 503, so another may
+                # answer. On 7 Oct gemini-3.8-flash timed out three times and,
+                # read as "no network", ended the thesis check with nothing
+                # read while gemini-flash-lite-latest was serving the same run.
+                slow = isinstance(e, requests.exceptions.ReadTimeout)
             else:
                 error = None
                 if resp.status_code not in _TRANSIENT:
@@ -282,7 +289,7 @@ def gemini_transport(
         else:
             raise ReaderUnavailable(
                 f"{error} after {RETRY_ATTEMPTS} attempts; resuming next run",
-                model_specific=resp is not None,
+                model_specific=resp is not None or slow,
             )
         if resp.status_code == 404:
             raise ReaderUnavailable(
@@ -325,6 +332,12 @@ def model_chain() -> List[str]:
     return list(dict.fromkeys(m for m in [first, *rest] if m))
 
 
+# The model that last answered in this process. The event reader runs first
+# and finds out which model is up; the thesis check, minutes later, starts
+# there instead of queueing again behind the ones that just failed.
+_LAST_SERVED: Dict[str, Optional[str]] = {"model": None}
+
+
 def chained_transport(transports: List[Tuple[str, Transport]]) -> Transport:
     """Try each model in turn; keep the first that answers for the whole run.
 
@@ -345,7 +358,7 @@ def chained_transport(transports: List[Tuple[str, Transport]]) -> Transport:
             name, transport = transports[state["index"]]
             try:
                 text = transport(prompt)
-                call.model = name
+                call.model = _LAST_SERVED["model"] = name
                 return text
             except ReaderUnavailable as e:
                 failures.append(f"{name}: {e}")
@@ -433,6 +446,9 @@ def default_transport(
         else discover_models(key)
     )
     chain = list(dict.fromkeys(configured[:1] + discovered + configured[1:]))
+    served = _LAST_SERVED["model"]
+    if served in chain:
+        chain = [served] + [m for m in chain if m != served]
     transport = chained_transport(
         [(m, gemini_transport(key, m, schema)) for m in chain]
     )
