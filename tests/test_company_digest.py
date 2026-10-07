@@ -213,3 +213,23 @@ def test_weekly_closes_feed_the_card_price_line():
     by = {c["ticker"]: c for c in d["companies"]}
     assert by["SUZLON"]["prices"] == prices["SUZLON"]
     assert "prices" not in by["QUIET"]
+
+
+def test_namesakes_from_earlier_runs_stay_set_apart():
+    """7 Oct: the thesis check could not run, today's result had no namesakes,
+    and Daryl Dixon's teaser went back into Dixon's news. Readings from earlier
+    runs keep a headline set apart until it is read again."""
+    s = next(
+        c
+        for c in build_company_digest(
+            WATCHLIST,
+            COVERAGE,
+            BRIEF,
+            today="2026-10-03",
+            namesakes={("SUZLON", "suzlon fined by exchanges for lodr")},
+        )["companies"]
+        if c["ticker"] == "SUZLON"
+    )
+    assert [a["text"] for a in s["namesakes"]] == [
+        "Suzlon fined by exchanges for LODR non-compliance"
+    ]

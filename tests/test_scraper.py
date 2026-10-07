@@ -210,14 +210,32 @@ def _run_filings(nse_result, news_result, bse_result=None):
     async def fake_news(session, watchlist):
         return news_result
 
+    # BSE is switched off in production (providers/bse_announcements.py);
+    # these tests cover how its filings merge if it is ever switched back on.
     with patch.object(
         scraper, "nse_fetch_filings", return_value=nse_result
     ), patch.object(
         scraper, "bse_fetch_filings", return_value=bse_result or []
     ), patch.object(
         scraper, "_fetch_filing_news_async", fake_news
+    ), patch.object(
+        scraper.bse_announcements, "BSE_ENABLED", True
     ):
         return asyncio.run(scraper.fetch_exchange_filings_async(None, {}))
+
+
+def test_bse_is_not_called_while_switched_off():
+    """Every call met BSE's bot filter; it is off, and must stay unasked."""
+    import asyncio
+    import scraper
+
+    async def fake_news(session, watchlist):
+        return []
+
+    with patch.object(scraper, "nse_fetch_filings", return_value=[]), patch.object(
+        scraper, "bse_fetch_filings", side_effect=AssertionError("BSE was called")
+    ), patch.object(scraper, "_fetch_filing_news_async", fake_news):
+        assert asyncio.run(scraper.fetch_exchange_filings_async(None, {})) == []
 
 
 def test_filings_merge_both_sources():
@@ -354,6 +372,8 @@ def test_holdings_outrank_everything_else():
         scraper, "nse_fetch_filings", return_value=theirs
     ), _patch.object(scraper, "bse_fetch_filings", return_value=[ours]), _patch.object(
         scraper, "_fetch_filing_news_async", fake_news
+    ), _patch.object(
+        scraper.bse_announcements, "BSE_ENABLED", True
     ):
         out = asyncio.run(scraper.fetch_exchange_filings_async(None, watchlist))
 

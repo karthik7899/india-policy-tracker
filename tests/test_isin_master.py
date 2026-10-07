@@ -30,6 +30,15 @@ def _no_live_bse():
         yield
 
 
+@pytest.fixture
+def bse_on():
+    """BSE is switched off in production; these cover the merge if it returns."""
+    import providers.bse_announcements as bse
+
+    with patch.object(bse, "BSE_ENABLED", True):
+        yield
+
+
 _REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
 _EQUITY_CSV = """\
@@ -332,7 +341,22 @@ def test_bse_merge_never_raises():
         assert asyncio.run(im.refresh_bse_scrips({})) == 0
 
 
-def test_refresh_merges_nse_first_then_bse(tmp_path):
+def test_bse_is_not_asked_while_switched_off(tmp_path):
+    """BSE answers every request with its bot filter; while it is switched
+    off the refresh runs on NSE alone."""
+    path = str(tmp_path / "master.json")
+    with patch.object(
+        im, "fetch_scrip_master_sync", side_effect=AssertionError("BSE was asked")
+    ):
+        added = asyncio.run(
+            refresh_isin_master_async(
+                _FakeSession(response=_FakeResponse(200, _EQUITY_CSV)), {}, path=path
+            )
+        )
+    assert added > 0
+
+
+def test_refresh_merges_nse_first_then_bse(tmp_path, bse_on):
     """NSE wins a tie because it is the namespace the watchlist speaks."""
     path = str(tmp_path / "master.json")
     master = {}
@@ -356,7 +380,7 @@ def test_refresh_merges_nse_first_then_bse(tmp_path):
         assert json.load(f)["RELIANCE"] == "INE002A01018"
 
 
-def test_bse_still_merges_when_nse_is_blocked(tmp_path):
+def test_bse_still_merges_when_nse_is_blocked(tmp_path, bse_on):
     """Either source failing must not stop the other."""
     path = str(tmp_path / "master.json")
     master = {}

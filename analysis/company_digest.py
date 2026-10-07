@@ -23,7 +23,7 @@ Nothing new is fetched or judged here. The digest is written as a sidecar
 
 import datetime
 import re
-from typing import Any, Dict, List
+from typing import Any, Dict, Iterable, List, Tuple
 
 from analysis.event_evidence import article_date
 
@@ -134,8 +134,15 @@ def build_company_digest(
     brief: Dict[str, Any],
     today: str = "",
     prices: Dict[str, List[List[Any]]] = None,
+    namesakes: Iterable[Tuple[str, str]] = None,
 ) -> Dict[str, Any]:
-    """``{as_of, window_days, companies: [...]}``, most recently active first."""
+    """``{as_of, window_days, companies: [...]}``, most recently active first.
+
+    ``namesakes`` are (TICKER, headline) pairs read as another company's news
+    on any run (thesis_check.namesake_headlines). Without them only today's
+    check is used, and a day the check cannot run puts every namesake back:
+    on 7 Oct Daryl Dixon's teaser returned to Dixon's news that way.
+    """
     today = today or datetime.date.today().isoformat()
     cutoff = (
         datetime.date.fromisoformat(today) - datetime.timedelta(days=WINDOW_DAYS)
@@ -144,6 +151,9 @@ def build_company_digest(
     checks = (brief.get("thesis_check") or {}).get("holdings") or {}
     balance = brief.get("policy_balance") or {}
     impacts = brief.get("policy_impacts") or []
+    read_elsewhere: Dict[str, set] = {}
+    for t, h in namesakes or ():
+        read_elsewhere.setdefault(str(t).upper(), set()).add(h)
 
     companies = []
     for sector, stocks in (watchlist or {}).items():
@@ -161,7 +171,7 @@ def build_company_digest(
             elsewhere = {
                 h.strip().lower()
                 for h in (checks.get(ticker) or {}).get("not_about") or []
-            }
+            } | read_elsewhere.get(ticker, set())
             namesakes = [
                 a
                 for a in activity

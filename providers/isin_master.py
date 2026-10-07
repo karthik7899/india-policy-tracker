@@ -309,7 +309,10 @@ async def refresh_isin_master_async(session, master, path=MASTER_PATH):
             f"{str(e)[:120]}); committed snapshot still serves."
         )
 
-    added += await refresh_bse_scrips(master)
+    from providers.bse_announcements import BSE_ENABLED
+
+    if BSE_ENABLED:
+        added += await refresh_bse_scrips(master)
 
     # A correction changes the file even when nothing was added, and once the
     # master is saturated "nothing added" is every run. Persisting only on

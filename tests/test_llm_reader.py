@@ -598,3 +598,69 @@ def test_an_explicit_fallback_list_is_not_second_guessed(monkeypatch):
     )
     _, chain = llm_reader.default_transport()
     assert chain.endswith("mine")
+
+
+@pytest.fixture(autouse=True)
+def _no_served_model_carried_between_tests():
+    llm_reader._LAST_SERVED["model"] = None
+    yield
+    llm_reader._LAST_SERVED["model"] = None
+
+
+def _raising(exc):
+    def post(*a, **k):
+        raise exc
+
+    return post
+
+
+def test_a_model_that_times_out_hands_over_to_the_next(monkeypatch):
+    """7 Oct: gemini-3.8-flash timed out three times and, read as "no
+    network", ended the thesis check with nothing read, while the next model
+    in the chain was serving the same run."""
+    import requests
+
+    monkeypatch.setattr(llm_reader.time, "sleep", lambda s: None)
+    monkeypatch.setattr(
+        requests, "post", _raising(requests.exceptions.ReadTimeout("read timed out"))
+    )
+    with pytest.raises(ReaderUnavailable) as raised:
+        llm_reader.gemini_transport("k", "m")("prompt")
+    assert raised.value.model_specific
+
+
+def test_no_network_still_stops_the_whole_chain(monkeypatch):
+    """A refused connection fails every model alike; trying each spends the run."""
+    import requests
+
+    monkeypatch.setattr(llm_reader.time, "sleep", lambda s: None)
+    monkeypatch.setattr(
+        requests, "post", _raising(requests.exceptions.ConnectionError("refused"))
+    )
+    with pytest.raises(ReaderUnavailable) as raised:
+        llm_reader.gemini_transport("k", "m")("prompt")
+    assert not raised.value.model_specific
+
+
+def test_a_later_reader_starts_with_the_model_that_answered(monkeypatch):
+    """The event reader finds out which model is up; the thesis check, minutes
+    later in the same run, starts there."""
+    monkeypatch.setenv("GEMINI_API_KEY", "k")
+    monkeypatch.delenv("GEMINI_MODEL", raising=False)
+    monkeypatch.delenv("GEMINI_FALLBACK_MODELS", raising=False)
+    monkeypatch.setattr(
+        llm_reader,
+        "discover_models",
+        lambda key: ["gemini-3.8-flash", "gemini-flash-lite-latest"],
+    )
+    busy = ReaderUnavailable("busy", model_specific=True)
+    first = llm_reader.chained_transport(
+        [
+            ("gemini-3.8-flash", _named("gemini-3.8-flash", [busy], [])),
+            ("gemini-flash-lite-latest", _named("lite", ["[]"], [])),
+        ]
+    )
+    assert first("event batch") == "[]"
+
+    _, chain = llm_reader.default_transport()
+    assert chain.split(" → ")[:2] == ["gemini-flash-lite-latest", "gemini-3.8-flash"]

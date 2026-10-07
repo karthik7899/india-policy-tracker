@@ -529,14 +529,21 @@ async def run_pipeline():
 
     data["thesis_check"] = run_thesis_check(watchlist, coverage)
     annotate_health(data["thesis_health"], data["thesis_check"])
-    drop_namesake_proposals(namesake_headlines(data["thesis_check"]))
+    # Today's readings and every earlier run's: a day the check cannot run
+    # must not put namesakes back on the Companies view or in the queue.
+    namesakes = namesake_headlines(data["thesis_check"])
+    drop_namesake_proposals(namesakes)
 
     # One card per holding — its recent activity and the policies touching
     # its sector — for the dashboard's Companies view.
     from analysis.company_digest import build_company_digest
 
     data["company_digest"] = build_company_digest(
-        watchlist, coverage, data, prices=weekly_closes
+        watchlist,
+        coverage,
+        data,
+        prices=weekly_closes,
+        namesakes=namesakes,
     )
 
     # What is new since the previous run, for the top of the dashboard and
