@@ -1,8 +1,8 @@
 {
-  "prompt_version": "5",
+  "prompt_version": "6",
   "entries": {
     "0023f389a4c11146": {
-      "v": "4",
+      "v": "6",
       "ticker": "RELIANCE",
       "headline": "Proud to share that Reliance Industries Limited (RIL) and Reliance Retail have been recognised as one of India's Best Employers Among Nation Builders 2026 by Great Place To Work®, for the third consec",
       "reading": {
@@ -10,11 +10,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
-      "model": "gemini-3.8-flash"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-lite-latest"
     },
     "010e57c879048a77": {
-      "v": "4",
+      "v": "6",
       "ticker": "KAYNES",
       "headline": "Kaynes Technology India (NSEI:KAYNES) Stock Forecast & Analyst Predictions",
       "reading": {
@@ -22,11 +22,24 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
+      "model": "gemini-flash-lite-latest"
+    },
+    "0148e4ee05010b1b": {
+      "v": "6",
+      "ticker": "SIEMENS",
+      "headline": "Industrial AI in Manufacturing 2027: How Siemens, BMW, PepsiCo and Unilever Are Using AI, Digital Twins and Robotics",
+      "reading": {
+        "stance": "unrelated",
+        "claim": "",
+        "because": "",
+        "about": false
+      },
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "04e2a6ca8e18cbf2": {
-      "v": "4",
+      "v": "6",
       "ticker": "TCS",
       "headline": "TCS In Focus: Morgan Stanley Bullish On Global Capability Center Acquisition",
       "reading": {
@@ -34,7 +47,7 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "064c1c4273b8efcb": {
@@ -50,15 +63,15 @@
       "model": "gemini-flash-lite-latest"
     },
     "064f9a22403c71c5": {
-      "v": "5",
+      "v": "6",
       "ticker": "ITC",
       "headline": "94% of ITC’s businesses now linked to agri-crops or plantations – Chairman Sanjiv Puri says at ITC AGM",
       "reading": {
-        "stance": "supports",
-        "claim": "direct rural boost play",
-        "because": "94% of ITC’s businesses now linked to agri-crops or plantations"
+        "stance": "unrelated",
+        "claim": "",
+        "because": ""
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "06bfc06bd89d6116": {
@@ -74,19 +87,19 @@
       "model": "gemini-3.8-flash"
     },
     "06c1db8f6f22c9a6": {
-      "v": "4",
+      "v": "6",
       "ticker": "GODREJPROP",
       "headline": "Godrej Properties (NSE:GODREJPROP): What Does the New INR 6,000 Crore Marine Lines Project Mean?",
       "reading": {
         "stance": "supports",
-        "claim": "Large residential developer adding projects such as the ₹6,000 crore Marine Lines launch in Mumbai, with pre-sales momentum in Mumbai and NCR",
-        "because": "New INR 6,000 Crore Marine Lines Project"
+        "claim": "adding projects such as the ₹6,000 crore Marine Lines launch in Mumbai",
+        "because": "INR 6,000 Crore Marine Lines Project"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "07063c712c8a923c": {
-      "v": "4",
+      "v": "6",
       "ticker": "TCS",
       "headline": "Press Release - DGCX partners with TCS to advance and upgrade derivatives market infrastructure",
       "reading": {
@@ -94,11 +107,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "0710440b55fe67f5": {
-      "v": "5",
+      "v": "6",
       "ticker": "SUZLON",
       "headline": "Suzlon stock falls for fifth straight session; brokerage cuts target price",
       "reading": {
@@ -106,23 +119,23 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "0771ec88024406da": {
-      "v": "4",
+      "v": "6",
       "ticker": "RELAXO",
       "headline": "Relaxo and EaseMyTrip Revive ‘BUY & FLY’ Campaign, Offering Travel Rewards on Footwear Purchases",
       "reading": {
-        "stance": "unrelated",
-        "claim": "",
-        "because": ""
+        "stance": "supports",
+        "claim": "Mass-market footwear leader with a wide distribution network",
+        "because": "Revive ‘BUY & FLY’ Campaign, Offering Travel Rewards on Footwear Purchases"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "07a046016ab3c081": {
-      "v": "5",
+      "v": "6",
       "ticker": "BHEL",
       "headline": "BHEL shares hit all-time high post strong Q1 show; will profitability concerns weigh on outlook?",
       "reading": {
@@ -130,7 +143,7 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "0850c2dcc7849b00": {
@@ -146,7 +159,7 @@
       "model": "gemini-flash-lite-latest"
     },
     "086565cf29b20ab0": {
-      "v": "4",
+      "v": "6",
       "ticker": "DIXON",
       "headline": "SAM Advises Vivo Mobile India On Strategic Joint Venture With Dixon Technologies",
       "reading": {
@@ -154,35 +167,47 @@
         "claim": "Leader in electronic assembly (mobile, laptop, LED TV)",
         "because": "SAM Advises Vivo Mobile India On Strategic Joint Venture With Dixon Technologies"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "09b70c65e847ce96": {
-      "v": "4",
+      "v": "6",
       "ticker": "MPHASIS",
       "headline": "MphasiS Limited has informed the Exchange regarding a press release dated September 02, 2026, titled \"Mphasis and TechnoPro Holdings Sign Strategic agreement to Accelerate AI-led Enterprise Transforma",
       "reading": {
         "stance": "supports",
-        "claim": "Direct-core BFS-focused IT services player, key beneficiary of enterprise cloud and cost-takeout deals",
-        "because": "Sign Strategic agreement to Accelerate AI-led Enterprise Transformation"
+        "claim": "key beneficiary of enterprise cloud and cost-takeout deals",
+        "because": "Mphasis and TechnoPro Holdings Sign Strategic agreement to Accelerate AI-led Enterprise Transformation"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
+      "model": "gemini-flash-lite-latest"
+    },
+    "09c3579d60d27db6": {
+      "v": "6",
+      "ticker": "PERSISTENT",
+      "headline": "3 AI Sector Stocks With a Strong Future Roadmap: Infosys, Persistent Systems and Coforge",
+      "reading": {
+        "stance": "unrelated",
+        "claim": "",
+        "because": ""
+      },
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "09c9558dd0a43039": {
-      "v": "5",
+      "v": "6",
       "ticker": "HAL",
       "headline": "Government shelves plan for second HAL fighter jet assembly line",
       "reading": {
         "stance": "contradicts",
         "claim": "expanding local fighter jet assembly",
-        "because": "shelves plan for second HAL fighter jet assembly line"
+        "because": "Government shelves plan for second HAL fighter jet assembly line"
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "0a81bd9546d4568a": {
-      "v": "5",
+      "v": "6",
       "ticker": "ITC",
       "headline": "PDUNASS Inaugurates Joint EPFO–ITC-ILO Training Programme on “Actuarial Practices in Social Security: Strengthening Actuarial Governance at EPFO India”",
       "reading": {
@@ -190,11 +215,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "0aa4ba7a924c32f0": {
-      "v": "5",
+      "v": "6",
       "ticker": "DIXON",
       "headline": "Dixon Technologies CFO resigns",
       "reading": {
@@ -202,11 +227,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "0b36c0e3d2c13bf0": {
-      "v": "4",
+      "v": "6",
       "ticker": "RELAXO",
       "headline": "Relaxo Footwears Number of Employees 2026 | Employee Count & Headcount Data",
       "reading": {
@@ -214,7 +239,7 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "0bc1e2356f3f6671": {
@@ -254,7 +279,7 @@
       "model": "gemini-3.8-flash"
     },
     "0cd6df1ded7d8d78": {
-      "v": "4",
+      "v": "6",
       "ticker": "ADANIGREEN",
       "headline": "Adani Green Energy Limited (NSE: ADANIGREEN) in Focus on Renewable Expansion",
       "reading": {
@@ -262,11 +287,11 @@
         "claim": "Developing the world's largest renewable energy park in Khavda, Gujarat (30 GW capacity target)",
         "because": "Renewable Expansion"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "0d95ed721f3ede41": {
-      "v": "5",
+      "v": "6",
       "ticker": "COFORGE",
       "headline": "Coforge shares rise on $5 billion revenue target by FY30; analysts shift focus to execution plans",
       "reading": {
@@ -274,11 +299,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-07",
-      "model": "gemini-flash-lite-latest"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-latest"
     },
     "0dcb0c4e4420c32b": {
-      "v": "5",
+      "v": "6",
       "ticker": "CONCOR",
       "headline": "Government scraps ₹10,000 crore container manufacturing scheme",
       "reading": {
@@ -286,7 +311,7 @@
         "claim": "major beneficiary of the ₹10,000 crore container manufacturing scheme",
         "because": "Government scraps ₹10,000 crore container manufacturing scheme"
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "0ddeb2841bfc1157": {
@@ -302,7 +327,7 @@
       "model": "gemini-flash-lite-latest"
     },
     "0e47993a2a4eb024": {
-      "v": "4",
+      "v": "6",
       "ticker": "PERSISTENT",
       "headline": "Prefer Coforge, Mphasis, Persistent shares to IT majors ahead of Q1 earnings: Analyst",
       "reading": {
@@ -310,11 +335,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "0e7ee0b387728b3c": {
-      "v": "4",
+      "v": "6",
       "ticker": "SYRMA",
       "headline": "Syrma SGS Technology (NSEI:SYRMA) Stock Forecast & Analyst Predictions",
       "reading": {
@@ -322,11 +347,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "0fb5a59015f6c69d": {
-      "v": "5",
+      "v": "6",
       "ticker": "BEL",
       "headline": "Navy awards command radar contract to Tata Advanced Systems after BEL loses bid",
       "reading": {
@@ -334,23 +359,23 @@
         "claim": "securing major naval and surveillance command radar orders",
         "because": "Navy awards command radar contract to Tata Advanced Systems after BEL loses bid"
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "10ce78a75c89d877": {
-      "v": "4",
+      "v": "6",
       "ticker": "SUZLON",
       "headline": "Suzlon Energy Secures 201.6 MW Wind Project Order From Waaree Group in Andhra Pradesh",
       "reading": {
         "stance": "supports",
         "claim": "dominating wind turbine supply with a record order book",
-        "because": "Suzlon Energy Secures 201.6 MW Wind Project Order From Waaree Group"
+        "because": "Suzlon Energy Secures 201.6 MW Wind Project Order From Waaree Group in Andhra Pradesh"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "111ef0747b04a543": {
-      "v": "4",
+      "v": "6",
       "ticker": "CONCOR",
       "headline": "CONCOR flags off first export container to the UK from ICD Whitefield under India–UK FTA",
       "reading": {
@@ -358,19 +383,19 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "11ad0315586f25c5": {
-      "v": "4",
+      "v": "6",
       "ticker": "DIXON",
       "headline": "Rs 1.27 lk cr Semicon 2.0: 1 ships chips, 3 build moats — CG Power, Kaynes, Dixon & Tata Elxsi",
       "reading": {
         "stance": "supports",
         "claim": "Leader in electronic assembly (mobile, laptop, LED TV)",
-        "because": "Semicon 2.0: 1 ships chips, 3 build moats — CG Power, Kaynes, Dixon & Tata Elxsi"
+        "because": "Dixon & Tata Elxsi"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "11f63aa82ed902da": {
@@ -386,7 +411,7 @@
       "model": "gemini-flash-lite-latest"
     },
     "12a3de29c80b1fd2": {
-      "v": "4",
+      "v": "6",
       "ticker": "SUZLON",
       "headline": "Suzlon Energy Secures 250 MW Wind Order From Torrent Green Energy",
       "reading": {
@@ -394,23 +419,35 @@
         "claim": "dominating wind turbine supply with a record order book",
         "because": "Suzlon Energy Secures 250 MW Wind Order From Torrent Green Energy"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
+      "model": "gemini-flash-lite-latest"
+    },
+    "12ce02876b1671ca": {
+      "v": "6",
+      "ticker": "RELIANCE",
+      "headline": "Reliance Industries unveils major investment proposals across key sectors in Andhra Pradesh",
+      "reading": {
+        "stance": "supports",
+        "claim": "scaling retail stores, and commissioning green energy gigafactories",
+        "because": "unveils major investment proposals across key sectors in Andhra Pradesh"
+      },
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "12e795959ebdc352": {
-      "v": "5",
+      "v": "6",
       "ticker": "DIXON",
       "headline": "Gigabyte unveils its first Made-in-India gaming laptop, Gaming A16, in partnership with Dixon Technologies",
       "reading": {
         "stance": "supports",
         "claim": "Leader in electronic assembly (mobile, laptop, LED TV)",
-        "because": "unveils its first Made-in-India gaming laptop, Gaming A16, in partnership with Dixon Technologies"
+        "because": "Gigabyte unveils its first Made-in-India gaming laptop, Gaming A16, in partnership with Dixon Technologies"
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "1340776f5de945d6": {
-      "v": "4",
+      "v": "6",
       "ticker": "ACMESOLAR",
       "headline": "ACME Solar ACMESOLAR: 66.68 MW Phase-I Commissioned in Rajasthan",
       "reading": {
@@ -418,56 +455,55 @@
         "claim": "Renewable developer scaling solar plus battery storage, commissioning new Rajasthan capacity on record revenue",
         "because": "66.68 MW Phase-I Commissioned in Rajasthan"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "13df65ae3f4981ac": {
-      "v": "4",
+      "v": "6",
       "ticker": "BPCL",
       "headline": "BPCL exits Numaligarh Refinery ahead of privatisation",
       "reading": {
-        "stance": "contradicts",
-        "claim": "State refiner",
-        "because": "BPCL exits Numaligarh Refinery ahead of privatisation"
+        "stance": "unrelated",
+        "claim": "",
+        "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "14996f2626f66776": {
-      "v": "5",
+      "v": "6",
       "ticker": "SUZLON",
       "headline": "Suzlon bags 400 MW wind EPC order from Tata Power Renewable",
       "reading": {
         "stance": "supports",
         "claim": "dominating wind turbine supply with a record order book",
-        "because": "bags 400 MW wind EPC order from Tata Power Renewable"
+        "because": "Suzlon bags 400 MW wind EPC order from Tata Power Renewable"
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "149f10839d18fb74": {
-      "v": "5",
+      "v": "6",
       "ticker": "RELIANCE",
       "headline": "US President Trump Announces $300 Billion Partnership with Reliance to Build First Major US Refinery in 50 Years",
       "reading": {
         "stance": "unrelated",
         "claim": "",
-        "because": "",
-        "about": false
+        "because": ""
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "1581a4730bfe1821": {
-      "v": "4",
+      "v": "6",
       "ticker": "DIACABS",
       "headline": "Diamond Power Infrastructure (NSE:DIACABS) Hits All-Time High on Strong Order Book",
       "reading": {
         "stance": "supports",
         "claim": "fast-growing order book",
-        "because": "Strong Order Book"
+        "because": "Hits All-Time High on Strong Order Book"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "16527d5cbeb22eae": {
@@ -483,7 +519,7 @@
       "model": "gemini-3.8-flash"
     },
     "16667428eb85e394": {
-      "v": "4",
+      "v": "6",
       "ticker": "SUZLON",
       "headline": "Suzlon eyes full-stack renewable play, international expansion",
       "reading": {
@@ -491,7 +527,7 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "16c68241b43d51ad": {
@@ -507,15 +543,15 @@
       "model": "gemini-flash-lite-latest"
     },
     "1747483888e1e085": {
-      "v": "4",
+      "v": "6",
       "ticker": "KAYNES",
       "headline": "Kaynes and BOSGAME partner to bring computing brand to India",
       "reading": {
-        "stance": "supports",
-        "claim": "High-end electronics and PCBA manufacturing",
-        "because": "Kaynes and BOSGAME partner to bring computing brand to India"
+        "stance": "unrelated",
+        "claim": "",
+        "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "17abaf7cef782b63": {
@@ -531,7 +567,7 @@
       "model": "gemini-flash-lite-latest"
     },
     "183e00713c3b26f3": {
-      "v": "4",
+      "v": "6",
       "ticker": "CPPLUS",
       "headline": "Aditya Infotech (CPPLUS) Q1 25/26 earnings summary",
       "reading": {
@@ -539,11 +575,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "18441c1b773a4ee9": {
-      "v": "4",
+      "v": "6",
       "ticker": "DIXON",
       "headline": "Electronics components facilities of Kaynes, Dixon, Wipro, Motherson & others to start operations in few mon..",
       "reading": {
@@ -551,11 +587,11 @@
         "claim": "Leader in electronic assembly (mobile, laptop, LED TV)",
         "because": "Electronics components facilities of Kaynes, Dixon, Wipro, Motherson & others to start operations in few mon"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "1880b53acf38829e": {
-      "v": "5",
+      "v": "6",
       "ticker": "BHEL",
       "headline": "Hystar and BHEL Partner to Manufacture PEM Electrolysers in India",
       "reading": {
@@ -563,23 +599,23 @@
         "claim": "expanding local container manufacturing and green energy grids",
         "because": "Hystar and BHEL Partner to Manufacture PEM Electrolysers in India"
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "18a7542e495daea9": {
-      "v": "5",
+      "v": "6",
       "ticker": "CAMPUS",
       "headline": "Campus Activewear unveils its first reimagined store in New Delhi",
       "reading": {
-        "stance": "supports",
-        "claim": "Dominant direct-to-consumer sports footwear brand in tier-2/3 cities, major beneficiary of fitness trends",
-        "because": "Campus Activewear unveils its first reimagined store in New Delhi"
+        "stance": "unrelated",
+        "claim": "",
+        "because": ""
       },
-      "seen": "2026-10-07",
-      "model": "gemini-flash-lite-latest"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-latest"
     },
     "19162a56845b5743": {
-      "v": "4",
+      "v": "6",
       "ticker": "TCS",
       "headline": "TCS opens India's first lights-out factory lab in Pune",
       "reading": {
@@ -587,11 +623,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "1931fd0202abcff4": {
-      "v": "4",
+      "v": "6",
       "ticker": "SUZLON",
       "headline": "Suzlon powers Waaree Group's renewable ambitions with a maiden DevCo led 201.6 MW wind order",
       "reading": {
@@ -599,11 +635,11 @@
         "claim": "dominating wind turbine supply with a record order book",
         "because": "Suzlon powers Waaree Group's renewable ambitions with a maiden DevCo led 201.6 MW wind order"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "197966b64ce5498f": {
-      "v": "5",
+      "v": "6",
       "ticker": "COFORGE",
       "headline": "Coforge margins contract for third straight quarter as GenAI deals squeeze pricing",
       "reading": {
@@ -611,11 +647,11 @@
         "claim": "expanding margins via GenAI offerings",
         "because": "Coforge margins contract for third straight quarter as GenAI deals squeeze pricing"
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "1aadb627829df75f": {
-      "v": "4",
+      "v": "6",
       "ticker": "BEL",
       "headline": "Defence stocks: Bharat Electronics is Motilal Oswal's top pick as Rs 13 lakh crore approvals boost order...",
       "reading": {
@@ -623,23 +659,23 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
-      "model": "gemini-3.8-flash"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-lite-latest"
     },
     "1aaf8e5ca7b298e0": {
-      "v": "4",
+      "v": "6",
       "ticker": "BHEL",
       "headline": "BHEL Partners With Hystar To Advance PEM Electrolyzers Technology For Green Hydrogen",
       "reading": {
         "stance": "supports",
-        "claim": "expanding local container manufacturing and green energy grids",
-        "because": "Partners With Hystar To Advance PEM Electrolyzers Technology For Green Hydrogen"
+        "claim": "green energy grids",
+        "because": "BHEL Partners With Hystar To Advance PEM Electrolyzers Technology For Green Hydrogen"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "1ad9e3a7fb8646ea": {
-      "v": "4",
+      "v": "6",
       "ticker": "BPCL",
       "headline": "BPCL flags off first Extreme Weather Grade diesel rake from Bina Refinery",
       "reading": {
@@ -647,11 +683,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "1adb1a3861723a6f": {
-      "v": "5",
+      "v": "6",
       "ticker": "MPHASIS",
       "headline": "TCS, Mphasis, Infosys, Persistent Systems shares fall, Nifty IT worst sectoral performer; here's why",
       "reading": {
@@ -659,11 +695,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "1afd91f819825668": {
-      "v": "4",
+      "v": "6",
       "ticker": "BHEL",
       "headline": "Titagarh Rail Systems Board Approves BHEL Joint Venture for Vande Bharat Maintenance",
       "reading": {
@@ -671,11 +707,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "1ca1045aca0884c8": {
-      "v": "4",
+      "v": "6",
       "ticker": "FORTIS",
       "headline": "IHH plans to raise Fortis stake to 51%, expand capacity to 10,000 beds by 2031",
       "reading": {
@@ -683,31 +719,43 @@
         "claim": "Hospital and diagnostics network benefiting from insurance penetration and Ayushman Bharat volumes",
         "because": "expand capacity to 10,000 beds by 2031"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "1d19ee4136ebb691": {
-      "v": "4",
+      "v": "6",
       "ticker": "KAYNES",
       "headline": "Bosgame Enters India with Kaynes Technology; Companies Sign Strategic MoU to Strengthen Computing Presence in India",
       "reading": {
-        "stance": "supports",
-        "claim": "High-end electronics and PCBA manufacturing",
-        "because": "Bosgame Enters India with Kaynes Technology; Companies Sign Strategic MoU to Strengthen Computing Presence in India"
+        "stance": "unrelated",
+        "claim": "",
+        "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
+      "model": "gemini-flash-lite-latest"
+    },
+    "1eb0fc4aa21fb49a": {
+      "v": "6",
+      "ticker": "TATACONSUM",
+      "headline": "TATA CONSUMER PRODUCTS LIMITED has informed the Exchange regarding 'the update on litigation'.",
+      "reading": {
+        "stance": "unrelated",
+        "claim": "",
+        "because": ""
+      },
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "1f62fcde14507162": {
-      "v": "5",
+      "v": "6",
       "ticker": "DIXON",
       "headline": "Government clears Dixon (India)-Vivo (China) joint venture for manufacturing smartphones",
       "reading": {
         "stance": "supports",
-        "claim": "heavily subsidized under manufacturing PLI",
+        "claim": "Leader in electronic assembly (mobile, laptop, LED TV)",
         "because": "Government clears Dixon (India)-Vivo (China) joint venture for manufacturing smartphones"
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "1f8721e5042e8838": {
@@ -735,7 +783,7 @@
       "model": "gemini-flash-lite-latest"
     },
     "2105cfcc61e1c095": {
-      "v": "5",
+      "v": "6",
       "ticker": "SUZLON",
       "headline": "Suzlon Energy raises ₹2,500 crore term loan, ending its debt-free status",
       "reading": {
@@ -743,31 +791,31 @@
         "claim": "completely debt-free",
         "because": "raises ₹2,500 crore term loan, ending its debt-free status"
       },
-      "seen": "2026-10-07",
-      "model": "gemini-flash-lite-latest"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-latest"
     },
     "2237aca414dbe5d1": {
-      "v": "4",
+      "v": "6",
       "ticker": "KAYNES",
       "headline": "Electronics components facilities of Kaynes, Dixon, Wipro, Motherson & others to start operations in few mon..",
       "reading": {
         "stance": "supports",
         "claim": "High-end electronics and PCBA manufacturing",
-        "because": "Electronics components facilities of Kaynes, Dixon, Wipro, Motherson & others to start operations in few mon"
+        "because": "Electronics components facilities of Kaynes"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "22523ac4b661254b": {
-      "v": "4",
+      "v": "6",
       "ticker": "COFORGE",
       "headline": "Coforge Limited has informed the Exchange regarding a press release dated September 30, 2026, titled \"\"Coforge Highlights the Shift to Agentic Travel and Modern Airline Retailing\"\".",
       "reading": {
         "stance": "supports",
-        "claim": "large deal wins in BFSI and travel verticals",
-        "because": "Coforge Highlights the Shift to Agentic Travel and Modern Airline Retailing"
+        "claim": "expanding margins via GenAI offerings",
+        "because": "Coforge Highlights the Shift to Agentic Travel"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "2272bc5a404b4563": {
@@ -807,7 +855,7 @@
       "model": "gemini-flash-lite-latest"
     },
     "24fef8e18d06f750": {
-      "v": "4",
+      "v": "6",
       "ticker": "ADANIPOWER",
       "headline": "Adaniconnex Private Limited completed the acquisition of Chandenvalle Infra Park Limited from Adani Power Limited for INR 5.4 billion.",
       "reading": {
@@ -815,11 +863,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "25753fccd87adaac": {
-      "v": "4",
+      "v": "6",
       "ticker": "RELAXO",
       "headline": "Relaxo Footwears Q1FY27 net profit up 12% to ₹549 crore",
       "reading": {
@@ -827,23 +875,23 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "261f7c48e2e91d76": {
-      "v": "4",
+      "v": "6",
       "ticker": "SYRMA",
       "headline": "Syrma SGS-Elemaster opens electronics manufacturing facility in Bengaluru",
       "reading": {
         "stance": "supports",
         "claim": "new Jodhpur and Bengaluru plants",
-        "because": "Syrma SGS-Elemaster opens electronics manufacturing facility in Bengaluru"
+        "because": "opens electronics manufacturing facility in Bengaluru"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "26d47328196f1376": {
-      "v": "4",
+      "v": "6",
       "ticker": "CONCOR",
       "headline": "CONCOR awarded Authorized Economic Operator (AEO) Certificate by Indian Customs",
       "reading": {
@@ -851,11 +899,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "2767ba4e4bdd7e90": {
-      "v": "4",
+      "v": "6",
       "ticker": "FORTIS",
       "headline": "Fortis Healthcare shares rise as IHH Healthcare reiterates plans to increase stake",
       "reading": {
@@ -863,7 +911,7 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "277ab7d6161c5873": {
@@ -879,52 +927,52 @@
       "model": "gemini-flash-lite-latest"
     },
     "27b9620c536fb3c4": {
-      "v": "4",
+      "v": "6",
       "ticker": "LTTS",
       "headline": "LTTS’ Revenue Grew 14% By Engineering Intelligence",
       "reading": {
         "stance": "supports",
-        "claim": "Engineering R&D services leader, scaling embedded software and semiconductor design-services wins",
-        "because": "Revenue Grew 14% By Engineering Intelligence"
+        "claim": "Engineering R&D services leader",
+        "because": "LTTS’ Revenue Grew 14% By Engineering Intelligence"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "293e6047d8841c2e": {
-      "v": "4",
+      "v": "6",
       "ticker": "SYRMA",
       "headline": "Syrma SGS Subsidiary Opens New Medical Plastics Facility In Jodhpur",
       "reading": {
         "stance": "supports",
         "claim": "new Jodhpur and Bengaluru plants",
-        "because": "Syrma SGS Subsidiary Opens New Medical Plastics Facility In Jodhpur"
+        "because": "Opens New Medical Plastics Facility In Jodhpur"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "2aae3dd5e3147072": {
-      "v": "5",
+      "v": "6",
       "ticker": "CONCOR",
       "headline": "CONCOR starts double-stack operations on WDFC",
-      "reading": {
-        "stance": "supports",
-        "claim": "Dominant railway container carrier",
-        "because": "CONCOR starts double-stack operations on WDFC"
-      },
-      "seen": "2026-10-07",
-      "model": "gemini-flash-lite-latest"
-    },
-    "2c5ab27cc907e938": {
-      "v": "4",
-      "ticker": "BEL",
-      "headline": "Market Preview, June 22, 2026: Vi Warrant Allotment, BEL ₹1,081-Cr Orders, JSW Infra QIP, Hindustan Zinc Green Hydrogen MoU and Info Edge AI Portfolio to Keep Markets Busy on Tuesday",
       "reading": {
         "stance": "unrelated",
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
-      "model": "gemini-3.8-flash"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-latest"
+    },
+    "2c5ab27cc907e938": {
+      "v": "6",
+      "ticker": "BEL",
+      "headline": "Market Preview, June 22, 2026: Vi Warrant Allotment, BEL ₹1,081-Cr Orders, JSW Infra QIP, Hindustan Zinc Green Hydrogen MoU and Info Edge AI Portfolio to Keep Markets Busy on Tuesday",
+      "reading": {
+        "stance": "supports",
+        "claim": "securing major naval and surveillance command radar orders",
+        "because": "BEL ₹1,081-Cr Orders"
+      },
+      "seen": "2026-10-08",
+      "model": "gemini-flash-lite-latest"
     },
     "2cf5fa8d2abe6659": {
       "v": "1",
@@ -939,7 +987,7 @@
       "model": "gemini-flash-lite-latest"
     },
     "2d5c392a86b128b0": {
-      "v": "4",
+      "v": "6",
       "ticker": "FORTIS",
       "headline": "Fortis Healthcare Limited has informed the Exchange Regarding Order Passed By The Hon Ble Delhi High Court In Relation To Certain Applications Filed By Daiichi Sankyo Company, Limited Inter Alia The C",
       "reading": {
@@ -947,11 +995,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "2de997412a26df5c": {
-      "v": "5",
+      "v": "6",
       "ticker": "IDEAFORGE",
       "headline": "Supply chain disruptions push ideaForge into losses in Q1FY27",
       "reading": {
@@ -959,11 +1007,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-07",
-      "model": "gemini-flash-lite-latest"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-latest"
     },
     "2e3cd73ecd8b5eb1": {
-      "v": "4",
+      "v": "6",
       "ticker": "DIXON",
       "headline": "TVS Motor, Dixon Tech in, Reliance, M&M out: Which stocks made it into Macquarie's new India portfolio?",
       "reading": {
@@ -971,11 +1019,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "2ff872c4cbd23033": {
-      "v": "4",
+      "v": "6",
       "ticker": "KAYNES",
       "headline": "Kaynes Technology (NSE:KAYNES) Business Outlook and Electronics Growth Factors",
       "reading": {
@@ -983,35 +1031,59 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "307cc0f5fe27b9a2": {
-      "v": "5",
+      "v": "6",
       "ticker": "SUZLON",
       "headline": "Suzlon order book shrinks 30% as Tata Power cancels 400 MW wind order",
       "reading": {
         "stance": "contradicts",
-        "claim": "dominating wind turbine supply with a record order book",
+        "claim": "record order book",
         "because": "order book shrinks 30% as Tata Power cancels 400 MW wind order"
       },
-      "seen": "2026-10-07",
-      "model": "gemini-flash-lite-latest"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-latest"
     },
     "319ab11f910b774e": {
-      "v": "4",
+      "v": "6",
       "ticker": "ITC",
       "headline": "Premiumization drive growth for ITC’s Personal Care Division in FY26",
       "reading": {
         "stance": "supports",
-        "claim": "Resilient cigarette margins funding rapid expansion of high-margin FMCG brands, direct rural boost play",
+        "claim": "rapid expansion of high-margin FMCG brands",
         "because": "Premiumization drive growth for ITC’s Personal Care Division"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
+      "model": "gemini-flash-lite-latest"
+    },
+    "3281c77438e496ec": {
+      "v": "6",
+      "ticker": "CONCOR",
+      "headline": "CONCOR places ₹87.15 crore order for 12 rakes of BLSS Wagons",
+      "reading": {
+        "stance": "unrelated",
+        "claim": "",
+        "because": ""
+      },
+      "seen": "2026-10-08",
+      "model": "gemini-flash-lite-latest"
+    },
+    "3319d5e888bc3db4": {
+      "v": "6",
+      "ticker": "IDEAFORGE",
+      "headline": "Certain Equity Shares of ideaForge Technology Limited are subject to a Lock-Up Agreement Ending on 8-OCT-2026.",
+      "reading": {
+        "stance": "unrelated",
+        "claim": "",
+        "because": ""
+      },
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "3350fe368c1964d5": {
-      "v": "4",
+      "v": "6",
       "ticker": "CAMPUS",
       "headline": "Campus Activewear Number of Employees 2026 | Employee Count & Headcount Data",
       "reading": {
@@ -1019,23 +1091,23 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "33781b25865aee23": {
-      "v": "4",
+      "v": "6",
       "ticker": "DIACABS",
       "headline": "Diamond Power Infrastructure DIACABS NCLT Exit Completed",
       "reading": {
-        "stance": "unrelated",
-        "claim": "",
-        "because": ""
+        "stance": "supports",
+        "claim": "out of insolvency",
+        "because": "NCLT Exit Completed"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "35a6509f61157fe1": {
-      "v": "4",
+      "v": "6",
       "ticker": "ACMESOLAR",
       "headline": "ACME Solar Holdings Ltd (NSE:ACMESOLAR) (Q1 2027) Earnings Call Highlights: Record Revenue and ...",
       "reading": {
@@ -1043,7 +1115,19 @@
         "claim": "Renewable developer scaling solar plus battery storage, commissioning new Rajasthan capacity on record revenue",
         "because": "Record Revenue"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
+      "model": "gemini-flash-lite-latest"
+    },
+    "35f6d67000b608eb": {
+      "v": "6",
+      "ticker": "COFORGE",
+      "headline": "Coforge launches CXNova agentic AI platform for customer experience orchestration",
+      "reading": {
+        "stance": "supports",
+        "claim": "expanding margins via GenAI offerings",
+        "because": "Coforge launches CXNova agentic AI platform"
+      },
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "376b41ab3c4a77e4": {
@@ -1059,7 +1143,7 @@
       "model": "gemini-flash-lite-latest"
     },
     "37cddfcc345c2f46": {
-      "v": "4",
+      "v": "6",
       "ticker": "ICICIBANK",
       "headline": "ICICI Bank Limited has informed the Exchange about Disclosure under Regulation 30 of the SEBI (Listing Obligations and Disclosure Requirements) Regulations, 2015",
       "reading": {
@@ -1067,8 +1151,8 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
-      "model": "gemini-3.8-flash"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-lite-latest"
     },
     "3a9fdd0252c9549e": {
       "v": "4",
@@ -1083,43 +1167,43 @@
       "model": "gemini-flash-lite-latest"
     },
     "3aff916abffec0ba": {
-      "v": "4",
+      "v": "6",
       "ticker": "LEMONTREE",
       "headline": "Lemon Tree Hotels Limited has informed the Exchange regarding a press release dated September 24, 2026, titled \"the Company has signed a License Agreement viz. Lemon Tree Hotel, Patancheru in Telangan",
       "reading": {
         "stance": "supports",
-        "claim": "Mid-market chain expanding into tier-2 cities",
-        "because": "signed a License Agreement viz. Lemon Tree Hotel, Patancheru in Telangana"
+        "claim": "Mid-market chain expanding into tier-2 cities as UDAN air connectivity widens the travel base",
+        "because": "the Company has signed a License Agreement viz. Lemon Tree Hotel, Patancheru in Telangana"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "3c47a7754503dab7": {
-      "v": "4",
+      "v": "6",
       "ticker": "PERSISTENT",
       "headline": "Persistent Systems Limited has informed the Exchange regarding a press release dated September 21, 2026, titled \"Persistent Earns Databricks Brickbuilder Specialization for BFSI to Advance Governed AI",
       "reading": {
         "stance": "supports",
         "claim": "enterprise AI services provider",
-        "because": "Persistent Earns Databricks Brickbuilder Specialization for BFSI to Advance Governed AI in Financial Services"
+        "because": "Earns Databricks Brickbuilder Specialization for BFSI to Advance Governed AI in Financial Services"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "3c6a9752d43cfb60": {
-      "v": "4",
+      "v": "6",
       "ticker": "SPELS",
       "headline": "CapEx per share of SPEL Semiconductor Limited – NSE:SPELS",
       "reading": {
-        "stance": "unrelated",
-        "claim": "",
-        "because": ""
+        "stance": "supports",
+        "claim": "expanding IC testing capabilities",
+        "because": "CapEx per share of SPEL Semiconductor Limited"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "3c70b7710af3879d": {
-      "v": "4",
+      "v": "6",
       "ticker": "DIXON",
       "headline": "Dixon Tech Secures IMG Approval for Vivo JV Targeting ₹30,000 Cr Smartphone Manufacturing",
       "reading": {
@@ -1127,7 +1211,7 @@
         "claim": "Leader in electronic assembly (mobile, laptop, LED TV)",
         "because": "Dixon Tech Secures IMG Approval for Vivo JV Targeting ₹30,000 Cr Smartphone Manufacturing"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "3cc119ec85a0683b": {
@@ -1155,19 +1239,19 @@
       "model": "gemini-flash-lite-latest"
     },
     "3da3df678e89b50d": {
-      "v": "4",
+      "v": "6",
       "ticker": "SUZLON",
       "headline": "AP Government and Suzlon break ground for 1,325 MW wind projects in Ananthapuramu; unlock 10,500 crores investment and create 1,600 green jobs",
       "reading": {
         "stance": "supports",
-        "claim": "dominating wind turbine supply",
-        "because": "AP Government and Suzlon break ground for 1,325 MW wind projects"
+        "claim": "dominating wind turbine supply with a record order book",
+        "because": "AP Government and Suzlon break ground for 1,325 MW wind projects in Ananthapuramu"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "3e4fd21d21addceb": {
-      "v": "4",
+      "v": "6",
       "ticker": "LTTS",
       "headline": "LTTS concludes global EI OpenHack 2026 with 4,000 participants",
       "reading": {
@@ -1175,11 +1259,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "3f52ce7e11295722": {
-      "v": "4",
+      "v": "6",
       "ticker": "ADANIPOWER",
       "headline": "Adani Enterprises, Adani Power, Adani Ports: Adani Group stocks gain after Adani Airport’s ₹9,825 crore fundraise",
       "reading": {
@@ -1187,23 +1271,23 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "3f99fb2a61c04244": {
-      "v": "5",
+      "v": "6",
       "ticker": "LTTS",
       "headline": "L&T Technology Services Limited has secured a landmark engagement valued over $ 75 million from a leading global technology enterprise.",
       "reading": {
         "stance": "supports",
-        "claim": "Engineering R&D services leader, scaling embedded software and semiconductor design-services wins",
-        "because": "secured a landmark engagement valued over $ 75 million from a leading global technology enterprise"
+        "claim": "scaling embedded software and semiconductor design-services wins",
+        "because": "has secured a landmark engagement valued over $ 75 million"
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "3fd55a18a4b8b3a9": {
-      "v": "4",
+      "v": "6",
       "ticker": "SUZLON",
       "headline": "Suzlon Secures 400 MW EPC Wind Project from Tata Power, Crosses 1 GW Partnership Milestone",
       "reading": {
@@ -1211,11 +1295,11 @@
         "claim": "dominating wind turbine supply with a record order book",
         "because": "Suzlon Secures 400 MW EPC Wind Project from Tata Power"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "3fd5e0ca0fe160cc": {
-      "v": "4",
+      "v": "6",
       "ticker": "RELAXO",
       "headline": "Relaxo Footwears (BSE:530517)",
       "reading": {
@@ -1223,7 +1307,7 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "40664035aa37eac6": {
@@ -1239,7 +1323,7 @@
       "model": "gemini-flash-lite-latest"
     },
     "417ae15790965616": {
-      "v": "4",
+      "v": "6",
       "ticker": "DIXON",
       "headline": "Dixon Technologies meets Bajaj Life Insurance in one-on-one session",
       "reading": {
@@ -1247,7 +1331,7 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "41a68ca1e6ae45c5": {
@@ -1263,7 +1347,7 @@
       "model": "gemini-flash-lite-latest"
     },
     "41bab604228deee9": {
-      "v": "4",
+      "v": "6",
       "ticker": "CONCOR",
       "headline": "CONCOR Launches Ennore to Hyderabad Rail Freight Service",
       "reading": {
@@ -1271,20 +1355,20 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "4221c259ffa4a31c": {
-      "v": "4",
+      "v": "6",
       "ticker": "BEL",
       "headline": "BEL, HAL, Bharat Dynamics: Defence stocks rally as DAC clears ₹52,000 crore defence acquisition proposals",
       "reading": {
-        "stance": "unrelated",
-        "claim": "",
-        "because": ""
+        "stance": "supports",
+        "claim": "securing major naval and surveillance command radar orders",
+        "because": "DAC clears ₹52,000 crore defence acquisition proposals"
       },
-      "seen": "2026-10-06",
-      "model": "gemini-3.8-flash"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-lite-latest"
     },
     "429c77c7e3e5a156": {
       "v": "1",
@@ -1299,7 +1383,7 @@
       "model": "gemini-flash-lite-latest"
     },
     "42eda08d14bb69c2": {
-      "v": "4",
+      "v": "6",
       "ticker": "BEL",
       "headline": "Bharat Electronics Limited has informed the Exchange regarding Proceedings of Annual General Meeting held on August 28, 2026",
       "reading": {
@@ -1307,19 +1391,19 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
-      "model": "gemini-3.8-flash"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-lite-latest"
     },
     "4334f06194bb36b3": {
-      "v": "4",
+      "v": "6",
       "ticker": "SYRMA",
       "headline": "Homegrown PCB manufacturing to drive domestic value add, cut India’s imports: Syrma SGS’ JS Gujral",
       "reading": {
-        "stance": "supports",
-        "claim": "Electronics manufacturing services provider",
-        "because": "Homegrown PCB manufacturing to drive domestic value add, cut India’s imports: Syrma SGS’ JS Gujral"
+        "stance": "unrelated",
+        "claim": "",
+        "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "43d9cc7d62e26d18": {
@@ -1335,7 +1419,7 @@
       "model": "gemini-flash-lite-latest"
     },
     "4419096f68e07131": {
-      "v": "5",
+      "v": "6",
       "ticker": "COFORGE",
       "headline": "Coforge named Exceptional Performer in Whitelane 2026 study",
       "reading": {
@@ -1343,20 +1427,20 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-07",
-      "model": "gemini-flash-lite-latest"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-latest"
     },
     "458c6a89b156524e": {
-      "v": "4",
+      "v": "6",
       "ticker": "HAL",
       "headline": "BEL, HAL, Bharat Dynamics: Defence stocks rally as DAC clears ₹52,000 crore defence acquisition proposals",
       "reading": {
-        "stance": "unrelated",
-        "claim": "",
-        "because": ""
+        "stance": "supports",
+        "claim": "State aerospace major",
+        "because": "DAC clears ₹52,000 crore defence acquisition proposals"
       },
-      "seen": "2026-10-06",
-      "model": "gemini-3.8-flash"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-lite-latest"
     },
     "45a2165a0a094b7e": {
       "v": "1",
@@ -1371,19 +1455,19 @@
       "model": "gemini-flash-lite-latest"
     },
     "46986c3287c67499": {
-      "v": "4",
+      "v": "6",
       "ticker": "BPCL",
       "headline": "Analyst price target upgrade for BPCL bets on Mozambique progress and margin recovery",
       "reading": {
-        "stance": "supports",
-        "claim": "refining margin recovery, progress in its Mozambique gas project",
-        "because": "Analyst price target upgrade for BPCL bets on Mozambique progress and margin recovery"
+        "stance": "unrelated",
+        "claim": "",
+        "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "4699917ae839ee8c": {
-      "v": "4",
+      "v": "6",
       "ticker": "RELAXO",
       "headline": "Clean Max approves sale of stakes in two subsidiaries to Relaxo and VVDN",
       "reading": {
@@ -1391,19 +1475,19 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "46bc292f848908bc": {
-      "v": "4",
+      "v": "6",
       "ticker": "FORTIS",
       "headline": "Fortis Healthcare Inks Agreement for 400-bed Super Speciality Hospital in Delhi",
       "reading": {
         "stance": "supports",
-        "claim": "Hospital and diagnostics network",
-        "because": "400-bed Super Speciality Hospital in Delhi"
+        "claim": "Hospital and diagnostics network benefiting from insurance penetration and Ayushman Bharat volumes",
+        "because": "Fortis Healthcare Inks Agreement for 400-bed Super Speciality Hospital in Delhi"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "471ce24d9cb32c6f": {
@@ -1419,7 +1503,7 @@
       "model": "gemini-flash-lite-latest"
     },
     "486b5405b5c5b57b": {
-      "v": "4",
+      "v": "6",
       "ticker": "IOC",
       "headline": "Finally, Rs 2.4 crore IOC bus terminus in Tondiarpet to be ready after 40 years",
       "reading": {
@@ -1427,7 +1511,7 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "48e81ec6a0d75675": {
@@ -1454,6 +1538,18 @@
       "seen": "2026-10-05",
       "model": "gemini-flash-lite-latest"
     },
+    "4ba8e737ac165831": {
+      "v": "6",
+      "ticker": "RELAXO",
+      "headline": "Relaxo Footwears: பசுமை ஆற்றல் நோக்கி அதிரடி மாற்றம்! புதிய ஒப்பந்தத்தில் கையெழுத்து",
+      "reading": {
+        "stance": "unrelated",
+        "claim": "",
+        "because": ""
+      },
+      "seen": "2026-10-08",
+      "model": "gemini-flash-lite-latest"
+    },
     "4c636aca519bb63b": {
       "v": "3",
       "ticker": "ARVIND",
@@ -1467,43 +1563,43 @@
       "model": "gemini-flash-lite-latest"
     },
     "4c69741e8d5d7f3e": {
-      "v": "4",
+      "v": "6",
       "ticker": "IKS",
       "headline": "ICICI Securities sees recovery in ER&D stocks in Q2; Tata Tech, Netweb, IKS, Cyient among top picks",
-      "reading": {
-        "stance": "supports",
-        "claim": "growing revenue around 20% a year with high returns on capital",
-        "because": "sees recovery in ER&D stocks"
-      },
-      "seen": "2026-10-06",
-      "model": "gemini-flash-lite-latest"
-    },
-    "4cf67180efabb185": {
-      "v": "4",
-      "ticker": "HAL",
-      "headline": "Hindustan Aeronautics Opening Bell Updates: HAL Acquires HATSOFF, Defence Sector Tailwinds",
       "reading": {
         "stance": "unrelated",
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
-      "model": "gemini-3.8-flash"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-lite-latest"
+    },
+    "4cf67180efabb185": {
+      "v": "6",
+      "ticker": "HAL",
+      "headline": "Hindustan Aeronautics Opening Bell Updates: HAL Acquires HATSOFF, Defence Sector Tailwinds",
+      "reading": {
+        "stance": "supports",
+        "claim": "expanding local fighter jet assembly",
+        "because": "HAL Acquires HATSOFF"
+      },
+      "seen": "2026-10-08",
+      "model": "gemini-flash-lite-latest"
     },
     "4d3ad7335b4ab71d": {
-      "v": "5",
+      "v": "6",
       "ticker": "TCS",
       "headline": "TCS launches next-gen system-on-chip design services for automotive and semiconductor companies",
       "reading": {
-        "stance": "supports",
-        "claim": "Expanding sovereign cloud and secure cyber command centers globally for enterprise clients",
-        "because": "launches next-gen system-on-chip design services for automotive and semiconductor companies"
+        "stance": "unrelated",
+        "claim": "",
+        "because": ""
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "4d9110f63bd50210": {
-      "v": "4",
+      "v": "6",
       "ticker": "SUZLON",
       "headline": "Suzlon Energy secures maiden 200 MW wind energy contract from Ayana Renewable Power",
       "reading": {
@@ -1511,7 +1607,7 @@
         "claim": "dominating wind turbine supply with a record order book",
         "because": "Suzlon Energy secures maiden 200 MW wind energy contract from Ayana Renewable Power"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "4ea8167a9f83e01e": {
@@ -1527,7 +1623,7 @@
       "model": "gemini-flash-lite-latest"
     },
     "4f0db08f81d5eb50": {
-      "v": "5",
+      "v": "6",
       "ticker": "SIEMENS",
       "headline": "Siemens bags ₹1,200 crore order from Indian Railways for locomotive propulsion systems",
       "reading": {
@@ -1535,11 +1631,11 @@
         "claim": "expanding local factory automation and grid equipment manufacturing",
         "because": "Siemens bags ₹1,200 crore order from Indian Railways for locomotive propulsion systems"
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "50483105000de349": {
-      "v": "5",
+      "v": "6",
       "ticker": "SIEMENS",
       "headline": "Siemens and FuelCell Energy Partner on Scalable Fuel Cells",
       "reading": {
@@ -1548,11 +1644,11 @@
         "because": "",
         "about": false
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "5099bf86d171d2f7": {
-      "v": "4",
+      "v": "6",
       "ticker": "TCS",
       "headline": "Best Buy’s Global Capability Center in India to transition to TCS",
       "reading": {
@@ -1560,11 +1656,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "512134a2dbfc8dba": {
-      "v": "5",
+      "v": "6",
       "ticker": "BEL",
       "headline": "Defence Ministry signs 1950 crore contract with Bharat Electronics Limited",
       "reading": {
@@ -1572,23 +1668,23 @@
         "claim": "securing major naval and surveillance command radar orders",
         "because": "Defence Ministry signs 1950 crore contract with Bharat Electronics Limited"
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "521d1d1ba23a53ac": {
-      "v": "4",
+      "v": "6",
       "ticker": "FORTIS",
       "headline": "Fortis signs 29-year agreement for 400-bed super speciality hospital in Ashok Vihar",
       "reading": {
         "stance": "supports",
-        "claim": "Hospital and diagnostics network",
-        "because": "400-bed super speciality hospital in Ashok Vihar"
+        "claim": "Hospital and diagnostics network benefiting from insurance penetration and Ayushman Bharat volumes",
+        "because": "Fortis signs 29-year agreement for 400-bed super speciality hospital in Ashok Vihar"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "525300e460f896ac": {
-      "v": "4",
+      "v": "6",
       "ticker": "HAL",
       "headline": "Hindustan Aeronautics Limited has informed the Exchange regarding Proceedings of Annual General Meeting held on August 28, 2026",
       "reading": {
@@ -1596,23 +1692,23 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
-      "model": "gemini-3.8-flash"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-lite-latest"
     },
     "527a91bc17a5249a": {
-      "v": "5",
+      "v": "6",
       "ticker": "IDEAFORGE",
       "headline": "IdeaForge Technology unveils mapping drone",
       "reading": {
         "stance": "supports",
-        "claim": "Pioneer in tactical and mapping drone systems",
+        "claim": "mapping drone systems",
         "because": "unveils mapping drone"
       },
-      "seen": "2026-10-07",
-      "model": "gemini-flash-lite-latest"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-latest"
     },
     "5325f950d83919ca": {
-      "v": "4",
+      "v": "6",
       "ticker": "VBL",
       "headline": "Varun Beverages Q1 CY2026 Results: Good or Bad? Check Revenue, PAT, Volume Growth, Dividend Details",
       "reading": {
@@ -1620,11 +1716,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "5363f8f622df1177": {
-      "v": "4",
+      "v": "6",
       "ticker": "SYRMA",
       "headline": "Syrma SGS JV renamed Syrma SGS Elemaster Private Limited",
       "reading": {
@@ -1632,7 +1728,7 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "53a0a4dc80929499": {
@@ -1648,7 +1744,7 @@
       "model": "gemini-flash-lite-latest"
     },
     "53d93aaa93f47654": {
-      "v": "4",
+      "v": "6",
       "ticker": "CONCOR",
       "headline": "CONCOR signs MoU with APEDA to strengthen export cold chain and logistics ecosystem",
       "reading": {
@@ -1656,19 +1752,19 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "5476bd6a4526f825": {
-      "v": "4",
+      "v": "6",
       "ticker": "KAYNES",
       "headline": "CG Power, Kaynes, Moschip Tech: Chip stocks rally as PM bets big on India’s semiconductor push",
       "reading": {
-        "stance": "supports",
-        "claim": "setting up a state-of-the-art semiconductor OSAT plant",
-        "because": "Chip stocks rally as PM bets big on India’s semiconductor push"
+        "stance": "unrelated",
+        "claim": "",
+        "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "5487f6e7b4ff6fff": {
@@ -1684,7 +1780,7 @@
       "model": "gemini-flash-lite-latest"
     },
     "55d0f8cf48cebb9a": {
-      "v": "5",
+      "v": "6",
       "ticker": "ADANIGREEN",
       "headline": "Adani Green Energy Limited Just Missed EPS By 8.7%: Here's What Analysts Think Will Happen Next",
       "reading": {
@@ -1692,11 +1788,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "55e72d357c42e153": {
-      "v": "5",
+      "v": "6",
       "ticker": "BEL",
       "headline": "Ananth Technologies and BEL sign MoU for defence and aerospace systems",
       "reading": {
@@ -1704,20 +1800,20 @@
         "claim": "securing major naval and surveillance command radar orders",
         "because": "Ananth Technologies and BEL sign MoU for defence and aerospace systems"
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "55eef018ffa1ab39": {
-      "v": "5",
+      "v": "6",
       "ticker": "FORTIS",
       "headline": "Fortis signs O&M agreement for 300-bed hospital, enters Odisha market",
       "reading": {
-        "stance": "supports",
-        "claim": "Hospital and diagnostics network",
-        "because": "signs O&M agreement for 300-bed hospital, enters Odisha market"
+        "stance": "unrelated",
+        "claim": "",
+        "because": ""
       },
-      "seen": "2026-10-07",
-      "model": "gemini-flash-lite-latest"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-latest"
     },
     "575774c9d56f20de": {
       "v": "4",
@@ -1732,7 +1828,7 @@
       "model": "gemini-flash-lite-latest"
     },
     "5799d1270746b999": {
-      "v": "5",
+      "v": "6",
       "ticker": "CONCOR",
       "headline": "CONCOR Q1 Revenue Reaches ₹2,160 Crore as Net Profit Holds at ₹267 Crore",
       "reading": {
@@ -1740,23 +1836,23 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "589f14c74b023ca2": {
-      "v": "4",
+      "v": "6",
       "ticker": "SYRMA",
       "headline": "Syrma SGS inaugurates a new facility in Jodhpur",
       "reading": {
         "stance": "supports",
         "claim": "new Jodhpur and Bengaluru plants",
-        "because": "Syrma SGS inaugurates a new facility in Jodhpur"
+        "because": "inaugurates a new facility in Jodhpur"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "5953030374fc1c23": {
-      "v": "4",
+      "v": "6",
       "ticker": "TCS",
       "headline": "Amadeus Partners TCS",
       "reading": {
@@ -1764,23 +1860,25 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "59c34a0379929724": {
-      "v": "4",
+      "v": "6",
       "ticker": "NTPCGREEN",
       "headline": "NTPC Green Energy (NSE:NTPCGREEN): What Does 81.34 MW Kalasar Solar Declaration Mean?",
       "reading": {
-        "stance": "supports",
-        "claim": "steadily commissioning solar capacity such as Dahod and Kalasar toward a large state-backed renewable build-out",
-        "because": "81.34 MW Kalasar Solar Declaration"
+        "stance": "unrelated",
+        "claim": "",
+        "because": "",
+        "downgraded": "supports",
+        "reason": "claim not in the thesis"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "5ac5478b8cc505ac": {
-      "v": "4",
+      "v": "6",
       "ticker": "IOC",
       "headline": "India, Mauritius ink long-term fuel supply agreement; IOC to meet complete import requirement",
       "reading": {
@@ -1788,11 +1886,11 @@
         "claim": "locking in long-term supply deals such as the Mauritius fuel agreement",
         "because": "India, Mauritius ink long-term fuel supply agreement; IOC to meet complete import requirement"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "5b3225690aaec756": {
-      "v": "5",
+      "v": "6",
       "ticker": "SUZLON",
       "headline": "Suzlon Share Price Slumps Over 12% In One Month. Here Are Three Key Reasons Why",
       "reading": {
@@ -1800,11 +1898,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-07",
-      "model": "gemini-flash-lite-latest"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-latest"
     },
     "5b85beedbb52febd": {
-      "v": "4",
+      "v": "6",
       "ticker": "SUZLON",
       "headline": "Suzlon crosses 1 GW partnership with Tata Power following a DevCo led new 400MW EPC order",
       "reading": {
@@ -1812,11 +1910,11 @@
         "claim": "dominating wind turbine supply with a record order book",
         "because": "Suzlon crosses 1 GW partnership with Tata Power following a DevCo led new 400MW EPC order"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "5e187c8c487e74e7": {
-      "v": "4",
+      "v": "6",
       "ticker": "BHEL",
       "headline": "Vande Bharat Sleeper trains: BHEL, Titagarh to form joint venture for 35-year maintenance",
       "reading": {
@@ -1824,23 +1922,23 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "5eb2745ab20b3f85": {
-      "v": "4",
+      "v": "6",
       "ticker": "SYRMA",
       "headline": "Syrma SGS Elemaster Inaugurates state-of-the-art high-reliability electronics manufacturing facility in Bengaluru",
       "reading": {
         "stance": "supports",
         "claim": "new Jodhpur and Bengaluru plants",
-        "because": "Syrma SGS Elemaster Inaugurates state-of-the-art high-reliability electronics manufacturing facility in Bengaluru"
+        "because": "Inaugurates state-of-the-art high-reliability electronics manufacturing facility in Bengaluru"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "60c2e9afe7306deb": {
-      "v": "5",
+      "v": "6",
       "ticker": "HAL",
       "headline": "HAL shares tumble 8% as markets sell off on weak global cues",
       "reading": {
@@ -1848,11 +1946,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "62f60376e64d8292": {
-      "v": "5",
+      "v": "6",
       "ticker": "MPHASIS",
       "headline": "Mphasis Posts Q1 EBIT Of 6.48B Rupees With Margin Slipping To 14.78% QoQ",
       "reading": {
@@ -1860,11 +1958,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "62fac7045d0e16b2": {
-      "v": "4",
+      "v": "6",
       "ticker": "BEL",
       "headline": "Dixon to BEL",
       "reading": {
@@ -1872,11 +1970,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
-      "model": "gemini-3.8-flash"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-lite-latest"
     },
     "630f78e872666866": {
-      "v": "4",
+      "v": "6",
       "ticker": "SBIN",
       "headline": "SBIN: State Bank of India has informed the Exchange about 27.09.2026 (Sunday) being a working day",
       "reading": {
@@ -1884,11 +1982,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
-      "model": "gemini-3.8-flash"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-lite-latest"
     },
     "64117623e038c01f": {
-      "v": "4",
+      "v": "6",
       "ticker": "CUMMINSIND",
       "headline": "Cummins India Limited has informed the Exchange regarding a press release dated September 15, 2026, titled \"Cummins India Unveils Next-Generation Power Solutions and Showcases Smart Aftermarket Soluti",
       "reading": {
@@ -1896,11 +1994,11 @@
         "claim": "supplying power backups and engines for logistics and railway expansion",
         "because": "Cummins India Unveils Next-Generation Power Solutions and Showcases Smart Aftermarket Solutions"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "6441a5414e5030d9": {
-      "v": "4",
+      "v": "6",
       "ticker": "ADANIPOWER",
       "headline": "Buy Adani Power; target of Rs 250: Motilal Oswal",
       "reading": {
@@ -1908,23 +2006,23 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "644915ab903f30d0": {
-      "v": "5",
+      "v": "6",
       "ticker": "FORTIS",
       "headline": "Fortis Healthcare exits Ayushman Bharat scheme over unpaid claims",
       "reading": {
         "stance": "contradicts",
-        "claim": "benefiting from insurance penetration and Ayushman Bharat volumes",
+        "claim": "Ayushman Bharat volumes",
         "because": "Fortis Healthcare exits Ayushman Bharat scheme over unpaid claims"
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "64de9f47392b4981": {
-      "v": "4",
+      "v": "6",
       "ticker": "RELAXO",
       "headline": "Relaxo Footwears incorporates SPV for captive solar power",
       "reading": {
@@ -1932,47 +2030,48 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "65cf756bc2085eb6": {
-      "v": "4",
+      "v": "6",
       "ticker": "LTTS",
       "headline": "LTTS partners with Anthropic to embed Claude AI in engineering",
       "reading": {
         "stance": "supports",
-        "claim": "Engineering R&D services leader, scaling embedded software and semiconductor design-services wins",
-        "because": "partners with Anthropic to embed Claude AI in engineering"
+        "claim": "scaling embedded software and semiconductor design-services wins",
+        "because": "LTTS partners with Anthropic to embed Claude AI in engineering"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "66abfff452d3e823": {
-      "v": "5",
+      "v": "6",
       "ticker": "HAL",
       "headline": "HAL hands over 2 LCA FOC Twin Seater Trainers & 3 HTT 40 Basic Trainers to IAF and 4 Dhruv NG helicopters to PHL in the presence of Raksha Mantri & Civil Aviation Minister",
       "reading": {
         "stance": "supports",
         "claim": "expanding local fighter jet assembly",
-        "because": "hands over 2 LCA FOC Twin Seater Trainers & 3 HTT 40 Basic Trainers to IAF and 4 Dhruv NG helicopters to PHL"
+        "because": "hands over 2 LCA FOC Twin Seater Trainers"
       },
-      "seen": "2026-10-07",
-      "model": "gemini-flash-lite-latest"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-latest"
     },
     "673660d1e5345020": {
-      "v": "4",
+      "v": "6",
       "ticker": "SIEMENS",
       "headline": "Siemens Unveils SCALANCE XFM-200 Compact, Flat Managed Switches for Cabinet-Critical Installations",
       "reading": {
         "stance": "unrelated",
         "claim": "",
-        "because": ""
+        "because": "",
+        "about": false
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "67423cb0d13a7a51": {
-      "v": "5",
+      "v": "6",
       "ticker": "ARVIND",
       "headline": "Nizamabad MP Arvind inaugurates ₹9-crore Jankampet goods shed",
       "reading": {
@@ -1981,23 +2080,23 @@
         "because": "",
         "about": false
       },
-      "seen": "2026-10-07",
-      "model": "gemini-flash-lite-latest"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-latest"
     },
     "676b008318e39bb1": {
-      "v": "5",
+      "v": "6",
       "ticker": "KAYNES",
       "headline": "Kaynes Technology puts semiconductor OSAT plant on hold indefinitely",
       "reading": {
         "stance": "contradicts",
         "claim": "setting up a state-of-the-art semiconductor OSAT plant",
-        "because": "puts semiconductor OSAT plant on hold indefinitely"
+        "because": "Kaynes Technology puts semiconductor OSAT plant on hold indefinitely"
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "67c74682250ee36e": {
-      "v": "5",
+      "v": "6",
       "ticker": "COFORGE",
       "headline": "Coforge Wins $230M AI Transformation Contract With European Client",
       "reading": {
@@ -2005,11 +2104,23 @@
         "claim": "large deal wins in BFSI and travel verticals",
         "because": "Coforge Wins $230M AI Transformation Contract"
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
+      "model": "gemini-flash-lite-latest"
+    },
+    "68235dd95cff2f64": {
+      "v": "6",
+      "ticker": "FORTIS",
+      "headline": "IHH to cooperate with Fortis audit, stands by its 31% stake purchase",
+      "reading": {
+        "stance": "unrelated",
+        "claim": "",
+        "because": ""
+      },
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "68ab9274a3f7a328": {
-      "v": "4",
+      "v": "6",
       "ticker": "FORTIS",
       "headline": "Saraf and Partners acts on Fortis",
       "reading": {
@@ -2017,11 +2128,23 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
+      "model": "gemini-flash-lite-latest"
+    },
+    "6a65baade33f6837": {
+      "v": "6",
+      "ticker": "ADANIPOWER",
+      "headline": "Adani Power Ends 1.6% Higher After 770 MW Bhutan Hydropower Pact",
+      "reading": {
+        "stance": "unrelated",
+        "claim": "",
+        "because": ""
+      },
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "6b619b39409e7869": {
-      "v": "4",
+      "v": "6",
       "ticker": "COFORGE",
       "headline": "Coforge Share Price: Unveils New AI Adoption Framework",
       "reading": {
@@ -2029,7 +2152,7 @@
         "claim": "expanding margins via GenAI offerings",
         "because": "Unveils New AI Adoption Framework"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "6bb017bfd53d9c3e": {
@@ -2045,7 +2168,7 @@
       "model": "gemini-flash-lite-latest"
     },
     "6bbfe3ca78b420f4": {
-      "v": "4",
+      "v": "6",
       "ticker": "COFORGE",
       "headline": "Coforge Limited has informed the Exchange regarding a press release dated September 30, 2026, titled \"\"Coforge felicitated at ET Edge Best Tech Brands 2026\"\".",
       "reading": {
@@ -2053,11 +2176,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "6c8971417fe31724": {
-      "v": "4",
+      "v": "6",
       "ticker": "BHEL",
       "headline": "Titagarh Rail Systems and BHEL Sign Long-Term Maintenance Agreement for Vande Bharat Sleeper Trains",
       "reading": {
@@ -2065,11 +2188,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "6cb2fe804765adc0": {
-      "v": "4",
+      "v": "6",
       "ticker": "KAYNES",
       "headline": "Kaynes Technology India Number of Employees 2026 | Employee Count & Headcount Data",
       "reading": {
@@ -2077,11 +2200,23 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
+      "model": "gemini-flash-lite-latest"
+    },
+    "6d768602252449ed": {
+      "v": "6",
+      "ticker": "FORTIS",
+      "headline": "Fortis Healthcare (NSEI:FORTIS) Stock Forecast & Analyst Predictions",
+      "reading": {
+        "stance": "unrelated",
+        "claim": "",
+        "because": ""
+      },
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "6e1f1173efbc2900": {
-      "v": "5",
+      "v": "6",
       "ticker": "CONCOR",
       "headline": "CONCOR appoints Shri Ajit Kumar Panda as CMD effective Aug 1, 2026",
       "reading": {
@@ -2089,7 +2224,7 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "7044070cf2036482": {
@@ -2105,7 +2240,7 @@
       "model": "gemini-flash-lite-latest"
     },
     "71144609ac83f4a5": {
-      "v": "5",
+      "v": "6",
       "ticker": "FORTIS",
       "headline": "Fortis unveils garden-centred Rosemont apartment development in New Farm",
       "reading": {
@@ -2114,7 +2249,7 @@
         "because": "",
         "about": false
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "731348026f590682": {
@@ -2130,19 +2265,19 @@
       "model": "gemini-flash-lite-latest"
     },
     "7379d8ec8bfb1a04": {
-      "v": "4",
+      "v": "6",
       "ticker": "GODREJPROP",
       "headline": "Godrej Properties GODREJPROP: Gurugram Dispute Settled",
       "reading": {
-        "stance": "supports",
-        "claim": "Large residential developer adding projects such as the ₹6,000 crore Marine Lines launch in Mumbai, with pre-sales momentum in Mumbai and NCR",
-        "because": "Gurugram Dispute Settled"
+        "stance": "unrelated",
+        "claim": "",
+        "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "75c9b403a229a5eb": {
-      "v": "4",
+      "v": "6",
       "ticker": "CONCOR",
       "headline": "CONCOR signs MoU with IIT Roorkee to develop AI-driven smart logistics decision support system",
       "reading": {
@@ -2150,11 +2285,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "764eb6be7e84ab0e": {
-      "v": "5",
+      "v": "6",
       "ticker": "ELGIEQUIP",
       "headline": "Elgi Equipments (NSE:ELGIEQUIP): Why Did It Divest Its Stake in Gentex Air Solutions LLC?",
       "reading": {
@@ -2162,7 +2297,7 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "76815a0e23194b71": {
@@ -2178,43 +2313,43 @@
       "model": "gemini-flash-lite-latest"
     },
     "76c9f2bc32b2c1b5": {
-      "v": "4",
+      "v": "6",
       "ticker": "HAL",
       "headline": "HAL, Bharat Dynamics, others power Nifty India Defence up over 1% as Ministry unveils ₹3,070 crore business plan",
       "reading": {
-        "stance": "unrelated",
-        "claim": "",
-        "because": ""
+        "stance": "supports",
+        "claim": "State aerospace major",
+        "because": "Ministry unveils ₹3,070 crore business plan"
       },
-      "seen": "2026-10-06",
-      "model": "gemini-3.8-flash"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-lite-latest"
     },
     "770108a1641791a6": {
-      "v": "4",
+      "v": "6",
       "ticker": "SYRMA",
       "headline": "Syrma SGS eyes 35%+ revenue growth, targets ₹1,600 crore exports and ₹1,200 crore ODM in FY27",
       "reading": {
         "stance": "supports",
         "claim": "targeting 35%+ revenue growth, ₹1,600 crore of exports and ₹1,200 crore of ODM revenue in FY27",
-        "because": "Syrma SGS eyes 35%+ revenue growth, targets ₹1,600 crore exports and ₹1,200 crore ODM in FY27"
+        "because": "eyes 35%+ revenue growth, targets ₹1,600 crore exports and ₹1,200 crore ODM in FY27"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "77e15626c8c1dccf": {
-      "v": "4",
+      "v": "6",
       "ticker": "LTTS",
       "headline": "L&T Technology Services Teams Up With Anthropic To Embed Claude AI In Engineering",
       "reading": {
         "stance": "supports",
-        "claim": "Engineering R&D services leader, scaling embedded software and semiconductor design-services wins",
-        "because": "Teams Up With Anthropic To Embed Claude AI In Engineering"
+        "claim": "scaling embedded software and semiconductor design-services wins",
+        "because": "L&T Technology Services Teams Up With Anthropic To Embed Claude AI In Engineering"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "78eac3f35c1b2b3b": {
-      "v": "4",
+      "v": "6",
       "ticker": "CPPLUS",
       "headline": "Stock Alert: 360 One Wam, IRB Infra, Arvind Smartspace, Aditya Infotech, Cupid",
       "reading": {
@@ -2222,23 +2357,23 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "79ba4708b3d3d418": {
-      "v": "4",
+      "v": "6",
       "ticker": "IKS",
       "headline": "Inventurus Knowledge Solutions Ltd (NSE:IKS) (Q1 2027) Earnings Call Highlights: Strong Revenue ...",
       "reading": {
-        "stance": "supports",
-        "claim": "growing revenue around 20% a year",
-        "because": "Strong Revenue"
+        "stance": "unrelated",
+        "claim": "",
+        "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "7a81ac2163a766e4": {
-      "v": "4",
+      "v": "6",
       "ticker": "DIXON",
       "headline": "Dixon Tech Or Avalon Or Syrma SGS? PL Capital Sees Multi-Year EMS Opportunity, But There's A Catch",
       "reading": {
@@ -2246,11 +2381,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "7a9b72a420ea0236": {
-      "v": "4",
+      "v": "6",
       "ticker": "IOC",
       "headline": "Jindal Stainless, IOC extend lubricant supply agreement by 5 years",
       "reading": {
@@ -2258,7 +2393,7 @@
         "claim": "locking in long-term supply deals",
         "because": "Jindal Stainless, IOC extend lubricant supply agreement by 5 years"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "7aa35f7ea9749012": {
@@ -2274,7 +2409,7 @@
       "model": "gemini-flash-lite-latest"
     },
     "7acfe622f36693cc": {
-      "v": "4",
+      "v": "6",
       "ticker": "MPHASIS",
       "headline": "MphasiS Limited has informed the Exchange regarding a press release dated September 22, 2026, titled \"Mphasis and Copa Airlines Host Global Quantum Computing Challenge toAccelerate Innovation in Airli",
       "reading": {
@@ -2282,11 +2417,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "7be8f393b8f67581": {
-      "v": "5",
+      "v": "6",
       "ticker": "DIXON",
       "headline": "Explained: Why Jefferies prefers Kaynes Tech shares over Dixon Tech; urges caution on Syrma SGS",
       "reading": {
@@ -2294,11 +2429,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "7d35897418240e61": {
-      "v": "5",
+      "v": "6",
       "ticker": "ARVIND",
       "headline": "Arvind Ltd’s Q1 profit stays flat despite 25% revenue growth",
       "reading": {
@@ -2306,11 +2441,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-07",
-      "model": "gemini-flash-lite-latest"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-latest"
     },
     "7d63da3b0cd4841f": {
-      "v": "4",
+      "v": "6",
       "ticker": "ADANIPOWER",
       "headline": "Adani Power Limited has informed the Exchange about Signing of Agreement for sale of a Subsidiary",
       "reading": {
@@ -2318,19 +2453,19 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "7d9b64af41469177": {
-      "v": "4",
+      "v": "6",
       "ticker": "LTTS",
       "headline": "L&T Technology Services has secured a landmark engagement valued at over $75 Million from a leading global technology enterprise.",
       "reading": {
         "stance": "supports",
-        "claim": "Engineering R&D services leader, scaling embedded software and semiconductor design-services wins",
-        "because": "secured a landmark engagement valued at over $75 Million"
+        "claim": "scaling embedded software and semiconductor design-services wins",
+        "because": "has secured a landmark engagement valued at over $75 Million"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "7d9e0f97082593af": {
@@ -2346,7 +2481,7 @@
       "model": "gemini-flash-lite-latest"
     },
     "7e0958eaed167086": {
-      "v": "5",
+      "v": "6",
       "ticker": "SIEMENS",
       "headline": "Siemens unveils ÖBB Railjet M at InnoTrans",
       "reading": {
@@ -2355,7 +2490,7 @@
         "because": "",
         "about": false
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "7f2da6b9bacda008": {
@@ -2371,19 +2506,19 @@
       "model": "gemini-flash-lite-latest"
     },
     "7f409c659fd20af3": {
-      "v": "4",
+      "v": "6",
       "ticker": "BATAINDIA",
       "headline": "Bata India BATAINDIA Central Government Approval New MD CEO",
       "reading": {
         "stance": "supports",
-        "claim": "restore sales growth under a new MD and CEO",
+        "claim": "under a new MD and CEO",
         "because": "Central Government Approval New MD CEO"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "7f6f99e71b0fda26": {
-      "v": "4",
+      "v": "6",
       "ticker": "ADANIPOWER",
       "headline": "Stocks To Buy or Sell Today, August 28, 2026: LIC, RVNL, and Adani Power Tech Among Shares That May Remain",
       "reading": {
@@ -2391,11 +2526,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "7fd1094297c925c7": {
-      "v": "4",
+      "v": "6",
       "ticker": "HDFCBANK",
       "headline": "RIL, Asian Paints, HDFC Bank, TCS, among other shares change hands via block deals on June 24",
       "reading": {
@@ -2403,59 +2538,59 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
-      "model": "gemini-3.8-flash"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-lite-latest"
     },
     "80075515d95d03ac": {
-      "v": "4",
+      "v": "6",
       "ticker": "COFORGE",
       "headline": "Coforge Limited has informed the Exchange regarding a press release dated October 05, 2026, titled \" Coforge Introduces Intent Engineering Framework to Help Enterprises Build Outcome-Aligned AI Agents",
       "reading": {
         "stance": "supports",
         "claim": "expanding margins via GenAI offerings",
-        "because": "Coforge Introduces Intent Engineering Framework to Help Enterprises Build Outcome-Aligned AI Agents"
+        "because": "Introduces Intent Engineering Framework to Help Enterprises Build Outcome-Aligned AI Agents"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "800e810a9441ed88": {
-      "v": "5",
+      "v": "6",
       "ticker": "ARVIND",
       "headline": "Arvind acquires stake in two Torrent Urja entities for renewable power",
-      "reading": {
-        "stance": "supports",
-        "claim": "investing in technical textiles under recent government schemes",
-        "because": "Arvind acquires stake in two Torrent Urja entities for renewable power"
-      },
-      "seen": "2026-10-07",
-      "model": "gemini-flash-lite-latest"
-    },
-    "80583b2de2e16052": {
-      "v": "5",
-      "ticker": "ARVIND",
-      "headline": "Arvind unveils AD Denim campaign with actor Raghav Juyal",
       "reading": {
         "stance": "unrelated",
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-07",
-      "model": "gemini-flash-lite-latest"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-latest"
+    },
+    "80583b2de2e16052": {
+      "v": "6",
+      "ticker": "ARVIND",
+      "headline": "Arvind unveils AD Denim campaign with actor Raghav Juyal",
+      "reading": {
+        "stance": "supports",
+        "claim": "Leading denim manufacturer",
+        "because": "unveils AD Denim campaign"
+      },
+      "seen": "2026-10-08",
+      "model": "gemini-flash-latest"
     },
     "80953657e3b90e50": {
-      "v": "4",
+      "v": "6",
       "ticker": "COFORGE",
       "headline": "Coforge Limited has informed the Exchange regarding a press release dated August 31, 2026, titled \"Coforge Unveils AI Adoption Fabric for Outcome Acceleration\".",
       "reading": {
         "stance": "supports",
         "claim": "expanding margins via GenAI offerings",
-        "because": "Unveils AI Adoption Fabric for Outcome Acceleration"
+        "because": "Coforge Unveils AI Adoption Fabric"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "8120c4f767af4aaa": {
-      "v": "4",
+      "v": "6",
       "ticker": "KAYNES",
       "headline": "Kaynes Technology and BOSGAME sign MoU to expand India market presence",
       "reading": {
@@ -2463,11 +2598,11 @@
         "claim": "High-end electronics and PCBA manufacturing",
         "because": "Kaynes Technology and BOSGAME sign MoU to expand India market presence"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "82d4079473d96292": {
-      "v": "5",
+      "v": "6",
       "ticker": "TCS",
       "headline": "SAS Partners with TCS, AI-driven Cyber Resilience Takes Flight",
       "reading": {
@@ -2475,11 +2610,11 @@
         "claim": "secure cyber command centers",
         "because": "AI-driven Cyber Resilience Takes Flight"
       },
-      "seen": "2026-10-07",
-      "model": "gemini-flash-lite-latest"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-latest"
     },
     "82ec77ce201876be": {
-      "v": "4",
+      "v": "6",
       "ticker": "DIXON",
       "headline": "Dixon Tech shares surge sharply as government likely to approve Vivo JV",
       "reading": {
@@ -2487,7 +2622,7 @@
         "claim": "Leader in electronic assembly (mobile, laptop, LED TV)",
         "because": "Dixon Tech shares surge sharply as government likely to approve Vivo JV"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "836d60583858bbd4": {
@@ -2515,15 +2650,15 @@
       "model": "gemini-flash-lite-latest"
     },
     "85ff5bf04147aeaa": {
-      "v": "4",
+      "v": "6",
       "ticker": "BATAINDIA",
       "headline": "Bata India Limited (NSE: BATAINDIA) in Focus on Festive Footwear Demand",
       "reading": {
         "stance": "supports",
         "claim": "relying on festive demand",
-        "because": "Festive Footwear Demand"
+        "because": "Focus on Festive Footwear Demand"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "873e6d27af51e7e3": {
@@ -2539,7 +2674,7 @@
       "model": "gemini-flash-lite-latest"
     },
     "87d122ce214a9cfb": {
-      "v": "4",
+      "v": "6",
       "ticker": "KAYNES",
       "headline": "Better EMS Stock: Syrma SGS vs Kaynes Technology",
       "reading": {
@@ -2547,19 +2682,20 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "883b6f718ffb40d1": {
-      "v": "4",
+      "v": "6",
       "ticker": "SCHNEIDER",
       "headline": "Schneider Electric’s solutions to turn problems into competitive advantages",
       "reading": {
         "stance": "unrelated",
         "claim": "",
-        "because": ""
+        "because": "",
+        "about": false
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "89cfab01a594a8fb": {
@@ -2575,7 +2711,7 @@
       "model": "gemini-flash-lite-latest"
     },
     "89f6ed2f98f0c5c6": {
-      "v": "4",
+      "v": "6",
       "ticker": "INDHOTEL",
       "headline": "The Indian Hotels Company Limited has informed the Exchange about Scheme of Arrangement between Oriental Hotels Limited and The Indian Hotels Company Limited and their respective shareholders",
       "reading": {
@@ -2583,7 +2719,7 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "8d37fced7282df7a": {
@@ -2599,15 +2735,15 @@
       "model": "gemini-flash-lite-latest"
     },
     "8d73dc3290718e9e": {
-      "v": "4",
+      "v": "6",
       "ticker": "COFORGE",
       "headline": "Coforge Limited has informed the Exchange regarding a press release dated September 30, 2026, titled \"\"Coforge Launches CXNova, an Agentic CX Orchestration Platform that Delivers Intelligent, Real-Tim",
       "reading": {
         "stance": "supports",
         "claim": "expanding margins via GenAI offerings",
-        "because": "Coforge Launches CXNova, an Agentic CX Orchestration Platform that Delivers Intelligent, Real-Time Customer Experiences"
+        "because": "Coforge Launches CXNova, an Agentic CX Orchestration Platform"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "8e115c40e594712f": {
@@ -2623,7 +2759,7 @@
       "model": "gemini-flash-lite-latest"
     },
     "8e1676305a763348": {
-      "v": "4",
+      "v": "6",
       "ticker": "VBL",
       "headline": "Varun Beverages Q1 EBITDA Touches 23.43B Rupees; Volume Growth Reaches 19.8%",
       "reading": {
@@ -2631,11 +2767,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "8e49a76fbd07c3d2": {
-      "v": "4",
+      "v": "6",
       "ticker": "FORTIS",
       "headline": "Accumulate Fortis Healthcare; target of Rs 1050: Prabhudas Lilladher",
       "reading": {
@@ -2643,7 +2779,7 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "8f47a4b85caa0b41": {
@@ -2659,19 +2795,19 @@
       "model": "gemini-flash-lite-latest"
     },
     "912c088ae05dffc6": {
-      "v": "5",
+      "v": "6",
       "ticker": "PERSISTENT",
       "headline": "Persistent Systems makes its biggest acquisition ever",
       "reading": {
-        "stance": "supports",
-        "claim": "High-growth digital engineering and enterprise AI services provider",
-        "because": "makes its biggest acquisition ever"
+        "stance": "unrelated",
+        "claim": "",
+        "because": ""
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "91f512cacefd7439": {
-      "v": "4",
+      "v": "6",
       "ticker": "TCS",
       "headline": "Tata Consultancy Services Limited has informed the Exchange regarding 'Press Release - DGCX partners with TCS to advance and upgrade derivatives market infrastructure'.",
       "reading": {
@@ -2679,19 +2815,19 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "924ed51f683d8b1e": {
-      "v": "5",
+      "v": "6",
       "ticker": "VBL",
       "headline": "Varun Beverages posts 15.5% surge in Q1 net, denies bidding stake in Bira 91",
       "reading": {
-        "stance": "supports",
-        "claim": "scaling dairy/juice products",
-        "because": "posts 15.5% surge in Q1 net"
+        "stance": "unrelated",
+        "claim": "",
+        "because": ""
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "9268d658f619e17c": {
@@ -2707,19 +2843,20 @@
       "model": "gemini-flash-lite-latest"
     },
     "9288c53786e15755": {
-      "v": "4",
+      "v": "6",
       "ticker": "SCHNEIDER",
       "headline": "Schneider Electric Unveils Ultra-Compact Lexium SCARA High-Speed Robot to Boost Manufacturing Productivity",
       "reading": {
         "stance": "unrelated",
         "claim": "",
-        "because": ""
+        "because": "",
+        "about": false
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "92ee31854a96422f": {
-      "v": "4",
+      "v": "6",
       "ticker": "BPCL",
       "headline": "BPCL launches next-generation diesel for Indian Army in India",
       "reading": {
@@ -2727,11 +2864,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "937e4e6ae6e1ba5f": {
-      "v": "5",
+      "v": "6",
       "ticker": "BEL",
       "headline": "Motilal Oswal bullish on defence sector; BEL top pick for 20% upside",
       "reading": {
@@ -2739,11 +2876,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "93948cec8ef7d492": {
-      "v": "4",
+      "v": "6",
       "ticker": "FORTIS",
       "headline": "Fortis Healthcare Limited has informed the Exchange about filing of Special Leave Petition ( SLP ) before the Hon ble Supreme Court of India",
       "reading": {
@@ -2751,11 +2888,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "93cc1fa314ec935c": {
-      "v": "4",
+      "v": "6",
       "ticker": "BATAINDIA",
       "headline": "Bata India Ltd (NSE/BSE: BATAINDIA) Business Overview and Future Outlook",
       "reading": {
@@ -2763,7 +2900,7 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "94240e1fe212fe0b": {
@@ -2779,19 +2916,19 @@
       "model": "gemini-flash-lite-latest"
     },
     "943910cbb37b91e1": {
-      "v": "4",
+      "v": "6",
       "ticker": "BEL",
       "headline": "BEL secures orders worth ₹1,081 crore; shares end flat",
       "reading": {
-        "stance": "unrelated",
-        "claim": "",
-        "because": ""
+        "stance": "supports",
+        "claim": "securing major naval and surveillance command radar orders",
+        "because": "BEL secures orders worth ₹1,081 crore"
       },
-      "seen": "2026-10-06",
-      "model": "gemini-3.8-flash"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-lite-latest"
     },
     "944727452f43dae6": {
-      "v": "4",
+      "v": "6",
       "ticker": "RELAXO",
       "headline": "Relaxo Footwears Ltd Share Price Today NSE/BSE Charts",
       "reading": {
@@ -2799,19 +2936,19 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "94492e4fadeba4d5": {
-      "v": "5",
+      "v": "6",
       "ticker": "LEMONTREE",
       "headline": "Lemon Tree Hotels Limited has informed the Exchange about completion of acquisition of land parcel in Bandra (East), Mumbai by Fleur Hotels Limited, a material subsidiary of the Company",
       "reading": {
-        "stance": "supports",
-        "claim": "Mid-market chain expanding into tier-2 cities",
-        "because": "completion of acquisition of land parcel in Bandra (East), Mumbai by Fleur Hotels Limited, a material subsidiary of the Company"
+        "stance": "unrelated",
+        "claim": "",
+        "because": ""
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "94da2e5d783c2876": {
@@ -2839,20 +2976,19 @@
       "model": "gemini-flash-lite-latest"
     },
     "9513fd68c1f4a711": {
-      "v": "5",
+      "v": "6",
       "ticker": "SIEMENS",
       "headline": "Siemens and Samsung Foundry strengthen collaboration to advance silicon design enablement",
       "reading": {
         "stance": "unrelated",
         "claim": "",
-        "because": "",
-        "about": false
+        "because": ""
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "953b00eb6de2d40e": {
-      "v": "4",
+      "v": "6",
       "ticker": "COFORGE",
       "headline": "\"Coforge Expands Automotive Engineering Footprint to Accelerate Connected, EV and Software-Defined Vehicle Innovation\"",
       "reading": {
@@ -2860,11 +2996,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "96b105f88ee81d11": {
-      "v": "4",
+      "v": "6",
       "ticker": "MPHASIS",
       "headline": "Mphasis 35th AGM Scheduled Jul 23; Revised FY26 Annual Report Filed with Chairman's Statement",
       "reading": {
@@ -2872,7 +3008,7 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "9711fb7deb954228": {
@@ -2885,6 +3021,18 @@
         "because": "Coforge’s AI pivot set to power its next phase of growth"
       },
       "seen": "2026-09-30",
+      "model": "gemini-flash-lite-latest"
+    },
+    "97be18885fdd65a5": {
+      "v": "6",
+      "ticker": "MPHASIS",
+      "headline": "Mphasis extends Social Security Scotland deal in £35.4 million contract",
+      "reading": {
+        "stance": "supports",
+        "claim": "key beneficiary of enterprise cloud and cost-takeout deals",
+        "because": "Mphasis extends Social Security Scotland deal in £35.4 million contract"
+      },
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "984c3164b904dfa2": {
@@ -2900,27 +3048,28 @@
       "model": "gemini-3.8-flash"
     },
     "98d693c9309d3cc4": {
-      "v": "4",
+      "v": "6",
       "ticker": "SIEMENS",
       "headline": "Siemens to acquire RTL design automation software company",
       "reading": {
         "stance": "unrelated",
         "claim": "",
-        "because": ""
+        "because": "",
+        "about": false
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "99933c1377a81c16": {
-      "v": "4",
+      "v": "6",
       "ticker": "KPIL",
       "headline": "Kalpataru Projects International Limited has informed the Exchange regarding a press release dated September 25, 2026, titled \"KPIL ANNOUNCES SUCCESSFUL LISTING OF LINJEMONTAGE EQUITY SHARES ON NASDAQ",
       "reading": {
-        "stance": "unrelated",
-        "claim": "",
-        "because": ""
+        "stance": "supports",
+        "claim": "converting a large order book into revenue",
+        "because": "KPIL ANNOUNCES SUCCESSFUL LISTING OF LINJEMONTAGE EQUITY SHARES ON NASDAQ STOCKHOLM"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "99b3c1e4ce8cfe93": {
@@ -2936,7 +3085,7 @@
       "model": "gemini-flash-lite-latest"
     },
     "9ba42a3a368cb4f7": {
-      "v": "5",
+      "v": "6",
       "ticker": "FORTIS",
       "headline": "Fortis Healthcare: IHH Plans To Raise Stake From 31% To 51%",
       "reading": {
@@ -2944,11 +3093,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "9be7245570406d05": {
-      "v": "5",
+      "v": "6",
       "ticker": "CPPLUS",
       "headline": "CP Plus loses CCTV market lead as share falls to 18%",
       "reading": {
@@ -2956,11 +3105,11 @@
         "claim": "CCTV market leader (35%+ share)",
         "because": "CP Plus loses CCTV market lead as share falls to 18%"
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "9beb73d477a744da": {
-      "v": "4",
+      "v": "6",
       "ticker": "CONCOR",
       "headline": "CONCOR and FIEO hold high-level discussions to strengthen multimodal logistics for Indian exporters",
       "reading": {
@@ -2968,11 +3117,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "9bfe72edebf04086": {
-      "v": "5",
+      "v": "6",
       "ticker": "WELSPUNLIV",
       "headline": "Welspun Living dropped from textile PLI after missing investment targets",
       "reading": {
@@ -2980,7 +3129,7 @@
         "claim": "Major beneficiary of textile PLI",
         "because": "Welspun Living dropped from textile PLI after missing investment targets"
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "9c1f78eb11fd559c": {
@@ -3007,8 +3156,20 @@
       "seen": "2026-10-05",
       "model": "gemini-flash-lite-latest"
     },
+    "9c4d03de1198d317": {
+      "v": "6",
+      "ticker": "ADANIPOWER",
+      "headline": "Adani Power 770 MW Chamkharchhu Hydropower Deal Bhutan",
+      "reading": {
+        "stance": "unrelated",
+        "claim": "",
+        "because": ""
+      },
+      "seen": "2026-10-08",
+      "model": "gemini-flash-lite-latest"
+    },
     "9c7d7bd30cfe1390": {
-      "v": "5",
+      "v": "6",
       "ticker": "ANANTRAJ",
       "headline": "Anant Raj drops data center plans, to sell NCR commercial properties",
       "reading": {
@@ -3016,11 +3177,11 @@
         "claim": "transitioning commercial properties into major data center hubs in NCR",
         "because": "Anant Raj drops data center plans, to sell NCR commercial properties"
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "9d6f89b86f95f859": {
-      "v": "4",
+      "v": "6",
       "ticker": "TCS",
       "headline": "IIEST, Shibpur partners with TCS to launch state-of-the-art centre of excellence in AI",
       "reading": {
@@ -3028,11 +3189,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "9ddcce9a45f18c1b": {
-      "v": "4",
+      "v": "6",
       "ticker": "RELIANCE",
       "headline": "TVS Motor, Dixon Tech in, Reliance, M&M out: Which stocks made it into Macquarie's new India portfolio?",
       "reading": {
@@ -3040,23 +3201,23 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
-      "model": "gemini-3.8-flash"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-lite-latest"
     },
     "9f3cd6cfa9e3ddf0": {
-      "v": "4",
+      "v": "6",
       "ticker": "SYRMA",
       "headline": "Syrma SGS and Elemaster inaugurate joint venture facility in Bengaluru",
       "reading": {
         "stance": "supports",
         "claim": "new Jodhpur and Bengaluru plants",
-        "because": "Syrma SGS and Elemaster inaugurate joint venture facility in Bengaluru"
+        "because": "inaugurate joint venture facility in Bengaluru"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "9f4875ea4b1937bf": {
-      "v": "4",
+      "v": "6",
       "ticker": "SUZLON",
       "headline": "Suzlon to Premier Energies: Ambit sees up to 40% upside but flags solar margin risks",
       "reading": {
@@ -3064,11 +3225,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "9fcd7d8c65a14bb1": {
-      "v": "4",
+      "v": "6",
       "ticker": "HDFCBANK",
       "headline": "Top stocks in news: HDFC Bank, RITES, YES Bank, Concor, Axis Bank, SW Solar, Afcons Infra",
       "reading": {
@@ -3076,11 +3237,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
-      "model": "gemini-3.8-flash"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-lite-latest"
     },
     "a02195a73a7867cb": {
-      "v": "4",
+      "v": "6",
       "ticker": "DIACABS",
       "headline": "Multibagger stock Diamond Power hits record high despite stock market crash. InCred sees 28% more upside",
       "reading": {
@@ -3088,23 +3249,23 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "a0c7d75d752c6a05": {
-      "v": "5",
+      "v": "6",
       "ticker": "KAYNES",
       "headline": "Kaynes planning potential $1 bn OSAT investment under ISM 2.0: Report",
       "reading": {
         "stance": "supports",
         "claim": "setting up a state-of-the-art semiconductor OSAT plant",
-        "because": "planning potential $1 bn OSAT investment under ISM 2.0"
+        "because": "Kaynes planning potential $1 bn OSAT investment under ISM 2.0"
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "a0d39cca0e813caf": {
-      "v": "4",
+      "v": "6",
       "ticker": "BPCL",
       "headline": "BPCL board approves ₹5,000 crore fundraising through non-convertible debentures",
       "reading": {
@@ -3112,23 +3273,23 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "a2319300aeb4e9e3": {
-      "v": "4",
+      "v": "6",
       "ticker": "LTTS",
       "headline": "LTTS and Anthropic Partner to Transform Engineering",
       "reading": {
         "stance": "supports",
-        "claim": "Engineering R&D services leader, scaling embedded software and semiconductor design-services wins",
-        "because": "Partner to Transform Engineering"
+        "claim": "scaling embedded software and semiconductor design-services wins",
+        "because": "LTTS and Anthropic Partner to Transform Engineering"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "a29cbde7f81294e0": {
-      "v": "4",
+      "v": "6",
       "ticker": "BPCL",
       "headline": "CSE signs MoU with BPCL",
       "reading": {
@@ -3136,11 +3297,11 @@
         "claim": "biofuels expansion",
         "because": "CSE signs MoU with BPCL"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "a2f4690400689d81": {
-      "v": "4",
+      "v": "6",
       "ticker": "ADANIPOWER",
       "headline": "Adani Power (NSE:ADANIPOWER): Has It Been Named Successful Bidder for GVK Energy?",
       "reading": {
@@ -3148,7 +3309,7 @@
         "claim": "adding capacity through acquisitions such as the GVK Energy bid",
         "because": "Named Successful Bidder for GVK Energy"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "a40f5982fa60b0c4": {
@@ -3164,7 +3325,7 @@
       "model": "gemini-flash-lite-latest"
     },
     "a5236904576cff8c": {
-      "v": "5",
+      "v": "6",
       "ticker": "THERMAX",
       "headline": "THERMAX: Revenue up 7% but profit down 85% on project overrun; order book and restructuring boost outlook",
       "reading": {
@@ -3172,11 +3333,11 @@
         "claim": "scaling green hydrogen and boiler manufacturing capacity",
         "because": "order book and restructuring boost outlook"
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "a5a6b63d9069dc38": {
-      "v": "4",
+      "v": "6",
       "ticker": "PERSISTENT",
       "headline": "TCS, Mphasis, Infosys, Persistent Systems shares fall, Nifty IT worst sectoral performer; here's why",
       "reading": {
@@ -3184,11 +3345,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "a5b6279874f93d66": {
-      "v": "4",
+      "v": "6",
       "ticker": "CONCOR",
       "headline": "CONCOR signs MoU with APEDA to strengthen export cold chain",
       "reading": {
@@ -3196,7 +3357,7 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "a61d8b38aaa1a582": {
@@ -3212,19 +3373,19 @@
       "model": "gemini-flash-lite-latest"
     },
     "a6958e26aa00a7b4": {
-      "v": "4",
+      "v": "6",
       "ticker": "VBL",
       "headline": "Intimation for execution of an Exclusive Distribution Agreement by Varun Beverages (Zimbabwe) (Private) Limited, subsidiary of the Company as per details attached.",
       "reading": {
         "stance": "supports",
-        "claim": "PepsiCo's dominant bottler, expanding into newer territories and scaling dairy/juice products",
-        "because": "execution of an Exclusive Distribution Agreement by Varun Beverages (Zimbabwe) (Private) Limited"
+        "claim": "expanding into newer territories",
+        "because": "Exclusive Distribution Agreement by Varun Beverages (Zimbabwe) (Private) Limited"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "a766b2d47a143138": {
-      "v": "4",
+      "v": "6",
       "ticker": "IOC",
       "headline": "IOC launches Trustworthy AI Framework",
       "reading": {
@@ -3233,19 +3394,19 @@
         "because": "",
         "about": false
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "a77765672bd4a3ef": {
-      "v": "4",
+      "v": "6",
       "ticker": "FORTIS",
       "headline": "Fortis signs services agreement for 400 bed hospital in Delhi",
       "reading": {
         "stance": "supports",
-        "claim": "Hospital and diagnostics network",
-        "because": "400 bed hospital in Delhi"
+        "claim": "Hospital and diagnostics network benefiting from insurance penetration and Ayushman Bharat volumes",
+        "because": "Fortis signs services agreement for 400 bed hospital in Delhi"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "a790886e9ff95a18": {
@@ -3261,7 +3422,7 @@
       "model": "gemini-flash-lite-latest"
     },
     "a8dddac4c1d10044": {
-      "v": "4",
+      "v": "6",
       "ticker": "COFORGE",
       "headline": "Coforge Limited has informed the Exchange regarding Proceedings of Annual General Meeting held on August 24, 2026",
       "reading": {
@@ -3269,7 +3430,7 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "a8dfde0ee94e75c4": {
@@ -3285,7 +3446,7 @@
       "model": "gemini-3.8-flash"
     },
     "a9b815dd201e1021": {
-      "v": "4",
+      "v": "6",
       "ticker": "CONCOR",
       "headline": "RITES Signs MoU with CONCOR For Project Management Consultancy Services",
       "reading": {
@@ -3293,11 +3454,23 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
+      "model": "gemini-flash-lite-latest"
+    },
+    "aa7d82763ea13c31": {
+      "v": "6",
+      "ticker": "MPHASIS",
+      "headline": "MphasiS Limited has informed the Exchange regarding Grant of 488500  Options.",
+      "reading": {
+        "stance": "unrelated",
+        "claim": "",
+        "because": ""
+      },
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "aaaea56330e81518": {
-      "v": "5",
+      "v": "6",
       "ticker": "BEL",
       "headline": "Buy, Sell Or Hold: HAL, Bharat Electronics, Bharat Dynamics, Mazagon Dock, Data Patterns",
       "reading": {
@@ -3305,11 +3478,23 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
+      "model": "gemini-flash-latest"
+    },
+    "ac5f88e6080fe8ed": {
+      "v": "6",
+      "ticker": "COFORGE",
+      "headline": "3 AI Sector Stocks With a Strong Future Roadmap: Infosys, Persistent Systems and Coforge",
+      "reading": {
+        "stance": "unrelated",
+        "claim": "",
+        "because": ""
+      },
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "ac720e5b021bd8fb": {
-      "v": "5",
+      "v": "6",
       "ticker": "DIXON",
       "headline": "Dixon Tech gains after JM Financial upgrades stock, raises target price by 27%",
       "reading": {
@@ -3317,11 +3502,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-07",
-      "model": "gemini-flash-lite-latest"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-latest"
     },
     "ac8b61de91928f88": {
-      "v": "4",
+      "v": "6",
       "ticker": "MPHASIS",
       "headline": "Prefer Coforge, Mphasis, Persistent shares to IT majors ahead of Q1 earnings: Analyst",
       "reading": {
@@ -3329,11 +3514,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "ad528a856eccf172": {
-      "v": "5",
+      "v": "6",
       "ticker": "SIEMENS",
       "headline": "Siemens Limited has informed the Exchange about change in Management",
       "reading": {
@@ -3341,19 +3526,19 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "adb5f6a391d0059c": {
-      "v": "5",
+      "v": "6",
       "ticker": "BHEL",
       "headline": "BHEL Wins Rs 5,145.6 mn Power Grid Transformer Contract",
       "reading": {
         "stance": "supports",
-        "claim": "expanding local container manufacturing and green energy grids",
+        "claim": "State-owned heavy power equipment giant",
         "because": "BHEL Wins Rs 5,145.6 mn Power Grid Transformer Contract"
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "aedd0e8dcea5a96a": {
@@ -3369,19 +3554,21 @@
       "model": "gemini-flash-lite-latest"
     },
     "aee9e38ad0c70cd1": {
-      "v": "4",
+      "v": "6",
       "ticker": "NTPCGREEN",
       "headline": "NTPC Green Energy (NSE:NTPCGREEN) Commissions 68.22 MW Dahod Solar Capacity",
       "reading": {
-        "stance": "supports",
-        "claim": "steadily commissioning solar capacity such as Dahod and Kalasar toward a large state-backed renewable build-out",
-        "because": "Commissions 68.22 MW Dahod Solar Capacity"
+        "stance": "unrelated",
+        "claim": "",
+        "because": "",
+        "downgraded": "supports",
+        "reason": "claim not in the thesis"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "aef753939d225917": {
-      "v": "5",
+      "v": "6",
       "ticker": "SCHNEIDER",
       "headline": "Schneider Electric’s Planned Acquisition of Cognite Reinforces the Data Foundation for Industrial AI",
       "reading": {
@@ -3390,23 +3577,23 @@
         "because": "",
         "about": false
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "af69ee7cf1c8ac37": {
-      "v": "4",
+      "v": "6",
       "ticker": "SIEMENS",
       "headline": "Siemens and Humanoid deploy humanoids in industrial operations with Nvidia",
       "reading": {
-        "stance": "supports",
-        "claim": "factory automation",
-        "because": "deploy humanoids in industrial operations"
+        "stance": "unrelated",
+        "claim": "",
+        "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "af96e3c79a189751": {
-      "v": "4",
+      "v": "6",
       "ticker": "LEMONTREE",
       "headline": "Lemon Tree Hotels Limited has informed the Exchange about completion of acquisition of land parcel in Bandra (East), Mumbai by Fleur Hotels Limited, a material subsidiary of the Co",
       "reading": {
@@ -3414,7 +3601,7 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "b001c5d850478de9": {
@@ -3430,7 +3617,7 @@
       "model": "gemini-flash-lite-latest"
     },
     "b00f548f96cb5aaf": {
-      "v": "4",
+      "v": "6",
       "ticker": "TCS",
       "headline": "Press Release - TCS launches India''s first lights-out factory lab to advance AI-first manufacturing",
       "reading": {
@@ -3438,7 +3625,7 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "b0491c9a7e0416f3": {
@@ -3454,7 +3641,7 @@
       "model": "gemini-flash-lite-latest"
     },
     "b13936d45b6ffe2b": {
-      "v": "4",
+      "v": "6",
       "ticker": "COFORGE",
       "headline": "Coforge Limited has informed the Exchange regarding 'Sustainability Report for FY 2025-26 '.",
       "reading": {
@@ -3462,7 +3649,7 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "b31f564cb6ef179d": {
@@ -3478,43 +3665,43 @@
       "model": "gemini-flash-lite-latest"
     },
     "b4bbfdb91af6621d": {
-      "v": "4",
+      "v": "6",
       "ticker": "ADANIPOWER",
       "headline": "Adani Power Limited has informed the Exchange about Memorandum of Understanding/Agreements",
-      "reading": {
-        "stance": "supports",
-        "claim": "adding capacity through acquisitions such as the GVK Energy bid and selling under long-term power purchase agreements",
-        "because": "Memorandum of Understanding/Agreements"
-      },
-      "seen": "2026-10-06",
-      "model": "gemini-flash-lite-latest"
-    },
-    "b4ebffc2b1fd9dc8": {
-      "v": "5",
-      "ticker": "SUZLON",
-      "headline": "NCLT Ahmedabad Dismisses Insolvency Plea Against Suzlon Energy",
-      "reading": {
-        "stance": "supports",
-        "claim": "completely debt-free",
-        "because": "Dismisses Insolvency Plea Against Suzlon Energy"
-      },
-      "seen": "2026-10-07",
-      "model": "gemini-flash-lite-latest"
-    },
-    "b4eec25aad8b6bcf": {
-      "v": "4",
-      "ticker": "BHEL",
-      "headline": "BHEL receives LNTP from DVC for 800 MW Durgapur project",
       "reading": {
         "stance": "unrelated",
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
+      "model": "gemini-flash-lite-latest"
+    },
+    "b4ebffc2b1fd9dc8": {
+      "v": "6",
+      "ticker": "SUZLON",
+      "headline": "NCLT Ahmedabad Dismisses Insolvency Plea Against Suzlon Energy",
+      "reading": {
+        "stance": "unrelated",
+        "claim": "",
+        "because": ""
+      },
+      "seen": "2026-10-08",
+      "model": "gemini-flash-lite-latest"
+    },
+    "b4eec25aad8b6bcf": {
+      "v": "6",
+      "ticker": "BHEL",
+      "headline": "BHEL receives LNTP from DVC for 800 MW Durgapur project",
+      "reading": {
+        "stance": "supports",
+        "claim": "State-owned heavy power equipment giant",
+        "because": "BHEL receives LNTP from DVC for 800 MW Durgapur project"
+      },
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "b64f02e01f467930": {
-      "v": "4",
+      "v": "6",
       "ticker": "CONCOR",
       "headline": "RITES Signs MOU with CONCOR for Logistics Projects Expanding ₹5,900 Crore Order Book",
       "reading": {
@@ -3522,7 +3709,7 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "b68f043fc0864a01": {
@@ -3538,7 +3725,7 @@
       "model": "gemini-3.8-flash"
     },
     "b6e0f0a3407eb1a4": {
-      "v": "4",
+      "v": "6",
       "ticker": "SUZLON",
       "headline": "Suzlon Energy Limited has informed the Exchange about Bagging/Receiving of orders/contracts",
       "reading": {
@@ -3546,11 +3733,11 @@
         "claim": "dominating wind turbine supply with a record order book",
         "because": "Bagging/Receiving of orders/contracts"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "b6f577b00e116edf": {
-      "v": "4",
+      "v": "6",
       "ticker": "SYRMA",
       "headline": "Better EMS Stock: Syrma SGS vs Kaynes Technology",
       "reading": {
@@ -3558,11 +3745,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "b80970304530f447": {
-      "v": "5",
+      "v": "6",
       "ticker": "KAYNES",
       "headline": "Accumulate Kaynes Technology India; target of Rs 4390: Prabhudas Lilladher",
       "reading": {
@@ -3570,8 +3757,8 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-07",
-      "model": "gemini-flash-lite-latest"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-latest"
     },
     "b8229cc707b1f017": {
       "v": "2",
@@ -3586,7 +3773,7 @@
       "model": "gemini-flash-lite-latest"
     },
     "b8333eeadae064f4": {
-      "v": "5",
+      "v": "6",
       "ticker": "HDFCBANK",
       "headline": "Bank Q2 Results FY27: HDFC Bank, Axis Bank, ICICI Bank Announce Results Dates",
       "reading": {
@@ -3594,8 +3781,8 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-07",
-      "model": "gemini-flash-lite-latest"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-latest"
     },
     "b96c86062eeb716e": {
       "v": "4",
@@ -3610,7 +3797,7 @@
       "model": "gemini-3.8-flash"
     },
     "ba45ec0f99ff66a0": {
-      "v": "4",
+      "v": "6",
       "ticker": "TCS",
       "headline": "TCS renews title partnership with Jaguar TCS Racing and expands role as official AI partner ahead of Formula E’s GEN4 era",
       "reading": {
@@ -3618,23 +3805,23 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "ba725bf9ee28ece6": {
-      "v": "4",
+      "v": "6",
       "ticker": "PERSISTENT",
       "headline": "Persistent and Nagarro sign Business Combination Agreement to form the Persistent",
       "reading": {
-        "stance": "supports",
-        "claim": "High-growth digital engineering and enterprise AI services provider",
-        "because": "Persistent and Nagarro sign Business Combination Agreement to form the Persistent"
+        "stance": "unrelated",
+        "claim": "",
+        "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "ba9143a0e32e71a6": {
-      "v": "4",
+      "v": "6",
       "ticker": "ACMESOLAR",
       "headline": "ACME Solar (NSE:ACMESOLAR): Has It Commissioned 66.68 MW Solar and 300 MWh BESS in Rajasthan?",
       "reading": {
@@ -3642,7 +3829,7 @@
         "claim": "Renewable developer scaling solar plus battery storage, commissioning new Rajasthan capacity on record revenue",
         "because": "Commissioned 66.68 MW Solar and 300 MWh BESS in Rajasthan"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "baa7c8a78678274f": {
@@ -3658,7 +3845,7 @@
       "model": "gemini-flash-lite-latest"
     },
     "bc2f00fa390ec4c6": {
-      "v": "4",
+      "v": "6",
       "ticker": "BEL",
       "headline": "Mtar Tech, BEL, Paras Defence: Defence stocks volatile ahead of DAC meeting; what investors should know",
       "reading": {
@@ -3666,11 +3853,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
-      "model": "gemini-3.8-flash"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-lite-latest"
     },
     "bc36f519158acbf1": {
-      "v": "4",
+      "v": "6",
       "ticker": "ASTRAMICRO",
       "headline": "Defence Electronics Stocks: Astra Microwave, Paras Defence and Mo",
       "reading": {
@@ -3678,8 +3865,8 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
-      "model": "gemini-3.8-flash"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-lite-latest"
     },
     "bc61846178c9e063": {
       "v": "2",
@@ -3694,7 +3881,7 @@
       "model": "gemini-flash-latest"
     },
     "bc8394f0ed8eb0f4": {
-      "v": "5",
+      "v": "6",
       "ticker": "ZENTEC",
       "headline": "Defence Ministry bars Zen Technologies from counter-drone tenders",
       "reading": {
@@ -3702,11 +3889,11 @@
         "claim": "winning repeat Ministry of Defence counter-drone orders",
         "because": "Defence Ministry bars Zen Technologies from counter-drone tenders"
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "bcf1838c5ba47170": {
-      "v": "5",
+      "v": "6",
       "ticker": "SCHNEIDER",
       "headline": "Schneider Electric Infrastructure Limited has informed the Exchange about Investor Presentation",
       "reading": {
@@ -3714,35 +3901,47 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "be5c2f2271d8aa42": {
-      "v": "4",
+      "v": "6",
       "ticker": "SYRMA",
       "headline": "Syrma SGS Elemaster Opens Manufacturing Facility in Bengaluru",
       "reading": {
         "stance": "supports",
         "claim": "new Jodhpur and Bengaluru plants",
-        "because": "Syrma SGS Elemaster Opens Manufacturing Facility in Bengaluru"
+        "because": "Opens Manufacturing Facility in Bengaluru"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "beaa3c00112ad76f": {
-      "v": "4",
+      "v": "6",
       "ticker": "KAYNES",
       "headline": "Kaynes Technology Partners with BOSGAME for India Launch",
       "reading": {
-        "stance": "supports",
-        "claim": "High-end electronics and PCBA manufacturing",
-        "because": "Kaynes Technology Partners with BOSGAME for India Launch"
+        "stance": "unrelated",
+        "claim": "",
+        "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
+      "model": "gemini-flash-lite-latest"
+    },
+    "bf89e18d00a54277": {
+      "v": "6",
+      "ticker": "FORTIS",
+      "headline": "IHH plans to raise Fortis stake to 51 pc, expand capacity to 10,000 beds",
+      "reading": {
+        "stance": "supports",
+        "claim": "Hospital and diagnostics network benefiting from insurance penetration and Ayushman Bharat volumes",
+        "because": "expand capacity to 10,000 beds"
+      },
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "bf9a7c749c9aede3": {
-      "v": "4",
+      "v": "6",
       "ticker": "CGPOWER",
       "headline": "CG Power and Industrial Solutions (NSEI:CGPOWER) Stock Forecast & Analyst Predictions",
       "reading": {
@@ -3750,7 +3949,7 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "bfff64098822f4fc": {
@@ -3791,7 +3990,7 @@
       "model": "gemini-flash-latest"
     },
     "c240f4a9561cb26c": {
-      "v": "4",
+      "v": "6",
       "ticker": "ITC",
       "headline": "RIL, ITC, TCS, L&T, Infosys among top 10 under-owned stocks amid 2-decade low FII positioning",
       "reading": {
@@ -3799,7 +3998,7 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "c2574f4d39520b03": {
@@ -3815,7 +4014,7 @@
       "model": "gemini-flash-lite-latest"
     },
     "c28f48a8908cc90f": {
-      "v": "4",
+      "v": "6",
       "ticker": "ADANIGREEN",
       "headline": "Adani Green Energy Limited has informed the Exchange regarding 'Operationalization of Projects'.",
       "reading": {
@@ -3823,11 +4022,11 @@
         "claim": "Developing the world's largest renewable energy park in Khavda, Gujarat (30 GW capacity target)",
         "because": "Operationalization of Projects"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "c3138908c61a7de5": {
-      "v": "4",
+      "v": "6",
       "ticker": "CONCOR",
       "headline": "IFFCO, CONCOR explore Logistics Partnership",
       "reading": {
@@ -3835,7 +4034,7 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "c37cffbed70db74c": {
@@ -3851,7 +4050,7 @@
       "model": "gemini-flash-lite-latest"
     },
     "c59408fb08e307e9": {
-      "v": "5",
+      "v": "6",
       "ticker": "KAYNES",
       "headline": "Kaynes Technology targets lower metering receivables, better cash flow by FY27-end",
       "reading": {
@@ -3859,11 +4058,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "c59e23ace5d5d8a8": {
-      "v": "4",
+      "v": "6",
       "ticker": "TCS",
       "headline": "TCS Partners With DGCE To Advance Derivatives Market Infrastructure; Shares Up 3.3%",
       "reading": {
@@ -3871,11 +4070,23 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
+      "model": "gemini-flash-lite-latest"
+    },
+    "c5b573d3aed0552a": {
+      "v": "6",
+      "ticker": "CONCOR",
+      "headline": "CONCOR’s Dadri logistics park records highest monthly reefer dispatches",
+      "reading": {
+        "stance": "unrelated",
+        "claim": "",
+        "because": ""
+      },
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "c70beedcdba2efc4": {
-      "v": "5",
+      "v": "6",
       "ticker": "FORTIS",
       "headline": "Buy Fortis Healthcare; target of Rs 1120: Prabhudas Lilladher",
       "reading": {
@@ -3883,11 +4094,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-07",
-      "model": "gemini-flash-lite-latest"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-latest"
     },
     "c76738be1be451ab": {
-      "v": "4",
+      "v": "6",
       "ticker": "BHEL",
       "headline": "BHEL approves INR 65 crore investment in NTPC joint venture",
       "reading": {
@@ -3895,11 +4106,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "c770e67ac766c48f": {
-      "v": "4",
+      "v": "6",
       "ticker": "BPCL",
       "headline": "BPCL, CSE sign MoU to advance biofuels and circular economy projects",
       "reading": {
@@ -3907,11 +4118,11 @@
         "claim": "biofuels expansion",
         "because": "BPCL, CSE sign MoU to advance biofuels and circular economy projects"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "c778d0c3d411a38a": {
-      "v": "4",
+      "v": "6",
       "ticker": "SYRMA",
       "headline": "Dixon Tech Or Avalon Or Syrma SGS? PL Capital Sees Multi-Year EMS Opportunity, But There's A Catch",
       "reading": {
@@ -3919,11 +4130,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "c8149c159aaea934": {
-      "v": "4",
+      "v": "6",
       "ticker": "ADANIPOWER",
       "headline": "Adani Power (BSE:533096) Stock Forecast & Analyst Predictions",
       "reading": {
@@ -3931,11 +4142,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "c825a02c12b3e47d": {
-      "v": "4",
+      "v": "6",
       "ticker": "SUZLON",
       "headline": "Suzlon, Exel Composites Sign Multiyear €100M Deal for Carbon Fiber Planks Supply",
       "reading": {
@@ -3943,11 +4154,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "c868efc66a090bbc": {
-      "v": "5",
+      "v": "6",
       "ticker": "BHEL",
       "headline": "BHEL fined ₹11 lakh by exchanges for LODR non-compliance",
       "reading": {
@@ -3955,7 +4166,7 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "c8dde51dad5bceb9": {
@@ -3971,7 +4182,7 @@
       "model": "gemini-flash-lite-latest"
     },
     "c97bcb3def915ceb": {
-      "v": "4",
+      "v": "6",
       "ticker": "SUZLON",
       "headline": "Suzlon wins its maiden 200 MW wind energy order from Ayana Renewable Power",
       "reading": {
@@ -3979,7 +4190,7 @@
         "claim": "dominating wind turbine supply with a record order book",
         "because": "Suzlon wins its maiden 200 MW wind energy order from Ayana Renewable Power"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "c9aff232dbdd58ad": {
@@ -4007,7 +4218,7 @@
       "model": "gemini-flash-lite-latest"
     },
     "cad80bf7c008881f": {
-      "v": "4",
+      "v": "6",
       "ticker": "DIXON",
       "headline": "Dixon shares rise as Vivo JV wins government approval",
       "reading": {
@@ -4015,11 +4226,11 @@
         "claim": "Leader in electronic assembly (mobile, laptop, LED TV)",
         "because": "Dixon shares rise as Vivo JV wins government approval"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "cb0be90488126642": {
-      "v": "5",
+      "v": "6",
       "ticker": "HAL",
       "headline": "ABN AMRO gains momentum in Germany following the integration of Hauck Aufhäuser Lampe (HAL)",
       "reading": {
@@ -4028,11 +4239,11 @@
         "because": "",
         "about": false
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "cb64b4369eec40f7": {
-      "v": "5",
+      "v": "6",
       "ticker": "ADSL",
       "headline": "Allied Digital Services (NSE: ADSL): Bull Case, Bear Case Explained",
       "reading": {
@@ -4040,11 +4251,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "cbb11c26802b5a82": {
-      "v": "4",
+      "v": "6",
       "ticker": "KAYNES",
       "headline": "Explained: Why Jefferies prefers Kaynes Tech shares over Dixon Tech; urges caution on Syrma SGS",
       "reading": {
@@ -4052,11 +4263,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "cbc61c3771499477": {
-      "v": "4",
+      "v": "6",
       "ticker": "TCS",
       "headline": "TCS launches lights-out factory lab in Pune to drive AI-enabled manufacturing",
       "reading": {
@@ -4064,23 +4275,23 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "cbd88f44ca32c951": {
-      "v": "4",
+      "v": "6",
       "ticker": "VBL",
       "headline": "VBL: Q2 CY2026 delivered double-digit revenue and profit growth, expanded partnerships, and a new Kenya acquisition",
       "reading": {
         "stance": "supports",
-        "claim": "PepsiCo's dominant bottler, expanding into newer territories and scaling dairy/juice products",
-        "because": "expanded partnerships, and a new Kenya acquisition"
+        "claim": "expanding into newer territories",
+        "because": "new Kenya acquisition"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "cbfcab18eb509d3f": {
-      "v": "5",
+      "v": "6",
       "ticker": "IDEAFORGE",
       "headline": "ideaForge Technology Promoter Vipul Joshi Pledges 3,70,370 Equity Shares Under SEBI Regulation 31",
       "reading": {
@@ -4088,8 +4299,8 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-07",
-      "model": "gemini-flash-lite-latest"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-latest"
     },
     "cc2408e70f52a6e6": {
       "v": "4",
@@ -4104,19 +4315,19 @@
       "model": "gemini-flash-lite-latest"
     },
     "cc9eb8e6f0af730e": {
-      "v": "4",
+      "v": "6",
       "ticker": "BHEL",
       "headline": "Hystar, BHEL to localise PEM electrolyser production in India",
       "reading": {
         "stance": "supports",
-        "claim": "expanding local container manufacturing and green energy grids",
+        "claim": "green energy grids",
         "because": "Hystar, BHEL to localise PEM electrolyser production in India"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "ccfeaff8e13f18e4": {
-      "v": "4",
+      "v": "6",
       "ticker": "ICICIBANK",
       "headline": "ICICI Bank Limited has informed the Exchange about Disclosure under Regulation 30 of SEBI (Listing Obligations and Disclosure Requirements) Regulations, 2015",
       "reading": {
@@ -4124,19 +4335,20 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
-      "model": "gemini-3.8-flash"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-lite-latest"
     },
     "cd3645f7a51ab556": {
-      "v": "4",
+      "v": "6",
       "ticker": "SIEMENS",
       "headline": "Siemens and FuelCell Energy Collaborate to Explore Scalable Fuel Cell Power Solutions",
       "reading": {
         "stance": "unrelated",
         "claim": "",
-        "because": ""
+        "because": "",
+        "about": false
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "ce3a86768b7d77fc": {
@@ -4152,31 +4364,31 @@
       "model": "gemini-flash-lite-latest"
     },
     "ce5b6a7395454cdb": {
-      "v": "4",
+      "v": "6",
       "ticker": "STLTECH",
       "headline": "Sterlite Technologies Limited has informed the Exchange about Bagging/Receiving of orders/contracts",
       "reading": {
-        "stance": "supports",
-        "claim": "Expanding optical fiber and cable capacities to meet hyper-scale data center interconnect demands",
-        "because": "Bagging/Receiving of orders/contracts"
+        "stance": "unrelated",
+        "claim": "",
+        "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "ced2468d54c40321": {
-      "v": "5",
+      "v": "6",
       "ticker": "RELIANCE",
       "headline": "Reliance Unveils Comprehensive Clean Energy Strategy Amid India’s Energy 'Supercycle'",
       "reading": {
         "stance": "supports",
         "claim": "commissioning green energy gigafactories",
-        "because": "Unveils Comprehensive Clean Energy Strategy Amid India’s Energy 'Supercycle'"
+        "because": "Reliance Unveils Comprehensive Clean Energy Strategy"
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "cf13df2e0f563c06": {
-      "v": "5",
+      "v": "6",
       "ticker": "CAMPUS",
       "headline": "TCS' HyperVault Secures 264 Acres For Massive 1GW AI Data Center Campus In Hyderabad",
       "reading": {
@@ -4185,23 +4397,24 @@
         "because": "",
         "about": false
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "cff98d2f763857de": {
-      "v": "4",
+      "v": "6",
       "ticker": "SIEMENS",
       "headline": "Siemens and Cloudberry VC collaborate to accelerate European deep-tech innovation",
       "reading": {
         "stance": "unrelated",
         "claim": "",
-        "because": ""
+        "because": "",
+        "about": false
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "d0a730256eeaf364": {
-      "v": "4",
+      "v": "6",
       "ticker": "STLTECH",
       "headline": "STLTECH: Sterlite Technologies Limited has informed the Exchange regarding a press release dated August 27, 2026, titled \"Press Release   Sterlite Technologies Limited ( STL ) takes a major leap towar",
       "reading": {
@@ -4209,23 +4422,25 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "d0d99e2860754b3a": {
-      "v": "4",
+      "v": "6",
       "ticker": "NTPCGREEN",
       "headline": "NTPC Green Energy (NSE:NTPCGREEN) Adds 153.94 MW Kalasar Solar Capacity",
       "reading": {
-        "stance": "supports",
-        "claim": "steadily commissioning solar capacity such as Dahod and Kalasar toward a large state-backed renewable build-out",
-        "because": "Adds 153.94 MW Kalasar Solar Capacity"
+        "stance": "unrelated",
+        "claim": "",
+        "because": "",
+        "downgraded": "supports",
+        "reason": "claim not in the thesis"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "d10c2f4660ed2145": {
-      "v": "4",
+      "v": "6",
       "ticker": "NTPCGREEN",
       "headline": "NTPC Green Energy (NSE:NTPCGREEN): Who Has Been Appointed as Statutory Auditor for FY2026-27?",
       "reading": {
@@ -4233,19 +4448,19 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "d183a800ad11eb42": {
-      "v": "4",
+      "v": "6",
       "ticker": "KAYNES",
       "headline": "Rs 1.27 lk cr Semicon 2.0: 1 ships chips, 3 build moats — CG Power, Kaynes, Dixon & Tata Elxsi",
       "reading": {
         "stance": "supports",
-        "claim": "High-end electronics and PCBA manufacturing, setting up a state-of-the-art semiconductor OSAT plant",
-        "because": "Semicon 2.0: 1 ships chips, 3 build moats — CG Power, Kaynes, Dixon & Tata Elxsi"
+        "claim": "setting up a state-of-the-art semiconductor OSAT plant",
+        "because": "CG Power, Kaynes, Dixon & Tata Elxsi"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "d1b618911e7c8110": {
@@ -4272,32 +4487,45 @@
       "seen": "2026-09-30",
       "model": "gemini-flash-latest"
     },
+    "d3a2e3fc46c51a5c": {
+      "v": "6",
+      "ticker": "BHEL",
+      "headline": "BHEL outpaces NTPC by 80 points in six months; Kotak questions thermal capacity outlook",
+      "reading": {
+        "stance": "unrelated",
+        "claim": "",
+        "because": ""
+      },
+      "seen": "2026-10-08",
+      "model": "gemini-flash-lite-latest"
+    },
     "d448e1c6aec690c4": {
-      "v": "4",
+      "v": "6",
       "ticker": "SIEMENS",
       "headline": "Getting the Grid Right: Siemens",
       "reading": {
-        "stance": "supports",
-        "claim": "grid equipment manufacturing",
-        "because": "Getting the Grid Right"
+        "stance": "unrelated",
+        "claim": "",
+        "because": "",
+        "about": false
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "d474f4cc0e514022": {
-      "v": "4",
+      "v": "6",
       "ticker": "FORTIS",
       "headline": "Fortis Healthcare enters Odisha with 300-bed hospital pact",
       "reading": {
         "stance": "supports",
-        "claim": "Hospital and diagnostics network",
-        "because": "300-bed hospital pact"
+        "claim": "Hospital and diagnostics network benefiting from insurance penetration and Ayushman Bharat volumes",
+        "because": "Fortis Healthcare enters Odisha with 300-bed hospital pact"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "d53c1df9d71bed85": {
-      "v": "5",
+      "v": "6",
       "ticker": "BEL",
       "headline": "BEL bags additional orders worth Rs 1,081 crore",
       "reading": {
@@ -4305,11 +4533,11 @@
         "claim": "securing major naval and surveillance command radar orders",
         "because": "BEL bags additional orders worth Rs 1,081 crore"
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "d5972f931aa1b431": {
-      "v": "4",
+      "v": "6",
       "ticker": "MPHASIS",
       "headline": "Mphasis awarded EcoVadis Silver Medal with 75 score in FY26",
       "reading": {
@@ -4317,11 +4545,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "d84eb0bcb0f7b4f9": {
-      "v": "5",
+      "v": "6",
       "ticker": "TCS",
       "headline": "As AI slows IT growth, JP Morgan expects TCS and Infosys to outperform Wipro, HCL Tech",
       "reading": {
@@ -4329,11 +4557,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-07",
-      "model": "gemini-flash-lite-latest"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-latest"
     },
     "d87573d317f883b9": {
-      "v": "4",
+      "v": "6",
       "ticker": "COFORGE",
       "headline": "Coforge Limited has informed the Exchange regarding a press release dated September 15, 2026, titled \"\"Coforge Expands Automotive Engineering Footprint to Accelerate Connected, EV and Software-Defined",
       "reading": {
@@ -4341,7 +4569,7 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "d8b2ffc2d72878ff": {
@@ -4357,7 +4585,7 @@
       "model": "gemini-flash-lite-latest"
     },
     "d9282cc4ba174a33": {
-      "v": "5",
+      "v": "6",
       "ticker": "CHALET",
       "headline": "HDFC Mutual Fund increases stake in Chalet Hotels to 9.11%",
       "reading": {
@@ -4365,11 +4593,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "d9faaa89f35b487c": {
-      "v": "4",
+      "v": "6",
       "ticker": "LTTS",
       "headline": "Earnings Update: L&T Technology Services Limited (NSE:LTTS) Just Reported Its First-Quarter Results And Analysts Are Updating Their Forecasts",
       "reading": {
@@ -4377,7 +4605,7 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "d9fcd3515f1f9a52": {
@@ -4393,7 +4621,7 @@
       "model": "gemini-3.8-flash"
     },
     "db077c44426a1ec7": {
-      "v": "4",
+      "v": "6",
       "ticker": "ELGIEQUIP",
       "headline": "Elgi Equipments Limited has informed the Exchange about Diversification/Disinvestment",
       "reading": {
@@ -4401,11 +4629,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "db09aaad947ad7ae": {
-      "v": "4",
+      "v": "6",
       "ticker": "DIACABS",
       "headline": "Diamond Power Infrastructure Limited has informed the Exchange about Bagging/Receiving of orders/contracts",
       "reading": {
@@ -4413,7 +4641,7 @@
         "claim": "winning state utility orders such as PuVVNL's on a fast-growing order book",
         "because": "Bagging/Receiving of orders/contracts"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "dbbb950a20c364ba": {
@@ -4429,7 +4657,7 @@
       "model": "gemini-flash-lite-latest"
     },
     "dbd28c8d15b0d2c5": {
-      "v": "4",
+      "v": "6",
       "ticker": "IOC",
       "headline": "IOC: World Athletics holds key to Russian comeback",
       "reading": {
@@ -4438,7 +4666,7 @@
         "because": "",
         "about": false
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "dcaa1533ab87ffc0": {
@@ -4466,19 +4694,19 @@
       "model": "gemini-flash-lite-latest"
     },
     "dcd7aa5fed294dfa": {
-      "v": "4",
+      "v": "6",
       "ticker": "GODREJPROP",
       "headline": "Godrej Properties (NSE:GODREJPROP) Adds ₹6,000 Crore Mumbai Luxury Housing Project",
       "reading": {
         "stance": "supports",
-        "claim": "Large residential developer adding projects such as the ₹6,000 crore Marine Lines launch in Mumbai, with pre-sales momentum in Mumbai and NCR",
+        "claim": "adding projects such as the ₹6,000 crore Marine Lines launch in Mumbai",
         "because": "Adds ₹6,000 Crore Mumbai Luxury Housing Project"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "ddcf29d449068d14": {
-      "v": "5",
+      "v": "6",
       "ticker": "SCHNEIDER",
       "headline": "Precision Optics Enabling Lunar Navigation: Schneider-Kreuznach’s Role in NASA’s Artemis Missions",
       "reading": {
@@ -4487,19 +4715,19 @@
         "because": "",
         "about": false
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "ddd53870e9ae8abd": {
-      "v": "4",
+      "v": "6",
       "ticker": "ACMESOLAR",
       "headline": "ACME Solar Holdings (NSE:ACMESOLAR) Sets Up New Renewable Energy Subsidiary",
       "reading": {
-        "stance": "supports",
-        "claim": "Renewable developer scaling solar plus battery storage, commissioning new Rajasthan capacity on record revenue",
-        "because": "Sets Up New Renewable Energy Subsidiary"
+        "stance": "unrelated",
+        "claim": "",
+        "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "dde373c04deac3f3": {
@@ -4527,19 +4755,19 @@
       "model": "gemini-flash-lite-latest"
     },
     "df236f6d886bd9f5": {
-      "v": "4",
+      "v": "6",
       "ticker": "DIACABS",
       "headline": "Diacabs wins Rs 61.04 crore order from PuVVNL for 33 kV HT XLPE cables",
       "reading": {
         "stance": "supports",
         "claim": "winning state utility orders such as PuVVNL's on a fast-growing order book",
-        "because": "Diacabs wins Rs 61.04 crore order from PuVVNL for 33 kV HT XLPE cables"
+        "because": "wins Rs 61.04 crore order from PuVVNL for 33 kV HT XLPE cables"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "df56373d766ba213": {
-      "v": "5",
+      "v": "6",
       "ticker": "BEL",
       "headline": "BEL Q2 profit dips 4% on higher employee costs",
       "reading": {
@@ -4547,11 +4775,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "df75e91faf940e5f": {
-      "v": "5",
+      "v": "6",
       "ticker": "TCS",
       "headline": "TCS Q1 Preview: Wage Hikes Seen Weighing On Margin, Growth Stays Muted",
       "reading": {
@@ -4559,8 +4787,8 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-07",
-      "model": "gemini-flash-lite-latest"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-latest"
     },
     "dfc3532f9f40b486": {
       "v": "1",
@@ -4587,7 +4815,7 @@
       "model": "gemini-flash-lite-latest"
     },
     "e21cd9f563c5793c": {
-      "v": "4",
+      "v": "6",
       "ticker": "ADANIPOWER",
       "headline": "Stocks To Buy or Sell Today, September 28, 2026: SAIL, Adani Power and Vedanta Among Shares That May Remain",
       "reading": {
@@ -4595,7 +4823,7 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "e247211a04de0b34": {
@@ -4611,7 +4839,7 @@
       "model": "gemini-flash-lite-latest"
     },
     "e247499741465bee": {
-      "v": "5",
+      "v": "6",
       "ticker": "DIXON",
       "headline": "Government ends smartphone PLI payouts; Dixon's incentive claims rejected",
       "reading": {
@@ -4619,11 +4847,11 @@
         "claim": "heavily subsidized under manufacturing PLI",
         "because": "Government ends smartphone PLI payouts; Dixon's incentive claims rejected"
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "e274c6f6baf6e27c": {
-      "v": "4",
+      "v": "6",
       "ticker": "BPCL",
       "headline": "वैश्विक कच्चे तेल संकट के बीच,BPCL की रणनीतिक कुशलता",
       "reading": {
@@ -4631,11 +4859,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "e285ebfac51fc026": {
-      "v": "4",
+      "v": "6",
       "ticker": "RELAXO",
       "headline": "Relaxo Launches Inaugural Relaxo Premier League To Boost Employee Engagement",
       "reading": {
@@ -4643,11 +4871,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "e39c63fbf30a33ef": {
-      "v": "4",
+      "v": "6",
       "ticker": "TCS",
       "headline": "Aareal Bank and TCS forge strategic partnership to accelerate digital transformation",
       "reading": {
@@ -4655,7 +4883,7 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "e43d0108d124a0a3": {
@@ -4683,7 +4911,7 @@
       "model": "gemini-flash-lite-latest"
     },
     "e54496f33ce4f7a8": {
-      "v": "5",
+      "v": "6",
       "ticker": "IDEAFORGE",
       "headline": "Indian Army cancels ideaForge drone contract, shifts orders to rival supplier",
       "reading": {
@@ -4691,11 +4919,11 @@
         "claim": "primary supplier for Indian Army and police borders",
         "because": "Indian Army cancels ideaForge drone contract, shifts orders to rival supplier"
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "e5711caf611acf7e": {
-      "v": "4",
+      "v": "6",
       "ticker": "CONCOR",
       "headline": "CONCOR and BMCT strengthen strategic partnership to advance Rail-Based Container Logistics",
       "reading": {
@@ -4703,7 +4931,7 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "e5877d7d3414f83c": {
@@ -4719,7 +4947,7 @@
       "model": "gemini-flash-latest"
     },
     "e5d96fc5ab56752d": {
-      "v": "5",
+      "v": "6",
       "ticker": "ARVIND",
       "headline": "CARE Ratings upgrades LT ratings of Arvind to 'AA' with 'stable' outlook",
       "reading": {
@@ -4727,8 +4955,8 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-07",
-      "model": "gemini-flash-lite-latest"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-latest"
     },
     "e731f68dc3c8dcec": {
       "v": "3",
@@ -4743,31 +4971,33 @@
       "model": "gemini-flash-lite-latest"
     },
     "e753c6d9a9ef713d": {
-      "v": "4",
+      "v": "6",
       "ticker": "COFORGE",
       "headline": "Coforge Wins \"AI Native Enterprise\" Award at TOI AI Quotient Awards\"",
       "reading": {
-        "stance": "supports",
-        "claim": "expanding margins via GenAI offerings",
-        "because": "AI Native Enterprise"
+        "stance": "unrelated",
+        "claim": "",
+        "because": "",
+        "downgraded": "supports",
+        "reason": "quote not in the headline"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "e7701f9963cee204": {
-      "v": "5",
+      "v": "6",
       "ticker": "ANANTRAJ",
       "headline": "Anant Raj plans ₹25,000 crore data centre bet without fresh funding",
       "reading": {
         "stance": "supports",
-        "claim": "Real-estate developer transitioning commercial properties into major data center hubs in NCR",
-        "because": "Anant Raj plans ₹25,000 crore data centre bet"
+        "claim": "transitioning commercial properties into major data center hubs",
+        "because": "plans ₹25,000 crore data centre bet"
       },
-      "seen": "2026-10-07",
-      "model": "gemini-flash-lite-latest"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-latest"
     },
     "e7d8c287e5dce0d2": {
-      "v": "5",
+      "v": "6",
       "ticker": "SCHNEIDER",
       "headline": "Schneider Electric Announces Intention To Acquire Cognite",
       "reading": {
@@ -4776,32 +5006,32 @@
         "because": "",
         "about": false
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "e834ad921599cfe2": {
-      "v": "4",
+      "v": "6",
       "ticker": "LTTS",
       "headline": "LTTS Unveils Ainfonix™ 4.0 to Advance AI-Driven Engineering Intelligence",
       "reading": {
         "stance": "supports",
-        "claim": "Engineering R&D services leader, scaling embedded software and semiconductor design-services wins",
-        "because": "Unveils Ainfonix™ 4.0 to Advance AI-Driven Engineering Intelligence"
+        "claim": "embedded software and semiconductor design-services wins",
+        "because": "Ainfonix™ 4.0 to Advance AI-Driven Engineering Intelligence"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "ea9cc8452f3ca1c9": {
-      "v": "5",
+      "v": "6",
       "ticker": "HAL",
       "headline": "Finance Ministry withdraws customs duty exemption on aircraft parts imported by HAL",
       "reading": {
         "stance": "contradicts",
         "claim": "benefiting from custom duty exemptions",
-        "because": "withdraws customs duty exemption on aircraft parts imported by HAL"
+        "because": "Finance Ministry withdraws customs duty exemption on aircraft parts imported by HAL"
       },
-      "seen": "2026-10-07",
-      "model": "gemini-flash-lite-latest"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-latest"
     },
     "ead13a98b25e5a11": {
       "v": "2",
@@ -4828,7 +5058,7 @@
       "model": "gemini-flash-lite-latest"
     },
     "ec430c4488e686c3": {
-      "v": "4",
+      "v": "6",
       "ticker": "IKS",
       "headline": "Inventurus Knowledge Solutions (NSEI:IKS) Stock Forecast & Analyst Predictions",
       "reading": {
@@ -4836,19 +5066,19 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "edffd7956adcaf64": {
-      "v": "5",
+      "v": "6",
       "ticker": "VBL",
       "headline": "Varun Beverages Acquires Devyani Food Industries Kenya Business For $32 Million",
       "reading": {
         "stance": "supports",
         "claim": "expanding into newer territories",
-        "because": "Acquires Devyani Food Industries Kenya Business For $32 Million"
+        "because": "Varun Beverages Acquires Devyani Food Industries Kenya Business For $32 Million"
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "ee372534bd3ec318": {
@@ -4864,7 +5094,7 @@
       "model": "gemini-3.8-flash"
     },
     "ef0d68b8340da447": {
-      "v": "5",
+      "v": "6",
       "ticker": "SIEMENS",
       "headline": "Siemens to acquire Precision Innovations to expand AI-powered system-on-a-chip design exploration and optimization",
       "reading": {
@@ -4873,11 +5103,11 @@
         "because": "",
         "about": false
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "efd34a53a446bc71": {
-      "v": "4",
+      "v": "6",
       "ticker": "KAYNES",
       "headline": "Kaynes Technology, BOSGAME Sign MoU To Expand In India",
       "reading": {
@@ -4885,11 +5115,11 @@
         "claim": "High-end electronics and PCBA manufacturing",
         "because": "Kaynes Technology, BOSGAME Sign MoU To Expand In India"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "eff9e17fbca7c4a4": {
-      "v": "4",
+      "v": "6",
       "ticker": "COFORGE",
       "headline": "Coforge Limited has informed the Exchange regarding a press release dated August 27, 2026, titled \"Coforge Celebrates 20 Years in Peru, Reinforces Commitment to Move Enterprises from AI Ambition to Ex",
       "reading": {
@@ -4897,11 +5127,11 @@
         "claim": "expanding margins via GenAI offerings",
         "because": "Move Enterprises from AI Ambition to Execution"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "f00056f6565dee6c": {
-      "v": "4",
+      "v": "6",
       "ticker": "DIXON",
       "headline": "Dixon-Vivo joint venture inches close to securing final govt approval",
       "reading": {
@@ -4909,11 +5139,11 @@
         "claim": "Leader in electronic assembly (mobile, laptop, LED TV)",
         "because": "Dixon-Vivo joint venture inches close to securing final govt approval"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "f02c0a04e9eeb4ae": {
-      "v": "4",
+      "v": "6",
       "ticker": "TCS",
       "headline": "Tata Consultancy Services Limited has informed the Exchange regarding 'Press Release - TCS launches India's first lights-out factory lab to advance AI-first manufacturing'.",
       "reading": {
@@ -4921,35 +5151,47 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "f053634550e7cfc6": {
-      "v": "4",
+      "v": "6",
       "ticker": "SYRMA",
       "headline": "Syrma Sgs Technology Limited has informed the Exchange regarding a press release dated September 22, 2026, titled \"Update on inauguration of facility by Syrma Johri MedTech Limited, a subsidiary of Sy",
       "reading": {
         "stance": "supports",
         "claim": "new Jodhpur and Bengaluru plants",
-        "because": "Update on inauguration of facility by Syrma Johri MedTech Limited, a subsidiary of Syrma SGS Technology Limited"
+        "because": "inauguration of facility by Syrma Johri MedTech Limited, a subsidiary of Syrma SGS Technology Limited"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
+      "model": "gemini-flash-lite-latest"
+    },
+    "f21045160331d1a4": {
+      "v": "6",
+      "ticker": "ADANIGREEN",
+      "headline": "Adani Green Energy, Waaree Energies, KPI Green, ACME Solar: How renewable energy stocks performed on October 6",
+      "reading": {
+        "stance": "unrelated",
+        "claim": "",
+        "because": ""
+      },
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "f28addb7c3e2b6e6": {
-      "v": "5",
+      "v": "6",
       "ticker": "INDHOTEL",
       "headline": "INDHOTEL: Revenue and profit rose year-over-year, driven by hotel segment growth and a key acquisition",
       "reading": {
-        "stance": "supports",
-        "claim": "scaling asset-light management contracts against record domestic travel demand",
-        "because": "Revenue and profit rose year-over-year, driven by hotel segment growth and a key acquisition"
+        "stance": "unrelated",
+        "claim": "",
+        "because": ""
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "f3476e011ba9d5ca": {
-      "v": "5",
+      "v": "6",
       "ticker": "BHEL",
       "headline": "Man’s body found stuffed in sack in bushes: 4–5-day-old corpse found near BHEL gate no. 8; severe injury ma...",
       "reading": {
@@ -4958,23 +5200,23 @@
         "because": "",
         "about": false
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "f46db78ffa34abb4": {
-      "v": "5",
+      "v": "6",
       "ticker": "IDEAFORGE",
       "headline": "ideaForge gets Rs 151 crore Govt funding to develop ‘Yeti’ drone for high-altitude military logistics",
       "reading": {
         "stance": "supports",
-        "claim": "Pioneer in tactical and mapping drone systems, primary supplier for Indian Army and police borders",
-        "because": "gets Rs 151 crore Govt funding to develop ‘Yeti’ drone for high-altitude military logistics"
+        "claim": "primary supplier for Indian Army",
+        "because": "Govt funding to develop ‘Yeti’ drone for high-altitude military logistics"
       },
-      "seen": "2026-10-07",
-      "model": "gemini-flash-lite-latest"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-latest"
     },
     "f49f907280993657": {
-      "v": "4",
+      "v": "6",
       "ticker": "BHEL",
       "headline": "Bharat Heavy Electricals Ltd Share/Stock Price Live Today | The HinduBusinessLine",
       "reading": {
@@ -4982,23 +5224,23 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "f4ec83099b5fa635": {
-      "v": "4",
+      "v": "6",
       "ticker": "SYRMA",
       "headline": "Syrma Sgs Technology Limited has informed the Exchange regarding a press release dated September 22, 2026, titled \"Update on inauguration of facility by Syrma Johri MedTech Limited",
       "reading": {
         "stance": "supports",
         "claim": "new Jodhpur and Bengaluru plants",
-        "because": "Update on inauguration of facility by Syrma Johri MedTech Limited"
+        "because": "inauguration of facility by Syrma Johri MedTech Limited"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "f54c235e1a290d03": {
-      "v": "5",
+      "v": "6",
       "ticker": "SCHNEIDER",
       "headline": "Schneider Electric and AMD release first Helios platform reference design to accelerate AI Factory deployment",
       "reading": {
@@ -5007,7 +5249,7 @@
         "because": "",
         "about": false
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "f54ed10526024cac": {
@@ -5023,7 +5265,7 @@
       "model": "gemini-flash-lite-latest"
     },
     "f59069fadf633e2a": {
-      "v": "5",
+      "v": "6",
       "ticker": "DIXON",
       "headline": "The teaser for ‘The Walking Dead: Daryl Dixon’ final season is out and it unveils a new key character",
       "reading": {
@@ -5032,35 +5274,35 @@
         "because": "",
         "about": false
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "f60bb257dd84e3be": {
-      "v": "5",
+      "v": "6",
       "ticker": "ASTRAMICRO",
       "headline": "Astra Microwave: Defence orders set the stage for growth",
       "reading": {
-        "stance": "supports",
-        "claim": "critical supplier of radars and satellite payloads",
-        "because": "Defence orders set the stage for growth"
+        "stance": "unrelated",
+        "claim": "",
+        "because": ""
       },
-      "seen": "2026-10-07",
-      "model": "gemini-flash-lite-latest"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-latest"
     },
     "f638a607cbacfc8c": {
-      "v": "4",
+      "v": "6",
       "ticker": "VBL",
       "headline": "Varun Beverages completes USD 32 million Kenya acquisition",
       "reading": {
         "stance": "supports",
-        "claim": "PepsiCo's dominant bottler, expanding into newer territories and scaling dairy/juice products",
-        "because": "completes USD 32 million Kenya acquisition"
+        "claim": "expanding into newer territories",
+        "because": "Varun Beverages completes USD 32 million Kenya acquisition"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "f6645671350f56d3": {
-      "v": "4",
+      "v": "6",
       "ticker": "RELAXO",
       "headline": "Relaxo Footwears signs definitive agreements for captive renewable energy",
       "reading": {
@@ -5068,7 +5310,7 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "f6b80bf2a44f1de4": {
@@ -5084,19 +5326,19 @@
       "model": "gemini-flash-lite-latest"
     },
     "f79b30463d299b75": {
-      "v": "5",
+      "v": "6",
       "ticker": "ICICIBANK",
       "headline": "ICICI Bank's gross NPAs jump to five-year high as retail asset quality worsens",
       "reading": {
         "stance": "contradicts",
-        "claim": "sector-leading asset quality",
-        "because": "gross NPAs jump to five-year high as retail asset quality worsens"
+        "claim": "asset quality",
+        "because": "ICICI Bank's gross NPAs jump to five-year high as retail asset quality worsens"
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "f7eaded1be0c27e8": {
-      "v": "4",
+      "v": "6",
       "ticker": "MPHASIS",
       "headline": "Analysts Are Updating Their Mphasis Limited (NSE:MPHASIS) Estimates After Its Full-Year Results",
       "reading": {
@@ -5104,23 +5346,23 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "f7eb4f60517d92d7": {
-      "v": "5",
+      "v": "6",
       "ticker": "ADANIGREEN",
       "headline": "Adani Green cuts Khavda renewable park target to 15 GW",
       "reading": {
         "stance": "contradicts",
-        "claim": "30 GW capacity target",
+        "claim": "Developing the world's largest renewable energy park in Khavda, Gujarat (30 GW capacity target)",
         "because": "Adani Green cuts Khavda renewable park target to 15 GW"
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "f7f0076f2a7a0ef8": {
-      "v": "4",
+      "v": "6",
       "ticker": "LEMONTREE",
       "headline": "Lemon Tree Hotels Limited has informed the Exchange regarding a press release dated September 24, 2026, titled \"LEMON TREE HOTELS EXPANDS MUMBAI FOOTPRINT; ACQUIRES LAND TO DEVELOP LEMON TREE PREMIER ",
       "reading": {
@@ -5128,11 +5370,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "f9f174bb89e1aceb": {
-      "v": "4",
+      "v": "6",
       "ticker": "IOC",
       "headline": "India-Mauritius deepen oil ties, IOC to supply island nation’s fuel needs",
       "reading": {
@@ -5140,23 +5382,23 @@
         "claim": "locking in long-term supply deals such as the Mauritius fuel agreement",
         "because": "India-Mauritius deepen oil ties, IOC to supply island nation’s fuel needs"
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "fa0be4d2869c109f": {
-      "v": "5",
+      "v": "6",
       "ticker": "SUZLON",
       "headline": "Suzlon begins FY27 strong with 23% YoY revenue growth and highest-ever Q1 deliveries",
       "reading": {
         "stance": "supports",
-        "claim": "Turnaround story",
-        "because": "begins FY27 strong with 23% YoY revenue growth and highest-ever Q1 deliveries"
+        "claim": "dominating wind turbine supply with a record order book",
+        "because": "highest-ever Q1 deliveries"
       },
-      "seen": "2026-10-07",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "fa2e1b1e939a804d": {
-      "v": "4",
+      "v": "6",
       "ticker": "SBIN",
       "headline": "State Bank of India has informed the Exchange about investor interaction organised by CITI",
       "reading": {
@@ -5164,11 +5406,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
-      "model": "gemini-3.8-flash"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-lite-latest"
     },
     "fbca37345359014e": {
-      "v": "4",
+      "v": "6",
       "ticker": "TCS",
       "headline": "Tata Consultancy Services Limited has informed the Exchange regarding 'Press Release - TCS wins Rs 122 crore bid to build AI-enabled digital governance platform for Odisha Government'.",
       "reading": {
@@ -5176,11 +5418,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "fc133a905a3a5da3": {
-      "v": "5",
+      "v": "6",
       "ticker": "ADANIGREEN",
       "headline": "Buy, Sell Or Hold: Adani Green Energy, Suzlon Energy, Waaree Energies, KPI Green Energy, Websol Energy System — Analyst Forecast",
       "reading": {
@@ -5188,11 +5430,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-07",
-      "model": "gemini-flash-lite-latest"
+      "seen": "2026-10-08",
+      "model": "gemini-flash-latest"
     },
     "fcc88f6240a0ebeb": {
-      "v": "4",
+      "v": "6",
       "ticker": "DIXON",
       "headline": "\"It all led to this\": AMC unveils first poster for the final season of \"The Walking Dead: Daryl Dixon\"",
       "reading": {
@@ -5201,11 +5443,11 @@
         "because": "",
         "about": false
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "fd759efbdc99648e": {
-      "v": "4",
+      "v": "6",
       "ticker": "BHEL",
       "headline": "Ellenbarrie bags Rs. 481-crore BHEL contract for major Odisha air separation unit",
       "reading": {
@@ -5213,11 +5455,11 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     },
     "ffd292c86c78995d": {
-      "v": "4",
+      "v": "6",
       "ticker": "SYRMA",
       "headline": "Franklin Templeton cuts Syrma SGS stake to 3.01% via open market sale",
       "reading": {
@@ -5225,7 +5467,7 @@
         "claim": "",
         "because": ""
       },
-      "seen": "2026-10-06",
+      "seen": "2026-10-08",
       "model": "gemini-flash-lite-latest"
     }
   }

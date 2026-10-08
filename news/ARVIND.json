@@ -15,6 +15,32 @@
       "status": "counted"
     },
     {
+      "date": "Tue, 06 Oct 2026 13:58:31 GMT",
+      "headline": "Arvind completes acquisition of 46% stake in new GCC entity",
+      "source_url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxQcXlHYnVCMERDbzVtMDVaY1FkUkQ5QXZZTzNtZWVEUkN6T1FCXzhOckFVdEVCa05oRWh0QXhrSllzMEQyc05rb3h0Uk1BQ29ibmxLc2JfLXA0R19tSHJmaUxhN3JQTlVrNFdlZlQwbVQtaFpoM0wzbGpmc0pXamdzMWpqNkhhWjRReXBLQ01mWS1iSkZ5QnpNVGFlOVBmZWdFSTRYaDlSRV9SWFZlVUE?oc=5",
+      "source_label": "scanx.trade",
+      "event_type": "",
+      "source_kind": "Agreement",
+      "event_tags": [
+        "Agreement"
+      ],
+      "confidence": "M",
+      "status": "counted"
+    },
+    {
+      "date": "Wed, 07 Oct 2026 04:48:00 GMT",
+      "headline": "Arvind NSE:ARVIND Acquires 46% Stake in Arvind GCC",
+      "source_url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxOSkQ4UkV1Y0s3RTBXcGlyb1F3OEo0OFpqdzEwaEsyd21PSnItMXdkZDFKVm56R25TWmZOVDhWNC14OWJFem05d210QnhZbVgzc3ZwLUtIZGpuNWNnWWlHY3RNeDVYaU9vbFJ1SmxNWUNYN3RaSlJ0eGlUYXZPdWV4RExDV29xU202bzE4cTZBcXk2UGZBckNPTVlJU3N1YzUwblIzckdFbm5NVlRXWXk4?oc=5",
+      "source_label": "Kalkine India",
+      "event_type": "",
+      "source_kind": "Agreement",
+      "event_tags": [
+        "Agreement"
+      ],
+      "confidence": "M",
+      "status": "counted"
+    },
+    {
       "date": "Fri, 25 Sep 2026 16:51:56 GMT",
       "headline": "Arvind Limited and Ashish N Soni to showcase collaboration in Delhi this October",
       "source_url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxPUVIxZGp0ZFU2WjNfbjJNb2M2OWNyaVVKa2tjS1I0cDNhaTFfSmRnTFZRbmdvaGsxTHQ5RU8tR2NBY1NyVFhxcWZjMjgya19sWVhfbm5aY3Ffa3JHa181QkFKVzhKN1FsWjZadWhzN2pERkpMcnNjUkJZcTBNVTdsMzFjSHFKb3FSLXAtaGMzMFFHN1BoMmpaMEZMbW94X2RmWHVPTF9hek5QYjRSazFVVFFTMTF5ZlpMdng1NzBNdTJzSFE5ak04?oc=5",
@@ -301,7 +327,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (153 days old)"
+      "exclusion_reason": "aged >120d (154 days old)"
     },
     {
       "date": "27 Aug 2026",
@@ -315,6 +341,36 @@
       ],
       "confidence": "M",
       "status": "counted"
+    },
+    {
+      "date": "2026-10-06",
+      "headline": "Arvind completes acquisition of 46% stake in new GCC entity",
+      "source_url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxQcXlHYnVCMERDbzVtMDVaY1FkUkQ5QXZZTzNtZWVEUkN6T1FCXzhOckFVdEVCa05oRWh0QXhrSllzMEQyc05rb3h0Uk1BQ29ibmxLc2JfLXA0R19tSHJmaUxhN3JQTlVrNFdlZlQwbVQtaFpoM0wzbGpmc0pXamdzMWpqNkhhWjRReXBLQ01mWS1iSkZ5QnpNVGFlOVBmZWdFSTRYaDlSRV9SWFZlVUE?oc=5",
+      "source_label": "scanx.trade",
+      "event_type": "acquisition",
+      "source_kind": "Event",
+      "event_tags": [
+        "acquisition",
+        "Event"
+      ],
+      "confidence": "H",
+      "status": "merged",
+      "exclusion_reason": "merged: duplicate phrasing of “Arvind completes acquisition of 46% stake in new GCC entity”"
+    },
+    {
+      "date": "2026-10-07",
+      "headline": "Arvind NSE:ARVIND Acquires 46% Stake in Arvind GCC",
+      "source_url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxOSkQ4UkV1Y0s3RTBXcGlyb1F3OEo0OFpqdzEwaEsyd21PSnItMXdkZDFKVm56R25TWmZOVDhWNC14OWJFem05d210QnhZbVgzc3ZwLUtIZGpuNWNnWWlHY3RNeDVYaU9vbFJ1SmxNWUNYN3RaSlJ0eGlUYXZPdWV4RExDV29xU202bzE4cTZBcXk2UGZBckNPTVlJU3N1YzUwblIzckdFbm5NVlRXWXk4?oc=5",
+      "source_label": "Kalkine India",
+      "event_type": "acquisition",
+      "source_kind": "Event",
+      "event_tags": [
+        "acquisition",
+        "Event"
+      ],
+      "confidence": "H",
+      "status": "merged",
+      "exclusion_reason": "merged: duplicate phrasing of “Arvind NSE:ARVIND Acquires 46% Stake in Arvind GCC”"
     },
     {
       "date": "2026-09-26",
