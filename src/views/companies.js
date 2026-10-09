@@ -27,7 +27,7 @@ const SORTS = [
 ];
 const ARROW = { tailwind: "▲", headwind: "▼", mixed: "◆" };
 
-function label(sector, labels) {
+export function label(sector, labels) {
   return labels?.[sector]?.label || String(sector || "").replace(/_/g, " ");
 }
 
@@ -69,7 +69,7 @@ export function policyMeta(p) {
     .join(" · ");
 }
 
-function statusPill(status) {
+export function statusPill(status) {
   if (!status) return null;
   const mark = { Broken: "✕", Weakening: "!", Intact: "✓" }[status] || "?";
   return el(
@@ -94,7 +94,7 @@ export function markers(c) {
   ];
 }
 
-function priceLine(c) {
+export function priceLine(c) {
   const svg = sparkline(c.prices, markers(c));
   if (!svg) return null;
   const change = seriesChange(c.prices);
@@ -111,6 +111,76 @@ function priceLine(c) {
   );
 }
 
+/** The holding's own news in the window, and the namesakes set aside from it. */
+export function activitySection(c, windowDays) {
+  return el(
+    "section",
+    {},
+    el("h4", {}, `Recent activity${c.activity_count > (c.activity || []).length ? ` (${c.activity_count})` : ""}`),
+    c.activity?.length
+      ? el(
+          "ul",
+          { class: "evidence" },
+          c.activity.map((a) =>
+            el(
+              "li",
+              {},
+              el("span", { class: `tag${a.kind === "adverse" ? " tag-risk" : ""}` }, a.kind),
+              link(a.link, a.text),
+              el(
+                "span",
+                { class: "evidence-meta" },
+                [shortDate(a.date), a.source].filter(Boolean).join(" · "),
+              ),
+            ),
+          ),
+        )
+      : el("p", { class: "company-empty" }, `No news attributed to it in ${windowDays} days.`),
+    // Headlines the thesis check read as being about a namesake (a
+    // foreign parent, a person): kept for inspection, not shown as news.
+    c.namesakes?.length
+      ? disclosure(
+          `${c.namesakes.length} set aside \u2014 likely about another company or person ${LLM_MARK}`,
+          el(
+            "ul",
+            { class: "evidence" },
+            c.namesakes.map((a) => el("li", {}, link(a.link, a.text))),
+          ),
+        )
+      : null,
+  );
+}
+
+/** The policies touching the holding or its sector, with their direction. */
+export function policySection(c, sectorName, windowDays) {
+  return el(
+    "section",
+    {},
+    el("h4", {}, "Policy"),
+    c.policies?.length
+      ? el(
+          "ul",
+          { class: "evidence" },
+          c.policies.map((p) =>
+            el(
+              "li",
+              {},
+              p.direction
+                ? el(
+                    "span",
+                    { class: `tag ${p.direction === "headwind" ? "tag-risk" : p.direction === "tailwind" ? "tag-opp" : ""}` },
+                    `${ARROW[p.direction] || ""} ${p.direction}`,
+                  )
+                : null,
+              link(p.link, p.headline),
+              el("span", { class: "evidence-meta" }, policyMeta(p)),
+            ),
+          ),
+        )
+      : el("p", { class: "company-empty" }, `No policy touching ${sectorName} in ${windowDays} days.`),
+  );
+}
+
 function card(c, labels, windowDays) {
   const sectorName = label(c.sector, labels);
   return el(
@@ -119,7 +189,7 @@ function card(c, labels, windowDays) {
     el(
       "header",
       { class: "company-head" },
-      tickerLink(c.ticker, "holdings"),
+      tickerLink(c.ticker),
       el("span", { class: "company-name" }, c.name || ""),
       statusPill(c.thesis_status),
       c.challenges?.length
@@ -127,74 +197,37 @@ function card(c, labels, windowDays) {
         : null,
     ),
     el("p", { class: "company-sector" }, sectorName),
-    priceLine(c),
+    // Folded on a phone, open elsewhere. Fifty-odd full cards made this
+    // view 29,500px tall on a phone; folded, each is its latest headline and
+    // two counts, and opening one shows the rest.
     el(
-      "div",
-      { class: "company-cols" },
+      "details",
+      { class: "company-more", open: compactCards() ? null : "" },
+      el("summary", { class: "company-more-summary" }, cardSummary(c)),
+      priceLine(c),
       el(
-        "section",
-        {},
-        el("h4", {}, `Recent activity${c.activity_count > (c.activity || []).length ? ` (${c.activity_count})` : ""}`),
-        c.activity?.length
-          ? el(
-              "ul",
-              { class: "evidence" },
-              c.activity.map((a) =>
-                el(
-                  "li",
-                  {},
-                  el("span", { class: `tag${a.kind === "adverse" ? " tag-risk" : ""}` }, a.kind),
-                  link(a.link, a.text),
-                  el(
-                    "span",
-                    { class: "evidence-meta" },
-                    [shortDate(a.date), a.source].filter(Boolean).join(" · "),
-                  ),
-                ),
-              ),
-            )
-          : el("p", { class: "company-empty" }, `No news attributed to it in ${windowDays} days.`),
-        // Headlines the thesis check read as being about a namesake (a
-        // foreign parent, a person): kept for inspection, not shown as news.
-        c.namesakes?.length
-          ? disclosure(
-              `${c.namesakes.length} set aside \u2014 likely about another company or person ${LLM_MARK}`,
-              el(
-                "ul",
-                { class: "evidence" },
-                c.namesakes.map((a) => el("li", {}, link(a.link, a.text))),
-              ),
-            )
-          : null,
-      ),
-      el(
-        "section",
-        {},
-        el("h4", {}, "Policy"),
-        c.policies?.length
-          ? el(
-              "ul",
-              { class: "evidence" },
-              c.policies.map((p) =>
-                el(
-                  "li",
-                  {},
-                  p.direction
-                    ? el(
-                        "span",
-                        { class: `tag ${p.direction === "headwind" ? "tag-risk" : p.direction === "tailwind" ? "tag-opp" : ""}` },
-                        `${ARROW[p.direction] || ""} ${p.direction}`,
-                      )
-                    : null,
-                  link(p.link, p.headline),
-                  el("span", { class: "evidence-meta" }, policyMeta(p)),
-                ),
-              ),
-            )
-          : el("p", { class: "company-empty" }, `No policy touching ${sectorName} in ${windowDays} days.`),
+        "div",
+        { class: "company-cols" },
+        activitySection(c, windowDays),
+        policySection(c, sectorName, windowDays),
       ),
     ),
   );
+}
+
+/** A card's one-line account, shown when it is folded. */
+export function cardSummary(c) {
+  const latest = (c.activity || [])[0];
+  const news = c.activity_count || 0;
+  const policies = c.policy_count || 0;
+  return [
+    latest ? latest.text : "No news in the window",
+    `${news} news \u00b7 ${policies} polic${policies === 1 ? "y" : "ies"}`,
+  ].join(" \u2014 ");
+}
+
+function compactCards() {
+  return typeof window !== "undefined" && Boolean(window.matchMedia?.("(max-width: 640px)").matches);
 }
 
 export async function render(container, { payload, route }) {
@@ -261,7 +294,7 @@ export async function render(container, { payload, route }) {
           el(
             "p",
             { class: "company-quiet" },
-            quiet.map((c, i) => [i ? ", " : "", tickerLink(c.ticker, "holdings")]),
+            quiet.map((c, i) => [i ? ", " : "", tickerLink(c.ticker)]),
           ),
         )
       : null,

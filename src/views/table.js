@@ -167,22 +167,18 @@ export function dataTable(rows, columns, opts = {}) {
 }
 
 /**
- * A ticker rendered as a link that focuses it.
+ * A ticker rendered as a link to that company's page.
  *
- * This is the cross-view thread: the same element in any table, carrying the
- * focus into whichever view the reader is already in. Previously a ticker was
- * inert text in six different tables and following one meant a manual search.
- *
- * `params` carries the current filters through, so following a company out of
- * a filtered table does not silently drop the filter on arrival.
+ * One destination for every ticker, whichever view it appears in. Tickers
+ * used to focus the company in the current view, so what a click showed
+ * depended on where it was made: the Holdings drawer had prices and coverage
+ * but not the thesis grade, Risk had the grade but not the news, and seeing
+ * one company whole meant visiting five views.
  */
-export function tickerLink(ticker, view, params = {}) {
+export function tickerLink(ticker) {
   if (!ticker) return "—";
-  return el(
-    "a",
-    { class: "ticker-link", href: href(view, { ...params, focus: ticker }) },
-    String(ticker).toUpperCase(),
-  );
+  const key = String(ticker).toUpperCase();
+  return el("a", { class: "ticker-link", href: href("company", { focus: key }) }, key);
 }
 
 /** A titled panel, optionally with a chart canvas above the table. */
