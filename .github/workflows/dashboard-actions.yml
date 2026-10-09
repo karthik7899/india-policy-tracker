@@ -3,7 +3,8 @@ name: Dashboard requests
 # The dashboard is a static page on a public site, so a decision made there
 # (accept a partner, move a holding, confirm a label) travels as an issue the
 # owner submits under their own login, and this applies it
-# (scripts/dashboard_actions.py).
+# (scripts/dashboard_actions.py). A question asked there arrives the same way
+# and is answered from the briefing as a comment.
 #
 # Anyone can open an issue on a public repository, and this job holds a token
 # that can write to it. So it runs only for the owner's issues, and the body
@@ -45,4 +46,8 @@ jobs:
       - name: Apply the request
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Questions only: decisions never call the model.
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL: ${{ vars.GEMINI_MODEL }}
+          GEMINI_FALLBACK_MODELS: ${{ vars.GEMINI_FALLBACK_MODELS }}
         run: python scripts/dashboard_actions.py "$GITHUB_EVENT_PATH"

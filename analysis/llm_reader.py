@@ -237,23 +237,27 @@ Transport = Callable[[str], str]
 
 
 def gemini_transport(
-    api_key: str, model: str, schema: Optional[Dict[str, Any]] = None
+    api_key: str,
+    model: str,
+    schema: Optional[Dict[str, Any]] = None,
+    text: bool = False,
 ) -> Transport:
     """One model's transport. ``schema`` is the response schema — the event
     reader's by default; the thesis check (analysis/thesis_check.py) passes
-    its own."""
+    its own. ``text`` asks for prose instead of JSON, for answering a
+    question (scripts/dashboard_actions.py)."""
     import requests
 
     url = API_URL.format(model=model)
 
     def call(prompt: str) -> str:
+        config: Dict[str, Any] = {"temperature": 0}
+        if not text:
+            config["responseMimeType"] = "application/json"
+            config["responseSchema"] = schema or _SCHEMA
         body = {
             "contents": [{"role": "user", "parts": [{"text": prompt}]}],
-            "generationConfig": {
-                "temperature": 0,
-                "responseMimeType": "application/json",
-                "responseSchema": schema or _SCHEMA,
-            },
+            "generationConfig": config,
         }
         # 5xx is Google's side and usually brief: the first live run met
         # "503 This model is currently experiencing high demand" on its first
@@ -432,6 +436,7 @@ def discover_models(api_key: str) -> List[str]:
 
 def default_transport(
     schema: Optional[Dict[str, Any]] = None,
+    text: bool = False,
 ) -> Tuple[Optional[Transport], str]:
     key = os.environ.get("GEMINI_API_KEY", "").strip()
     if not key:
@@ -450,7 +455,7 @@ def default_transport(
     if served in chain:
         chain = [served] + [m for m in chain if m != served]
     transport = chained_transport(
-        [(m, gemini_transport(key, m, schema)) for m in chain]
+        [(m, gemini_transport(key, m, schema, text)) for m in chain]
     )
     return transport, " → ".join(chain)
 
