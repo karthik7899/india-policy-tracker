@@ -18,6 +18,7 @@
 import { el, mount } from "../core/dom.js";
 import { num, crore, pct, bandIndex, BANDS, shortDate, sizeLabel, LLM_MARK } from "../core/format.js";
 import { loadCoverage } from "../core/data.js";
+import { href } from "../core/router.js";
 import * as filters from "../core/filters.js";
 import * as charts from "../charts/charts.js";
 import { dataTable, panel, chartFrame, tickerLink } from "./table.js";
@@ -177,17 +178,87 @@ export function upsideText(stock) {
   return text;
 }
 
-/** The drawer: everything known about one holding, fetched on open. */
-async function drawer(stock, payload) {
+/** The headline numbers for one holding, as a definition list. */
+export function factsList(stock) {
   const sc = stock.screener || {};
-  const coverage = await loadCoverage(stock.ticker);
+  const rows = [
+    ["Price", stock.price ?? "—"],
+    ["Target", stock.target ?? "—"],
+    ["Upside", upsideText(stock)],
+    ["P/E", sc.pe_ratio ?? "—"],
+    ["ROCE", sc.roce !== undefined ? `${sc.roce}%` : "—"],
+    ["Turnover", sc.advt_cr ? `${crore(sc.advt_cr)}/day (${sc.liquidity_band ?? "unknown"})` : "—"],
+    [
+      "Delivery",
+      sc.deliv_pct !== undefined && sc.deliv_pct !== null
+        ? `${sc.deliv_pct}% of last session (${sc.delivery_band ?? "unknown"})`
+        : "—",
+    ],
+  ];
+  return el(
+    "dl",
+    { class: "drawer-facts" },
+    rows.flatMap(([k, v]) => [el("dt", {}, k), el("dd", {}, String(v))]),
+  );
+}
 
-  // The warnings raised for THIS holding, so the evidence below sits next to
-  // the claim it supports rather than on another tab.
-  const key = String(stock.ticker || "").toUpperCase();
-  const signals = (payload?.briefing?.early_warnings || []).filter(
+/** The warnings raised for one holding. */
+export function holdingSignals(payload, ticker) {
+  const key = String(ticker || "").toUpperCase();
+  return (payload?.briefing?.early_warnings || []).filter(
     (w) => String(w.ticker || "").toUpperCase() === key,
   );
+}
+
+export function signalsSection(signals) {
+  if (!signals.length) return null;
+  return el(
+    "div",
+    { class: "drawer-section" },
+    el("h4", {}, `Signals (${signals.length})`),
+    el(
+      "ul",
+      { class: "evidence" },
+      signals.map((w) =>
+        el(
+          "li",
+          {},
+          el(
+            "span",
+            { class: `tag tag-${w.direction === "risk" ? "risk" : "opp"}` },
+            w.direction === "risk" ? "risk" : "opportunity",
+          ),
+          " ",
+          w.signal || w.category || "",
+          // What the signal was struck from. A number off a results page
+          // and a reading of a news story are different kinds of claim,
+          // and the reader is entitled to know which one they are being
+          // shown before they act on it.
+          w.evidence_source
+            ? el("span", { class: "evidence-meta" }, ` — ${w.evidence_source}`)
+            : null,
+          // How big it is against this company. Absent when the headline
+          // carried no size the guards would attribute to one company —
+          // which is "not known", never "small", so nothing is printed.
+          typeof w.materiality_pct === "number"
+            ? el(
+                "span",
+                { class: "evidence-meta" },
+                `Sized at ${sizeLabel(w.materiality_pct, w.materiality_band)}`,
+              )
+            : null,
+        ),
+      ),
+    ),
+  );
+}
+
+/**
+ * What moved in the sector a holding sits in, and the articles written about
+ * it. Returned together because the second leaves out what the first shows.
+ */
+export function newsSections(stock, payload, coverage) {
+  const key = String(stock.ticker || "").toUpperCase();
 
   // build_coverage keeps merged duplicates and aged-out stories on purpose, as
   // an audit trail. They are evidence about the PIPELINE, not about the
@@ -229,101 +300,35 @@ async function drawer(stock, payload) {
       !shownAbove.has(evidenceKey(c.headline || c.title)),
   );
 
-  const rows = [
-    ["Price", stock.price ?? "—"],
-    ["Target", stock.target ?? "—"],
-    ["Upside", upsideText(stock)],
-    ["P/E", sc.pe_ratio ?? "—"],
-    ["ROCE", sc.roce !== undefined ? `${sc.roce}%` : "—"],
-    ["Turnover", sc.advt_cr ? `${crore(sc.advt_cr)}/day (${sc.liquidity_band ?? "unknown"})` : "—"],
-    [
-      "Delivery",
-      sc.deliv_pct !== undefined && sc.deliv_pct !== null
-        ? `${sc.deliv_pct}% of last session (${sc.delivery_band ?? "unknown"})`
-        : "—",
-    ],
-  ];
-
-  return el(
-    "div",
-    { class: "drawer" },
-    el("h3", { class: "drawer-title" }, `${stock.name || stock.ticker}`),
-    el(
-      "dl",
-      { class: "drawer-facts" },
-      rows.flatMap(([k, v]) => [el("dt", {}, k), el("dd", {}, String(v))]),
-    ),
-    thesisSection(stock.catalyst, payload?.briefing?.thesis_check?.holdings?.[key]),
-    signals.length
-      ? el(
-          "div",
-          { class: "drawer-section" },
-          el("h4", {}, `Signals (${signals.length})`),
-          el(
-            "ul",
-            { class: "evidence" },
-            signals.map((w) =>
+  const sector = sectorNews.length
+    ? el(
+        "div",
+        { class: "drawer-section" },
+        el("h4", {}, `Sector — ${block?.name || stock.sector || ""}`),
+        sectorDirect.length
+          ? el(
+              "div",
+              {},
+              el("p", { class: "evidence-meta" }, "Names this holding"),
+              el("ul", { class: "evidence" }, sectorDirect.map(sectorRow)),
+            )
+          : null,
+        sectorWide.length
+          ? el(
+              "div",
+              {},
               el(
-                "li",
-                {},
-                el(
-                  "span",
-                  { class: `tag tag-${w.direction === "risk" ? "risk" : "opp"}` },
-                  w.direction === "risk" ? "risk" : "opportunity",
-                ),
-                " ",
-                w.signal || w.category || "",
-                // What the signal was struck from. A number off a results page
-                // and a reading of a news story are different kinds of claim,
-                // and the reader is entitled to know which one they are being
-                // shown before they act on it.
-                w.evidence_source
-                  ? el("span", { class: "evidence-meta" }, ` — ${w.evidence_source}`)
-                  : null,
-                // How big it is against this company. Absent when the headline
-                // carried no size the guards would attribute to one company —
-                // which is "not known", never "small", so nothing is printed.
-                typeof w.materiality_pct === "number"
-                  ? el(
-                      "span",
-                      { class: "evidence-meta" },
-                      `Sized at ${sizeLabel(w.materiality_pct, w.materiality_band)}`,
-                    )
-                  : null,
+                "p",
+                { class: "evidence-meta" },
+                sectorDirect.length ? "Elsewhere in the sector" : "Sector-wide",
               ),
-            ),
-          ),
-        )
-      : null,
+              el("ul", { class: "evidence" }, sectorWide.map(sectorRow)),
+            )
+          : null,
+      )
+    : null;
 
-    sectorNews.length
-      ? el(
-          "div",
-          { class: "drawer-section" },
-          el("h4", {}, `Sector — ${block?.name || stock.sector || ""}`),
-          sectorDirect.length
-            ? el(
-                "div",
-                {},
-                el("p", { class: "evidence-meta" }, "Names this holding"),
-                el("ul", { class: "evidence" }, sectorDirect.map(sectorRow)),
-              )
-            : null,
-          sectorWide.length
-            ? el(
-                "div",
-                {},
-                el(
-                  "p",
-                  { class: "evidence-meta" },
-                  sectorDirect.length ? "Elsewhere in the sector" : "Sector-wide",
-                ),
-                el("ul", { class: "evidence" }, sectorWide.map(sectorRow)),
-              )
-            : null,
-        )
-      : null,
-
+  const articles =
     counted.length || setAside.length
       ? el(
           "div",
@@ -393,7 +398,27 @@ async function drawer(stock, payload) {
               )
             : null,
         )
-      : null,
+      : null;
+  return [sector, articles];
+}
+
+/** The drawer: the short account of one holding, with the way to the full page. */
+async function drawer(stock, payload) {
+  const key = String(stock.ticker || "").toUpperCase();
+  const coverage = await loadCoverage(stock.ticker);
+  return el(
+    "div",
+    { class: "drawer" },
+    el("h3", { class: "drawer-title" }, `${stock.name || stock.ticker}`),
+    el(
+      "p",
+      {},
+      el("a", { class: "company-page-link", href: href("company", { focus: key }) }, "Company page →"),
+    ),
+    factsList(stock),
+    thesisSection(stock.catalyst, payload?.briefing?.thesis_check?.holdings?.[key]),
+    signalsSection(holdingSignals(payload, key)),
+    newsSections(stock, payload, coverage),
   );
 }
 
@@ -491,7 +516,7 @@ export async function render(container, { payload, route }) {
           {
             key: "ticker",
             label: "Stock",
-            render: (r) => tickerLink(r.ticker, "holdings", params),
+            render: (r) => tickerLink(r.ticker),
           },
           { key: "name", label: "Name" },
           { key: "sector", label: "Sector", render: (r) => String(r.sector).replace(/_/g, " ") },

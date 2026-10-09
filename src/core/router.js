@@ -16,6 +16,14 @@ let current = { view: "overview", focus: null, params: {} };
 /** Parse "#/view?focus=X&q=Y" into a route. */
 export function parse(hash) {
   const raw = String(hash || "").replace(/^#\/?/, "");
+  // "#stock/HAL/news" is the old dashboard's form, and the email kept
+  // linking to it after the rewrite: every "Coverage (n)" link landed on the
+  // Overview. It now opens the company page it always meant.
+  const legacy = /^stock\/([^/?#]+)/i.exec(raw);
+  if (legacy) {
+    const focus = decodeURIComponent(legacy[1]).toUpperCase();
+    return { view: "company", focus, params: { focus } };
+  }
   const [path, query] = raw.split("?");
   const params = {};
   new URLSearchParams(query || "").forEach((value, key) => {

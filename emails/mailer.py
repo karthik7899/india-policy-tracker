@@ -121,7 +121,7 @@ _CAP_LADDER = (
 
 
 def coverage_link(ticker, count, dashboard_url=None):
-    """ "Coverage (n)" as a deep link into the drawer for that holding.
+    """ "Coverage (n)" as a deep link to that holding's company page.
 
     The email cannot hold the article list — it is already at the size floor —
     but it can hand the reader the exact place the list lives, so a headline
@@ -132,7 +132,7 @@ def coverage_link(ticker, count, dashboard_url=None):
     if not ticker:
         return ""
     return (
-        f'<a href="{base}#stock/{ticker}/news" target="_blank" '
+        f'<a href="{base}#/company?focus={ticker}" target="_blank" '
         f'style="color:#60a5fa;text-decoration:underline;font-size:11px;">'
         f"Coverage ({int(count or 0)})</a>"
     )

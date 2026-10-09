@@ -142,7 +142,7 @@ export async function render(container, { payload, route }) {
   const challenged = health.filter((h) => h.challenges);
 
   const gradeColumns = [
-    { key: "ticker", label: "Stock", render: (r) => tickerLink(r.ticker, "holdings", params) },
+    { key: "ticker", label: "Stock", render: (r) => tickerLink(r.ticker) },
     {
       key: "status",
       label: "Status",
@@ -274,7 +274,7 @@ export async function render(container, { payload, route }) {
       dataTable(
         warnings,
         [
-          { key: "ticker", label: "Stock", render: (r) => tickerLink(r.ticker, "holdings", params) },
+          { key: "ticker", label: "Stock", render: (r) => tickerLink(r.ticker) },
           { key: "severity", label: "Severity" },
           { key: "status", label: "Change" },
           { key: "signal", label: "Signal", sortable: false },

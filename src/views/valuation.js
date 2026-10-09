@@ -174,7 +174,7 @@ export async function render(container, { payload, route }) {
       dataTable(
         rows,
         [
-          { key: "ticker", label: "Stock", render: (r) => tickerLink(r.ticker, "holdings", params) },
+          { key: "ticker", label: "Stock", render: (r) => tickerLink(r.ticker) },
           { key: "price", label: "Price", numeric: true },
           { key: "graham_intrinsic_value", label: "Intrinsic", numeric: true, render: (r) => plain(r.graham_intrinsic_value) },
           { key: "_margin", label: "Margin", numeric: true, render: (r) => pct(r._margin) },
@@ -200,7 +200,7 @@ export async function render(container, { payload, route }) {
         ? dataTable(
             rows,
             [
-              { key: "ticker", label: "Stock", render: (r) => tickerLink(r.ticker, "holdings", params) },
+              { key: "ticker", label: "Stock", render: (r) => tickerLink(r.ticker) },
               { key: "owner_earnings", label: "Owner earnings", numeric: true, render: (r) => plain(r.owner_earnings) },
               { key: "moat_status", label: "Moat" },
             ],
@@ -232,7 +232,7 @@ export async function render(container, { payload, route }) {
       dataTable(
         rows,
         [
-          { key: "ticker", label: "Stock", render: (r) => tickerLink(r.ticker, "holdings", params) },
+          { key: "ticker", label: "Stock", render: (r) => tickerLink(r.ticker) },
           { key: "_score", label: "Score", numeric: true },
           {
             key: "confidence",

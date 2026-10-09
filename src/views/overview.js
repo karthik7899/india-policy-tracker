@@ -114,7 +114,7 @@ function changesPanel(changes) {
               el(
                 "li",
                 {},
-                i.ticker ? [tickerLink(i.ticker, "companies"), " "] : null,
+                i.ticker ? [tickerLink(i.ticker), " "] : null,
                 i.link
                   ? el("a", { href: i.link, target: "_blank", rel: "noopener noreferrer" }, i.text)
                   : i.text,
@@ -239,7 +239,7 @@ export async function render(container, { payload, route }) {
           dataTable(
             judged,
             [
-              { key: "ticker", label: "Pick", render: (r) => tickerLink(r.ticker, "holdings") },
+              { key: "ticker", label: "Pick", render: (r) => tickerLink(r.ticker) },
               { key: "date", label: "Since" },
               { key: "return_pct", label: "Return", render: (r) => pct(r.return_pct) },
               { key: "nifty_pct", label: "Nifty 50", render: (r) => pct(r.nifty_pct) },
@@ -267,7 +267,7 @@ export async function render(container, { payload, route }) {
       dataTable(
         warnings.slice(0, 12),
         [
-          { key: "ticker", label: "Stock", render: (r) => tickerLink(r.ticker, "risk") },
+          { key: "ticker", label: "Stock", render: (r) => tickerLink(r.ticker) },
           { key: "severity", label: "Severity" },
           { key: "signal", label: "Signal" },
         ],
