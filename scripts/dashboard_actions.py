@@ -6,6 +6,9 @@ partner, move a holding, confirm or correct an eval label) travels as an issue
 the owner submits under their own GitHub login. The workflow
 .github/workflows/dashboard-actions.yml runs this on it.
 
+A question asked on the dashboard's Ask view arrives the same way and is
+answered from the briefing (analysis/ask.py) as a comment on the issue.
+
 Only the owner's issues get here: the workflow checks author_association
 before any step runs, because anyone can open an issue on a public repository
 and the job holds a write token. The body is read from the event file, never
@@ -30,7 +33,8 @@ from typing import Any, Dict, List, Optional, Tuple
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
 
-MARKER_RE = re.compile(r"<!--\s*tracker:(decisions)\s+v1\s*-->")
+MARKER_RE = re.compile(r"<!--\s*tracker:(decisions|question)\s+v1\s*-->")
+QUESTION_LABEL = "dashboard-question"
 JSON_BLOCK_RE = re.compile(r"```json\s*(\{.*?\})\s*```", re.DOTALL)
 
 LABEL_FILES = {
@@ -453,6 +457,36 @@ def reply(number: int, report: Dict[str, list], error: str = "") -> None:
     )
 
 
+def answer_question(number: int, payload: Dict[str, Any]) -> None:
+    """Answer on the issue and close it. Nothing is committed.
+
+    The label is how the dashboard finds questions to list; it is created on
+    first use, since a label that does not exist yet cannot be set from the
+    new-issue link.
+    """
+    from analysis.ask import answer
+
+    try:
+        _api("POST", "/labels", json={"name": QUESTION_LABEL, "color": "2a78d6"})
+    except Exception:  # noqa: BLE001 - it already exists
+        pass
+    _api("POST", f"/issues/{number}/labels", json={"labels": [QUESTION_LABEL]})
+    focus = payload.get("focus")
+    focus = (
+        str(focus).upper()
+        if isinstance(focus, str) and TICKER_RE.match(str(focus).upper())
+        else None
+    )
+    text, footer = answer(str(payload.get("question") or ""), focus=focus)
+    body = text + (f"\n\n---\n<sub>{footer}</sub>" if footer else "")
+    _api("POST", f"/issues/{number}/comments", json={"body": body})
+    _api(
+        "PATCH",
+        f"/issues/{number}",
+        json={"state": "closed", "state_reason": "completed"},
+    )
+
+
 def main(event_path: str) -> int:
     event = _load(event_path)
     issue = event.get("issue") or {}
@@ -463,6 +497,9 @@ def main(event_path: str) -> int:
         return 0
     if error or payload is None:
         reply(number, {"applied": [], "skipped": []}, error or "empty request")
+        return 0
+    if kind == "question":
+        answer_question(number, payload)
         return 0
     if not wait_for_daily():
         reply(

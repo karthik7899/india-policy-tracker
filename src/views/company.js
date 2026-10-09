@@ -249,6 +249,8 @@ export async function render(container, { payload, route }) {
       el(
         "p",
         { class: "view-sub" },
+        el("a", { href: href("ask", { focus: key }) }, `Ask about ${key} \u2192`),
+        " \u00b7 ",
         [
           stock.price ? `Price ${stock.price}` : "",
           stock.target ? `target ${stock.target}` : "",

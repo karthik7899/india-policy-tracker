@@ -599,3 +599,10 @@ td .disclose-summary { padding: 2px 0; }
 .choice-on { background: var(--series-1); border-color: var(--series-1); color: #fff; }
 .choice-opp.choice-on { background: var(--good); border-color: var(--good); }
 .choice-risk.choice-on { background: var(--critical); border-color: var(--critical); }
+
+/* Ask view (src/views/ask.js). */
+.ask-form { display: grid; gap: 8px; }
+.ask-text { width: 100%; box-sizing: border-box; resize: vertical; font-size: 14px; }
+.ask-answer { font-size: 14px; line-height: 1.55; margin-top: 6px; }
+.ask-answer p { margin: 6px 0; }
+.ask-answer ul { margin: 6px 0; padding-left: 20px; }
