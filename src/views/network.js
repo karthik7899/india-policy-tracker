@@ -211,20 +211,6 @@ function partnersPanel(edges, held, params) {
 }
 
 /**
- * Where to edit the proposals file, when the page is served from GitHub
- * Pages — owner.github.io/repo/. Anywhere else (a local preview, the smoke
- * test) there is no honest link to give, so none is shown.
- */
-function proposalsEditUrl() {
-  const { hostname, pathname } = window.location;
-  if (!hostname.endsWith(".github.io")) return null;
-  const owner = hostname.split(".")[0];
-  const repo = pathname.split("/").filter(Boolean)[0];
-  if (!owner || !repo) return null;
-  return `https://github.com/${owner}/${repo}/edit/main/entity_graph_proposals.json`;
-}
-
-/**
  * Proposed partners: tie-ups the pipeline read that a person has not ruled on.
  *
  * The review step exists because a wrong edge does not produce a wrong
@@ -235,7 +221,6 @@ function proposalsEditUrl() {
 function proposalsPanel(proposals) {
   const pending = (proposals || []).filter((p) => p && p.status === "pending");
   if (!pending.length) return null;
-  const editUrl = proposalsEditUrl();
 
   const body = el(
     "div",
@@ -243,13 +228,8 @@ function proposalsPanel(proposals) {
     el(
       "p",
       { class: "section-note" },
-      "Nothing here affects any signal until accepted. To decide, set a " +
-        "proposal's status to \u201caccepted\u201d or \u201crejected\u201d in " +
-        "entity_graph_proposals.json; accepted pairs join the graph on the next run. " +
-        "Correct the counterparty's name first if it is wrong.",
-      editUrl
-        ? [" ", el("a", { href: editUrl, target: "_blank", rel: "noopener noreferrer" }, "Edit on GitHub \u2192")]
-        : null,
+      "Nothing here affects any signal until accepted; accepted pairs join the graph on the next run. ",
+      el("a", { href: href("review") }, "Accept, reject or rename them on the Review view \u2192"),
     ),
     el(
       "ul",

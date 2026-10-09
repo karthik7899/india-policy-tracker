@@ -306,14 +306,21 @@ def audit_watchlist(watchlist: Dict[str, Any]) -> Dict[str, Any]:
     Reads ``yahoo_industry`` and ``business_keywords``, which
     providers/yahoo.py records on each holding. Returns ``{checked,
     misfits: [{ticker, name, sector, industry, suggested}], unverified:
-    [tickers]}``. Reports only; moves nothing.
+    [tickers], confirmed: [tickers]}``. Reports only; moves nothing.
+
+    A holding the owner chose to keep where it is (``sector_confirmed``, set
+    from the dashboard's Review view) is not reported again while it stays in
+    that sector; moved elsewhere, the confirmation no longer applies.
     """
-    checked, misfits, unverified = 0, [], []
+    checked, misfits, unverified, confirmed = 0, [], [], []
     for sector, stocks in (watchlist or {}).items():
         if sector not in SECTOR_FIT or not isinstance(stocks, list):
             continue
         for s in stocks:
             if not isinstance(s, dict) or not s.get("ticker"):
+                continue
+            if s.get("sector_confirmed") == sector:
+                confirmed.append(s["ticker"])
                 continue
             industry = s.get("yahoo_industry")
             groups = s.get("business_keywords") or []
@@ -332,4 +339,9 @@ def audit_watchlist(watchlist: Dict[str, Any]) -> Dict[str, Any]:
                         "suggested": fitting_sectors(industry, groups),
                     }
                 )
-    return {"checked": checked, "misfits": misfits, "unverified": unverified}
+    return {
+        "checked": checked,
+        "misfits": misfits,
+        "unverified": unverified,
+        "confirmed": confirmed,
+    }
