@@ -437,7 +437,11 @@ def discover_models(api_key: str) -> List[str]:
 def default_transport(
     schema: Optional[Dict[str, Any]] = None,
     text: bool = False,
+    exclude: Tuple[str, ...] = (),
 ) -> Tuple[Optional[Transport], str]:
+    """The model chain for one reader. ``exclude`` drops any model whose name
+    contains one of the strings: the thesis check's second reading leaves
+    out the lite models that made the first."""
     key = os.environ.get("GEMINI_API_KEY", "").strip()
     if not key:
         return None, "GEMINI_API_KEY not set"
@@ -451,6 +455,9 @@ def default_transport(
         else discover_models(key)
     )
     chain = list(dict.fromkeys(configured[:1] + discovered + configured[1:]))
+    chain = [m for m in chain if not any(x in m for x in exclude)]
+    if not chain:
+        return None, "no model left after excluding " + ", ".join(exclude)
     served = _LAST_SERVED["model"]
     if served in chain:
         chain = [served] + [m for m in chain if m != served]

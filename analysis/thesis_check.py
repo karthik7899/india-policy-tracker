@@ -149,6 +149,169 @@ _SCHEMA = {
 }
 
 
+# ---------------------------------------------------------------------------
+# A second reading of every challenge
+# ---------------------------------------------------------------------------
+
+# A challenge is the one reading that reaches the email as "thesis
+# challenged", and on 9 Oct the lite model that reads in bulk raised one on
+# "ARVIND: Record revenue, margin expansion, and major US acquisition drive
+# strong Q1 FY27 growth", quoting the whole thesis against the whole
+# headline. A rule cannot tell that from a real one: "Adani Green cuts Khavda
+# renewable park target to 15 GW" is quoted just as whole. So a stronger model
+# reads each challenge again with a narrower question, and only a challenge
+# both readers make is shown as confirmed; one the second refuses is dropped.
+# Challenges are rare (one live on 9 Oct), so this costs a few calls a run.
+#
+# Bump CHECK_VERSION when the question changes; earlier verdicts are re-asked.
+CHECK_VERSION = "1"
+CHECK_BATCH = 10
+MAX_CHECKS_PER_RUN = 40
+# The second reader leaves out the lite models that made the first reading,
+# and models built for other media.
+CHECK_EXCLUDE = ("lite", "tts", "image", "audio", "embedding")
+
+_CHECK_INSTRUCTIONS = """You check flags raised by another reader. For each item below, that reader
+said the HEADLINE contradicts the quoted CLAIM from an investor's THESIS.
+Confirm only real contradictions.
+
+verdict — "contradicts" only if the headline reports that something the
+          claim depends on has got worse: an order, programme, approval,
+          plant or plan lost, cancelled, delayed or cut; a competitor winning
+          what the claim expects the company to win; a policy or subsidy the
+          claim counts on withdrawn, cut or reversed; or what the claim states
+          (debt-free, market leader, margins expanding, order book) reported
+          to be no longer true. Otherwise "does_not".
+          Good news never contradicts: record results, growth, expansion,
+          margin gains, a new order, a deal or an acquisition. Results or
+          margins contradict only when the claim names that measure and the
+          headline says it got worse. A share-price move is not evidence.
+because — the words of the HEADLINE that show the contradiction, copied
+          exactly and contiguously; "" when the verdict is "does_not".
+
+Judge only from the thesis, the claim and the headline."""
+
+_CHECK_SCHEMA = {
+    "type": "ARRAY",
+    "items": {
+        "type": "OBJECT",
+        "properties": {
+            "id": {"type": "INTEGER"},
+            "verdict": {"type": "STRING", "enum": ["contradicts", "does_not"]},
+            "because": {"type": "STRING"},
+        },
+        "required": ["id", "verdict", "because"],
+    },
+}
+
+
+def _check_prompt(batch: List[Tuple[int, Dict[str, Any], Dict[str, Any]]]) -> str:
+    lines = []
+    for i, pair, reading in batch:
+        lines.append(
+            f"\n{i}: HOLDING: {pair['name']} ({pair['ticker']}, listed in India)"
+        )
+        lines.append(f"   THESIS: {pair['thesis']}")
+        lines.append(f"   CLAIM: {reading.get('claim', '')}")
+        lines.append(f"   HEADLINE: {pair['headline']}")
+    return (
+        f"{_CHECK_INSTRUCTIONS}\n\nReturn a JSON array, one object per numbered "
+        "item.\n" + "\n".join(lines)
+    )
+
+
+def checked(entry: Optional[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
+    """The entry's second-reading verdict, if one was made with this check."""
+    check = (entry or {}).get("check")
+    return check if (check or {}).get("v") == CHECK_VERSION else None
+
+
+def apply_check(
+    reading: Dict[str, Any], check: Optional[Dict[str, Any]]
+) -> Dict[str, Any]:
+    """A reading as served: a challenge confirmed, refused, or still waiting."""
+    if reading.get("stance") != "contradicts":
+        return reading
+    if check is None:
+        return {**reading, "confirmed": False}
+    if check.get("verdict") == "contradicts":
+        return {**reading, "confirmed": True}
+    return {
+        "stance": "unrelated",
+        "claim": "",
+        "because": "",
+        "downgraded": "contradicts",
+        "reason": "not confirmed by a second reading",
+    }
+
+
+def check_challenges(
+    items: List[Tuple[str, Dict[str, Any], Dict[str, Any]]],
+    entries: Dict[str, Any],
+    transport,
+    today: str,
+    status: Dict[str, Any],
+) -> bool:
+    """Ask the second reader about each ``(key, pair, reading)`` challenge.
+
+    The verdict is stored on the cache entry beside the first reading, so a
+    challenge is checked once and the check can be re-asked on its own when
+    CHECK_VERSION changes. A "contradicts" verdict must quote the headline
+    verbatim, like the first reading; one that does not is a refusal. Never
+    raises: a challenge the check could not reach stays unconfirmed and is
+    tried again next run.
+    """
+    from analysis.llm_reader import ReaderUnavailable
+
+    changed = False
+    todo = items[:MAX_CHECKS_PER_RUN]
+    status["checks_pending"] = len(items) - len(todo)
+    try:
+        for start in range(0, len(todo), CHECK_BATCH):
+            chunk = todo[start : start + CHECK_BATCH]
+            text = transport(
+                _check_prompt([(i, p, r) for i, (_, p, r) in enumerate(chunk)])
+            )
+            try:
+                answers = json.loads(text)
+            except ValueError:
+                status["checks_pending"] += len(chunk)
+                continue
+            by_id = {a.get("id"): a for a in answers if isinstance(a, dict)}
+            for i, (key, pair, _reading) in enumerate(chunk):
+                raw = by_id.get(i)
+                if raw is None or raw.get("verdict") not in ("contradicts", "does_not"):
+                    status["checks_pending"] += 1
+                    continue
+                verdict = raw["verdict"]
+                because = re.sub(r"\s+", " ", str(raw.get("because") or "")).strip(
+                    " .,;:"
+                )
+                if verdict == "contradicts" and (
+                    not _norm(because) or _norm(because) not in _norm(pair["headline"])
+                ):
+                    verdict = "does_not"
+                entries[key]["check"] = {
+                    "v": CHECK_VERSION,
+                    "verdict": verdict,
+                    "because": because if verdict == "contradicts" else "",
+                    "date": today,
+                    **(
+                        {"model": transport.model}
+                        if getattr(transport, "model", None)
+                        else {}
+                    ),
+                }
+                status["confirmed" if verdict == "contradicts" else "refused"] += 1
+                changed = True
+    except ReaderUnavailable as e:
+        status["checks_skipped"] = str(e)
+        status["checks_pending"] = sum(
+            1 for key, _, _ in items if checked(entries.get(key)) is None
+        )
+    return changed
+
+
 def has_thesis(catalyst: Any) -> bool:
     """A written thesis, as opposed to the rotation engine's placeholder."""
     text = str(catalyst or "").strip()
@@ -295,11 +458,17 @@ def read_pairs(
     cache_path: str = CACHE_PATH,
     max_new: int = MAX_NEW_PER_RUN,
     today: str = "",
+    check_transport=None,
 ) -> Tuple[Dict[str, Dict[str, Any]], Dict[str, Any]]:
     """Readings keyed by pair_key — cached ones free, new ones fetched.
 
     Same contract as llm_reader.read_headlines: never raises, skips cleanly
     without a key or on an API failure, and says why in ``status``.
+
+    Every challenge is then read a second time (check_challenges) and served
+    through apply_check: confirmed, dropped, or marked unconfirmed until the
+    second reading can be made. ``check_transport`` is that reader's; the
+    default chain leaves out the lite models.
     """
     from analysis.llm_reader import (
         ReaderUnavailable,
@@ -309,7 +478,16 @@ def read_pairs(
     )
 
     today = today or datetime.date.today().isoformat()
-    status = {"cached": 0, "read": 0, "pending": 0, "skipped": ""}
+    status = {
+        "cached": 0,
+        "read": 0,
+        "pending": 0,
+        "skipped": "",
+        "confirmed": 0,
+        "refused": 0,
+        "checks_pending": 0,
+        "checks_skipped": "",
+    }
     readings: Dict[str, Dict[str, Any]] = {}
     entries = load_cache(cache_path)
     if entries is None:
@@ -317,11 +495,13 @@ def read_pairs(
         return readings, status
 
     todo, seen = [], set()
+    pair_of: Dict[str, Dict[str, Any]] = {}
     for pair in pairs or []:
         key = pair_key(pair["ticker"], pair["thesis"], pair["headline"])
         if key in seen:
             continue
         seen.add(key)
+        pair_of[key] = pair
         entry = entries.get(key)
         if entry and entry.get("v") == PROMPT_VERSION:
             readings[key] = entry["reading"]
@@ -330,12 +510,22 @@ def read_pairs(
         else:
             todo.append((key, pair))
 
+    # The real second reader only goes with the real first one: a caller that
+    # passes its own transport (a test, cache-only scoring) gets no API call.
+    real = transport is None
     if transport is None:
         transport, detail = default_transport(_SCHEMA)
         if transport is None:
             status["skipped"] = detail
             status["pending"] = len(todo)
-            return readings, status
+            # Cached readings still go out through their stored checks: a
+            # challenge the second reader dropped must not return on a day
+            # without a key.
+            served = {
+                key: apply_check(reading, checked(entries.get(key)))
+                for key, reading in readings.items()
+            }
+            return served, status
 
     changed = False
     batch_todo = todo[:max_new]
@@ -376,6 +566,34 @@ def read_pairs(
         status["pending"] = len(todo) - status["read"]
     if getattr(transport, "model", None):
         status["model"] = transport.model
+
+    # The second reading of every challenge not yet checked.
+    challenges = [
+        (key, pair_of[key], reading)
+        for key, reading in readings.items()
+        if reading.get("stance") == "contradicts"
+        and key in entries
+        and checked(entries[key]) is None
+    ]
+    if challenges:
+        if check_transport is None:
+            if real:
+                check_transport, detail = default_transport(
+                    _CHECK_SCHEMA, exclude=CHECK_EXCLUDE
+                )
+            else:
+                detail = "no second reader given"
+            if check_transport is None:
+                status["checks_skipped"] = detail
+                status["checks_pending"] = len(challenges)
+        if check_transport is not None:
+            changed |= check_challenges(
+                challenges, entries, check_transport, today, status
+            )
+    readings = {
+        key: apply_check(reading, checked(entries.get(key)))
+        for key, reading in readings.items()
+    }
 
     cutoff = (
         datetime.date.fromisoformat(today)
@@ -437,6 +655,11 @@ def summarise(
             **({"link": pair["link"]} if pair.get("link") else {}),
             **({"source": pair["source"]} if pair.get("source") else {}),
             "reader": "llm",
+            **(
+                {"confirmed": bool(reading.get("confirmed"))}
+                if reading["stance"] == "contradicts"
+                else {}
+            ),
         }
         key = "challenged" if reading["stance"] == "contradicts" else "supported"
         row[key].append(item)
@@ -512,7 +735,11 @@ def run_thesis_check(
             f"{status['pending']} pending"
             + (f" ({status['skipped']})" if status["skipped"] else "")
             + f"; {result['challenged']} holding(s) challenged; "
-            f"{len(no_thesis)} holding(s) have no written thesis."
+            f"{len(no_thesis)} holding(s) have no written thesis. "
+            f"Second reading of challenges: {status['confirmed']} confirmed, "
+            f"{status['refused']} dropped, {status['checks_pending']} waiting"
+            + (f" ({status['checks_skipped']})" if status["checks_skipped"] else "")
+            + "."
         )
         return result
     except Exception as e:  # noqa: BLE001 - an enrichment must never break a run

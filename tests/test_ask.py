@@ -185,3 +185,56 @@ def test_a_question_is_answered_on_the_issue_and_closed(monkeypatch):
         kw["json"]["body"] for m, p, kw in calls if p == "/issues/6/comments"
     )
     assert "about None" in comment
+
+
+def test_a_results_question_gets_the_reported_figures(tmp_path):
+    """9 Oct: "How does this quarter results look like", asked of Apollo
+    Hospitals, was answered "the data does not contain the quarterly results"
+    while the pipeline held eight quarters of them."""
+    src = _sources(tmp_path)
+    watchlist = json.loads(json.dumps(WATCHLIST))
+    watchlist["manufacturing_electronics"][0].update(
+        earnings_growth="+34.1%",
+        screener={
+            "q_sales": 7044.0,
+            "qoq_sales_growth": 6.63,
+            "revenue_yoy_pct": 20.6,
+            "q_opm": 16.0,
+            "q_net_profit": 610.0,
+            "q_eps": 40.39,
+            "sales_trend": [5842.0, 6304.0, 6477.0, 6606.0, 7044.0],
+            # Holds four quarters of sales despite its name; not passed on as
+            # a growth figure.
+            "quarterly_revenue_growth": [6304.0, 6477.0, 6606.0, 7044.0],
+            "annual_sales_trend": [25228.0, 26430.0],
+            "promoter_pct": 28.02,
+            "pe_ratio": 54.8,
+        },
+    )
+    src["watchlist"] = watchlist
+    ctx = ask.build_context("How does this quarter results look like", src, "SYRMA")
+    reported = ctx["holdings_asked_about"][0]["reported"]
+    assert reported["latest_quarter"] == {
+        "sales_cr": 7044.0,
+        "sales_change_vs_previous_quarter_pct": 6.63,
+        "sales_change_vs_year_ago_quarter_pct": 20.6,
+        "operating_margin_pct": 16.0,
+        "net_profit_cr": 610.0,
+        "eps": 40.39,
+    }
+    assert reported["quarterly_oldest_first"]["sales_cr"][-1] == 7044.0
+    assert reported["annual_oldest_first_last_is_trailing_12_months"]["sales_cr"] == [
+        25228.0,
+        26430.0,
+    ]
+    assert reported["growth"]["earnings_growth_yahoo"] == "+34.1%"
+    assert reported["shareholding_pct"] == {"promoter": 28.02}
+    assert "quarterly_revenue_growth" not in json.dumps(reported)
+    # The model is told the units and the order, and not to invent quarter names.
+    assert "oldest to latest" in ctx["how_to_read"]
+    assert "Quarter names are not recorded" in ctx["how_to_read"]
+
+
+def test_a_holding_without_reported_figures_says_nothing_rather_than_zero(tmp_path):
+    ctx = ask.build_context("Why is SYRMA broken?", _sources(tmp_path))
+    assert ctx["holdings_asked_about"][0]["reported"] == {}

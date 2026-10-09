@@ -986,11 +986,16 @@ def _build_thesis_check_html(check, caps=_CAPS_NORMAL):
             if len(r["challenged"]) > 1
             else ""
         )
+        # A challenge the second reading has not confirmed yet says so; one it
+        # refused never gets here (thesis_check.apply_check).
+        pending = (
+            " &middot; second reading pending" if c.get("confirmed") is False else ""
+        )
         items += (
             f"<li style='margin-bottom:8px;'><span class='stock-ticker'>{r['ticker']}</span> "
             f"{head}{more}<br><span style='font-size:11px;color:#94a3b8;'>"
             f"&ldquo;{c['because']}&rdquo; against the thesis &ldquo;{c['claim']}&rdquo;"
-            f"</span></li>"
+            f"{pending}</span></li>"
         )
     body = (
         f"<ul style='font-size:12px;line-height:1.5;padding-left:18px;color:#cbd5e1;'>{items}</ul>"
@@ -1001,8 +1006,9 @@ def _build_thesis_check_html(check, caps=_CAPS_NORMAL):
     return f"""
         <h4 style="margin: 0 0 6px 0; color: #e2e8f0; font-size: 13px; text-transform: uppercase;">Thesis Check</h4>
         <p style="font-size: 11px; color: #94a3b8; margin: 0 0 10px 0;">
-            {coverage} A challenge is the LLM's reading of one headline &mdash; review it; it does
-            not change the status above.
+            {coverage} A challenge is the LLM's reading of one headline, read again by a
+            stronger model before it is shown &mdash; review it; it does not change the
+            status above.
         </p>
         {body}
         """

@@ -140,6 +140,98 @@ def subjects(
     return [t for t in tickers if t in held][:MAX_HOLDINGS], sectors
 
 
+def _figures(stock: Dict[str, Any], sc: Dict[str, Any]) -> Dict[str, Any]:
+    """The company's reported numbers, under names that say what they are.
+
+    The first live question ("How does this quarter results look like",
+    asked of Apollo Hospitals) was answered "the data does not contain the
+    quarterly results" while the pipeline held eight quarters of them: only
+    P/E, ROCE, ROE and market cap were passed on. Keys are renamed rather than
+    passed through because "quarterly_revenue_growth" holds sales, not growth.
+    """
+
+    def pick(pairs):
+        return {
+            name: sc.get(key)
+            for name, key in pairs
+            if sc.get(key) not in (None, "", [])
+        }
+
+    out = {
+        "latest_quarter": pick(
+            (
+                ("sales_cr", "q_sales"),
+                ("sales_change_vs_previous_quarter_pct", "qoq_sales_growth"),
+                ("sales_change_vs_year_ago_quarter_pct", "revenue_yoy_pct"),
+                ("operating_margin_pct", "q_opm"),
+                ("operating_margin_change_pp", "opm_expansion"),
+                ("net_profit_cr", "q_net_profit"),
+                ("eps", "q_eps"),
+            )
+        ),
+        "quarterly_oldest_first": pick(
+            (
+                ("sales_cr", "sales_trend"),
+                ("eps", "eps_trend"),
+                ("operating_margin_pct", "quarterly_ebitda_margin"),
+            )
+        ),
+        "annual_oldest_first_last_is_trailing_12_months": pick(
+            (
+                ("sales_cr", "annual_sales_trend"),
+                ("eps", "annual_eps_trend"),
+                ("operating_margin_pct", "operating_margin_trend"),
+                ("debt_cr", "debt_trend"),
+                ("operating_cash_flow_cr", "cash_flow_trend"),
+                ("roce_pct", "roce_trend"),
+            )
+        ),
+        "growth": {
+            **pick(
+                (
+                    ("sales_trailing_12_months_pct", "revenue_ttm_growth_pct"),
+                    ("sales_multi_year_cagr_pct", "revenue_cagr_pct"),
+                    ("eps_trailing_12_months", "ttm_eps"),
+                )
+            ),
+            **{
+                name: stock.get(key)
+                for name, key in (
+                    ("revenue_growth_yahoo", "revenue_growth"),
+                    ("earnings_growth_yahoo", "earnings_growth"),
+                )
+                if stock.get(key)
+            },
+        },
+        "shareholding_pct": pick(
+            (
+                ("promoter", "promoter_pct"),
+                ("promoter_change_pp", "promoter_change"),
+                ("fii", "fii_pct"),
+                ("fii_change_pp", "fii_change"),
+                ("dii", "dii_pct"),
+                ("dii_change_pp", "dii_change"),
+            )
+        ),
+        "valuation": pick(
+            (
+                ("pe_ratio", "pe_ratio"),
+                ("industry_pe", "industry_pe"),
+                ("pe_vs_peers", "pe_vs_peers"),
+                ("roce_pct", "roce"),
+                ("roe_pct", "roe"),
+                ("market_cap_cr", "market_cap"),
+                ("graham_intrinsic_value", "graham_intrinsic_value"),
+                ("moat", "moat_status"),
+                ("alerts", "valuation_alerts"),
+                ("week52_low", "week52_low"),
+                ("week52_high", "week52_high"),
+            )
+        ),
+    }
+    return {k: v for k, v in out.items() if v}
+
+
 def _holding_extract(ticker: str, src: Dict[str, Any]) -> Dict[str, Any]:
     b = src["briefing"]
     sector, stock = next(
@@ -167,11 +259,7 @@ def _holding_extract(ticker: str, src: Dict[str, Any]) -> Dict[str, Any]:
         "target": stock.get("target"),
         "upside": stock.get("growth_pct"),
         "rating": stock.get("rating"),
-        "fundamentals": {
-            k: sc.get(k)
-            for k in ("pe_ratio", "roce", "roe", "debt_to_equity", "market_cap")
-            if sc.get(k) is not None
-        },
+        "reported": _figures(stock, sc),
         "thesis_health": (b.get("thesis_health") or {}).get(ticker),
         "thesis_check": {
             "challenged": (check.get("challenged") or [])[:5],
@@ -247,6 +335,15 @@ def build_context(
         counts[row.get("status") or "?"] = counts.get(row.get("status") or "?", 0) + 1
     changes = b.get("changes") or {}
     context = {
+        "how_to_read": (
+            "Reported figures are as Screener.in publishes them: rupees crore "
+            "(_cr) for sales, profit, debt and cash flow, rupees for EPS, "
+            "percent (_pct) and percentage points (_pp) for margins and growth. "
+            "Series run oldest to latest: the last quarterly value is the "
+            "latest reported quarter, the last annual value the trailing twelve "
+            "months. Quarter names are not recorded, so say 'the latest "
+            "quarter' rather than naming one unless a headline does."
+        ),
         "briefing_date": str(
             (src.get("digest") or {}).get("as_of")
             or (b.get("track_record") or {}).get("as_of")
