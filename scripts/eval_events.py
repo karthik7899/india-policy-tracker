@@ -384,6 +384,9 @@ def _run_thesis(args) -> int:
         pairs,
         transport=None if args.live else _no_calls,
         max_new=len(pairs),
+        # The second reading of challenges is scored with the first: a
+        # challenge it drops counts as not raised.
+        check_transport=None if args.live else _no_calls,
     )
     print(
         f"Thesis readings available for {len(readings)} of {len(labels)} labelled "

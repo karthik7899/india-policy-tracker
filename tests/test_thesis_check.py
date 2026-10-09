@@ -491,3 +491,224 @@ def test_the_scorer_grades_namesake_detection():
     }
     r = score_thesis(labels, readings)["dev"]
     assert r["namesake_recall"] == 1.0 and r["namesake_precision"] == 0.5
+
+
+# ---------------------------------------------------------------------------
+# the second reading of a challenge
+# ---------------------------------------------------------------------------
+
+
+def fake_check(verdicts, calls=None, model="stronger-model"):
+    """A second reader answering by headline: {headline: (verdict, because)}."""
+
+    def call(prompt):
+        if calls is not None:
+            calls.append(prompt)
+        out, current = [], None
+        for line in prompt.splitlines():
+            head, _, rest = line.strip().partition(": ")
+            if head.isdigit() and rest.startswith("HOLDING"):
+                current = int(head)
+            elif line.strip().startswith("HEADLINE: ") and current is not None:
+                headline = line.strip()[len("HEADLINE: ") :]
+                if headline in verdicts:
+                    verdict, because = verdicts[headline]
+                    out.append({"id": current, "verdict": verdict, "because": because})
+        return json.dumps(out)
+
+    call.model = model
+    return call
+
+
+def _loan_pair():
+    pairs, _ = thesis_pairs(WATCHLIST, COVERAGE)
+    return [p for p in pairs if p["headline"] == LOAN]
+
+
+def test_a_challenge_the_second_reading_refuses_is_dropped(cache):
+    """9 Oct: record revenue and margin expansion read as contradicting
+    Arvind's thesis. Only a challenge both readers make is shown."""
+    readings, status = read_pairs(
+        _loan_pair(),
+        fake(ANSWERS),
+        cache,
+        today="2026-10-09",
+        check_transport=fake_check({LOAN: ("does_not", "")}),
+    )
+    (reading,) = readings.values()
+    assert reading["stance"] == "unrelated"
+    assert reading["downgraded"] == "contradicts"
+    assert reading["reason"] == "not confirmed by a second reading"
+    assert (status["confirmed"], status["refused"]) == (0, 1)
+
+
+def test_a_challenge_both_readers_make_is_shown_as_confirmed(cache):
+    readings, status = read_pairs(
+        _loan_pair(),
+        fake(ANSWERS),
+        cache,
+        today="2026-10-09",
+        check_transport=fake_check(
+            {LOAN: ("contradicts", "ending its debt-free status")}
+        ),
+    )
+    (reading,) = readings.values()
+    assert reading["stance"] == "contradicts" and reading["confirmed"] is True
+    assert status["confirmed"] == 1
+    entry = json.load(open(cache))["entries"][pair_key("SUZLON", THESIS, LOAN)]
+    assert entry["check"]["verdict"] == "contradicts"
+    assert entry["check"]["model"] == "stronger-model"
+
+
+def test_a_confirmation_must_quote_the_headline(cache):
+    readings, _ = read_pairs(
+        _loan_pair(),
+        fake(ANSWERS),
+        cache,
+        today="2026-10-09",
+        check_transport=fake_check(
+            {LOAN: ("contradicts", "the company is in trouble")}
+        ),
+    )
+    assert next(iter(readings.values()))["stance"] == "unrelated"
+
+
+def test_a_verdict_is_asked_once_and_kept(cache):
+    first = fake_check({LOAN: ("contradicts", "ending its debt-free status")})
+    read_pairs(
+        _loan_pair(), fake(ANSWERS), cache, today="2026-10-09", check_transport=first
+    )
+    calls = []
+    readings, status = read_pairs(
+        _loan_pair(),
+        fake(ANSWERS),
+        cache,
+        today="2026-10-10",
+        check_transport=fake_check({}, calls),
+    )
+    assert calls == [] and next(iter(readings.values()))["confirmed"] is True
+
+
+def test_a_challenge_the_check_cannot_reach_waits_unconfirmed(cache):
+    def down(prompt):
+        raise ReaderUnavailable("busy")
+
+    readings, status = read_pairs(
+        _loan_pair(), fake(ANSWERS), cache, today="2026-10-09", check_transport=down
+    )
+    reading = next(iter(readings.values()))
+    assert reading["stance"] == "contradicts" and reading["confirmed"] is False
+    assert status["checks_pending"] == 1 and "busy" in status["checks_skipped"]
+    # The next run asks again.
+    readings, _ = read_pairs(
+        _loan_pair(),
+        fake(ANSWERS),
+        cache,
+        today="2026-10-10",
+        check_transport=fake_check({LOAN: ("does_not", "")}),
+    )
+    assert next(iter(readings.values()))["stance"] == "unrelated"
+
+
+def test_a_dropped_challenge_stays_dropped_on_a_day_without_a_key(cache, monkeypatch):
+    read_pairs(
+        _loan_pair(),
+        fake(ANSWERS),
+        cache,
+        today="2026-10-09",
+        check_transport=fake_check({LOAN: ("does_not", "")}),
+    )
+    monkeypatch.delenv("GEMINI_API_KEY", raising=False)
+    readings, status = read_pairs(_loan_pair(), cache_path=cache, today="2026-10-10")
+    assert "GEMINI_API_KEY" in status["skipped"]
+    assert next(iter(readings.values()))["stance"] == "unrelated"
+
+
+def test_a_supplied_reader_never_brings_a_real_second_reader(cache, monkeypatch):
+    """Tests and cache-only scoring pass their own reader; the check must not
+    reach the API behind their back."""
+    monkeypatch.setenv("GEMINI_API_KEY", "would-be-real")
+
+    def no_api(*a, **k):
+        raise AssertionError("the real second reader was built")
+
+    monkeypatch.setattr("analysis.llm_reader.default_transport", no_api)
+    readings, status = read_pairs(
+        _loan_pair(), fake(ANSWERS), cache, today="2026-10-09"
+    )
+    assert next(iter(readings.values()))["confirmed"] is False
+    assert status["checks_skipped"] == "no second reader given"
+
+
+def test_a_new_check_version_asks_again(cache, monkeypatch):
+    read_pairs(
+        _loan_pair(),
+        fake(ANSWERS),
+        cache,
+        today="2026-10-09",
+        check_transport=fake_check({LOAN: ("does_not", "")}),
+    )
+    monkeypatch.setattr(thesis_check, "CHECK_VERSION", "99")
+    calls = []
+    read_pairs(
+        _loan_pair(),
+        fake(ANSWERS),
+        cache,
+        today="2026-10-10",
+        check_transport=fake_check(
+            {LOAN: ("contradicts", "ending its debt-free status")}, calls
+        ),
+    )
+    assert len(calls) == 1
+
+
+def test_supports_are_not_checked_and_carry_no_flag(cache):
+    calls = []
+    pairs, _ = thesis_pairs(WATCHLIST, COVERAGE)
+    order = [p for p in pairs if p["headline"] == ORDER]
+    readings, _ = read_pairs(
+        order,
+        fake(ANSWERS),
+        cache,
+        today="2026-10-09",
+        check_transport=fake_check({}, calls),
+    )
+    assert calls == [] and "confirmed" not in next(iter(readings.values()))
+
+
+def test_the_summary_says_whether_a_challenge_was_confirmed(cache):
+    pairs, no_thesis = thesis_pairs(WATCHLIST, COVERAGE)
+    readings, _ = read_pairs(
+        pairs,
+        fake(ANSWERS),
+        cache,
+        today="2026-10-09",
+        check_transport=fake_check(
+            {LOAN: ("contradicts", "ending its debt-free status")}
+        ),
+    )
+    row = summarise(pairs, readings, no_thesis)["holdings"]["SUZLON"]
+    assert row["challenged"][0]["confirmed"] is True
+    assert "confirmed" not in row["supported"][0]
+
+
+def test_the_second_reader_is_told_good_news_never_contradicts():
+    prompt = thesis_check._check_prompt(
+        [
+            (
+                0,
+                {
+                    "name": "Arvind",
+                    "ticker": "ARVIND",
+                    "thesis": "Leading denim maker.",
+                    "headline": "Record revenue",
+                },
+                {"claim": "Leading denim maker"},
+            )
+        ]
+    )
+    assert "Good news never contradicts" in prompt
+    assert (
+        "CLAIM: Leading denim maker" in prompt and "HEADLINE: Record revenue" in prompt
+    )
+    assert "listed in India" in prompt

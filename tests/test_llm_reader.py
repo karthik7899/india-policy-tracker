@@ -664,3 +664,30 @@ def test_a_later_reader_starts_with_the_model_that_answered(monkeypatch):
 
     _, chain = llm_reader.default_transport()
     assert chain.split(" → ")[:2] == ["gemini-flash-lite-latest", "gemini-3.8-flash"]
+
+
+def test_a_chain_can_leave_out_the_lite_models(monkeypatch):
+    """The thesis check's second reading must not be made by the kind of model
+    that made the first."""
+    monkeypatch.setenv("GEMINI_API_KEY", "k")
+    monkeypatch.delenv("GEMINI_MODEL", raising=False)
+    monkeypatch.delenv("GEMINI_FALLBACK_MODELS", raising=False)
+    monkeypatch.setattr(
+        llm_reader,
+        "discover_models",
+        lambda key: [
+            "gemini-3.8-flash",
+            "gemini-flash-lite-latest",
+            "gemini-3.8-flash-tts",
+        ],
+    )
+    llm_reader._LAST_SERVED["model"] = "gemini-flash-lite-latest"
+    _, chain = llm_reader.default_transport(exclude=("lite", "tts"))
+    assert chain.split(" → ")[0] == "gemini-3.8-flash"
+    assert "lite" not in chain and "tts" not in chain
+
+    monkeypatch.setattr(llm_reader, "FALLBACK_MODELS", ())
+    monkeypatch.setattr(llm_reader, "discover_models", lambda key: [])
+    monkeypatch.setenv("GEMINI_MODEL", "gemini-flash-lite-latest")
+    transport, detail = llm_reader.default_transport(exclude=("lite",))
+    assert transport is None and "no model left" in detail
