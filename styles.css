@@ -560,3 +560,42 @@ td .disclose-summary { padding: 2px 0; }
 @media (min-width: 641px) {
   .company-more[open] > .company-more-summary { display: none; }
 }
+
+/* Review view (src/views/review.js). */
+.review-bar { position: sticky; top: 0; z-index: 5; }
+.review-bar-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+.review-parts a { margin-right: 8px; }
+.button-primary {
+  display: inline-block; padding: 7px 14px; border-radius: var(--radius);
+  background: var(--series-1); color: #fff; text-decoration: none; font-size: 13px; font-weight: 600;
+}
+.button-quiet {
+  padding: 6px 12px; border-radius: var(--radius); border: 1px solid var(--border);
+  background: transparent; color: var(--ink-2); font: inherit; font-size: 13px; cursor: pointer;
+}
+.review-list { list-style: none; margin: 0; padding: 0; }
+.review-item { padding: 12px 0; border-top: 1px solid var(--border); }
+.review-item:first-child { border-top: 0; }
+.review-head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 14px; }
+.review-headline { margin: 2px 0; font-size: 14px; overflow-wrap: anywhere; }
+.review-headline .tag { margin-left: 6px; }
+.review-change { margin: 4px 0; font-size: 13px; color: var(--series-1); }
+.review-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.review-input {
+  font: inherit; font-size: 13px; padding: 5px 8px; min-width: 0;
+  color: var(--ink); background: var(--plane);
+  border: 1px solid var(--border); border-radius: 6px;
+}
+.review-editor { display: grid; gap: 8px; margin-top: 8px; max-width: 560px; }
+.review-effects { display: grid; gap: 6px; }
+.review-effect { display: flex; gap: 6px; flex-wrap: wrap; }
+.review-check { font-size: 13px; }
+.review-pages { display: flex; gap: 12px; align-items: center; margin-top: 10px; font-size: 13px; }
+.choice {
+  padding: 5px 12px; border-radius: 999px; border: 1px solid var(--border);
+  background: var(--surface); color: var(--ink-2); font: inherit; font-size: 13px; cursor: pointer;
+}
+.choice:hover { color: var(--ink); }
+.choice-on { background: var(--series-1); border-color: var(--series-1); color: #fff; }
+.choice-opp.choice-on { background: var(--good); border-color: var(--good); }
+.choice-risk.choice-on { background: var(--critical); border-color: var(--critical); }

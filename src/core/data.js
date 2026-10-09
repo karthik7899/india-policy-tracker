@@ -101,6 +101,20 @@ export async function loadProposals() {
 }
 
 /**
+ * One of the hand-labelled eval sets (eval/*.json), which the Review view
+ * lets a reader confirm or correct. null when the file cannot be read.
+ */
+export async function loadLabels(path) {
+  const body = await fetchJSON(path);
+  return body && Array.isArray(body.labels) ? body : null;
+}
+
+/** Forget a cached file, so a view can re-read it after a change. */
+export function forget(path) {
+  sidecarCache.delete(path);
+}
+
+/**
  * Fetch and cache one JSON file.
  *
  * A missing sidecar resolves to null rather than throwing: the data being

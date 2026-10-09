@@ -37,6 +37,20 @@ POLICY_LABELS_PATH = os.path.join(ROOT, "eval", "policy_labels.json")
 THESIS_LABELS_PATH = os.path.join(ROOT, "eval", "thesis_labels.json")
 
 
+def _review_note(body, which=""):
+    """How much of a label set a person has checked (dashboard Review view)."""
+    rows = body.get("labels") or []
+    done = sum(1 for r in rows if r.get("reviewed"))
+    if body.get("reviewed"):
+        return
+    if not done:
+        print(f"NOTE: {which}labels are a draft nobody has reviewed yet.\n")
+    else:
+        print(
+            f"NOTE: {done} of {len(rows)} {which}labels reviewed; the rest are a draft.\n"
+        )
+
+
 def _same_party(a: str, b: str) -> bool:
     """Whole-word prefix either way: "Titagarh" is "Titagarh Rail Systems"."""
     x, y = a.lower().split(), b.lower().split()
@@ -227,8 +241,7 @@ def _run_policy(args) -> int:
     with open(POLICY_LABELS_PATH, encoding="utf-8") as f:
         body = json.load(f)
     labels = body["labels"]
-    if not body.get("reviewed"):
-        print("NOTE: policy labels are a draft nobody has reviewed yet.\n")
+    _review_note(body, "policy ")
     headlines = [r["headline"] for r in labels]
     transport = None if args.live else _no_calls
     readings, _ = read_headlines(headlines, transport=transport)
@@ -363,8 +376,7 @@ def _run_thesis(args) -> int:
     with open(THESIS_LABELS_PATH, encoding="utf-8") as f:
         body = json.load(f)
     labels = body["labels"]
-    if not body.get("reviewed"):
-        print("NOTE: thesis labels are a draft nobody has reviewed yet.\n")
+    _review_note(body, "thesis ")
     pairs = [{"ticker": r["ticker"], "name": r["ticker"], **r} for r in labels]
     # Live reads are bounded by the label count: a scoring run can never
     # spend more than one pass over this file.
@@ -446,8 +458,7 @@ def main() -> int:
         watchlist = json.load(f)
     labels = body["labels"]
 
-    if not body.get("reviewed"):
-        print("NOTE: labels are a draft nobody has reviewed yet.\n")
+    _review_note(body, "")
 
     readers = ["rules", "llm", "combined"] if args.reader == "all" else [args.reader]
     readings: Dict[str, Dict[str, Any]] = {}
