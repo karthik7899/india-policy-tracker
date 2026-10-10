@@ -17,6 +17,39 @@ named.
 
 ---
 
+## NSE's event calendar and corporate actions answer a runner
+
+**Measured 2026-10-10**, run 38030507295
+(`probe_upstream.py --source nse-calendar`).
+
+`providers/nse_calendar.py` was written against the fields NSE's own pages
+read, before any of it had been requested from a runner. Both endpoints
+answer through the announcements provider's handshake, take the date window,
+and use exactly the field names the provider reads first:
+
+```
+handshake        : True -> cookies ['AKA_A2', '_abck', 'bm_sz', 'nsit']
+event-calendar   : index=equities, from_date=26-09-2026, to_date=09-12-2026
+                   200, application/json, 90,915 bytes, list, 351 records
+                   fields: bm_desc company date purpose symbol
+                   351 of 351 normalised
+corporate-actions: same window
+                   200, application/json, 7,095 bytes, list, 24 records
+                   fields: bcEndDate bcStartDate caBroadcastDate comp exDate
+                           faceVal ind isin ndEndDate ndStartDate recDate
+                           series subject symbol
+                   24 of 24 normalised
+```
+
+The window was honoured on the first request, so the provider's fallbacks (the
+same request with only `index`, then with no parameters) did not run; they
+stay for the day NSE stops taking it. Why there are 24 corporate actions
+against 351 board meetings in the same window was not established; the
+saved sample (artifact `upstream-sample-nse-calendar`, kept 7 days) is where
+to start if the count looks wrong on a later run.
+
+---
+
 ## NSE's announcements API answers a runner — it is the primary source
 
 **Measured 2026-09-14**, run 34806776390

@@ -12,16 +12,18 @@ session and handshake rather than repeating them:
   * corporate actions -- ex-dates and record dates for dividends, bonuses,
     splits, rights and AGMs.
 
-NOT MEASURED YET from a runner. The endpoints are the ones NSE's own pages
-call, and the field names are the ones those pages read, but neither has been
-probed from GitHub Actions the way the announcements API was. So:
+MEASURED from a GitHub Actions runner, 10 Oct 2026 (docs/upstream-findings.md):
+both endpoints answer through the handshake, honour the date window, and use
+the field names read first below -- 351 board meetings and 24 corporate
+actions over eleven weeks, every one normalised. They are still undocumented,
+so:
 
   * every field is read through aliases (first_present), so a rename costs
     one field rather than the feed;
-  * a request carrying date parameters that comes back empty is tried once
-    without them, because NSE answers a parameter it does not take with an
-    empty list rather than an error -- the announcements provider learned
-    that with index=corporate;
+  * a request carrying date parameters that comes back empty is tried again
+    with only the market named, then with no parameters, because NSE answers
+    a parameter it does not take with an empty list rather than an error --
+    the announcements provider learned that with index=corporate;
   * fetch_calendar() cannot raise: every failure is logged with its cause
     and the calendar falls back on the board-meeting intimations already
     read from the announcements feed (analysis/event_calendar.py).
