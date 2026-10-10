@@ -303,12 +303,100 @@ def probe_nse_announcements():
         session.close()
 
 
+def probe_nse_calendar():
+    """Do NSE's event calendar and corporate actions answer a runner, and in
+    what shape?
+
+    providers/nse_calendar.py was written against the fields NSE's own pages
+    read, not against a measured response. This prints, per endpoint, what
+    came back and the field names, and saves the bodies, so the aliases can
+    be checked against the genuine article.
+    """
+    import datetime
+
+    from providers import nse_announcements as nse
+    from providers import nse_calendar as cal
+    from providers.screener import describe_fragment
+
+    print(f"\n{'=' * 72}\nNSE EVENT CALENDAR AND CORPORATE ACTIONS\n{'=' * 72}")
+    session = nse.build_session()
+    ok_all = True
+    try:
+        ok = nse.handshake(session)
+        print(f"  handshake   : {ok} -> cookies {sorted(session.cookies.keys())}")
+        today = datetime.date.today()
+        window = {
+            "index": "equities",
+            "from_date": (today - datetime.timedelta(days=cal.BACK_DAYS)).strftime(
+                "%d-%m-%Y"
+            ),
+            "to_date": (today + datetime.timedelta(days=cal.AHEAD_DAYS)).strftime(
+                "%d-%m-%Y"
+            ),
+        }
+        for name, url, page, normalize in (
+            ("event-calendar", cal.EVENTS_URL, cal.EVENTS_PAGE, cal.normalize_event),
+            (
+                "corporate-actions",
+                cal.ACTIONS_URL,
+                cal.ACTIONS_PAGE,
+                cal.normalize_action,
+            ),
+        ):
+            for params in (window, None):
+                nse._polite_pause()
+                response = session.get(
+                    url,
+                    params=params,
+                    headers={**nse.API_HEADERS, "Referer": page},
+                    timeout=nse.REQUEST_TIMEOUT_S,
+                )
+                ctype = response.headers.get("Content-Type", "")
+                body = response.text or ""
+                print(f"\n  {name} params={params}")
+                print(f"    status      : {response.status_code}")
+                print(f"    content-type: {ctype or 'unstated'}")
+                print(f"    bytes       : {len(body)}")
+                if "json" not in ctype.lower():
+                    print(f"    body        : {describe_fragment(body, ctype)}")
+                    ok_all = False
+                    continue
+                try:
+                    payload = json.loads(body)
+                except ValueError as e:
+                    print(f"    VERDICT     : JSON declared but undecodable: {e}")
+                    ok_all = False
+                    continue
+                rows = (
+                    payload.get("data", payload.get("rows", []))
+                    if isinstance(payload, dict)
+                    else payload
+                )
+                count = len(rows) if isinstance(rows, list) else 0
+                print(f"    records     : {count}")
+                _save(f"nse_{name}{'' if params else '_bare'}.json", body)
+                if count:
+                    print(f"    FIELD NAMES : {sorted(rows[0].keys())}")
+                    normalized = [normalize(r) for r in rows]
+                    usable = [n for n in normalized if n]
+                    print(f"    usable      : {len(usable)} of {count}")
+                    if usable:
+                        print(f"    SAMPLE      : {json.dumps(usable[0])[:300]}")
+                    break
+            else:
+                ok_all = False
+        return ok_all
+    finally:
+        session.close()
+
+
 SOURCES = {
     "screener-peers": ("async", probe_screener_peers),
     "nse-isin": ("async-noarg", probe_nse_isin),
     "bse-scrips": ("sync", probe_bse_scrips),
     "nse-delivery": ("async-noarg", probe_nse_delivery),
     "nse-announcements": ("sync", probe_nse_announcements),
+    "nse-calendar": ("sync", probe_nse_calendar),
 }
 
 

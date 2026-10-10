@@ -8,6 +8,8 @@ import { num, pct, thesisStatus, LLM_MARK } from "../core/format.js";
 import { href } from "../core/router.js";
 import * as charts from "../charts/charts.js";
 import { dataTable, panel, chartFrame, tickerLink } from "./table.js";
+import { resolve } from "../core/data.js";
+import { within, kindLabel } from "../core/calendar.js";
 
 /** A headline number. The form heuristic's answer to a one-bar bar chart. */
 function statTile(label, value, detail, tone) {
@@ -57,6 +59,7 @@ const CHANGE_GROUPS = [
   ["policy", "New policy"],
   ["warnings", "New or escalated alerts"],
   ["portfolio", "Portfolio limits"],
+  ["results", "Results & dates"],
 ];
 
 /**
@@ -88,6 +91,33 @@ export function policyRows(balance, labels = {}) {
     }))
     .filter((r) => r.tailwind || r.headwind || r.mixed)
     .sort((a, c) => c.net - a.net || c.tailwind - a.tailwind);
+}
+
+/** The week ahead: results dates, ex-dates and market dates, in date order. */
+function comingUpPanel(calendar) {
+  if (!calendar) return null;
+  const soon = within(calendar, 7);
+  return panel(
+    "Coming up this week",
+    soon.length ? null : "Nothing dated for a holding in the next seven days.",
+    soon.length
+      ? el(
+          "ul",
+          { class: "evidence" },
+          soon.slice(0, 8).map((e) =>
+            el(
+              "li",
+              {},
+              el("strong", {}, new Date(`${e.date}T00:00:00`).toLocaleDateString("en-IN", { weekday: "short", day: "2-digit", month: "short" })),
+              " ",
+              e.ticker ? [tickerLink(e.ticker), " "] : null,
+              `${kindLabel(e.kind)}: ${e.title}`,
+            ),
+          ),
+        )
+      : null,
+    el("p", { class: "section-note" }, el("a", { href: href("calendar") }, soon.length > 8 ? `+ ${soon.length - 8} more, and the rest of the calendar →` : "The calendar and the latest results →")),
+  );
 }
 
 function changesPanel(changes) {
@@ -184,6 +214,7 @@ export async function render(container, { payload, route }) {
     ),
 
     changesPanel(b.changes),
+    comingUpPanel(await resolve(b, "event_calendar")),
 
     policy.length
       ? panel(

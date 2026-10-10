@@ -62,6 +62,8 @@ _CAPS_NORMAL = {
     "extremes": 5,
     # Limit breaches listed in the Portfolio section.
     "portfolio": 5,
+    # Rows in each list of the Calendar section.
+    "calendar": 8,
 }
 _CAPS_COMPACT = {
     # Holding cards in "Your Holdings", and rows per source feed in the
@@ -80,6 +82,7 @@ _CAPS_COMPACT = {
     "changes": 4,
     "extremes": 3,
     "portfolio": 3,
+    "calendar": 5,
 }
 # The floor. One holding per sector with the overflow link doing the rest —
 # enough to say what moved, and small enough that sector growth cannot push
@@ -101,6 +104,7 @@ _CAPS_MINIMAL = {
     "changes": 3,
     "extremes": 2,
     "portfolio": 2,
+    "calendar": 3,
 }
 
 # Full detail with a little less of what repeats. Going straight from full
@@ -115,6 +119,7 @@ _CAPS_TRIMMED = {
     "lists": 4,
     "research": 5,
     "portfolio": 4,
+    "calendar": 6,
 }
 
 _CAP_LADDER = (
@@ -731,6 +736,7 @@ _CHANGE_LABELS = (
     ("policy", "New policy"),
     ("warnings", "New or escalated alerts"),
     ("portfolio", "Portfolio limits"),
+    ("results", "Results &amp; dates"),
 )
 
 
@@ -1070,6 +1076,91 @@ def _build_portfolio_html(portfolio, caps=_CAPS_NORMAL):
             <table class="stock-table" style="margin-top: 6px;"><tbody>{table}</tbody></table>
             {limits}
             {trade}
+        </div>
+        """
+
+
+_CALENDAR_DAYS = 7
+
+
+def _build_calendar_html(calendar, results, caps=_CAPS_NORMAL):
+    """Results that came in since the last run, then the week ahead.
+
+    ``calendar`` and ``results`` arrive escaped (analysis/event_calendar.py).
+    Nothing is called a beat or a miss: there is no consensus to measure
+    against, so each result is set against a year earlier.
+    """
+    import datetime
+
+    n = caps.get("calendar", 8)
+    results = results or {}
+    today = set(results.get("reported_today") or [])
+    cards = [c for c in results.get("scorecards") or [] if c.get("ticker") in today][:n]
+    calendar = calendar or {}
+    try:
+        as_of = datetime.date.fromisoformat(str(calendar.get("as_of")))
+    except ValueError:
+        as_of = datetime.date.today()
+    until = (as_of + datetime.timedelta(days=_CALENDAR_DAYS)).isoformat()
+    soon = [
+        e
+        for e in (calendar.get("upcoming") or []) + (calendar.get("macro") or [])
+        if str(e.get("date", "")) <= until
+    ]
+    soon.sort(key=lambda e: (e.get("date", ""), e.get("ticker", "")))
+    if not cards and not soon:
+        return ""
+
+    def day(iso):
+        try:
+            return datetime.date.fromisoformat(iso).strftime("%a %d %b")
+        except ValueError:
+            return iso
+
+    reported = "".join(
+        f"<li><span class='stock-ticker'>{c['ticker']}</span> "
+        f"{c.get('quarter', '')} quarter: {c.get('summary', '')}</li>"
+        for c in cards
+    )
+    ahead = "".join(
+        f"<li>{day(e.get('date', ''))} &middot; "
+        + (
+            f"<span class='stock-ticker'>{e['ticker']}</span> "
+            if e.get("ticker")
+            else ""
+        )
+        + f"{e.get('title', '')}</li>"
+        for e in soon[:n]
+    )
+    more = len(soon) - min(len(soon), n)
+    if more:
+        ahead += f"<li style='color:#94a3b8;'>+ {more} more on the dashboard</li>"
+    head = (
+        "<h4 style='margin:10px 0 4px 0;color:#e2e8f0;font-size:12px;"
+        "text-transform:uppercase;'>"
+    )
+    listing = (
+        "<ul style='font-size:12px;line-height:1.5;padding-left:18px;"
+        "color:#cbd5e1;margin:0;'>"
+    )
+    blocks = ""
+    if cards:
+        blocks += (
+            f"{head}Reported since the last run ({len(today)})</h4>"
+            f"{listing}{reported}</ul>"
+        )
+    if soon:
+        blocks += f"{head}The next {_CALENDAR_DAYS} days</h4>{listing}{ahead}</ul>"
+    return f"""
+        <div class="section-card">
+            <h3 style="color: #60a5fa; margin-bottom: 4px; font-size: 16px;">Calendar</h3>
+            <p style="font-size: 11px; color: #6b7280; margin: 0 0 6px 0;">
+                Results set against a year earlier (no consensus is available, so none is
+                called a beat or a miss); dates from NSE's calendars and the companies' own
+                filings. The next {calendar.get('ahead_days', 45)} days are on the
+                <a href="{with_fragment(DASHBOARD_URL, '#/calendar')}" style="color:#60a5fa;" target="_blank">dashboard's Calendar view</a>.
+            </p>
+            {blocks}
         </div>
         """
 
@@ -1610,6 +1701,9 @@ def _render_email(brief_data, watchlist, caps):
     body_html += _build_changes_html(brief_data.get("changes"))
     body_html += _build_companies_html(brief_data.get("company_digest"), caps)
     body_html += _build_portfolio_html(brief_data.get("portfolio"), caps)
+    body_html += _build_calendar_html(
+        brief_data.get("event_calendar"), brief_data.get("results"), caps
+    )
 
     # Early Warning System. Alerts already shown as cards above are not
     # repeated: the table used to reprint every card, so one holding with
