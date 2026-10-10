@@ -597,3 +597,14 @@ def test_eps_that_did_not_move_with_sales_is_left_out():
     }
     (card,) = ec.update_results(moved, first, today=TODAY)["scorecards"]
     assert card["eps"] == 30.0
+
+
+def test_neither_step_can_break_the_run():
+    c = ec.build_calendar({"x": "not a list"}, {"events": "nonsense"}, 5, today=TODAY)
+    assert c["upcoming"] == [] and c["sources"]["filings"] == 0
+    prior = {"seen": {"HAL": {"sales": HAL_SALES}}, "scorecards": [{"ticker": "HAL"}]}
+    with patch.object(ec, "_held", side_effect=RuntimeError("boom")):
+        r = ec.update_results(WATCHLIST, prior, today=TODAY)
+        c = ec.build_calendar(WATCHLIST, today=TODAY)
+    assert r["seen"] == prior["seen"] and r["scorecards"] == prior["scorecards"]
+    assert r["error"] == "RuntimeError('boom')" and c["error"] == "RuntimeError('boom')"

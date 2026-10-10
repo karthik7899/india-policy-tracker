@@ -175,8 +175,27 @@ def build_calendar(
     macro: Optional[List[Dict[str, Any]]] = None,
     today: Optional[datetime.date] = None,
 ) -> Dict[str, Any]:
-    """Every dated event for a holding, from BACK_DAYS ago to AHEAD_DAYS on."""
+    """Every dated event for a holding, from BACK_DAYS ago to AHEAD_DAYS on.
+    Never raises: an empty calendar that says why is returned instead."""
     today = today or datetime.date.today()
+    try:
+        return _build_calendar(watchlist, fetched, filings, prior, macro, today)
+    except Exception as e:  # noqa: BLE001 - an enrichment must never break a run
+        log.warning(f"Calendar failed safely: {e!r}")
+        return {
+            "as_of": today.isoformat(),
+            "ahead_days": AHEAD_DAYS,
+            "back_days": BACK_DAYS,
+            "upcoming": [],
+            "recent": [],
+            "macro": [],
+            "next_results": {},
+            "sources": {"nse": {}, "nse_errors": [], "filings": 0, "carried": 0},
+            "error": repr(e),
+        }
+
+
+def _build_calendar(watchlist, fetched, filings, prior, macro, today):
     held = _held(watchlist)
     first = (today - datetime.timedelta(days=BACK_DAYS)).isoformat()
     last = (today + datetime.timedelta(days=AHEAD_DAYS)).isoformat()
@@ -407,10 +426,27 @@ def update_results(
     ``seen`` keeps each holding's last non-empty sales and EPS series.
     Screener empties a holding's figures on a failed fetch, and comparing
     against that would miss the next result entirely.
+
+    Never raises: on a failure the last run's state is handed on unchanged,
+    so the next run still has something to compare with.
     """
     today = today or datetime.date.today()
+    prior = prior if isinstance(prior, dict) else {}
+    try:
+        return _update_results(watchlist, prior, today)
+    except Exception as e:  # noqa: BLE001 - an enrichment must never break a run
+        log.warning(f"Results failed safely: {e!r}")
+        return {
+            "as_of": today.isoformat(),
+            "reported_today": [],
+            "scorecards": list(prior.get("scorecards") or []),
+            "seen": dict(prior.get("seen") or {}),
+            "error": repr(e),
+        }
+
+
+def _update_results(watchlist, prior, today):
     held = _held(watchlist)
-    prior = prior or {}
     seen = {
         t: v
         for t, v in (prior.get("seen") or {}).items()
