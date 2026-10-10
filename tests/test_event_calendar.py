@@ -608,3 +608,16 @@ def test_neither_step_can_break_the_run():
         c = ec.build_calendar(WATCHLIST, today=TODAY)
     assert r["seen"] == prior["seen"] and r["scorecards"] == prior["scorecards"]
     assert r["error"] == "RuntimeError('boom')" and c["error"] == "RuntimeError('boom')"
+
+
+def test_the_day_tracking_began_is_kept():
+    first = ec.update_results(WATCHLIST, None, today=TODAY)
+    assert first["tracking_since"] == TODAY.isoformat()
+    later = ec.update_results(
+        WATCHLIST, first, today=TODAY + datetime.timedelta(days=3)
+    )
+    assert later["tracking_since"] == TODAY.isoformat()
+    # A run from before the field existed: the date it first recorded figures.
+    legacy = {"as_of": "2026-10-10", "seen": first["seen"], "scorecards": []}
+    out = ec.update_results(WATCHLIST, legacy, today=TODAY + datetime.timedelta(days=1))
+    assert out["tracking_since"] == "2026-10-10"

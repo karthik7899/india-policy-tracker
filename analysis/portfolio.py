@@ -28,7 +28,11 @@ What it does not claim:
 
   * Returns over past windows are a BACKCAST: today's weights held through
     each window. They say how the current book would have behaved, not how
-    the book did; nothing here records past positions.
+    the book did; nothing here records past positions. And they flatter it:
+    the watchlist holds these names partly because they rose, so the first
+    live run's year read +27.5% against the Nifty's -10.9% (10 Oct 2026).
+    analysis/track_record.py measures picks from the day they were made,
+    which is the fair test, and says so for the same reason.
   * No allocation/selection (Brinson) attribution. That needs the
     benchmark's constituent weights, which no source this pipeline reads
     provides. Contribution by stock and sector is given instead.

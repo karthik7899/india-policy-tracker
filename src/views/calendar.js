@@ -79,8 +79,8 @@ function resultsPanel(results) {
       : el(
           "p",
           { class: "company-empty" },
-          results?.scorecards
-            ? "No holding has reported in the last 45 days."
+          results?.tracking_since
+            ? `No holding has reported since ${shortDate(results.tracking_since)}, when results began to be tracked. A holding that reported before then has no scorecard until its next quarter.`
             : "Results appear here once a holding reports; the first run only records each holding's figures to compare with.",
         ),
   );

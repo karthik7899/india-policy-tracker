@@ -655,3 +655,7 @@ td .disclose-summary { padding: 2px 0; }
   .cal-event { grid-template-columns: 1fr; gap: 2px; }
 }
 .cal-what a:not(.ticker-link) { color: inherit; }
+.portfolio-caveat {
+  margin: 0 0 12px; padding: 8px 10px; font-size: 12px; line-height: 1.5; max-width: 80ch;
+  border-left: 3px solid var(--warning); background: var(--plane); color: var(--ink-2);
+}
