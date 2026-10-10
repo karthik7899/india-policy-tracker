@@ -13,6 +13,7 @@ loaded before it is overwritten) and lists only what is new:
   events      market events about holdings not seen before
   policy      policy measures read for the first time
   warnings    alerts that are new or escalated
+  portfolio   portfolio limits newly breached, or back within
 
 Nothing is re-judged; every item is something another step already
 produced, and each says which step.
@@ -47,6 +48,7 @@ def build_changes(
         "events": [],
         "policy": [],
         "warnings": [],
+        "portfolio": [],
     }
 
     before, now = set(held_before or ()), set(held_now or ())
@@ -146,6 +148,8 @@ def build_changes(
                 }
             )
 
+    items["portfolio"] = _limit_changes(data.get("portfolio"), prior.get("portfolio"))
+
     if first_run:
         # Without a previous run everything is "new", which says nothing.
         items = {k: [] for k in items}
@@ -155,3 +159,59 @@ def build_changes(
         "counts": counts,
         "items": {k: v[:MAX_PER_KIND] for k, v in items.items()},
     }
+
+
+# What each kind of portfolio limit is about, for a breach that has cleared.
+_LIMIT_SUBJECT = {
+    "stock": "position size",
+    "sector": "sector weight",
+    "group": "group weight",
+    "liquidity": "days to exit",
+    "ownership": "share of the company owned",
+    "excluded": "excluded name held",
+    "beta": "beta",
+    "tracking_error": "tracking error",
+}
+
+
+def _limit_changes(now: Any, before: Any) -> List[Dict[str, Any]]:
+    """Breaches that appeared since the last run, then ones that cleared.
+
+    A book the last run did not measure is skipped: everything in it would
+    read as new.
+    """
+    out: List[Dict[str, Any]] = []
+    old_books = {
+        str(b.get("id")): b
+        for b in (before or {}).get("books") or []
+        if isinstance(b, dict) and "breaches" in b
+    }
+    for book in (now or {}).get("books") or []:
+        if not isinstance(book, dict) or "breaches" not in book:
+            continue
+        was = old_books.get(str(book.get("id")))
+        if was is None:
+            continue
+        old = {(b.get("kind"), b.get("subject")): b for b in was["breaches"]}
+        new = {(b.get("kind"), b.get("subject")): b for b in book["breaches"]}
+        name = book.get("name") or book.get("id")
+        for key, b in new.items():
+            if key not in old:
+                out.append(
+                    {
+                        "text": b.get("message") or "",
+                        "direction": "worse",
+                        "detail": f"{name} · new limit breach",
+                    }
+                )
+        for (kind, subject), b in old.items():
+            if (kind, subject) not in new:
+                out.append(
+                    {
+                        "text": f"{subject}: {_LIMIT_SUBJECT.get(kind, kind)} back "
+                        "within the limit",
+                        "direction": "better",
+                        "detail": f"{name} · was: {b.get('message') or ''}",
+                    }
+                )
+    return out

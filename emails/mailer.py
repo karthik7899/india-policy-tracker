@@ -60,6 +60,8 @@ _CAPS_NORMAL = {
     "caution": 8,
     "changes": 6,
     "extremes": 5,
+    # Limit breaches listed in the Portfolio section.
+    "portfolio": 5,
 }
 _CAPS_COMPACT = {
     # Holding cards in "Your Holdings", and rows per source feed in the
@@ -77,6 +79,7 @@ _CAPS_COMPACT = {
     "caution": 5,
     "changes": 4,
     "extremes": 3,
+    "portfolio": 3,
 }
 # The floor. One holding per sector with the overflow link doing the rest —
 # enough to say what moved, and small enough that sector growth cannot push
@@ -97,6 +100,7 @@ _CAPS_MINIMAL = {
     "caution": 3,
     "changes": 3,
     "extremes": 2,
+    "portfolio": 2,
 }
 
 # Full detail with a little less of what repeats. Going straight from full
@@ -110,6 +114,7 @@ _CAPS_TRIMMED = {
     "warnings": 10,
     "lists": 4,
     "research": 5,
+    "portfolio": 4,
 }
 
 _CAP_LADDER = (
@@ -725,6 +730,7 @@ _CHANGE_LABELS = (
     ("events", "Company events"),
     ("policy", "New policy"),
     ("warnings", "New or escalated alerts"),
+    ("portfolio", "Portfolio limits"),
 )
 
 
@@ -911,6 +917,159 @@ def _build_companies_html(digest, caps=_CAPS_NORMAL):
                 {f"+ {more} more on the " if more else "Every holding is on the "}<a href="{DASHBOARD_URL}#/companies" style="color:#60a5fa;" target="_blank">dashboard's Companies view</a>.
             </p>
             {blocks}
+        </div>
+        """
+
+
+def _pct(value, digits=1):
+    return "&mdash;" if value is None else f"{value:+.{digits}f}%"
+
+
+def _signed_cr(value):
+    """ "+₹1.2 Cr" / "-₹48.7 Cr": the sign before the rupee, where it is read."""
+    sign = "+" if value > 0 else "-" if value < 0 else ""
+    return f"{sign}₹{abs(value):,.1f} Cr"
+
+
+def _build_portfolio_html(portfolio, caps=_CAPS_NORMAL):
+    """The first book in portfolios.json: its worth, its risk, what breaks a
+    limit, and how much trading would restore the targets.
+
+    The full measures and the order list are on the dashboard; this is the
+    part to read before deciding whether to open it. ``portfolio`` arrives
+    escaped (analysis/portfolio.py).
+    """
+    books = [
+        b for b in (portfolio or {}).get("books") or [] if b and not b.get("error")
+    ]
+    if not books:
+        return ""
+    b = books[0]
+    s, risk, bench = b["summary"], b.get("risk") or {}, b.get("benchmark") or {}
+    label = bench.get("label") or "benchmark"
+    rows = [
+        (
+            "Value",
+            f"₹{s['nav_cr']:,.1f} Cr in {s['positions']} positions"
+            + (f", {s['cash_pct']:.1f}% cash" if s.get("cash_pct") else ""),
+        )
+    ]
+    if s.get("pnl_cr") is not None:
+        rows.append(
+            (
+                "Unrealised P&amp;L",
+                f"{_signed_cr(s['pnl_cr'])} ({_pct(s['pnl_pct'], 2)})"
+                + (
+                    f"; {label} {_pct(s['benchmark_since_inception_pct'])} "
+                    f"since {b['inception']}"
+                    if s.get("benchmark_since_inception_pct") is not None
+                    and b.get("inception")
+                    else ""
+                ),
+            )
+        )
+    week = (b.get("returns") or {}).get("week")
+    if week:
+        rows.append(
+            (
+                f"Week of {week['week_of']}",
+                f"{_pct(week['portfolio_pct'])} vs {label} "
+                f"{_pct(week.get('benchmark_pct'))}",
+            )
+        )
+    if risk.get("beta") is not None:
+        var = risk.get("var_95") or {}
+        rows.append(
+            (
+                "Risk",
+                f"beta {risk['beta']:.2f}, volatility {risk['vol_pct']:.1f}%, "
+                f"tracking error {risk['tracking_error_pct']:.1f}% a year"
+                + (
+                    f"; a 1-in-20 week loses ₹{var['cr']:,.1f} Cr"
+                    if var.get("cr") is not None
+                    else ""
+                ),
+            )
+        )
+    liq = b.get("liquidity") or {}
+    sellable = {e["days"]: e["pct"] for e in liq.get("exitable") or []}
+    if sellable:
+        rows.append(
+            (
+                "Liquidity",
+                f"{sellable.get(1, 0):.0f}% sellable in a day, "
+                f"{sellable.get(5, 0):.0f}% in five, at "
+                f"{liq.get('participation_pct', 20)}% of daily value traded",
+            )
+        )
+    fall = next(
+        (x for x in b.get("scenarios") or [] if x.get("key") == "market_fall"), None
+    )
+    if fall:
+        rows.append((fall["label"], f"{_signed_cr(fall['cr'])} ({_pct(fall['pct'])})"))
+    table = "".join(
+        f"<tr><td class='ew-td' style='color:#94a3b8;white-space:nowrap;'>{k}</td>"
+        f"<td class='ew-td'>{v}</td></tr>"
+        for k, v in rows
+    )
+
+    breaches = b.get("breaches") or []
+    shown = breaches[: caps.get("portfolio", 5)]
+    items = "".join(
+        f"<li>{x['message']}"
+        + (
+            " <span class='badge badge-negative' style='font-size:9px;'>new</span>"
+            if x.get("new")
+            else ""
+        )
+        + "</li>"
+        for x in shown
+    )
+    if len(breaches) > len(shown):
+        items += (
+            f"<li style='color:#94a3b8;'>+ {len(breaches) - len(shown)} more on "
+            "the dashboard</li>"
+        )
+    limits = (
+        f"<h4 style='margin:12px 0 4px 0;color:#f87171;font-size:12px;"
+        f"text-transform:uppercase;'>Limit breaches ({len(breaches)})</h4>"
+        f"<ul style='font-size:12px;line-height:1.5;padding-left:18px;"
+        f"color:#cbd5e1;margin:0;'>{items}</ul>"
+        if breaches
+        else "<p style='font-size:12px;color:#34d399;margin:10px 0 0 0;'>"
+        "Every limit is met.</p>"
+    )
+    orders = b.get("orders") or {}
+    n = len(orders.get("rows") or [])
+    trade = (
+        f"<p style='font-size:12px;color:#cbd5e1;margin:10px 0 0 0;'>{n} order(s) "
+        f"would restore the targets: ₹{orders['sell_cr']:,.1f} Cr sold, "
+        f"₹{orders['buy_cr']:,.1f} Cr bought"
+        + (
+            f", leaving {len(orders['breaches_after'])} breach(es)"
+            if orders.get("breaches_after")
+            else ", leaving every limit met"
+        )
+        + ".</p>"
+        if n
+        else ""
+    )
+    note = (
+        "An illustrative model book, not real holdings. "
+        if b.get("kind") == "model"
+        else ""
+    )
+    return f"""
+        <div class="section-card">
+            <h3 style="color: #60a5fa; margin-bottom: 4px; font-size: 16px;">Portfolio</h3>
+            <p style="font-size: 11px; color: #6b7280; margin: 0 0 6px 0;">
+                {b['name']}. {note}Risk from up to a year of weekly closes against the {label};
+                positions, orders and the rest on the
+                <a href="{with_fragment(DASHBOARD_URL, '#/portfolio')}" style="color:#60a5fa;" target="_blank">dashboard's Portfolio view</a>.
+            </p>
+            <table class="stock-table" style="margin-top: 6px;"><tbody>{table}</tbody></table>
+            {limits}
+            {trade}
         </div>
         """
 
@@ -1450,6 +1609,7 @@ def _render_email(brief_data, watchlist, caps):
 
     body_html += _build_changes_html(brief_data.get("changes"))
     body_html += _build_companies_html(brief_data.get("company_digest"), caps)
+    body_html += _build_portfolio_html(brief_data.get("portfolio"), caps)
 
     # Early Warning System. Alerts already shown as cards above are not
     # repeated: the table used to reprint every card, so one holding with

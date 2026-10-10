@@ -41,6 +41,7 @@ This platform runs entirely in the cloud for free using **GitHub Actions** and *
 * **Automated Watchlist Rotation:** 
   * Checks emerging competitors discovered in news feeds.
   * Filters candidates through a strict **15% QoQ revenue growth threshold** (via Screener) and rotates weaker-performing watchlist tickers with stronger ones.
+* **Portfolio:** Positions in `portfolios.json` measured every run (`analysis/portfolio.py`): value and unrealised P&L; weight by sector and business group (`business_groups.json`); days to sell each position at its real size; beta, volatility, tracking error, drawdown and a historical 1-in-20 week loss against the Nifty 50, from a year of weekly closes; backcast returns with contribution by holding and sector; what-if scenarios; the book's own limits (position, sector, group, days to exit, share of a company owned, exclusions); and the whole-share orders that would restore its targets, with any target a limit cuts listed and a CSV download for the desk. The committed book is a model — the watchlist in equal weights at ₹500 crore, written by `scripts/model_portfolio.py`. This repository is public, so real positions put there are public too.
 * **Self-Updating Web Dashboard:** The GitHub Action automatically commits the aggregated news log and updated watchlist into the codebase, updating the frontend pages instantly.
 
 ---

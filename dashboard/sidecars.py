@@ -44,8 +44,9 @@ DATA_DIR = "data"
 # data/<key>.json, for a key one view needs in full.
 SPLIT_PER_TICKER = ("stock_topics",)
 # company_digest is the Companies view's whole input (analysis/company_digest.py),
-# loaded when that view opens rather than on every page load.
-SPLIT_WHOLE = ("buffett_valuation", "company_digest")
+# loaded when that view opens rather than on every page load; portfolio is the
+# Portfolio view's (analysis/portfolio.py).
+SPLIT_WHOLE = ("buffett_valuation", "company_digest", "portfolio")
 
 
 def _safe_ticker(ticker: Any) -> str:

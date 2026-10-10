@@ -23,6 +23,8 @@ import {
   upsideText,
 } from "./holdings.js";
 import { priceLine, activitySection, policySection, statusPill, label } from "./companies.js";
+import { pickBook, positionOf } from "../core/portfolio.js";
+import { pct } from "../core/format.js";
 
 const EDGE_LABEL = {
   partner: "partner",
@@ -212,11 +214,12 @@ export async function render(container, { payload, route }) {
   const b = payload?.briefing || {};
   const labels = payload?.sectors || {};
   const sectorName = label(stock.sector, labels);
-  const [digest, coverage, edges, proposals] = await Promise.all([
+  const [digest, coverage, edges, proposals, portfolio] = await Promise.all([
     resolve(b, "company_digest"),
     loadCoverage(key),
     loadGraph(),
     loadProposals(),
+    resolve(b, "portfolio"),
   ]);
   const card = (digest?.companies || []).find((c) => String(c.ticker).toUpperCase() === key);
   const health = b.thesis_health?.[key];
@@ -291,6 +294,7 @@ export async function render(container, { payload, route }) {
         "aside",
         { class: "company-page-side" },
         panel("Numbers", null, card ? priceLine(card) : null, factsList(stock)),
+        positionSection(pickBook(portfolio), key),
         (() => {
           const signals = holdingSignals(payload, key);
           return signals.length ? panel(null, null, signalsSection(signals)) : null;
@@ -305,5 +309,50 @@ export async function render(container, { payload, route }) {
         ),
       ),
     ),
+  );
+}
+
+/**
+ * The holding as a position in the book (analysis/portfolio.py): its size,
+ * how long it would take to sell, any limit it breaks, and any order the
+ * rebalance would send. Nothing when the book does not hold it.
+ */
+export function positionSection(book, ticker) {
+  if (!book || book.error) return null;
+  const p = positionOf(book, ticker);
+  const order = (book.orders?.rows || []).find((o) => o.ticker === ticker);
+  if (!p && !order) return null;
+  const breaches = (book.breaches || []).filter((b) => b.subject === ticker);
+  const n = (v, d = 2, s = "") => (typeof v === "number" ? `${v.toFixed(d)}${s}` : "—");
+  const facts = p
+    ? [
+        ["Weight", `${n(p.weight_pct, 2, "%")} of the book (target ${n(p.target_pct, 2, "%")})`],
+        ["Value", `₹${n(p.value_cr, 2)} Cr · ${p.quantity.toLocaleString("en-IN")} shares`],
+        typeof p.pnl_pct === "number" ? ["P&L", `${pct(p.pnl_pct, 2)} on cost`] : null,
+        typeof p.days_to_exit === "number"
+          ? ["To sell", `${n(p.days_to_exit, 1)} days at 20% of daily value traded`]
+          : ["To sell", "no traded value on record"],
+        typeof p.ownership_pct === "number" ? ["Owned", `${n(p.ownership_pct, 2, "%")} of the company`] : null,
+        typeof p.beta === "number" ? ["Beta", `${n(p.beta, 2)} to the ${book.benchmark?.label || "benchmark"}`] : null,
+      ].filter(Boolean)
+    : [];
+  return panel(
+    "In the portfolio",
+    book.kind === "model" ? `${book.name} — a model, not real holdings.` : book.name,
+    facts.length
+      ? el("dl", { class: "portfolio-stats" }, facts.map(([k, v]) => [el("dt", {}, k), el("dd", {}, v)]))
+      : el("p", { class: "company-empty" }, "Not held yet."),
+    breaches.length
+      ? el("ul", { class: "portfolio-breaches" }, breaches.map((b) => el("li", {}, b.message)))
+      : null,
+    order
+      ? el(
+          "p",
+          { class: "portfolio-line" },
+          el("strong", { class: order.side === "SELL" ? "order-sell" : "order-buy" }, order.side),
+          ` ${order.quantity.toLocaleString("en-IN")} shares (₹${n(order.value_cr, 2)} Cr): ${order.reason}.`,
+        )
+      : null,
+    el("p", { class: "evidence-meta" }, el("a", { href: href("portfolio", { book: book.id }) }, "The whole book \u2192")),
   );
 }

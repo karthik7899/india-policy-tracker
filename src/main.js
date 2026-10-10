@@ -12,6 +12,7 @@ import { destroyAll } from "./charts/charts.js";
 
 import * as overview from "./views/overview.js";
 import * as companies from "./views/companies.js";
+import * as portfolio from "./views/portfolio.js";
 import * as company from "./views/company.js";
 import * as review from "./views/review.js";
 import * as ask from "./views/ask.js";
@@ -27,6 +28,7 @@ import { mountSearch } from "./views/searchbox.js";
 const VIEWS = {
   overview: { label: "Overview", module: overview },
   companies: { label: "Companies", module: companies },
+  portfolio: { label: "Portfolio", module: portfolio },
   review: { label: "Review", module: review },
   ask: { label: "Ask", module: ask },
   holdings: { label: "Holdings", module: holdings },

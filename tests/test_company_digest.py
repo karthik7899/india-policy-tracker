@@ -214,6 +214,14 @@ def test_weekly_closes_feed_the_card_price_line():
     assert by["SUZLON"]["prices"] == prices["SUZLON"]
     assert "prices" not in by["QUIET"]
 
+    # The run keeps a year of closes for the portfolio; a card shows half.
+    year = {"SUZLON": [[f"w{i:02d}", 40.0 + i] for i in range(53)]}
+    d = build_company_digest(
+        WATCHLIST, COVERAGE, BRIEF, today="2026-10-03", prices=year
+    )
+    card = next(c for c in d["companies"] if c["ticker"] == "SUZLON")
+    assert card["prices"] == year["SUZLON"][-26:]
+
 
 def test_namesakes_from_earlier_runs_stay_set_apart():
     """7 Oct: the thesis check could not run, today's result had no namesakes,
