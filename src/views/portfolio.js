@@ -210,6 +210,12 @@ function returnsPanel(book, labels) {
   return panel(
     "Returns against the " + bench,
     "A backcast: today's weights held through each window, from weekly closes. It says how the current book would have done, not how this book did — nothing records past positions. Holdings listed for less than a window are left out of it and the rest reweighted.",
+    el(
+      "p",
+      { class: "portfolio-caveat" },
+      el("strong", {}, "It flatters the book. "),
+      "These holdings are on the watchlist partly because they rose — the rotation engine adds names that are growing and drops ones that are not — so the gap over the benchmark says more about how they were chosen than about what comes next. The track record on the Overview measures each pick from the day it was made.",
+    ),
     dataTable(
       ret.windows,
       [

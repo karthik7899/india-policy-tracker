@@ -438,11 +438,24 @@ def update_results(
         log.warning(f"Results failed safely: {e!r}")
         return {
             "as_of": today.isoformat(),
+            "tracking_since": _tracking_since(prior, today),
             "reported_today": [],
             "scorecards": list(prior.get("scorecards") or []),
             "seen": dict(prior.get("seen") or {}),
             "error": repr(e),
         }
+
+
+def _tracking_since(prior: Dict[str, Any], today: datetime.date) -> str:
+    """The first run that recorded figures to compare with. A holding that
+    reported before it has no scorecard until its next quarter, and the page
+    says so rather than calling the season quiet."""
+    if prior.get("tracking_since"):
+        return str(prior["tracking_since"])
+    # The run that introduced this field after figures were first recorded.
+    if "seen" in prior and prior.get("as_of"):
+        return str(prior["as_of"])
+    return today.isoformat()
 
 
 def _update_results(watchlist, prior, today):
@@ -496,6 +509,7 @@ def _update_results(watchlist, prior, today):
     )
     return {
         "as_of": today.isoformat(),
+        "tracking_since": _tracking_since(prior, today),
         "reported_today": [c["ticker"] for c in reported],
         "scorecards": scorecards,
         "seen": seen,
