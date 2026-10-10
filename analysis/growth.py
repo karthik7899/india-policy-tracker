@@ -145,9 +145,11 @@ def _liquidity_from_frame(frame):
         return None
 
 
-# Weekly closes kept per holding for the Companies view's price line: the
-# same 1-year weekly download as the 52-week range, so no extra request.
-WEEKLY_POINTS = 26
+# Weekly closes kept per holding: the same 1-year weekly download as the
+# 52-week range, so no extra request. The whole year is kept for the
+# portfolio's risk figures (analysis/portfolio.py); the Companies view's
+# price line shows the last half of it (analysis/company_digest.py).
+WEEKLY_POINTS = 53
 
 
 def _weekly_closes(frame):

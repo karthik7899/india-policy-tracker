@@ -56,6 +56,7 @@ const CHANGE_GROUPS = [
   ["events", "Company events"],
   ["policy", "New policy"],
   ["warnings", "New or escalated alerts"],
+  ["portfolio", "Portfolio limits"],
 ];
 
 /**

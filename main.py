@@ -546,6 +546,15 @@ async def run_pipeline():
         namesakes=namesakes,
     )
 
+    # The book: positions in portfolios.json valued, measured against the
+    # benchmark and checked against their limits, with the orders that would
+    # restore the targets (analysis/portfolio.py).
+    from analysis.portfolio import build_portfolios
+
+    data["portfolio"] = build_portfolios(
+        watchlist, weekly_closes, prior=prior.get("portfolio")
+    )
+
     # What is new since the previous run, for the top of the dashboard and
     # the email (analysis/changes.py).
     from analysis.changes import build_changes

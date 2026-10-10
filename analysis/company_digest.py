@@ -31,6 +31,9 @@ WINDOW_DAYS = 30
 MAX_ACTIVITY = 6
 MAX_POLICIES = 4
 _TEXT_LIMIT = 180
+# Weeks of closes on a card's price line; the run keeps a year of them for the
+# portfolio's risk figures.
+PRICE_WEEKS = 26
 
 _KIND = {
     "order_win": "order",
@@ -202,7 +205,7 @@ def build_company_digest(
                     # Weekly closes for the card's price line, so a reader can
                     # see whether the news and the policies moved the stock.
                     **(
-                        {"prices": (prices or {})[ticker]}
+                        {"prices": (prices or {})[ticker][-PRICE_WEEKS:]}
                         if (prices or {}).get(ticker)
                         else {}
                     ),

@@ -1,0 +1,409 @@
+{
+  "_about": "Books the portfolio view measures (analysis/portfolio.py). This repository is public, and so is everything in this file. Field meanings are in _schema; scripts/model_portfolio.py writes the model.",
+  "_schema": {
+    "id": "Short key; the dashboard links to a book by it.",
+    "name": "What the page calls the book.",
+    "kind": "\"model\" for an illustrative book, \"actual\" for real positions.",
+    "benchmark": "NIFTY50 or NIFTY500, or a Yahoo symbol such as \"^CNXIT\". One per book.",
+    "inception": "Date the positions were bought (ISO). Optional.",
+    "cash_cr": "Cash, in rupees crore.",
+    "positions": "[{ticker, quantity, avg_cost}]: NSE symbol, shares held, average price paid in rupees (optional; without it there is no P&L).",
+    "targets": "\"equal_weight\" (today's watchlist, evenly) or {TICKER: % of NAV}. A held name missing from the targets is sold.",
+    "target_cash_pct": "Cash to keep, % of NAV. Default 0.",
+    "rebalance_band_pct": "Drift, in percentage points of NAV, left untraded. Default 0.25.",
+    "limits": {
+      "max_stock_pct": "Largest position, % of NAV.",
+      "max_sector_pct": "Largest sector, % of NAV.",
+      "max_group_pct": "Largest business group (business_groups.json), % of NAV.",
+      "max_days_to_exit": "Days to sell any position at 20% of its daily value traded.",
+      "max_ownership_pct": "Largest share of any one company, %.",
+      "max_beta": "Beta to the benchmark. Optional.",
+      "max_tracking_error_pct": "Tracking error, % a year. Optional."
+    },
+    "exclusions": "[TICKER or {ticker, reason}]: never held, e.g. {\"ticker\": \"ITC\", \"reason\": \"tobacco\"}."
+  },
+  "portfolios": [
+    {
+      "id": "model",
+      "name": "Model book: the watchlist in equal weights",
+      "kind": "model",
+      "note": "Illustrative. ₹500 crore bought in equal weights at the prices of the 2026-10-09 run; nobody holds it. Replace it with real positions, bearing in mind this file is public.",
+      "inception": "2026-10-09",
+      "benchmark": "NIFTY50",
+      "cash_cr": 0.0081,
+      "targets": "equal_weight",
+      "target_cash_pct": 0,
+      "rebalance_band_pct": 0.25,
+      "limits": {
+        "max_stock_pct": 8,
+        "max_sector_pct": 25,
+        "max_group_pct": 15,
+        "max_days_to_exit": 5,
+        "max_ownership_pct": 1
+      },
+      "exclusions": [],
+      "positions": [
+        {
+          "ticker": "ACMESOLAR",
+          "quantity": 166713,
+          "avg_cost": 416.55
+        },
+        {
+          "ticker": "ADANIGREEN",
+          "quantity": 55237,
+          "avg_cost": 1257.2
+        },
+        {
+          "ticker": "ADANIPOWER",
+          "quantity": 367430,
+          "avg_cost": 189.0
+        },
+        {
+          "ticker": "ADSL",
+          "quantity": 626472,
+          "avg_cost": 110.85
+        },
+        {
+          "ticker": "ANANTRAJ",
+          "quantity": 121374,
+          "avg_cost": 572.15
+        },
+        {
+          "ticker": "APOLLOHOSP",
+          "quantity": 8679,
+          "avg_cost": 8001.0
+        },
+        {
+          "ticker": "ARVIND",
+          "quantity": 136152,
+          "avg_cost": 510.05
+        },
+        {
+          "ticker": "ASMTEC",
+          "quantity": 10442,
+          "avg_cost": 6650.0
+        },
+        {
+          "ticker": "ASTRAMICRO",
+          "quantity": 42036,
+          "avg_cost": 1652.0
+        },
+        {
+          "ticker": "BATAINDIA",
+          "quantity": 113120,
+          "avg_cost": 613.9
+        },
+        {
+          "ticker": "BEL",
+          "quantity": 187941,
+          "avg_cost": 369.5
+        },
+        {
+          "ticker": "BHEL",
+          "quantity": 159844,
+          "avg_cost": 434.45
+        },
+        {
+          "ticker": "BIRLACABLE",
+          "quantity": 180281,
+          "avg_cost": 385.2
+        },
+        {
+          "ticker": "BPCL",
+          "quantity": 242262,
+          "avg_cost": 286.65
+        },
+        {
+          "ticker": "CAMPUS",
+          "quantity": 352814,
+          "avg_cost": 196.83
+        },
+        {
+          "ticker": "CAPILLARY",
+          "quantity": 122466,
+          "avg_cost": 567.05
+        },
+        {
+          "ticker": "CGPOWER",
+          "quantity": 81027,
+          "avg_cost": 857.05
+        },
+        {
+          "ticker": "CHALET",
+          "quantity": 84703,
+          "avg_cost": 819.85
+        },
+        {
+          "ticker": "COFORGE",
+          "quantity": 37183,
+          "avg_cost": 1867.6
+        },
+        {
+          "ticker": "CONCOR",
+          "quantity": 156741,
+          "avg_cost": 443.05
+        },
+        {
+          "ticker": "CPPLUS",
+          "quantity": 16952,
+          "avg_cost": 4096.4
+        },
+        {
+          "ticker": "CUMMINSIND",
+          "quantity": 14369,
+          "avg_cost": 4832.7
+        },
+        {
+          "ticker": "DIACABS",
+          "quantity": 184178,
+          "avg_cost": 377.05
+        },
+        {
+          "ticker": "DIXON",
+          "quantity": 5440,
+          "avg_cost": 12765.0
+        },
+        {
+          "ticker": "ELGIEQUIP",
+          "quantity": 118962,
+          "avg_cost": 583.75
+        },
+        {
+          "ticker": "FAZE3Q",
+          "quantity": 169770,
+          "avg_cost": 409.05
+        },
+        {
+          "ticker": "FORTIS",
+          "quantity": 88826,
+          "avg_cost": 781.8
+        },
+        {
+          "ticker": "GODREJPROP",
+          "quantity": 44898,
+          "avg_cost": 1546.7
+        },
+        {
+          "ticker": "GOKEX",
+          "quantity": 104028,
+          "avg_cost": 667.55
+        },
+        {
+          "ticker": "HAL",
+          "quantity": 14847,
+          "avg_cost": 4677.3
+        },
+        {
+          "ticker": "HDFCBANK",
+          "quantity": 97912,
+          "avg_cost": 709.25
+        },
+        {
+          "ticker": "HINDPETRO",
+          "quantity": 213150,
+          "avg_cost": 325.8
+        },
+        {
+          "ticker": "ICICIBANK",
+          "quantity": 51152,
+          "avg_cost": 1357.6
+        },
+        {
+          "ticker": "IDEAFORGE",
+          "quantity": 103363,
+          "avg_cost": 671.85
+        },
+        {
+          "ticker": "IKS",
+          "quantity": 40426,
+          "avg_cost": 1717.8
+        },
+        {
+          "ticker": "INDHOTEL",
+          "quantity": 96732,
+          "avg_cost": 717.9
+        },
+        {
+          "ticker": "INDOMIM",
+          "quantity": 54194,
+          "avg_cost": 1281.4
+        },
+        {
+          "ticker": "IOC",
+          "quantity": 550360,
+          "avg_cost": 126.18
+        },
+        {
+          "ticker": "ITC",
+          "quantity": 261069,
+          "avg_cost": 266.0
+        },
+        {
+          "ticker": "KAYNES",
+          "quantity": 21201,
+          "avg_cost": 3275.5
+        },
+        {
+          "ticker": "KIRLOSENG",
+          "quantity": 31448,
+          "avg_cost": 2208.2
+        },
+        {
+          "ticker": "KPIL",
+          "quantity": 49845,
+          "avg_cost": 1393.2
+        },
+        {
+          "ticker": "LEMONTREE",
+          "quantity": 628854,
+          "avg_cost": 110.43
+        },
+        {
+          "ticker": "LTTS",
+          "quantity": 21325,
+          "avg_cost": 3256.4
+        },
+        {
+          "ticker": "MAXHEALTH",
+          "quantity": 78295,
+          "avg_cost": 886.95
+        },
+        {
+          "ticker": "METROBRAND",
+          "quantity": 80417,
+          "avg_cost": 863.55
+        },
+        {
+          "ticker": "MPHASIS",
+          "quantity": 29410,
+          "avg_cost": 2361.2
+        },
+        {
+          "ticker": "MTARTECH",
+          "quantity": 8886,
+          "avg_cost": 7815.0
+        },
+        {
+          "ticker": "NTPCGREEN",
+          "quantity": 752296,
+          "avg_cost": 92.31
+        },
+        {
+          "ticker": "OFSS",
+          "quantity": 6603,
+          "avg_cost": 10517.0
+        },
+        {
+          "ticker": "OPTIEMUS",
+          "quantity": 84895,
+          "avg_cost": 818.0
+        },
+        {
+          "ticker": "PAGEIND",
+          "quantity": 1893,
+          "avg_cost": 36670.0
+        },
+        {
+          "ticker": "PERSISTENT",
+          "quantity": 12161,
+          "avg_cost": 5710.0
+        },
+        {
+          "ticker": "PGIL",
+          "quantity": 54063,
+          "avg_cost": 1284.5
+        },
+        {
+          "ticker": "QUICKHEAL",
+          "quantity": 503220,
+          "avg_cost": 138.0
+        },
+        {
+          "ticker": "RELAXO",
+          "quantity": 242388,
+          "avg_cost": 286.5
+        },
+        {
+          "ticker": "RELIANCE",
+          "quantity": 59247,
+          "avg_cost": 1172.1
+        },
+        {
+          "ticker": "SBIN",
+          "quantity": 72504,
+          "avg_cost": 957.8
+        },
+        {
+          "ticker": "SCHNEIDER",
+          "quantity": 58951,
+          "avg_cost": 1178.0
+        },
+        {
+          "ticker": "SIEMENS",
+          "quantity": 19357,
+          "avg_cost": 3587.5
+        },
+        {
+          "ticker": "SPELS",
+          "quantity": 585288,
+          "avg_cost": 118.65
+        },
+        {
+          "ticker": "STLTECH",
+          "quantity": 68263,
+          "avg_cost": 1017.3
+        },
+        {
+          "ticker": "SUZLON",
+          "quantity": 1852345,
+          "avg_cost": 37.49
+        },
+        {
+          "ticker": "SYRMA",
+          "quantity": 40313,
+          "avg_cost": 1722.6
+        },
+        {
+          "ticker": "TATACONSUM",
+          "quantity": 72720,
+          "avg_cost": 954.95
+        },
+        {
+          "ticker": "TCS",
+          "quantity": 32052,
+          "avg_cost": 2166.6
+        },
+        {
+          "ticker": "THERMAX",
+          "quantity": 21301,
+          "avg_cost": 3260.0
+        },
+        {
+          "ticker": "TVSSCS",
+          "quantity": 556624,
+          "avg_cost": 124.76
+        },
+        {
+          "ticker": "UTLSOLAR",
+          "quantity": 169873,
+          "avg_cost": 408.8
+        },
+        {
+          "ticker": "VBL",
+          "quantity": 157828,
+          "avg_cost": 440.0
+        },
+        {
+          "ticker": "WELSPUNLIV",
+          "quantity": 311382,
+          "avg_cost": 223.02
+        },
+        {
+          "ticker": "ZENTEC",
+          "quantity": 45480,
+          "avg_cost": 1526.9
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "_about": "Companies under common control, for the portfolio's group-concentration limit (analysis/portfolio.py). Only memberships that are certain are listed; a holding in no group counts as its own. Add a company here when the watchlist gains another member of a group. Government of India covers companies the central government controls directly or through another central PSU (HPCL through ONGC, NTPC Green through NTPC).",
+  "groups": {
+    "Government of India": [
+      "BEL",
+      "BHEL",
+      "BPCL",
+      "CONCOR",
+      "HAL",
+      "HINDPETRO",
+      "IOC",
+      "NTPCGREEN",
+      "SBIN"
+    ],
+    "Tata": ["INDHOTEL", "TATACONSUM", "TCS"],
+    "Adani": ["ADANIGREEN", "ADANIPOWER"],
+    "Godrej": ["GODREJPROP"],
+    "K Raheja": ["CHALET"],
+    "Kirloskar": ["KIRLOSENG"],
+    "Larsen & Toubro": ["LTTS"],
+    "MP Birla": ["BIRLACABLE"],
+    "Murugappa": ["CGPOWER"],
+    "TVS": ["TVSSCS"],
+    "Welspun": ["WELSPUNLIV"]
+  }
+}

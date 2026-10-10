@@ -82,6 +82,7 @@ def test_only_what_is_new_is_listed():
         "events": 1,
         "policy": 1,
         "warnings": 1,
+        "portfolio": 0,
     }
     assert [i["text"] for i in c["items"]["watchlist"]] == [
         "added to the watchlist",
