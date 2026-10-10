@@ -205,6 +205,20 @@ async def run_pipeline():
         isin_refresh_task = refresh_isin_master_async(session, isin_master)
         global_events_task = fetch_global_event_feeds_async(session)
         state_policy_task = fetch_state_policy_async(session)
+        # Results dates, ex-dates and AGMs ahead, from NSE's own calendars.
+        # Rotation has already run, so this is today's watchlist.
+        from providers.nse_calendar import fetch_calendar
+
+        calendar_task = asyncio.to_thread(
+            fetch_calendar,
+            [
+                st.get("ticker")
+                for sec, stocks in watchlist.items()
+                if sec != "macro_indicators" and isinstance(stocks, list)
+                for st in stocks
+                if isinstance(st, dict) and st.get("ticker")
+            ],
+        )
 
         (
             pli_competitors,
@@ -215,6 +229,7 @@ async def run_pipeline():
             _isin_added,
             global_market_news,
             state_policy,
+            nse_calendar,
         ) = await asyncio.gather(
             pli_task,
             adv_rss_task,
@@ -224,6 +239,7 @@ async def run_pipeline():
             isin_refresh_task,
             global_events_task,
             state_policy_task,
+            calendar_task,
         )
 
         from history.store import HistoryStore
@@ -545,6 +561,26 @@ async def run_pipeline():
         prices=weekly_closes,
         namesakes=namesakes,
     )
+
+    # What is coming up for each holding, and what the results that came in
+    # since the last run said (analysis/event_calendar.py).
+    from analysis.event_calendar import build_calendar, update_results
+
+    data["event_calendar"] = build_calendar(
+        watchlist,
+        fetched=nse_calendar,
+        filings=data.get("exchange_filings"),
+        prior=prior.get("event_calendar"),
+    )
+    cal = data["event_calendar"]
+    log.info(
+        f"Calendar: {len(cal['upcoming'])} event(s) in the next {cal['ahead_days']} "
+        f"days for {len({e['ticker'] for e in cal['upcoming']})} holding(s), "
+        f"{len(cal['next_results'])} with a results date; "
+        f"{cal['sources']['filings']} from filings, "
+        f"{cal['sources']['carried']} carried from the last run."
+    )
+    data["results"] = update_results(watchlist, prior.get("results"))
 
     # The book: positions in portfolios.json valued, measured against the
     # benchmark and checked against their limits, with the orders that would

@@ -24,6 +24,7 @@ import {
 } from "./holdings.js";
 import { priceLine, activitySection, policySection, statusPill, label } from "./companies.js";
 import { pickBook, positionOf } from "../core/portfolio.js";
+import { eventsFor, scorecardFor, kindLabel } from "../core/calendar.js";
 import { pct } from "../core/format.js";
 
 const EDGE_LABEL = {
@@ -214,12 +215,14 @@ export async function render(container, { payload, route }) {
   const b = payload?.briefing || {};
   const labels = payload?.sectors || {};
   const sectorName = label(stock.sector, labels);
-  const [digest, coverage, edges, proposals, portfolio] = await Promise.all([
+  const [digest, coverage, edges, proposals, portfolio, calendar, results] = await Promise.all([
     resolve(b, "company_digest"),
     loadCoverage(key),
     loadGraph(),
     loadProposals(),
     resolve(b, "portfolio"),
+    resolve(b, "event_calendar"),
+    resolve(b, "results"),
   ]);
   const card = (digest?.companies || []).find((c) => String(c.ticker).toUpperCase() === key);
   const health = b.thesis_health?.[key];
@@ -295,6 +298,7 @@ export async function render(container, { payload, route }) {
         { class: "company-page-side" },
         panel("Numbers", null, card ? priceLine(card) : null, factsList(stock)),
         positionSection(pickBook(portfolio), key),
+        datesSection(eventsFor(calendar, key), scorecardFor(results, key)),
         (() => {
           const signals = holdingSignals(payload, key);
           return signals.length ? panel(null, null, signalsSection(signals)) : null;
@@ -354,5 +358,47 @@ export function positionSection(book, ticker) {
         )
       : null,
     el("p", { class: "evidence-meta" }, el("a", { href: href("portfolio", { book: book.id }) }, "The whole book \u2192")),
+  );
+}
+
+/**
+ * What the holding has coming up, and what its latest results said
+ * (analysis/event_calendar.py). Nothing when there is neither.
+ */
+export function datesSection(events, card) {
+  if (!(events || []).length && !card) return null;
+  return panel(
+    "Dates and results",
+    null,
+    (events || []).length
+      ? el(
+          "ul",
+          { class: "evidence" },
+          events.slice(0, 5).map((e) =>
+            el(
+              "li",
+              {},
+              el("strong", {}, e.date),
+              ` ${kindLabel(e.kind)}: `,
+              e.link ? el("a", { href: e.link, target: "_blank", rel: "noopener noreferrer" }, e.title) : e.title,
+              e.detail ? el("span", { class: "evidence-meta" }, e.detail) : null,
+            ),
+          ),
+        )
+      : el("p", { class: "company-empty" }, "No date announced in the next 45 days."),
+    card
+      ? el(
+          "p",
+          { class: "portfolio-line" },
+          el("strong", {}, `${card.quarter || "Latest"} quarter: `),
+          card.summary || "",
+          el(
+            "span",
+            { class: "evidence-meta" },
+            `Seen ${card.detected}; set against a year earlier, with no consensus to call it a beat or a miss.`,
+          ),
+        )
+      : null,
+    el("p", { class: "evidence-meta" }, el("a", { href: href("calendar") }, "The whole calendar \u2192")),
   );
 }

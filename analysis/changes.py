@@ -14,6 +14,7 @@ loaded before it is overwritten) and lists only what is new:
   policy      policy measures read for the first time
   warnings    alerts that are new or escalated
   portfolio   portfolio limits newly breached, or back within
+  results     holdings that reported, and results dates newly announced
 
 Nothing is re-judged; every item is something another step already
 produced, and each says which step.
@@ -49,6 +50,7 @@ def build_changes(
         "policy": [],
         "warnings": [],
         "portfolio": [],
+        "results": [],
     }
 
     before, now = set(held_before or ()), set(held_now or ())
@@ -149,6 +151,7 @@ def build_changes(
             )
 
     items["portfolio"] = _limit_changes(data.get("portfolio"), prior.get("portfolio"))
+    items["results"] = _result_changes(data, prior)
 
     if first_run:
         # Without a previous run everything is "new", which says nothing.
@@ -214,4 +217,48 @@ def _limit_changes(now: Any, before: Any) -> List[Dict[str, Any]]:
                         "detail": f"{name} · was: {b.get('message') or ''}",
                     }
                 )
+    return out
+
+
+def _result_changes(
+    data: Dict[str, Any], prior: Dict[str, Any]
+) -> List[Dict[str, Any]]:
+    """Holdings that reported since the last run, then results dates that
+    were not on the last run's calendar."""
+    out: List[Dict[str, Any]] = []
+    results = data.get("results") or {}
+    today = set(results.get("reported_today") or [])
+    for c in results.get("scorecards") or []:
+        if isinstance(c, dict) and c.get("ticker") in today:
+            out.append(
+                {
+                    "ticker": c["ticker"],
+                    "text": (
+                        f"reported the {c['quarter']} quarter"
+                        if c.get("quarter")
+                        else "reported a quarter"
+                    ),
+                    "detail": c.get("summary") or "",
+                }
+            )
+    if "event_calendar" not in prior:
+        return out
+    known = {
+        (e.get("ticker"), e.get("date"))
+        for e in (prior.get("event_calendar") or {}).get("upcoming") or []
+        if isinstance(e, dict) and e.get("kind") == "results"
+    }
+    for e in (data.get("event_calendar") or {}).get("upcoming") or []:
+        if not isinstance(e, dict) or e.get("kind") != "results":
+            continue
+        if (e.get("ticker"), e.get("date")) in known:
+            continue
+        out.append(
+            {
+                "ticker": e.get("ticker") or "",
+                "text": f"results due {e.get('date')}",
+                "detail": e.get("source") or "",
+                **({"link": e["link"]} if e.get("link") else {}),
+            }
+        )
     return out

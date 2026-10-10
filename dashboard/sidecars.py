@@ -45,8 +45,15 @@ DATA_DIR = "data"
 SPLIT_PER_TICKER = ("stock_topics",)
 # company_digest is the Companies view's whole input (analysis/company_digest.py),
 # loaded when that view opens rather than on every page load; portfolio is the
-# Portfolio view's (analysis/portfolio.py).
-SPLIT_WHOLE = ("buffett_valuation", "company_digest", "portfolio")
+# Portfolio view's (analysis/portfolio.py); event_calendar and results are the
+# Calendar view's (analysis/event_calendar.py).
+SPLIT_WHOLE = (
+    "buffett_valuation",
+    "company_digest",
+    "portfolio",
+    "event_calendar",
+    "results",
+)
 
 
 def _safe_ticker(ticker: Any) -> str:

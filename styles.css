@@ -638,3 +638,20 @@ td .disclose-summary { padding: 2px 0; }
   .portfolio-stats { grid-template-columns: 1fr; gap: 2px; }
   .portfolio-stats dd { margin-bottom: 6px; }
 }
+
+/* Calendar view (src/views/calendar.js). */
+.cal-week { margin-bottom: 10px; }
+.cal-list { list-style: none; margin: 0; padding: 0; }
+.cal-event {
+  display: grid; grid-template-columns: 92px 1fr; gap: 10px;
+  padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 13px; line-height: 1.45;
+}
+.cal-event:last-child { border-bottom: 0; }
+.cal-day { color: var(--ink-2); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.cal-what { min-width: 0; overflow-wrap: anywhere; }
+.cal-kind { margin-left: 0; }
+.cal-results { border-color: var(--series-1); color: var(--series-1); }
+@media (max-width: 640px) {
+  .cal-event { grid-template-columns: 1fr; gap: 2px; }
+}
+.cal-what a:not(.ticker-link) { color: inherit; }

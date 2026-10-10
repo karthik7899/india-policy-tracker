@@ -133,6 +133,11 @@ def build_display_payload(
     payload = dict(brief_data or {})
     # Kept in the corpus for event confirmation; the page never shows it.
     payload.pop("exchange_filings", None)
+    # The quarterly series the next run compares against, likewise.
+    if isinstance(payload.get("results"), dict):
+        payload["results"] = {
+            k: v for k, v in payload["results"].items() if k != "seen"
+        }
     try:
         for key, cap in FEED_CAPS.items():
             rows = payload.get(key)

@@ -297,6 +297,19 @@ def _holding_extract(ticker: str, src: Dict[str, Any]) -> Dict[str, Any]:
             for c in (coverage.get("items") or [])
             if (c.get("status") or "counted") == "counted"
         ][:10],
+        "calendar": [
+            {k: e.get(k) for k in ("date", "kind", "title", "detail", "source")}
+            for e in (b.get("event_calendar") or {}).get("upcoming") or []
+            if str(e.get("ticker", "")).upper() == ticker
+        ][:6],
+        "latest_results": next(
+            (
+                {k: v for k, v in c.items() if k not in ("name", "sector")}
+                for c in (b.get("results") or {}).get("scorecards") or []
+                if str(c.get("ticker", "")).upper() == ticker
+            ),
+            None,
+        ),
     }
 
 
@@ -342,7 +355,10 @@ def build_context(
             "Series run oldest to latest: the last quarterly value is the "
             "latest reported quarter, the last annual value the trailing twelve "
             "months. Quarter names are not recorded, so say 'the latest "
-            "quarter' rather than naming one unless a headline does."
+            "quarter' rather than naming one unless a headline does; "
+            "latest_results.quarter is inferred from when the result appeared. "
+            "No consensus estimate exists here, so never call a result a beat "
+            "or a miss."
         ),
         "briefing_date": str(
             (src.get("digest") or {}).get("as_of")
@@ -358,6 +374,10 @@ def build_context(
             ),
             "since_last_run": changes.get("items"),
             "track_record": (b.get("track_record") or {}).get("summary"),
+            "coming_up": [
+                {k: e.get(k) for k in ("date", "ticker", "kind", "title")}
+                for e in ((b.get("event_calendar") or {}).get("upcoming") or [])[:15]
+            ],
             "policy": [
                 {
                     k: p.get(k)
