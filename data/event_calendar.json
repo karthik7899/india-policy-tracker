@@ -1,6 +1,6 @@
 {
   "value": {
-    "as_of": "2026-10-10",
+    "as_of": "2026-10-12",
     "ahead_days": 45,
     "back_days": 14,
     "upcoming": [
@@ -148,6 +148,17 @@
         "sector": "data_center_support"
       },
       {
+        "ticker": "APOLLOHOSP",
+        "date": "2026-11-04",
+        "kind": "results",
+        "title": "Board meeting: Financial Results/Other business matters",
+        "detail": "To consider and approve the financial results for the period ended September 30, 2026 and other business matters",
+        "source": "NSE event calendar",
+        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
+        "name": "Apollo Hospitals Enterprise",
+        "sector": "healthcare_hospitals"
+      },
+      {
         "ticker": "CUMMINSIND",
         "date": "2026-11-04",
         "kind": "results",
@@ -197,12 +208,13 @@
       "GODREJPROP": "2026-10-23",
       "STLTECH": "2026-10-23",
       "ANANTRAJ": "2026-10-28",
+      "APOLLOHOSP": "2026-11-04",
       "CUMMINSIND": "2026-11-04",
       "MPHASIS": "2026-11-05"
     },
     "sources": {
       "nse": {
-        "event_calendar": 354,
+        "event_calendar": 375,
         "corporate_actions": 24
       },
       "nse_errors": [],

@@ -2,6 +2,38 @@
   "_how_to_review": "Partner edges proposed from completed tie-up headlines. Nothing here reaches the graph until you set status to 'accepted'; 'rejected' stops the pair being proposed again. You may correct 'counterparty' before accepting (e.g. 'Vivo Mobile' -> 'Vivo') — it is the name the graph will match in future headlines. Leave 'proposed_as' alone: it is how the pipeline recognises the same pair next time.",
   "proposals": [
     {
+      "holding": "SYRMA",
+      "counterparty": "Brings KLEVV Products",
+      "proposed_as": "Brings KLEVV Products",
+      "status": "pending",
+      "first_seen": "2026-10-12",
+      "last_seen": "2026-10-12",
+      "evidence": [
+        {
+          "headline": "Essencore Partners With Syrma SGS, Brings KLEVV Products to India",
+          "date": "2026-10-12",
+          "link": "https://news.google.com/rss/articles/CBMiswFBVV95cUxQVTZ2MzkwZFlpa0duVFpYM0ZBMVFKN1Q4R3NoM1g5ekRwUUJmYnRlN1pHWEREV2JBSEJxbXZ6VzRNR3pZYXBMdEg0YkFmY2RLYnZ3bHJGeVlRQ1N6OVlpQWVUcjFMenpMSmI3aE03NWtzLThqVWlkcUI4RU1icDFlMk9PYXJkREktcEFwcS10XzMwWFduODJQTDZNY0hiQk4zc3ZlbVZxYkZTNlItTlMxbW1jcw?oc=5",
+          "source": "Electronics For You BUSINESS"
+        }
+      ]
+    },
+    {
+      "holding": "SYRMA",
+      "counterparty": "Essencore",
+      "proposed_as": "Essencore",
+      "status": "pending",
+      "first_seen": "2026-10-12",
+      "last_seen": "2026-10-12",
+      "evidence": [
+        {
+          "headline": "Essencore Partners With Syrma SGS, Brings KLEVV Products to India",
+          "date": "2026-10-12",
+          "link": "https://news.google.com/rss/articles/CBMiswFBVV95cUxQVTZ2MzkwZFlpa0duVFpYM0ZBMVFKN1Q4R3NoM1g5ekRwUUJmYnRlN1pHWEREV2JBSEJxbXZ6VzRNR3pZYXBMdEg0YkFmY2RLYnZ3bHJGeVlRQ1N6OVlpQWVUcjFMenpMSmI3aE03NWtzLThqVWlkcUI4RU1icDFlMk9PYXJkREktcEFwcS10XzMwWFduODJQTDZNY0hiQk4zc3ZlbVZxYkZTNlItTlMxbW1jcw?oc=5",
+          "source": "Electronics For You BUSINESS"
+        }
+      ]
+    },
+    {
       "holding": "BHEL",
       "counterparty": "Titagarh",
       "proposed_as": "Titagarh",
