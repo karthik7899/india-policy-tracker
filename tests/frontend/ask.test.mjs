@@ -92,7 +92,7 @@ test("the news an answer cites is read back from the list under it", () => {
   const text = [
     "Exports grew [1].",
     "",
-    "<details><summary>News searched: 2 headline(s) for “&quot;L&amp;T&quot; order”</summary>",
+    "<details><summary>News searched: 2 headline(s) from “&quot;L&amp;T&quot; order” and “&quot;Larsen &amp; Toubro&quot;”; 3 not naming the company left out</summary>",
     "",
     "1. [L&amp;T wins \\*mega\\* \\[order\\] &lt;b&gt;](https://news.google.com/a_%281%29) · Mint · 2026-10-02",
     "2. [No source](https://x.in/b) · 2026-10-01",
@@ -106,7 +106,7 @@ test("the news an answer cites is read back from the list under it", () => {
   ].join("\n");
   const { blocks, note, news } = answerBlocks(text);
   assert.deepEqual(blocks, [{ type: "para", parts: [{ text: "Exports grew [1]." }] }]);
-  assert.equal(news.summary, "News searched: 2 headline(s) for “\"L&T\" order”");
+  assert.equal(news.summary, "News searched: 2 headline(s) from “\"L&T\" order” and “\"Larsen & Toubro\"”; 3 not naming the company left out");
   assert.deepEqual(news.items, [
     { n: 1, title: "L&T wins *mega* [order] <b>", url: "https://news.google.com/a_%281%29", meta: "Mint · 2026-10-02" },
     { n: 2, title: "No source", url: "https://x.in/b", meta: "2026-10-01" },

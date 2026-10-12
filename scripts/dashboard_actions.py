@@ -511,9 +511,13 @@ def format_answer(
             + "".join(f" · {_md(x)}" for x in (i.get("source"), i.get("date")) if x)
             for n, i in enumerate(items, 1)
         ]
+        searched = " and ".join(f"“{html.escape(q)}”" for q in news["queries"])
+        left_out = news.get("left_out") or 0
         parts.append(
-            f"<details><summary>News searched: {len(items)} headline(s) for "
-            f"“{html.escape(news['query'])}”</summary>\n\n"
+            f"<details><summary>News searched: {len(items)} headline(s) from "
+            f"{searched}"
+            + (f"; {left_out} not naming the company left out" if left_out else "")
+            + "</summary>\n\n"
             + "\n".join(lines)
             + "\n\n</details>"
         )
@@ -525,6 +529,22 @@ def format_answer(
             f"\n\n---\n<sub>{footer} Comment on this issue to ask a follow-up.</sub>"
         )
     return body
+
+
+def _log_answer(
+    started: float, text: str, footer: str, news: Optional[Dict[str, Any]]
+) -> None:
+    """What the run did, for its log: the comment says less about the search."""
+    print(f"Answered in {time.monotonic() - started:.0f}s: {footer or text}")
+    if not news:
+        print("News: no search.")
+        return
+    print(
+        f"News: {len(news.get('items') or [])} headline(s) kept,"
+        f" {news.get('left_out') or 0} not naming the company left out, from "
+        + "; ".join(news.get("queries") or [])
+        + (f" (failed: {news['error']})" if news.get("error") else "")
+    )
 
 
 def answer_question(number: int, payload: Dict[str, Any]) -> None:
@@ -542,9 +562,11 @@ def answer_question(number: int, payload: Dict[str, Any]) -> None:
     except Exception:  # noqa: BLE001 - it already exists
         pass
     _api("POST", f"/issues/{number}/labels", json={"labels": [QUESTION_LABEL]})
+    started = time.monotonic()
     text, footer, news = answer(
         str(payload.get("question") or ""), focus=_focus(payload)
     )
+    _log_answer(started, text, footer, news)
     _api(
         "POST",
         f"/issues/{number}/comments",
@@ -630,9 +652,11 @@ def answer_follow_up(
     if comment.get("id") not in ids:
         print("This comment has been answered already; nothing to do.")
         return False
+    started = time.monotonic()
     text, footer, news = answer(
         "\n\n".join(t for _, t in pending), focus=_focus(payload), history=history
     )
+    _log_answer(started, text, footer, news)
     # A failure ("Could not answer this time") has no footer and answers
     # nothing, so the owner's next comment is answered along with these.
     replies_to = ids if footer else []
