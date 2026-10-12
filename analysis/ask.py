@@ -90,6 +90,8 @@ own, and leave out a part you have nothing for:
 - Cite what you rely on: from the DATA the headline, its date, or the figure
   and its field; from the NEWS the item's number in brackets, as [2].
 - If none of the three answers the question, say so and say what is missing.
+  Then give the nearest thing the sources do have, cited: revenue guidance
+  where no order book is published, the last results where no forecast is.
 - Describe the evidence; do not tell the investor to buy or sell.
 - Thesis grades (Intact / Weakening / Broken) and their reasons come from the
   pipeline's rules. "challenged"/"supported" items and anything marked
@@ -98,13 +100,17 @@ own, and leave out a part you have nothing for:
   "they" and "that" from it, and do not repeat what was already said.
 - Plain text, at most 300 words. Short paragraphs or "- " bullets."""
 
-_SEARCH_INSTRUCTIONS = """Write one Google News search query that would find recent news
-answering the QUESTION below, asked about Indian listed companies. Name a
-company the way the press does (its full name or its brand, never a cut-off
-or spaced-out abbreviation) and add the few words the question is about. At
-most 10 words; quotes and OR are allowed. Reply with the query alone.
-If the question is only about this dashboard's own grades, scores or
-changes, which no news would answer, reply NONE."""
+_SEARCH_INSTRUCTIONS = """Plan a Google News search for the QUESTION below, asked about Indian
+listed companies. Reply in two lines:
+QUERY: one search that would find news answering the question: each company
+the way the press names it (its full name or its brand, never a cut-off or
+spaced-out abbreviation) and the few words the question is about. At most 10
+words; quotes and OR are allowed.
+NAMES: the names the press uses for the companies the question is about,
+separated by ";", as "Aditya Infotech; CP Plus". Leave it empty for a
+question about an industry, a policy or the market as a whole.
+Reply NONE alone only for a question about how this dashboard works or what
+its labels mean, which no news could help with."""
 
 
 def _stem(word: str) -> str:
@@ -484,27 +490,52 @@ def _history(history) -> List[Tuple[str, str]]:
     return kept[::-1]
 
 
-def _clean_query(reply: str) -> Optional[str]:
-    """The query in the model's reply; None for NONE or nothing usable."""
-    lines = (x.strip().strip("`*").strip() for x in str(reply or "").splitlines())
-    line = next((x for x in lines if x), "")
-    line = re.sub(r"^(?:search\s+)?query\s*:\s*", "", line, flags=re.I).strip("`* ")
+def _clean_query(text: str) -> Optional[str]:
+    """A query as the model wrote it; None for NONE or nothing usable."""
+    line = re.sub(r"^(?:search\s+)?query\s*:\s*", "", text.strip(), flags=re.I)
+    line = line.strip("`* ")
     if line.strip(".").upper() == "NONE" or not re.search(r"[A-Za-z]", line):
         return None
     return line[:MAX_QUERY]
 
 
-def search_query(
+def _read_plan(reply: str) -> Optional[Dict[str, Any]]:
+    """The search in the model's reply: ``{"query", "names"}``, or None.
+
+    The reply is a QUERY line and a NAMES line; a bare query, the shape the
+    first version asked for, is read as the query.
+    """
+    lines = [x.strip().strip("`*").strip() for x in str(reply or "").splitlines()]
+    lines = [x for x in lines if x]
+    fields = {}
+    for line in lines:
+        m = re.match(r"(QUERY|NAMES)\s*:\s*(.*)$", line, flags=re.I)
+        if m:
+            fields[m.group(1).upper()] = m.group(2).strip()
+    query = _clean_query(fields.get("QUERY", "" if fields else " ".join(lines[:1])))
+    names = []
+    for name in fields.get("NAMES", "").split(";"):
+        name = " ".join(name.strip(" \"'.").split())
+        if len(name) >= 3 and name.upper() != "NONE" and name not in names:
+            names.append(name)
+    if query is None and not names:
+        return None
+    return {"query": query, "names": names[:3]}
+
+
+def search_plan(
     question: str,
     holdings: List[Dict[str, Any]],
     history: List[Tuple[str, str]],
     transport,
-) -> Optional[str]:
-    """The Google News query the model writes for a question.
+) -> Optional[Dict[str, Any]]:
+    """The Google News search the model plans for a question.
 
-    None when no search is worth running: the question is about the
-    dashboard's own grades, or the model could not write one. A model that
-    cannot write a query is unlikely to answer either, and the answer says so.
+    ``{"query", "names"}``: its search for the question, and the names the
+    press uses for the companies it is about. None when no search is worth
+    running: the question is about how the dashboard works, or the model
+    could not plan one. A model that cannot plan one is unlikely to answer
+    either, and the answer says so.
     """
     from analysis.llm_reader import ReaderUnavailable
 
@@ -518,9 +549,46 @@ def search_query(
         parts.append("CONVERSATION:\n" + _conversation(history[-2:])[:3000])
     parts.append(f"QUESTION: {question}")
     try:
-        return _clean_query(transport("\n\n".join(parts) + "\n"))
+        return _read_plan(transport("\n\n".join(parts) + "\n"))
     except ReaderUnavailable:
         return None
+
+
+def searches(plan: Optional[Dict[str, Any]]) -> List[str]:
+    """The planned search, then the companies' names alone.
+
+    12 Oct: "How does CP PLUS order book look like ?" was searched as
+    "Aditya Infotech" "order book" and found nothing on CP PLUS's order book,
+    which it does not publish, and nothing else on the company either. Its
+    names alone find its recent news, which holds the nearest thing: the
+    results and the revenue guidance.
+    """
+    if not plan:
+        return []
+    names = " OR ".join(f'"{n}"' for n in plan["names"])
+    return list(dict.fromkeys(q for q in (plan["query"], names) if q))
+
+
+def names_company(
+    headline: str, names: List[str], holdings: List[Dict[str, Any]]
+) -> bool:
+    """Whether a headline names a company the question is about.
+
+    By a name the model gave, as a whole word, or by the matcher the
+    briefing attributes headlines with ("Dixon Tech" is Dixon Technologies).
+    """
+    from analysis.parsing import title_matches_company
+
+    low = headline.lower()
+    if any(
+        re.search(rf"(?<![a-z0-9]){re.escape(n.lower())}(?![a-z0-9])", low)
+        for n in names
+    ):
+        return True
+    return any(
+        title_matches_company(headline, h.get("ticker") or "", h.get("name") or "")
+        for h in holdings
+    )
 
 
 def _get(url: str) -> Tuple[int, str]:
@@ -545,53 +613,71 @@ def _headline(entry: Dict[str, Any]) -> Tuple[str, str]:
 
 
 def fetch_news(
-    query: str, fetch=None, today: Optional[datetime.date] = None
+    queries: List[str],
+    names: List[str] = (),
+    holdings: List[Dict[str, Any]] = (),
+    fetch=None,
+    today: Optional[datetime.date] = None,
 ) -> Dict[str, Any]:
-    """Headlines a Google News search finds, newest first, at most MAX_NEWS.
+    """Headlines Google News finds for the searches, at most MAX_NEWS.
 
-    Google News does not always honour "when:" (scraper.py met headlines
-    weeks older than asked for), so age is checked here as well. Never raises:
-    a failed search is recorded as ``error`` and the answer goes on without it.
+    The first search's headlines come first, then the next's; the kept ones
+    are listed newest first. When the question names companies, a headline
+    that names none of them is left out and counted: Google matches words
+    anywhere in an article, and on 12 Oct eight of the ten headlines found
+    for CP PLUS's order book were about other companies. Google News does
+    not always honour "when:" (scraper.py met headlines weeks older than
+    asked for), so age is checked here as well.
+
+    Never raises: a search that fails is skipped, and ``error`` is set when
+    every one did, so the answer goes on without news and says why.
     """
     import feedparser
 
     today = today or datetime.date.today()
-    news: Dict[str, Any] = {"query": query, "items": []}
-    url = NEWS_URL.format(query=urllib.parse.quote(f"{query} when:{NEWS_DAYS}d"))
-    try:
-        status, text = (fetch or _get)(url)
-    except Exception as e:  # noqa: BLE001 - the answer goes on without news
-        news["error"] = type(e).__name__
-        return news
-    if status != 200:
-        news["error"] = f"HTTP {status}"
-        return news
     oldest = today - datetime.timedelta(days=NEWS_DAYS)
-    seen = set()
-    for entry in feedparser.parse(text).entries:
-        headline, source = _headline(entry)
-        parsed = entry.get("published_parsed")
-        day = datetime.date(*parsed[:3]) if parsed else None
-        link = str(entry.get("link") or "")
-        if (
-            not headline
-            or day is None
-            or not oldest <= day <= today
-            or not link.startswith(("https://", "http://"))
-            or headline.lower() in seen
-        ):
+    news: Dict[str, Any] = {"queries": list(queries), "items": [], "left_out": 0}
+    errors, seen, kept = [], set(), []
+    for query in queries:
+        url = NEWS_URL.format(query=urllib.parse.quote(f"{query} when:{NEWS_DAYS}d"))
+        try:
+            status, text = (fetch or _get)(url)
+        except Exception as e:  # noqa: BLE001 - the answer goes on without news
+            errors.append(type(e).__name__)
             continue
-        seen.add(headline.lower())
-        news["items"].append(
-            {
-                "headline": headline,
-                "source": source,
-                "date": day.isoformat(),
-                "link": link,
-            }
-        )
-    news["items"].sort(key=lambda i: i["date"], reverse=True)
-    del news["items"][MAX_NEWS:]
+        if status != 200:
+            errors.append(f"HTTP {status}")
+            continue
+        found = []
+        for entry in feedparser.parse(text).entries:
+            headline, source = _headline(entry)
+            parsed = entry.get("published_parsed")
+            day = datetime.date(*parsed[:3]) if parsed else None
+            link = str(entry.get("link") or "")
+            if (
+                not headline
+                or day is None
+                or not oldest <= day <= today
+                or not link.startswith(("https://", "http://"))
+                or headline.lower() in seen
+            ):
+                continue
+            seen.add(headline.lower())
+            if names and not names_company(headline, names, holdings):
+                news["left_out"] += 1
+                continue
+            found.append(
+                {
+                    "headline": headline,
+                    "source": source,
+                    "date": day.isoformat(),
+                    "link": link,
+                }
+            )
+        kept += sorted(found, key=lambda i: i["date"], reverse=True)
+    if errors and len(errors) == len(queries):
+        news["error"] = errors[0]
+    news["items"] = sorted(kept[:MAX_NEWS], key=lambda i: i["date"], reverse=True)
     return news
 
 
@@ -602,13 +688,14 @@ def prompt(
     history: Optional[List[Tuple[str, str]]] = None,
 ) -> str:
     items = (news or {}).get("items") or []
+    searched = "; ".join((news or {}).get("queries") or [])
     if items:
-        found = f"NEWS (Google News search: {news['query']}):\n" + "\n".join(
+        found = f"NEWS (Google News searches: {searched}):\n" + "\n".join(
             f"[{n}] {i['date']} · {i['source']} · {i['headline']}"
             for n, i in enumerate(items, 1)
         )
     elif news:
-        found = f"NEWS: none found (searched: {news['query']})"
+        found = f"NEWS: none found (searched: {searched})"
     else:
         found = "NEWS: no search was run for this question"
     parts = [
@@ -635,8 +722,8 @@ def answer(
 
     ``history`` is the exchange so far on a follow-up: ``(role, text)`` pairs,
     oldest first, role "question" or "answer". ``news`` is the search run
-    for the answer (``query``, ``items``, and ``error`` if it failed), None
-    when none was.
+    for the answer (``queries``, ``items``, ``left_out``, and ``error`` if it
+    failed), None when none was.
     """
     from analysis.llm_reader import ReaderUnavailable, default_transport
 
@@ -655,8 +742,10 @@ def answer(
         {k: h.get(k) for k in ("ticker", "name", "sector")}
         for h in context["holdings_asked_about"]
     ]
-    query = search_query(question, holdings, history, transport)
-    news = fetch_news(query, fetch, today) if query else None
+    plan = search_plan(question, holdings, history, transport)
+    names = (plan or {}).get("names") or []
+    queries = searches(plan)
+    news = fetch_news(queries, names, holdings, fetch, today) if queries else None
     try:
         text = transport(prompt(question, context, news, history)).strip()
     except ReaderUnavailable as e:
@@ -673,7 +762,11 @@ def answer(
     if news and news.get("error"):
         footer += f" The news search failed ({news['error']})."
     elif news and not found:
-        footer += f" The news search found nothing from the last {NEWS_DAYS} days."
+        footer += (
+            " The news search found no headline"
+            + (f" naming {' or '.join(names)}" if names else "")
+            + f" from the last {NEWS_DAYS} days."
+        )
     footer += (
         " Anything under Background is the model's general knowledge, not checked"
         " against a source. Check the items it cites before relying on it."

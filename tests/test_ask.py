@@ -132,39 +132,68 @@ def test_an_extract_too_big_is_trimmed_from_the_least_specific_end(
 
 
 class _Fake:
-    """The model: writes ``query`` when asked for a search, ``reply`` else."""
+    """The model: writes ``plan`` when asked for a search, ``reply`` else."""
 
     model = "fake-model"
 
-    def __init__(self, reply="SYRMA is **Broken**.", query="NONE", raise_=None):
-        self.reply, self.query, self.raise_ = reply, query, raise_
+    def __init__(self, reply="SYRMA is **Broken**.", plan="NONE", raise_=None):
+        self.reply, self.plan, self.raise_ = reply, plan, raise_
         self.prompts = []
 
     def __call__(self, prompt):
         self.prompts.append(prompt)
         if self.raise_:
             raise self.raise_
-        return self.query if "search query" in prompt.split("\n")[0] else self.reply
+        return self.plan if prompt.startswith("Plan a Google News") else self.reply
 
 
-RSS = """<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel>
-<item><title>Aditya Infotech Q1: revenue up 30% - Business Standard</title>
-<link>https://news.google.com/rss/articles/a1</link>
-<pubDate>Tue, 11 Aug 2026 06:00:00 GMT</pubDate>
-<source url="https://www.business-standard.com">Business Standard</source></item>
-<item><title>CP Plus maker eyes exports &amp; more - The Economic Times</title>
-<link>https://news.google.com/rss/articles/a2</link>
-<pubDate>Fri, 02 Oct 2026 06:00:00 GMT</pubDate>
-<source url="https://economictimes.indiatimes.com">The Economic Times</source></item>
-<item><title>An old story - Mint</title>
-<link>https://news.google.com/rss/articles/a3</link>
-<pubDate>Mon, 01 Jan 2024 06:00:00 GMT</pubDate>
-<source url="https://www.livemint.com">Mint</source></item>
-<item><title>CP Plus maker eyes exports &amp; more - The Economic Times</title>
-<link>https://news.google.com/rss/articles/a4</link>
-<pubDate>Fri, 02 Oct 2026 07:00:00 GMT</pubDate>
-<source url="https://economictimes.indiatimes.com">The Economic Times</source></item>
-</channel></rss>"""
+def _item(title, source, day, link):
+    return (
+        f"<item><title>{title} - {source}</title><link>{link}</link>"
+        f"<pubDate>{day} 06:00:00 GMT</pubDate>"
+        f'<source url="https://x.in">{source}</source></item>'
+    )
+
+
+def _rss(*items):
+    return (
+        '<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel>'
+        + "".join(items)
+        + "</channel></rss>"
+    )
+
+
+A = "https://news.google.com/rss/articles/"
+RSS = _rss(
+    _item(
+        "Aditya Infotech Q1: revenue up 30%",
+        "Business Standard",
+        "Tue, 11 Aug 2026",
+        A + "a1",
+    ),
+    _item(
+        "CP Plus maker eyes exports &amp; more",
+        "The Economic Times",
+        "Fri, 02 Oct 2026",
+        A + "a2",
+    ),
+    # Found for "Aditya Infotech" "order book" on 12 Oct: the words are in the
+    # article, the company is not in the headline.
+    _item(
+        "VA Tech Wabag Q1 profit rises 37%; order book at Rs 19,400 crore",
+        "The Financial Express",
+        "Wed, 12 Aug 2026",
+        A + "a3",
+    ),
+    _item("An old story", "Mint", "Mon, 01 Jan 2024", A + "a4"),
+    _item(
+        "CP Plus maker eyes exports &amp; more",
+        "The Economic Times",
+        "Fri, 02 Oct 2026",
+        A + "a5",
+    ),
+)
+PLAN = 'QUERY: "Aditya Infotech" order book\nNAMES: Aditya Infotech; CP Plus'
 
 TODAY = datetime.date(2026, 10, 12)
 
@@ -196,13 +225,11 @@ def test_an_answer_is_drawn_from_the_extract_and_says_what_read_it():
     assert "Background is the model's general knowledge" in footer
 
 
-def test_the_model_writes_the_search_and_the_answer_cites_what_it_found():
+def test_the_model_plans_the_search_and_the_answer_cites_what_it_found():
     """12 Oct: "How does CP PLUS order book look like ?" was answered "no
     mention of the order book": the extract was all the model could use."""
     urls = []
-    fake = _Fake(
-        reply="**From the news**\n- Exports [1]", query='"Aditya Infotech" order book'
-    )
+    fake = _Fake(reply="**From the news**\n- Exports [1]", plan=PLAN)
     text, footer, news = ask.answer(
         "How does CP PLUS order book look like ?",
         focus="CPPLUS",
@@ -211,41 +238,113 @@ def test_the_model_writes_the_search_and_the_answer_cites_what_it_found():
         today=TODAY,
     )
     plan, prompt = fake.prompts
-    # The search is written knowing which holding is meant.
+    # The search is planned knowing which holding is meant.
     assert '"ticker": "CPPLUS"' in plan and "Aditya Infotech" in plan
     assert "QUESTION: How does CP PLUS order book look like ?" in plan
+    # The question's own search, then the company's names alone.
     assert "%22Aditya%20Infotech%22%20order%20book%20when%3A180d" in urls[0]
-    assert news["query"] == '"Aditya Infotech" order book'
-    assert 'NEWS (Google News search: "Aditya Infotech" order book):' in prompt
+    assert "%22Aditya%20Infotech%22%20OR%20%22CP%20Plus%22%20when" in urls[1]
+    assert news["queries"] == [
+        '"Aditya Infotech" order book',
+        '"Aditya Infotech" OR "CP Plus"',
+    ]
+    assert (
+        'NEWS (Google News searches: "Aditya Infotech" order book; '
+        '"Aditya Infotech" OR "CP Plus"):'
+    ) in prompt
     assert (
         "[1] 2026-10-02 · The Economic Times · CP Plus maker eyes exports & more"
         in prompt
     )
     assert "[2] 2026-08-11 · Business Standard" in prompt
+    # The other company's order book is not passed off as CP PLUS's.
+    assert "Wabag" not in prompt and news["left_out"] == 1
     assert "drawing on CPPLUS, and of 2 headline(s) from Google News" in footer
 
 
+def test_the_plan_is_read_from_whatever_the_model_wraps_it_in():
+    assert ask._read_plan(PLAN) == {
+        "query": '"Aditya Infotech" order book',
+        "names": ["Aditya Infotech", "CP Plus"],
+    }
+    assert ask._read_plan('```\nQUERY: "Syrma SGS" margins\nNAMES:\n```') == {
+        "query": '"Syrma SGS" margins',
+        "names": [],
+    }
+    # A bare query, the shape the first version asked for.
+    assert ask._read_plan('"Dixon Technologies" this week') == {
+        "query": '"Dixon Technologies" this week',
+        "names": [],
+    }
+    # Names alone still search for the company's news.
+    plan = ask._read_plan(
+        'QUERY: NONE\nNAMES: "Dixon Technologies"; Dixon Technologies; ab'
+    )
+    assert plan == {"query": None, "names": ["Dixon Technologies"]}
+    assert ask.searches(plan) == ['"Dixon Technologies"']
+    assert ask._read_plan("NONE") is None
+    assert ask._read_plan("none.") is None
+    assert ask._read_plan("QUERY: ???\nNAMES: none") is None
+    assert ask._read_plan("") is None
+    assert len(ask._read_plan("word " * 100)["query"]) == ask.MAX_QUERY
+    assert ask.searches(None) == []
+    # The same search is not run twice.
+    assert ask.searches({"query": '"Dixon"', "names": ["Dixon"]}) == ['"Dixon"']
+
+
+def test_dixon_this_week_is_searched_not_taken_for_the_dashboard():
+    """12 Oct: "What changed for Dixon this week?" ran no search: the first
+    instructions kept the search off questions about the dashboard's
+    "changes", and the model read this one as such."""
+    assert "changes" not in ask._SEARCH_INSTRUCTIONS
+    assert "how this dashboard works" in ask._SEARCH_INSTRUCTIONS
+
+
+def test_a_headline_counts_only_if_it_names_the_company():
+    dixon = [{"ticker": "DIXON", "name": "Dixon Technologies"}]
+    names = ["Dixon Technologies"]
+    # The briefing's own matcher reads "Dixon Tech" as Dixon Technologies.
+    assert ask.names_company("Dixon Tech shares jump 5% on Q2 hopes", names, dixon)
+    assert ask.names_company("dixon technologies wins order", names, [])
+    assert not ask.names_company("Amber eyes 20% of Oppo India volumes", names, dixon)
+    assert not ask.names_company("Dixon Technologiesx", names, [])
+
+
 def test_news_is_newest_first_without_old_or_repeated_headlines():
-    news = ask.fetch_news("x", _feed(), today=TODAY)
-    assert news["items"] == [
-        {
-            "headline": "CP Plus maker eyes exports & more",
-            "source": "The Economic Times",
-            "date": "2026-10-02",
-            "link": "https://news.google.com/rss/articles/a2",
-        },
-        {
-            "headline": "Aditya Infotech Q1: revenue up 30%",
-            "source": "Business Standard",
-            "date": "2026-08-11",
-            "link": "https://news.google.com/rss/articles/a1",
-        },
+    news = ask.fetch_news(["x"], fetch=_feed(), today=TODAY)
+    assert [(i["headline"], i["source"], i["date"]) for i in news["items"]] == [
+        ("CP Plus maker eyes exports & more", "The Economic Times", "2026-10-02"),
+        (
+            "VA Tech Wabag Q1 profit rises 37%; order book at Rs 19,400 crore",
+            "The Financial Express",
+            "2026-08-12",
+        ),
+        ("Aditya Infotech Q1: revenue up 30%", "Business Standard", "2026-08-11"),
     ]
-    assert "error" not in news
+    assert news["items"][0]["link"] == A + "a2"
+    # Nothing named, nothing left out: a question about an industry.
+    assert news["left_out"] == 0 and "error" not in news
+
+
+def test_the_questions_own_search_comes_first_when_there_is_too_much(monkeypatch):
+    monkeypatch.setattr(ask, "MAX_NEWS", 2)
+    feeds = {
+        "first": _rss(
+            _item("Dixon order win", "Mint", "Mon, 10 Aug 2026", A + "f1"),
+            _item("Dixon plant", "Mint", "Tue, 11 Aug 2026", A + "f2"),
+        ),
+        "second": _rss(_item("Dixon newest", "Mint", "Fri, 09 Oct 2026", A + "s1")),
+    }
+
+    def fetch(url):
+        return 200, feeds["first" if "first" in url else "second"]
+
+    news = ask.fetch_news(["first", "second"], ["Dixon"], [], fetch, TODAY)
+    assert [i["headline"] for i in news["items"]] == ["Dixon plant", "Dixon order win"]
 
 
 def test_a_failed_search_is_said_and_the_answer_goes_on():
-    fake = _Fake(query="Syrma SGS margins")
+    fake = _Fake(plan="QUERY: Syrma SGS margins")
     text, footer, news = ask.answer(
         "Why is SYRMA broken?",
         transport=fake,
@@ -253,38 +352,38 @@ def test_a_failed_search_is_said_and_the_answer_goes_on():
         today=TODAY,
     )
     assert text == "SYRMA is **Broken**."
-    assert news == {"query": "Syrma SGS margins", "items": [], "error": "HTTP 503"}
+    assert news == {
+        "queries": ["Syrma SGS margins"],
+        "items": [],
+        "left_out": 0,
+        "error": "HTTP 503",
+    }
     assert "NEWS: none found (searched: Syrma SGS margins)" in fake.prompts[-1]
     assert "The news search failed (HTTP 503)." in footer
 
     def down(url):
         raise ConnectionError("no route")
 
-    assert ask.fetch_news("x", down)["error"] == "ConnectionError"
-    empty = ask.fetch_news("x", _feed(body="<rss><channel></channel></rss>"))
-    assert empty == {"query": "x", "items": []}
+    assert ask.fetch_news(["x"], fetch=down)["error"] == "ConnectionError"
+    # One search failing is not the search failing.
+    flaky = iter([(503, ""), (200, RSS)])
+    news = ask.fetch_news(["a", "b"], fetch=lambda url: next(flaky), today=TODAY)
+    assert "error" not in news and len(news["items"]) == 3
+    empty = ask.fetch_news(["x"], fetch=_feed(body="<rss><channel></channel></rss>"))
+    assert empty == {"queries": ["x"], "items": [], "left_out": 0}
     _, footer, _ = ask.answer(
-        "Why is SYRMA broken?",
-        transport=fake,
+        "How does CP PLUS order book look like ?",
+        transport=_Fake(plan=PLAN),
         fetch=_feed(body="<rss><channel></channel></rss>"),
     )
-    assert "found nothing from the last 180 days" in footer
-
-
-def test_the_query_is_read_from_whatever_the_model_wraps_it_in():
-    assert ask._clean_query('Query: "Aditya Infotech" order book') == (
-        '"Aditya Infotech" order book'
+    assert (
+        "found no headline naming Aditya Infotech or CP Plus from the last 180 days"
+        in footer
     )
-    assert ask._clean_query('```\n"Syrma SGS" margins\n```') == '"Syrma SGS" margins'
-    assert ask._clean_query("NONE") is None
-    assert ask._clean_query("none.") is None
-    assert ask._clean_query("") is None
-    assert ask._clean_query("???") is None
-    assert len(ask._clean_query("word " * 100)) == ask.MAX_QUERY
 
 
 def test_a_follow_up_keeps_the_holding_and_reads_the_exchange():
-    fake = _Fake(query="Syrma SGS operating margin")
+    fake = _Fake(plan="QUERY: Syrma SGS operating margin\nNAMES: Syrma SGS")
     history = [
         ("question", "Why is SYRMA broken?"),
         ("answer", "Margins fell three quarters running."),
@@ -379,7 +478,8 @@ def test_the_news_found_is_listed_under_the_answer_as_itself():
     import dashboard_actions as da
 
     news = {
-        "query": '"L&T" <orders>',
+        "queries": ['"L&T" <orders>', '"Larsen & Toubro"'],
+        "left_out": 3,
         "items": [
             {
                 "headline": "L&T wins *mega* [order] <b>",
@@ -399,7 +499,10 @@ def test_the_news_found_is_listed_under_the_answer_as_itself():
     assert body.startswith(
         "Text [1].\n\n<details><summary>News searched: 2 headline(s)"
     )
-    assert "for “&quot;L&amp;T&quot; &lt;orders&gt;”</summary>" in body
+    assert (
+        "from “&quot;L&amp;T&quot; &lt;orders&gt;” and “&quot;Larsen &amp; Toubro&quot;”"
+        "; 3 not naming the company left out</summary>"
+    ) in body
     assert (
         "1. [L&amp;T wins \\*mega\\* \\[order\\] &lt;b&gt;]"
         "(https://news.google.com/a_%281%29) · Mint · 2026-10-02"
