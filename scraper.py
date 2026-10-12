@@ -57,6 +57,33 @@ async def fetch_all_feeds_async():
     return today_brief
 
 
+_NAVIGATION_MARKS = ("menu", "nav", "header", "footer", "breadcrumb")
+
+
+def _is_navigation(li):
+    """A list item that is a page's menu rather than a release's content.
+
+    A real page lists its menus in the same tags as a release lists its
+    beneficiaries, and every one of them would otherwise be read as a
+    company. A menu item is a link, or sits in a nav, header, footer or menu
+    block; a list of beneficiaries in a release is plain text. Decided on
+    structure alone, because PIB's markup could not be checked: the
+    development sandbox's proxy refuses pib.gov.in.
+    """
+    link = li.find("a")
+    if link is not None and link.get_text(strip=True) == li.get_text(strip=True):
+        return True
+    for parent in li.parents:
+        if parent.name in ("nav", "header", "footer"):
+            return True
+        marks = " ".join(
+            [str(parent.get("id") or "")] + list(parent.get("class") or [])
+        ).lower()
+        if any(m in marks for m in _NAVIGATION_MARKS):
+            return True
+    return False
+
+
 def _extract_pli_data_from_html(html, title, published_date=""):
     companies = []
     soup = BeautifulSoup(html, "lxml")
@@ -114,9 +141,11 @@ def _extract_pli_data_from_html(html, title, published_date=""):
                     if "\n" not in cell_text:
                         companies.append(cell_text)
 
-    # 4. Extract companies from lists
+    # 4. Extract companies from lists, leaving out a page's navigation
     for ul in soup.find_all("ul"):
         for li in ul.find_all("li"):
+            if _is_navigation(li):
+                continue
             li_text = li.get_text(strip=True)
             if len(li_text) > 3 and len(li_text) < 100 and "\n" not in li_text:
                 companies.append(li_text)
@@ -306,54 +335,101 @@ async def fetch_state_policy_async(session, today=None):
     return items
 
 
+# Releases read per run, to limit requests.
+MAX_PLI_RELEASES = 5
+
+# Every PIB release page names the bureau; Google News's own page for the same
+# story does not. Names are read from a fetched page only when it is the
+# release, because the parser takes every table cell and list item on a page
+# for a company name.
+_PIB_MARKER = "press information bureau"
+
+
+def _is_pib_release(html):
+    return _PIB_MARKER in (html or "")[:200_000].lower()
+
+
+def _headline_text(title, summary):
+    """The headline and summary as plain text.
+
+    Google News summaries are HTML, and for a story several outlets carried
+    they hold a list of the related headlines, each of which the parser
+    would read as a company. Without the markup only the parser's
+    company-suffix match ("... Ltd", "... Limited") can find a name.
+    """
+    plain = BeautifulSoup(summary, "lxml").get_text(" ") if summary else ""
+    return f"{title} {plain}".strip()
+
+
 async def scrape_pib_pli_approvals_async(session, watchlist):
+    """PLI beneficiaries named in PIB releases from the last 30 days.
+
+    Releases are found through Google News, and a Google News link can lead
+    to Google's own page rather than to pib.gov.in. That page came back as an
+    ordinary success, so the fallback to the headline -- which ran only when
+    the fetch raised -- never ran, and this returned nothing on every run from
+    at least mid-September 2026 without saying so. Names are now read from
+    the release when the link leads there and from the headline and summary
+    otherwise, and every step is counted in one log line. A headline names a
+    company only now and then; a beneficiary list lives in the release.
+    """
     log.info("Scraping PIB for PLI approval announcements (Async)...")
     query = 'site:pib.gov.in "PLI" AND ("provisionally selected" OR "approved" OR "incentive scheme" OR "applications approved")'
     encoded_query = urllib.parse.quote(f"{query} when:30d")
     rss_url = f"https://news.google.com/rss/search?q={encoded_query}&hl=en-IN&gl=IN&ceid=IN:en"
 
     emerging_pli_competitors = []
+    tally = {"releases": 0, "release page": 0, "headline": 0, "elsewhere": 0}
+    failed = 0
+    search_note = ""
 
     from utils import fetch_text_async
 
     try:
         status, xml_data = await fetch_text_async(session, rss_url, timeout=15)
-        if status == 200:
+        if status != 200:
+            search_note = f"search returned HTTP {status}"
+        else:
             feed = feedparser.parse(xml_data)
-
-            # We process at most 5 entries to limit network calls
-            for entry in feed.entries[:5]:
+            entries = feed.entries[:MAX_PLI_RELEASES]
+            tally["releases"] = len(entries)
+            for entry in entries:
                 title = entry.get("title", "")
                 link = entry.get("link", "")
                 published = entry.get("published", "")
 
-                # Fetch actual article HTML (assuming session handles redirects if possible,
-                # or if Google News RSS returns direct HTML fallback)
+                extracted, source = [], "headline"
                 try:
                     art_status, art_html = await fetch_text_async(
                         session, link, timeout=15
                     )
-                    if art_status == 200:
+                    if art_status == 200 and _is_pib_release(art_html):
                         extracted = _extract_pli_data_from_html(
                             art_html, title, published
                         )
-                        for comp in extracted:
-                            comp["announcement"] = title.split(" - ")[0]
-                            comp["link"] = link
-                            emerging_pli_competitors.append(comp)
+                        source = "release page"
+                    else:
+                        tally["elsewhere"] += 1
                 except Exception as ex:
-                    log.error(f"Failed to fetch article for PLI extraction: {ex}")
-                    # Fallback to extracting from RSS title/summary
+                    failed += 1
+                    log.warning(f"PLI release fetch failed: {type(ex).__name__}: {ex}")
+                if not extracted:
                     extracted = _extract_pli_data_from_html(
-                        title + " " + entry.get("summary", ""), title, published
+                        _headline_text(title, entry.get("summary", "")),
+                        title,
+                        published,
                     )
-                    for comp in extracted:
-                        comp["announcement"] = title.split(" - ")[0]
-                        comp["link"] = link
-                        emerging_pli_competitors.append(comp)
+                    source = "headline"
+                tally[source] += len(extracted)
+                for comp in extracted:
+                    comp["announcement"] = title.split(" - ")[0]
+                    comp["link"] = link
+                    comp["found_in"] = source
+                    emerging_pli_competitors.append(comp)
 
     except Exception as e:
         log.error(f"Error scraping PIB PLI approvals: {e}")
+        search_note = f"search failed ({type(e).__name__})"
 
     # Deduplicate before returning (can have same company in different RSS entries)
     deduped = []
@@ -364,9 +440,10 @@ async def scrape_pib_pli_approvals_async(session, watchlist):
     existing_names = set()
     for sector, stocks in watchlist.items():
         for s in stocks:
-            existing_names.add(s["name"].lower())
+            if s.get("name"):
+                existing_names.add(str(s["name"]).lower())
             if s.get("ticker"):
-                existing_names.add(s["ticker"].lower())
+                existing_names.add(str(s["ticker"]).lower())
 
     unique_candidates = []
     for comp in emerging_pli_competitors:
@@ -391,6 +468,21 @@ async def scrape_pib_pli_approvals_async(session, watchlist):
             f"PIB PLI approval competitor detected: {comp['name']} ({comp['status']})"
         )
 
+    # One line that says where an empty result came from.
+    log.info(
+        "PLI approvals: "
+        + (search_note or f"{tally['releases']} release(s) in the last 30 days")
+        + f"; {tally['release page']} name(s) from release pages, "
+        f"{tally['headline']} from headlines"
+        + (
+            f"; {tally['elsewhere']} link(s) led to a page that was not the release"
+            if tally["elsewhere"]
+            else ""
+        )
+        + (f"; {failed} fetch(es) failed" if failed else "")
+        + f"; {len(deduped)} new candidate(s) after removing duplicates and "
+        "holdings."
+    )
     return deduped
 
 
