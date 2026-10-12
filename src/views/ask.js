@@ -1,11 +1,15 @@
-// Ask — a question about the watchlist, answered from the briefing.
+// Ask — a question about the watchlist, answered from the briefing, the news
+// and, for background, the model's general knowledge.
 //
-// The answer is an LLM reading of an extract of the committed briefing
-// (analysis/ask.py), told to cite what it used and to say what the data
-// does not contain. It arrives as a comment on a GitHub issue, which is
-// public on a public repository; the page says so before anything is asked.
+// The answer is an LLM reading (analysis/ask.py) in up to three labelled
+// parts: what the committed briefing says, what headlines from a news search
+// run for the question say, and background the model knows. It is told to
+// cite what it used and never to give a figure from memory. It arrives as a
+// comment on a GitHub issue, which is public on a public repository; the page
+// says so before anything is asked. A comment the owner adds to the issue is
+// a follow-up, and the exchange is shown here as a thread.
 
-import { el, mount } from "../core/dom.js";
+import { el, mount, disclosure } from "../core/dom.js";
 import { href } from "../core/router.js";
 import { shortDate, LLM_MARK } from "../core/format.js";
 import { panel } from "./table.js";
@@ -25,22 +29,61 @@ function holdingsList(watchlist) {
     .sort((a, b) => String(a.ticker).localeCompare(String(b.ticker)));
 }
 
+const external = (url, text) => el("a", { href: url, target: "_blank", rel: "noopener noreferrer" }, text);
+
 function parts(segments) {
-  return segments.map((s) => (s.bold ? el("strong", {}, s.bold) : s.text));
+  return segments.map((s) => (s.bold ? el("strong", {}, s.bold) : s.href ? external(s.href, s.text) : s.text));
+}
+
+function blockView(b) {
+  if (b.type === "heading") return el("p", { class: "ask-part" }, b.text);
+  if (b.type === "list") return el("ul", {}, b.items.map((item) => el("li", {}, parts(item))));
+  return el("p", {}, parts(b.parts));
 }
 
 function answerView(text) {
-  const { blocks, note } = answerBlocks(text);
+  const { blocks, note, news } = answerBlocks(text);
   return el(
     "div",
     { class: "ask-answer" },
-    blocks.map((b) =>
-      b.type === "list"
-        ? el("ul", {}, b.items.map((item) => el("li", {}, parts(item))))
-        : el("p", {}, parts(b.parts)),
-    ),
+    blocks.map(blockView),
+    news && news.items.length
+      ? disclosure(
+          news.summary || `News searched: ${news.items.length} headline(s)`,
+          el(
+            "ol",
+            { class: "ask-news" },
+            news.items.map((n) =>
+              el("li", { value: String(n.n) }, external(n.url, n.title), n.meta ? el("span", { class: "evidence-meta" }, ` · ${n.meta}`) : null),
+            ),
+          ),
+        )
+      : null,
     note ? el("p", { class: "evidence-meta" }, note) : null,
   );
+}
+
+function followUpView(text) {
+  const { blocks } = answerBlocks(text);
+  return el("div", { class: "ask-followup" }, el("p", { class: "ask-part" }, "Follow-up"), blocks.map(blockView));
+}
+
+function threadView(q) {
+  const turns = q.thread || [];
+  const answered = turns.some((t) => t.role === "answer");
+  const waiting = turns.length && turns[turns.length - 1].role === "followup";
+  return [
+    turns.map((t) => (t.role === "answer" ? answerView(t.body) : followUpView(t.body))),
+    waiting ? el("p", { class: "evidence-meta" }, "Waiting for an answer to the follow-up.") : null,
+    answered
+      ? el(
+          "p",
+          { class: "evidence-meta" },
+          external(q.url, "Ask a follow-up on GitHub →"),
+          " Comment on the issue; the answer is posted there and reads the exchange so far.",
+        )
+      : null,
+  ];
 }
 
 function questionsPanel(result, refresh) {
@@ -71,23 +114,30 @@ function questionsPanel(result, refresh) {
       ? el(
           "ul",
           { class: "review-list" },
-          items.map((q) =>
-            el(
+          items.map((q) => {
+            const answers = (q.thread || []).filter((t) => t.role === "answer").length;
+            const followUps = (q.thread || []).filter((t) => t.role === "followup").length;
+            return el(
               "li",
               { class: "review-item" },
               el("p", { class: "review-headline" }, el("strong", {}, q.question)),
               el(
                 "p",
                 { class: "evidence-meta" },
-                [shortDate(q.created), q.focus ? `asked from ${q.focus}` : "", q.answer ? `answered ${LLM_MARK}` : q.state === "closed" ? "closed" : "waiting for an answer"]
+                [
+                  shortDate(q.created),
+                  q.focus ? `asked from ${q.focus}` : "",
+                  answers ? `answered ${LLM_MARK}` : q.state === "closed" ? "closed" : "waiting for an answer",
+                  followUps ? `${followUps} follow-up${followUps === 1 ? "" : "s"}` : "",
+                ]
                   .filter(Boolean)
                   .join(" · "),
                 " · ",
-                el("a", { href: q.url, target: "_blank", rel: "noopener noreferrer" }, `#${q.number}`),
+                external(q.url, `#${q.number}`),
               ),
-              q.answer ? answerView(q.answer) : null,
-            ),
-          ),
+              threadView(q),
+            );
+          }),
         )
       : null,
   );
@@ -131,7 +181,7 @@ export async function render(container, { payload, route, fresh = false }) {
       el(
         "p",
         { class: "view-sub" },
-        "Answered from today's briefing by the LLM, which is told to cite what it used and to say when the data does not answer.",
+        "Answered by the LLM from today's briefing first, then from a news search run for the question, then from its general knowledge for background, each part labelled. It is told to cite what it used and never to give a figure from memory.",
       ),
     ),
     panel(
@@ -150,7 +200,7 @@ export async function render(container, { payload, route, fresh = false }) {
         el(
           "p",
           { class: "section-note" },
-          "Opens a pre-filled GitHub issue; submit it under your login and an answer is posted on it in a minute or two. ",
+          "Opens a pre-filled GitHub issue; submit it under your login and an answer is posted on it in a minute or two. To ask a follow-up, comment on the same issue. ",
           el("strong", {}, "Questions and answers are public"),
           ": they are issues on a public repository.",
         ),

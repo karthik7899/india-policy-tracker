@@ -7,12 +7,16 @@ the owner submits under their own GitHub login. The workflow
 .github/workflows/dashboard-actions.yml runs this on it.
 
 A question asked on the dashboard's Ask view arrives the same way and is
-answered from the briefing (analysis/ask.py) as a comment on the issue.
+answered (analysis/ask.py) as a comment on the issue. A comment the owner
+adds to that issue afterwards is a follow-up, answered in turn with the
+exchange so far in view.
 
-Only the owner's issues get here: the workflow checks author_association
-before any step runs, because anyone can open an issue on a public repository
-and the job holds a write token. The body is read from the event file, never
-through a shell.
+Only the owner's issues and comments get here: the workflow checks
+author_association before any step runs, because anyone can open an issue or
+comment on a public repository and the job holds a write token. A follow-up
+is read with the owner's other comments and the workflow's answers only;
+anyone else's comments on the issue are left out. The body is read from the
+event file, never through a shell.
 
 Everything in the request is validated against what the files can hold. An
 item that does not fit (an unknown ticker, a stance that is not a stance, a
@@ -22,6 +26,7 @@ proposal already decided) is skipped and named in the reply, never guessed at.
 """
 
 import datetime
+import html
 import json
 import os
 import re
@@ -35,6 +40,10 @@ sys.path.insert(0, ROOT)
 
 MARKER_RE = re.compile(r"<!--\s*tracker:(decisions|question)\s+v1\s*-->")
 QUESTION_LABEL = "dashboard-question"
+# An answer to a follow-up names the comments it answers, in a marker GitHub
+# does not show, so a later run knows which are left.
+ANSWERED_RE = re.compile(r"<!--\s*tracker:answered\s+([\d\s]+?)\s*-->")
+FOOTER_RE = re.compile(r"\n-{3,}\n(?=<sub>)")
 JSON_BLOCK_RE = re.compile(r"```json\s*(\{.*?\})\s*```", re.DOTALL)
 
 LABEL_FILES = {
@@ -457,11 +466,73 @@ def reply(number: int, report: Dict[str, list], error: str = "") -> None:
     )
 
 
+def _focus(payload: Dict[str, Any]) -> Optional[str]:
+    """The holding the question was asked from, if it is a ticker at all."""
+    focus = payload.get("focus")
+    if isinstance(focus, str) and TICKER_RE.match(focus.upper()):
+        return focus.upper()
+    return None
+
+
+def _md(text: Any) -> str:
+    """Text placed in Markdown as itself: no tag, link or emphasis of its own."""
+    text = html.escape(" ".join(str(text or "").split()), quote=False)
+    return re.sub(r"([\\\[\]*_`])", r"\\\1", text)
+
+
+def _url(link: str) -> str:
+    """A link Markdown cannot end early: a bracket or space would cut it."""
+    return re.sub(r"[()\s<>]", lambda m: "%{:02X}".format(ord(m.group(0))), link)
+
+
+def format_answer(
+    text: str,
+    footer: str,
+    news: Optional[Dict[str, Any]] = None,
+    replies_to: List[int] = (),
+) -> str:
+    """The comment an answer is posted as.
+
+    The headlines the news search found follow the answer in a collapsed
+    list, numbered as the answer cites them. The dashboard reads the same
+    layout back (src/core/ask.js answerBlocks). The model's text cannot
+    carry that markup itself, so a headline that talked it into writing a
+    marker or a list cannot pass one off as the workflow's.
+    """
+    parts = [
+        re.sub(
+            r"<!--.*?-->|</?(?:details|summary)\b[^>]*>", "", text, flags=re.S | re.I
+        ).strip()
+    ]
+    items = (news or {}).get("items") or []
+    if items:
+        lines = [
+            f"{n}. [{_md(i['headline'])}]({_url(i['link'])})"
+            + "".join(f" · {_md(x)}" for x in (i.get("source"), i.get("date")) if x)
+            for n, i in enumerate(items, 1)
+        ]
+        parts.append(
+            f"<details><summary>News searched: {len(items)} headline(s) for "
+            f"“{html.escape(news['query'])}”</summary>\n\n"
+            + "\n".join(lines)
+            + "\n\n</details>"
+        )
+    if replies_to:
+        parts.append(f"<!-- tracker:answered {' '.join(map(str, replies_to))} -->")
+    body = "\n\n".join(parts)
+    if footer:
+        body += (
+            f"\n\n---\n<sub>{footer} Comment on this issue to ask a follow-up.</sub>"
+        )
+    return body
+
+
 def answer_question(number: int, payload: Dict[str, Any]) -> None:
     """Answer on the issue and close it. Nothing is committed.
 
-    The label is how the dashboard finds questions to list; it is created on
-    first use, since a label that does not exist yet cannot be set from the
+    The label is how the dashboard finds questions to list, and how the
+    workflow knows a later comment is a follow-up. It is created on first
+    use, since a label that does not exist yet cannot be set from the
     new-issue link.
     """
     from analysis.ask import answer
@@ -471,15 +542,14 @@ def answer_question(number: int, payload: Dict[str, Any]) -> None:
     except Exception:  # noqa: BLE001 - it already exists
         pass
     _api("POST", f"/issues/{number}/labels", json={"labels": [QUESTION_LABEL]})
-    focus = payload.get("focus")
-    focus = (
-        str(focus).upper()
-        if isinstance(focus, str) and TICKER_RE.match(str(focus).upper())
-        else None
+    text, footer, news = answer(
+        str(payload.get("question") or ""), focus=_focus(payload)
     )
-    text, footer = answer(str(payload.get("question") or ""), focus=focus)
-    body = text + (f"\n\n---\n<sub>{footer}</sub>" if footer else "")
-    _api("POST", f"/issues/{number}/comments", json={"body": body})
+    _api(
+        "POST",
+        f"/issues/{number}/comments",
+        json={"body": format_answer(text, footer, news)},
+    )
     _api(
         "PATCH",
         f"/issues/{number}",
@@ -487,8 +557,116 @@ def answer_question(number: int, payload: Dict[str, Any]) -> None:
     )
 
 
+def _is_bot(comment: Dict[str, Any]) -> bool:
+    return (comment.get("user") or {}).get("type") == "Bot"
+
+
+def _plain(body: str) -> str:
+    """An answer as the exchange remembers it: no footer, news list or marker."""
+    body = FOOTER_RE.split(body or "", maxsplit=1)[0]
+    body = re.sub(r"<details>.*?</details>", "", body, flags=re.S)
+    return re.sub(r"<!--.*?-->", "", body, flags=re.S).strip()
+
+
+def conversation(
+    payload: Dict[str, Any],
+    comments: List[Dict[str, Any]],
+    comment: Optional[Dict[str, Any]] = None,
+) -> Tuple[List[Tuple[str, str]], List[Tuple[int, str]]]:
+    """The exchange on a question issue: ``(history, pending)``.
+
+    ``history`` is ``(role, text)`` oldest first, from the issue's own
+    question on; ``pending`` the owner's comments no answer has replied to
+    yet, as ``(id, text)``. Only the owner's comments and the workflow's
+    answers count. ``comment`` is the one that triggered the run, added if
+    the list does not have it yet.
+    """
+    comments = list(comments or [])
+    if comment and comment.get("id") not in {c.get("id") for c in comments}:
+        comments.append(comment)
+    answered = {
+        int(n)
+        for c in comments
+        if _is_bot(c)
+        for m in ANSWERED_RE.finditer(c.get("body") or "")
+        for n in m.group(1).split()
+    }
+    history = [("question", str(payload.get("question") or ""))]
+    pending = []
+    for c in comments:
+        body = c.get("body") or ""
+        if _is_bot(c):
+            # An answer ends in its footer; "Could not answer this time" has
+            # none, and is no part of the exchange.
+            if FOOTER_RE.search(body):
+                history.append(("answer", _plain(body)))
+            continue
+        if c.get("author_association") != "OWNER":
+            continue
+        text = re.sub(r"<!--.*?-->", "", body, flags=re.S).strip()
+        if not re.search(r"\w", text):
+            continue
+        if c.get("id") in answered:
+            history.append(("question", text))
+        else:
+            pending.append((int(c.get("id") or 0), text))
+    return history, pending
+
+
+def answer_follow_up(
+    number: int, payload: Dict[str, Any], comment: Dict[str, Any]
+) -> bool:
+    """Answer the owner's new comments on a question issue.
+
+    Every comment not yet answered is answered together, so a follow-up
+    posted while another was being answered is not lost, and a run that
+    finds its comment already answered by an earlier one does nothing.
+    """
+    from analysis.ask import answer
+
+    comments = _api("GET", f"/issues/{number}/comments?per_page=100") or []
+    history, pending = conversation(payload, comments, comment)
+    ids = [i for i, _ in pending]
+    if comment.get("id") not in ids:
+        print("This comment has been answered already; nothing to do.")
+        return False
+    text, footer, news = answer(
+        "\n\n".join(t for _, t in pending), focus=_focus(payload), history=history
+    )
+    # A failure ("Could not answer this time") has no footer and answers
+    # nothing, so the owner's next comment is answered along with these.
+    replies_to = ids if footer else []
+    _api(
+        "POST",
+        f"/issues/{number}/comments",
+        json={"body": format_answer(text, footer, news, replies_to=replies_to)},
+    )
+    return True
+
+
+def follow_up(event: Dict[str, Any]) -> int:
+    issue = event.get("issue") or {}
+    comment = event.get("comment") or {}
+    labels = {str(lb.get("name")) for lb in issue.get("labels") or []}
+    kind, payload, _ = parse_request(issue.get("body") or "")
+    if (
+        kind != "question"
+        or payload is None
+        or QUESTION_LABEL not in labels
+        or issue.get("pull_request")
+        or _is_bot(comment)
+        or comment.get("author_association") != "OWNER"
+    ):
+        print("Not a follow-up to a dashboard question; nothing to do.")
+        return 0
+    answer_follow_up(int(issue.get("number") or 0), payload, comment)
+    return 0
+
+
 def main(event_path: str) -> int:
     event = _load(event_path)
+    if event.get("comment"):
+        return follow_up(event)
     issue = event.get("issue") or {}
     number = int(issue.get("number") or 0)
     kind, payload, error = parse_request(issue.get("body") or "")

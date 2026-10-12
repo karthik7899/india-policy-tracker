@@ -1,26 +1,52 @@
-"""Answer a question asked on the dashboard, from the briefing's own data.
+"""Answer a question asked on the dashboard: from the briefing first, then
+from the news, then from what the model knows, each kept apart.
 
 The dashboard's Ask view sends a question as an issue the owner submits;
-scripts/dashboard_actions.py hands it here. The answer comes from the LLM
-reading an extract of the committed briefing, never the open web: what is
-asked about (the holdings and sectors the question names, or the one the
-page was open on) in full, and the day's summary around it. The model is
-told to answer from that extract only, to cite what it used, and to say
-what the extract does not contain rather than fill the gap.
+scripts/dashboard_actions.py hands it here. A comment the owner adds to that
+issue later comes here too, as a follow-up, with the exchange so far. An
+answer draws on three sources and says which one each statement came from:
+
+  * the briefing: an extract of the committed data, with what is asked about
+    (the holdings and sectors the question names, or the one the page was
+    open on) in full and the day's summary around it;
+  * the news: headlines from a Google News search run for the question. The
+    model writes the query, since it knows "Oracle Fin.Serv." as Oracle
+    Financial Services and CPPLUS as the CP PLUS brand. The answer cites the
+    headlines by number and lists them, with links, under the answer;
+  * the model's general knowledge, as background only: what a company does,
+    how a scheme works. It never supplies a figure or a recent event.
+
+Gemini can search the web itself ("grounding with Google Search"). Its terms,
+however, let a grounded answer be shown only to the person who asked, next to
+Google's search suggestions, and restrict keeping or republishing it. An
+answer here is a comment on a public issue, kept and shown on a public page,
+so the search is run here instead, on the feed the briefing already reads.
 
 It is a reading like every other LLM output here: marked as one, and checked
 by whoever reads it against the items it cites.
 """
 
+import datetime
+import html
 import json
 import os
 import re
+import urllib.parse
 from typing import Any, Dict, List, Optional, Tuple
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-MAX_QUESTION = 500
+# The dashboard caps a question at 500 characters; a follow-up typed on
+# GitHub is not capped, so this is wider.
+MAX_QUESTION = 1000
 MAX_HOLDINGS = 5
 MAX_CONTEXT_CHARS = 60_000
+# The exchange so far, newest kept first, on a follow-up.
+MAX_HISTORY_CHARS = 12_000
+
+NEWS_URL = "https://news.google.com/rss/search?q={query}&hl=en-IN&gl=IN&ceid=IN:en"
+NEWS_DAYS = 180
+MAX_NEWS = 10
+MAX_QUERY = 150
 
 # Words in sector names too ordinary to mean the sector when a question uses
 # them: "what data is there" is not about data centres.
@@ -42,17 +68,43 @@ _GENERIC_SECTOR_WORDS = {
 }
 
 _INSTRUCTIONS = """You answer questions about an investor's watchlist of Indian listed
-companies. Answer ONLY from the DATA below: an extract of today's briefing,
-built by an automated pipeline from news, filings and market data.
+companies. You have three sources, and the reader must always be able to tell
+which one a statement came from:
 
-- Cite what you rely on: the headline, its date, or the figure and its field.
-- If the DATA does not answer the question, say so and say what is missing.
-  Do not fill the gap from general knowledge.
+1. DATA: an extract of today's briefing, built by an automated pipeline from
+   news, filings and market data. Use it first.
+2. NEWS: headlines from a Google News search run for this question, numbered,
+   each with its date and source. They are headlines only: say what a
+   headline says, not what its article might go on to say.
+3. Your general knowledge, for background the other two lack: what a company
+   does, how a scheme, a contract or an industry works. Never give a figure, a
+   result, an order book, a price or a recent event from memory; it may be
+   out of date or wrong.
+
+Answer in up to three parts, each opening with its heading on a line of its
+own, and leave out a part you have nothing for:
+**From the briefing**
+**From the news**
+**Background (general knowledge, not from a source here)**
+
+- Cite what you rely on: from the DATA the headline, its date, or the figure
+  and its field; from the NEWS the item's number in brackets, as [2].
+- If none of the three answers the question, say so and say what is missing.
 - Describe the evidence; do not tell the investor to buy or sell.
 - Thesis grades (Intact / Weakening / Broken) and their reasons come from the
   pipeline's rules. "challenged"/"supported" items and anything marked
   reader "llm" are LLM readings of headlines, less certain than a filing.
-- Plain text, at most 250 words. Short paragraphs or "- " bullets."""
+- When there is a CONVERSATION, the QUESTION follows on from it: read "it",
+  "they" and "that" from it, and do not repeat what was already said.
+- Plain text, at most 300 words. Short paragraphs or "- " bullets."""
+
+_SEARCH_INSTRUCTIONS = """Write one Google News search query that would find recent news
+answering the QUESTION below, asked about Indian listed companies. Name a
+company the way the press does (its full name or its brand, never a cut-off
+or spaced-out abbreviation) and add the few words the question is about. At
+most 10 words; quotes and OR are allowed. Reply with the query alone.
+If the question is only about this dashboard's own grades, scores or
+changes, which no news would answer, reply NONE."""
 
 
 def _stem(word: str) -> str:
@@ -337,11 +389,15 @@ def _sector_extract(sector: str, src: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def build_context(
-    question: str, src: Dict[str, Any], focus: Optional[str] = None
+    question: str, src: Dict[str, Any], focus: Optional[str] = None, also: str = ""
 ) -> Dict[str, Any]:
-    """The extract an answer is drawn from: subjects in full, the day in brief."""
+    """The extract an answer is drawn from: subjects in full, the day in brief.
+
+    ``also`` is what was asked earlier in the exchange, so a follow-up ("and
+    their margins?") keeps the holdings the first question named.
+    """
     b = src["briefing"]
-    tickers, sectors = subjects(question, src["watchlist"], focus)
+    tickers, sectors = subjects(f"{question} {also}".strip(), src["watchlist"], focus)
     health = b.get("thesis_health") or {}
     counts: Dict[str, int] = {}
     for row in health.values():
@@ -405,38 +461,221 @@ def build_context(
     return context
 
 
-def prompt(question: str, context: Dict[str, Any]) -> str:
-    return (
-        f"{_INSTRUCTIONS}\n\nDATA:\n"
-        + json.dumps(context, ensure_ascii=False, default=str)
-        + f"\n\nQUESTION: {question}\n"
+def _conversation(history: List[Tuple[str, str]]) -> str:
+    return "\n".join(
+        f"{'Q' if role == 'question' else 'A'}: {text}" for role, text in history
     )
 
 
+def _history(history) -> List[Tuple[str, str]]:
+    """The exchange so far, oldest first, cut from the oldest end to fit."""
+    turns = [
+        (role, " ".join(str(text or "").split()))
+        for role, text in history or []
+        if role in ("question", "answer") and str(text or "").strip()
+    ]
+    kept: List[Tuple[str, str]] = []
+    size = 0
+    for role, text in reversed(turns):
+        size += len(text) + 4
+        if size > MAX_HISTORY_CHARS:
+            break
+        kept.append((role, text))
+    return kept[::-1]
+
+
+def _clean_query(reply: str) -> Optional[str]:
+    """The query in the model's reply; None for NONE or nothing usable."""
+    lines = (x.strip().strip("`*").strip() for x in str(reply or "").splitlines())
+    line = next((x for x in lines if x), "")
+    line = re.sub(r"^(?:search\s+)?query\s*:\s*", "", line, flags=re.I).strip("`* ")
+    if line.strip(".").upper() == "NONE" or not re.search(r"[A-Za-z]", line):
+        return None
+    return line[:MAX_QUERY]
+
+
+def search_query(
+    question: str,
+    holdings: List[Dict[str, Any]],
+    history: List[Tuple[str, str]],
+    transport,
+) -> Optional[str]:
+    """The Google News query the model writes for a question.
+
+    None when no search is worth running: the question is about the
+    dashboard's own grades, or the model could not write one. A model that
+    cannot write a query is unlikely to answer either, and the answer says so.
+    """
+    from analysis.llm_reader import ReaderUnavailable
+
+    parts = [_SEARCH_INSTRUCTIONS]
+    if holdings:
+        parts.append(
+            "HOLDINGS ASKED ABOUT: " + json.dumps(holdings, ensure_ascii=False)
+        )
+    if history:
+        # The last exchange is enough to read "their" and "it".
+        parts.append("CONVERSATION:\n" + _conversation(history[-2:])[:3000])
+    parts.append(f"QUESTION: {question}")
+    try:
+        return _clean_query(transport("\n\n".join(parts) + "\n"))
+    except ReaderUnavailable:
+        return None
+
+
+def _get(url: str) -> Tuple[int, str]:
+    import requests
+
+    resp = requests.get(
+        url, timeout=15, headers={"User-Agent": "Mozilla/5.0 (india-policy-tracker)"}
+    )
+    return resp.status_code, resp.text
+
+
+def _headline(entry: Dict[str, Any]) -> Tuple[str, str]:
+    """``(headline, source)``: Google News writes "Headline - Source"."""
+    title = html.unescape(re.sub(r"<[^>]+>", "", entry.get("title") or ""))
+    title = " ".join(title.split())
+    source = " ".join(str((entry.get("source") or {}).get("title") or "").split())
+    if source and title.endswith(f" - {source}"):
+        title = title[: -len(source) - 3].strip()
+    elif not source and " - " in title:
+        title, source = (s.strip() for s in title.rsplit(" - ", 1))
+    return title, source
+
+
+def fetch_news(
+    query: str, fetch=None, today: Optional[datetime.date] = None
+) -> Dict[str, Any]:
+    """Headlines a Google News search finds, newest first, at most MAX_NEWS.
+
+    Google News does not always honour "when:" (scraper.py met headlines
+    weeks older than asked for), so age is checked here as well. Never raises:
+    a failed search is recorded as ``error`` and the answer goes on without it.
+    """
+    import feedparser
+
+    today = today or datetime.date.today()
+    news: Dict[str, Any] = {"query": query, "items": []}
+    url = NEWS_URL.format(query=urllib.parse.quote(f"{query} when:{NEWS_DAYS}d"))
+    try:
+        status, text = (fetch or _get)(url)
+    except Exception as e:  # noqa: BLE001 - the answer goes on without news
+        news["error"] = type(e).__name__
+        return news
+    if status != 200:
+        news["error"] = f"HTTP {status}"
+        return news
+    oldest = today - datetime.timedelta(days=NEWS_DAYS)
+    seen = set()
+    for entry in feedparser.parse(text).entries:
+        headline, source = _headline(entry)
+        parsed = entry.get("published_parsed")
+        day = datetime.date(*parsed[:3]) if parsed else None
+        link = str(entry.get("link") or "")
+        if (
+            not headline
+            or day is None
+            or not oldest <= day <= today
+            or not link.startswith(("https://", "http://"))
+            or headline.lower() in seen
+        ):
+            continue
+        seen.add(headline.lower())
+        news["items"].append(
+            {
+                "headline": headline,
+                "source": source,
+                "date": day.isoformat(),
+                "link": link,
+            }
+        )
+    news["items"].sort(key=lambda i: i["date"], reverse=True)
+    del news["items"][MAX_NEWS:]
+    return news
+
+
+def prompt(
+    question: str,
+    context: Dict[str, Any],
+    news: Optional[Dict[str, Any]] = None,
+    history: Optional[List[Tuple[str, str]]] = None,
+) -> str:
+    items = (news or {}).get("items") or []
+    if items:
+        found = f"NEWS (Google News search: {news['query']}):\n" + "\n".join(
+            f"[{n}] {i['date']} · {i['source']} · {i['headline']}"
+            for n, i in enumerate(items, 1)
+        )
+    elif news:
+        found = f"NEWS: none found (searched: {news['query']})"
+    else:
+        found = "NEWS: no search was run for this question"
+    parts = [
+        _INSTRUCTIONS,
+        "DATA:\n" + json.dumps(context, ensure_ascii=False, default=str),
+        found,
+    ]
+    if history:
+        parts.append("CONVERSATION:\n" + _conversation(history))
+    parts.append(f"QUESTION: {question}")
+    return "\n\n".join(parts) + "\n"
+
+
 def answer(
-    question: str, focus: Optional[str] = None, transport=None, root: str = ROOT
-) -> Tuple[str, str]:
-    """``(answer text, footer)``. Never raises: a failure is the answer."""
+    question: str,
+    focus: Optional[str] = None,
+    transport=None,
+    root: str = ROOT,
+    history=None,
+    fetch=None,
+    today: Optional[datetime.date] = None,
+) -> Tuple[str, str, Optional[Dict[str, Any]]]:
+    """``(answer text, footer, news)``. Never raises: a failure is the answer.
+
+    ``history`` is the exchange so far on a follow-up: ``(role, text)`` pairs,
+    oldest first, role "question" or "answer". ``news`` is the search run
+    for the answer (``query``, ``items``, and ``error`` if it failed), None
+    when none was.
+    """
     from analysis.llm_reader import ReaderUnavailable, default_transport
 
     question = " ".join(str(question or "").split())[:MAX_QUESTION]
     if not question:
-        return "The question was empty.", ""
+        return "The question was empty.", "", None
+    history = _history(history)
     src = load_sources(root)
-    context = build_context(question, src, focus)
+    asked_before = " ".join(text for role, text in history if role == "question")
+    context = build_context(question, src, focus, also=asked_before)
     if transport is None:
         transport, chain = default_transport(text=True)
         if transport is None:
-            return f"Could not answer: {chain}.", ""
+            return f"Could not answer: {chain}.", "", None
+    holdings = [
+        {k: h.get(k) for k in ("ticker", "name", "sector")}
+        for h in context["holdings_asked_about"]
+    ]
+    query = search_query(question, holdings, history, transport)
+    news = fetch_news(query, fetch, today) if query else None
     try:
-        text = transport(prompt(question, context)).strip()
+        text = transport(prompt(question, context, news, history)).strip()
     except ReaderUnavailable as e:
-        return f"Could not answer this time: {e}. Ask again later.", ""
-    asked = [h["ticker"] for h in context["holdings_asked_about"]]
+        return f"Could not answer this time: {e}. Ask again later.", "", None
+    asked = [h["ticker"] for h in holdings]
+    found = (news or {}).get("items") or []
     footer = (
         f"✦ LLM reading ({getattr(transport, 'model', None) or 'Gemini'}) of the briefing"
         + (f" dated {context['briefing_date']}" if context["briefing_date"] else "")
         + (f", drawing on {', '.join(asked)}" if asked else "")
-        + ". Check the items it cites before relying on it."
+        + (f", and of {len(found)} headline(s) from Google News" if found else "")
+        + "."
     )
-    return text or "The model returned an empty answer.", footer
+    if news and news.get("error"):
+        footer += f" The news search failed ({news['error']})."
+    elif news and not found:
+        footer += f" The news search found nothing from the last {NEWS_DAYS} days."
+    footer += (
+        " Anything under Background is the model's general knowledge, not checked"
+        " against a source. Check the items it cites before relying on it."
+    )
+    return text or "The model returned an empty answer.", footer, news
