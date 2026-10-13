@@ -1,6 +1,6 @@
 {
   "value": {
-    "as_of": "2026-10-12",
+    "as_of": "2026-10-13",
     "ahead_days": 45,
     "back_days": 14,
     "upcoming": [
@@ -49,6 +49,17 @@
         "sector": "midcap_it"
       },
       {
+        "ticker": "UTLSOLAR",
+        "date": "2026-10-15",
+        "kind": "fund_raising",
+        "title": "Board meeting: Fund Raising",
+        "detail": "To consider Fund Raising",
+        "source": "NSE event calendar",
+        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
+        "name": "Fujiyama Power",
+        "sector": "semiconductors_equipment"
+      },
+      {
         "ticker": "HDFCBANK",
         "date": "2026-10-17",
         "kind": "results",
@@ -93,6 +104,28 @@
         "sector": "clean_energy"
       },
       {
+        "ticker": "INDHOTEL",
+        "date": "2026-10-21",
+        "kind": "results",
+        "title": "Board meeting: Financial Results",
+        "detail": "To consider and approve the financial results for the period ended September 30, 2026",
+        "source": "NSE event calendar",
+        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
+        "name": "Indian Hotels Company",
+        "sector": "hospitality_travel"
+      },
+      {
+        "ticker": "HINDPETRO",
+        "date": "2026-10-22",
+        "kind": "results",
+        "title": "Board meeting: Financial Results",
+        "detail": "To consider and approve the financial results for the period ended September 30, 2026",
+        "source": "NSE event calendar",
+        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
+        "name": "H P C L",
+        "sector": "big_cap_industries"
+      },
+      {
         "ticker": "ADANIPOWER",
         "date": "2026-10-23",
         "kind": "results",
@@ -102,6 +135,17 @@
         "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
         "name": "Adani Power",
         "sector": "clean_energy"
+      },
+      {
+        "ticker": "BPCL",
+        "date": "2026-10-23",
+        "kind": "results",
+        "title": "Board meeting: Financial Results",
+        "detail": "To consider and approve the financial results for the period ended September 30, 2026",
+        "source": "NSE event calendar",
+        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
+        "name": "B P C L",
+        "sector": "big_cap_industries"
       },
       {
         "ticker": "COFORGE",
@@ -179,6 +223,17 @@
         "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
         "name": "Mphasis Ltd",
         "sector": "midcap_it"
+      },
+      {
+        "ticker": "THERMAX",
+        "date": "2026-11-05",
+        "kind": "results",
+        "title": "Board meeting: Financial Results",
+        "detail": "To consider and approve the financial results for the period ended September 30, 2026",
+        "source": "NSE event calendar",
+        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
+        "name": "Thermax Ltd",
+        "sector": "industrial_manufacturing"
       }
     ],
     "recent": [
@@ -203,19 +258,23 @@
       "ICICIBANK": "2026-10-17",
       "LTTS": "2026-10-19",
       "ADANIGREEN": "2026-10-21",
+      "INDHOTEL": "2026-10-21",
+      "HINDPETRO": "2026-10-22",
       "ADANIPOWER": "2026-10-23",
+      "BPCL": "2026-10-23",
       "COFORGE": "2026-10-23",
       "GODREJPROP": "2026-10-23",
       "STLTECH": "2026-10-23",
       "ANANTRAJ": "2026-10-28",
       "APOLLOHOSP": "2026-11-04",
       "CUMMINSIND": "2026-11-04",
-      "MPHASIS": "2026-11-05"
+      "MPHASIS": "2026-11-05",
+      "THERMAX": "2026-11-05"
     },
     "sources": {
       "nse": {
-        "event_calendar": 375,
-        "corporate_actions": 24
+        "event_calendar": 421,
+        "corporate_actions": 27
       },
       "nse_errors": [],
       "filings": 0,
