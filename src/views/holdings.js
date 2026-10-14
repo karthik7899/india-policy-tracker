@@ -199,6 +199,10 @@ export function factsList(stock) {
         ? `${sc.deliv_pct}% of last session (${sc.delivery_band ?? "unknown"})`
         : "—",
     ],
+    // Screener's figures come from the consolidated accounts unless the company
+    // has none (providers/screener.py); a standalone P/E is not comparable to
+    // a peer's consolidated one, so the reader is told which they are seeing.
+    ...(sc.accounts === "standalone" ? [["Accounts", "standalone (no consolidated figures)"]] : []),
   ];
   return el(
     "dl",

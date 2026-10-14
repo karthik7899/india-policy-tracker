@@ -17,6 +17,51 @@ named.
 
 ---
 
+## Three holdings have no consolidated figures on Screener
+
+**Measured 2026-10-14**, runs 38542728415 and 38557623882
+(`probe_upstream.py --source screener-accounts`) and 38557627379
+(`--source screener-peers`). Figures in ₹ Cr, from the second run.
+
+Every run read `/company/{T}/consolidated/` and nothing else. For SCHNEIDER,
+PAGEIND and RELAXO that page answers 200 with the shareholding and nothing
+more. Their standalone page, `/company/{T}/`, carries all of it:
+
+```
+consolidated  SCHNEIDER, PAGEIND, RELAXO: 200, 8 fields, no figures, no warehouse id
+              HAL: 200, P/E 35.3, warehouse 23511394
+              ASMTEC: 404
+
+standalone    SCHNEIDER  mcap 28,655  P/E 148.0  ROCE 29.6  Q sales   651  warehouse 1285
+              PAGEIND    mcap 41,184  P/E  52.7  ROCE 64.4  Q sales 1,420  warehouse 3073
+              RELAXO     mcap  7,482  P/E  40.4  ROCE 11.2  Q sales   705  warehouse 3182
+              HAL        P/E 35.5, warehouse 20540165
+              ASMTEC: 404
+```
+
+- **A page without figures still parsed to a non-empty dict.** The capex and
+  R&D defaults are written for every page, so the three were logged "Screener
+  data loaded" each day and marked fetched, which kept the last-known-good
+  step from putting anything back. `has_figures()` now decides that.
+- **Nothing on the blank page points to the other one.** A page with figures
+  heads its tables "Consolidated Figures in Rs. Crores / View Standalone"; the
+  blank ones have no such heading, and the word turns up on them only in
+  custom KPI rows ("Sales Volume … Standalone data"), on two of the three. So
+  the parse decides the fallback, not a notice.
+- **The warehouse id differs by view**, and the blank pages had none, so these
+  three holdings' industries were never scanned for peers. A standalone id
+  works for the peers API: PAGEIND's (3073) returned 7 rows.
+- **ASMTEC is a 404 under both views**, so Screener files it under another
+  slug, which was not looked for. Its price already comes through the BSE
+  fallback. **Still open.**
+
+**Consequence:** `providers/screener.py` reads the consolidated page, then the
+standalone one when the first shows no figures or is a 404, and records which
+in `accounts`; the dashboard says when a holding's figures are standalone, as
+a standalone P/E is not comparable to a peer's consolidated one.
+
+---
+
 ## NSE's event calendar and corporate actions answer a runner
 
 **Measured 2026-10-10**, run 38030507295

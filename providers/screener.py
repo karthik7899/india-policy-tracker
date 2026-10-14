@@ -65,7 +65,45 @@ def _report_shareholding_rows(soup, ticker):
     _shareholding_rows_reported = True
 
 
-async def fetch_screener_async(session, ticker, sector, price):
+# A company's page in each of Screener's two views of its accounts.
+ACCOUNTS = ("consolidated", "standalone")
+
+# Fields a company page carries only when it shows figures. The capex and R&D
+# defaults below are written for every page, figures or none, so a page that
+# showed nothing still parsed to a non-empty dict and was logged "Screener
+# data loaded".
+FIGURE_FIELDS = ("market_cap", "pe_ratio", "roce", "q_sales", "annual_sales_trend")
+
+
+def company_url(ticker, accounts="consolidated"):
+    base = f"https://www.screener.in/company/{ticker}/"
+    return base + "consolidated/" if accounts == "consolidated" else base
+
+
+def has_figures(sc):
+    """Whether a parsed page showed the company's figures."""
+    return any(key in (sc or {}) for key in FIGURE_FIELDS)
+
+
+async def fetch_screener_async(session, ticker, sector, price, fetch=None):
+    """``(ticker, fields, warehouse_id)`` from the company's Screener page.
+
+    The consolidated accounts first, then the standalone ones when the
+    consolidated page shows no figures or is not there (HTTP 404), as for a
+    company with no subsidiaries to consolidate. Every run until this read
+    only the consolidated page, and SCHNEIDER, PAGEIND and RELAXO came back
+    with their shareholding and nothing else: no ratios, no quarters, no
+    annual figures. ``accounts`` records which view the figures came from.
+    Any other failure ends the attempt: after a 429 or a 403 the second
+    request would only meet the same answer.
+
+    ``fields`` is None when no page could be read; it is a dict without
+    figures (has_figures() is False) when a page was read and showed none.
+
+    ``fetch(session, url)`` makes each request. The batch passes one that
+    queues it behind every other Screener request; called on its own, the
+    second view waits one interval after the first.
+    """
     # ETFs / index funds do not have individual fundamentals
     if sector == "macro_indicators":
         return (
@@ -79,16 +117,51 @@ async def fetch_screener_async(session, ticker, sector, price):
             None,
         )
 
-    url = f"https://www.screener.in/company/{ticker}/consolidated/"
-    sc = {}
-    try:
-        status, text = await fetch_text_async(session, url)
-        if not text:
-            log.error(f"{ticker}: Screener.in empty response")
-            return ticker, None, None
-    except Exception as e:
-        log.error(f"{ticker}: Screener.in exception: {e}")
+    fetch = fetch or _spaced_requests()
+    fallback, blank = None, []
+    for accounts in ACCOUNTS:
+        try:
+            status, text = await fetch(session, company_url(ticker, accounts))
+        except Exception as e:
+            log.error(f"{ticker}: Screener.in exception ({accounts}): {e}")
+            break
+        if status == 404:
+            log.info(f"{ticker}: no Screener {accounts} page (HTTP 404).")
+            continue
+        if status != 200 or not text:
+            log.error(f"{ticker}: Screener {accounts} page: HTTP {status}.")
+            break
+        sc, warehouse_id = parse_company_page(text, ticker, sector)
+        if has_figures(sc):
+            sc["accounts"] = accounts
+            return ticker, sc, warehouse_id
+        # Kept in case the other view has nothing either: the shareholding,
+        # which does not depend on the accounts, is still the company's.
+        fallback = fallback or (sc, warehouse_id)
+        blank.append(accounts)
+    if fallback is None:
         return ticker, None, None
+    log.warning(
+        f"{ticker}: no figures on Screener's {' or '.join(blank)} page; "
+        "only shareholding was read."
+    )
+    return ticker, fallback[0], fallback[1]
+
+
+def _spaced_requests():
+    """``fetch(session, url)`` for one company read on its own."""
+    pacer = _RequestPacer(_SCREENER_REQUEST_INTERVAL_S)
+
+    async def fetch(session, url):
+        await pacer.wait()
+        return await fetch_text_async(session, url)
+
+    return fetch
+
+
+def parse_company_page(text, ticker, sector):
+    """``(fields, warehouse_id)`` from one Screener company page."""
+    sc = {}
     # lxml rather than html.parser, for correctness before speed. On the
     # malformed markup scrapers actually meet, html.parser mis-recovers in ways
     # that silently fabricate numbers: an unclosed <td> made it fuse the cells
@@ -295,7 +368,7 @@ async def fetch_screener_async(session, ticker, sector, price):
         _report_shareholding_rows(soup, ticker)
 
     sc = {k: v for k, v in sc.items() if v is not None}
-    return ticker, sc, warehouse_id
+    return sc, warehouse_id
 
 
 # Header text Screener has used for the company column. "Name" was the
@@ -618,6 +691,12 @@ async def fetch_all_screener_fundamentals(watchlist):
         async with semaphore:
             return await coro
 
+    def request(session, url):
+        # Each company page on its own turn, not each company: one read from
+        # its standalone accounts makes a second request, which joins the
+        # back of the queue instead of going out beside someone else's.
+        return throttled(fetch_text_async(session, url))
+
     async with aiohttp.ClientSession() as session:
         for sector, stocks in watchlist.items():
             for stock in stocks:
@@ -627,23 +706,41 @@ async def fetch_all_screener_fundamentals(watchlist):
                 ticker_to_sector[ticker] = sector
                 stock["screener"] = {}
                 tasks.append(
-                    throttled(fetch_screener_async(session, ticker, sector, price))
+                    fetch_screener_async(session, ticker, sector, price, request)
                 )
 
         results = await asyncio.gather(*tasks)
 
         holdings = []
+        standalone, blank = [], []
         for ticker, sc_data, warehouse_id in results:
             if sc_data:
                 # A holding left empty here gets its last fetched values back
                 # once every source has run (analysis/last_good.py).
                 ticker_to_stock[ticker]["screener"] = sc_data
+            if has_figures(sc_data):
+                # Only a page with figures is a fetch that worked: one with
+                # shareholding alone leaves the rest to be kept from before.
                 mark(ticker_to_stock[ticker], "screener")
+                if sc_data.get("accounts") == "standalone":
+                    standalone.append(ticker)
+                accounts = sc_data.get("accounts")
                 log.info(
-                    f"{ticker}: Screener data loaded (PE={sc_data.get('pe_ratio', 'N/A')})"
+                    f"{ticker}: Screener data loaded (PE={sc_data.get('pe_ratio', 'N/A')}"
+                    + (f", {accounts} accounts" if accounts else "")
+                    + ")"
                 )
+            elif sc_data is not None:
+                blank.append(ticker)
             if warehouse_id and ticker_to_sector.get(ticker):
                 holdings.append((ticker, warehouse_id))
+        log.info(
+            f"Screener: {len(standalone)} holding(s) read from standalone accounts"
+            + (f" ({', '.join(standalone)})" if standalone else "")
+            + f"; {len(blank)} with shareholding but no figures"
+            + (f" ({', '.join(blank)})" if blank else "")
+            + "."
+        )
 
         peer_results = await _fetch_industry_tables(holdings, throttled, session)
 

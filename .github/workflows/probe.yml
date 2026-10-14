@@ -24,13 +24,14 @@ on:
         options:
           - all
           - screener-peers
+          - screener-accounts
           - nse-isin
           - bse-scrips
           - nse-delivery
           - nse-announcements
           - nse-calendar
       symbol:
-        description: Ticker for the per-company probes
+        description: Ticker for the per-company probes (screener-accounts takes several, comma-separated)
         type: string
         required: false
         default: HAL

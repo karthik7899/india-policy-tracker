@@ -7,7 +7,7 @@ from providers.rss import fetch_query_feed_async
 from analysis.growth import update_single_stock
 import analysis.rotation as rotation_mod
 from analysis.rotation import auto_curate_watchlist
-from providers.screener import fetch_screener_async
+from providers.screener import fetch_screener_async, has_figures
 
 
 # --- 1. Empty RSS ---
@@ -88,13 +88,19 @@ def test_malformed_screener_html(monkeypatch):
     async def mock_fetch(*args, **kwargs):
         return 200, malformed_html
 
-    monkeypatch.setattr("utils.fetch_text_async", mock_fetch)
+    # Patched where it is used. These two tests patched utils.fetch_text_async,
+    # which providers/screener.py had already imported by name, so the mock was
+    # never called and they passed on the error a None session raised.
+    monkeypatch.setattr("providers.screener.fetch_text_async", mock_fetch)
+    monkeypatch.setattr("providers.screener._SCREENER_REQUEST_INTERVAL_S", 0)
 
     ticker, sc, _wid = asyncio.run(
         fetch_screener_async(None, "RELIANCE", "energy", 1000.0)
     )
     assert ticker == "RELIANCE"
-    assert sc is None
+    # A page with no figures is not mistaken for one: only the capex and R&D
+    # defaults come back, and the caller does not count it as fetched.
+    assert not has_figures(sc)
 
 
 # --- 6. HTTP Failures ---
@@ -102,7 +108,8 @@ def test_http_failures(monkeypatch):
     async def mock_fetch(*args, **kwargs):
         return 500, ""
 
-    monkeypatch.setattr("utils.fetch_text_async", mock_fetch)
+    monkeypatch.setattr("providers.screener.fetch_text_async", mock_fetch)
+    monkeypatch.setattr("providers.screener._SCREENER_REQUEST_INTERVAL_S", 0)
 
     ticker, sc, _wid = asyncio.run(
         fetch_screener_async(None, "RELIANCE", "energy", 1000.0)
