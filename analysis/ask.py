@@ -387,7 +387,10 @@ def _sector_extract(sector: str, src: Dict[str, Any]) -> Dict[str, Any]:
         ],
         "policy_balance": (b.get("policy_balance") or {}).get(sector),
         "policies": [
-            {k: p.get(k) for k in ("headline", "date", "status", "state", "effects")}
+            {
+                k: p.get(k)
+                for k in ("headline", "date", "status", "strength", "state", "effects")
+            }
             for p in b.get("policy_impacts") or []
             if any(e.get("sector") == sector for e in p.get("effects") or [])
         ][:8],
@@ -443,9 +446,24 @@ def build_context(
             "policy": [
                 {
                     k: p.get(k)
-                    for k in ("headline", "date", "status", "state", "effects")
+                    for k in (
+                        "headline",
+                        "date",
+                        "status",
+                        "strength",
+                        "state",
+                        "effects",
+                    )
                 }
                 for p in (b.get("policy_impacts") or [])[:10]
+            ],
+            # Governments' MoUs and pacts: soft, no measure taken yet.
+            "government_partnerships": [
+                {
+                    k: p.get(k)
+                    for k in ("headline", "date", "government", "sectors", "tickers")
+                }
+                for p in (b.get("policy_partnerships") or [])[:8]
             ],
         },
     }

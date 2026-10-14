@@ -58,6 +58,10 @@ def _coverage(watchlist: Dict[str, Any]) -> Dict[str, Any]:
         "priced": priced,
         "fundamentals": fundamentals,
         "growth": growth,
+        # Holdings using a value kept from an earlier run because a source
+        # failed this one (analysis/last_good.py). Counted as covered: the
+        # value is under a week old, and the reader is told it is kept.
+        "kept": sum(1 for s in holdings if s.get("_stale_fields")),
         # The mean of the coverages that gate analysis. A count of populated
         # keys would flatter a run that fetched every cheap field and no
         # expensive one.
@@ -231,7 +235,8 @@ def build_plain_text(summary: Dict[str, Any], dashboard_url: str, today) -> str:
         "",
         f"Data completeness: {cov['completeness']}%  |  "
         f"Priced: {cov['priced']}/{cov['total']}  |  "
-        f"Run: {'DEGRADED' if summary['degraded'] else 'Healthy'}",
+        + (f"Kept from an earlier run: {cov['kept']}  |  " if cov.get("kept") else "")
+        + f"Run: {'DEGRADED' if summary['degraded'] else 'Healthy'}",
         "",
     ]
 

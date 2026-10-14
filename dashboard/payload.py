@@ -29,6 +29,7 @@ FEED_CAPS = {
     # already more second-order hypotheses than anyone acts on in a day.
     "read_throughs": 25,
     "policy_impacts": 30,
+    "policy_partnerships": 20,
     "state_policy": 30,
 }
 

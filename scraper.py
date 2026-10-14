@@ -261,17 +261,19 @@ async def fetch_state_policy_async(session, today=None):
     Each item carries ``feed_state``: the state whose search found it. That is
     where the search looked, not whose policy it is — the article can mention
     a state the headline does not — so jurisdiction is read from the headline
-    itself (analysis/policy_impact.state_of). Fail-safe like every feed: a
-    search that fails contributes nothing and the run continues.
+    itself (analysis/policy_impact.state_of). Items from a state's industrial
+    policy searches (config.STATE_INDUSTRY_QUERIES) also carry
+    ``feed_kind: "industry"``. Fail-safe like every feed: a search that fails
+    contributes nothing and the run continues.
     """
     from analysis.event_evidence import article_date
-    from config import STATE_POLICY_QUERIES
+    from config import STATE_INDUSTRY_QUERIES, STATE_POLICY_QUERIES
     from utils import fetch_text_async
 
     today = today or datetime.date.today()
     cutoff = (today - datetime.timedelta(days=STATE_MAX_AGE_DAYS)).isoformat()
 
-    async def _fetch(state, query):
+    async def _fetch(state, kind, query):
         try:
             url = (
                 "https://news.google.com/rss/search?q="
@@ -279,27 +281,30 @@ async def fetch_state_policy_async(session, today=None):
             )
             status, xml_data = await fetch_text_async(session, url, timeout=15)
             if status == 200:
-                return state, feedparser.parse(xml_data)
+                return state, kind, feedparser.parse(xml_data)
             log.info(f"State policy feed ({state}, {query}): HTTP {status}.")
         except Exception as e:
             log.error(f"State policy feed ({state}, {query}) failed: {e}")
-        return state, None
+        return state, kind, None
 
-    results = await asyncio.gather(
-        *(
-            _fetch(state, query)
-            for state, queries in STATE_POLICY_QUERIES.items()
-            for query in queries
+    searches = [
+        (state, kind, query)
+        for kind, table in (
+            ("general", STATE_POLICY_QUERIES),
+            ("industry", STATE_INDUSTRY_QUERIES),
         )
-    )
-    # One pool per state, so a state's searches share its slots.
+        for state, queries in table.items()
+        for query in queries
+    ]
+    results = await asyncio.gather(*(_fetch(*s) for s in searches))
+    # One pool per state and kind, so a state's searches share its slots and
+    # its industrial-policy searches have their own.
     pools: dict = {}
-    for state, feed in results:
+    for state, kind, feed in results:
         if feed:
-            pools.setdefault(state, []).extend(feed.entries)
-    results = list(pools.items())
-    items, seen, per_state, stale = [], set(), {}, 0
-    for state, entries in results:
+            pools.setdefault((state, kind), []).extend(feed.entries)
+    items, seen, per_state, stale, industry = [], set(), {}, 0, 0
+    for (state, kind), entries in pools.items():
         fresh = []
         for entry in entries:
             date = article_date(entry.get("published")) or ""
@@ -318,6 +323,8 @@ async def fetch_state_policy_async(session, today=None):
             seen.add(title.lower())
             taken += 1
             per_state[state] = per_state.get(state, 0) + 1
+            if kind == "industry":
+                industry += 1
             items.append(
                 {
                     "title": title,
@@ -325,11 +332,14 @@ async def fetch_state_policy_async(session, today=None):
                     "date": entry.get("published", ""),
                     "source": entry.get("source", {}).get("title", "News"),
                     "feed_state": state,
+                    **({"feed_kind": "industry"} if kind == "industry" else {}),
                 }
             )
+    states = dict.fromkeys([*STATE_POLICY_QUERIES, *STATE_INDUSTRY_QUERIES])
     log.info(
-        f"State policy feed: {len(items)} headline(s) — "
-        + ", ".join(f"{s} {per_state.get(s, 0)}" for s in STATE_POLICY_QUERIES)
+        f"State policy feed: {len(items)} headline(s), {industry} from "
+        "industrial-policy searches — "
+        + ", ".join(f"{s} {per_state.get(s, 0)}" for s in states)
         + f"; {stale} older than {STATE_MAX_AGE_DAYS} days skipped."
     )
     return items

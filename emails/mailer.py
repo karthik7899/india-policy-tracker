@@ -307,17 +307,70 @@ def _policy_badge(policy):
     return f"<span class='badge {cls}'>{label}</span>{extra} | "
 
 
-def _build_policy_direction_html(impacts, caps):
+_STRENGTH_LABEL = {"hard": "Hard policy", "proposed": "Proposed"}
+
+
+def _build_partnerships_html(partnerships, caps):
+    """Governments' MoUs and pacts: soft, listed under the measures."""
+    rows = [r for r in (partnerships or []) if isinstance(r, dict)]
+    if not rows:
+        return ""
+    items = ""
+    for r in rows[: max(1, caps.get("lists", 5) - 2)]:
+        head = r.get("headline", "")
+        link = r.get("link")
+        title = (
+            f"<a href='{link}' target='_blank' style='color:#e2e8f0;'>{head}</a>"
+            if link
+            else head
+        )
+        whose = r.get("government")
+        meta = " · ".join(
+            x
+            for x in (
+                (
+                    f"{whose} government"
+                    if whose and whose not in ("Centre", "Government")
+                    else whose if whose == "Centre" else ""
+                ),
+                ", ".join(
+                    html_lib.escape(_sector_label(s)) for s in r.get("sectors") or []
+                ),
+                ", ".join(r.get("tickers") or []),
+            )
+            if x
+        )
+        items += (
+            f"<li style='margin-bottom:6px;'>{title}"
+            + (
+                f"<br><span style='font-size:11px;color:#94a3b8;'>{meta}</span>"
+                if meta
+                else ""
+            )
+            + "</li>"
+        )
+    return (
+        "<p style='font-size: 12px; color: #94a3b8; margin: 10px 0 4px 0;'>"
+        "<strong>Soft partnerships</strong>: MoUs and pacts a government signed. "
+        "No measure yet; one may follow, or nothing.</p>"
+        "<ul style='font-size: 13px; line-height: 1.5; padding-left: 18px; "
+        f"color: #cbd5e1;'>{items}</ul>"
+    )
+
+
+def _build_policy_direction_html(impacts, caps, partnerships=None):
     """This cycle's policy measures and which way they cut, per sector.
 
-    Measures in force or approved come first; proposals after. Labelled as
-    the LLM's reading because that is what it is — scored against
+    Measures in force or approved come first, labelled hard; proposals
+    after. Governments' MoUs and pacts follow as soft partnerships. Labelled
+    as the LLM's reading because that is what it is — scored against
     eval/policy_labels.json, not yet reviewed by a person. ``impacts``
     arrive escaped with the rest of brief_data, so only the sector label,
     which comes from config, is escaped here.
     """
     rows = [r for r in (impacts or []) if isinstance(r, dict) and r.get("effects")]
-    if not rows:
+    soft = _build_partnerships_html(partnerships, caps)
+    if not rows and not soft:
         return ""
     order = {"in_force": 0, "approved": 1, "proposed": 2}
     rows.sort(key=lambda r: (order.get(r.get("status"), 3), r.get("date", "")))
@@ -341,21 +394,34 @@ def _build_policy_direction_html(impacts, caps):
             if link
             else head
         )
+        status = str(r.get("status", "")).replace("_", " ")
+        strength = _STRENGTH_LABEL.get(r.get("strength"))
         items += (
             f"<li style='margin-bottom:8px;'>{whose}{title}<br>"
             f"<span style='font-size:11px;color:#94a3b8;'>{effects} · "
-            f"{str(r.get('status', '')).replace('_', ' ')}"
-            f"{' &middot; ' + str(r['outlets']) + ' outlets' if (r.get('outlets') or 0) > 1 else ''}"
+            + (
+                f"{strength}, {status}"
+                if strength and strength.lower() != status
+                else status
+            )
+            + f"{' &middot; ' + str(r['outlets']) + ' outlets' if (r.get('outlets') or 0) > 1 else ''}"
             f"</span></li>"
         )
+    measures = (
+        '<ul style="font-size: 13px; line-height: 1.5; padding-left: 18px; '
+        f'color: #cbd5e1;">{items}</ul>'
+        if items
+        else ""
+    )
     return f"""
         <div class="section-card">
             <h3 style="color: #60a5fa; margin-bottom: 6px; font-size: 16px;">Policy Direction</h3>
             <p style="font-size: 11px; color: #6b7280; margin: 0 0 10px 0;">
                 Central, state and regulator actions this cycle, and which of our sectors each
-                helps (▲) or hurts (▼). Read by the LLM from the headline; not verified.
+                helps (▲) or hurts (▼). A hard policy is approved or in force. Read by the LLM
+                from the headline; not verified.
             </p>
-            <ul style="font-size: 13px; line-height: 1.5; padding-left: 18px; color: #cbd5e1;">{items}</ul>
+            {measures}{soft}
         </div>
         """
 
@@ -430,7 +496,13 @@ def _build_exec_summary_html(summary):
         'font-family:Arial,Helvetica,sans-serif;">'
         f'Data completeness <strong style="color:#e2e8f0;">{cov["completeness"]}%</strong>'
         f' &nbsp;|&nbsp; Priced <strong style="color:#e2e8f0;">{cov["priced"]}/{cov["total"]}</strong>'
-        f' &nbsp;|&nbsp; Run <strong style="color:{status_colour};">{status_text}</strong>'
+        + (
+            f' &nbsp;|&nbsp; Kept from an earlier run <strong style="color:#e2e8f0;">'
+            f'{cov["kept"]}</strong>'
+            if cov.get("kept")
+            else ""
+        )
+        + f' &nbsp;|&nbsp; Run <strong style="color:{status_colour};">{status_text}</strong>'
         "</td></tr></table>"
     )
 
@@ -1723,7 +1795,9 @@ def _render_email(brief_data, watchlist, caps):
     # curve stage, rotation track record — all synthesized from data already
     # computed above, no new fetches.
     body_html += _build_research_engine_html(brief_data, caps)
-    body_html += _build_policy_direction_html(brief_data.get("policy_impacts"), caps)
+    body_html += _build_policy_direction_html(
+        brief_data.get("policy_impacts"), caps, brief_data.get("policy_partnerships")
+    )
     body_html += _build_policy_balance_html(brief_data.get("policy_balance"))
 
     selected_sectors, eligible_total = _sectors_to_render(brief_data, caps)

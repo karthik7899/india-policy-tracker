@@ -564,6 +564,21 @@ STATE_POLICY_QUERIES = {
     "Rajasthan": ['"Rajasthan government"', '"Rajasthan cabinet"'],
 }
 
+# Industrial policy where it is decided. The searches above return a state's
+# whole news day, where a day of cabinet politics can take all of a state's
+# slots. These look for the semiconductor, data-centre and industrial
+# incentives that decide where a plant goes, and fill slots of their own.
+# Words unquoted, so "data center" is found as well as "data centre". Started
+# with the five states that compete hardest for those plants.
+STATE_INDUSTRY_QUERIES = {
+    state: [
+        f'"{state}" semiconductor policy',
+        f'"{state}" data centre policy',
+        f'"{state}" industrial policy',
+    ]
+    for state in ("Gujarat", "Maharashtra", "Tamil Nadu", "Karnataka", "Telangana")
+}
+
 
 def _normalize_watchlist(watchlist):
     """Canonicalize every stock record's typed fields on load (see

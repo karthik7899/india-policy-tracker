@@ -3,6 +3,7 @@ import asyncio
 from collections import Counter, namedtuple
 from bs4 import BeautifulSoup
 from logger import log
+from analysis.last_good import mark
 from analysis.parsing import extract_row_values, calculate_trend, calculate_growth
 from utils import (
     TransientNetworkError,
@@ -634,7 +635,10 @@ async def fetch_all_screener_fundamentals(watchlist):
         holdings = []
         for ticker, sc_data, warehouse_id in results:
             if sc_data:
+                # A holding left empty here gets its last fetched values back
+                # once every source has run (analysis/last_good.py).
                 ticker_to_stock[ticker]["screener"] = sc_data
+                mark(ticker_to_stock[ticker], "screener")
                 log.info(
                     f"{ticker}: Screener data loaded (PE={sc_data.get('pe_ratio', 'N/A')})"
                 )

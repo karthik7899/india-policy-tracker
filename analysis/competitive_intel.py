@@ -160,8 +160,14 @@ def _headline_items(data: Dict[str, Any], watchlist: Dict[str, Any]):
     for item in data.get("product_launches", []) or []:
         if isinstance(item, dict):
             yield item.get("product"), item
+    from analysis.headline_text import is_filing_noise
+
     for item in data.get("corporate_filings", []) or []:
-        if isinstance(item, dict):
+        # Statutory housekeeping (trading-window closures, Reg 74(5)
+        # certificates, newspaper notices) gives the rules nothing to match
+        # and cost the LLM a reading each. The filings feed itself is kept
+        # whole: the calendar reads board-meeting notices from it.
+        if isinstance(item, dict) and not is_filing_noise(item.get("filing")):
             yield item.get("filing"), item
     for item in data.get("global_market_news", []) or []:
         if isinstance(item, dict):

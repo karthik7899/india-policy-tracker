@@ -25,7 +25,12 @@ const STREAMS = [
   ["events", "Market events", "market_events"],
   ["global", "Global", "global_market_news"],
   ["policy", "Policy", "policy_impacts"],
+  ["partnerships", "Gov't partnerships", "policy_partnerships"],
 ];
+
+// How binding a policy row is (analysis/policy_impact.py): a measure approved
+// or in force, a draft, or a government's MoU or pact with a company.
+export const STRENGTH_LABEL = { hard: "Hard policy", proposed: "Proposed", soft: "Soft partnership" };
 
 function streamNav(active, route) {
   return el(
@@ -98,12 +103,31 @@ export function policyDetail(item, labels = {}) {
   const effects = (item.effects || [])
     .map((e) => `${ARROW[e.direction] || ""} ${sectorName(e.sector, labels)}`.trim())
     .join(", ");
+  const status = String(item.status || "").replace(/_/g, " ");
+  const strength = STRENGTH_LABEL[item.strength];
   return [
     effects,
-    String(item.status || "").replace(/_/g, " "),
+    // "Hard policy, in force"; a row from before strength was recorded keeps
+    // its bare status.
+    strength && strength.toLowerCase() !== status ? `${strength}, ${status}` : status,
     item.state ? `${item.state} government` : "",
     item.outlets > 1 ? `${item.outlets} outlets` : "",
     LLM_MARK,
+  ]
+    .filter(Boolean)
+    .join(" \u00b7 ");
+}
+
+/**
+ * A government's MoU or pact with a company: no measure yet, so not a policy
+ * row. The sectors and holdings are the tie-up event's own.
+ */
+export function partnershipDetail(item, labels = {}) {
+  return [
+    STRENGTH_LABEL.soft,
+    item.government && item.government !== "Government" ? `${item.government}${item.government === "Centre" ? "" : " government"}` : "",
+    (item.sectors || []).map((s) => sectorName(s, labels)).join(", "),
+    item.certainty && item.certainty !== "completed" ? item.certainty : "",
   ]
     .filter(Boolean)
     .join(" \u00b7 ");
@@ -114,10 +138,16 @@ function normalise(item, streamLabel, labels) {
   return {
     when: item.date || item.published || "",
     what: item.filing || item.headline || item.title || item.signal || "",
-    who: item.company || item.ticker || item.name || (item.actors || [])[0] || "",
+    who: item.company || item.ticker || item.name || (item.actors || item.tickers || [])[0] || "",
     source: item.source || streamLabel,
     link: item.link || item.url || "",
-    detail: item.event_type ? eventDetail(item) : item.effects ? policyDetail(item, labels) : "",
+    detail: item.event_type
+      ? eventDetail(item)
+      : item.effects
+        ? policyDetail(item, labels)
+        : item.strength === "soft"
+          ? partnershipDetail(item, labels)
+          : "",
   };
 }
 

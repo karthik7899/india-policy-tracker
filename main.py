@@ -20,6 +20,7 @@ from dashboard.builder import build_dashboard_views
 from providers.screener import fetch_all_screener_fundamentals
 from emails.mailer import build_briefing_email, send_email
 from analysis import revisions as revisions_mod
+from analysis import last_good
 from analysis import postmortem
 from analysis.thesis import compute_thesis_health
 from analysis.variant_perception import compute_variant_perception
@@ -91,6 +92,9 @@ async def run_pipeline():
     # Snapshot targets/coverage before anything mutates the watchlist, so
     # estimate-revision momentum can diff "before this run" vs "after".
     prior_estimates = revisions_mod.snapshot_prior_estimates(watchlist)
+    # And every fetched value, so one a source fails to deliver this run can
+    # be put back, marked, rather than lost (analysis/last_good.py).
+    prior_values = last_good.snapshot(watchlist)
     prior_industry_shares = snapshot_prior_industry_shares(watchlist)
 
     # Gather news data async
@@ -168,6 +172,13 @@ async def run_pipeline():
         delivery_rows = await fetch_delivery_async(delivery_session)
     delivery_applied = apply_delivery(watchlist, delivery_rows)
     log.info(f"Delivery: attached to {delivery_applied} holding(s).")
+
+    # Every live source has now written. A value one of them failed to
+    # deliver is put back if it is under a week old, and marked as kept, so
+    # nothing downstream reads a timeout as a company with no fundamentals.
+    kept = last_good.restore(watchlist, prior_values)
+    data["freshness"]["last_good"] = kept
+    log.info(last_good.describe(kept))
 
     # True industry market share: each holding's slice of its FULL Screener
     # industry peer group's quarterly sales, not just the watchlist subset.
@@ -301,6 +312,18 @@ async def run_pipeline():
         # Before classification: a partner accepted since the last run must
         # already be a known entity when today's headlines are read.
         apply_accepted_proposals(graph)
+        from analysis.headline_text import is_filing_noise
+
+        filings = data.get("corporate_filings") or []
+        noise = sum(
+            1
+            for f in filings
+            if isinstance(f, dict) and is_filing_noise(f.get("filing"))
+        )
+        log.info(
+            f"Filings: {noise} of {len(filings)} are statutory housekeeping and "
+            "are left out of event classification and the LLM reader."
+        )
         events = classify_headlines(data, watchlist, graph)
 
         # Second reader. Optional: without GEMINI_API_KEY, or on any API
@@ -364,6 +387,19 @@ async def run_pipeline():
             sources=collect_sources(data, watchlist),
         )
         annotate_event_materiality(data["market_events"], watchlist)
+
+        # Governments' MoUs and pacts: no measure was taken, so the policy
+        # reader lists none; they are tie-ups with a government party.
+        from analysis.policy_impact import government_partnerships
+
+        data["policy_partnerships"] = government_partnerships(data["market_events"])
+        hard = sum(1 for r in data["policy_impacts"] if r.get("strength") == "hard")
+        log.info(
+            f"Policy strength: {hard} of {len(data['policy_impacts'])} measure(s) "
+            "approved or in force; "
+            f"{len(data['policy_partnerships'])} government partnership(s) "
+            "(MoUs, pacts) in the last 30 days."
+        )
 
         # How much to believe each event: how many outlets reported the
         # story, and whether the holding disclosed it to the exchange.

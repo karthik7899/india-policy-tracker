@@ -75,7 +75,10 @@ def update_single_stock(stock, prefetched_prices=None, prefetched_liquidity=None
             data["price"] = float(prefetched_prices[yahoo_ticker])
 
         if data.get("price") is not None:
+            from analysis.last_good import mark
+
             stock["price"] = f"{data['price']:.2f}"
+            mark(stock, "price")
 
         for k, v in data.items():
             if k != "price" and v is not None:

@@ -29,6 +29,14 @@ All of it is the LLM's reading, labelled as such wherever it is shown. It is
 never fed into scores or warnings: like every other LLM-only output here, it
 informs the reader and is scored against eval/policy_labels.json before
 anyone should lean on it.
+
+How binding it is. Each policy row carries a ``strength``: ``hard`` for a
+measure approved or in force (a gazette notification, a capital subsidy, a
+power-tariff approval), ``proposed`` for a draft. A government signing an
+MoU or a pact with a company changes no rule, so the reader records no
+measure, and those headlines never become policy rows. They arrive as tie-up
+events instead, and government_partnerships() lists the ones with a
+government party as ``soft``: a partnership, not yet a policy.
 """
 
 import datetime
@@ -40,6 +48,7 @@ from analysis.event_evidence import article_date
 # How much a measure counts toward a sector's balance by how far along it is.
 # A proposal is a signal, not yet a change to anyone's economics.
 STATUS_WEIGHT = {"in_force": 1.0, "approved": 1.0, "proposed": 0.5}
+STRENGTH = {"in_force": "hard", "approved": "hard", "proposed": "proposed"}
 BALANCE_WINDOW_DAYS = 30
 
 # State-feed headlines kept across runs: as long as the balance looks back,
@@ -96,7 +105,9 @@ _CENTRAL_RE = re.compile(
     # nor a "centre of excellence".
     r"\b(?:(?<!data\s)(?<!call\s)(?<!care\s)(?<!distribution\s)"
     r"(?<!experience\s)(?<!fulfilment\s)(?<!development\s)(?<!service\s)"
-    r"centre(?!\s+(?:of|for)\b)|central\s+govt|central\s+government|"
+    # Nor "take centre stage": Arvind at a fashion week was read as the
+    # Centre signing a pact.
+    r"centre(?!\s+(?:of|for|stage)\b|-stage)|central\s+govt|central\s+government|"
     r"union\s+(?:cabinet|budget|government|minister)|modi\s+govt|goi)\b",
     re.IGNORECASE,
 )
@@ -156,11 +167,13 @@ def policy_impacts(
             continue
         citation = (sources or {}).get(headline.lower()) or {}
         state = state_of(headline)
+        status = reading.get("policy_status") or "proposed"
         out.append(
             {
                 "headline": headline[:200],
                 "measure": reading["policy_measure"],
-                "status": reading.get("policy_status") or "proposed",
+                "status": status,
+                "strength": STRENGTH.get(status, "proposed"),
                 "effects": effects,
                 **({"state": state} if state else {}),
                 "date": article_date(citation.get("date")) or today,
@@ -265,6 +278,76 @@ def merge_repeat_policies(impacts: List[Dict[str, Any]]) -> List[Dict[str, Any]]
                 merged["state"] = state
         out.append(merged)
     out.sort(key=lambda r: (r.get("date", ""), r.get("headline", "")), reverse=True)
+    return out
+
+
+# A government named as a party without a state or the Centre: "ministry",
+# "govt". Public companies (NTPC, BEL) are companies here, not governments.
+_GOVERNMENT_RE = re.compile(
+    r"\b(?:govt|government|cabinet|ministry|chief\s+minister)\b", re.IGNORECASE
+)
+
+
+def government_party(headline: str) -> Optional[str]:
+    """Whose government is a party to a headline: a state, "Centre",
+    "Government" when the headline does not say whose, or None.
+
+    Unlike state_of(), a state is named even when the Centre is too: in
+    "Andhra govt, Centre, AM/NS India sign pact" the state is a party.
+    """
+    text = str(headline or "")
+    states = [state for state, rx in _STATE_RES.items() if rx.search(text)]
+    if len(states) == 1:
+        return states[0]
+    if _CENTRAL_RE.search(text):
+        return "Centre"
+    if states or _GOVERNMENT_RE.search(text):
+        return "Government"
+    return None
+
+
+def government_partnerships(
+    events: List[Dict[str, Any]], today: str = ""
+) -> List[Dict[str, Any]]:
+    """Tie-ups with a government party over BALANCE_WINDOW_DAYS, newest first.
+
+    "ReNew signs Rs 700 billion MoU with Maharashtra government", "Anant
+    Raj's MoU with Haryana Govt": the reader records no measure for these,
+    because none was taken, so they never reach policy_impacts. They are
+    listed here as ``soft``: an intention a government signed, which can
+    become a hard measure (land allotted, a subsidy approved) or nothing.
+    Sectors and holdings are the event's own (its vocabulary domains and
+    the holdings it names).
+    """
+    today = today or datetime.date.today().isoformat()
+    cutoff = (
+        datetime.date.fromisoformat(today)
+        - datetime.timedelta(days=BALANCE_WINDOW_DAYS)
+    ).isoformat()
+    out, seen = [], set()
+    for event in events or []:
+        if not isinstance(event, dict) or event.get("event_type") != "tie_up":
+            continue
+        headline = str(event.get("headline") or "")
+        party = government_party(headline)
+        day = article_date(event.get("date")) or today
+        if not party or day < cutoff or headline.lower() in seen:
+            continue
+        seen.add(headline.lower())
+        out.append(
+            {
+                "headline": headline[:200],
+                "strength": "soft",
+                "government": party,
+                "sectors": list(event.get("domains") or []),
+                "tickers": list(event.get("actors") or []),
+                "certainty": event.get("certainty"),
+                "date": day,
+                **({"link": event["link"]} if event.get("link") else {}),
+                **({"source": event["source"]} if event.get("source") else {}),
+            }
+        )
+    out.sort(key=lambda r: (r["date"], r["headline"]), reverse=True)
     return out
 
 
