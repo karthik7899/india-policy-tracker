@@ -99,6 +99,64 @@ async def probe_screener_peers(symbol):
     return status == 200 and bool(rows)
 
 
+def _row_labels(soup, section_id):
+    """First-column labels of a Screener section's rows, as the parser sees them."""
+    section = soup.find("section", id=section_id)
+    if not section:
+        return []
+    labels = []
+    for tr in section.find_all("tr"):
+        tds = tr.find_all("td")
+        if tds:
+            labels.append(tds[0].get_text(" ", strip=True))
+    return labels
+
+
+def _watchlist_name(symbol):
+    """The watchlist's name for a holding, which the pipeline checks a
+    Screener search answer against; None outside the watchlist."""
+    try:
+        with open("watchlist.json", encoding="utf-8") as f:
+            watchlist = json.load(f)
+    except (OSError, ValueError):
+        return None
+    for rows in watchlist.values():
+        for s in rows if isinstance(rows, list) else []:
+            if isinstance(s, dict) and s.get("ticker") == symbol:
+                return s.get("name")
+    return None
+
+
+async def _screener_search(session, symbol):
+    """What Screener's own search calls a company it has no page for under
+    the ticker: by the ticker, then by the watchlist's name for it."""
+    from urllib.parse import quote
+
+    for query in [symbol, _watchlist_name(symbol)]:
+        if not query:
+            continue
+        url = (
+            "https://www.screener.in/api/company/search/" f"?q={quote(query)}&v=3&fts=1"
+        )
+        async with session.get(url, timeout=20) as response:
+            body = await response.text()
+            status = response.status
+            ctype = response.headers.get("Content-Type", "")
+        try:
+            hits = [(h.get("name"), h.get("url")) for h in json.loads(body)][:6]
+        except (ValueError, AttributeError, TypeError):
+            hits = "unreadable"
+        _report(
+            f"SCREENER SEARCH ({query!r})",
+            status,
+            ctype,
+            body,
+            f"results={hits}",
+            _save(f"screener_search_{symbol}_{len(query)}.json", body),
+        )
+        await asyncio.sleep(1.5)
+
+
 async def probe_screener_accounts(symbols):
     """Each company's consolidated and standalone pages, side by side.
 
@@ -145,15 +203,31 @@ async def probe_screener_accounts(symbols):
                     f"warehouse={warehouse_id}; final URL {final}",
                     _save(f"screener_{symbol}_{accounts}.html", body),
                 )
-                text = " ".join(BeautifulSoup(body, "lxml").get_text(" ").split())
+                soup = BeautifulSoup(body, "lxml")
+                text = " ".join(soup.get_text(" ").split())
                 mentions = re.findall(
                     r"[^.]{0,90}\b(?:consolidated|standalone)\b[^.]{0,90}", text, re.I
                 )
                 print(f"  Mentions    : {mentions[:3] or 'none'}")
+                # The labels the parser matches against: a bank's page names
+                # its rows differently from a manufacturer's.
+                for section in ("quarters", "profit-loss"):
+                    print(
+                        f"  Rows {section:<11}: {_row_labels(soup, section) or 'none'}"
+                    )
+                if status == 404 and accounts == ACCOUNTS[-1]:
+                    await asyncio.sleep(1.5)
+                    await _screener_search(session, symbol)
             await asyncio.sleep(1.5)
-            _t, sc, _w = await fetch_screener_async(session, symbol, "probe", 0.0)
+            _t, sc, _w = await fetch_screener_async(
+                session, symbol, "probe", 0.0, name=_watchlist_name(symbol)
+            )
+            shown = {
+                k: (sc or {}).get(k)
+                for k in ("accounts", "slug", "q_sales", "q_opm", "q_fin_margin")
+            }
             print(
-                f"  PIPELINE    : {symbol} -> accounts={(sc or {}).get('accounts')} "
+                f"  PIPELINE    : {symbol} -> {shown} "
                 f"figures={has_figures(sc)} fields={len(sc or {})}"
             )
             found = found or has_figures(sc)

@@ -87,6 +87,15 @@ test("the latest results state the figures and never a beat or a miss", () => {
   assert.equal(resultsBadge(results, "TCS", { asOf: "2026-10-16" }), null);
 });
 
+test("a lender's results say revenue, its top line", () => {
+  const results = {
+    scorecards: [
+      { ticker: "SBIN", detected: "2026-10-15", quarter: "Sep 2026", sales_qoq_pct: 3.6, opm_change_pp: -1, margin_basis: "financing" },
+    ],
+  };
+  assert.equal(resultsBadge(results, "SBIN", { asOf: "2026-10-16" }).text, "Sep 2026: revenue ▲3.6% QoQ · margin ▼1.0 pts QoQ");
+});
+
 test("days are counted between calendar dates", () => {
   assert.equal(daysBetween("2026-10-14", "2026-10-24"), 10);
   assert.equal(daysBetween("2026-10-14", "2026-10-13"), -1);

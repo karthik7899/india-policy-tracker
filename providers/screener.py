@@ -1,6 +1,9 @@
 import aiohttp
 import asyncio
+import json
+import re
 from collections import Counter, namedtuple
+from urllib.parse import quote
 from bs4 import BeautifulSoup
 from logger import log
 from analysis.last_good import mark
@@ -75,8 +78,8 @@ ACCOUNTS = ("consolidated", "standalone")
 FIGURE_FIELDS = ("market_cap", "pe_ratio", "roce", "q_sales", "annual_sales_trend")
 
 
-def company_url(ticker, accounts="consolidated"):
-    base = f"https://www.screener.in/company/{ticker}/"
+def company_url(slug, accounts="consolidated"):
+    base = f"https://www.screener.in/company/{slug}/"
     return base + "consolidated/" if accounts == "consolidated" else base
 
 
@@ -85,7 +88,54 @@ def has_figures(sc):
     return any(key in (sc or {}) for key in FIGURE_FIELDS)
 
 
-async def fetch_screener_async(session, ticker, sector, price, fetch=None):
+# Screener's own company search, which answers with the page it files a
+# company under. A company with no NSE listing is filed under its BSE code:
+# ASMTEC is /company/526433/ (docs/upstream-findings.md).
+SEARCH_URL = "https://www.screener.in/api/company/search/?q={query}&v=3&fts=1"
+
+# "/company/526433/consolidated/" or "/company/HAL/". Not the "Search
+# everywhere" row, and not a partly-paid line, which is "/company/id/<n>/".
+_COMPANY_PAGE = re.compile(r"^/company/([A-Za-z0-9&_.-]+)/(?:consolidated/)?$")
+
+
+def _plain_name(name):
+    words = re.sub(r"[^a-z0-9& ]+", " ", str(name or "").lower()).split()
+    return " ".join(w for w in words if w not in ("ltd", "limited", "the"))
+
+
+def slug_from_search(hits, name):
+    """The page a Screener search filed the company under, or None.
+
+    Only a hit whose name is the holding's counts: another company's figures
+    under this ticker would be worse than none.
+    """
+    want = _plain_name(name)
+    if not want or not isinstance(hits, list):
+        return None
+    for hit in hits:
+        if not isinstance(hit, dict):
+            continue
+        page = _COMPANY_PAGE.match(str(hit.get("url") or ""))
+        found = _plain_name(hit.get("name"))
+        if page and page.group(1) != "id" and found and found == want:
+            return page.group(1)
+    return None
+
+
+async def find_slug(fetch, session, ticker, name):
+    """Ask Screener's search where it files ``ticker``; None if it cannot say."""
+    try:
+        status, text = await fetch(session, SEARCH_URL.format(query=quote(ticker)))
+        hits = json.loads(text) if status == 200 else None
+    except Exception as e:
+        log.error(f"{ticker}: Screener search failed: {e}")
+        return None
+    return slug_from_search(hits, name)
+
+
+async def fetch_screener_async(
+    session, ticker, sector, price, fetch=None, slug=None, name=None
+):
     """``(ticker, fields, warehouse_id)`` from the company's Screener page.
 
     The consolidated accounts first, then the standalone ones when the
@@ -97,12 +147,17 @@ async def fetch_screener_async(session, ticker, sector, price, fetch=None):
     Any other failure ends the attempt: after a 429 or a 403 the second
     request would only meet the same answer.
 
+    The page is ``slug``, the ticker unless an earlier run found otherwise.
+    When neither view is there and the holding's ``name`` is known,
+    Screener's search is asked once where it files the company, and the
+    answer is kept in ``fields["slug"]`` for the next run.
+
     ``fields`` is None when no page could be read; it is a dict without
     figures (has_figures() is False) when a page was read and showed none.
 
     ``fetch(session, url)`` makes each request. The batch passes one that
-    queues it behind every other Screener request; called on its own, the
-    second view waits one interval after the first.
+    queues it behind every other Screener request; called on its own, each
+    request waits one interval after the last.
     """
     # ETFs / index funds do not have individual fundamentals
     if sector == "macro_indicators":
@@ -118,34 +173,71 @@ async def fetch_screener_async(session, ticker, sector, price, fetch=None):
         )
 
     fetch = fetch or _spaced_requests()
-    fallback, blank = None, []
+    slug = slug or ticker
+    sc, warehouse_id, missing = await _read_company(
+        fetch, session, ticker, slug, sector
+    )
+    if missing and name:
+        found = await find_slug(fetch, session, ticker, name)
+        if found and found != slug:
+            log.info(f"{ticker}: Screener files it as {found}.")
+            slug = found
+            sc, warehouse_id, missing = await _read_company(
+                fetch, session, ticker, slug, sector
+            )
+    if sc is not None and slug != ticker:
+        sc["slug"] = slug
+    return ticker, sc, warehouse_id
+
+
+async def _read_company(fetch, session, ticker, slug, sector):
+    """``(fields, warehouse_id, missing)`` from one company page's two views;
+    ``missing`` when neither is there."""
+    fallback, blank, missing = None, [], True
     for accounts in ACCOUNTS:
         try:
-            status, text = await fetch(session, company_url(ticker, accounts))
+            status, text = await fetch(session, company_url(slug, accounts))
         except Exception as e:
             log.error(f"{ticker}: Screener.in exception ({accounts}): {e}")
+            missing = False
             break
         if status == 404:
             log.info(f"{ticker}: no Screener {accounts} page (HTTP 404).")
             continue
+        missing = False
         if status != 200 or not text:
             log.error(f"{ticker}: Screener {accounts} page: HTTP {status}.")
             break
         sc, warehouse_id = parse_company_page(text, ticker, sector)
         if has_figures(sc):
             sc["accounts"] = accounts
-            return ticker, sc, warehouse_id
+            return sc, warehouse_id, False
         # Kept in case the other view has nothing either: the shareholding,
         # which does not depend on the accounts, is still the company's.
         fallback = fallback or (sc, warehouse_id)
         blank.append(accounts)
     if fallback is None:
-        return ticker, None, None
+        return None, None, missing
     log.warning(
         f"{ticker}: no figures on Screener's {' or '.join(blank)} page; "
         "only shareholding was read."
     )
-    return ticker, fallback[0], fallback[1]
+    return fallback[0], fallback[1], False
+
+
+# A lender's page (Screener's template for banks and NBFCs) calls its top
+# line "Revenue" -- interest earned -- where every other page says "Sales",
+# and read as sales it gives HDFCBANK, ICICIBANK and SBIN quarterly and
+# annual figures at all.
+#
+# Its "Financing Margin %" sits where other pages have "OPM %", but it is not
+# an operating margin and is kept apart from one. It is revenue less interest
+# expended and expenses, provisions included, and on a consolidated page it
+# leaves out an insurance arm's income: ICICIBANK's was -12% and SBIN's -8%
+# on 14 Oct 2026, while both made a profit. Read as q_opm it would have zeroed ICICI's
+# Graham value as a company losing money at the operating line.
+SALES_ROW = r"\b(?:Sales|Revenue)\b"
+FINANCING_MARGIN_ROW = r"\bFinancing Margin\b"
 
 
 def _spaced_requests():
@@ -203,7 +295,7 @@ def parse_company_page(text, ticker, sector):
                     pass
 
     # 2. Quarterly Results
-    q_sales = extract_row_values(soup, "quarters", "Sales")
+    q_sales = extract_row_values(soup, "quarters", SALES_ROW)
     if q_sales:
         sc["q_sales"] = q_sales[-1]
         if len(q_sales) >= 2:
@@ -219,6 +311,13 @@ def parse_company_page(text, ticker, sector):
         sc["quarterly_ebitda_margin"] = calculate_trend(q_opm, 4)
         if len(q_opm) >= 2:
             sc["opm_expansion"] = round(q_opm[-1] - q_opm[-2], 1)
+
+    # A lender's margin, shown and asked about but never scored as an
+    # operating margin (see FINANCING_MARGIN_ROW).
+    q_fin_margin = extract_row_values(soup, "quarters", FINANCING_MARGIN_ROW)
+    if q_fin_margin:
+        sc["q_fin_margin"] = q_fin_margin[-1]
+        sc["fin_margin_trend"] = q_fin_margin[-8:]
 
     q_eps = extract_row_values(soup, "quarters", "EPS")
     if q_eps:
@@ -243,7 +342,7 @@ def parse_company_page(text, ticker, sector):
     # Annual revenue is the only series long enough to carry a real multi-year
     # CAGR — the quarterly table tops out at 8 quarters. Annual periods are
     # also seasonality-free by construction (analysis/sector_growth.py).
-    a_sales = extract_row_values(soup, "profit-loss", "Sales")
+    a_sales = extract_row_values(soup, "profit-loss", SALES_ROW)
     if a_sales:
         sc["annual_sales_trend"] = a_sales[-6:]
 
@@ -285,8 +384,10 @@ def parse_company_page(text, ticker, sector):
     if capex:
         sc["capex"] = abs(capex[-1])
     else:
-        # Fallback capex estimate
-        sales_val = sc.get("q_sales", 0)
+        # Fallback capex estimate: 5% of annualised sales, a manufacturer's
+        # ratio. A lender's revenue is interest earned, and its capex is
+        # branches and systems, so it is not estimated from that.
+        sales_val = 0 if q_fin_margin else sc.get("q_sales", 0)
         sc["capex"] = round(sales_val * 4 * 0.05, 1)
 
     # R&D Expenditure (from P&L if present)
@@ -704,9 +805,19 @@ async def fetch_all_screener_fundamentals(watchlist):
                 price = float(stock.get("price") or 0.0)
                 ticker_to_stock[ticker] = stock
                 ticker_to_sector[ticker] = sector
+                # Where an earlier run found Screener files the company.
+                slug = (stock.get("screener") or {}).get("slug")
                 stock["screener"] = {}
                 tasks.append(
-                    fetch_screener_async(session, ticker, sector, price, request)
+                    fetch_screener_async(
+                        session,
+                        ticker,
+                        sector,
+                        price,
+                        request,
+                        slug=slug,
+                        name=stock.get("name"),
+                    )
                 )
 
         results = await asyncio.gather(*tasks)

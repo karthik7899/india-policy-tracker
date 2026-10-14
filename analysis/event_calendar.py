@@ -346,6 +346,10 @@ def scorecard(
         return None
     eps = _series(sc.get("eps_trend"))
     opm = _series(sc.get("quarterly_ebitda_margin"))
+    # A lender has a financing margin instead (providers/screener.py), said so.
+    lender = not opm and bool(_series(sc.get("fin_margin_trend")))
+    if lender:
+        opm = _series(sc.get("fin_margin_trend"))
     quarter = _quarter_end(detected)
     card: Dict[str, Any] = {
         "ticker": ticker,
@@ -370,6 +374,8 @@ def scorecard(
         card["opm_pct"] = opm[-1]
         if len(opm) >= 2:
             card["opm_change_pp"] = round(opm[-1] - opm[-2], 1)
+        if lender:
+            card["margin_basis"] = "financing"
     profit = to_float(sc.get("q_net_profit"))
     if profit is not None:
         card["net_profit_cr"] = profit
@@ -382,8 +388,9 @@ def _signed(v: float, unit: str = "%") -> str:
 
 
 def _summary(c: Dict[str, Any]) -> str:
-    """One sentence, year-on-year first."""
-    parts = [f"Sales ₹{c['sales_cr']:,.0f} Cr"]
+    """One sentence, year-on-year first. A lender's top line is revenue."""
+    top = "Revenue" if c.get("margin_basis") == "financing" else "Sales"
+    parts = [f"{top} ₹{c['sales_cr']:,.0f} Cr"]
     if c.get("sales_yoy_pct") is not None:
         parts[-1] += f", {_signed(c['sales_yoy_pct'])} on a year ago"
     if c.get("sales_qoq_pct") is not None:
@@ -405,7 +412,8 @@ def _summary(c: Dict[str, Any]) -> str:
             parts.append(f"EPS {c['eps']:.2f}")
     if c.get("opm_pct") is not None:
         parts.append(
-            f"operating margin {c['opm_pct']:.0f}%"
+            f"{'financing' if c.get('margin_basis') == 'financing' else 'operating'}"
+            f" margin {c['opm_pct']:.0f}%"
             + (
                 f", {_signed(c['opm_change_pp'], ' pts')} on the quarter before"
                 if c.get("opm_change_pp")

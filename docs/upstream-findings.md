@@ -17,6 +17,54 @@ named.
 
 ---
 
+## Screener files ASMTEC under its BSE code, and names a bank's rows differently
+
+**Measured 2026-10-14**, runs 38560166912, 38561213070 and 38561917933
+(`probe_upstream.py --source screener-accounts`, which now prints each
+page's row labels and asks Screener's search about a page that is not there).
+
+**ASMTEC.** `/company/ASMTEC/` is a 404 under both views. Screener's own
+search, `/api/company/search/?q=ASMTEC&v=3&fts=1`, answers with one company:
+
+```
+[{"id": 300, "name": "ASM Technologies Ltd", "url": "/company/526433/consolidated/"},
+ {"id": null, "name": "Search everywhere: ASMTEC", "url": "/full-text-search/?q=ASMTEC"}]
+```
+
+526433 is its BSE code, and that page has everything: market cap ₹10,034 Cr,
+P/E 137.0, ROCE 27.0, quarterly sales ₹199 Cr. Searching by name also returns
+a partly-paid line, `/company/id/1275222/`, which is not the company's page.
+So `providers/screener.py` asks the search once, when neither view is there,
+takes a hit only if its name is the holding's, and keeps the page it found
+(`slug`) for the next run.
+
+**Banks.** HDFCBANK's and SBIN's pages use Screener's template for lenders:
+
+```
+quarters    : Revenue +, Interest, Expenses +, Financing Profit, Financing Margin %,
+              Other Income +, Depreciation, Profit before tax, Tax %, Net Profit +,
+              EPS in Rs, Gross NPA %, Net NPA %
+profit-loss : the same, with Dividend Payout % for the NPA rows
+```
+
+The parser looked for "Sales" and "OPM", so all three banks had no
+quarterly sales, no margin and no annual sales. "Revenue" (interest earned)
+is now read as sales.
+
+"Financing Margin %" sits where other pages have "OPM %", but it is **not an
+operating margin**, and the runs that checked this code (38561213070,
+38561917933) showed why it must not be read as one: ICICIBANK's
+consolidated financing margin was **-12%** and SBIN's -8%, while both made
+a profit. It is revenue less interest expended and expenses, provisions
+included, and on a consolidated page it leaves out an insurance arm's
+income, which Screener puts in Other Income. Read as `q_opm`, it would have
+zeroed both banks' Graham values as companies losing money at the operating
+line and raised margin warnings. So it is kept as `q_fin_margin` and
+`fin_margin_trend`: shown on the results card and given to Ask as a
+financing margin, and never scored.
+
+---
+
 ## Three holdings have no consolidated figures on Screener
 
 **Measured 2026-10-14**, runs 38542728415 and 38557623882

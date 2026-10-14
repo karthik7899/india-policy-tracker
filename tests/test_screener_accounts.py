@@ -176,7 +176,7 @@ def test_only_a_page_with_figures_counts_as_fetched(monkeypatch):
         "ASMTEC": (None, None),
     }
 
-    async def fake_fetch(session, ticker, sector, price, fetch=None):
+    async def fake_fetch(session, ticker, sector, price, fetch=None, **kwargs):
         return (ticker, *results[ticker])
 
     monkeypatch.setattr(screener, "fetch_screener_async", fake_fetch)
@@ -200,3 +200,95 @@ def test_only_a_page_with_figures_counts_as_fetched(monkeypatch):
     assert "roce" in stocks["RELAXO"]["_stale_fields"]
     # A fresh page keeps its own figures.
     assert stocks["HAL"]["screener"]["market_cap"] == 1.0
+
+
+# ---------------------------------------------------------------------------
+# A company Screener files under another name
+# ---------------------------------------------------------------------------
+
+# Screener's answer for "ASMTEC" on 14 Oct 2026, verbatim.
+ASMTEC_SEARCH = (
+    '[{"id": 300, "name": "ASM Technologies Ltd", '
+    '"url": "/company/526433/consolidated/"}, {"id": null, '
+    '"name": "Search everywhere: ASMTEC", "url": "/full-text-search/?q=ASMTEC"}]'
+)
+SEARCH = screener.SEARCH_URL.format(query="ASMTEC")
+BSE_PAGE = "https://www.screener.in/company/526433/consolidated/"
+
+
+def _fetch_asmtec(**kwargs):
+    return asyncio.run(
+        screener.fetch_screener_async(None, "ASMTEC", "x", 0.0, **kwargs)
+    )
+
+
+def test_a_company_with_no_page_under_its_ticker_is_found_through_search(pages):
+    pages[SEARCH] = (200, ASMTEC_SEARCH)
+    pages[BSE_PAGE] = (200, FULL)
+    _t, sc, _w = _fetch_asmtec(name="ASM Technologies")
+    assert sc["slug"] == "526433" and sc["accounts"] == "consolidated"
+    assert sc["market_cap"] == 41234.0
+    assert pages["asked"] == [
+        "https://www.screener.in/company/ASMTEC/consolidated/",
+        "https://www.screener.in/company/ASMTEC/",
+        SEARCH,
+        BSE_PAGE,
+    ]
+
+
+def test_the_page_found_before_is_read_without_searching(pages):
+    pages[BSE_PAGE] = (200, FULL)
+    _t, sc, _w = _fetch_asmtec(slug="526433", name="ASM Technologies")
+    assert sc["slug"] == "526433"
+    assert pages["asked"] == [BSE_PAGE]
+
+
+def test_only_a_missing_page_is_searched_for(pages):
+    """Not after a failure, and not without a name to check the answer by."""
+    pages["https://www.screener.in/company/ASMTEC/consolidated/"] = ConnectionError()
+    _t, sc, _w = _fetch_asmtec(name="ASM Technologies")
+    assert sc is None and SEARCH not in pages["asked"]
+    pages["asked"].clear()
+    del pages["https://www.screener.in/company/ASMTEC/consolidated/"]
+    _t, sc, _w = _fetch_asmtec()
+    assert sc is None and SEARCH not in pages["asked"]
+
+
+def test_a_search_answer_must_be_the_holdings_company():
+    hits = [
+        {"id": 1, "name": "ASM Infra Ltd", "url": "/company/ASMINFRA/"},
+        {
+            "id": 2,
+            "name": "ASM Technologies Ltd Partly Paidup",
+            "url": "/company/id/1275222/",
+        },
+        {
+            "id": None,
+            "name": "Search everywhere: ASM",
+            "url": "/full-text-search/?q=ASM",
+        },
+    ]
+    assert screener.slug_from_search(hits, "ASM Technologies") is None
+    hits.append({"id": 300, "name": "ASM Technologies Ltd", "url": "/company/526433/"})
+    assert screener.slug_from_search(hits, "ASM Technologies") == "526433"
+    assert screener.slug_from_search(hits, None) is None
+    assert screener.slug_from_search("not a list", "ASM Technologies") is None
+
+
+def test_the_batch_reads_where_the_last_run_found_the_page(monkeypatch):
+    seen = {}
+
+    async def fake_fetch(session, ticker, sector, price, fetch=None, **kwargs):
+        seen[ticker] = kwargs
+        return ticker, None, None
+
+    monkeypatch.setattr(screener, "fetch_screener_async", fake_fetch)
+    monkeypatch.setattr(screener, "_fetch_industry_tables", _no_tables)
+    monkeypatch.setattr(screener, "_assemble_peer_views", lambda *a: ({}, []))
+    stock = {
+        "ticker": "ASMTEC",
+        "name": "ASM Technologies",
+        "screener": {"slug": "526433", "roce": 27.0},
+    }
+    asyncio.run(screener.fetch_all_screener_fundamentals({"x": [stock]}))
+    assert seen["ASMTEC"] == {"slug": "526433", "name": "ASM Technologies"}
