@@ -88,6 +88,31 @@ def test_a_partial_fetch_keeps_only_what_is_missing():
     assert "pledged_pct" not in sc
 
 
+def test_figures_from_the_other_view_of_the_accounts_are_not_kept():
+    """PAGEIND, read from its standalone page until Screener shows consolidated
+    figures: that day's page is not topped up with standalone ones."""
+    stock = _holding()
+    stock["screener"]["accounts"] = "standalone"
+    _run(stock, price=True, screener={"accounts": "consolidated", "roe": 25.0})
+    sc = stock["screener"]
+    assert sc["roe"] == 25.0
+    assert "roce" not in sc and "q_sales" not in sc
+    # Turnover and delivery are not Screener's, so they are still kept.
+    assert sc["advt_cr"] == 512.0 and sc["deliv_pct"] == 48.0
+    assert set(stock["_stale_fields"]) == {"advt_cr", "week52_low", "deliv_pct"}
+
+
+def test_a_record_without_a_view_counts_as_consolidated():
+    stock = _holding()
+    _run(stock, price=True, screener={"accounts": "consolidated", "roe": 25.0})
+    assert stock["screener"]["roce"] == 31.2
+    # And the view itself is kept along with a failed fetch's figures.
+    stock = _holding()
+    stock["screener"]["accounts"] = "standalone"
+    _run(stock, price=True)
+    assert stock["screener"]["accounts"] == "standalone"
+
+
 def test_a_value_older_than_a_week_is_dropped_not_shown_as_current():
     stock = _holding(_stale_fields={"roce": "2026-10-06", "price": "2026-10-05"})
     report = _run(stock)

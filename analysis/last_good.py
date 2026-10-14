@@ -37,6 +37,7 @@ from typing import Any, Dict, Iterable, Optional
 TTL_DAYS = 7
 
 SCREENER_FIELDS = (
+    "accounts",
     "annual_eps_trend",
     "annual_sales_trend",
     "capex",
@@ -137,6 +138,13 @@ def snapshot(watchlist, when=None) -> Dict[str, Any]:
     }
 
 
+def _accounts(screener: Dict[str, Any]) -> str:
+    """Which of Screener's views the figures came from. Records from before
+    providers/screener.py read the standalone page carry none, and every one
+    of them was read from the consolidated page."""
+    return screener.get("accounts") or "consolidated"
+
+
 def _day(stamp: Optional[str]) -> Optional[datetime.date]:
     try:
         return datetime.date.fromisoformat(str(stamp)[:10])
@@ -200,10 +208,18 @@ def restore(
             if not isinstance(screener, dict):
                 screener = stock["screener"] = {}
             screener_fresh = str(fetched.get("screener") or "") >= started
+            # A page read from the other view of the accounts takes nothing
+            # from the last one: a standalone P/E kept beside consolidated
+            # quarters would read as one company's figures.
+            switched = screener_fresh and _accounts(screener) != _accounts(
+                before["screener"]
+            )
             for field in KEPT_FIELDS:
                 if field in screener or field not in before["screener"]:
                     continue
                 if screener_fresh and field in OPTIONAL_ROWS:
+                    continue
+                if switched and field in SCREENER_FIELDS:
                     continue
                 source = (
                     "screener"

@@ -99,6 +99,67 @@ async def probe_screener_peers(symbol):
     return status == 200 and bool(rows)
 
 
+async def probe_screener_accounts(symbols):
+    """Each company's consolidated and standalone pages, side by side.
+
+    On 14 Oct SCHNEIDER, PAGEIND and RELAXO came back from the consolidated
+    page with their shareholding and no figures, and ASMTEC with nothing.
+    This reads both views of each company (comma-separated symbols) through
+    the real parser, then what the pipeline's fetch returns.
+    """
+    import re
+
+    import aiohttp
+    from bs4 import BeautifulSoup
+
+    from providers.screener import (
+        ACCOUNTS,
+        company_url,
+        fetch_screener_async,
+        has_figures,
+        parse_company_page,
+    )
+
+    found = False
+    async with aiohttp.ClientSession() as session:
+        for symbol in [s.strip().upper() for s in symbols.split(",") if s.strip()]:
+            for accounts in ACCOUNTS:
+                # Screener limits by rate; one request every 1.5 s stays clear.
+                await asyncio.sleep(1.5)
+                url = company_url(symbol, accounts)
+                async with session.get(url, timeout=20) as response:
+                    body = await response.text()
+                    status = response.status
+                    ctype = response.headers.get("Content-Type", "")
+                    final = str(response.url)
+                sc, warehouse_id = parse_company_page(body, symbol, "probe")
+                core = {
+                    k: sc.get(k) for k in ("market_cap", "pe_ratio", "roce", "q_sales")
+                }
+                _report(
+                    f"SCREENER {accounts.upper()} ({symbol})",
+                    status,
+                    ctype,
+                    body,
+                    f"figures={has_figures(sc)} {core}; {len(sc)} field(s); "
+                    f"warehouse={warehouse_id}; final URL {final}",
+                    _save(f"screener_{symbol}_{accounts}.html", body),
+                )
+                text = " ".join(BeautifulSoup(body, "lxml").get_text(" ").split())
+                mentions = re.findall(
+                    r"[^.]{0,90}\b(?:consolidated|standalone)\b[^.]{0,90}", text, re.I
+                )
+                print(f"  Mentions    : {mentions[:3] or 'none'}")
+            await asyncio.sleep(1.5)
+            _t, sc, _w = await fetch_screener_async(session, symbol, "probe", 0.0)
+            print(
+                f"  PIPELINE    : {symbol} -> accounts={(sc or {}).get('accounts')} "
+                f"figures={has_figures(sc)} fields={len(sc or {})}"
+            )
+            found = found or has_figures(sc)
+    return found
+
+
 async def probe_nse_isin():
     """EQUITY_L.csv — the source that settles an ISIN disagreement."""
     import aiohttp
@@ -392,6 +453,7 @@ def probe_nse_calendar():
 
 SOURCES = {
     "screener-peers": ("async", probe_screener_peers),
+    "screener-accounts": ("async", probe_screener_accounts),
     "nse-isin": ("async-noarg", probe_nse_isin),
     "bse-scrips": ("sync", probe_bse_scrips),
     "nse-delivery": ("async-noarg", probe_nse_delivery),
