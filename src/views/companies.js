@@ -19,6 +19,7 @@ import * as filters from "../core/filters.js";
 import { panel, tickerLink } from "./table.js";
 import { sparkline, seriesChange } from "../core/sparkline.js";
 import { filterBar, filteredEmpty } from "./filterbar.js";
+import { earningsBadge, resultsBadge } from "../core/calendar.js";
 
 const SORTS = [
   ["recent", "Latest activity"],
@@ -82,6 +83,20 @@ export function statusPill(status) {
 
 function link(url, text) {
   return url ? el("a", { href: url, target: "_blank", rel: "noopener noreferrer" }, text) : text;
+}
+
+/**
+ * Results due within ten days, and the latest results while they are new
+ * (src/core/calendar.js). Beside the thesis grade, which says what the
+ * evidence means for the case; the badge only states the figures.
+ */
+export function calendarBadges(calendar, results, ticker) {
+  const due = earningsBadge(calendar, ticker);
+  const latest = resultsBadge(results, ticker);
+  return [
+    due ? el("span", { class: "pill pill-earnings", title: `Results due ${shortDate(due.date)}` }, due.text) : null,
+    latest ? el("span", { class: "pill pill-results", title: latest.title }, latest.text) : null,
+  ];
 }
 
 /** Markers for the price line: the card's own news and policies. */
@@ -181,7 +196,7 @@ export function policySection(c, sectorName, windowDays) {
   );
 }
 
-function card(c, labels, windowDays) {
+function card(c, labels, windowDays, dates = {}) {
   const sectorName = label(c.sector, labels);
   return el(
     "article",
@@ -195,6 +210,7 @@ function card(c, labels, windowDays) {
       c.challenges?.length
         ? el("span", { class: "tag tag-risk", title: c.challenges[0].headline }, "thesis challenged")
         : null,
+      calendarBadges(dates.calendar, dates.results, c.ticker),
     ),
     el("p", { class: "company-sector" }, sectorName),
     // Folded on a phone, open elsewhere. Fifty-odd full cards made this
@@ -235,7 +251,12 @@ export async function render(container, { payload, route }) {
   const params = (route && route.params) || {};
   const active = filters.read(route);
   const sort = SORTS.some(([k]) => k === params.sort) ? params.sort : "recent";
-  const digest = await resolve(b, "company_digest");
+  const [digest, calendar, results] = await Promise.all([
+    resolve(b, "company_digest"),
+    resolve(b, "event_calendar"),
+    resolve(b, "results"),
+  ]);
+  const dates = { calendar, results };
   const labels = payload?.sectors || {};
   const sectors = Object.keys(payload?.watchlist || {})
     .filter((s) => s !== "macro_indicators")
@@ -286,7 +307,7 @@ export async function render(container, { payload, route }) {
       ),
     ),
     busy.length
-      ? el("div", { class: "company-grid" }, busy.map((c) => card(c, labels, windowDays)))
+      ? el("div", { class: "company-grid" }, busy.map((c) => card(c, labels, windowDays, dates)))
       : panel(null, null, anyFilter ? filteredEmpty("companies", params, "holdings") : "Nothing new for any holding."),
     quiet.length
       ? disclosure(
@@ -294,7 +315,11 @@ export async function render(container, { payload, route }) {
           el(
             "p",
             { class: "company-quiet" },
-            quiet.map((c, i) => [i ? ", " : "", tickerLink(c.ticker)]),
+            quiet.map((c, i) => {
+              // Quiet in the news can still be days from its results.
+              const due = earningsBadge(calendar, c.ticker);
+              return [i ? ", " : "", tickerLink(c.ticker), due ? el("span", { class: "evidence-meta" }, ` (${due.text})`) : null];
+            }),
           ),
         )
       : null,

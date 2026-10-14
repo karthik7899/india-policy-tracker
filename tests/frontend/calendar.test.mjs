@@ -54,3 +54,42 @@ test("kinds read as words", () => {
   assert.equal(kindLabel("results"), "Results");
   assert.equal(kindLabel("something_new"), "something new");
 });
+
+import { earningsBadge, resultsBadge, daysBetween, todayISO } from "../../src/core/calendar.js";
+
+test("results due within ten days read as T-minus days", () => {
+  const calendar = { next_results: { BHEL: "2026-10-14", PERSISTENT: "2026-10-15", HDFCBANK: "2026-10-24", OLD: "2026-10-01" } };
+  const asOf = "2026-10-14";
+  assert.deepEqual(earningsBadge(calendar, "bhel", { asOf }), { date: "2026-10-14", days: 0, text: "Earnings: today" });
+  assert.equal(earningsBadge(calendar, "PERSISTENT", { asOf }).text, "Earnings: T-1d");
+  assert.equal(earningsBadge(calendar, "HDFCBANK", { asOf }).text, "Earnings: T-10d");
+  assert.equal(earningsBadge(calendar, "HDFCBANK", { asOf: "2026-10-13" }), null);
+  // A date already past, on a calendar a day stale, shows nothing.
+  assert.equal(earningsBadge(calendar, "OLD", { asOf }), null);
+  assert.equal(earningsBadge(null, "BHEL", { asOf }), null);
+});
+
+test("the latest results state the figures and never a beat or a miss", () => {
+  const results = {
+    scorecards: [
+      { ticker: "BHEL", detected: "2026-10-15", quarter: "Sep 2026", sales_yoy_pct: 21.4, sales_qoq_pct: 8, opm_change_pp: -3, summary: "Sales ₹8,000 Cr, +21.4% on a year ago" },
+      { ticker: "NEW", detected: "2026-10-15", quarter: "Sep 2026", sales_qoq_pct: -4.2 },
+    ],
+  };
+  const badge = resultsBadge(results, "BHEL", { asOf: "2026-10-16" });
+  assert.equal(badge.text, "Sep 2026: sales ▲21.4% YoY · margin ▼3.0 pts QoQ");
+  assert.equal(badge.title, "Sales ₹8,000 Cr, +21.4% on a year ago");
+  assert.ok(!/beat|miss/i.test(badge.text));
+  // No year-ago figure yet: the quarter before, said so.
+  assert.equal(resultsBadge(results, "NEW", { asOf: "2026-10-16" }).text, "Sep 2026: sales ▼4.2% QoQ");
+  // Old news after 45 days.
+  assert.equal(resultsBadge(results, "BHEL", { asOf: "2026-12-15" }), null);
+  assert.equal(resultsBadge(results, "TCS", { asOf: "2026-10-16" }), null);
+});
+
+test("days are counted between calendar dates", () => {
+  assert.equal(daysBetween("2026-10-14", "2026-10-24"), 10);
+  assert.equal(daysBetween("2026-10-14", "2026-10-13"), -1);
+  assert.equal(daysBetween("x", "2026-10-13"), null);
+  assert.equal(todayISO(new Date(2026, 9, 4)), "2026-10-04");
+});

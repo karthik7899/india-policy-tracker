@@ -265,6 +265,10 @@ body {
 .pill-serious { color: var(--serious); }
 .pill-critical { color: var(--critical); }
 .pill-warning { color: var(--warning); }
+/* Results due soon, and the latest results: facts, so no status colour. */
+.pill-earnings { color: var(--series-1); border-color: var(--series-1); }
+.pill-results { color: var(--ink-2); font-weight: 500; }
+.company-page-head .view-title .pill { font-size: 12px; }
 
 /* --- network ----------------------------------------------------------- */
 

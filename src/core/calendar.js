@@ -75,3 +75,54 @@ export function scorecardFor(results, ticker) {
   const key = String(ticker || "").toUpperCase();
   return (results?.scorecards || []).find((c) => String(c.ticker).toUpperCase() === key) || null;
 }
+
+/** Today in the reader's own calendar, as ISO. */
+export function todayISO(now = new Date()) {
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+}
+
+/** Whole days from `from` to `to` (ISO dates); negative when `to` is earlier. */
+export function daysBetween(from, to) {
+  const a = Date.parse(`${from}T00:00:00Z`);
+  const b = Date.parse(`${to}T00:00:00Z`);
+  return Number.isNaN(a) || Number.isNaN(b) ? null : Math.round((b - a) / 86400000);
+}
+
+/**
+ * "Earnings: T-3d" for a holding whose results are due within `withinDays`,
+ * from the calendar's next_results (analysis/event_calendar.py); null
+ * otherwise. A date already past, as on a calendar a day stale, shows nothing.
+ */
+export function earningsBadge(calendar, ticker, { withinDays = 10, asOf = todayISO() } = {}) {
+  const date = calendar?.next_results?.[String(ticker || "").toUpperCase()];
+  const days = date ? daysBetween(asOf, date) : null;
+  if (days === null || days < 0 || days > withinDays) return null;
+  return { date, days, text: days === 0 ? "Earnings: today" : `Earnings: T-${days}d` };
+}
+
+function signed(v, unit) {
+  return `${v > 0 ? "▲" : v < 0 ? "▼" : ""}${Math.abs(v).toFixed(1)}${unit}`;
+}
+
+/**
+ * The latest results in a line: the quarter, sales against a year ago (the
+ * quarter before when there is no year-ago figure) and the margin's move
+ * on the quarter before, for `withinDays` after the figures were seen.
+ * Never a beat or a miss: there is no consensus here to measure against.
+ * The thesis grade beside it says what the evidence means for the case.
+ */
+export function resultsBadge(results, ticker, { withinDays = 45, asOf = todayISO() } = {}) {
+  const card = scorecardFor(results, ticker);
+  const age = card ? daysBetween(card.detected, asOf) : null;
+  if (age === null || age < 0 || age > withinDays) return null;
+  const yoy = typeof card.sales_yoy_pct === "number" ? card.sales_yoy_pct : null;
+  const qoq = typeof card.sales_qoq_pct === "number" ? card.sales_qoq_pct : null;
+  const sales =
+    yoy !== null ? `sales ${signed(yoy, "%")} YoY` : qoq !== null ? `sales ${signed(qoq, "%")} QoQ` : "";
+  const margin = typeof card.opm_change_pp === "number" ? `margin ${signed(card.opm_change_pp, " pts")} QoQ` : "";
+  return {
+    text: `${card.quarter || "Latest quarter"}: ${[sales, margin].filter(Boolean).join(" · ") || "reported"}`,
+    title: card.summary || "",
+  };
+}

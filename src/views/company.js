@@ -22,7 +22,7 @@ import {
   thesisSection,
   upsideText,
 } from "./holdings.js";
-import { priceLine, activitySection, policySection, statusPill, label } from "./companies.js";
+import { priceLine, activitySection, policySection, statusPill, label, calendarBadges } from "./companies.js";
 import { pickBook, positionOf } from "../core/portfolio.js";
 import { eventsFor, scorecardFor, kindLabel } from "../core/calendar.js";
 import { pct } from "../core/format.js";
@@ -249,6 +249,7 @@ export async function render(container, { payload, route }) {
         stock.name || "",
         " ",
         statusPill(health?.status || card?.thesis_status),
+        calendarBadges(calendar, results, key),
       ),
       el(
         "p",
