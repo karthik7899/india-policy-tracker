@@ -11,6 +11,14 @@ on:
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
+# One briefing at a time. Two at once start from the same commit, both rewrite
+# history.json and the payload, and the second's `git pull --rebase` then
+# conflicts with the first's push: its run fails after its email has gone and
+# its data is lost. A second run waits here instead (not cancelled).
+concurrency:
+  group: daily-brief
+  cancel-in-progress: false
+
 jobs:
   # Quality checks run alongside the briefing but deliberately do NOT block
   # it: a formatting nit must never stop the daily email (it did once, for
@@ -46,8 +54,13 @@ jobs:
     permissions:
       contents: write # Needed to commit dashboard_data.json back to repo
     steps:
+      # The branch's newest commit, not the one this run was started on: a run
+      # that waited for another (see concurrency above) must start from the
+      # data that run committed.
       - name: Checkout repository
         uses: actions/checkout@v7
+        with:
+          ref: ${{ github.ref_name }}
 
       - name: Set up Python
         uses: actions/setup-python@v6
