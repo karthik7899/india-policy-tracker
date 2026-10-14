@@ -20,6 +20,7 @@ from dashboard.builder import build_dashboard_views
 from providers.screener import fetch_all_screener_fundamentals
 from emails.mailer import build_briefing_email, send_email
 from analysis import revisions as revisions_mod
+from analysis import last_good
 from analysis import postmortem
 from analysis.thesis import compute_thesis_health
 from analysis.variant_perception import compute_variant_perception
@@ -91,6 +92,9 @@ async def run_pipeline():
     # Snapshot targets/coverage before anything mutates the watchlist, so
     # estimate-revision momentum can diff "before this run" vs "after".
     prior_estimates = revisions_mod.snapshot_prior_estimates(watchlist)
+    # And every fetched value, so one a source fails to deliver this run can
+    # be put back, marked, rather than lost (analysis/last_good.py).
+    prior_values = last_good.snapshot(watchlist)
     prior_industry_shares = snapshot_prior_industry_shares(watchlist)
 
     # Gather news data async
@@ -168,6 +172,13 @@ async def run_pipeline():
         delivery_rows = await fetch_delivery_async(delivery_session)
     delivery_applied = apply_delivery(watchlist, delivery_rows)
     log.info(f"Delivery: attached to {delivery_applied} holding(s).")
+
+    # Every live source has now written. A value one of them failed to
+    # deliver is put back if it is under a week old, and marked as kept, so
+    # nothing downstream reads a timeout as a company with no fundamentals.
+    kept = last_good.restore(watchlist, prior_values)
+    data["freshness"]["last_good"] = kept
+    log.info(last_good.describe(kept))
 
     # True industry market share: each holding's slice of its FULL Screener
     # industry peer group's quarterly sales, not just the watchlist subset.

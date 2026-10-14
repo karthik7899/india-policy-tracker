@@ -430,7 +430,13 @@ def _build_exec_summary_html(summary):
         'font-family:Arial,Helvetica,sans-serif;">'
         f'Data completeness <strong style="color:#e2e8f0;">{cov["completeness"]}%</strong>'
         f' &nbsp;|&nbsp; Priced <strong style="color:#e2e8f0;">{cov["priced"]}/{cov["total"]}</strong>'
-        f' &nbsp;|&nbsp; Run <strong style="color:{status_colour};">{status_text}</strong>'
+        + (
+            f' &nbsp;|&nbsp; Kept from an earlier run <strong style="color:#e2e8f0;">'
+            f'{cov["kept"]}</strong>'
+            if cov.get("kept")
+            else ""
+        )
+        + f' &nbsp;|&nbsp; Run <strong style="color:{status_colour};">{status_text}</strong>'
         "</td></tr></table>"
     )
 
