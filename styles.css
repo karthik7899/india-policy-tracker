@@ -506,8 +506,15 @@ td .disclose-summary { padding: 2px 0; }
 
 /* Company page (src/views/company.js): the case for owning it on the left,
    the numbers and links beside it. */
-.crumbs { margin: 0 0 4px; font-size: 12px; color: var(--muted); }
+/* The trail under the tab strip (src/core/crumbs.js). */
+.crumbs-bar { max-width: 1240px; margin: 0 auto; padding: 10px 20px 0; box-sizing: border-box; }
+.crumbs-bar[hidden] { display: none; }
+.crumbs { display: flex; flex-wrap: wrap; margin: 0; padding: 0; list-style: none; font-size: 12px; color: var(--muted); }
+.crumbs li { overflow-wrap: anywhere; }
+.crumbs li + li::before { content: "\203A"; margin: 0 6px; color: var(--muted); }
 .crumbs a { color: var(--ink-2); }
+.crumbs [aria-current] { color: var(--ink); }
+@media (max-width: 640px) { .crumbs-bar { padding: 8px 16px 0; } }
 .company-page-ticker { color: var(--series-1); }
 .company-page-head .view-title { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .company-page {

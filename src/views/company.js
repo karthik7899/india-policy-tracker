@@ -236,13 +236,8 @@ export async function render(container, { payload, route }) {
     el(
       "header",
       { class: "view-head company-page-head" },
-      el(
-        "p",
-        { class: "crumbs" },
-        el("a", { href: href("companies") }, "Companies"),
-        " › ",
-        el("a", { href: href("companies", { sector: stock.sector }) }, sectorName),
-      ),
+      // The trail above (Companies › sector › ticker) is drawn by main.js
+      // from the route, as it is on every view.
       el(
         "h2",
         { class: "view-title" },
