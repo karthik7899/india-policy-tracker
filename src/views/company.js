@@ -22,7 +22,15 @@ import {
   thesisSection,
   upsideText,
 } from "./holdings.js";
-import { priceLine, activitySection, policySection, statusPill, label } from "./companies.js";
+import {
+  priceLine,
+  activitySection,
+  policySection,
+  statusPill,
+  label,
+  calendarBadges,
+  dataInspector,
+} from "./companies.js";
 import { pickBook, positionOf } from "../core/portfolio.js";
 import { eventsFor, scorecardFor, kindLabel } from "../core/calendar.js";
 import { pct } from "../core/format.js";
@@ -215,18 +223,21 @@ export async function render(container, { payload, route }) {
   const b = payload?.briefing || {};
   const labels = payload?.sectors || {};
   const sectorName = label(stock.sector, labels);
-  const [digest, coverage, edges, proposals, portfolio, calendar, results] = await Promise.all([
-    resolve(b, "company_digest"),
-    loadCoverage(key),
-    loadGraph(),
-    loadProposals(),
-    resolve(b, "portfolio"),
-    resolve(b, "event_calendar"),
-    resolve(b, "results"),
-  ]);
+  const [digest, coverage, edges, proposals, portfolio, calendar, results, thesisCheck, sectorBlocks] =
+    await Promise.all([
+      resolve(b, "company_digest"),
+      loadCoverage(key),
+      loadGraph(),
+      loadProposals(),
+      resolve(b, "portfolio"),
+      resolve(b, "event_calendar"),
+      resolve(b, "results"),
+      resolve(b, "thesis_check"),
+      resolve(b, "sector_blocks"),
+    ]);
   const card = (digest?.companies || []).find((c) => String(c.ticker).toUpperCase() === key);
   const health = b.thesis_health?.[key];
-  const check = b.thesis_check?.holdings?.[key];
+  const check = thesisCheck?.holdings?.[key];
   const windowDays = digest?.window_days || 30;
 
   if (typeof document !== "undefined") document.title = `${key} · India Policy Tracker`;
@@ -236,13 +247,8 @@ export async function render(container, { payload, route }) {
     el(
       "header",
       { class: "view-head company-page-head" },
-      el(
-        "p",
-        { class: "crumbs" },
-        el("a", { href: href("companies") }, "Companies"),
-        " › ",
-        el("a", { href: href("companies", { sector: stock.sector }) }, sectorName),
-      ),
+      // The trail above (Companies › sector › ticker) is drawn by main.js
+      // from the route, as it is on every view.
       el(
         "h2",
         { class: "view-title" },
@@ -252,6 +258,12 @@ export async function render(container, { payload, route }) {
         " ",
         statusPill(health?.status || card?.thesis_status),
       ),
+      // Beside the heading, not in it: a screen reader would read the
+      // inspector's whole list as the page's title.
+      (() => {
+        const badges = [...calendarBadges(calendar, results, key), dataInspector(stock)].filter(Boolean);
+        return badges.length ? el("div", { class: "company-page-badges" }, badges) : null;
+      })(),
       el(
         "p",
         { class: "view-sub" },
@@ -291,7 +303,7 @@ export async function render(container, { payload, route }) {
               ),
             )
           : null,
-        panel("Everything written about it", null, newsSections(stock, payload, coverage)),
+        panel("Everything written about it", null, newsSections(stock, payload, coverage, sectorBlocks)),
       ),
       el(
         "aside",

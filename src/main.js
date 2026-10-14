@@ -25,6 +25,7 @@ import * as network from "./views/network.js";
 import * as system from "./views/system.js";
 import { restoreFocus } from "./views/filterbar.js";
 import { mountSearch } from "./views/searchbox.js";
+import { crumbsFor } from "./core/crumbs.js";
 
 const VIEWS = {
   overview: { label: "Overview", module: overview },
@@ -77,6 +78,29 @@ function nav(active) {
   ];
 }
 
+/**
+ * The trail (src/core/crumbs.js), redrawn from the route on every navigation
+ * alongside the tab strip, and hidden when there is nothing to trace.
+ */
+function renderCrumbs(route) {
+  const host = document.getElementById("crumbs");
+  if (!host) return;
+  const steps = crumbsFor(route, { views: VIEWS, watchlist: payload?.watchlist, labels: payload?.sectors });
+  host.hidden = !steps.length;
+  mount(
+    host,
+    steps.length
+      ? el(
+          "ol",
+          { class: "crumbs" },
+          steps.map((s) =>
+            el("li", {}, s.href ? el("a", { href: s.href }, s.text) : el("span", { "aria-current": "page" }, s.text)),
+          ),
+        )
+      : null,
+  );
+}
+
 async function renderRoute(route) {
   const navHost = document.getElementById("nav");
   const viewHost = document.getElementById("view");
@@ -84,6 +108,7 @@ async function renderRoute(route) {
 
   const known = VIEWS[route.view] ? route.view : "overview";
   mount(navHost, nav(VIEWS[known].under || known));
+  renderCrumbs(route);
   if (!VIEWS[known].hidden) document.title = "India Policy Tracker";
 
   // Charts hold canvas contexts; leaving them attached to a replaced DOM leaks

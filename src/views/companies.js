@@ -19,6 +19,8 @@ import * as filters from "../core/filters.js";
 import { panel, tickerLink } from "./table.js";
 import { sparkline, seriesChange } from "../core/sparkline.js";
 import { filterBar, filteredEmpty } from "./filterbar.js";
+import { earningsBadge, resultsBadge } from "../core/calendar.js";
+import { completeness, describeCompleteness } from "../core/completeness.js";
 
 const SORTS = [
   ["recent", "Latest activity"],
@@ -82,6 +84,61 @@ export function statusPill(status) {
 
 function link(url, text) {
   return url ? el("a", { href: url, target: "_blank", rel: "noopener noreferrer" }, text) : text;
+}
+
+/**
+ * The holding's data, field by field (src/core/completeness.js), shown only
+ * when a field is missing or kept from an earlier run. The summary carries
+ * the percentage; tapping it (or hovering) names the fields and the source
+ * each comes from, so a gap reads as "Screener failed", not as a number.
+ */
+export function dataInspector(stock) {
+  if (!stock) return null;
+  const c = completeness(stock);
+  if (!c.missing.length && !c.kept.length) return null;
+  const list = (fields, text) => fields.map(text).join(", ");
+  return el(
+    "details",
+    { class: "data-inspect" },
+    el(
+      "summary",
+      { class: `pill data-inspect-summary${c.missing.length ? " pill-warning" : ""}`, title: describeCompleteness(c, shortDate) },
+      `Data ${c.pct}%${c.kept.length ? " · kept" : ""}`,
+    ),
+    el(
+      "div",
+      { class: "data-inspect-body" },
+      c.missing.length
+        ? el("p", {}, el("strong", {}, "Missing: "), list(c.missing, (f) => `${f.label} (${f.source})`))
+        : null,
+      c.kept.length
+        ? el(
+            "p",
+            {},
+            el("strong", {}, "Kept from an earlier run: "),
+            list(c.kept, (f) => `${f.label} (fetched ${shortDate(f.since)})`),
+            el("span", { class: "evidence-meta" }, " A source failed this run; a value under a week old stands in."),
+          )
+        : null,
+      c.notApplicable.length
+        ? el("p", { class: "evidence-meta" }, `Not applicable: ${list(c.notApplicable, (f) => `${f.label}, ${f.why}`)}`)
+        : null,
+    ),
+  );
+}
+
+/**
+ * Results due within ten days, and the latest results while they are new
+ * (src/core/calendar.js). Beside the thesis grade, which says what the
+ * evidence means for the case; the badge only states the figures.
+ */
+export function calendarBadges(calendar, results, ticker) {
+  const due = earningsBadge(calendar, ticker);
+  const latest = resultsBadge(results, ticker);
+  return [
+    due ? el("span", { class: "pill pill-earnings", title: `Results due ${shortDate(due.date)}` }, due.text) : null,
+    latest ? el("span", { class: "pill pill-results", title: latest.title }, latest.text) : null,
+  ];
 }
 
 /** Markers for the price line: the card's own news and policies. */
@@ -181,7 +238,7 @@ export function policySection(c, sectorName, windowDays) {
   );
 }
 
-function card(c, labels, windowDays) {
+function card(c, labels, windowDays, dates = {}) {
   const sectorName = label(c.sector, labels);
   return el(
     "article",
@@ -195,6 +252,8 @@ function card(c, labels, windowDays) {
       c.challenges?.length
         ? el("span", { class: "tag tag-risk", title: c.challenges[0].headline }, "thesis challenged")
         : null,
+      calendarBadges(dates.calendar, dates.results, c.ticker),
+      dataInspector(dates.stocks?.[String(c.ticker).toUpperCase()]),
     ),
     el("p", { class: "company-sector" }, sectorName),
     // Folded on a phone, open elsewhere. Fifty-odd full cards made this
@@ -235,7 +294,18 @@ export async function render(container, { payload, route }) {
   const params = (route && route.params) || {};
   const active = filters.read(route);
   const sort = SORTS.some(([k]) => k === params.sort) ? params.sort : "recent";
-  const digest = await resolve(b, "company_digest");
+  const [digest, calendar, results] = await Promise.all([
+    resolve(b, "company_digest"),
+    resolve(b, "event_calendar"),
+    resolve(b, "results"),
+  ]);
+  // The watchlist record behind each card, for the data inspector.
+  const stocks = {};
+  for (const [sector, list] of Object.entries(payload?.watchlist || {})) {
+    if (sector === "macro_indicators" || !Array.isArray(list)) continue;
+    for (const s of list) if (s?.ticker) stocks[String(s.ticker).toUpperCase()] = s;
+  }
+  const dates = { calendar, results, stocks };
   const labels = payload?.sectors || {};
   const sectors = Object.keys(payload?.watchlist || {})
     .filter((s) => s !== "macro_indicators")
@@ -286,7 +356,7 @@ export async function render(container, { payload, route }) {
       ),
     ),
     busy.length
-      ? el("div", { class: "company-grid" }, busy.map((c) => card(c, labels, windowDays)))
+      ? el("div", { class: "company-grid" }, busy.map((c) => card(c, labels, windowDays, dates)))
       : panel(null, null, anyFilter ? filteredEmpty("companies", params, "holdings") : "Nothing new for any holding."),
     quiet.length
       ? disclosure(
@@ -294,7 +364,11 @@ export async function render(container, { payload, route }) {
           el(
             "p",
             { class: "company-quiet" },
-            quiet.map((c, i) => [i ? ", " : "", tickerLink(c.ticker)]),
+            quiet.map((c, i) => {
+              // Quiet in the news can still be days from its results.
+              const due = earningsBadge(calendar, c.ticker);
+              return [i ? ", " : "", tickerLink(c.ticker), due ? el("span", { class: "evidence-meta" }, ` (${due.text})`) : null];
+            }),
           ),
         )
       : null,

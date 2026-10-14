@@ -265,6 +265,10 @@ body {
 .pill-serious { color: var(--serious); }
 .pill-critical { color: var(--critical); }
 .pill-warning { color: var(--warning); }
+/* Results due soon, and the latest results: facts, so no status colour. */
+.pill-earnings { color: var(--series-1); border-color: var(--series-1); }
+.pill-results { color: var(--ink-2); font-weight: 500; }
+.company-page-badges { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 6px; margin-top: 6px; }
 
 /* --- network ----------------------------------------------------------- */
 
@@ -506,8 +510,15 @@ td .disclose-summary { padding: 2px 0; }
 
 /* Company page (src/views/company.js): the case for owning it on the left,
    the numbers and links beside it. */
-.crumbs { margin: 0 0 4px; font-size: 12px; color: var(--muted); }
+/* The trail under the tab strip (src/core/crumbs.js). */
+.crumbs-bar { max-width: 1240px; margin: 0 auto; padding: 10px 20px 0; box-sizing: border-box; }
+.crumbs-bar[hidden] { display: none; }
+.crumbs { display: flex; flex-wrap: wrap; margin: 0; padding: 0; list-style: none; font-size: 12px; color: var(--muted); }
+.crumbs li { overflow-wrap: anywhere; }
+.crumbs li + li::before { content: "\203A"; margin: 0 6px; color: var(--muted); }
 .crumbs a { color: var(--ink-2); }
+.crumbs [aria-current] { color: var(--ink); }
+@media (max-width: 640px) { .crumbs-bar { padding: 8px 16px 0; } }
 .company-page-ticker { color: var(--series-1); }
 .company-page-head .view-title { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .company-page {
@@ -672,3 +683,17 @@ td .disclose-summary { padding: 2px 0; }
   margin: 0 0 12px; padding: 8px 10px; font-size: 12px; line-height: 1.5; max-width: 80ch;
   border-left: 3px solid var(--warning); background: var(--plane); color: var(--ink-2);
 }
+
+/* Data inspector (src/views/companies.js dataInspector): a pill in a holding's
+   header that opens, in place, into the fields missing or kept. Open, it
+   takes the header's full width rather than floating over the card, so it
+   cannot run off a phone's screen. */
+.data-inspect { font-size: 12px; }
+.data-inspect[open] { flex-basis: 100%; }
+.data-inspect-summary { cursor: pointer; list-style: none; font-weight: 500; }
+.data-inspect-summary::-webkit-details-marker { display: none; }
+.data-inspect-body {
+  margin-top: 6px; padding: 8px 10px; border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--plane); color: var(--ink-2); font-weight: 400; line-height: 1.5; overflow-wrap: anywhere;
+}
+.data-inspect-body p { margin: 2px 0; }
