@@ -1,6 +1,6 @@
 {
   "value": {
-    "as_of": "2026-10-13",
+    "as_of": "2026-10-14",
     "ahead_days": 45,
     "back_days": 14,
     "upcoming": [
@@ -192,6 +192,17 @@
         "sector": "data_center_support"
       },
       {
+        "ticker": "IOC",
+        "date": "2026-10-30",
+        "kind": "results",
+        "title": "Board meeting: Financial Results",
+        "detail": "To consider and approve the financial results for the period ended September 30, 2026",
+        "source": "NSE event calendar",
+        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
+        "name": "I O C L",
+        "sector": "big_cap_industries"
+      },
+      {
         "ticker": "APOLLOHOSP",
         "date": "2026-11-04",
         "kind": "results",
@@ -266,6 +277,7 @@
       "GODREJPROP": "2026-10-23",
       "STLTECH": "2026-10-23",
       "ANANTRAJ": "2026-10-28",
+      "IOC": "2026-10-30",
       "APOLLOHOSP": "2026-11-04",
       "CUMMINSIND": "2026-11-04",
       "MPHASIS": "2026-11-05",
@@ -273,8 +285,8 @@
     },
     "sources": {
       "nse": {
-        "event_calendar": 421,
-        "corporate_actions": 27
+        "event_calendar": 467,
+        "corporate_actions": 29
       },
       "nse_errors": [],
       "filings": 0,

@@ -2,6 +2,19 @@
   "ticker": "ADANIPOWER",
   "items": [
     {
+      "date": "Sun, 11 Oct 2026 07:19:51 GMT",
+      "headline": "Adani Power shares up 27% in 2026 but Elara sees 16% more upside",
+      "source_url": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxOdFk3T0tQcERKTGowX3JuWHRIdUJRUGRLZnRQQnpqbGxaeGszUmFOWU00UlVKNUhwT3BvZU5vVlAzX3NidGd2Qm84RHRZRllRV2ZSRUgtbEw5VXRqT2V3R2ZFVVo5d1RYaEhPaWVsYWVzSlZoOHhVOWVia1A5Q1U3ZURBT0hkRWlTOEEtWGUwUW53MG9ZZ1lKYUd2UUtrdmdoRmQyNHJWdlBLZ3NEazMyb0gwNVM4SlVCYlJrbGQ5Ull0YzRjZ2g2TkhxVFVzUHVEX3l4NERQTDlaUmw0UmFqWDNrWFdfN3JqVmc?oc=5",
+      "source_label": "TradingView",
+      "event_type": "",
+      "source_kind": "Agreement",
+      "event_tags": [
+        "Agreement"
+      ],
+      "confidence": "M",
+      "status": "counted"
+    },
+    {
       "date": "Tue, 06 Oct 2026 15:41:21 GMT",
       "headline": "Adani Power Ends 1.6% Higher After 770 MW Bhutan Hydropower Pact",
       "source_url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxORUM0OTlTR2xuMHdDX0hYdi1tRjdFS3NybXItbXlaZVJjOHJvY0RROWtvbEItTjgxdlJVajd1R2JydjlKb2JFVXVhcGhTanpGSVpCVWNpOVZ0ejlsalBibVdpdXZqSjMwMGJBdURPbUtaQlgwVnV3bnZ3d013MkEyNzRNVDhRaGRMSVhOYUROdDhRTXdFZlIxV0swZFBYRTNEOHBPUHdHSm9ybDhWYTVvSndSeExWZ0h1aUEwOA?oc=5",
@@ -145,6 +158,19 @@
       "status": "counted"
     },
     {
+      "date": "14 Oct 2026",
+      "headline": "Adani Power Limited has informed the Exchange about Letter of Award",
+      "source_url": "https://nsearchives.nseindia.com/corporate/ADANIPOWER_14102026105706_APLLoAfromUttarakhand13102026.pdf",
+      "source_label": "NSE",
+      "event_type": "",
+      "source_kind": "Filing",
+      "event_tags": [
+        "Filing"
+      ],
+      "confidence": "M",
+      "status": "counted"
+    },
+    {
       "date": "06 Oct 2026",
       "headline": "Adani Power Limited has informed the Exchange regarding 'Certificate under regulation 74(5) of the SEBI (Depositories and Participants) Regulation, 2018 for the quarter ended September 30, 2026'.",
       "source_url": "https://nsearchives.nseindia.com/corporate/ADANIPOWER_06102026121219_APLreg74_5_30092026.pdf",
@@ -208,7 +234,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (151 days old)"
+      "exclusion_reason": "aged >120d (152 days old)"
     },
     {
       "date": "01 Sep 2026",
@@ -235,6 +261,21 @@
       ],
       "confidence": "M",
       "status": "counted"
+    },
+    {
+      "date": "2026-10-14",
+      "headline": "Adani Power Limited has informed the Exchange about Letter of Award",
+      "source_url": "https://nsearchives.nseindia.com/corporate/ADANIPOWER_14102026105706_APLLoAfromUttarakhand13102026.pdf",
+      "source_label": "NSE",
+      "event_type": "order_win",
+      "source_kind": "Event",
+      "event_tags": [
+        "order_win",
+        "Event"
+      ],
+      "confidence": "H",
+      "status": "merged",
+      "exclusion_reason": "merged: duplicate phrasing of “Adani Power Limited has informed the Exchange about Letter o”"
     },
     {
       "date": "2026-10-06",
