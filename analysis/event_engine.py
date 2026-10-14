@@ -61,6 +61,7 @@ EVENT_VOCABULARY: Dict[str, tuple] = {
         "bags contract",
         "order worth",
         "letter of intent",
+        "letter of award",
         "purchase order",
     ),
     "capacity_add": (
@@ -143,6 +144,14 @@ EVENT_PATTERNS: Dict[str, tuple] = {
         # Not "order win from X": there X is the customer. "Defence stock
         # jumps... Order win from BEL" is another company's win.
         re.compile(r"\border win\b(?!\s+from\b)"),
+        # How Indian infrastructure, railway and defence awards are filed:
+        # "Receipt of LoA from NHAI", "RVNL emerges L1 bidder for...".
+        re.compile(
+            r"\b(?:receives?|received|receipt of|gets?|bags?)\s+(?:an?\s+)?loa\b"
+        ),
+        re.compile(
+            r"\b(?:emerges?|emerged)\s+(?:as\s+)?(?:the\s+)?(?:l-?1|lowest\s+bidder)\b"
+        ),
     ),
     "capacity_add": (
         re.compile(
@@ -216,6 +225,13 @@ CERTAINTY_MARKERS = (
             "signs mou",
             "mou with",
             "memorandum of understanding",
+            # The lowest bid, not yet the award.
+            "lowest bidder",
+            "l1 bidder",
+            "emerges l1",
+            "emerged l1",
+            "emerges as l1",
+            "emerged as l1",
         ),
     ),
 )

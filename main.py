@@ -312,6 +312,18 @@ async def run_pipeline():
         # Before classification: a partner accepted since the last run must
         # already be a known entity when today's headlines are read.
         apply_accepted_proposals(graph)
+        from analysis.headline_text import is_filing_noise
+
+        filings = data.get("corporate_filings") or []
+        noise = sum(
+            1
+            for f in filings
+            if isinstance(f, dict) and is_filing_noise(f.get("filing"))
+        )
+        log.info(
+            f"Filings: {noise} of {len(filings)} are statutory housekeeping and "
+            "are left out of event classification and the LLM reader."
+        )
         events = classify_headlines(data, watchlist, graph)
 
         # Second reader. Optional: without GEMINI_API_KEY, or on any API

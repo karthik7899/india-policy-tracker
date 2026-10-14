@@ -63,8 +63,11 @@ _PROCEDURAL = re.compile(
     r"notice\s+of\s+(?:annual|extra-?ordinary)\s+general\s+meeting|"
     r"(?:agm|egm)\s+notice|annual\s+report|book\s+closure|record\s+date|"
     r"credit\s+rating|loss\s+of\s+share\s+certificates?|duplicate\s+share|"
-    r"compliance\s+certificate|regulation\s+74\s*\(5\)|"
-    r"certificate\s+under\s+(?:sebi|regulation)|depositories\s+and\s+participants|"
+    # No closing bracket: the \b that closes this pattern cannot follow one.
+    r"compliance\s+certificate|reg(?:ulation|\.)?\s*74\s*\(\s*5|"
+    r"issue\s+of\s+duplicate|newspaper\s+clippings?|"
+    r"investors?'?\s+(?:grievances?|complaints?)|"
+    r"certificate\s+under\s+(?:sebi|reg(?:ulation)?)|depositories\s+and\s+participants|"
     r"shareholders?\s+meeting|voting\s+results?|scrutini[sz]er|"
     r"intimation\s+of\s+board\s+meeting|board\s+meeting\s+intimation|"
     r"schedules?\s+board\s+meeting|closure\s+of\s+trading|"
@@ -174,6 +177,33 @@ def classify(text: str) -> str:
     if _PRICE_MOVE_RE.search(body):
         return "routine"
     return "substantive"
+
+
+# A stake crossing a disclosure threshold (SEBI's Takeover Regulations,
+# Regulation 29) is filed in the same register as housekeeping, but it is a
+# large holder buying or selling: the LLM read two of them as acquisitions.
+_SUBSTANTIAL_STAKE = re.compile(
+    r"substantial\s+acquisition|regulation\s+29\s*\(", re.IGNORECASE
+)
+
+
+def is_filing_noise(text: str) -> bool:
+    """Whether an exchange filing is statutory housekeeping, with nothing in
+    it for the event rules or the LLM to read.
+
+    The procedural and empty-label tests of classify(), without its market
+    commentary and price-move tests: those were written for headlines, and
+    on news they take "VLCC Freight Rates Surge 800%" for a stock tip. Never
+    an adverse filing, and never a substantial-stake disclosure. Of the 283
+    exchange filings the LLM had read by 14 Oct, this finds 168 housekeeping,
+    and the LLM had read none of those as an event.
+    """
+    body = tidy(text)
+    if _ADVERSE.search(body) or _SUBSTANTIAL_STAKE.search(body):
+        return False
+    if _PROCEDURAL.search(body) and not _TOP_JOB.search(body):
+        return True
+    return bool(_EMPTY.match(body.strip(" .")))
 
 
 def display(text: str, reading: dict = None, holdings=()) -> str:
