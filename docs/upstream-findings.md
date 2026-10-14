@@ -63,6 +63,13 @@ line and raised margin warnings. So it is kept as `q_fin_margin` and
 `fin_margin_trend`: shown on the results card and given to Ask as a
 financing margin, and never scored.
 
+**Ratios table** (run 38569875263, HAL, BEL and HDFCBANK): a company's has
+Debtor Days, Inventory Days, Days Payable, Cash Conversion Cycle, Working
+Capital Days and ROCE %, one column a year; a lender's has ROE % alone. The
+latest working-capital and debtor days are read for the dashboard's
+visibility proxy, which stands where an order book would: no source this
+pipeline reads publishes one.
+
 ---
 
 ## Three holdings have no consolidated figures on Screener

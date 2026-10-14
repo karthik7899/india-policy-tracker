@@ -14,7 +14,9 @@ import { shortDate, crore, sizeLabel, LLM_MARK } from "../core/format.js";
 import { href } from "../core/router.js";
 import { resolve } from "../core/data.js";
 import * as filters from "../core/filters.js";
-import { dataTable, panel } from "./table.js";
+import { dataTable, panel, pillTag, convictionToggle } from "./table.js";
+import { catalystPill, HIGH } from "../core/catalyst.js";
+import { calendarDay } from "../core/calendar.js";
 import { filterBar, filteredEmpty } from "./filterbar.js";
 
 const STREAMS = [
@@ -134,9 +136,25 @@ export function partnershipDetail(item, labels = {}) {
     .join(" \u00b7 ");
 }
 
+/**
+ * An item's time, for putting the streams in one order. The feeds write
+ * dates three ways ("2026-10-14", "14 Oct 2026", "Wed, 30 Sep 2026 07:59:00
+ * GMT"), and compared as text they sorted by weekday name: "Everything"
+ * opened on 30 Sept, and the day's policies and events fell past the cap.
+ * Undated items go last.
+ */
+export function sortTime(when) {
+  const day = calendarDay(when);
+  if (day) return Date.UTC(day[0], day[1] - 1, day[2]);
+  const t = Date.parse(when);
+  return Number.isNaN(t) ? -Infinity : t;
+}
+
 /** Normalise the differing shapes into one row. */
-function normalise(item, streamLabel, labels) {
+export function normalise(item, streamLabel, labels) {
   return {
+    // How settled it is: a policy's strength, an order win's stage.
+    pill: catalystPill(item),
     when: item.date || item.published || "",
     what: item.filing || item.headline || item.title || item.signal || "",
     who: item.company || item.ticker || item.name || (item.actors || item.tickers || [])[0] || "",
@@ -171,8 +189,13 @@ export async function render(container, { payload, route }) {
   if (stream === "all") {
     // Interleaved by date rather than concatenated: concatenation is exactly
     // what let one source consume every slot in the filings section.
-    all.sort((a, c) => String(c.when).localeCompare(String(a.when)));
+    all.sort((a, c) => sortTime(c.when) - sortTime(a.when));
   }
+
+  // Hard policies and confirmed wins only, when asked: what has happened,
+  // without the drafts, MoUs, L-1 bids and reports around it.
+  const conviction = params.conviction === "high";
+  if (conviction) all = all.filter((r) => r.pill && HIGH.has(r.pill.kind));
 
   // Filter BEFORE the cap, not after. Capping first would search only the
   // newest eighty items and report "no matches" for something that is
@@ -190,9 +213,8 @@ export async function render(container, { payload, route }) {
       el(
         "p",
         { class: "view-sub" },
-        anyFilter
-          ? `${matched.length} of ${all.length} items`
-          : `${all.length} items`,
+        (anyFilter ? `${matched.length} of ${all.length} items` : `${all.length} items`) +
+          (conviction ? " \u00b7 hard policies and confirmed wins only" : ""),
       ),
     ),
 
@@ -204,7 +226,12 @@ export async function render(container, { payload, route }) {
       summary: matched.length > CAP ? `showing the newest ${CAP}` : "",
     }),
 
-    streamNav(stream, route || { params: {} }),
+    el(
+      "div",
+      { class: "flow-controls" },
+      streamNav(stream, route || { params: {} }),
+      convictionToggle("flow", params, conviction),
+    ),
     panel(
       null,
       null,
@@ -218,6 +245,7 @@ export async function render(container, { payload, route }) {
             label: "What",
             sortable: false,
             render: (r) => [
+              pillTag(r.pill),
               r.link
                 ? el("a", { href: r.link, target: "_blank", rel: "noopener noreferrer" }, r.what)
                 : r.what,
@@ -233,7 +261,9 @@ export async function render(container, { payload, route }) {
           route,
           empty: anyFilter
             ? filteredEmpty("flow", params, "items")
-            : "Nothing in this stream.",
+            : conviction
+              ? "No hard policy or confirmed win in this stream."
+              : "Nothing in this stream.",
         },
       ),
     ),

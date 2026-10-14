@@ -892,3 +892,24 @@ def test_the_matched_phrase_can_be_found_in_its_clause_again():
     assert event_clause({"headline": headline, "phrase": phrase}).startswith(
         "Suzlon bags"
     )
+
+
+def test_a_headlines_certainty_is_read_from_its_event_clause():
+    from analysis.event_engine import headline_certainty
+
+    # An L-1 bid is the lowest bid, not yet the award.
+    assert (
+        headline_certainty("RVNL emerges L1 bidder for Rs 500 crore project")
+        == "announced"
+    )
+    assert (
+        headline_certainty("RVNL receives LoA from NHAI for Rs 500 crore")
+        == "completed"
+    )
+    assert headline_certainty("BEL likely to win Rs 2,000 crore order") == "reported"
+    # The event's own clause: a market move in another does not count.
+    assert (
+        headline_certainty("Suzlon wins 200 MW order; shares may rise further")
+        == "completed"
+    )
+    assert headline_certainty("Sensex closes higher") is None

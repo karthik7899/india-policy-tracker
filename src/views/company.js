@@ -13,7 +13,7 @@
 import { el, mount } from "../core/dom.js";
 import { resolve, loadCoverage, loadGraph, loadProposals } from "../core/data.js";
 import { href } from "../core/router.js";
-import { panel } from "./table.js";
+import { panel, convictionToggle } from "./table.js";
 import {
   factsList,
   holdingSignals,
@@ -192,6 +192,14 @@ function readThroughSection(rows) {
   );
 }
 
+/** The holding's partners in the entity graph (tie-ups accepted into it). */
+export function partnerCount(edges, ticker) {
+  const key = String(ticker || "").toUpperCase();
+  return (edges || []).filter(
+    (e) => e?.type === "partner" && [e.src, e.dst].some((n) => String(n).toUpperCase() === key),
+  ).length;
+}
+
 export async function render(container, { payload, route }) {
   const ticker = route?.focus;
   const stock = findHolding(payload?.watchlist, ticker);
@@ -239,6 +247,8 @@ export async function render(container, { payload, route }) {
   const health = b.thesis_health?.[key];
   const check = thesisCheck?.holdings?.[key];
   const windowDays = digest?.window_days || 30;
+  // Hard policies and confirmed wins only, when asked (src/core/catalyst.js).
+  const conviction = route?.params?.conviction === "high";
 
   if (typeof document !== "undefined") document.title = `${key} · India Policy Tracker`;
 
@@ -261,7 +271,7 @@ export async function render(container, { payload, route }) {
       // Beside the heading, not in it: a screen reader would read the
       // inspector's whole list as the page's title.
       (() => {
-        const badges = [...calendarBadges(calendar, results, key), dataInspector(stock)].filter(Boolean);
+        const badges = [...calendarBadges(calendar, results, key), dataInspector(stock, { always: true })].filter(Boolean);
         return badges.length ? el("div", { class: "company-page-badges" }, badges) : null;
       })(),
       el(
@@ -295,11 +305,12 @@ export async function render(container, { payload, route }) {
           ? panel(
               `News and policy, last ${windowDays} days`,
               null,
+              convictionToggle("company", route?.params || { focus: key }, conviction),
               el(
                 "div",
                 { class: "company-cols" },
-                activitySection(card, windowDays),
-                policySection(card, sectorName, windowDays),
+                activitySection(card, windowDays, { highOnly: conviction }),
+                policySection(card, sectorName, windowDays, { highOnly: conviction }),
               ),
             )
           : null,
@@ -308,7 +319,7 @@ export async function render(container, { payload, route }) {
       el(
         "aside",
         { class: "company-page-side" },
-        panel("Numbers", null, card ? priceLine(card) : null, factsList(stock)),
+        panel("Numbers", null, card ? priceLine(card) : null, factsList(stock, { partners: partnerCount(edges, key) })),
         positionSection(pickBook(portfolio), key),
         datesSection(eventsFor(calendar, key), scorecardFor(results, key)),
         (() => {

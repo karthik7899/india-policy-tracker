@@ -27,6 +27,27 @@ function isoDay(date) {
   return date.toISOString().slice(0, 10);
 }
 
+const CALENDAR_DAY = /^(\d{4})-(\d{2})-(\d{2})$/;
+
+/** Written as a day, valid or not: "2026-02-30" is not to be read as 2 March. */
+export function dayShaped(value) {
+  return CALENDAR_DAY.test(String(value ?? ""));
+}
+
+/**
+ * `[year, month, day]` when `value` is a date with no time ("2026-10-15"),
+ * else null. Such a date is a day on the calendar, not an instant, and is
+ * never handed to `new Date(value)`: that reads it as midnight UTC, which a
+ * reader west of Greenwich sees as the day before.
+ */
+export function calendarDay(value) {
+  const m = dayShaped(value) && CALENDAR_DAY.exec(String(value));
+  if (!m) return null;
+  const [y, mo, d] = [Number(m[1]), Number(m[2]), Number(m[3])];
+  const check = new Date(Date.UTC(y, mo - 1, d));
+  return check.getUTCMonth() === mo - 1 && check.getUTCDate() === d ? [y, mo, d] : null;
+}
+
 /** The Monday of the week an ISO date falls in, as ISO. */
 export function weekOf(iso) {
   const d = new Date(`${iso}T00:00:00Z`);
@@ -55,7 +76,7 @@ export function byWeek(events, macro = []) {
 
 /** Events in the `days` from `asOf`, holdings and market dates together. */
 export function within(calendar, days, asOf) {
-  const start = asOf || calendar?.as_of || isoDay(new Date());
+  const start = asOf || calendar?.as_of || todayISO();
   const end = new Date(`${start}T00:00:00Z`);
   end.setUTCDate(end.getUTCDate() + days);
   const until = isoDay(end);

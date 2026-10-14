@@ -183,8 +183,48 @@ export function upsideText(stock) {
   return text;
 }
 
-/** The headline numbers for one holding, as a definition list. */
-export function factsList(stock) {
+const known = (v) => v !== null && v !== undefined && v !== "" && v !== "N/A";
+
+/**
+ * What stands in for an order book: the latest working-capital and debtor
+ * days (Screener's ratios table) and the partners on record in the entity
+ * graph. ROCE, the other measure of how capital turns into revenue, is a row
+ * of its own above. ``null`` when there is nothing to show, as for a lender,
+ * whose ratios table has neither and which may have no partners.
+ */
+export function visibilityProxy(stock, { partners = 0 } = {}) {
+  const sc = stock?.screener || {};
+  const days = (v) => `${Math.round(Number(v))} days`;
+  const parts = [
+    known(sc.working_capital_days) ? `working capital ${days(sc.working_capital_days)}` : "",
+    known(sc.debtor_days) ? `debtors ${days(sc.debtor_days)}` : "",
+    partners ? `${partners} partner${partners === 1 ? "" : "s"} on record` : "",
+  ].filter(Boolean);
+  if (!parts.length) return null;
+  const text = parts.join(" \u00b7 ");
+  return { text: text.charAt(0).toUpperCase() + text.slice(1), title: VISIBILITY_NOTE };
+}
+
+const VISIBILITY_NOTE =
+  "No order book is reported for this company: no source this pipeline reads publishes one. " +
+  "These stand in: working-capital and debtor days (latest year, Screener) and partners recorded in the entity graph.";
+
+/**
+ * The order-book slot: the order book where a source gives one, else the
+ * visibility proxy, labelled as such, else nothing.
+ */
+export function orderBookRow(stock, { partners = 0 } = {}) {
+  const sc = stock?.screener || {};
+  if (known(sc.order_book)) return ["Order book", crore(sc.order_book)];
+  const proxy = visibilityProxy(stock, { partners });
+  return proxy ? ["Visibility proxy", proxy] : null;
+}
+
+/**
+ * The headline numbers for one holding, as a definition list. ``partners``
+ * is the holding's count in the entity graph, where the caller has it.
+ */
+export function factsList(stock, { partners = 0 } = {}) {
   const sc = stock.screener || {};
   const rows = [
     ["Price", stock.price ?? "—"],
@@ -199,15 +239,19 @@ export function factsList(stock) {
         ? `${sc.deliv_pct}% of last session (${sc.delivery_band ?? "unknown"})`
         : "—",
     ],
+    orderBookRow(stock, { partners }),
     // Screener's figures come from the consolidated accounts unless the company
     // has none (providers/screener.py); a standalone P/E is not comparable to
     // a peer's consolidated one, so the reader is told which they are seeing.
     ...(sc.accounts === "standalone" ? [["Accounts", "standalone (no consolidated figures)"]] : []),
-  ];
+  ].filter(Boolean);
   return el(
     "dl",
     { class: "drawer-facts" },
-    rows.flatMap(([k, v]) => [el("dt", {}, k), el("dd", {}, String(v))]),
+    rows.flatMap(([k, v]) => [
+      el("dt", {}, k),
+      typeof v === "object" ? el("dd", { title: v.title }, v.text) : el("dd", {}, String(v)),
+    ]),
   );
 }
 

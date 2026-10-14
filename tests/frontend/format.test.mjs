@@ -121,3 +121,30 @@ test("a route round-trips through href and parse", () => {
   assert.equal(round.params.lens, "buffett");
   assert.equal(round.focus, "BEL");
 });
+
+// --- dates: a day with no time is the same day everywhere ------------------
+
+import { shortDate } from "../../src/core/format.js";
+import { inZones } from "./zones.mjs";
+
+const ZONES = ["Asia/Kolkata", "UTC", "America/Los_Angeles", "Pacific/Kiritimati", "Etc/GMT+12"];
+
+test("a date with no time is written as the same day in every timezone", () => {
+  // Read as midnight UTC, it was 14 Oct for anyone west of Greenwich.
+  inZones(ZONES, (tz) => {
+    assert.equal(shortDate("2026-10-15"), "15 Oct 2026", tz);
+    assert.equal(shortDate("2026-01-01"), "01 Jan 2026", tz);
+  });
+});
+
+test("a timestamp is still shown in the reader's own time", () => {
+  inZones(["Asia/Kolkata"], () => assert.equal(shortDate("2026-10-15T20:30:00Z"), "16 Oct 2026"));
+  inZones(["America/Los_Angeles"], () => assert.equal(shortDate("2026-10-15T20:30:00Z"), "15 Oct 2026"));
+});
+
+test("something written as a day that is no day is shown as written", () => {
+  // new Date("2026-02-30") would have been 2 March.
+  assert.equal(shortDate("2026-02-30"), "2026-02-30");
+  assert.equal(shortDate(""), "");
+  assert.equal(shortDate("soon"), "soon");
+});

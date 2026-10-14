@@ -211,7 +211,7 @@ async def probe_screener_accounts(symbols):
                 print(f"  Mentions    : {mentions[:3] or 'none'}")
                 # The labels the parser matches against: a bank's page names
                 # its rows differently from a manufacturer's.
-                for section in ("quarters", "profit-loss"):
+                for section in ("quarters", "profit-loss", "ratios"):
                     print(
                         f"  Rows {section:<11}: {_row_labels(soup, section) or 'none'}"
                     )

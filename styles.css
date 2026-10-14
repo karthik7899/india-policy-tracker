@@ -268,6 +268,16 @@ body {
 /* Results due soon, and the latest results: facts, so no status colour. */
 .pill-earnings { color: var(--series-1); border-color: var(--series-1); }
 .pill-results { color: var(--ink-2); font-weight: 500; }
+/* How settled a catalyst is (src/core/catalyst.js). The label carries the
+   meaning; colour only groups: what has happened is green, what is pending
+   blue, drafts and soft partnerships muted. */
+.pill-catalyst { font-size: 11px; padding: 0 7px; margin-right: 6px; vertical-align: 1px; white-space: nowrap; }
+.pill-hard, .pill-win { color: var(--good); border-color: var(--good); }
+.pill-l1, .pill-announced { color: var(--series-1); border-color: var(--series-1); }
+.pill-proposed, .pill-reported { color: var(--ink-2); }
+.pill-soft { color: var(--ink-2); border-style: dashed; }
+.flow-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.conviction-toggle { white-space: nowrap; }
 .company-page-badges { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 6px; margin-top: 6px; }
 
 /* --- network ----------------------------------------------------------- */
@@ -697,3 +707,5 @@ td .disclose-summary { padding: 2px 0; }
   background: var(--plane); color: var(--ink-2); font-weight: 400; line-height: 1.5; overflow-wrap: anywhere;
 }
 .data-inspect-body p { margin: 2px 0; }
+/* Live / LKG cached / Missing, each in its status colour (src/core/completeness.js). */
+.data-state-pill { font-size: 11px; padding: 0 6px; }

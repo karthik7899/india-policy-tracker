@@ -219,3 +219,18 @@ test("clicking a new column starts descending; clicking the same one toggles", (
   assert.equal(nextDir("pe", "pe", "desc"), "asc");
   assert.equal(nextDir("pe", "pe", "asc"), "desc");
 });
+
+import { inZones } from "./zones.mjs";
+
+test("a date with no time is aged in calendar days, in the reader's calendar", () => {
+  const now = Date.parse("2026-10-15T03:30:00Z"); // 09:00 in India, still the 14th in California
+  inZones(["Asia/Kolkata"], () => {
+    assert.equal(ageInDays("2026-10-08", now), 7);
+    assert.equal(ageInDays("2026-10-15", now), 0);
+  });
+  inZones(["America/Los_Angeles"], () => {
+    assert.equal(ageInDays("2026-10-08", now), 6);
+    assert.equal(ageInDays("2026-10-14", now), 0);
+  });
+  assert.equal(ageInDays("2026-02-30", now), null);
+});

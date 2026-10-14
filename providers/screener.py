@@ -415,6 +415,17 @@ def parse_company_page(text, ticker, sector):
     if roce_trend:
         sc["roce_trend"] = calculate_trend(roce_trend, 5)
 
+    # The latest year's working-capital days and debtor days: what the
+    # dashboard shows for revenue visibility, as no source publishes an order
+    # book. A lender's ratios table has neither, only ROE
+    # (docs/upstream-findings.md).
+    debtor_days = extract_row_values(soup, "ratios", "Debtor Days")
+    if debtor_days:
+        sc["debtor_days"] = debtor_days[-1]
+    working_capital_days = extract_row_values(soup, "ratios", "Working Capital Days")
+    if working_capital_days:
+        sc["working_capital_days"] = working_capital_days[-1]
+
     # 7. Shareholding
     promoters = extract_row_values(soup, "shareholding", "Promoters")
     if promoters:

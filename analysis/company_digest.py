@@ -60,6 +60,7 @@ def _kind(item: Dict[str, Any]) -> str:
 
 
 def _activity(items, cutoff: str) -> List[Dict[str, Any]]:
+    from analysis.event_engine import headline_certainty
     from analysis.headline_text import classify, tidy
 
     rows, seen = [], set()
@@ -81,11 +82,18 @@ def _activity(items, cutoff: str) -> List[Dict[str, Any]]:
         if any(key.startswith(k) or k.startswith(key) for k in seen):
             continue
         seen.add(key)
+        row_kind = "adverse" if kind == "adverse" else _kind(item)
+        # How settled an event is, as the event engine reads it: an L-1 bid
+        # is "announced", an award "completed" (src/core/catalyst.js).
+        certainty = (
+            headline_certainty(text) if item.get("event_type") in _KIND else None
+        )
         rows.append(
             {
                 "date": date,
-                "kind": "adverse" if kind == "adverse" else _kind(item),
+                "kind": row_kind,
                 "text": shown[:_TEXT_LIMIT],
+                **({"certainty": certainty} if certainty else {}),
                 **({"link": item["source_url"]} if item.get("source_url") else {}),
                 **(
                     {"source": item["source_label"]} if item.get("source_label") else {}
@@ -118,6 +126,8 @@ def _policies(
                 "headline": headline[:_TEXT_LIMIT],
                 "direction": (effect or {}).get("direction"),
                 "status": imp.get("status") or "",
+                # Hard (approved or in force), proposed, or soft.
+                **({"strength": imp["strength"]} if imp.get("strength") else {}),
                 "measure": imp.get("measure") or "",
                 "names_company": names,
                 **({"state": imp["state"]} if imp.get("state") else {}),

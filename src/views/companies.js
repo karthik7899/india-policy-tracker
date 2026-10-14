@@ -16,11 +16,12 @@ import { shortDate, thesisStatus, LLM_MARK } from "../core/format.js";
 import { href } from "../core/router.js";
 import { resolve } from "../core/data.js";
 import * as filters from "../core/filters.js";
-import { panel, tickerLink } from "./table.js";
+import { panel, tickerLink, catalystTag } from "./table.js";
+import { isHighConviction } from "../core/catalyst.js";
 import { sparkline, seriesChange } from "../core/sparkline.js";
 import { filterBar, filteredEmpty } from "./filterbar.js";
-import { earningsBadge, resultsBadge } from "../core/calendar.js";
-import { completeness, describeCompleteness } from "../core/completeness.js";
+import { earningsBadge, resultsBadge, todayISO } from "../core/calendar.js";
+import { completeness, describeCompleteness, fieldStates, STATES } from "../core/completeness.js";
 
 const SORTS = [
   ["recent", "Latest activity"],
@@ -87,41 +88,58 @@ function link(url, text) {
 }
 
 /**
- * The holding's data, field by field (src/core/completeness.js), shown only
- * when a field is missing or kept from an earlier run. The summary carries
- * the percentage; tapping it (or hovering) names the fields and the source
- * each comes from, so a gap reads as "Screener failed", not as a number.
+ * The summary line of the inspector: the percentage, then how many fields
+ * are cached and missing, or that every one is live. Pure.
  */
-export function dataInspector(stock) {
+export function inspectorSummary(c) {
+  const counts = [
+    c.kept.length ? `${c.kept.length} LKG cached` : "",
+    c.missing.length ? `${c.missing.length} missing` : "",
+  ].filter(Boolean);
+  return `Data ${c.pct}% · ${counts.join(" · ") || "all live"}`;
+}
+
+/**
+ * The holding's data, field by field (src/core/completeness.js), in three
+ * states: Live (fetched this run), LKG cached (the source failed and the
+ * last known good value stands in, with its source and the day it was
+ * fetched) and Missing. On a card it appears only when something is cached
+ * or missing; on the company page (``always``) it is there to inspect even
+ * when every field is live.
+ */
+export function dataInspector(stock, { always = false } = {}) {
   if (!stock) return null;
   const c = completeness(stock);
-  if (!c.missing.length && !c.kept.length) return null;
-  const list = (fields, text) => fields.map(text).join(", ");
+  if (!always && !c.missing.length && !c.kept.length) return null;
   return el(
     "details",
     { class: "data-inspect" },
     el(
       "summary",
       { class: `pill data-inspect-summary${c.missing.length ? " pill-warning" : ""}`, title: describeCompleteness(c, shortDate) },
-      `Data ${c.pct}%${c.kept.length ? " · kept" : ""}`,
+      inspectorSummary(c),
     ),
     el(
       "div",
       { class: "data-inspect-body" },
-      c.missing.length
-        ? el("p", {}, el("strong", {}, "Missing: "), list(c.missing, (f) => `${f.label} (${f.source})`))
-        : null,
-      c.kept.length
+      fieldStates(c, shortDate)
+        .filter((g) => g.fields.length)
+        .map((g) =>
+          el(
+            "p",
+            { class: "data-state" },
+            el("span", { class: `pill pill-${g.role} data-state-pill`, title: g.means }, g.label),
+            " ",
+            g.fields.map((f) => f.text).join(", "),
+          ),
+        ),
+      c.kept.length ? el("p", { class: "evidence-meta" }, STATES.kept.means) : null,
+      c.notApplicable.length
         ? el(
             "p",
-            {},
-            el("strong", {}, "Kept from an earlier run: "),
-            list(c.kept, (f) => `${f.label} (fetched ${shortDate(f.since)})`),
-            el("span", { class: "evidence-meta" }, " A source failed this run; a value under a week old stands in."),
+            { class: "evidence-meta" },
+            `Not applicable: ${c.notApplicable.map((f) => `${f.label}, ${f.why}`).join("; ")}`,
           )
-        : null,
-      c.notApplicable.length
-        ? el("p", { class: "evidence-meta" }, `Not applicable: ${list(c.notApplicable, (f) => `${f.label}, ${f.why}`)}`)
         : null,
     ),
   );
@@ -133,12 +151,25 @@ export function dataInspector(stock) {
  * evidence means for the case; the badge only states the figures.
  */
 export function calendarBadges(calendar, results, ticker) {
-  const due = earningsBadge(calendar, ticker);
-  const latest = resultsBadge(results, ticker);
+  return calendarBadgeSpecs(calendar, results, ticker).map((b) =>
+    el("span", { class: b.className, title: b.title }, b.text),
+  );
+}
+
+/**
+ * The badges' text and titles, without a DOM. The count ("today", "T-3d")
+ * and the date in the title both come from the reader's own calendar
+ * (src/core/calendar.js, src/core/format.js), so they agree in every
+ * timezone: the date was once read as midnight UTC and shown a day early
+ * west of Greenwich.
+ */
+export function calendarBadgeSpecs(calendar, results, ticker, asOf = todayISO()) {
+  const due = earningsBadge(calendar, ticker, { asOf });
+  const latest = resultsBadge(results, ticker, { asOf });
   return [
-    due ? el("span", { class: "pill pill-earnings", title: `Results due ${shortDate(due.date)}` }, due.text) : null,
-    latest ? el("span", { class: "pill pill-results", title: latest.title }, latest.text) : null,
-  ];
+    due && { className: "pill pill-earnings", text: due.text, title: `Results due ${shortDate(due.date)}` },
+    latest && { className: "pill pill-results", text: latest.text, title: latest.title },
+  ].filter(Boolean);
 }
 
 /** Markers for the price line: the card's own news and policies. */
@@ -168,21 +199,26 @@ export function priceLine(c) {
   );
 }
 
-/** The holding's own news in the window, and the namesakes set aside from it. */
-export function activitySection(c, windowDays) {
+/**
+ * The holding's own news in the window, and the namesakes set aside from it.
+ * ``highOnly`` keeps the confirmed order wins (src/core/catalyst.js).
+ */
+export function activitySection(c, windowDays, { highOnly = false } = {}) {
+  const rows = (c.activity || []).filter((a) => !highOnly || isHighConviction(a));
   return el(
     "section",
     {},
     el("h4", {}, `Recent activity${c.activity_count > (c.activity || []).length ? ` (${c.activity_count})` : ""}`),
-    c.activity?.length
+    rows.length
       ? el(
           "ul",
           { class: "evidence" },
-          c.activity.map((a) =>
+          rows.map((a) =>
             el(
               "li",
               {},
               el("span", { class: `tag${a.kind === "adverse" ? " tag-risk" : ""}` }, a.kind),
+              catalystTag(a),
               link(a.link, a.text),
               el(
                 "span",
@@ -192,7 +228,13 @@ export function activitySection(c, windowDays) {
             ),
           ),
         )
-      : el("p", { class: "company-empty" }, `No news attributed to it in ${windowDays} days.`),
+      : el(
+          "p",
+          { class: "company-empty" },
+          highOnly && c.activity?.length
+            ? `No confirmed order win in ${windowDays} days.`
+            : `No news attributed to it in ${windowDays} days.`,
+        ),
     // Headlines the thesis check read as being about a namesake (a
     // foreign parent, a person): kept for inspection, not shown as news.
     c.namesakes?.length
@@ -208,17 +250,21 @@ export function activitySection(c, windowDays) {
   );
 }
 
-/** The policies touching the holding or its sector, with their direction. */
-export function policySection(c, sectorName, windowDays) {
+/**
+ * The policies touching the holding or its sector, with their direction and
+ * how binding each is. ``highOnly`` keeps the hard ones.
+ */
+export function policySection(c, sectorName, windowDays, { highOnly = false } = {}) {
+  const rows = (c.policies || []).filter((p) => !highOnly || isHighConviction(p));
   return el(
     "section",
     {},
     el("h4", {}, "Policy"),
-    c.policies?.length
+    rows.length
       ? el(
           "ul",
           { class: "evidence" },
-          c.policies.map((p) =>
+          rows.map((p) =>
             el(
               "li",
               {},
@@ -229,12 +275,19 @@ export function policySection(c, sectorName, windowDays) {
                     `${ARROW[p.direction] || ""} ${p.direction}`,
                   )
                 : null,
+              catalystTag(p),
               link(p.link, p.headline),
               el("span", { class: "evidence-meta" }, policyMeta(p)),
             ),
           ),
         )
-      : el("p", { class: "company-empty" }, `No policy touching ${sectorName} in ${windowDays} days.`),
+      : el(
+          "p",
+          { class: "company-empty" },
+          highOnly && c.policies?.length
+            ? `No hard policy touching ${sectorName} in ${windowDays} days.`
+            : `No policy touching ${sectorName} in ${windowDays} days.`,
+        ),
   );
 }
 
