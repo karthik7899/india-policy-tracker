@@ -192,6 +192,14 @@ function readThroughSection(rows) {
   );
 }
 
+/** The holding's partners in the entity graph (tie-ups accepted into it). */
+export function partnerCount(edges, ticker) {
+  const key = String(ticker || "").toUpperCase();
+  return (edges || []).filter(
+    (e) => e?.type === "partner" && [e.src, e.dst].some((n) => String(n).toUpperCase() === key),
+  ).length;
+}
+
 export async function render(container, { payload, route }) {
   const ticker = route?.focus;
   const stock = findHolding(payload?.watchlist, ticker);
@@ -311,7 +319,7 @@ export async function render(container, { payload, route }) {
       el(
         "aside",
         { class: "company-page-side" },
-        panel("Numbers", null, card ? priceLine(card) : null, factsList(stock)),
+        panel("Numbers", null, card ? priceLine(card) : null, factsList(stock, { partners: partnerCount(edges, key) })),
         positionSection(pickBook(portfolio), key),
         datesSection(eventsFor(calendar, key), scorecardFor(results, key)),
         (() => {

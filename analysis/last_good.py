@@ -45,6 +45,7 @@ SCREENER_FIELDS = (
     "current_price",
     "debt_to_equity",
     "debt_trend",
+    "debtor_days",
     "dii_change",
     "dii_pct",
     "dividend_yield",
@@ -77,6 +78,7 @@ SCREENER_FIELDS = (
     "sales_trend",
     "slug",
     "ttm_eps",
+    "working_capital_days",
 )
 # Turnover (analysis/liquidity.assess) and the 52-week range, both from the
 # price download (analysis/growth.py), and NSE delivery (providers/nse_delivery).
