@@ -48,6 +48,18 @@ test("a failed Screener fetch reads as Screener's fields, missing", () => {
   assert.match(describeCompleteness(c), /^Missing: Market cap \(Screener\), P\/E \(Screener\)/);
 });
 
+test("a lender's financing margin is its quarterly margin", () => {
+  const s = full();
+  delete s.screener.q_opm;
+  s.screener.q_fin_margin = 14;
+  assert.equal(completeness(s).pct, 100);
+  s._stale_fields = { q_fin_margin: "2026-10-12" };
+  assert.deepEqual(
+    completeness(s).kept.map((f) => [f.key, f.since]),
+    [["q_opm", "2026-10-12"]],
+  );
+});
+
 test("a value kept from an earlier run counts, and says from when", () => {
   const s = full();
   s._stale_fields = { roce: "2026-10-12", price: "2026-10-13" };

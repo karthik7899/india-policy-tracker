@@ -27,7 +27,8 @@ export const FIELDS = [
   ["roce", "ROCE", "Screener", (s) => sc(s).roce],
   ["roe", "ROE", "Screener", (s) => sc(s).roe],
   ["q_sales", "Quarterly sales", "Screener", (s) => sc(s).q_sales],
-  ["q_opm", "Quarterly margin", "Screener", (s) => sc(s).q_opm],
+  // A lender's is its financing margin, kept apart from q_opm (providers/screener.py).
+  ["q_opm", "Quarterly margin", "Screener", (s) => sc(s).q_opm ?? sc(s).q_fin_margin],
   ["q_eps", "Quarterly EPS", "Screener", (s) => sc(s).q_eps],
   ["revenue_ttm_growth_pct", "Revenue growth", "computed from Screener", (s) => sc(s).revenue_ttm_growth_pct],
   ["promoter_pct", "Promoter holding", "Screener", (s) => sc(s).promoter_pct],
@@ -35,6 +36,9 @@ export const FIELDS = [
   ["deliv_pct", "Delivery %", "NSE", (s) => sc(s).deliv_pct],
   ["week52_low", "52-week range", "Yahoo", (s) => sc(s).week52_low],
 ];
+
+// The field a row's value can come from instead, and is marked kept under.
+const STALE_ALIAS = { q_opm: "q_fin_margin" };
 
 /** Why a missing field has nothing to report, or null when it should exist. */
 function notApplicable(key, stock) {
@@ -57,7 +61,8 @@ export function completeness(stock) {
   for (const [key, label, source, value] of FIELDS) {
     const field = { key, label, source };
     if (has(value(stock))) {
-      if (stale[key]) out.kept.push({ ...field, since: stale[key] });
+      const since = stale[key] || stale[STALE_ALIAS[key]];
+      if (since) out.kept.push({ ...field, since });
       else out.fresh.push(field);
       continue;
     }

@@ -51,6 +51,7 @@ SCREENER_FIELDS = (
     "eps_trend",
     "fii_change",
     "fii_pct",
+    "fin_margin_trend",
     "market_cap",
     "operating_margin_trend",
     "opm_expansion",
@@ -61,6 +62,7 @@ SCREENER_FIELDS = (
     "promoter_change",
     "promoter_pct",
     "q_eps",
+    "q_fin_margin",
     "q_net_profit",
     "q_opm",
     "q_sales",
@@ -73,6 +75,7 @@ SCREENER_FIELDS = (
     "roce_trend",
     "roe",
     "sales_trend",
+    "slug",
     "ttm_eps",
 )
 # Turnover (analysis/liquidity.assess) and the 52-week range, both from the

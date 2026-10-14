@@ -118,8 +118,10 @@ export function resultsBadge(results, ticker, { withinDays = 45, asOf = todayISO
   if (age === null || age < 0 || age > withinDays) return null;
   const yoy = typeof card.sales_yoy_pct === "number" ? card.sales_yoy_pct : null;
   const qoq = typeof card.sales_qoq_pct === "number" ? card.sales_qoq_pct : null;
+  // A lender's top line is revenue (analysis/event_calendar.py).
+  const top = card.margin_basis === "financing" ? "revenue" : "sales";
   const sales =
-    yoy !== null ? `sales ${signed(yoy, "%")} YoY` : qoq !== null ? `sales ${signed(qoq, "%")} QoQ` : "";
+    yoy !== null ? `${top} ${signed(yoy, "%")} YoY` : qoq !== null ? `${top} ${signed(qoq, "%")} QoQ` : "";
   const margin = typeof card.opm_change_pp === "number" ? `margin ${signed(card.opm_change_pp, " pts")} QoQ` : "";
   return {
     text: `${card.quarter || "Latest quarter"}: ${[sales, margin].filter(Boolean).join(" · ") || "reported"}`,

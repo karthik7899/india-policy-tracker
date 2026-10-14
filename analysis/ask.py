@@ -206,7 +206,11 @@ def _figures(stock: Dict[str, Any], sc: Dict[str, Any]) -> Dict[str, Any]:
     quarterly results" while the pipeline held eight quarters of them: only
     P/E, ROCE, ROE and market cap were passed on. Keys are renamed rather than
     passed through because "quarterly_revenue_growth" holds sales, not growth.
+    A lender's top line is revenue and its margin a financing margin
+    (providers/screener.py), and the names say so.
     """
+    bank = "q_fin_margin" in sc
+    sales = "revenue_cr" if bank else "sales_cr"
 
     def pick(pairs):
         return {
@@ -218,25 +222,27 @@ def _figures(stock: Dict[str, Any], sc: Dict[str, Any]) -> Dict[str, Any]:
     out = {
         "latest_quarter": pick(
             (
-                ("sales_cr", "q_sales"),
+                (sales, "q_sales"),
                 ("sales_change_vs_previous_quarter_pct", "qoq_sales_growth"),
                 ("sales_change_vs_year_ago_quarter_pct", "revenue_yoy_pct"),
                 ("operating_margin_pct", "q_opm"),
                 ("operating_margin_change_pp", "opm_expansion"),
+                ("financing_margin_pct", "q_fin_margin"),
                 ("net_profit_cr", "q_net_profit"),
                 ("eps", "q_eps"),
             )
         ),
         "quarterly_oldest_first": pick(
             (
-                ("sales_cr", "sales_trend"),
+                (sales, "sales_trend"),
                 ("eps", "eps_trend"),
                 ("operating_margin_pct", "quarterly_ebitda_margin"),
+                ("financing_margin_pct", "fin_margin_trend"),
             )
         ),
         "annual_oldest_first_last_is_trailing_12_months": pick(
             (
-                ("sales_cr", "annual_sales_trend"),
+                (sales, "annual_sales_trend"),
                 ("eps", "annual_eps_trend"),
                 ("operating_margin_pct", "operating_margin_trend"),
                 ("debt_cr", "debt_trend"),
