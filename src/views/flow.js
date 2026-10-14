@@ -14,7 +14,8 @@ import { shortDate, crore, sizeLabel, LLM_MARK } from "../core/format.js";
 import { href } from "../core/router.js";
 import { resolve } from "../core/data.js";
 import * as filters from "../core/filters.js";
-import { dataTable, panel } from "./table.js";
+import { dataTable, panel, pillTag, convictionToggle } from "./table.js";
+import { catalystPill, HIGH } from "../core/catalyst.js";
 import { filterBar, filteredEmpty } from "./filterbar.js";
 
 const STREAMS = [
@@ -135,8 +136,10 @@ export function partnershipDetail(item, labels = {}) {
 }
 
 /** Normalise the differing shapes into one row. */
-function normalise(item, streamLabel, labels) {
+export function normalise(item, streamLabel, labels) {
   return {
+    // How settled it is: a policy's strength, an order win's stage.
+    pill: catalystPill(item),
     when: item.date || item.published || "",
     what: item.filing || item.headline || item.title || item.signal || "",
     who: item.company || item.ticker || item.name || (item.actors || item.tickers || [])[0] || "",
@@ -174,6 +177,11 @@ export async function render(container, { payload, route }) {
     all.sort((a, c) => String(c.when).localeCompare(String(a.when)));
   }
 
+  // Hard policies and confirmed wins only, when asked: what has happened,
+  // without the drafts, MoUs, L-1 bids and reports around it.
+  const conviction = params.conviction === "high";
+  if (conviction) all = all.filter((r) => r.pill && HIGH.has(r.pill.kind));
+
   // Filter BEFORE the cap, not after. Capping first would search only the
   // newest eighty items and report "no matches" for something that is
   // genuinely in the stream, a step behind where the reader is looking.
@@ -190,9 +198,8 @@ export async function render(container, { payload, route }) {
       el(
         "p",
         { class: "view-sub" },
-        anyFilter
-          ? `${matched.length} of ${all.length} items`
-          : `${all.length} items`,
+        (anyFilter ? `${matched.length} of ${all.length} items` : `${all.length} items`) +
+          (conviction ? " \u00b7 hard policies and confirmed wins only" : ""),
       ),
     ),
 
@@ -204,7 +211,12 @@ export async function render(container, { payload, route }) {
       summary: matched.length > CAP ? `showing the newest ${CAP}` : "",
     }),
 
-    streamNav(stream, route || { params: {} }),
+    el(
+      "div",
+      { class: "flow-controls" },
+      streamNav(stream, route || { params: {} }),
+      convictionToggle("flow", params, conviction),
+    ),
     panel(
       null,
       null,
@@ -218,6 +230,7 @@ export async function render(container, { payload, route }) {
             label: "What",
             sortable: false,
             render: (r) => [
+              pillTag(r.pill),
               r.link
                 ? el("a", { href: r.link, target: "_blank", rel: "noopener noreferrer" }, r.what)
                 : r.what,
@@ -233,7 +246,9 @@ export async function render(container, { payload, route }) {
           route,
           empty: anyFilter
             ? filteredEmpty("flow", params, "items")
-            : "Nothing in this stream.",
+            : conviction
+              ? "No hard policy or confirmed win in this stream."
+              : "Nothing in this stream.",
         },
       ),
     ),

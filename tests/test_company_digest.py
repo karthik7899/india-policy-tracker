@@ -241,3 +241,38 @@ def test_namesakes_from_earlier_runs_stay_set_apart():
     assert [a["text"] for a in s["namesakes"]] == [
         "Suzlon fined by exchanges for LODR non-compliance"
     ]
+
+
+def test_an_event_row_says_how_settled_it_is_and_a_policy_how_binding():
+    """For the pills on the company page (src/core/catalyst.js): an order
+    won is completed, an L-1 bid only announced; a policy carries its
+    strength from analysis/policy_impact.py."""
+    coverage = {
+        "SUZLON": [
+            _item(
+                "Suzlon bags 400 MW wind EPC order from Tata Power",
+                "2026-10-01",
+                event_type="order_win",
+            ),
+            _item(
+                "Suzlon emerges L1 bidder for 300 MW NTPC wind project",
+                "2026-10-02",
+                event_type="order_win",
+            ),
+        ]
+    }
+    brief = {
+        **BRIEF,
+        "policy_impacts": [
+            {**BRIEF["policy_impacts"][0], "strength": "hard"},
+        ],
+    }
+    company = build_company_digest(WATCHLIST, coverage, brief, today="2026-10-03")[
+        "companies"
+    ][0]
+    by_text = {a["text"][:20]: a.get("certainty") for a in company["activity"]}
+    assert by_text == {
+        "Suzlon emerges L1 bi": "announced",
+        "Suzlon bags 400 MW w": "completed",
+    }
+    assert company["policies"][0]["strength"] == "hard"

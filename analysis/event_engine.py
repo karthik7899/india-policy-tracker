@@ -16,7 +16,7 @@ loop that hardened the headline→company matcher.
 
 import datetime
 import re
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from analysis.competitive_intel import (
     SECTOR_BATTLEGROUNDS,
@@ -290,6 +290,32 @@ def classify_certainty(text: str) -> str:
     return CERTAINTY_COMPLETED
 
 
+def first_event_clause(headline: str):
+    """``(clause, event_type, phrase)`` for the first clause of a headline that
+    holds an event and is not a denial; None when no clause does.
+
+    Within a clause, not across the whole headline: one routinely carries two
+    statements ("ITC Hotels to acquire GHK for Rs 155 crore; shares decline
+    5%"), and matching across both lets one claim or cancel the other.
+    """
+    for clause in split_clauses(headline):
+        clause_lower = clause.lower()
+        if any(neg in clause_lower for neg in NEGATION_MARKERS):
+            continue  # this clause is a denial; others may still count
+        hit_type, hit_phrase = match_event_type(clause_lower)
+        if hit_type:
+            return clause, hit_type, hit_phrase
+    return None
+
+
+def headline_certainty(headline: str) -> Optional[str]:
+    """How settled a headline's event is (reported / announced / completed),
+    read from its event clause as classify_headlines reads it; None when it
+    holds no event. An L-1 bid is "announced": the award is not yet made."""
+    found = first_event_clause(headline)
+    return classify_certainty(found[0]) if found else None
+
+
 def graph_entities(clause: str, graph: Dict[str, Any]) -> List[str]:
     """Graph entities named in this clause — Google, Apple, Broadcom, Marvell.
 
@@ -378,37 +404,22 @@ def classify_headlines(
         for headline in collect_headlines(data, watchlist):
             lower = headline.lower()
 
-            # Classify within a clause, not across the whole headline. A
-            # headline routinely carries two of them — "ITC Hotels to acquire
-            # GHK for Rs 155 crore; shares decline 5%" — and matching the
-            # event, its actors and any negation against the full string lets
-            # one clause cancel or claim what belongs to the other.
-            event_type = phrase = certainty = counterparties = None
-            actors: List[str] = []
-            external: List[str] = []
-            for clause in split_clauses(headline):
-                clause_lower = clause.lower()
-                if any(neg in clause_lower for neg in NEGATION_MARKERS):
-                    continue  # this clause is a denial; others may still count
-
-                hit_type, hit_phrase = match_event_type(clause_lower)
-                if not hit_type:
-                    continue
-
-                # Attribution is relational, so the company has to appear
-                # alongside the event, not merely somewhere in the headline.
-                event_type, phrase = hit_type, hit_phrase
-                certainty = classify_certainty(clause)
-                actors = [
-                    ticker
-                    for ticker, name in holdings
-                    if title_matches_company(clause, ticker, name)
-                ]
-                external = graph_entities(clause, graph)
-                counterparties = _counterparties(event_type, clause, actors, holdings)
-                break
-            if not event_type:
+            # Classified within its event clause (first_event_clause), so
+            # the actors and any negation are that statement's own.
+            found = first_event_clause(headline)
+            if not found:
                 continue
+            clause, event_type, phrase = found
+            certainty = classify_certainty(clause)
+            # Attribution is relational, so the company has to appear
+            # alongside the event, not merely somewhere in the headline.
+            actors = [
+                ticker
+                for ticker, name in holdings
+                if title_matches_company(clause, ticker, name)
+            ]
+            external = graph_entities(clause, graph)
+            counterparties = _counterparties(event_type, clause, actors, holdings)
 
             # Domains stay headline-wide: unlike actors they are topical
             # rather than relational, and Tier 1 routing is deliberately loose.

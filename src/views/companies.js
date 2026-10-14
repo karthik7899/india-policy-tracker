@@ -16,7 +16,8 @@ import { shortDate, thesisStatus, LLM_MARK } from "../core/format.js";
 import { href } from "../core/router.js";
 import { resolve } from "../core/data.js";
 import * as filters from "../core/filters.js";
-import { panel, tickerLink } from "./table.js";
+import { panel, tickerLink, catalystTag } from "./table.js";
+import { isHighConviction } from "../core/catalyst.js";
 import { sparkline, seriesChange } from "../core/sparkline.js";
 import { filterBar, filteredEmpty } from "./filterbar.js";
 import { earningsBadge, resultsBadge, todayISO } from "../core/calendar.js";
@@ -198,21 +199,26 @@ export function priceLine(c) {
   );
 }
 
-/** The holding's own news in the window, and the namesakes set aside from it. */
-export function activitySection(c, windowDays) {
+/**
+ * The holding's own news in the window, and the namesakes set aside from it.
+ * ``highOnly`` keeps the confirmed order wins (src/core/catalyst.js).
+ */
+export function activitySection(c, windowDays, { highOnly = false } = {}) {
+  const rows = (c.activity || []).filter((a) => !highOnly || isHighConviction(a));
   return el(
     "section",
     {},
     el("h4", {}, `Recent activity${c.activity_count > (c.activity || []).length ? ` (${c.activity_count})` : ""}`),
-    c.activity?.length
+    rows.length
       ? el(
           "ul",
           { class: "evidence" },
-          c.activity.map((a) =>
+          rows.map((a) =>
             el(
               "li",
               {},
               el("span", { class: `tag${a.kind === "adverse" ? " tag-risk" : ""}` }, a.kind),
+              catalystTag(a),
               link(a.link, a.text),
               el(
                 "span",
@@ -222,7 +228,13 @@ export function activitySection(c, windowDays) {
             ),
           ),
         )
-      : el("p", { class: "company-empty" }, `No news attributed to it in ${windowDays} days.`),
+      : el(
+          "p",
+          { class: "company-empty" },
+          highOnly && c.activity?.length
+            ? `No confirmed order win in ${windowDays} days.`
+            : `No news attributed to it in ${windowDays} days.`,
+        ),
     // Headlines the thesis check read as being about a namesake (a
     // foreign parent, a person): kept for inspection, not shown as news.
     c.namesakes?.length
@@ -238,17 +250,21 @@ export function activitySection(c, windowDays) {
   );
 }
 
-/** The policies touching the holding or its sector, with their direction. */
-export function policySection(c, sectorName, windowDays) {
+/**
+ * The policies touching the holding or its sector, with their direction and
+ * how binding each is. ``highOnly`` keeps the hard ones.
+ */
+export function policySection(c, sectorName, windowDays, { highOnly = false } = {}) {
+  const rows = (c.policies || []).filter((p) => !highOnly || isHighConviction(p));
   return el(
     "section",
     {},
     el("h4", {}, "Policy"),
-    c.policies?.length
+    rows.length
       ? el(
           "ul",
           { class: "evidence" },
-          c.policies.map((p) =>
+          rows.map((p) =>
             el(
               "li",
               {},
@@ -259,12 +275,19 @@ export function policySection(c, sectorName, windowDays) {
                     `${ARROW[p.direction] || ""} ${p.direction}`,
                   )
                 : null,
+              catalystTag(p),
               link(p.link, p.headline),
               el("span", { class: "evidence-meta" }, policyMeta(p)),
             ),
           ),
         )
-      : el("p", { class: "company-empty" }, `No policy touching ${sectorName} in ${windowDays} days.`),
+      : el(
+          "p",
+          { class: "company-empty" },
+          highOnly && c.policies?.length
+            ? `No hard policy touching ${sectorName} in ${windowDays} days.`
+            : `No policy touching ${sectorName} in ${windowDays} days.`,
+        ),
   );
 }
 

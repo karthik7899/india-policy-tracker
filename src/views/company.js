@@ -13,7 +13,7 @@
 import { el, mount } from "../core/dom.js";
 import { resolve, loadCoverage, loadGraph, loadProposals } from "../core/data.js";
 import { href } from "../core/router.js";
-import { panel } from "./table.js";
+import { panel, convictionToggle } from "./table.js";
 import {
   factsList,
   holdingSignals,
@@ -239,6 +239,8 @@ export async function render(container, { payload, route }) {
   const health = b.thesis_health?.[key];
   const check = thesisCheck?.holdings?.[key];
   const windowDays = digest?.window_days || 30;
+  // Hard policies and confirmed wins only, when asked (src/core/catalyst.js).
+  const conviction = route?.params?.conviction === "high";
 
   if (typeof document !== "undefined") document.title = `${key} · India Policy Tracker`;
 
@@ -295,11 +297,12 @@ export async function render(container, { payload, route }) {
           ? panel(
               `News and policy, last ${windowDays} days`,
               null,
+              convictionToggle("company", route?.params || { focus: key }, conviction),
               el(
                 "div",
                 { class: "company-cols" },
-                activitySection(card, windowDays),
-                policySection(card, sectorName, windowDays),
+                activitySection(card, windowDays, { highOnly: conviction }),
+                policySection(card, sectorName, windowDays, { highOnly: conviction }),
               ),
             )
           : null,

@@ -7,6 +7,7 @@
 import { el, mount, emptyState } from "../core/dom.js";
 import { href } from "../core/router.js";
 import { num } from "../core/format.js";
+import { catalystPill } from "../core/catalyst.js";
 
 /** Values that mean "we could not read this", as opposed to a real value. */
 function isMissing(value) {
@@ -175,6 +176,31 @@ export function dataTable(rows, columns, opts = {}) {
  * but not the thesis grade, Risk had the grade but not the news, and seeing
  * one company whole meant visiting five views.
  */
+/** A catalyst's pill (src/core/catalyst.js): pass the pill, or the row to read it from. */
+export function pillTag(p) {
+  return p ? el("span", { class: `pill pill-catalyst pill-${p.kind}`, title: p.title }, p.label) : null;
+}
+
+export function catalystTag(item) {
+  return pillTag(catalystPill(item));
+}
+
+/**
+ * The high-conviction toggle: a link that adds ?conviction=high to the route
+ * or clears it, so the filter survives a reload and the back button.
+ */
+export function convictionToggle(view, params, on) {
+  return el(
+    "a",
+    {
+      class: `lens conviction-toggle${on ? " lens-active" : ""}`,
+      href: href(view, { ...params, conviction: on ? null : "high" }),
+      title: "Only hard policies (approved or in force) and confirmed order wins",
+    },
+    on ? "\u2713 High conviction only" : "High conviction only",
+  );
+}
+
 export function tickerLink(ticker) {
   if (!ticker) return "—";
   const key = String(ticker).toUpperCase();
