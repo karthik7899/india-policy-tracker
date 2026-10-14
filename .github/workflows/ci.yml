@@ -31,6 +31,11 @@ jobs:
           black --check .
           flake8 .
 
+      # Two tests check the saved LLM caches against the code's event types
+      # and stances; the caches live on the data-state branch.
+      - name: Bring in the saved state
+        run: python scripts/state.py pull
+
       - name: Run tests
         run: python -m pytest tests/
 

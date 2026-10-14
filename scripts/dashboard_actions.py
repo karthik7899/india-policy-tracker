@@ -416,6 +416,14 @@ def _git(*args: str) -> subprocess.CompletedProcess:
     return subprocess.run(["git", *args], cwd=ROOT, capture_output=True, text=True)
 
 
+def _set_output(name: str, value: str) -> None:
+    """A step output for the workflow; nothing outside one."""
+    path = os.environ.get("GITHUB_OUTPUT")
+    if path:
+        with open(path, "a", encoding="utf-8") as f:
+            f.write(f"{name}={value}\n")
+
+
 def commit_and_push(payload: Dict[str, Any], number: int) -> Dict[str, list]:
     """Apply on the newest main and push, re-applying from scratch on a race.
 
@@ -435,6 +443,9 @@ def commit_and_push(payload: Dict[str, Any], number: int) -> Dict[str, list]:
             "commit", "-q", "-m", f"Apply dashboard decisions from #{number} [skip ci]"
         )
         if _git("push", "-q", "origin", "HEAD:main").returncode == 0:
+            # A push made with the workflow's token starts no workflow, so the
+            # job asks for the site to be republished (dashboard-actions.yml).
+            _set_output("pushed", "true")
             return report
         time.sleep(5 * attempt)
     report["skipped"].append("could not push after 5 attempts; nothing was saved")

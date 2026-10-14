@@ -6,8 +6,8 @@ strategy has until someone forces a scorecard. This module is that
 scorecard: every add/rotate decision is logged with the price and target at
 decision time; once enough time has passed, the decision is re-priced
 against the stock's current watchlist price and marked as playing out or
-not. The ledger is a small JSON file committed alongside
-``dashboard_data.json``/``watchlist.json`` so the history survives runs.
+not. The ledger is a small JSON file committed to main with
+``watchlist.json``, so the history survives runs and keeps its own in git.
 """
 
 import datetime

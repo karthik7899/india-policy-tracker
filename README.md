@@ -70,9 +70,14 @@ Go to your GitHub Repository -> **Settings** -> **Secrets and variables** -> **A
 
 ### 3. Enable GitHub Pages Dashboard
 1. Go to repository **Settings** -> **Pages**.
-2. Under **Build and deployment** -> **Source**, select **Deploy from a branch**.
-3. Choose the `main` branch and `/ (root)` folder, then click **Save**.
+2. Under **Build and deployment** -> **Source**, select **GitHub Actions**.
+3. The `Publish dashboard` workflow (`.github/workflows/pages.yml`) deploys the site on every push to `main` and after every daily briefing.
 4. The dashboard will now be live at `https://yourusername.github.io/india-policy-tracker/`.
+
+### Where the data lives
+The daily run's state (the news corpus `history.json`, the dashboard payload `dashboard_data.json` and its `data/` and `news/` sidecars, and the two LLM caches) lives on the **`data-state`** branch, not on `main`. That branch holds a single commit, the latest state, which each run replaces, so `main`'s history no longer grows by a copy of the corpus every day. `main` keeps the code and the files people edit or review: `watchlist.json`, the entity graph, the label sets and `rotation_ledger.json`.
+
+`scripts/state.py` moves the state: `pull` puts the latest copy in the working tree, and `push` replaces the branch's commit. Each run's state is also kept as a `state-<run number>` workflow artifact for 14 days. To roll back a bad run, unpack an earlier artifact at the repository root and run `python scripts/state.py push`.
 
 ---
 
@@ -84,14 +89,21 @@ Ensure you have Python installed, then install all required packages from `requi
 pip install -r requirements.txt
 ```
 
-### 2. Running the Aggregation Pipeline
+### 2. Fetching the Latest Data
+The state files are ignored on `main` (see *Where the data lives*). Pull the latest copy into your checkout:
+```bash
+python scripts/state.py pull
+```
+Without it the pipeline still runs, starting from an empty corpus.
+
+### 3. Running the Aggregation Pipeline
 To test the scrapers, value investing screeners, and institutional flows locally:
 ```bash
 python brief.py
 ```
 This writes the compiled JSON results to `dashboard_data.json` and outputs a local HTML briefing preview (`email_preview.html`).
 
-### 3. Serving the Web Dashboard
+### 4. Serving the Web Dashboard
 Serve the directory locally using Python's lightweight web server:
 ```bash
 python -m http.server 8000

@@ -145,7 +145,7 @@ def write_sidecars(payload: Dict[str, Any]) -> Tuple[Dict[str, Any], int]:
                 tickers.append(safe)
                 written += 1
             _prune(directory, current)
-            # The manifest replaces the data. Sorted so the committed payload
+            # The manifest replaces the data. Sorted so the saved payload
             # does not churn on dict ordering between runs.
             lightened[key] = {
                 "sidecar": f"{DATA_DIR}/{key}",

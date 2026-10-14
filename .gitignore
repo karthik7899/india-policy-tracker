@@ -12,3 +12,13 @@ node_modules/
 # Upstream probe samples (scripts/probe_upstream.py) — third-party responses,
 # kept as CI artifacts rather than committed.
 probe-output/
+
+# The pipeline's state lives on the data-state branch, one commit replaced
+# by each run, not in main's history (scripts/state.py). `python
+# scripts/state.py pull` puts the latest copy here.
+history.json
+dashboard_data.json
+llm_cache.json
+thesis_cache.json
+data/
+news/

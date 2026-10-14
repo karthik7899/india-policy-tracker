@@ -7,6 +7,7 @@ half-answered batch, an unreadable cache — is reproduced exactly.
 
 import datetime
 import json
+import os
 
 import pytest
 
@@ -365,7 +366,11 @@ def test_each_api_failure_explains_itself(monkeypatch, status, phrase):
         llm_reader.gemini_transport("k", "m")("prompt")
 
 
-def test_the_committed_cache_is_well_formed():
+def test_the_saved_cache_is_well_formed():
+    """The cache lives on the data-state branch; CI pulls it before the tests
+    (scripts/state.py), so a change to EVENT_TYPES is checked against it."""
+    if not os.path.exists(llm_reader.CACHE_PATH):
+        pytest.skip("no llm_cache.json here; `python scripts/state.py pull`")
     with open(llm_reader.CACHE_PATH, encoding="utf-8") as f:
         body = json.load(f)
     assert isinstance(body.get("entries"), dict)

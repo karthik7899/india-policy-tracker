@@ -1,0 +1,60 @@
+name: Publish dashboard
+
+# The dashboard is main's files plus the latest state. The payload, its
+# sidecars and the coverage files live on the data-state branch, not in
+# main (scripts/state.py), so Pages serves an artifact this workflow builds
+# rather than the branch itself. Pages' source must be "GitHub Actions":
+# Settings -> Pages -> Build and deployment -> Source.
+#
+# A push to main (a merged change to the page) publishes. So do the daily
+# briefing and applied dashboard decisions, by calling this workflow: their
+# own pushes are made with the workflow token, and those start no workflow.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  workflow_call:
+
+permissions:
+  contents: read
+  pages: write # deploy
+  id-token: write # prove the deployment came from this workflow
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    # One at a time and none cancelled: each publishes a newer state.
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      # main's tip rather than the commit that started the caller: the daily
+      # briefing commits watchlist.json and the entity graph before this runs.
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          ref: main
+
+      - name: Bring in the latest state
+        run: python3 scripts/state.py pull
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      # The whole tree, as deploying from the branch served it; the action
+      # leaves out .git and .github.
+      - name: Upload the site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -2,9 +2,9 @@
 
 Rising analyst price targets and growing analyst coverage are among the most
 reliable tailwinds funds trade on — the "estimate revision" factor. This
-pipeline already commits ``dashboard_data.json`` to git every run, so the
-prior run's targets, analyst counts and recommendation scores are sitting on
-disk for free; the only work is diffing them against this run's numbers
+pipeline already keeps ``watchlist.json`` from run to run, so the prior
+run's targets, analyst counts and recommendation scores are sitting on disk
+for free; the only work is diffing them against this run's numbers
 before they get overwritten.
 """
 

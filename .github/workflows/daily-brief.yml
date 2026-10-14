@@ -11,6 +11,13 @@ on:
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
+# One briefing at a time. Each starts from the state the last one pushed to
+# data-state, and two at once would start from the same one: the second push
+# is refused (scripts/state.py) rather than throw the first run's work away.
+concurrency:
+  group: daily-brief
+  cancel-in-progress: false
+
 jobs:
   # Quality checks run alongside the briefing but deliberately do NOT block
   # it: a formatting nit must never stop the daily email (it did once, for
@@ -38,13 +45,20 @@ jobs:
           black --check .
           flake8 .
 
+      # Two tests check the saved LLM caches against the code's event types
+      # and stances; the caches live on the data-state branch.
+      - name: Bring in the saved state
+        run: python scripts/state.py pull
+
       - name: Run tests
         run: python -m pytest tests/
 
   run-briefing:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # Needed to commit dashboard_data.json back to repo
+      contents: write # main's watchlist and graph, and the data-state branch
+    outputs:
+      should_run: ${{ steps.gate.outputs.should_run }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
@@ -90,6 +104,12 @@ jobs:
               f.write(f"should_run={'true' if should_run else 'false'}\n")
           PY
 
+      # The corpus, the payload and its sidecars, and the LLM caches, as the
+      # last run left them on the data-state branch (scripts/state.py).
+      - name: Bring in the saved state
+        if: steps.gate.outputs.should_run == 'true'
+        run: python scripts/state.py pull
+
       - name: Install dependencies
         if: steps.gate.outputs.should_run == 'true'
         run: |
@@ -130,19 +150,39 @@ jobs:
           # first run rather than only when a contradiction happens in the news.
           python scripts/eval_events.py --reader thesis --live
 
+      # data-state holds one commit, the latest state, so an earlier one is
+      # kept here: to roll back a bad run, unpack this into the repository
+      # and run `python scripts/state.py push`.
+      - name: Keep this run's state for 14 days
+        if: steps.gate.outputs.should_run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: state-${{ github.run_number }}
+          path: |
+            history.json
+            dashboard_data.json
+            llm_cache.json
+            thesis_cache.json
+            data/
+            news/
+          retention-days: 14
+          if-no-files-found: error
+
       # Implicitly also requires success(), so a failed or degraded run never
-      # overwrites the committed dashboard and watchlist with partial data.
+      # overwrites the saved state, watchlist or graph with partial data.
       - name: Commit and Push Updated Dashboard Data
         if: steps.gate.outputs.should_run == 'true'
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          # data/ holds the payload sidecars, news/ the coverage sidecars.
-          # Both are tracked, and every run rewrites them — leaving either out
-          # of this list strands them as unstaged changes, which is not a
-          # cosmetic omission: git pull --rebase refuses to run at all, so the
-          # commit below is made and then never pushed.
-          git add dashboard_data.json history.json watchlist.json rotation_ledger.json isin_master.json entity_graph.json entity_graph_proposals.json llm_cache.json thesis_cache.json news/ data/
+          # The state goes to data-state, replacing the last run's; it is
+          # ignored on main (scripts/state.py, .gitignore).
+          python scripts/state.py push
+          # What stays on main: the files people edit or review. Anything the
+          # run rewrites that is tracked and not on this list would make
+          # git pull --rebase refuse to run, so the commit below would be made
+          # and never pushed; the check after this names it instead.
+          git add watchlist.json rotation_ledger.json isin_master.json entity_graph.json entity_graph_proposals.json
 
           # Anything the run rewrote that is not on that list would fail the
           # rebase two steps down with "cannot pull with rebase", which says
@@ -179,3 +219,15 @@ jobs:
           RUN_NUMBER: ${{ github.run_number }}
           RUN_SHA: ${{ github.sha }}
         run: python alerts.py
+
+  # The site is main's files plus the state just pushed (pages.yml). Called
+  # rather than triggered: this run's pushes use the workflow token, and a
+  # push made with it starts no workflow.
+  publish:
+    needs: run-briefing
+    if: needs.run-briefing.outputs.should_run == 'true'
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    uses: ./.github/workflows/pages.yml

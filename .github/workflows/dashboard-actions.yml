@@ -33,6 +33,8 @@ jobs:
       contents: write # commit the applied decisions
       issues: write # reply on the issue and close it
       actions: read # see whether the daily briefing is running
+    outputs:
+      pushed: ${{ steps.apply.outputs.pushed }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
@@ -43,12 +45,18 @@ jobs:
           python-version: '3.12'
           cache: 'pip'
 
+      # A question reads the corpus, the company digest and the coverage
+      # files, which live on the data-state branch (scripts/state.py).
+      - name: Bring in the saved state
+        run: python scripts/state.py pull
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
       - name: Apply the request
+        id: apply
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # Questions only: decisions never call the model.
@@ -56,6 +64,17 @@ jobs:
           GEMINI_MODEL: ${{ vars.GEMINI_MODEL }}
           GEMINI_FALLBACK_MODELS: ${{ vars.GEMINI_FALLBACK_MODELS }}
         run: python scripts/dashboard_actions.py "$GITHUB_EVENT_PATH"
+
+  # An applied decision changes files the dashboard reads; its push uses the
+  # workflow token, which starts no workflow, so the site is republished here.
+  publish:
+    needs: act
+    if: needs.act.outputs.pushed == 'true'
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    uses: ./.github/workflows/pages.yml
 
   follow-up:
     # A comment on an issue the question workflow labelled. Answering commits
@@ -83,6 +102,11 @@ jobs:
         with:
           python-version: '3.12'
           cache: 'pip'
+
+      # A question reads the corpus, the company digest and the coverage
+      # files, which live on the data-state branch (scripts/state.py).
+      - name: Bring in the saved state
+        run: python scripts/state.py pull
 
       - name: Install dependencies
         run: |

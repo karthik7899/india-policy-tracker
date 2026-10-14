@@ -1,6 +1,7 @@
 """The thesis check: grounding, pair selection, caching, and where it shows."""
 
 import json
+import os
 
 import pytest
 
@@ -237,7 +238,11 @@ def test_without_a_key_the_check_is_skipped(cache, monkeypatch):
     assert readings == {} and "GEMINI_API_KEY" in status["skipped"]
 
 
-def test_the_committed_cache_is_well_formed():
+def test_the_saved_cache_is_well_formed():
+    """The cache lives on the data-state branch; CI pulls it before the tests
+    (scripts/state.py), so a change to STANCES is checked against it."""
+    if not os.path.exists(thesis_check.CACHE_PATH):
+        pytest.skip("no thesis_cache.json here; `python scripts/state.py pull`")
     with open(thesis_check.CACHE_PATH, encoding="utf-8") as f:
         body = json.load(f)
     # The header names the version that last wrote the file; entries from an

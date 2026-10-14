@@ -1,20 +1,22 @@
-"""The daily workflow's `git add` list must cover everything the run writes.
+"""Everything the daily run writes must be saved, in exactly one place.
 
-This exists because it did not, and the cost was disproportionate to the
-mistake. PR #142 started writing payload sidecars into data/ and committed the
-first copies, but the workflow's add list was never extended. Every subsequent
-run rewrote those 56 tracked files, left them unstaged, committed the staged
-subset, and then hit:
+This exists because it once was not, and the cost was disproportionate to
+the mistake. PR #142 started writing payload sidecars into data/ and
+committed the first copies, but the workflow's add list was never extended.
+Every subsequent run rewrote those 56 tracked files, left them unstaged,
+committed the staged subset, and then hit:
 
     error: cannot pull with rebase: You have unstaged changes.
 
 The email still sent — that happens before the git step — so the only symptom
-was a failure alert with a git message that points at rebase rather than at the
-add list. Two trading days of dashboard data never reached main.
+was a failure alert with a git message that points at rebase rather than at
+the add list. Two trading days of dashboard data never reached main.
 
-The add list is an allow-list on purpose: it keeps caches, logs and scratch
-files out of the repo. So the guard is not "stage everything", it is "every
-output path the pipeline persists must be named in the list".
+Since the move to the data-state branch (scripts/state.py) there are two
+places: main's `git add` list, for the files people edit or review, and the
+state the run pushes to data-state. The add list is still an allow-list, to
+keep caches, logs and scratch files out of the repo. So the guard is "every
+output path the pipeline persists is in one of the two, and not both".
 """
 
 import collections
@@ -28,23 +30,22 @@ from analysis.llm_reader import CACHE_PATH as LLM_CACHE_PATH
 from analysis.thesis_check import CACHE_PATH as THESIS_CACHE_PATH
 from dashboard.sidecars import DATA_DIR
 from history.store import HISTORY_PATH, NEWS_DIR
+from scripts import state
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-WORKFLOW = os.path.join(
-    ROOT,
-    ".github",
-    "workflows",
-    "daily-brief.yml",
-)
+
+def _workflow(name):
+    with open(os.path.join(ROOT, ".github", "workflows", name), encoding="utf-8") as f:
+        return f.read()
+
+
+WORKFLOW = os.path.join(ROOT, ".github", "workflows", "daily-brief.yml")
 
 
 def _git_add_paths():
     """The pathspecs on the workflow's `git add` line."""
-    with open(WORKFLOW, encoding="utf-8") as handle:
-        source = handle.read()
-
-    match = re.search(r"^\s*git add (.+)$", source, re.MULTILINE)
+    match = re.search(r"^\s*git add (.+)$", _workflow("daily-brief.yml"), re.M)
     assert match, "the daily workflow no longer has a `git add` line"
     return [p.rstrip("/") for p in match.group(1).split()]
 
@@ -63,35 +64,50 @@ def _git_add_paths():
         os.path.basename(THESIS_CACHE_PATH),
     ],
 )
-def test_every_persisted_path_is_staged(path):
+def test_every_persisted_path_is_saved_in_one_place(path):
     # Imported from the modules that own them rather than written out again,
-    # so renaming a constant fails here instead of silently going unstaged.
-    assert path.rstrip("/") in _git_add_paths(), (
-        f"{path} is written by the pipeline but missing from the workflow's "
-        "git add list; the run will commit without it and the rebase will fail"
+    # so renaming a constant fails here instead of silently going unsaved.
+    path = path.rstrip("/")
+    on_main, in_state = path in _git_add_paths(), path in state.PATHS
+    assert on_main or in_state, (
+        f"{path} is written by the pipeline but neither committed to main nor "
+        "pushed to data-state; the next run would start without it"
     )
+    assert not (on_main and in_state), f"{path} is saved in both places"
 
 
-def test_sidecar_directories_are_tracked_not_generated_fresh():
-    """A path only needs staging if it is checked in; confirm these are.
+def test_the_daily_run_pulls_its_state_first_and_pushes_it_last():
+    source = _workflow("daily-brief.yml")
+    pull = source.index("python scripts/state.py pull")
+    assert pull < source.index("python main.py")
+    assert source.index("python scripts/state.py push") > source.index("python main.py")
 
-    If data/ were gitignored the add list would be irrelevant — and a future
-    change that ignores it should break this test rather than quietly make the
-    dashboard's sidecar fetches 404 on Pages.
-    """
-    repo = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    ignore = os.path.join(repo, ".gitignore")
-    if not os.path.exists(ignore):
-        return
 
-    with open(ignore, encoding="utf-8") as handle:
-        patterns = {line.strip().strip("/") for line in handle if line.strip()}
+def test_every_reader_of_the_state_pulls_it_first():
+    """Ask reads the corpus, the digest and the coverage files; without the
+    pull it would answer from nothing."""
+    source = _workflow("dashboard-actions.yml")
+    pulls = [m.start() for m in re.finditer(r"state\.py pull", source)]
+    runs = [m.start() for m in re.finditer(r"run: python scripts/dashboard", source)]
+    assert len(pulls) == len(runs) == 2
+    assert all(p < r for p, r in zip(pulls, runs))
 
-    for directory in (DATA_DIR, NEWS_DIR):
-        assert directory.rstrip("/") not in patterns, (
-            f"{directory} is gitignored but the dashboard fetches it at "
-            "runtime; ignoring it means the sidecars never reach Pages"
-        )
+
+def test_the_published_site_carries_the_sidecars():
+    """data/ and news/ are ignored on main now, so Pages gets them only by
+    the publish workflow pulling them before it uploads the site. Without it
+    the dashboard's sidecar fetches 404."""
+    source = _workflow("pages.yml")
+    assert source.index("state.py pull") < source.index("upload-pages-artifact")
+    for workflow in ("daily-brief.yml", "dashboard-actions.yml"):
+        assert "uses: ./.github/workflows/pages.yml" in _workflow(workflow)
+
+
+def test_each_runs_state_is_kept_as_an_artifact():
+    """data-state holds one commit, so the artifacts are the rollback."""
+    block = _workflow("daily-brief.yml").split("name: state-", 1)[1]
+    kept = re.search(r"path: \|\n((?:\s+\S+\n)+)", block).group(1).split()
+    assert {p.rstrip("/") for p in kept} == set(state.PATHS)
 
 
 # ---------------------------------------------------------------------------

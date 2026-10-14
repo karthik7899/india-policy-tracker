@@ -10,8 +10,8 @@ question differently tomorrow. So it is used as a second reader, never as the
 classifier, and every one of those failure modes has a guard here:
 
   * Read once, remembered. Each headline is sent at most once per prompt
-    version; the answer lives in llm_cache.json, committed like the ISIN
-    master. Runs are therefore reproducible, cost only new headlines, and a
+    version; the answer lives in llm_cache.json, kept from run to run on
+    the data-state branch (scripts/state.py). Runs are therefore reproducible, cost only new headlines, and a
     reading cannot flip between days — which matters, because warnings are
     graded "new" by comparing against yesterday.
   * Grounded. Every company name and amount returned must appear verbatim in
