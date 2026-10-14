@@ -261,7 +261,7 @@ export async function render(container, { payload, route }) {
       // Beside the heading, not in it: a screen reader would read the
       // inspector's whole list as the page's title.
       (() => {
-        const badges = [...calendarBadges(calendar, results, key), dataInspector(stock)].filter(Boolean);
+        const badges = [...calendarBadges(calendar, results, key), dataInspector(stock, { always: true })].filter(Boolean);
         return badges.length ? el("div", { class: "company-page-badges" }, badges) : null;
       })(),
       el(

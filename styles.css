@@ -697,3 +697,5 @@ td .disclose-summary { padding: 2px 0; }
   background: var(--plane); color: var(--ink-2); font-weight: 400; line-height: 1.5; overflow-wrap: anywhere;
 }
 .data-inspect-body p { margin: 2px 0; }
+/* Live / LKG cached / Missing, each in its status colour (src/core/completeness.js). */
+.data-state-pill { font-size: 11px; padding: 0 6px; }

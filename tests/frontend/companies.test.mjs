@@ -113,3 +113,12 @@ test("a results badge's count and date agree in every timezone", () => {
   });
   assert.deepEqual(calendarBadgeSpecs(calendar, null, "HAL", "2026-10-12"), []);
 });
+
+import { inspectorSummary } from "../../src/views/companies.js";
+
+test("the inspector's summary counts cached and missing fields, or says all live", () => {
+  const c = (kept, missing, pct) => ({ kept: Array(kept).fill({}), missing: Array(missing).fill({}), pct });
+  assert.equal(inspectorSummary(c(0, 0, 100)), "Data 100% · all live");
+  assert.equal(inspectorSummary(c(2, 0, 100)), "Data 100% · 2 LKG cached");
+  assert.equal(inspectorSummary(c(1, 1, 92)), "Data 92% · 1 LKG cached · 1 missing");
+});

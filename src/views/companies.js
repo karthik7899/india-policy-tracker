@@ -20,7 +20,7 @@ import { panel, tickerLink } from "./table.js";
 import { sparkline, seriesChange } from "../core/sparkline.js";
 import { filterBar, filteredEmpty } from "./filterbar.js";
 import { earningsBadge, resultsBadge, todayISO } from "../core/calendar.js";
-import { completeness, describeCompleteness } from "../core/completeness.js";
+import { completeness, describeCompleteness, fieldStates, STATES } from "../core/completeness.js";
 
 const SORTS = [
   ["recent", "Latest activity"],
@@ -87,41 +87,58 @@ function link(url, text) {
 }
 
 /**
- * The holding's data, field by field (src/core/completeness.js), shown only
- * when a field is missing or kept from an earlier run. The summary carries
- * the percentage; tapping it (or hovering) names the fields and the source
- * each comes from, so a gap reads as "Screener failed", not as a number.
+ * The summary line of the inspector: the percentage, then how many fields
+ * are cached and missing, or that every one is live. Pure.
  */
-export function dataInspector(stock) {
+export function inspectorSummary(c) {
+  const counts = [
+    c.kept.length ? `${c.kept.length} LKG cached` : "",
+    c.missing.length ? `${c.missing.length} missing` : "",
+  ].filter(Boolean);
+  return `Data ${c.pct}% · ${counts.join(" · ") || "all live"}`;
+}
+
+/**
+ * The holding's data, field by field (src/core/completeness.js), in three
+ * states: Live (fetched this run), LKG cached (the source failed and the
+ * last known good value stands in, with its source and the day it was
+ * fetched) and Missing. On a card it appears only when something is cached
+ * or missing; on the company page (``always``) it is there to inspect even
+ * when every field is live.
+ */
+export function dataInspector(stock, { always = false } = {}) {
   if (!stock) return null;
   const c = completeness(stock);
-  if (!c.missing.length && !c.kept.length) return null;
-  const list = (fields, text) => fields.map(text).join(", ");
+  if (!always && !c.missing.length && !c.kept.length) return null;
   return el(
     "details",
     { class: "data-inspect" },
     el(
       "summary",
       { class: `pill data-inspect-summary${c.missing.length ? " pill-warning" : ""}`, title: describeCompleteness(c, shortDate) },
-      `Data ${c.pct}%${c.kept.length ? " · kept" : ""}`,
+      inspectorSummary(c),
     ),
     el(
       "div",
       { class: "data-inspect-body" },
-      c.missing.length
-        ? el("p", {}, el("strong", {}, "Missing: "), list(c.missing, (f) => `${f.label} (${f.source})`))
-        : null,
-      c.kept.length
+      fieldStates(c, shortDate)
+        .filter((g) => g.fields.length)
+        .map((g) =>
+          el(
+            "p",
+            { class: "data-state" },
+            el("span", { class: `pill pill-${g.role} data-state-pill`, title: g.means }, g.label),
+            " ",
+            g.fields.map((f) => f.text).join(", "),
+          ),
+        ),
+      c.kept.length ? el("p", { class: "evidence-meta" }, STATES.kept.means) : null,
+      c.notApplicable.length
         ? el(
             "p",
-            {},
-            el("strong", {}, "Kept from an earlier run: "),
-            list(c.kept, (f) => `${f.label} (fetched ${shortDate(f.since)})`),
-            el("span", { class: "evidence-meta" }, " A source failed this run; a value under a week old stands in."),
+            { class: "evidence-meta" },
+            `Not applicable: ${c.notApplicable.map((f) => `${f.label}, ${f.why}`).join("; ")}`,
           )
-        : null,
-      c.notApplicable.length
-        ? el("p", { class: "evidence-meta" }, `Not applicable: ${list(c.notApplicable, (f) => `${f.label}, ${f.why}`)}`)
         : null,
     ),
   );

@@ -3,7 +3,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 
-import { completeness, describeCompleteness, FIELDS } from "../../src/core/completeness.js";
+import { completeness, describeCompleteness, fieldStates, FIELDS, STATES } from "../../src/core/completeness.js";
 
 const full = () => ({
   ticker: "HAL",
@@ -72,7 +72,10 @@ test("a value kept from an earlier run counts, and says from when", () => {
       ["roce", "2026-10-12"],
     ],
   );
-  assert.equal(describeCompleteness(c), "Kept from an earlier run: Price (2026-10-13), ROCE (2026-10-12)");
+  assert.equal(
+    describeCompleteness(c),
+    "LKG cached: Price (Yahoo, fetched 2026-10-13), ROCE (Screener, fetched 2026-10-12). Live: 11 fields",
+  );
 });
 
 test("nothing to report is not missing", () => {
@@ -96,11 +99,39 @@ test("nothing to report is not missing", () => {
   assert.equal(c.pct, Math.round((100 * 10) / 11));
   assert.equal(
     describeCompleteness(c),
-    "Missing: Delivery % (NSE). Not applicable: P/E, a loss over the last four quarters; Promoter holding, no promoter group",
+    "Missing: Delivery % (NSE). Live: 10 fields. Not applicable: P/E, a loss over the last four quarters; Promoter holding, no promoter group",
   );
 });
 
 test("an empty or absent holding does not throw", () => {
   assert.equal(completeness({}).missing.length, FIELDS.length);
   assert.equal(completeness(null).pct, 0);
+});
+
+test("the inspector names three states: live, LKG cached with source and date, missing", () => {
+  const s = full();
+  s._stale_fields = { roce: "2026-10-12" };
+  delete s.screener.deliv_pct;
+  const groups = fieldStates(completeness(s), (d) => `day ${d}`);
+  assert.deepEqual(
+    groups.map((g) => [g.state, g.label, g.role, g.fields.length]),
+    [
+      ["live", "Live", "good", 11],
+      ["kept", "LKG cached", "warning", 1],
+      ["missing", "Missing", "serious", 1],
+    ],
+  );
+  assert.equal(groups[1].fields[0].text, "ROCE (Screener, fetched day 2026-10-12)");
+  assert.equal(groups[2].fields[0].text, "Delivery % (NSE)");
+  assert.equal(groups[0].fields[0].text, "Price (Yahoo)");
+  assert.match(STATES.kept.means, /^Last known good/);
+});
+
+test("a lender's kept financing margin is a cached quarterly margin", () => {
+  const s = full();
+  delete s.screener.q_opm;
+  s.screener.q_fin_margin = 14;
+  s._stale_fields = { q_fin_margin: "2026-10-12" };
+  const [, kept] = fieldStates(completeness(s));
+  assert.deepEqual(kept.fields.map((f) => f.text), ["Quarterly margin (Screener, fetched 2026-10-12)"]);
 });

@@ -75,11 +75,49 @@ export function completeness(stock) {
   return out;
 }
 
-/** One line for a tooltip: what is missing, what is kept, what does not apply. */
-export function describeCompleteness(c, day = (d) => d) {
+// The states the inspector names, the status role each is drawn in, and what
+// each means. "LKG" is last known good (analysis/last_good.py).
+export const STATES = {
+  live: { label: "Live", role: "good", means: "Fetched this run." },
+  kept: {
+    label: "LKG cached",
+    role: "warning",
+    means:
+      "Last known good: the source failed this run, and the value it fetched within the past week stands in.",
+  },
+  missing: {
+    label: "Missing",
+    role: "serious",
+    means: "No value this run and none kept; the source named is the one that failed.",
+  },
+};
+
+/**
+ * The fields in each state, in the order of the scale (Live, LKG cached,
+ * Missing), each with the text to show: its source, and for a cached value
+ * the day it was fetched. Fields that do not apply are not a state of the
+ * data and stay in ``c.notApplicable``.
+ */
+export function fieldStates(c, day = (d) => d) {
+  const text = (f) => `${f.label} (${f.source})`;
   return [
-    c.missing.length ? `Missing: ${c.missing.map((f) => `${f.label} (${f.source})`).join(", ")}` : "",
-    c.kept.length ? `Kept from an earlier run: ${c.kept.map((f) => `${f.label} (${day(f.since)})`).join(", ")}` : "",
+    { state: "live", ...STATES.live, fields: c.fresh.map((f) => ({ ...f, text: text(f) })) },
+    {
+      state: "kept",
+      ...STATES.kept,
+      fields: c.kept.map((f) => ({ ...f, text: `${f.label} (${f.source}, fetched ${day(f.since)})` })),
+    },
+    { state: "missing", ...STATES.missing, fields: c.missing.map((f) => ({ ...f, text: text(f) })) },
+  ];
+}
+
+/** One line for a tooltip: what is missing, what is cached, what is live, what does not apply. */
+export function describeCompleteness(c, day = (d) => d) {
+  const [live, kept, missing] = fieldStates(c, day);
+  return [
+    missing.fields.length ? `${missing.label}: ${missing.fields.map((f) => f.text).join(", ")}` : "",
+    kept.fields.length ? `${kept.label}: ${kept.fields.map((f) => f.text).join(", ")}` : "",
+    live.fields.length ? `${live.label}: ${live.fields.length} field${live.fields.length === 1 ? "" : "s"}` : "",
     c.notApplicable.length ? `Not applicable: ${c.notApplicable.map((f) => `${f.label}, ${f.why}`).join("; ")}` : "",
   ]
     .filter(Boolean)
