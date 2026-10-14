@@ -19,7 +19,7 @@ import * as filters from "../core/filters.js";
 import { panel, tickerLink } from "./table.js";
 import { sparkline, seriesChange } from "../core/sparkline.js";
 import { filterBar, filteredEmpty } from "./filterbar.js";
-import { earningsBadge, resultsBadge } from "../core/calendar.js";
+import { earningsBadge, resultsBadge, todayISO } from "../core/calendar.js";
 import { completeness, describeCompleteness } from "../core/completeness.js";
 
 const SORTS = [
@@ -133,12 +133,25 @@ export function dataInspector(stock) {
  * evidence means for the case; the badge only states the figures.
  */
 export function calendarBadges(calendar, results, ticker) {
-  const due = earningsBadge(calendar, ticker);
-  const latest = resultsBadge(results, ticker);
+  return calendarBadgeSpecs(calendar, results, ticker).map((b) =>
+    el("span", { class: b.className, title: b.title }, b.text),
+  );
+}
+
+/**
+ * The badges' text and titles, without a DOM. The count ("today", "T-3d")
+ * and the date in the title both come from the reader's own calendar
+ * (src/core/calendar.js, src/core/format.js), so they agree in every
+ * timezone: the date was once read as midnight UTC and shown a day early
+ * west of Greenwich.
+ */
+export function calendarBadgeSpecs(calendar, results, ticker, asOf = todayISO()) {
+  const due = earningsBadge(calendar, ticker, { asOf });
+  const latest = resultsBadge(results, ticker, { asOf });
   return [
-    due ? el("span", { class: "pill pill-earnings", title: `Results due ${shortDate(due.date)}` }, due.text) : null,
-    latest ? el("span", { class: "pill pill-results", title: latest.title }, latest.text) : null,
-  ];
+    due && { className: "pill pill-earnings", text: due.text, title: `Results due ${shortDate(due.date)}` },
+    latest && { className: "pill pill-results", text: latest.text, title: latest.title },
+  ].filter(Boolean);
 }
 
 /** Markers for the price line: the card's own news and policies. */

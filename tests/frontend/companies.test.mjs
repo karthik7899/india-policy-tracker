@@ -96,3 +96,20 @@ test("card markers are its news and its directed policies", () => {
   });
   assert.deepEqual(m.map((x) => x.kind), ["activity", "headwind"]);
 });
+
+import { calendarBadgeSpecs } from "../../src/views/companies.js";
+import { inZones } from "./zones.mjs";
+
+test("a results badge's count and date agree in every timezone", () => {
+  const calendar = { next_results: { BHEL: "2026-10-15" } };
+  inZones(["Asia/Kolkata", "UTC", "America/Los_Angeles", "Pacific/Kiritimati", "Etc/GMT+12"], (tz) => {
+    const [due] = calendarBadgeSpecs(calendar, null, "BHEL", "2026-10-15");
+    assert.deepEqual(
+      [due.text, due.title],
+      ["Earnings: today", "Results due 15 Oct 2026"],
+      tz,
+    );
+    assert.equal(calendarBadgeSpecs(calendar, null, "BHEL", "2026-10-12")[0].text, "Earnings: T-3d", tz);
+  });
+  assert.deepEqual(calendarBadgeSpecs(calendar, null, "HAL", "2026-10-12"), []);
+});

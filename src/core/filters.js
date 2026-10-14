@@ -11,6 +11,7 @@
 // hold the DOM; this file holds the meaning.
 
 import { num } from "./format.js";
+import { calendarDay, dayShaped, daysBetween, todayISO } from "./calendar.js";
 
 /** Params this module owns. Views merge their own (lens, stream) around them. */
 export const FILTER_KEYS = ["q", "sector", "thesis", "band", "days"];
@@ -110,6 +111,12 @@ export function applyHoldings(rows, filters, context = {}) {
  */
 export function ageInDays(value, now = Date.now()) {
   if (!value) return null;
+  // A date with no time is a calendar day: counted against the reader's own
+  // today, not as an instant at midnight UTC, whose age depends on where the
+  // reader is (src/core/calendar.js).
+  if (dayShaped(value)) {
+    return calendarDay(value) ? daysBetween(value, todayISO(new Date(now))) : null;
+  }
   const t = new Date(value).getTime();
   if (Number.isNaN(t)) return null;
   return (now - t) / 86400000;

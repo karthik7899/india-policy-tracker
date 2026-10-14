@@ -102,3 +102,19 @@ test("days are counted between calendar dates", () => {
   assert.equal(daysBetween("x", "2026-10-13"), null);
   assert.equal(todayISO(new Date(2026, 9, 4)), "2026-10-04");
 });
+
+import { inZones } from "./zones.mjs";
+
+test("today is the reader's own calendar day", () => {
+  const now = new Date("2026-10-14T20:00:00Z"); // 01:30 on the 15th in India
+  inZones(["Asia/Kolkata", "Pacific/Kiritimati"], (tz) => assert.equal(todayISO(now), "2026-10-15", tz));
+  inZones(["America/Los_Angeles", "UTC"], (tz) => assert.equal(todayISO(now), "2026-10-14", tz));
+});
+
+test("day counts are calendar arithmetic, the same in every timezone", () => {
+  inZones(["Asia/Kolkata", "America/Los_Angeles", "Etc/GMT+12"], (tz) => {
+    assert.equal(daysBetween("2026-10-12", "2026-10-15"), 3, tz);
+    // Across the end of March, when Europe's clocks change.
+    assert.equal(daysBetween("2026-03-28", "2026-03-30"), 2, tz);
+  });
+});

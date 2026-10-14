@@ -6,6 +6,8 @@
 // ad-hoc is what to_float was created to end on the Python side. This is the
 // same idea for the browser: one tolerant coercion, one set of formatters.
 
+import { calendarDay, dayShaped } from "./calendar.js";
+
 /** Tolerant numeric coercion. Mirrors utils.to_float — same accepted forms. */
 /**
  * Marks a reading made by the LLM (Gemini) rather than taken from a source
@@ -57,12 +59,28 @@ export function plain(value, decimals = 2) {
   return n === null ? "—" : n.toFixed(decimals);
 }
 
-/** A date the way the rest of the product writes them. */
+const SHORT = { day: "2-digit", month: "short", year: "numeric" };
+
+/**
+ * A date the way the rest of the product writes them.
+ *
+ * A date with no time ("2026-10-15", as results dates, filings and kept-value
+ * stamps are) is written from its own fields, the same in every timezone.
+ * Parsed as an instant it was midnight UTC, which a reader west of Greenwich
+ * saw as 14 Oct beside a badge saying "Earnings: today". A timestamp is
+ * still shown in the reader's own time.
+ */
 export function shortDate(value) {
   if (!value) return "";
+  const day = calendarDay(value);
+  if (day) {
+    const [y, m, d] = day;
+    return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString("en-IN", { ...SHORT, timeZone: "UTC" });
+  }
+  if (dayShaped(value)) return String(value); // "2026-02-30" is no day at all
   const d = new Date(value);
   if (Number.isNaN(d.getTime())) return String(value);
-  return d.toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
+  return d.toLocaleDateString("en-IN", SHORT);
 }
 
 /**
