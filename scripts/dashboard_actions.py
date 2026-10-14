@@ -392,7 +392,9 @@ def daily_run_active() -> bool:
     with a rebase; a decision committed in between makes that rebase conflict
     and fails the day's run. So decisions wait for it.
     """
-    for status in ("in_progress", "queued"):
+    # "pending": waiting for another briefing to finish (the concurrency group
+    # in daily-brief.yml).
+    for status in ("in_progress", "queued", "pending"):
         runs = _api(
             "GET", f"/actions/workflows/daily-brief.yml/runs?status={status}&per_page=5"
         )

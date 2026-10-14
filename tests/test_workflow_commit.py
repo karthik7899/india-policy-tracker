@@ -94,6 +94,26 @@ def test_sidecar_directories_are_tracked_not_generated_fresh():
         )
 
 
+def test_briefings_wait_for_each_other_and_start_from_the_newest_commit():
+    """Two briefings at once start from the same commit and both rewrite
+    history.json, so the second's rebase conflicts after its email has gone.
+
+    Waiting is half of it: a run that waited still checks out the commit it
+    was started on unless told otherwise, and would start from the data the
+    first run replaced.
+    """
+    with open(WORKFLOW, encoding="utf-8") as handle:
+        source = handle.read()
+    assert re.search(
+        r"^concurrency:\n\s+group: daily-brief\n\s+cancel-in-progress: false$",
+        source,
+        re.M,
+    ), "daily runs must queue in one concurrency group, never cancel"
+    briefing = source.split("\n  run-briefing:\n", 1)[1]
+    checkout = briefing.split("- name: Set up Python", 1)[0]
+    assert "ref: ${{ github.ref_name }}" in checkout
+
+
 # ---------------------------------------------------------------------------
 # The probe workflow
 # ---------------------------------------------------------------------------
