@@ -388,6 +388,19 @@ async def run_pipeline():
         )
         annotate_event_materiality(data["market_events"], watchlist)
 
+        # Governments' MoUs and pacts: no measure was taken, so the policy
+        # reader lists none; they are tie-ups with a government party.
+        from analysis.policy_impact import government_partnerships
+
+        data["policy_partnerships"] = government_partnerships(data["market_events"])
+        hard = sum(1 for r in data["policy_impacts"] if r.get("strength") == "hard")
+        log.info(
+            f"Policy strength: {hard} of {len(data['policy_impacts'])} measure(s) "
+            "approved or in force; "
+            f"{len(data['policy_partnerships'])} government partnership(s) "
+            "(MoUs, pacts) in the last 30 days."
+        )
+
         # How much to believe each event: how many outlets reported the
         # story, and whether the holding disclosed it to the exchange.
         from analysis.event_evidence import (

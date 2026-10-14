@@ -380,3 +380,40 @@ def test_different_states_are_never_one_measure():
         },
     ]
     assert len(merge_repeat_policies(rows)) == 2
+
+
+def test_the_email_says_how_binding_each_measure_is_and_lists_partnerships():
+    rows = [
+        {
+            "headline": "Gujarat notifies semiconductor subsidy",
+            "status": "in_force",
+            "strength": "hard",
+            "effects": [{"sector": "clean_energy", "direction": "tailwind"}],
+            "state": "Gujarat",
+        },
+        {
+            "headline": "Telangana proposes EV policy",
+            "status": "proposed",
+            "strength": "proposed",
+            "effects": [{"sector": "clean_energy", "direction": "tailwind"}],
+        },
+    ]
+    partnerships = [
+        {
+            "headline": "ReNew signs MoU with Maharashtra government",
+            "strength": "soft",
+            "government": "Maharashtra",
+            "sectors": ["clean_energy"],
+            "tickers": [],
+        }
+    ]
+    html = _build_policy_direction_html(rows, {"lists": 5}, partnerships)
+    assert "Hard policy, in force" in html
+    # A draft says "proposed" once, not "Proposed, proposed".
+    assert "Proposed, proposed" not in html and "proposed" in html
+    assert "Soft partnerships" in html and "Maharashtra government" in html
+    # Partnerships alone still make a section; nothing makes none.
+    assert "Soft partnerships" in _build_policy_direction_html(
+        [], {"lists": 5}, partnerships
+    )
+    assert _build_policy_direction_html([], {"lists": 5}, []) == ""
