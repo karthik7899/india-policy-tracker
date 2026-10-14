@@ -12,6 +12,7 @@
 import { el, mount } from "../core/dom.js";
 import { shortDate, crore, sizeLabel, LLM_MARK } from "../core/format.js";
 import { href } from "../core/router.js";
+import { resolve } from "../core/data.js";
 import * as filters from "../core/filters.js";
 import { dataTable, panel } from "./table.js";
 import { filterBar, filteredEmpty } from "./filterbar.js";
@@ -159,18 +160,18 @@ export async function render(container, { payload, route }) {
   const params = (route && route.params) || {};
   const active = filters.read(route);
 
+  // Each feed is its own file (dashboard/sidecars.py), fetched when this view
+  // opens; "Everything" fetches them together.
+  const wanted = STREAMS.filter(([key, , field]) => field && (stream === "all" || key === stream));
+  const feeds = await Promise.all(wanted.map(([, , field]) => resolve(b, field)));
   let all = [];
+  wanted.forEach(([, label], i) => {
+    for (const item of feeds[i] || []) all.push(normalise(item, label, payload?.sectors));
+  });
   if (stream === "all") {
-    for (const [, label, key] of STREAMS) {
-      if (!key) continue;
-      for (const item of b[key] || []) all.push(normalise(item, label, payload?.sectors));
-    }
     // Interleaved by date rather than concatenated: concatenation is exactly
     // what let one source consume every slot in the filings section.
     all.sort((a, c) => String(c.when).localeCompare(String(a.when)));
-  } else {
-    const entry = STREAMS.find(([k]) => k === stream);
-    all = (b[entry?.[2]] || []).map((i) => normalise(i, entry?.[1], payload?.sectors));
   }
 
   // Filter BEFORE the cap, not after. Capping first would search only the

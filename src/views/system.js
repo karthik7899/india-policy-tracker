@@ -6,6 +6,7 @@
 // and those two look identical everywhere else in the product.
 
 import { el, mount } from "../core/dom.js";
+import { isManifest } from "../core/data.js";
 import { dataTable, panel } from "./table.js";
 
 /**
@@ -53,12 +54,15 @@ const CHANNELS = [
 const DID_NOT_RUN = -1;
 
 /** Absent (never ran) and empty (ran, found nothing) are different states. */
-function channelRows(briefing) {
+export function channelRows(briefing) {
   return CHANNELS.map(([key, label, note, expected, count]) => {
     const value = briefing?.[key];
     const present = Boolean(briefing) && key in briefing;
     let n = null;
-    if (present && value && typeof value === "object") {
+    // A key moved to its own file (dashboard/sidecars.py) is counted from
+    // its manifest; its keys are only "sidecar" and "count".
+    if (isManifest(value)) n = typeof value.count === "number" ? value.count : null;
+    else if (present && value && typeof value === "object") {
       n = count ? count(value) : Object.keys(value).length;
     }
     return {

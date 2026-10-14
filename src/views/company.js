@@ -215,18 +215,21 @@ export async function render(container, { payload, route }) {
   const b = payload?.briefing || {};
   const labels = payload?.sectors || {};
   const sectorName = label(stock.sector, labels);
-  const [digest, coverage, edges, proposals, portfolio, calendar, results] = await Promise.all([
-    resolve(b, "company_digest"),
-    loadCoverage(key),
-    loadGraph(),
-    loadProposals(),
-    resolve(b, "portfolio"),
-    resolve(b, "event_calendar"),
-    resolve(b, "results"),
-  ]);
+  const [digest, coverage, edges, proposals, portfolio, calendar, results, thesisCheck, sectorBlocks] =
+    await Promise.all([
+      resolve(b, "company_digest"),
+      loadCoverage(key),
+      loadGraph(),
+      loadProposals(),
+      resolve(b, "portfolio"),
+      resolve(b, "event_calendar"),
+      resolve(b, "results"),
+      resolve(b, "thesis_check"),
+      resolve(b, "sector_blocks"),
+    ]);
   const card = (digest?.companies || []).find((c) => String(c.ticker).toUpperCase() === key);
   const health = b.thesis_health?.[key];
-  const check = b.thesis_check?.holdings?.[key];
+  const check = thesisCheck?.holdings?.[key];
   const windowDays = digest?.window_days || 30;
 
   if (typeof document !== "undefined") document.title = `${key} · India Policy Tracker`;
@@ -286,7 +289,7 @@ export async function render(container, { payload, route }) {
               ),
             )
           : null,
-        panel("Everything written about it", null, newsSections(stock, payload, coverage)),
+        panel("Everything written about it", null, newsSections(stock, payload, coverage, sectorBlocks)),
       ),
       el(
         "aside",

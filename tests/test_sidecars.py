@@ -184,3 +184,37 @@ def test_nothing_to_split_leaves_no_empty_directory(tmp_path):
     light, written = _run(tmp_path, {"sector_growth": []})
     assert written == 0
     assert not (tmp_path / "data").exists()
+
+
+def test_no_view_reads_a_split_key_without_fetching_it():
+    """A key moved to its own file arrives as a manifest; a view reading it
+    straight off the briefing gets {sidecar, count} and renders nothing."""
+    import glob
+    import re
+
+    from dashboard.sidecars import SPLIT_PER_TICKER, SPLIT_WHOLE
+
+    root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    found = []
+    for path in glob.glob(os.path.join(root, "src", "**", "*.js"), recursive=True):
+        with open(path, encoding="utf-8") as f:
+            text = f.read()
+        for key in SPLIT_WHOLE + SPLIT_PER_TICKER:
+            pattern = r"\b(?:b|briefing)\??\.\s*" + key + r"\b"
+            for m in re.finditer(pattern, text):
+                line = text[: m.start()].count("\n") + 1
+                found.append(f"{os.path.relpath(path, root)}:{line} {key}")
+    assert found == []
+
+
+def test_the_landing_view_reads_nothing_that_was_split():
+    import re
+
+    from dashboard.sidecars import SPLIT_WHOLE
+
+    root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    with open(os.path.join(root, "src", "views", "overview.js"), encoding="utf-8") as f:
+        text = f.read()
+    direct = set(re.findall(r"\bb\??\.(\w+)", text))
+    assert direct, "the Overview's reads were not found; update this test"
+    assert not direct & set(SPLIT_WHOLE)

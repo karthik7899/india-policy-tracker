@@ -47,12 +47,37 @@ SPLIT_PER_TICKER = ("stock_topics",)
 # loaded when that view opens rather than on every page load; portfolio is the
 # Portfolio view's (analysis/portfolio.py); event_calendar and results are the
 # Calendar view's (analysis/event_calendar.py).
+#
+# The rest is everything the landing view (Overview) does not read: the
+# thesis check (the company page and holding drawer), sector blocks (the
+# drawer), the Flow view's eight feeds, the Run health view's peer and share
+# tables, and the state-policy feed, which no view reads. Run health counts a
+# split key from its manifest's ``count``. MEASURED on the 14 Oct run, the
+# page's first download (dashboard_data.json as written) fell from 1,004 KB,
+# 237 KB gzipped, to 515 KB, 85 KB gzipped. Most of what is left is the
+# watchlist, which every view reads. tests/test_sidecars.py fails if a view
+# reads a key listed here without resolving it.
 SPLIT_WHOLE = (
     "buffett_valuation",
     "company_digest",
     "portfolio",
     "event_calendar",
     "results",
+    "thesis_check",
+    "sector_blocks",
+    "market_events",
+    "policy_impacts",
+    "policy_partnerships",
+    "product_launches",
+    "corporate_agreements",
+    "institutional_activity",
+    "corporate_filings",
+    "global_market_news",
+    "peer_competitors",
+    "candidate_screen",
+    "market_share",
+    "industry_share",
+    "state_policy",
 )
 
 

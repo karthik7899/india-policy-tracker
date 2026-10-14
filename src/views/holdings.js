@@ -17,7 +17,7 @@
 
 import { el, mount } from "../core/dom.js";
 import { num, crore, pct, bandIndex, BANDS, shortDate, sizeLabel, LLM_MARK } from "../core/format.js";
-import { loadCoverage } from "../core/data.js";
+import { loadCoverage, resolve } from "../core/data.js";
 import { href } from "../core/router.js";
 import * as filters from "../core/filters.js";
 import * as charts from "../charts/charts.js";
@@ -262,7 +262,11 @@ export function signalsSection(signals) {
  * What moved in the sector a holding sits in, and the articles written about
  * it. Returned together because the second leaves out what the first shows.
  */
-export function newsSections(stock, payload, coverage) {
+/**
+ * ``sectorBlocks`` is the payload's sector blocks, which live in their own
+ * file (dashboard/sidecars.py): the async callers resolve them and pass them in.
+ */
+export function newsSections(stock, payload, coverage, sectorBlocks = []) {
   const key = String(stock.ticker || "").toUpperCase();
 
   // build_coverage keeps merged duplicates and aged-out stories on purpose, as
@@ -277,9 +281,7 @@ export function newsSections(stock, payload, coverage) {
   // beneficiary wants to see. Split by whether the item names this holding,
   // because "the sector moved" and "you were named in it" are different facts
   // and collapsing them would overstate the second.
-  const block = (payload?.briefing?.sector_blocks || []).find(
-    (s) => s.id === stock.sector,
-  );
+  const block = (Array.isArray(sectorBlocks) ? sectorBlocks : []).find((s) => s.id === stock.sector);
   const sectorNews = block?.news || [];
   const namesThis = (n) =>
     (n.affected_tickers || []).some((t) => String(t).toUpperCase() === key);
@@ -410,7 +412,12 @@ export function newsSections(stock, payload, coverage) {
 /** The drawer: the short account of one holding, with the way to the full page. */
 async function drawer(stock, payload) {
   const key = String(stock.ticker || "").toUpperCase();
-  const coverage = await loadCoverage(stock.ticker);
+  const b = payload?.briefing || {};
+  const [coverage, thesisCheck, sectorBlocks] = await Promise.all([
+    loadCoverage(stock.ticker),
+    resolve(b, "thesis_check"),
+    resolve(b, "sector_blocks"),
+  ]);
   return el(
     "div",
     { class: "drawer" },
@@ -421,9 +428,9 @@ async function drawer(stock, payload) {
       el("a", { class: "company-page-link", href: href("company", { focus: key }) }, "Company page →"),
     ),
     factsList(stock),
-    thesisSection(stock.catalyst, payload?.briefing?.thesis_check?.holdings?.[key]),
+    thesisSection(stock.catalyst, thesisCheck?.holdings?.[key]),
     signalsSection(holdingSignals(payload, key)),
-    newsSections(stock, payload, coverage),
+    newsSections(stock, payload, coverage, sectorBlocks),
   );
 }
 
