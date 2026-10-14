@@ -271,7 +271,7 @@ body {
 /* How settled a catalyst is (src/core/catalyst.js). The label carries the
    meaning; colour only groups: what has happened is green, what is pending
    blue, drafts and soft partnerships muted. */
-.pill-catalyst { font-size: 11px; padding: 0 7px; margin-right: 6px; vertical-align: 1px; }
+.pill-catalyst { font-size: 11px; padding: 0 7px; margin-right: 6px; vertical-align: 1px; white-space: nowrap; }
 .pill-hard, .pill-win { color: var(--good); border-color: var(--good); }
 .pill-l1, .pill-announced { color: var(--series-1); border-color: var(--series-1); }
 .pill-proposed, .pill-reported { color: var(--ink-2); }

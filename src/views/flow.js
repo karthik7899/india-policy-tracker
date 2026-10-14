@@ -16,6 +16,7 @@ import { resolve } from "../core/data.js";
 import * as filters from "../core/filters.js";
 import { dataTable, panel, pillTag, convictionToggle } from "./table.js";
 import { catalystPill, HIGH } from "../core/catalyst.js";
+import { calendarDay } from "../core/calendar.js";
 import { filterBar, filteredEmpty } from "./filterbar.js";
 
 const STREAMS = [
@@ -135,6 +136,20 @@ export function partnershipDetail(item, labels = {}) {
     .join(" \u00b7 ");
 }
 
+/**
+ * An item's time, for putting the streams in one order. The feeds write
+ * dates three ways ("2026-10-14", "14 Oct 2026", "Wed, 30 Sep 2026 07:59:00
+ * GMT"), and compared as text they sorted by weekday name: "Everything"
+ * opened on 30 Sept, and the day's policies and events fell past the cap.
+ * Undated items go last.
+ */
+export function sortTime(when) {
+  const day = calendarDay(when);
+  if (day) return Date.UTC(day[0], day[1] - 1, day[2]);
+  const t = Date.parse(when);
+  return Number.isNaN(t) ? -Infinity : t;
+}
+
 /** Normalise the differing shapes into one row. */
 export function normalise(item, streamLabel, labels) {
   return {
@@ -174,7 +189,7 @@ export async function render(container, { payload, route }) {
   if (stream === "all") {
     // Interleaved by date rather than concatenated: concatenation is exactly
     // what let one source consume every slot in the filings section.
-    all.sort((a, c) => String(c.when).localeCompare(String(a.when)));
+    all.sort((a, c) => sortTime(c.when) - sortTime(a.when));
   }
 
   // Hard policies and confirmed wins only, when asked: what has happened,

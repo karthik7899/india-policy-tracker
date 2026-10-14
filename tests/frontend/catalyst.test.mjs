@@ -4,7 +4,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 
 import { catalystPill, isHighConviction } from "../../src/core/catalyst.js";
-import { normalise } from "../../src/views/flow.js";
+import { normalise, sortTime } from "../../src/views/flow.js";
 
 const kind = (item) => catalystPill(item)?.kind ?? null;
 
@@ -65,4 +65,18 @@ test("a Flow row carries its catalyst's pill", () => {
   );
   assert.equal(row.pill.kind, "win");
   assert.equal(normalise({ title: "A launch", date: "2026-10-14" }, "Launches", {}).pill, null);
+});
+
+test("Everything is in date order whichever way a feed writes its dates", () => {
+  // As text these sorted by weekday name: "Wed, 30 Sep" came first.
+  const day = {
+    "Wed, 30 Sep 2026 07:59:00 GMT": "30 Sep",
+    "2026-10-14": "14 Oct",
+    "14 Oct 2026": "14 Oct",
+    "Tue, 13 Oct 2026 10:00:00 GMT": "13 Oct",
+    "2026-10-01": "1 Oct",
+    "": "undated",
+  };
+  const order = Object.keys(day).sort((a, b) => sortTime(b) - sortTime(a));
+  assert.deepEqual(order.map((w) => day[w]), ["14 Oct", "14 Oct", "13 Oct", "1 Oct", "30 Sep", "undated"]);
 });
