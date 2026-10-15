@@ -4,9 +4,10 @@ from concurrent.futures import ThreadPoolExecutor
 from logger import log
 from config import save_watchlist
 from entities import build_entity_master, resolve_entity_by_isin
-from providers.isin_master import load_isin_master
+from providers.isin_master import load_isin_master, load_registered_names
 from providers.yahoo import get_cached_ticker
 from utils import thread_local_session, to_float
+from .company_names import tidy_name
 from .parsing import resolve_ticker_from_name
 
 
@@ -277,6 +278,7 @@ def auto_curate_watchlist(brief_data, watchlist, screened_candidates=None):
     # name spelling, which the ticker-string check below can't see.
     entity_master = build_entity_master(watchlist)
     isin_master = load_isin_master()
+    registered_names = load_registered_names()
 
     # We will construct a structured emerging_players dictionary
     structured_emerging = {s: [] for s in SECTOR_METADATA}
@@ -365,7 +367,13 @@ def auto_curate_watchlist(brief_data, watchlist, screened_candidates=None):
 
             log.info(f"Evaluating candidate company: {name} in {sector}")
             ticker = probe["ticker"]
-            full_name = probe["full_name"]
+            # The name it would be held under. A screened peer arrives with
+            # Screener's cut-down label ("NTPC Green Ene."), which matched no
+            # headline; NSE's registered name replaces it
+            # (analysis/company_names.py).
+            full_name = tidy_name(
+                probe["full_name"] or name, registered_names.get(ticker)
+            )
 
             if probe["error"] == "unresolved":
                 log.info(f"Could not resolve ticker for: {name}. Skipping.")

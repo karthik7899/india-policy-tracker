@@ -300,3 +300,48 @@ class TestCandidateProbeConcurrency(unittest.TestCase):
             rot.auto_curate_watchlist({}, watchlist, screened_candidates=screened)
 
         self.assertEqual(priced, [])
+
+
+def _admit(label, ticker, registered):
+    """Run one screened peer through the rotation; returns its held name."""
+    import analysis.rotation as rot
+    from analysis.sector_fit import keywords
+
+    probe = {
+        "ticker": ticker,
+        "full_name": label,
+        "error": None,
+        "isin": None,
+        "live_price": 100.0,
+        "target_price": 130.0,
+        "growth_pct_val": 30.0,
+        "rating": "Buy",
+        "rev_growth_raw": 0.4,
+        "revenue_growth": "40.0%",
+        "qoq_growth": 25.0,
+        "industry": "Solar",
+        "keywords": keywords("develops solar and wind power plants"),
+    }
+    watchlist = {
+        "clean_energy": [{"ticker": "SUZLON", "name": "Suzlon", "growth_pct": "5%"}]
+    }
+    screened = {
+        "clean_energy": [{"name": label, "ticker": ticker, "growth_pct": "50%"}]
+    }
+    with patch.object(
+        rot, "_probe_candidate", lambda *a, **k: dict(probe)
+    ), patch.object(rot, "save_watchlist", lambda *a, **k: None), patch.object(
+        rot, "load_registered_names", lambda: registered
+    ):
+        rot.auto_curate_watchlist({}, watchlist, screened_candidates=screened)
+    return {s["ticker"]: s["name"] for s in watchlist["clean_energy"]}.get(ticker)
+
+
+def test_a_screened_peer_is_admitted_under_its_registered_name():
+    """Screener's peer table cuts names to about fifteen characters, and the
+    rotation admitted peers under the label: NTPC Green Energy joined the
+    watchlist as "NTPC Green Ene." and matched no headline by name."""
+    registered = {"NTPCGREEN": "NTPC Green Energy Limited"}
+    assert _admit("NTPC Green Ene.", "NTPCGREEN", registered) == "NTPC Green Energy"
+    # Without a registered name the label stands, less any legal suffix.
+    assert _admit("Some Peer Ltd", "SOMEPEER", {}) == "Some Peer"

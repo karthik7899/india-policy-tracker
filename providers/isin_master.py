@@ -78,6 +78,13 @@ from utils import atomic_write_json
 MASTER_PATH = os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "isin_master.json"
 )
+# Each NSE symbol's registered name, from the same equity list: "NTPC Green
+# Energy Limited" where Screener's peer table says "NTPC Green Ene."
+# (analysis/company_names.py).
+NAMES_PATH = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+    "registered_names.json",
+)
 
 _NSE_EQUITY_LIST_URL = "https://nsearchives.nseindia.com/content/equities/EQUITY_L.csv"
 _HEADERS = {
@@ -129,6 +136,68 @@ def parse_equity_csv(text):
     except Exception as e:
         log.warning(f"Could not parse NSE equity list CSV: {e}")
     return mapping
+
+
+def parse_equity_names(text):
+    """The same CSV's NAME OF COMPANY column: symbol→registered name."""
+    names = {}
+    if not text:
+        return names
+    try:
+        for row in csv.DictReader(io.StringIO(text)):
+            cleaned = {
+                (k or "").strip().upper(): (v or "").strip() for k, v in row.items()
+            }
+            symbol = cleaned.get("SYMBOL", "").upper()
+            name = " ".join(cleaned.get("NAME OF COMPANY", "").split())
+            if symbol and name:
+                names[symbol] = name
+    except Exception as e:
+        log.warning(f"Could not parse names from the NSE equity list: {e}")
+    return names
+
+
+def load_registered_names(path=NAMES_PATH):
+    """Committed symbol→registered name mapping; empty dict on any problem."""
+    import json
+
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        if isinstance(data, dict):
+            return {str(k).upper(): str(v) for k, v in data.items() if v}
+    except FileNotFoundError:
+        log.warning("registered_names.json not found; stored names go unchecked.")
+    except Exception as e:
+        log.warning(f"Could not load registered_names.json: {e}")
+    return {}
+
+
+def merge_names(names, fetched):
+    """Merge NSE's names into the committed ones. Returns (added, changed).
+
+    NSE is the source of its own registered names, so a changed name is
+    applied: companies do rename (Zomato is now Eternal). A fetch that would
+    change more than MAX_CORRECTION_FRACTION of the names it carries is a
+    corrupt feed, as for ISINs, and is declined whole.
+    """
+    changed = {s: n for s, n in fetched.items() if s in names and names[s] != n}
+    if (
+        len(fetched) >= MIN_FETCH_FOR_CORRECTION_GUARD
+        and len(changed) / len(fetched) > MAX_CORRECTION_FRACTION
+    ):
+        log.warning(
+            f"Registered names: NSE's list would rename {len(changed)} of "
+            f"{len(fetched)} symbols. That is too much to be real; keeping the "
+            "committed names."
+        )
+        return 0, 0
+    added = 0
+    for symbol, name in fetched.items():
+        if symbol not in names:
+            added += 1
+        names[symbol] = name
+    return added, len(changed)
 
 
 def fetch_scrip_master_sync():
@@ -272,7 +341,9 @@ async def refresh_bse_scrips(master):
         return 0
 
 
-async def refresh_isin_master_async(session, master, path=MASTER_PATH):
+async def refresh_isin_master_async(
+    session, master, path=MASTER_PATH, names=None, names_path=NAMES_PATH
+):
     """Merge NEW listings from NSE's equity list and BSE's scrip master.
 
     Mutates ``master`` in place and persists once, after both sources, so a
@@ -284,6 +355,10 @@ async def refresh_isin_master_async(session, master, path=MASTER_PATH):
     NSE goes first deliberately: it is the namespace the watchlist speaks, so
     where the two exchanges disagree on a ticker, the NSE mapping is the one
     that must survive.
+
+    ``names``, when given, takes the registered names from the same list and
+    is persisted to ``names_path`` when they change. The run has already
+    named its holdings from the committed copy; these serve the next run.
     """
     added = 0
     corrected = 0
@@ -303,6 +378,14 @@ async def refresh_isin_master_async(session, master, path=MASTER_PATH):
                 )
                 added += nse_added
                 log.info(f"ISIN master: {nse_added} new listings from NSE.")
+                if names is not None:
+                    names_added, renamed = merge_names(names, parse_equity_names(text))
+                    if names_added or renamed:
+                        atomic_write_json(dict(sorted(names.items())), names_path)
+                    log.info(
+                        f"Registered names: {names_added} added, {renamed} "
+                        f"changed, {len(names)} total."
+                    )
     except Exception as e:
         log.info(
             f"ISIN master NSE refresh skipped ({type(e).__name__}: "

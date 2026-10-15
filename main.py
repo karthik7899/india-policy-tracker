@@ -33,9 +33,11 @@ from entities import find_duplicate_holdings
 from providers.nse_delivery import apply_delivery, fetch_delivery_async
 from providers.isin_master import (
     load_isin_master,
+    load_registered_names,
     refresh_isin_master_async,
     annotate_watchlist_isins,
 )
+from analysis import company_names
 
 
 def save_data_for_dashboard(brief_data, watchlist):
@@ -88,6 +90,32 @@ async def run_pipeline():
     # holding check below) work from the first line of the run, offline.
     isin_master = load_isin_master()
     annotate_watchlist_isins(watchlist, isin_master)
+
+    # Names before anything matches on them: a name cut down from the
+    # registered one ("NTPC Green Ene.") matches no headline but by ticker
+    # (analysis/company_names.py).
+    registered_names = load_registered_names()
+    renamed = company_names.repair_holding_names(watchlist, registered_names)
+    if renamed:
+        log.info(
+            f"Names: {len(renamed)} holding(s) renamed to their registered "
+            "names: " + "; ".join(f"{t} '{old}' -> '{new}'" for t, old, new in renamed)
+        )
+    unchecked = [
+        f"{s['ticker']} '{s['name']}'"
+        for sec, stocks in watchlist.items()
+        if sec != "macro_indicators" and isinstance(stocks, list)
+        for s in stocks
+        if isinstance(s, dict)
+        and s.get("name")
+        and str(s.get("ticker", "")).upper() not in registered_names
+        and company_names.looks_shortened(s["name"])
+    ]
+    if unchecked:
+        log.warning(
+            "Names: cut down, and NSE's list has no name to repair them from: "
+            + ", ".join(unchecked)
+        )
 
     # Snapshot targets/coverage before anything mutates the watchlist, so
     # estimate-revision momentum can diff "before this run" vs "after".
@@ -147,6 +175,11 @@ async def run_pipeline():
     # Fetch Screener.in fundamentals async; also returns Screener's industry
     # peer tables — a competitor-discovery channel independent of headlines.
     peer_competitors, industry_tables = await fetch_all_screener_fundamentals(watchlist)
+    # Screener's peer tables cut long names to about fifteen characters, and
+    # these rows are both shown and matched against headlines.
+    competitors_renamed = company_names.name_rows(peer_competitors, registered_names)
+    if competitors_renamed:
+        log.info(f"Names: {competitors_renamed} competitor(s) given registered names.")
     data["peer_competitors"] = peer_competitors or {}
     data["candidate_screen"] = screen_sector_candidates(
         peer_competitors or {}, known_symbols=set(isin_master)
@@ -213,7 +246,9 @@ async def run_pipeline():
         filings_task = fetch_exchange_filings_async(
             session, watchlist, held_out=held_exchange_filings
         )
-        isin_refresh_task = refresh_isin_master_async(session, isin_master)
+        isin_refresh_task = refresh_isin_master_async(
+            session, isin_master, names=registered_names
+        )
         global_events_task = fetch_global_event_feeds_async(session)
         state_policy_task = fetch_state_policy_async(session)
         # Results dates, ex-dates and AGMs ahead, from NSE's own calendars.
@@ -540,6 +575,15 @@ async def run_pipeline():
     coverage = build_coverage(data, watchlist)
     data["coverage_count"] = coverage_counts(coverage)
     write_coverage_sidecars(coverage)
+    # A holding its own news names only by ticker: its stored name is not how
+    # headlines write it, and every headline without the ticker is lost.
+    by_ticker_only = company_names.found_only_by_ticker(watchlist, coverage)
+    if by_ticker_only:
+        log.warning(
+            "Names: found in their own news only by ticker, so the name is not "
+            "how headlines write it (headline_names.json takes shorter forms): "
+            + ", ".join(f"{t} '{n}' ({k} items)" for t, n, k in by_ticker_only)
+        )
 
     # Thesis health: does the accumulated evidence this cycle still support
     # each holding's catalyst, or has a kill criterion tripped?

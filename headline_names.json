@@ -1,0 +1,65 @@
+{
+ "_about": "Shorter names the news uses for a holding, by ticker, matched beside its registered name (analysis/company_names.py, analysis/parsing.title_matches_company). The displayed name stays the registered one. Hand-picked: add a form when a holding's name is longer than headlines write it. The run log names holdings found in their own news only by ticker; where the ticker is the name the news uses (BHEL), it is listed here as the form. A form must be capitalised in a headline as it is here, so ordinary words in it ('Indian Hotels') do not match a sentence about hotels.",
+ "names": {
+  "ACMESOLAR": [
+   "ACME Solar"
+  ],
+  "ADANIGREEN": [
+   "Adani Green"
+  ],
+  "APOLLOHOSP": [
+   "Apollo Hospitals"
+  ],
+  "BHEL": [
+   "BHEL"
+  ],
+  "BPCL": [
+   "BPCL",
+   "Bharat Petroleum"
+  ],
+  "CGPOWER": [
+   "CG Power"
+  ],
+  "CONCOR": [
+   "CONCOR"
+  ],
+  "HINDPETRO": [
+   "HPCL",
+   "Hindustan Petroleum"
+  ],
+  "IKS": [
+   "Inventurus"
+  ],
+  "INDHOTEL": [
+   "IHCL",
+   "Indian Hotels"
+  ],
+  "IOC": [
+   "IOCL"
+  ],
+  "KPIL": [
+   "Kalpataru Projects"
+  ],
+  "LEMONTREE": [
+   "Lemon Tree"
+  ],
+  "MAXHEALTH": [
+   "Max Healthcare"
+  ],
+  "NTPCGREEN": [
+   "NTPC Green"
+  ],
+  "OFSS": [
+   "Oracle Financial Services"
+  ],
+  "PGIL": [
+   "Pearl Global"
+  ],
+  "QUICKHEAL": [
+   "Quick Heal"
+  ],
+  "TATACONSUM": [
+   "Tata Consumer"
+  ]
+ }
+}

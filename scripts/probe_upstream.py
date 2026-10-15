@@ -243,6 +243,7 @@ async def probe_nse_isin():
         _NSE_EQUITY_LIST_URL,
         load_isin_master,
         parse_equity_csv,
+        parse_equity_names,
     )
 
     async with aiohttp.ClientSession() as session:
@@ -282,7 +283,49 @@ async def probe_nse_isin():
         for sym, (old, new) in sorted(disagree.items())[:15]:
             kind = "series" if old[:9] == new[:9] else "ISSUER"
             print(f"      {sym:14} {old} -> {new}   [{kind}]")
+
+    _report_names(parse_equity_names(body))
     return bool(live)
+
+
+def _report_names(names):
+    """How the holdings' and competitors' stored names compare with the names
+    NSE registers, and what analysis/company_names.py would store instead.
+    Tab-separated: who, ticker, registered name, stored name, repaired name
+    ("=" when the stored one stands)."""
+    from analysis.company_names import tidy_name
+
+    rows = {}
+    with open("watchlist.json", encoding="utf-8") as f:
+        for sector, stocks in json.load(f).items():
+            if sector == "macro_indicators" or not isinstance(stocks, list):
+                continue
+            for s in stocks:
+                if isinstance(s, dict) and s.get("ticker"):
+                    rows[str(s["ticker"]).upper()] = ("holding", s.get("name") or "")
+    for path in ("data/peer_competitors.json", "data/candidate_screen.json"):
+        try:
+            with open(path, encoding="utf-8") as f:
+                body = json.load(f)
+        except (OSError, ValueError):
+            continue
+        for peers in (body.get("value") or {}).values():
+            for p in peers if isinstance(peers, list) else []:
+                ticker = str((p or {}).get("ticker") or "").upper()
+                if ticker and ticker not in rows:
+                    rows[ticker] = ("competitor", p.get("name") or "")
+
+    print(f"\n  REGISTERED NAMES: {len(names)} parsed")
+    repaired = 0
+    for ticker, (who, stored) in sorted(rows.items()):
+        registered = names.get(ticker)
+        new = tidy_name(stored, registered)
+        repaired += new != stored
+        print(
+            f"  NAME\t{who}\t{ticker}\t{registered or '-'}\t{stored}\t"
+            f"{new if new != stored else '='}"
+        )
+    print(f"  {repaired} of {len(rows)} stored name(s) would be repaired.")
 
 
 def probe_bse_scrips():
