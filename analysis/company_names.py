@@ -16,8 +16,8 @@ registered name. A stored name is repaired to it only when the stored name is
 that name cut down: words truncated or abbreviated ("Ene.", "Devl."), reduced
 to initials ("B P C L"), or with the legal suffix written in ("Anant Raj
 Ltd"). A complete shorter name ("Kaynes Technology", "TVS Supply") or a
-brand that is not the registered name at all (The Leela's registered company
-is Schloss Bangalore) is how someone chose to write it, and is left alone.
+brand that is not the registered name at all (Nykaa's listed company is FSN
+E-Commerce Ventures) is how someone chose to write it, and is left alone.
 
 Registered names can be longer than the news writes them ("Kalpataru
 Projects International" is "Kalpataru Projects" in a headline), so
@@ -69,6 +69,24 @@ def _abbreviates(short: str, word: str) -> bool:
     return short[0] == word[0] and all(ch in rest for ch in short[1:])
 
 
+def _respell(clean: str, core: str) -> str:
+    """The registered name, spelt as the stored name spells each word it kept
+    whole: NSE writes "Acme Solar Holdings", "Mtar Technologies" and
+    "MphasiS", the companies "ACME", "MTAR" and "Mphasis". A name NSE writes
+    in capitals ("SIGMA ADVANCED SYSTEMS") is not shouted on screen either."""
+    kept = {w.lower(): w for w in core.split()}
+    shouting = clean.isupper()
+    out = []
+    for word in clean.split():
+        if word.lower() in kept:
+            out.append(kept[word.lower()])
+        elif shouting and len(word) > 3:
+            out.append(word.capitalize())
+        else:
+            out.append(word)
+    return " ".join(out)
+
+
 def repaired_name(stored: str, registered: Optional[str]) -> Optional[str]:
     """The registered name, if ``stored`` is it cut down; else None.
 
@@ -85,14 +103,15 @@ def repaired_name(stored: str, registered: Optional[str]) -> Optional[str]:
     if not all(_abbreviates(s, w) for s, w in zip(mine, full)):
         return None
     clean = clean_registered_name(registered)
-    if not clean or core == clean:
+    if not clean:
         return None
     # Something was cut, or the legal suffix written out in full. Neither
     # is true of a complete shorter name, which someone chose.
     cut = any(s != w for s, w in zip(mine, full))
     if not cut and mine != full:
         return None
-    return clean + aliases
+    respelt = _respell(clean, core)
+    return None if respelt == core else respelt + aliases
 
 
 def tidy_name(name: str, registered: Optional[str] = None) -> str:

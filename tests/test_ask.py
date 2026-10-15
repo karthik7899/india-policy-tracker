@@ -59,6 +59,19 @@ def test_a_question_names_its_holdings_and_sectors():
     ]
 
 
+def test_a_question_can_name_a_holding_as_headlines_do():
+    """By the shorter name in headline_names.json, not only the registered
+    one: nobody asks about "Kalpataru Projects International"."""
+    watchlist = {
+        "big_cap_industries": [
+            {"ticker": "KPIL", "name": "Kalpataru Projects International"}
+        ]
+    }
+    assert ask.subjects("what orders has Kalpataru Projects won?", watchlist)[0] == [
+        "KPIL"
+    ]
+
+
 def test_ordinary_words_do_not_name_a_holding_or_sector():
     # "data" is not the Data Center sector; a CEO called Arvind is not Arvind Ltd.
     assert ask.subjects("what data do you have?", WATCHLIST) == ([], [])

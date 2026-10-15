@@ -297,10 +297,29 @@ def title_matches_company(title, ticker, name):
 
     # The shorter names headlines use for a long registered name, kept out of
     # the displayed name (headline_names.json): "Kalpataru Projects" for
-    # Kalpataru Projects International.
-    for form in headline_names(ticker):
-        if _phrase_match(_parse_company_name(form)[1]):
-            return True
+    # Kalpataru Projects International. Some are ordinary words too ("Indian
+    # Hotels"), so in a headline that uses capitals each must be capitalised
+    # as it is in the form: "Indian hotels see record demand" is about hotels.
+    def _form_match(form):
+        written = tuple(_TOKEN_RE.findall(form))
+        words = tuple(_clean_token(t) for t in written)
+        if len(words) == 1:
+            # The ticker rule: a lower-case word in a capitalised headline
+            # is the word.
+            return _single_token_match(words[0], is_ticker=True)
+        for i in range(len(lowered) - len(words) + 1):
+            if lowered[i : i + len(words)] == words and (
+                not has_case
+                or all(
+                    not w[0].isupper() or tokens[i + j][0].isupper()
+                    for j, w in enumerate(written)
+                )
+            ):
+                return True
+        return False
+
+    if any(_form_match(form) for form in headline_names(ticker)):
+        return True
 
     return _single_token_match(ticker or "", is_ticker=True)
 

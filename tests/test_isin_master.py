@@ -14,9 +14,12 @@ from providers import isin_master as im  # noqa: E402
 from providers.isin_master import (  # noqa: E402
     annotate_watchlist_isins,
     load_isin_master,
+    load_registered_names,
+    merge_names,
     merge_new_symbols,
     parse_bse_scrip_rows,
     parse_equity_csv,
+    parse_equity_names,
     refresh_isin_master_async,
 )
 
@@ -66,6 +69,55 @@ def test_parse_equity_csv_handles_garbage():
     assert parse_equity_csv("") == {}
     assert parse_equity_csv(None) == {}
     assert parse_equity_csv("<html>blocked</html>") == {}
+
+
+def test_the_same_list_gives_each_symbol_its_registered_name():
+    assert parse_equity_names(_EQUITY_CSV) == {
+        "RELIANCE": "Reliance Industries Limited",
+        "TATAPOWER": "Tata Power Company Limited",
+        "BADROW": "Broken Company",
+    }
+    assert parse_equity_names("") == {}
+    assert parse_equity_names("<html>blocked</html>") == {}
+
+
+def test_names_merge_new_symbols_and_follow_a_rename():
+    names = {"ZOMATO": "Zomato Limited", "TCS": "Tata Consultancy Services Limited"}
+    added, changed = merge_names(
+        names, {"ZOMATO": "Eternal Limited", "HAL": "Hindustan Aeronautics Limited"}
+    )
+    assert (added, changed) == (1, 1)
+    assert names["ZOMATO"] == "Eternal Limited"
+    assert names["TCS"] == "Tata Consultancy Services Limited"
+
+
+def test_a_feed_renaming_too_much_at_once_is_declined():
+    names = {f"S{i}": f"Company {i} Limited" for i in range(100)}
+    fetched = {f"S{i}": f"Garbled {i}" for i in range(100)}
+    assert merge_names(names, fetched) == (0, 0)
+    assert names["S1"] == "Company 1 Limited"
+
+
+def test_the_refresh_keeps_the_names_for_the_next_run(tmp_path):
+    names_path = str(tmp_path / "names.json")
+    names = {"TATAPOWER": "Tata Power Co."}
+    session = _FakeSession(response=_FakeResponse(200, _EQUITY_CSV))
+    asyncio.run(
+        refresh_isin_master_async(
+            session,
+            {},
+            path=str(tmp_path / "master.json"),
+            names=names,
+            names_path=names_path,
+        )
+    )
+    assert load_registered_names(names_path)["TATAPOWER"] == (
+        "Tata Power Company Limited"
+    )
+    assert load_registered_names(names_path)["RELIANCE"] == (
+        "Reliance Industries Limited"
+    )
+    assert load_registered_names(str(tmp_path / "missing.json")) == {}
 
 
 # ---------------------------------------------------------------------------

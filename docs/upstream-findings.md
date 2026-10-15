@@ -17,6 +17,38 @@ named.
 
 ---
 
+## Screener's peer tables cut names short; NSE's equity list has them whole
+
+**Measured 2026-10-15**, run 38730401675 (`probe_upstream.py --source
+nse-isin`, which now prints each holding's and competitor's stored name beside
+NSE's registered one, and what `analysis/company_names.py` would store).
+
+**Screener's peer tables** label companies in about fifteen characters:
+"NTPC Green Ene.", "Oracle Fin.Serv.", "IRB Infra.Devl.", "Kotak Mah. Bank",
+initials for the oil refiners ("C P C L"), and cuts with no dot at all ("Data
+Pattern", "Inventurus Knowl"). In the 15 Oct peer and candidate tables, 27 of
+192 names ended in a dot. The rotation admitted holdings under these labels,
+and the matcher, which takes a name only as whole words, matched them to no
+headline but by ticker.
+
+**NSE's `EQUITY_L.csv`** carries `NAME OF COMPANY` for every symbol it lists:
+2,605 on this run, each with "Limited" (one with "Ltd."). 179 of our 192
+holdings and competitors are in it; ASMTEC (BSE-only) and SPELS are not.
+
+Two things about those names decide how they are used:
+
+- **NSE's capitals are not the company's.** "Acme Solar Holdings", "Mtar
+  Technologies", "MphasiS", "Ideaforge Technology"; three names are entirely
+  in capitals (Sagility, Sigma Advanced Systems, Tata Consumer Products). A
+  repaired name keeps the stored spelling of every word it kept whole.
+- **A registered name is not always how the news writes the company.**
+  "Kalpataru Projects International" is "Kalpataru Projects" in a headline,
+  and "Apollo Hospitals Enterprise" is "Apollo Hospitals". So a stored name is
+  repaired only when it is the registered name cut down, and the shorter forms
+  headlines use are listed in `headline_names.json`.
+
+---
+
 ## Screener files ASMTEC under its BSE code, and names a bank's rows differently
 
 **Measured 2026-10-14**, runs 38560166912, 38561213070 and 38561917933

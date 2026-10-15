@@ -155,7 +155,7 @@ def _screener_qoq_growth(session, ticker):
     return 0.0
 
 
-def _probe_candidate(name, preresolved, isin_master, watchlisted=(), names=None):
+def _probe_candidate(name, preresolved, isin_master, watchlisted=()):
     """Every network call for one candidate, and nothing that decides anything.
 
     Split out so these can run concurrently. What stays OUT of here is the
@@ -180,10 +180,7 @@ def _probe_candidate(name, preresolved, isin_master, watchlisted=(), names=None)
         return probe
 
     probe["ticker"] = ticker
-    # The name the holding is admitted under. A screened peer arrives with
-    # Screener's cut-down label ("NTPC Green Ene."), which matched no
-    # headline; NSE's registered name replaces it (analysis/company_names.py).
-    probe["full_name"] = tidy_name(full_name or name, (names or {}).get(ticker))
+    probe["full_name"] = full_name or name
     probe["isin"] = isin_master.get(ticker)
 
     # Stop before the market-data call for something already held. The
@@ -348,9 +345,7 @@ def auto_curate_watchlist(brief_data, watchlist, screened_candidates=None):
             ) as pool:
                 probes = list(
                     pool.map(
-                        lambda c: _probe_candidate(
-                            c[1], c[2], isin_master, snapshot, registered_names
-                        ),
+                        lambda c: _probe_candidate(c[1], c[2], isin_master, snapshot),
                         chunk,
                     )
                 )
@@ -372,7 +367,13 @@ def auto_curate_watchlist(brief_data, watchlist, screened_candidates=None):
 
             log.info(f"Evaluating candidate company: {name} in {sector}")
             ticker = probe["ticker"]
-            full_name = probe["full_name"]
+            # The name it would be held under. A screened peer arrives with
+            # Screener's cut-down label ("NTPC Green Ene."), which matched no
+            # headline; NSE's registered name replaces it
+            # (analysis/company_names.py).
+            full_name = tidy_name(
+                probe["full_name"] or name, registered_names.get(ticker)
+            )
 
             if probe["error"] == "unresolved":
                 log.info(f"Could not resolve ticker for: {name}. Skipping.")
@@ -389,9 +390,7 @@ def auto_curate_watchlist(brief_data, watchlist, screened_candidates=None):
             if probe["error"] == "watchlisted" and ticker not in watchlisted_tickers:
                 # Rotated out earlier in this same batch, so it is a live
                 # candidate again and was never priced. Rare; probe now.
-                probe = _probe_candidate(
-                    name, ticker, isin_master, watchlisted_tickers, registered_names
-                )
+                probe = _probe_candidate(name, ticker, isin_master, watchlisted_tickers)
 
             if ticker in watchlisted_tickers:
                 log.info(f"Ticker {ticker} is already in watchlist. Skipping.")
