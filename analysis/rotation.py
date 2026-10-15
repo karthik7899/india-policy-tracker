@@ -4,9 +4,10 @@ from concurrent.futures import ThreadPoolExecutor
 from logger import log
 from config import save_watchlist
 from entities import build_entity_master, resolve_entity_by_isin
-from providers.isin_master import load_isin_master
+from providers.isin_master import load_isin_master, load_registered_names
 from providers.yahoo import get_cached_ticker
 from utils import thread_local_session, to_float
+from .company_names import tidy_name
 from .parsing import resolve_ticker_from_name
 
 
@@ -154,7 +155,7 @@ def _screener_qoq_growth(session, ticker):
     return 0.0
 
 
-def _probe_candidate(name, preresolved, isin_master, watchlisted=()):
+def _probe_candidate(name, preresolved, isin_master, watchlisted=(), names=None):
     """Every network call for one candidate, and nothing that decides anything.
 
     Split out so these can run concurrently. What stays OUT of here is the
@@ -179,7 +180,10 @@ def _probe_candidate(name, preresolved, isin_master, watchlisted=()):
         return probe
 
     probe["ticker"] = ticker
-    probe["full_name"] = full_name or name
+    # The name the holding is admitted under. A screened peer arrives with
+    # Screener's cut-down label ("NTPC Green Ene."), which matched no
+    # headline; NSE's registered name replaces it (analysis/company_names.py).
+    probe["full_name"] = tidy_name(full_name or name, (names or {}).get(ticker))
     probe["isin"] = isin_master.get(ticker)
 
     # Stop before the market-data call for something already held. The
@@ -277,6 +281,7 @@ def auto_curate_watchlist(brief_data, watchlist, screened_candidates=None):
     # name spelling, which the ticker-string check below can't see.
     entity_master = build_entity_master(watchlist)
     isin_master = load_isin_master()
+    registered_names = load_registered_names()
 
     # We will construct a structured emerging_players dictionary
     structured_emerging = {s: [] for s in SECTOR_METADATA}
@@ -343,7 +348,9 @@ def auto_curate_watchlist(brief_data, watchlist, screened_candidates=None):
             ) as pool:
                 probes = list(
                     pool.map(
-                        lambda c: _probe_candidate(c[1], c[2], isin_master, snapshot),
+                        lambda c: _probe_candidate(
+                            c[1], c[2], isin_master, snapshot, registered_names
+                        ),
                         chunk,
                     )
                 )
@@ -382,7 +389,9 @@ def auto_curate_watchlist(brief_data, watchlist, screened_candidates=None):
             if probe["error"] == "watchlisted" and ticker not in watchlisted_tickers:
                 # Rotated out earlier in this same batch, so it is a live
                 # candidate again and was never priced. Rare; probe now.
-                probe = _probe_candidate(name, ticker, isin_master, watchlisted_tickers)
+                probe = _probe_candidate(
+                    name, ticker, isin_master, watchlisted_tickers, registered_names
+                )
 
             if ticker in watchlisted_tickers:
                 log.info(f"Ticker {ticker} is already in watchlist. Skipping.")

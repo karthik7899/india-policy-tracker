@@ -28,6 +28,7 @@ from analysis.llm_reader import CACHE_PATH as LLM_CACHE_PATH
 from analysis.thesis_check import CACHE_PATH as THESIS_CACHE_PATH
 from dashboard.sidecars import DATA_DIR
 from history.store import HISTORY_PATH, NEWS_DIR
+from providers.isin_master import MASTER_PATH, NAMES_PATH
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -61,6 +62,8 @@ def _git_add_paths():
         os.path.basename(PROPOSALS_PATH),
         os.path.basename(LLM_CACHE_PATH),
         os.path.basename(THESIS_CACHE_PATH),
+        os.path.basename(MASTER_PATH),
+        os.path.basename(NAMES_PATH),
     ],
 )
 def test_every_persisted_path_is_staged(path):

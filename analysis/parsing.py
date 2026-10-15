@@ -1,6 +1,7 @@
 import re
 import urllib.parse
 import functools
+from analysis.company_names import headline_names
 from logger import log
 
 # Words that precede a PERSON's given name, never a company mention
@@ -292,6 +293,13 @@ def title_matches_company(title, ticker, name):
     # Parenthetical aliases: "(L&T)", "(PepsiCo)", "(CP PLUS)".
     for alias_tokens in alias_tokens_list:
         if _phrase_match(alias_tokens):
+            return True
+
+    # The shorter names headlines use for a long registered name, kept out of
+    # the displayed name (headline_names.json): "Kalpataru Projects" for
+    # Kalpataru Projects International.
+    for form in headline_names(ticker):
+        if _phrase_match(_parse_company_name(form)[1]):
             return True
 
     return _single_token_match(ticker or "", is_ticker=True)

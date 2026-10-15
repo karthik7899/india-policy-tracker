@@ -10,8 +10,8 @@ answer draws on three sources and says which one each statement came from:
     (the holdings and sectors the question names, or the one the page was
     open on) in full and the day's summary around it;
   * the news: headlines from a Google News search run for the question. The
-    model writes the query, since it knows "Oracle Fin.Serv." as Oracle
-    Financial Services and CPPLUS as the CP PLUS brand. The answer cites the
+    model writes the query, since it knows OFSS as Oracle Financial Services
+    and CPPLUS as the CP PLUS brand. The answer cites the
     headlines by number and lists them, with links, under the answer;
   * the model's general knowledge, as background only: what a company does,
     how a scheme works. It never supplies a figure or a recent event.
@@ -154,11 +154,12 @@ def subjects(
 ) -> Tuple[List[str], List[str]]:
     """The holdings and sectors a question is about: ``(tickers, sectors)``.
 
-    A ticker counts written in any case ("syrma"); a company by its name,
-    with the same guards that keep "IBM CEO Arvind Krishna" off Arvind Ltd;
-    a sector by its label or key. The page the question was asked from
-    comes first.
+    A ticker counts written in any case ("syrma"); a company by its name or
+    the shorter name headlines use for it ("Kalpataru Projects"), with the
+    same guards that keep "IBM CEO Arvind Krishna" off Arvind Ltd; a sector
+    by its label or key. The page the question was asked from comes first.
     """
+    from analysis.company_names import headline_names
     from analysis.parsing import title_matches_company
     from config import SECTOR_METADATA
 
@@ -178,7 +179,8 @@ def subjects(
             ticker,
             "",
         )
-        if typed or title_matches_company(question, "", stock.get("name") or ""):
+        names = (stock.get("name") or "", *headline_names(ticker))
+        if typed or any(title_matches_company(question, "", n) for n in names if n):
             tickers.append(ticker)
     # Compared without a plural "s": "semiconductor" asks about the
     # Semiconductors & Equipment sector.
