@@ -883,6 +883,72 @@ def test_an_order_win_from_a_holding_is_not_the_holdings_win():
     assert match_event_type("defence stock jumps 9% on order win from bel")[0] is None
 
 
+_CUSTOMERS = {
+    "big_cap_industries": [
+        {"ticker": "BHEL", "name": "Bharat Heavy Electricals"},
+        {"ticker": "RELIANCE", "name": "Reliance Industries"},
+    ],
+    "aerospace_defence": [
+        {"ticker": "BEL", "name": "Bharat Electronics"},
+        {"ticker": "ZENTEC", "name": "Zen Technologies"},
+    ],
+    "clean_energy": [
+        {"ticker": "SUZLON", "name": "Suzlon Energy"},
+        {"ticker": "NTPCGREEN", "name": "NTPC Green Energy"},
+    ],
+}
+
+
+@pytest.mark.parametrize(
+    "headline, winners",
+    [
+        # The holding is what the contract is, or where the order comes from:
+        # four of the corpus's 32 order wins naming a holding, all four filed
+        # as the customer's win.
+        (
+            "Ellenbarrie bags Rs. 481-crore BHEL contract for major Odisha air separation unit",
+            [],
+        ),
+        ("Tiger Logistics wins ₹4 crore BHEL order for import break bulk project", []),
+        ("Cranex Receives Orders Worth Rs. 71.7 mn from BHEL and DEE VEE", []),
+        (
+            "Bikewo Green Tech wins Rs 66.46 crore order from Reliance Industries for EV tractor operations",
+            [],
+        ),
+        # Both sides held: only the winner is.
+        ("Suzlon wins 200 MW order from NTPC Green Energy", ["SUZLON"]),
+        ("Purchase order from BHEL to Zen Technologies for simulators", ["ZENTEC"]),
+        # Named before the win, or after it as anything but the customer: the
+        # winner, as before.
+        ("BHEL Bags Power Plant Order from SAIL", ["BHEL"]),
+        (
+            "Bharat Electronics Receives Orders Worth ₹533 Crore Across Defence Systems",
+            ["BEL"],
+        ),
+        ("Order worth Rs 1,081 crore for Bharat Electronics", ["BEL"]),
+    ],
+)
+def test_an_order_wins_customer_is_not_credited_with_it(headline, winners):
+    events = classify_headlines(_data(headline), _CUSTOMERS, {"edges": []})
+    assert (events[0]["actors"] if events else []) == winners
+
+
+def test_a_stored_win_credited_to_its_customer_is_reattributed():
+    """The 29 Sep event, carried over by every run since: BHEL placed it."""
+    stored = [
+        {
+            "headline": "Ellenbarrie bags Rs. 481-crore BHEL contract for major Odisha air separation unit",
+            "event_type": "order_win",
+            "phrase": "bags rs. 481-crore bhel contract",
+            "domains": [],
+            "actors": ["BHEL"],
+            "date": _TODAY,
+        }
+    ]
+    # No holding left to credit and no sector touched: nothing we track.
+    assert refresh_merged_events(stored, _CUSTOMERS) == []
+
+
 def test_the_matched_phrase_can_be_found_in_its_clause_again():
     """event_clause() re-finds the clause by the stored phrase."""
     from analysis.event_engine import event_clause

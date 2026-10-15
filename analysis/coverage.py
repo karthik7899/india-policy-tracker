@@ -125,7 +125,7 @@ def build_coverage(
             for s in stocks or []
             if isinstance(s, dict) and s.get("ticker")
         ]
-        seen: Dict[str, Dict[str, str]] = {t: {} for t, _ in holdings}
+        seen: Dict[str, Dict[str, Dict[str, Any]]] = {t: {} for t, _ in holdings}
 
         def add(ticker: str, item: Dict[str, Any]) -> None:
             key = _normalise(item["headline"])
@@ -137,9 +137,18 @@ def build_coverage(
             # same launch counted twice" was a real scoring defect and the
             # audit is how it stays visible.
             if key in seen[ticker]:
+                kept = seen[ticker][key]
+                # What the engine read in the story stays with it, whichever
+                # copy is counted. The event list is read last, so its copy is
+                # usually the duplicate: "Bharat Electronics Receives Orders
+                # Worth ₹533 Crore" was counted from a sector feed and reached
+                # BEL's card as plain news, never as an order win.
+                if item["event_type"] and not kept["event_type"]:
+                    kept["event_type"] = item["event_type"]
+                    kept["event_tags"] = [item["event_type"], *kept["event_tags"]]
                 item["status"] = "merged"
                 item["exclusion_reason"] = (
-                    f"merged: duplicate phrasing of “{seen[ticker][key][:60]}”"
+                    f"merged: duplicate phrasing of “{kept['headline'][:60]}”"
                 )
                 bucket.append(item)
                 return
@@ -151,7 +160,7 @@ def build_coverage(
                 bucket.append(item)
                 return
 
-            seen[ticker][key] = item["headline"]
+            seen[ticker][key] = item
             bucket.append(item)
 
         # Sector feeds match only within their own sector, as stock_topics
