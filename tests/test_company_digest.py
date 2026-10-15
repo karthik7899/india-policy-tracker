@@ -276,3 +276,34 @@ def test_an_event_row_says_how_settled_it_is_and_a_policy_how_binding():
         "Suzlon bags 400 MW w": "completed",
     }
     assert company["policies"][0]["strength"] == "hard"
+
+
+def test_an_event_a_feed_carried_first_is_still_shown_as_one():
+    """15 Oct: BEL's ₹533 crore order reached its card as plain news, so the
+    high-conviction filter hid it. A sector feed carried the story first,
+    and the engine's copy, the one that knew it was an order win, was
+    counted as the duplicate."""
+    import datetime
+
+    from analysis.coverage import build_coverage
+
+    today = datetime.date.today()
+    day = (today - datetime.timedelta(days=2)).isoformat()
+    headline = "Suzlon bags 400 MW wind EPC order from Tata Power"
+    data = {
+        "clean_energy": [{"title": headline, "date": day, "link": "https://n.test/s"}],
+        "market_events": [
+            {
+                "headline": headline,
+                "actors": ["SUZLON"],
+                "date": day,
+                "event_type": "order_win",
+            }
+        ],
+    }
+    coverage = build_coverage(data, WATCHLIST)
+    digest = build_company_digest(WATCHLIST, coverage, BRIEF, today=today.isoformat())
+    suzlon = next(c for c in digest["companies"] if c["ticker"] == "SUZLON")
+    assert [(a["kind"], a.get("certainty")) for a in suzlon["activity"]] == [
+        ("order", "completed")
+    ]

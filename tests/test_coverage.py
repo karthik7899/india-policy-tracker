@@ -67,6 +67,31 @@ class TestAuditTrail:
         assert len(merged) == 1
         assert "merged" in merged[0]["exclusion_reason"]
 
+    def test_the_engines_reading_reaches_the_counted_copy(self):
+        """The event list is read last, so its copy of a story is usually the
+        duplicate, and what the engine read went with it: BEL's ₹533 crore
+        order was counted from a sector feed and shown as plain news."""
+        headline = "Suzlon wins 300 MW order"
+        data = {
+            "clean_energy": [_news(headline)],
+            "market_events": [
+                {
+                    "headline": headline,
+                    "actors": ["SUZLON"],
+                    "date": _iso(1),
+                    "event_type": "order_win",
+                }
+            ],
+        }
+        items = cov.build_coverage(data, _watchlist())["SUZLON"]
+        counted = [i for i in items if i["status"] == "counted"]
+        assert len(counted) == 1
+        # Still the feed's copy, its source unchanged, now with the reading.
+        assert counted[0]["source_kind"] == "Sector news"
+        assert counted[0]["event_type"] == "order_win"
+        assert counted[0]["event_tags"] == ["order_win", "Sector news"]
+        assert cov.counts_for(items) == 1
+
     def test_an_out_of_window_item_is_excluded_with_its_age(self):
         data = {"clean_energy": [_news("Suzlon wins order", days_ago=200)]}
         items = cov.build_coverage(data, _watchlist())["SUZLON"]

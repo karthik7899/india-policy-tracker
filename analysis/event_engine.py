@@ -316,6 +316,62 @@ def headline_certainty(headline: str) -> Optional[str]:
     return classify_certainty(found[0]) if found else None
 
 
+# Where an order comes from: "from" and the name that follows, up to the next
+# preposition or punctuation. "from BHEL and DEE VEE" keeps both names.
+_FROM_PARTY_RE = re.compile(
+    r"\bfrom\s+(.+?)(?=\s+(?:for|to|in|at|worth|under|towards|on|with|as|via|"
+    r"across|after|amid|over)\b|[,;:(]|$)",
+    re.IGNORECASE,
+)
+
+
+def _named_as_customer(clause: str, phrase: str, ticker: str, name: str) -> bool:
+    """Is this holding named in an order win only as the one placing it?
+
+    "Ellenbarrie bags Rs. 481-crore BHEL contract" and "Cranex Receives Orders
+    Worth Rs. 71.7 mn from BHEL" were both filed as BHEL's order wins. A
+    holding named before the win ("BHEL bags ...") won it. One named only
+    after it, as what the contract is or where the order comes from, placed
+    it. Named after the win in any other way ("Order worth Rs 500 crore for
+    RVNL"), it is still read as the winner.
+    """
+    lower = clause.lower()
+    start = lower.find(phrase or "\0")
+    # Slices of the clause stand for slices of its lower-cased copy.
+    if start < 0 or len(lower) != len(clause):
+        return False
+    if title_matches_company(clause[:start], ticker, name):
+        return False
+    # Between the verb and "contract": "bags Rs. 481-crore BHEL contract".
+    win = clause[start : start + len(phrase)].split(None, 1)
+    if len(win) == 2 and title_matches_company(win[1], ticker, name):
+        return True
+    return any(
+        title_matches_company(m.group(1), ticker, name)
+        for m in _FROM_PARTY_RE.finditer(clause[start:])
+    )
+
+
+def clause_actors(
+    clause: str, event_type: Optional[str], phrase: Optional[str], holdings
+) -> List[str]:
+    """The holdings an event's clause names as its parties.
+
+    Named in the clause itself, not merely somewhere in the headline: the
+    attribution is relational. An order win's customer is not a party to the
+    win (_named_as_customer).
+    """
+    return [
+        ticker
+        for ticker, name in holdings
+        if title_matches_company(clause, ticker, name)
+        and not (
+            event_type == "order_win"
+            and _named_as_customer(clause, phrase, ticker, name)
+        )
+    ]
+
+
 def graph_entities(clause: str, graph: Dict[str, Any]) -> List[str]:
     """Graph entities named in this clause — Google, Apple, Broadcom, Marvell.
 
@@ -411,13 +467,7 @@ def classify_headlines(
                 continue
             clause, event_type, phrase = found
             certainty = classify_certainty(clause)
-            # Attribution is relational, so the company has to appear
-            # alongside the event, not merely somewhere in the headline.
-            actors = [
-                ticker
-                for ticker, name in holdings
-                if title_matches_company(clause, ticker, name)
-            ]
+            actors = clause_actors(clause, event_type, phrase, holdings)
             external = graph_entities(clause, graph)
             counterparties = _counterparties(event_type, clause, actors, holdings)
 
@@ -575,11 +625,9 @@ def refresh_merged_events(
                 else:
                     dropped_orphan += 1
                 continue
-            actors = [
-                ticker
-                for ticker, name in holdings
-                if title_matches_company(clause, ticker, name)
-            ]
+            actors = clause_actors(
+                clause, event.get("event_type"), event.get("phrase"), holdings
+            )
             # Re-derived for the same reason actors are: an event carried over
             # from before the graph knew about Marvell would otherwise keep an
             # empty external list for its whole 45-day retention, and the fix
