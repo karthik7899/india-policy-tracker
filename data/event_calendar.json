@@ -1,31 +1,9 @@
 {
   "value": {
-    "as_of": "2026-10-14",
+    "as_of": "2026-10-15",
     "ahead_days": 45,
     "back_days": 14,
     "upcoming": [
-      {
-        "ticker": "BHEL",
-        "date": "2026-10-14",
-        "kind": "results",
-        "title": "Board meeting: Financial Results",
-        "detail": "Board Meeting for Unaudited Financial Results for & upto the quarter ended30th September, 2026 and Closure of Trading Window thereof",
-        "source": "NSE event calendar",
-        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
-        "name": "Bharat Heavy Electricals",
-        "sector": "logistics_heavy_capital"
-      },
-      {
-        "ticker": "TCS",
-        "date": "2026-10-14",
-        "kind": "dividend",
-        "title": "Ex-date: Interim Dividend - Rs 12 Per Share",
-        "detail": "record date 2026-10-14",
-        "source": "NSE corporate actions",
-        "link": "https://www.nseindia.com/companies-listing/corporate-filings-actions",
-        "name": "Tata Consultancy Services",
-        "sector": "cybersecurity"
-      },
       {
         "ticker": "METROBRAND",
         "date": "2026-10-15",
@@ -148,6 +126,17 @@
         "sector": "big_cap_industries"
       },
       {
+        "ticker": "CGPOWER",
+        "date": "2026-10-23",
+        "kind": "results",
+        "title": "Board meeting: Financial Results",
+        "detail": "To consider and approve the financial results for the half year and quarter ended September 30, 2026.",
+        "source": "NSE event calendar",
+        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
+        "name": "CG Power & Industrial",
+        "sector": "manufacturing_electronics"
+      },
+      {
         "ticker": "COFORGE",
         "date": "2026-10-23",
         "kind": "results",
@@ -168,6 +157,17 @@
         "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
         "name": "Godrej Propert.",
         "sector": "data_center_support"
+      },
+      {
+        "ticker": "OFSS",
+        "date": "2026-10-23",
+        "kind": "results",
+        "title": "Board meeting: Financial Results",
+        "detail": "To consider and approve the financial results for the period ended September 30, 2026",
+        "source": "NSE event calendar",
+        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
+        "name": "Oracle Fin.Serv.",
+        "sector": "cybersecurity"
       },
       {
         "ticker": "STLTECH",
@@ -249,6 +249,39 @@
     ],
     "recent": [
       {
+        "ticker": "THELEELA",
+        "date": "2026-10-14",
+        "kind": "results",
+        "title": "Board meeting: Financial Results",
+        "detail": "To consider and approve the Unaudited Standalone And Consolidated Financial Results Of The Company For The Quarter and Half Year Ended September 30, 2026",
+        "source": "NSE event calendar",
+        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
+        "name": "Leela Palaces Hotels",
+        "sector": "hospitality_travel"
+      },
+      {
+        "ticker": "TCS",
+        "date": "2026-10-14",
+        "kind": "dividend",
+        "title": "Ex-date: Interim Dividend - Rs 12 Per Share",
+        "detail": "record date 2026-10-14",
+        "source": "NSE corporate actions",
+        "link": "https://www.nseindia.com/companies-listing/corporate-filings-actions",
+        "name": "Tata Consultancy Services",
+        "sector": "cybersecurity"
+      },
+      {
+        "ticker": "BHEL",
+        "date": "2026-10-14",
+        "kind": "results",
+        "title": "Board meeting: Financial Results",
+        "detail": "Board Meeting for Unaudited Financial Results for & upto the quarter ended30th September, 2026 and Closure of Trading Window thereof",
+        "source": "NSE event calendar",
+        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
+        "name": "Bharat Heavy Electricals",
+        "sector": "logistics_heavy_capital"
+      },
+      {
         "ticker": "TCS",
         "date": "2026-10-08",
         "kind": "results",
@@ -262,7 +295,6 @@
     ],
     "macro": [],
     "next_results": {
-      "BHEL": "2026-10-14",
       "METROBRAND": "2026-10-15",
       "PERSISTENT": "2026-10-15",
       "HDFCBANK": "2026-10-17",
@@ -273,8 +305,10 @@
       "HINDPETRO": "2026-10-22",
       "ADANIPOWER": "2026-10-23",
       "BPCL": "2026-10-23",
+      "CGPOWER": "2026-10-23",
       "COFORGE": "2026-10-23",
       "GODREJPROP": "2026-10-23",
+      "OFSS": "2026-10-23",
       "STLTECH": "2026-10-23",
       "ANANTRAJ": "2026-10-28",
       "IOC": "2026-10-30",
@@ -285,8 +319,8 @@
     },
     "sources": {
       "nse": {
-        "event_calendar": 467,
-        "corporate_actions": 29
+        "event_calendar": 518,
+        "corporate_actions": 30
       },
       "nse_errors": [],
       "filings": 0,

@@ -427,9 +427,9 @@
     "name": "H P C L",
     "price_at_decision": 356.8,
     "target_at_decision": 407.48,
-    "scored": false,
-    "outcome": null,
-    "realized_return_pct": null
+    "scored": true,
+    "outcome": "Underperforming",
+    "realized_return_pct": -2.5
   },
   {
     "date": "2026-09-03",
@@ -739,6 +739,18 @@
     "name": "Optiemus Infra.",
     "price_at_decision": 789.75,
     "target_at_decision": 987.19,
+    "scored": false,
+    "outcome": null,
+    "realized_return_pct": null
+  },
+  {
+    "date": "2026-10-15",
+    "action": "added",
+    "sector": "hospitality_travel",
+    "ticker": "THELEELA",
+    "name": "Leela Palaces Hotels",
+    "price_at_decision": 603.2,
+    "target_at_decision": 652.72,
     "scored": false,
     "outcome": null,
     "realized_return_pct": null
