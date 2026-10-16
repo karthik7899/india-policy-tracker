@@ -302,19 +302,19 @@ class TestCandidateProbeConcurrency(unittest.TestCase):
         self.assertEqual(priced, [])
 
 
-def _admit(label, ticker, registered):
-    """Run one screened peer through the rotation; returns its held name."""
-    import analysis.rotation as rot
+def _candidate(ticker, target=130.0, label=None):
+    """A probed clean-energy candidate at 100, with an analysts' target or
+    (target=None) none."""
     from analysis.sector_fit import keywords
 
-    probe = {
+    return {
         "ticker": ticker,
-        "full_name": label,
+        "full_name": label or ticker.title(),
         "error": None,
         "isin": None,
         "live_price": 100.0,
-        "target_price": 130.0,
-        "growth_pct_val": 30.0,
+        "target_price": target,
+        "growth_pct_val": target - 100.0 if target else None,
         "rating": "Buy",
         "rev_growth_raw": 0.4,
         "revenue_growth": "40.0%",
@@ -322,19 +322,54 @@ def _admit(label, ticker, registered):
         "industry": "Solar",
         "keywords": keywords("develops solar and wind power plants"),
     }
-    watchlist = {
-        "clean_energy": [{"ticker": "SUZLON", "name": "Suzlon", "growth_pct": "5%"}]
+
+
+def _covered(ticker, upside):
+    return {
+        "ticker": ticker,
+        "name": ticker,
+        "growth_pct": f"{upside}%",
+        "target": "120.00",
+        "analyst_count": 6,
     }
+
+
+def _uncovered(ticker, broken_runs=0):
+    """A holding no analyst covers: its upside is the pipeline's own Graham
+    estimate, clamped at -50%."""
+    stock = {
+        "ticker": ticker,
+        "name": ticker,
+        "growth_pct": "-50.0%",
+        "target": "50.00",
+        "estimate_method": "Fundamental Estimate",
+    }
+    if broken_runs:
+        stock["thesis_broken_runs"] = broken_runs
+    return stock
+
+
+def _rotate(holdings, probe, registered=None):
+    """Run one candidate through the rotation: (held tickers, its radar row,
+    decisions)."""
+    import analysis.rotation as rot
+
+    watchlist = {"clean_energy": holdings}
     screened = {
-        "clean_energy": [{"name": label, "ticker": ticker, "growth_pct": "50%"}]
+        "clean_energy": [
+            {"name": probe["full_name"], "ticker": probe["ticker"], "growth_pct": "50%"}
+        ]
     }
     with patch.object(
         rot, "_probe_candidate", lambda *a, **k: dict(probe)
     ), patch.object(rot, "save_watchlist", lambda *a, **k: None), patch.object(
-        rot, "load_registered_names", lambda: registered
+        rot, "load_registered_names", lambda: registered or {}
     ):
-        rot.auto_curate_watchlist({}, watchlist, screened_candidates=screened)
-    return {s["ticker"]: s["name"] for s in watchlist["clean_energy"]}.get(ticker)
+        radar, decisions = rot.auto_curate_watchlist(
+            {}, watchlist, screened_candidates=screened
+        )
+    row = next(r for r in radar["clean_energy"] if r["ticker"] == probe["ticker"])
+    return [s["ticker"] for s in watchlist["clean_energy"]], row, decisions
 
 
 def test_a_screened_peer_is_admitted_under_its_registered_name():
@@ -342,6 +377,98 @@ def test_a_screened_peer_is_admitted_under_its_registered_name():
     rotation admitted peers under the label: NTPC Green Energy joined the
     watchlist as "NTPC Green Ene." and matched no headline by name."""
     registered = {"NTPCGREEN": "NTPC Green Energy Limited"}
-    assert _admit("NTPC Green Ene.", "NTPCGREEN", registered) == "NTPC Green Energy"
+    _, _, decisions = _rotate(
+        [_covered("SUZLON", 5)],
+        _candidate("NTPCGREEN", label="NTPC Green Ene."),
+        registered,
+    )
+    assert decisions[0]["stock"]["name"] == "NTPC Green Energy"
     # Without a registered name the label stands, less any legal suffix.
-    assert _admit("Some Peer Ltd", "SOMEPEER", {}) == "Some Peer"
+    _, _, decisions = _rotate(
+        [_covered("SUZLON", 5)], _candidate("SOMEPEER", label="Some Peer Ltd")
+    )
+    assert decisions[0]["stock"]["name"] == "Some Peer"
+
+
+def test_a_candidate_no_analyst_covers_is_given_no_target(monkeypatch):
+    """It was given price x 1.25, a made-up 25% upside that passed the
+    potential check by construction. 31 of the first 64 decisions came in
+    on it."""
+    import analysis.rotation as rot
+
+    class Hist:
+        empty = False
+
+        def __getitem__(self, key):
+            class Close:
+                iloc = [100.0]
+
+            return Close()
+
+    class Ticker:
+        def __init__(self, info):
+            self.info = info
+
+        def history(self, **kwargs):
+            return Hist()
+
+    monkeypatch.setattr(rot, "_screener_qoq_growth", lambda session, t: 25.0)
+    for info, target, upside in (
+        ({"recommendationKey": "buy"}, None, None),
+        # A target with no analysts behind it is not a consensus either.
+        ({"targetMeanPrice": 140.0}, None, None),
+        # The median, as for a holding (providers/yahoo.py).
+        (
+            {
+                "targetMedianPrice": 130.0,
+                "targetMeanPrice": 140.0,
+                "numberOfAnalystOpinions": 6,
+            },
+            130.0,
+            30.0,
+        ),
+    ):
+        monkeypatch.setattr(rot, "get_cached_ticker", lambda s, i=info: Ticker(i))
+        probe = rot._probe_candidate("Peer", "PEER", {})
+        assert (probe["target_price"], probe["growth_pct_val"]) == (target, upside)
+
+
+def test_without_a_target_it_fills_an_empty_slot_but_replaces_no_holding():
+    held, row, decisions = _rotate(
+        [_covered(t, 5) for t in ("A", "B", "C", "D")], _candidate("NEW", None)
+    )
+    assert "NEW" in held
+    # Its own estimate is written later in the run, marked as such.
+    assert "target" not in decisions[0]["stock"]
+    assert "growth_pct" not in decisions[0]["stock"]
+
+    held, row, decisions = _rotate(
+        [_covered(t, 5) for t in ("A", "B", "C", "D", "E")], _candidate("NEW", None)
+    )
+    assert "NEW" not in held and decisions == []
+    assert row["status"] == "Pipeline"
+    assert "no analyst target" in row["reason"]
+
+
+def test_upside_is_compared_only_between_analysts_targets():
+    """The holding at -50% is the pipeline's own estimate, not a target."""
+    holdings = [_covered(t, u) for t, u in (("A", 10), ("B", 20), ("C", 30), ("D", 40))]
+    holdings.append(_uncovered("OWN"))
+    held, row, _ = _rotate(holdings, _candidate("NEW", 125.0))
+    assert "NEW" in held and "OWN" in held and "A" not in held
+
+
+def test_an_uncovered_holding_goes_only_after_its_thesis_stays_broken():
+    holdings = [_covered(t, 40) for t in ("A", "B", "C", "D")]
+    # Broken four runs running: still kept, and the candidate's 25% does not
+    # beat the covered 40%.
+    held, row, _ = _rotate(holdings + [_uncovered("OWN", 4)], _candidate("NEW", 125.0))
+    assert "OWN" in held and "NEW" not in held
+
+    for target in (125.0, None):
+        holdings = [_covered(t, 40) for t in ("A", "B", "C", "D")]
+        held, row, _ = _rotate(
+            holdings + [_uncovered("OWN", 5)], _candidate("NEW", target)
+        )
+        assert "OWN" not in held and "NEW" in held
+        assert row["reason"] == "Rotated into watchlist replacing OWN."

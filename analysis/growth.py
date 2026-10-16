@@ -117,13 +117,23 @@ def update_single_stock(stock, prefetched_prices=None, prefetched_liquidity=None
 
 
 def _calculate_growth_pct(stock, live_price, ticker):
+    from providers.yahoo import has_analyst_consensus
+
     target_price = to_float(stock.get("target")) or 0.0
     if target_price > 0 and live_price > 0:
         growth_val = ((target_price - live_price) / live_price) * 100
         sign = "+" if growth_val > 0 else ""
         stock["growth_pct"] = f"{sign}{growth_val:.1f}%"
+        # Without analysts the target is the last run's own estimate, which
+        # dashboard/builder.py recomputes later this run, not a target.
+        source = (
+            "analyst consensus"
+            if has_analyst_consensus(stock)
+            else "last run's own estimate"
+        )
         log.info(
-            f"Updated {ticker}: Price={live_price:.2f}, Target={target_price:.2f} ({sign}{growth_val:.1f}%)"
+            f"Updated {ticker}: Price={live_price:.2f}, Target={target_price:.2f} "
+            f"({sign}{growth_val:.1f}%, {source})"
         )
 
 

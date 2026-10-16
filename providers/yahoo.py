@@ -94,6 +94,22 @@ def _parse_targets(data, info):
         data["target_low"] = f"{float(low_target):.2f}"
 
 
+def consensus_target(info):
+    """The analysts' price target, by the rule holdings use (the median, else
+    the mean), or None where no analyst covers the stock."""
+    data = {"analyst_count": None, "target": None}
+    _parse_targets(data, info or {})
+    return float(data["target"]) if data["analyst_count"] and data["target"] else None
+
+
+def has_analyst_consensus(stock):
+    """Whether a holding's target is the analysts', rather than the pipeline's
+    own estimate (dashboard/builder.py) or none at all."""
+    from utils import to_float
+
+    return bool(to_float(stock.get("analyst_count"))) and bool(stock.get("target"))
+
+
 def _parse_recommendations(data, info):
     rating = info.get("recommendationKey")
     if rating:

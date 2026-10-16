@@ -20,9 +20,6 @@ _FUNDAMENTAL_UPSIDE_FLOOR = -50.0
 _FUNDAMENTAL_UPSIDE_CAP = 60.0
 
 
-from utils import to_float as _to_float  # noqa: E402  canonical shared coercion
-
-
 def _apply_potential_estimate(stock, price, graham_value):
     """Tag each stock's upside with how it was derived and refresh stale targets.
 
@@ -31,9 +28,9 @@ def _apply_potential_estimate(stock, price, graham_value):
     of a frozen, manually-seeded target — and are clearly labelled as such so the
     two are never conflated.
     """
-    has_analyst_coverage = bool(_to_float(stock.get("analyst_count"))) and bool(
-        stock.get("target")
-    )
+    from providers.yahoo import has_analyst_consensus
+
+    has_analyst_coverage = has_analyst_consensus(stock)
 
     # Expose the raw intrinsic value, and clear it when the model declines to
     # produce one. Setting without clearing let a stale value outlive the
