@@ -174,6 +174,32 @@ def compute_thesis_health(watchlist, warnings, revisions=None):
     return results
 
 
+def record_broken_runs(watchlist, health):
+    """Count, on each holding, the runs in a row its thesis has been Broken
+    (``thesis_broken_runs``); any other grade, or none, resets it.
+
+    A grade is re-read from scratch every run, and one bad quarter breaks a
+    thesis, so a single Broken is not grounds to drop anything. The rotation
+    lets a holding no analyst covers go only after HUGE_UPSET_RUNS of them
+    (analysis/rotation.py). Returns the tickers Broken this run, with counts.
+    """
+    broken = {}
+    for sector, stocks in (watchlist or {}).items():
+        if sector == "macro_indicators" or not isinstance(stocks, list):
+            continue
+        for stock in stocks:
+            if not isinstance(stock, dict):
+                continue
+            row = (health or {}).get(stock.get("ticker")) or {}
+            if row.get("status") == _BROKEN:
+                runs = int(stock.get("thesis_broken_runs") or 0) + 1
+                stock["thesis_broken_runs"] = runs
+                broken[stock["ticker"]] = runs
+            else:
+                stock.pop("thesis_broken_runs", None)
+    return broken
+
+
 def thesis_health_sorted(health_map):
     """Broken first, then Weakening, then Intact — the reading order for a briefing."""
     return sorted(health_map.values(), key=lambda r: (_ORDER[r["status"]], r["ticker"]))

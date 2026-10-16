@@ -12,7 +12,11 @@ from analysis.revisions import (  # noqa: E402
     snapshot_prior_estimates,
     compute_revision_momentum,
 )
-from analysis.thesis import compute_thesis_health, thesis_health_sorted  # noqa: E402
+from analysis.thesis import (  # noqa: E402
+    compute_thesis_health,
+    record_broken_runs,
+    thesis_health_sorted,
+)
 from analysis.variant_perception import compute_variant_perception  # noqa: E402
 from analysis.curve_stage import classify_sector_curve_stage  # noqa: E402
 from analysis import postmortem  # noqa: E402
@@ -170,6 +174,25 @@ def test_thesis_negative_revision_pushes_weakening_to_broken():
 def test_thesis_macro_indicators_skipped():
     wl = {"macro_indicators": [{"ticker": "ETF", "name": "ETF"}]}
     assert compute_thesis_health(wl, []) == {}
+
+
+def test_broken_runs_are_counted_on_the_holding_and_reset_by_any_other_grade():
+    """The rotation lets a holding no analyst covers go only after its thesis
+    stays Broken (analysis/rotation.HUGE_UPSET_RUNS); one bad quarter is not
+    enough."""
+    wl = {
+        "sec": [{"ticker": "AAA"}, {"ticker": "BBB"}],
+        "macro_indicators": [{"ticker": "NIFTY"}],
+    }
+    broken = {"AAA": {"status": "Broken"}, "BBB": {"status": "Broken"}}
+    assert record_broken_runs(wl, broken) == {"AAA": 1, "BBB": 1}
+    assert record_broken_runs(wl, broken) == {"AAA": 2, "BBB": 2}
+    assert wl["sec"][0]["thesis_broken_runs"] == 2
+    # Weakening, or no grade at all, starts the count again.
+    assert record_broken_runs(wl, {"AAA": {"status": "Weakening"}}) == {}
+    assert "thesis_broken_runs" not in wl["sec"][0]
+    assert "thesis_broken_runs" not in wl["sec"][1]
+    assert "thesis_broken_runs" not in wl["macro_indicators"][0]
 
 
 def test_thesis_health_sorted_broken_first():
@@ -457,6 +480,25 @@ def test_score_pending_decision_untracked_when_ticker_left_watchlist():
     assert ledger[0]["scored"] is True
     assert ledger[0]["outcome"] == "Left Watchlist (unscored)"
     assert ledger[0]["realized_return_pct"] is None
+
+
+def test_a_decision_without_an_analyst_target_is_kept_and_never_judged():
+    """Admitted with no analyst target, a holding has no anticipated return
+    to judge the realised one against. It used to carry price x 1.25."""
+    ledger = []
+    postmortem.log_decision(
+        ledger,
+        "added",
+        "sec",
+        {"ticker": "OWN", "name": "Own", "price": "100.00"},
+        today=datetime.date(2026, 1, 1),
+    )
+    assert ledger[0]["target_at_decision"] is None
+    wl = {"sec": [{"ticker": "OWN", "price": "140.00"}]}
+    postmortem.score_pending_decisions(ledger, wl, today=datetime.date(2026, 3, 1))
+    assert ledger[0]["outcome"] == "No Analyst Target (unscored)"
+    assert ledger[0]["realized_return_pct"] == 40.0
+    assert postmortem.compute_hit_rate(ledger)["total_scored"] == 0
 
 
 def test_compute_hit_rate_only_counts_judged_entries():

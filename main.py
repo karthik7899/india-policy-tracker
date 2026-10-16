@@ -590,6 +590,27 @@ async def run_pipeline():
     data["thesis_health"] = compute_thesis_health(
         watchlist, data["early_warnings"], data["estimate_revisions"]
     )
+    # Kept on each holding across runs: a holding no analyst covers is
+    # replaced only after its thesis stays Broken (analysis/rotation.py).
+    from analysis.rotation import HUGE_UPSET_RUNS
+    from analysis.thesis import record_broken_runs
+    from providers.yahoo import has_analyst_consensus
+
+    broken_runs = record_broken_runs(watchlist, data["thesis_health"])
+    uncovered = {
+        s["ticker"]
+        for sec, stocks in watchlist.items()
+        if sec != "macro_indicators" and isinstance(stocks, list)
+        for s in stocks
+        if isinstance(s, dict) and s.get("ticker") and not has_analyst_consensus(s)
+    }
+    watched = {t: n for t, n in broken_runs.items() if t in uncovered}
+    if watched:
+        log.info(
+            f"Thesis: Broken on consecutive runs, for holdings no analyst covers "
+            f"(replaceable at {HUGE_UPSET_RUNS}): "
+            + ", ".join(f"{t} {n}" for t, n in sorted(watched.items()))
+        )
 
     # Thesis check: does any headline about a holding contradict the words of
     # its thesis? An LLM reading, shown beside the health status as a prompt

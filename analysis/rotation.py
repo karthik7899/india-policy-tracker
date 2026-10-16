@@ -5,7 +5,7 @@ from logger import log
 from config import save_watchlist
 from entities import build_entity_master, resolve_entity_by_isin
 from providers.isin_master import load_isin_master, load_registered_names
-from providers.yahoo import get_cached_ticker
+from providers.yahoo import consensus_target, get_cached_ticker, has_analyst_consensus
 from utils import thread_local_session, to_float
 from .company_names import tidy_name
 from .parsing import resolve_ticker_from_name
@@ -205,11 +205,11 @@ def _probe_candidate(name, preresolved, isin_master, watchlisted=()):
         live_price = float(hist["Close"].iloc[-1])
         info = ticker_obj.info or {}
 
-        consensus_target = info.get("targetMeanPrice")
-        if consensus_target and float(consensus_target) > 0:
-            target_price = float(consensus_target)
-        else:
-            target_price = live_price * 1.25
+        # The analysts' target, read as a holding's is, or none. A candidate
+        # no analyst covers used to be given price x 1.25: a made-up 25% that
+        # passed the potential check by construction and outbid every holding
+        # below it. 31 of the ledger's first 64 decisions came in that way.
+        target_price = consensus_target(info)
 
         rev_growth_raw = info.get("revenueGrowth")
         from analysis.sector_fit import keywords
@@ -222,7 +222,11 @@ def _probe_candidate(name, preresolved, isin_master, watchlisted=()):
                 "keywords": keywords(info.get("longBusinessSummary")),
                 "live_price": live_price,
                 "target_price": target_price,
-                "growth_pct_val": ((target_price - live_price) / live_price) * 100,
+                "growth_pct_val": (
+                    (target_price - live_price) / live_price * 100
+                    if target_price
+                    else None
+                ),
                 "rating": info.get("recommendationKey", "N/A")
                 .replace("_", " ")
                 .title(),
@@ -250,6 +254,44 @@ def _get_potential(stock):
     # equally weakest.
     value = to_float(stock.get("growth_pct"))
     return 0.0 if value is None else value
+
+
+# A holding no analyst covers has no upside to compare: its growth_pct is the
+# pipeline's own Graham estimate, clamped at -50%, which made it every
+# sector's weakest pick. Optiemus and Birla Cable replaced each other 23
+# times in a month that way. Such a holding goes only on a huge upset: its
+# thesis Broken (analysis/thesis.py) on this many runs in a row.
+HUGE_UPSET_RUNS = 5
+
+
+def _broken_runs(stock):
+    return int(to_float(stock.get("thesis_broken_runs")) or 0)
+
+
+def _replaceable(holdings, candidate_upside):
+    """``(holding, why)``: the holding a candidate may replace, or None and
+    why not. Upside is compared only between analysts' targets."""
+    upset = [
+        s
+        for s in holdings
+        if not has_analyst_consensus(s) and _broken_runs(s) >= HUGE_UPSET_RUNS
+    ]
+    if upset:
+        worst = max(upset, key=_broken_runs)
+        return worst, f"its thesis has been Broken for {_broken_runs(worst)} runs"
+    if candidate_upside is None:
+        return None, "no analyst target, so no upside to set against a holding's"
+    covered = [s for s in holdings if has_analyst_consensus(s)]
+    if not covered:
+        return None, "no holding here has an analyst target to compare with"
+    weakest = min(covered, key=_get_potential)
+    potential = _get_potential(weakest)
+    if candidate_upside > potential:
+        return weakest, f"upside {candidate_upside:.1f}% against {potential:.1f}%"
+    return None, (
+        f"upside {candidate_upside:.1f}% did not beat the weakest covered pick "
+        f"{weakest['ticker']} ({potential:.1f}%)"
+    )
 
 
 def auto_curate_watchlist(brief_data, watchlist, screened_candidates=None):
@@ -462,8 +504,10 @@ def auto_curate_watchlist(brief_data, watchlist, screened_candidates=None):
                     )
                     continue
 
-                # Eligibility check:
-                is_eligible = growth_pct_val > 0
+                # Eligibility check. Target potential is judged only where
+                # analysts set a target; without one, the growth tests decide.
+                negative_potential = growth_pct_val is not None and growth_pct_val <= 0
+                is_eligible = not negative_potential
                 if rev_growth_raw is not None and rev_growth_raw < 0:
                     is_eligible = False
                 if candidate_qoq_growth < 15.0:
@@ -475,7 +519,7 @@ def auto_curate_watchlist(brief_data, watchlist, screened_candidates=None):
                     )
                     reason_str = (
                         "Negative target potential"
-                        if growth_pct_val <= 0
+                        if negative_potential
                         else (
                             f"Failed growth criteria (YoY revenue {revenue_growth})"
                             if rev_growth_raw is not None and rev_growth_raw < 0
@@ -532,8 +576,17 @@ def auto_curate_watchlist(brief_data, watchlist, screened_candidates=None):
                     "ticker": ticker,
                     "name": full_name,
                     "price": f"{live_price:.2f}",
-                    "target": f"{target_price:.2f}",
-                    "growth_pct": f"{growth_pct_val:.1f}%",
+                    # Only the analysts' target. Without one the holding
+                    # takes the pipeline's own estimate later in the run
+                    # (dashboard/builder.py), marked as such.
+                    **(
+                        {
+                            "target": f"{target_price:.2f}",
+                            "growth_pct": f"{growth_pct_val:.1f}%",
+                        }
+                        if target_price
+                        else {}
+                    ),
                     "catalyst": f"Auto-discovered via media radar. Catalyst: {related_headline}",
                     "rating": rating,
                     "revenue_growth": revenue_growth,
@@ -575,11 +628,9 @@ def auto_curate_watchlist(brief_data, watchlist, screened_candidates=None):
                         }
                     )
                 else:
-                    sorted_watchlist = sorted(current_watchlist, key=_get_potential)
-                    weakest_stock = sorted_watchlist[0]
-                    weakest_potential = _get_potential(weakest_stock)
+                    weakest_stock, why = _replaceable(current_watchlist, growth_pct_val)
 
-                    if growth_pct_val > weakest_potential:
+                    if weakest_stock is not None:
                         watchlist[sector] = [
                             x
                             for x in current_watchlist
@@ -590,7 +641,8 @@ def auto_curate_watchlist(brief_data, watchlist, screened_candidates=None):
                         watchlisted_tickers.add(ticker)
                         intake += 1
                         log.info(
-                            f"ROTATED: Replaced {weakest_stock['ticker']} with {ticker}"
+                            f"ROTATED: Replaced {weakest_stock['ticker']} with "
+                            f"{ticker}: {why}."
                         )
                         rotations_log.append(
                             f"Rotated {weakest_stock['name']} out for {full_name} in {sector}"
@@ -613,14 +665,14 @@ def auto_curate_watchlist(brief_data, watchlist, screened_candidates=None):
                         )
                     else:
                         log.info(
-                            f"Candidate {ticker} (Upside: {growth_pct_val:.1f}%) did not outperform the weakest watchlist pick {weakest_stock['ticker']} (Upside: {weakest_potential:.1f}%). Skipping rotation."
+                            f"Candidate {ticker} not rotated in: {why}. Skipping rotation."
                         )
                         structured_emerging.setdefault(sector, []).append(
                             {
                                 "name": full_name,
                                 "ticker": ticker,
                                 "status": "Pipeline",
-                                "reason": f"Pipeline candidate (Upside {growth_pct_val:.1f}% vs weakest watchlisted {weakest_potential:.1f}%).",
+                                "reason": f"Pipeline candidate: {why}.",
                                 "qoq_growth": round(candidate_qoq_growth, 1),
                             }
                         )

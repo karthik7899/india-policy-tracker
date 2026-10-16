@@ -27,6 +27,9 @@ MIN_AGE_DAYS = 45
 _PLAYING_OUT = "Thesis Playing Out"
 _UNDERPERFORMING = "Underperforming"
 _UNTRACKED = "Left Watchlist (unscored)"
+# Admitted with no analyst target: there is no anticipated return to judge
+# the realised one against, so it stays out of the hit rate.
+_NO_TARGET = "No Analyst Target (unscored)"
 
 
 def load_ledger(path=LEDGER_PATH):
@@ -56,14 +59,19 @@ def log_decision(ledger, action, sector, stock, today=None):
     """Appends a new decision entry. ``action`` is 'added' or 'rotated_in'.
 
     ``stock`` is the candidate dict as constructed in rotation.py, expected
-    to carry ticker/name/price/target. Silently skips if price/target are
-    missing or unparseable — nothing useful to score later.
+    to carry ticker/name/price and, where analysts cover it, a target.
+    Skipped only without a price: a holding admitted with no analyst target
+    is still a decision, recorded with no target and never judged against
+    one (_NO_TARGET).
     """
     try:
         price = float(stock.get("price"))
-        target = float(stock.get("target"))
     except (TypeError, ValueError):
         return ledger
+    try:
+        target = float(stock.get("target"))
+    except (TypeError, ValueError):
+        target = None
 
     date_str = (today or datetime.date.today()).isoformat()
     ledger.append(
@@ -118,17 +126,21 @@ def score_pending_decisions(ledger, watchlist, min_age_days=MIN_AGE_DAYS, today=
             continue
 
         price_at = entry["price_at_decision"]
-        target_at = entry["target_at_decision"]
+        target_at = entry.get("target_at_decision")
         realized_pct = (
             round((current_price - price_at) / price_at * 100, 1) if price_at else None
         )
         anticipated_pct = (
-            round((target_at - price_at) / price_at * 100, 1) if price_at else None
+            round((target_at - price_at) / price_at * 100, 1)
+            if price_at and target_at is not None
+            else None
         )
 
         entry["scored"] = True
         entry["realized_return_pct"] = realized_pct
-        if (
+        if target_at is None:
+            entry["outcome"] = _NO_TARGET
+        elif (
             realized_pct is not None
             and anticipated_pct is not None
             and anticipated_pct > 0
