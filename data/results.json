@@ -1,11 +1,48 @@
 {
   "value": {
-    "as_of": "2026-10-15",
+    "as_of": "2026-10-16",
     "tracking_since": "2026-10-10",
     "reported_today": [
-      "BHEL"
+      "METROBRAND",
+      "PERSISTENT"
     ],
     "scorecards": [
+      {
+        "ticker": "PERSISTENT",
+        "name": "Persistent Systems",
+        "sector": "midcap_it",
+        "detected": "2026-10-16",
+        "quarter": "Sep 2026",
+        "quarters": 8,
+        "sales_cr": 4664.0,
+        "sales_qoq_pct": 8.4,
+        "sales_rank": 1,
+        "sales_yoy_pct": 30.2,
+        "eps": 22.28,
+        "eps_yoy_pct": -26.1,
+        "opm_pct": 14.0,
+        "opm_change_pp": -2.0,
+        "net_profit_cr": 352.0,
+        "summary": "Sales ₹4,664 Cr, +30.2% on a year ago (+8.4% on the quarter before), the highest of 8 quarters; EPS 22.28, -26.1% on a year ago; operating margin 14%, -2.0 pts on the quarter before."
+      },
+      {
+        "ticker": "METROBRAND",
+        "name": "Metro Brands",
+        "sector": "sports_athleisure",
+        "detected": "2026-10-16",
+        "quarter": "Sep 2026",
+        "quarters": 8,
+        "sales_cr": 730.0,
+        "sales_qoq_pct": 1.4,
+        "sales_rank": 3,
+        "sales_yoy_pct": 12.1,
+        "eps": 2.78,
+        "eps_yoy_pct": 11.6,
+        "opm_pct": 27.0,
+        "opm_change_pp": -3.0,
+        "net_profit_cr": 77.0,
+        "summary": "Sales ₹730 Cr, +12.1% on a year ago (+1.4% on the quarter before); EPS 2.78, +11.6% on a year ago; operating margin 27%, -3.0 pts on the quarter before."
+      },
       {
         "ticker": "BHEL",
         "name": "Bharat Heavy Electricals",

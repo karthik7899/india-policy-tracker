@@ -3,26 +3,15 @@
     {
       "id": "sports_athleisure",
       "name": "Sports & Athleisure",
-      "stance_line": "3 new, 2 escalated",
-      "median_pe": 45.8,
+      "stance_line": "5 new, 0 escalated",
+      "median_pe": 52.1,
       "vs_peers_pct": null,
       "counts": {
-        "new": 3,
-        "escalated": 2
+        "new": 5,
+        "escalated": 0
       },
-      "delta": 11,
+      "delta": 12,
       "news": [
-        {
-          "date": "12 Oct 2026",
-          "headline": "BRICS Traditional and Indigenous Demonstration Games 2026 Celebrate Sporting Heritage and Cultural Diversity in Ahmedabad",
-          "url": "https://news.google.com/rss/articles/CBMifkFVX3lxTE05WjQyeVpsUDBqYUFSU3NCNkN3SGd2bGdELUszanFjdnRYVGw0UHdPeHVEM2xlSDJMaWk2d19EY3pEa0VtWkdJcGtMVmo2N3BEbjIyUmdPOEhhRHBWa01WeGRkc0tlTXNpaEpHSHN2bVZZYlQ0US1DRGNkQWoyQQ?oc=5",
-          "source": "www.pib.gov.in",
-          "tags": [
-            "other"
-          ],
-          "confidence": "M",
-          "affected_tickers": []
-        },
         {
           "date": "12 Oct 2026",
           "headline": "Retail stocks to buy before Q2 results: Metro Brands, Campus Activewear, Vishal Mega Mart shares — Elara recommends",
@@ -33,19 +22,7 @@
           ],
           "confidence": "M",
           "affected_tickers": [
-            "CAMPUS"
-          ]
-        },
-        {
-          "date": "12 Oct 2026",
-          "headline": "Retail Stocks Before Q2: Metro Brands, Campus, Vishal Mega Mart",
-          "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxQR0pWdmhfLVNUNGxGLVVlNkRPT3VPbzB2LXdYNmdPZWdqWnd0U1NsU0lUblRwOVRIUjZCNVByNFNLVm9FYjhLd0w2NEMzSDZZc3hNbmNVRTFKRGIwVWJ2cjRvT3JTUkZGVmxGSm56N01MbDNuR09HZVQtQTJySFBRUkdyQjJCN3BJMlFsRjBpMmZ3U1JvbTBhMkFITHZtdFVWdVh2X2s0QjFJTGV0Y3JGN0twUjk2QTl2djdseTgyT1Q5ckJVeUdiZzFrbnN1X1NuS09wZHd3?oc=5",
-          "source": "Univest",
-          "tags": [
-            "other"
-          ],
-          "confidence": "M",
-          "affected_tickers": [
+            "METROBRAND",
             "CAMPUS"
           ]
         },
@@ -53,22 +30,46 @@
           "date": "13 Oct 2026",
           "headline": "NSDF, SAI Partner with Indian Oil to Strengthen Boxing Ecosystem in India",
           "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE4wMVI5d3FycEstSUlRcUhUVFhtSEZqVEtyeHRiWHJINHFORzY5N1h5MWtiM3BZb3dxLVFNRnYyQ0l6UkN2Q0EzUnJJTzFNMFQyaW9wY21iREVWRXdtMURmMHFvTTNCU2pB?oc=5",
-          "source": "www.pib.gov.in",
+          "source": "Press Information Bureau",
           "tags": [
             "other"
           ],
           "confidence": "M",
           "affected_tickers": []
+        },
+        {
+          "date": "15 Oct 2026",
+          "headline": "Prime Minister Shri Narendra Modi interacts with the contingent of Indian athletes who participated in Asian Games 2026",
+          "url": "https://news.google.com/rss/articles/CBMifEFVX3lxTFBwd2ZPS2FucG52OHkyM1dNdXRxRk1fODljZS1XSUZpNXFmMVcxUW94VVZBZFJXdGVxcm5MU0Q4OEZDOXllM29la25xVzgxX3VvYjM3bjBXeWpYQmFKM3ZzOXB4SDh6NnFEazdrTDRXWVBYSVYzNlBuNHdFQVI?oc=5",
+          "source": "Press Information Bureau",
+          "tags": [
+            "other"
+          ],
+          "confidence": "M",
+          "affected_tickers": []
+        },
+        {
+          "date": "15 Oct 2026",
+          "headline": "Campus Activewear (NSE:CAMPUS): What Does Its Q2 FY27 Reg 74(5) Certificate Mean?",
+          "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxQeUpaRTJIUXZFVFVqVjhYZTJMZE9CWDJSNzktVE93eklZa2diUVh4ZDlMMWNJcTBuWGRzN2N5RjBoa0RNaEZhbkhEaExFZlZSdFZMMFR0S0dCeGQ0RW8xYTNQTFd6ZFg0OVZ6UFIwOWZMaHA0YWE3NHVBQ1FYa2VoNEtJZGZwdHY0MVVGYlE1czFOMDFXVUFGdjVmVmNKNzhTVEdYZU4zeVVEaUpLRVJQWl9xSGR2WjVlVy1XYW5DVQ?oc=5",
+          "source": "Kalkine India",
+          "tags": [
+            "other"
+          ],
+          "confidence": "M",
+          "affected_tickers": [
+            "CAMPUS"
+          ]
         }
       ],
       "focus_stocks": [
         {
           "ticker": "RELAXO",
-          "score": 3,
+          "score": -4,
           "severity_weight": 3,
           "primary_signal": "Revenue Contraction",
           "coverage_count": 20,
-          "pe_vs_peers": "14% below peers",
+          "pe_vs_peers": "23% below peers",
           "deep_link": "#stock/RELAXO/snapshot"
         },
         {
@@ -77,86 +78,84 @@
           "severity_weight": 3,
           "primary_signal": "Revenue Contraction",
           "coverage_count": 5,
-          "pe_vs_peers": "In line with peers",
+          "pe_vs_peers": "12% below peers",
           "deep_link": "#stock/CAMPUS/snapshot"
         },
         {
           "ticker": "METROBRAND",
-          "score": 5,
+          "score": 1,
           "severity_weight": 3,
-          "primary_signal": "Revenue Contraction",
-          "coverage_count": 0,
-          "pe_vs_peers": "31% above peers",
+          "primary_signal": "Margin Compression",
+          "coverage_count": 4,
+          "pe_vs_peers": "12% above peers",
           "deep_link": "#stock/METROBRAND/snapshot"
         }
       ],
       "threats": [
         {
-          "name": "Redtape",
-          "detail": "+3.6% revenue growth"
+          "name": "Bata India",
+          "detail": "+3.9% revenue growth"
         },
         {
-          "name": "Sreeleathers",
-          "detail": "+19.7% revenue growth"
+          "name": "Redtape",
+          "detail": "+3.6% revenue growth"
         }
       ],
       "suppressed": []
     },
     {
-      "id": "data_center_support",
-      "name": "Data Center Support",
-      "stance_line": "3 new, 1 escalated",
-      "median_pe": 33.8,
+      "id": "banking_financials",
+      "name": "Banking & Financials",
+      "stance_line": "3 new, 0 escalated",
+      "median_pe": 14.2,
       "vs_peers_pct": null,
       "counts": {
         "new": 3,
-        "escalated": 1
+        "escalated": 0
       },
-      "delta": 10,
+      "delta": 6,
       "news": [
         {
-          "date": "12 Oct 2026",
-          "headline": "The overlooked impact of India's new data center policy",
-          "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxNMjJib3VzSDNFemdKRTB2RTRwTGE4aUJCR3dzV0hZaW9oVWxTcExVMHdBeHVjUmFrLUIxbzZCeTFLeHE5YmZ5YjVQd1lFeVFBS0tuU3RFVEFlelVKd0dQczhDQlZrWTk3VmlqandGSURuZFRBcGV5V2JwS3BiVEdWcHZ5eWZlSTliMHRxVFdmWGt2YmY5VTQyYXFEb0FiNXBRc1JnbA?oc=5",
-          "source": "Data Center Dynamics",
-          "tags": [
-            "policy"
-          ],
-          "confidence": "M",
-          "policy": {
-            "measure": "regulation",
-            "status": "in_force",
-            "direction": "tailwind"
-          },
-          "affected_tickers": []
-        },
-        {
-          "date": "12 Oct 2026",
-          "headline": "Agreement Signed between DBN (Digital Bharat Nidhi)",
-          "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxQbl8tNmpJZm1EejA3dUFPX2xzZUpQMGJYckpLbldWZ2VVcWdEVlFfNEJTc3NTMnAyVkZDajd6N2w3cHJiR1lwSlU2SU5uUnlVTGFlUEkxOXAtRlh3dHNaV19qLXVMLVNxZ01INXBld0RaS1dvNW9hcXhzd0hzSVRQZElVOA?oc=5",
+          "date": "14 Oct 2026",
+          "headline": "Frequently Asked Questions (FAQs) on Strategic Restructuring of IDBI Bank Ltd.",
+          "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTFBnazZRcXIzQzhfZUdqTkpMTy1hd0FaOXc3LWU1dThIMDR4NTFDYW1uaWgtT21LYUc5MVRzcmR1Nm5CZlpSaW82c0JjXy1DcFppdWVudU1YNk4zQUUxQWFiZVl4YXdsU05uQ0ZuUlBDNmlwWHpmUW5fUHZB?oc=5",
           "source": "Press Information Bureau",
           "tags": [
-            "tie_up"
+            "other"
           ],
           "confidence": "M",
           "affected_tickers": []
         },
         {
-          "date": "13 Oct 2026",
-          "headline": "Anant Raj Cloud, Orange Business Sign Haryana MoU for Global Data",
-          "url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxPWlVERzd1Q1d6aDNmMVNxU1hodGF4SUh5NUVDZTUyUDRubDFfSjBoT0dUU0tYb3pwaHNMdmVGM0o0RmxLVGVsU3lEZjZNbDJJTE03a2NTb1poMTU2NTM5UDRSNE1ibXNYVm1EaVpoaDhCNmpvV2Y0RmhyWFpKMWpjbjdleW5yeTIxTnc1YVd0eEd1ZmFsNjVEY2k0Y1gxQkUxNXZZd2s2dzZCTDdaRk1Dc1l2VU54dk1OT0J2dmhkUkYyYmFmVVVpVDJPdDdqRTVDbkE?oc=5",
-          "source": "Construction World India",
+          "date": "15 Oct 2026",
+          "headline": "Bank credit rises 19.4% in September; RBI rate hike may slow growth in H2",
+          "url": "https://news.google.com/rss/articles/CBMi2gFBVV95cUxQNl9tYTNWdmdyVk1GLW5rSUdMaHpLQjdOdXBtbzFOVnppU3VfUE5yWXlLcVFWVkcta3hkQktyVFFMUy1qREYzTm51aFdRTFJYSWFjZ1lWVFptU012UkgxbG51cVREMFhTTjNNOGx4bmlobzhsVExhY1FfMUl2dklzZE1wM092TmU5czVlakdsOEgyQTktamJmaFJfT1loeDI3MHpobXRZNnBMR1plTGk2Sm9mZVp5ZHZWaHJIWUp4X29pLVY0N3FDZU93dnIxVDk1YUxKUHpacElZQdIB3wFBVV95cUxOcDFiRlM0UHVtYjNIbGp2aW9ZU3FrbjBjU1ZVOE5ESmtLWWJsMXlWbjhKSm9UeW42eThvU01EY0hnalB1T01iU2FkSzhwWEdOcV96YjZIamN2WU5sek1BQnk0MV9Sb2VLNmxZRlJLYTA0YXZIczFfYlhXWGxvbzNpY3JqWDdVU01sWDZ2Z0VkazdXS2xvOFpnaVBFbkhLTVlGR3BsMTZtZ2xpanVhdTJkZGVzb0xvY2lNbFZhNVlwNWZzTWNSbURPa2xnMlB6eHVVZUxhSEJlRnFsdi1GT3Uw?oc=5",
+          "source": "Business Standard",
           "tags": [
-            "tie_up"
+            "other"
           ],
           "confidence": "M",
           "affected_tickers": []
         },
         {
-          "date": "13 Oct 2026",
-          "headline": "India’s Data Centre Growth Story: Expansion, Investment & Economic Opportunity",
-          "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxQd0RQZi1kYk92aFBRQXg2RVpZaXZVQ3YxV3ZUUkprczUwcHdzU1dyNnIyeFBrdjdodUxsRjM1V3VZUzlLYUlnT1pOdXlhSVIzeEctVElVN2x6VXUtYXVSbVRUMTM1Mmt6QnVfSXJSZWE5VWxiMUEybzBqYklzMlMycmtkUnY3SHlRUnc?oc=5",
-          "source": "Cushman & Wakefield",
+          "date": "15 Oct 2026",
+          "headline": "ICICI Bank, HDFC Bank, SBI, Axis Bank: Which banking stock to buy ahead of Q2 results",
+          "url": "https://news.google.com/rss/articles/CBMiggJBVV95cUxOdXR5dHMzdWxSTFZsLURrTlVYYUo0UFV4Rk0tWWVQVXJBaUJhWDdlUERvUmRJTy1tRWdPa0o1dVRHWmYtYWJBc0RCb0prZV9iS1plTWZyU1BtVmFCWGN2cHRIQzBkcExBRW1vYmNfRW50a2JSWVY4LUlMYVZrek1kNnUyZW1WTGhNazdpVHY4UmdQcUtjbUdMT2lDTEJtRVRlcmpVYXJWb1pNR2N3SmVzdHRna0p5RXFSN29WUkFtU2o3VkJNNjVGdnROUjVuVWVxSHE1OVZDdUVyNjVKc3piMDVSLVBUcFRzREx0VnBXUEZUYkFLa3Vqa09oYWxVLTVfTXfSAYcCQVVfeXFMTzBGalJmV0N2ZDZnRHNCZW0xdUY3aU9QZm5sWkJfNDNTRS1MZmVwODdyd0dkSHFTcFYtSDA1aFlMZk40Q0RDVVpCTlBVbkdlOVBOcHg0QkJQcVItR2t6eTFRY3hXX0hRenNMZ2g1MzJkV1FtUTJUb1FTSE4xS25yYWd5WnJGWjR4ZzVBX29VdGs2U3hmN1ctcVQ2Ykp1eEhJaTlpQ18yaWkwWTZ3VDBYd0FXOWhNcTFBZmZpWXRTMU11ejdyU0JVR1dyUDhITzB2ek90ZDBVTDRqSlBzVHE5YnZOalRGek5sdjcyRmJNRXNrQURkNjE5bmllVmU3UW9rU3JuU05MNkE?oc=5",
+          "source": "Livemint",
+          "tags": [
+            "other"
+          ],
+          "confidence": "M",
+          "affected_tickers": [
+            "HDFCBANK",
+            "ICICIBANK"
+          ]
+        },
+        {
+          "date": "15 Oct 2026",
+          "headline": "Bank Stocks to Buy Before Q2 Results: Expert Views",
+          "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxQTjkyWm1kN3B5M09FdklxQjlEUHptS1lCVnJ1ck56dVBadVZ4R09rRUJIc0d0cldIZGF2OXdDX3Z4UXV0TVl1aVVxQ2tHckRxemh2NWtmNGJSczdtU0kzTllrelBtc3MySF9mNnItamNKNjh3cXhCeEM3eFRLbE9hdWJnSzJ0UW0wYndzQTE3akpDal9vZERfNFNqeE51TnpmcnpWX0FKLVNXdkJqMy1MSnR4VHQ4ajdKNm5NaXozT0FMVDRNbFE?oc=5",
+          "source": "Univest",
           "tags": [
             "other"
           ],
@@ -166,12 +165,514 @@
       ],
       "focus_stocks": [
         {
-          "ticker": "GODREJPROP",
-          "score": 2,
+          "ticker": "HDFCBANK",
+          "score": 3,
+          "severity_weight": 3,
+          "primary_signal": "FII Selling",
+          "coverage_count": 8,
+          "pe_vs_peers": "In line with peers",
+          "deep_link": "#stock/HDFCBANK/snapshot"
+        },
+        {
+          "ticker": "ICICIBANK",
+          "score": 10,
+          "severity_weight": 2,
+          "primary_signal": "Valuation Stretch",
+          "coverage_count": 11,
+          "pe_vs_peers": "25% above peers",
+          "deep_link": "#stock/ICICIBANK/snapshot"
+        },
+        {
+          "ticker": "SBIN",
+          "score": 14,
+          "severity_weight": 2,
+          "primary_signal": "Competitive Threat",
+          "coverage_count": 4,
+          "pe_vs_peers": "25% below peers",
+          "deep_link": "#stock/SBIN/snapshot"
+        }
+      ],
+      "threats": [
+        {
+          "name": "Kotak Mahindra Bank",
+          "detail": "+6.4% revenue growth"
+        },
+        {
+          "name": "Axis Bank",
+          "detail": "+9.9% revenue growth"
+        }
+      ],
+      "suppressed": []
+    },
+    {
+      "id": "aerospace_defence",
+      "name": "Aerospace & Defence",
+      "stance_line": "1 new, 0 escalated",
+      "median_pe": 45.1,
+      "vs_peers_pct": null,
+      "counts": {
+        "new": 1,
+        "escalated": 0
+      },
+      "delta": 3,
+      "news": [
+        {
+          "date": "14 Oct 2026",
+          "headline": "Bharat Electronics Receives Orders Worth ₹533 Crore Across Defence Systems",
+          "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxPOWZ0ZUE1UHkxVjZUMFFlYVZxdEh5ZEQtV0d6VjRUMnZDVzR6VE9LdGg4WnFiZTBnWTRJbTNWSnkzdUdVYUxWcENRMUFsaTNUWE1pVXdLU2pGUWZmVjBVNEdTZFdHZWd0czN0aHRqeXF5azl0NDNXQ1ZwdndVd21ZdE0wM1BsOFg3MW1wcjRXYjNSNXNrX2ZVcFRINVk1Y00t?oc=5",
+          "source": "Sahi",
+          "tags": [
+            "order_win"
+          ],
+          "confidence": "M",
+          "affected_tickers": [
+            "BEL"
+          ]
+        },
+        {
+          "date": "14 Oct 2026",
+          "headline": "Bharat Electronics Secures Fresh Orders Worth Rs 533 Crore For Drones, Jammers, Avionics And Defence Electronics",
+          "url": "https://news.google.com/rss/articles/CBMi2gFBVV95cUxQT25vXzliTjk5Y2lrSXltdU4ta0RqSnpPTmhSZmZaV29EVFpkSXRHREduTnVfMzBqSk9tSmR1MEt5cXlwbDVkd3J3a0RUYTVvbExWR0hKX05Nc1d2T3BsdElueXc4Nm1pd1dpZmdrRzRwbmRkdGRUN19FNnIxUzdkcDcxZTh3T2ZSWkcxV3VxekRFVTR0WnpNV3FlaHhlNjA3a0U2N2h2OUgtNWt3bHhmcmNfV29XSzdWa2V3Q0NJSUdOYi1aX1ZSOW0welRwVG5ZSm9WNi1wdkItUdIB6gFBVV95cUxNUWFJUGRaMkFLZUJ0LVBndkNvLWZDdHZUd2htWGx1bXhrOXRBR0NDc2p2eVpjZmoxX200YlNEQkhrbjJPR3BPdlRkV3A3TzNCbmdVZGFvcTM0ODRVT0hHcUszd0hMZ1VBc0FRY21XdXNWdEVraXA1Y0RSd1F0c1BtUnpEMnp3RjVrcnAwN1JvQ0poU0w1eDV3Z2NPV1ZvdXJaVFExTDFaZVBYX1l2NWRJMlVpM084cWdKLTRycTRfTTFVVGxTTktQZkp4MmtsTW9laEFMdk03dWt4cC1Ba250SC1NT1U2Z1BxNHc?oc=5",
+          "source": "Swarajya",
+          "tags": [
+            "order_win"
+          ],
+          "confidence": "M",
+          "affected_tickers": [
+            "BEL"
+          ]
+        },
+        {
+          "date": "15 Oct 2026",
+          "headline": "Czech Republic Delegation Meets BEML Leadership to Strengthen Industrial Collaboration",
+          "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE80RVpXNUIyOGFWejVaN0pySG1fbVVLbFo2VjRpTGVYdmIyTHNWclZhbkI1MG1GRFJaM05IRjhta0M1ekI2Vnh1dmVSOGxiOUM5aHhfSXFuMEU1Um9ra1cya0FTT1lxSG5K?oc=5",
+          "source": "Press Information Bureau",
+          "tags": [
+            "other"
+          ],
+          "confidence": "M",
+          "affected_tickers": []
+        },
+        {
+          "date": "15 Oct 2026",
+          "headline": "HDFC Defence Fund increase stake in HAL, Mazagon Dock, Bharat Electronics and 7 others in September",
+          "url": "https://news.google.com/rss/articles/CBMi9gFBVV95cUxPNHBxU0Q1ZllDNU95QXJoQ0ZOcmlhVW04UTNmanBqRjRWMHJVdW9EUi1IVjljdEdGdXJPS1ZBTmljeGFKdnFJS1kxZ3R2ZlZ6dEl3VlY3ekZ4SGJnRFZLdGhqREQtSEVKQnBFRTBJUXdZUlJveGxNSGZoSFF0UllWclJfNEFRMzB4b1pzMll3M29mRF9hMnVOaVQ3V3Q0QzN5cmIxXzBIOUZzQmZPOEZhQWh1X0RsU1JubnZkS3NVb3dLb3AwQVZ6bmhDN2FIRGhyaGtrNjZma053cjBsQ2dyZVRta3BwRmJFalg1VElVM1pvTGUyTXfSAfsBQVVfeXFMUGpMRUt5RzVYMWVlNXFxR0xVX3F4YWw0dUh6ZUtPRS11bmJmMnpNUUdIWGdDeFJQREdwTWxDWlhLYjJZM3ZWNm9HYXhvMFIzLVdZWTBJeW9acUhfalZCSzhoY08wN2JISDJZOEp6VzBENDRIaUVJS1FBVGRoUzI3aUxFVTRrR3JyZnBXNHRDVTA3U0dCUWJOTlU5ejhiZDRGT29PUGtTS2xDX2Q0VDJKQUF6ZTR5UHRsUy1sVVFuSnJSTi1Edm1OQUNBa1l0ckF2UWhaRVkzNXdrTnl0WEJScGZRaUxyMFJWSUNSdGhtazVHT2RPaEdIR1FNQ28?oc=5",
+          "source": "The Economic Times",
+          "tags": [
+            "other"
+          ],
+          "confidence": "M",
+          "affected_tickers": [
+            "HAL",
+            "BEL"
+          ]
+        }
+      ],
+      "focus_stocks": [
+        {
+          "ticker": "ASTRAMICRO",
+          "score": 0,
           "severity_weight": 4,
           "primary_signal": "Margin Compression",
-          "coverage_count": 4,
-          "pe_vs_peers": "11% below peers",
+          "coverage_count": 2,
+          "pe_vs_peers": "80% above peers",
+          "deep_link": "#stock/ASTRAMICRO/snapshot"
+        },
+        {
+          "ticker": "BEL",
+          "score": 7,
+          "severity_weight": 3,
+          "primary_signal": "FII Selling",
+          "coverage_count": 18,
+          "pe_vs_peers": "In line with peers",
+          "deep_link": "#stock/BEL/snapshot"
+        },
+        {
+          "ticker": "HAL",
+          "score": 9,
+          "severity_weight": 3,
+          "primary_signal": "Revenue Contraction",
+          "coverage_count": 9,
+          "pe_vs_peers": "21% below peers",
+          "deep_link": "#stock/HAL/snapshot"
+        }
+      ],
+      "threats": [
+        {
+          "name": "Bharat Dynamics",
+          "detail": "+130.8% revenue growth"
+        },
+        {
+          "name": "Garden Reach Shipbuilders & Engineers",
+          "detail": "+38.5% revenue growth"
+        }
+      ],
+      "suppressed": []
+    },
+    {
+      "id": "midcap_it",
+      "name": "Midcap IT",
+      "stance_line": "0 new, 1 escalated",
+      "median_pe": 38.9,
+      "vs_peers_pct": null,
+      "counts": {
+        "new": 0,
+        "escalated": 1
+      },
+      "delta": 3,
+      "news": [
+        {
+          "date": "12 Oct 2026",
+          "headline": "Union Finance Minister Smt. Nirmala Sitharaman concludes successful visit to Singapore, focusing on strengthening investment and financial cooperation",
+          "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTFBXWE5SZTkwZkpidWU2SjBhb1laYVVMUjdFenozSldza0Z4bUV5QmFxN016Z0pacTc5dnZYdG4wQ2dFMW53T2thbkVfa2xxc2l0SkE4ckJaZFE4RWZXdGxveHVQS3dUdldE?oc=5",
+          "source": "www.pib.gov.in",
+          "tags": [
+            "other"
+          ],
+          "confidence": "M",
+          "affected_tickers": []
+        },
+        {
+          "date": "12 Oct 2026",
+          "headline": "केंद्रीय वित्त मंत्री श्रीमती निर्मला सीतारमण ने निवेश और वित्तीय सहयोग को सुदृढ़ करने पर केंद्रित सिंगापुर की अपनी सफल यात्रा का समापन किया",
+          "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE5mX3JEazFiOWNHUE5Nb05DcGg2TVhnS2kwQ2tjY1RqUWVMUUFPSGw3SnBQX1FSYTNLY2tjdk1NaDd4UHhHNGhMSDA1YXZIVjBWOWFSaXl4bm9yamlHRmdWQU5abFloMy1GNW1n?oc=5",
+          "source": "pib.gov.in",
+          "tags": [
+            "other"
+          ],
+          "confidence": "M",
+          "affected_tickers": []
+        },
+        {
+          "date": "13 Oct 2026",
+          "headline": "Persistent Systems Opens Third Facility In Hyderabad To Boost AI Services",
+          "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxOSjYwQmZKUlRlbTJkajRwdFF6cDIyR0ZJXzBSMk5nVUpOalNSbFNjbGttUXZ5V1ZxWkRuOTNBak5sSDg1UUNybFNvM3d3Vkt3Zm1qempiallsSnd1cmV1LU5PYnI0eUQyc1RTSUl6TFlTZ2RrNWtPaHhrdjhkUEV0VzlnZzRzX1pjWFNRMFpCTjZiNjZFbU90TXlUeFo4dFhQ?oc=5",
+          "source": "Sahi",
+          "tags": [
+            "other"
+          ],
+          "confidence": "M",
+          "affected_tickers": [
+            "PERSISTENT"
+          ]
+        },
+        {
+          "date": "13 Oct 2026",
+          "headline": "Persistent Systems Adds Hyderabad Facility for BFSI Clients",
+          "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxNVGFGeS1qbFlFN0NIcS1Kbno1QUxDS1FKQzFSeWVGZC1YYlFqNUQ3NTMwSGt0MnBIcTJtTU1SWExPa2RhUGlFaHlaeFFNMUVmcmc0SHoxdlgyOTNCelp5ZXVnNERPR2RtVFFYYUZzQ1NRTWkzcm41WEx4cDVWa1IyY2l1UlEyVzZVdFVCVXJGSlNueWQwV3ozN3B2S3FQdw?oc=5",
+          "source": "Analytics India Magazine",
+          "tags": [
+            "other"
+          ],
+          "confidence": "M",
+          "affected_tickers": [
+            "PERSISTENT"
+          ]
+        }
+      ],
+      "focus_stocks": [
+        {
+          "ticker": "COFORGE",
+          "score": 2,
+          "severity_weight": 4,
+          "primary_signal": "FII Outflow",
+          "coverage_count": 25,
+          "pe_vs_peers": "14% above peers",
+          "deep_link": "#stock/COFORGE/snapshot"
+        },
+        {
+          "ticker": "PERSISTENT",
+          "score": 8,
+          "severity_weight": 3,
+          "primary_signal": "Margin Compression",
+          "coverage_count": 22,
+          "pe_vs_peers": "22% above peers",
+          "deep_link": "#stock/PERSISTENT/snapshot"
+        },
+        {
+          "ticker": "LTTS",
+          "score": 11,
+          "severity_weight": 2,
+          "primary_signal": "Valuation Stretch",
+          "coverage_count": 18,
+          "pe_vs_peers": "25% below peers",
+          "deep_link": "#stock/LTTS/snapshot"
+        }
+      ],
+      "threats": [
+        {
+          "name": "Infosys",
+          "detail": "+14.0% revenue growth"
+        },
+        {
+          "name": "HCL Technologies",
+          "detail": "+11.5% revenue growth"
+        }
+      ],
+      "suppressed": []
+    },
+    {
+      "id": "textiles_apparel",
+      "name": "Textiles & Apparel",
+      "stance_line": "1 new, 0 escalated",
+      "median_pe": 37.9,
+      "vs_peers_pct": null,
+      "counts": {
+        "new": 1,
+        "escalated": 0
+      },
+      "delta": 3,
+      "news": [
+        {
+          "date": "12 Oct 2026",
+          "headline": "India’s Textile Industry Targets $350 Billion by 2030: What It Means for MSMEs",
+          "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxNNXVFaV8xT0xuT0hjeVExMnI4MnhVOG1VbVBWaFBKWDRBc1llOVVWUHZsMFBBYmhnUjhVMVNiUlNPWk1yX3Q3dEdFeWxRbWZ0UHdhdlZobmVOai00V00tWDlLNXZHLUtTbWEyaXF0d1NEVzNodU5NMk1vTTdvLTBOZVh1RUhRUGVBT2c?oc=5",
+          "source": "SME Futures",
+          "tags": [
+            "other"
+          ],
+          "confidence": "M",
+          "affected_tickers": []
+        },
+        {
+          "date": "13 Oct 2026",
+          "headline": "Manufacturing Momentum:Building a Self-Reliant India",
+          "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE9zazRZV0FSRlE2VW05MVA5aVZWRmhfQS1iU3J2NEFzdUg0T2RDX19VZU1lUkFfT3Vsc0RyRWZKczF3cnYwRERPLWtIYm9Za2M0dWxCTnJ4VHYzc0gtZVRndGFJbG9rdXFLeDFrRG1uaU1nVzEtQV9F?oc=5",
+          "source": "www.pib.gov.in",
+          "tags": [
+            "other"
+          ],
+          "confidence": "M",
+          "affected_tickers": []
+        },
+        {
+          "date": "13 Oct 2026",
+          "headline": "Gokaldas Exports shares jump 5% on ₹350 crore investment plan in BRFL Textiles",
+          "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxOaUx4VlpialJ4dWpSMXNsanFocEtScWFneHJybUtmOFl0R0t5ak5HcmdVSS1XeVFXNml2bGxxUUN1S2lDR1lraHZNQ3ZaMTZiYjZrZ3FfYUUxRjQ2RVdFMUMzTi1DRmFLdjdXMS1tT2NfSFppQ2REZWY4bjJzZ25BdDkyeTR1bUJkcGpKV0JvVlZyUnRDS3UydnZZeDRudUt5N0RaeFhGNkFPV0JhS3lyYXp5TS05NHl0Zl9CUWVGYWtiTWRYY1BKZElZZ2o2Ync?oc=5",
+          "source": "Upstox",
+          "tags": [
+            "other"
+          ],
+          "confidence": "M",
+          "affected_tickers": [
+            "GOKEX"
+          ]
+        },
+        {
+          "date": "14 Oct 2026",
+          "headline": "Textile stocks Gokaldas, Indo Count, PDS, Filatex soar up to 6%; here's why",
+          "url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxNaDdqOVNPdlVMSXoxUnhyeVdKV3ZjdjN6RjBLYlFScnpQck1aUXNhYzdpYm9YX3lyMFJuMDhablV2SU1OUlFlTFpJMHZSZU1HMHVpVWxCVkZ3bUphOExpNm9fSUpfcjByTjZyV1g1aTdpaWRBYjE3LVJsRlJLblpLdzJmQ2hkcXJfMmctZVZFdWJ3MU0tdmZyQV9sWUlVTnBHVkk0eEtUQVpwTDRBOGtmSzFjeDdsdG1vazc0T1M3M3ZGaXdRSGFjTDFFcDN4X3VGeC1V0gHYAUFVX3lxTE1NYUM5UWJTWWRIcVJUVV91SEp0UjZLY2U4Qk9nd1JUd2t5bjJQN0R5SEhOWUZuWE01dDM0YlVWZ0RXWWlqXzR4b0hPQzltcmZGbFJGYmxOSUxXZUphU1Byb25WNTJVLUlNSWpCUFIxSTd4UU5BVE9EN0VueERHTi1BekdNR2VQaEhxVnk5OUZYWWVUWU1qbHpCUnN0WFZaa0dSSTU1V2h3RFpyX2VWSEJpUnd3bU1lYnNrT184Y2VLaC1udmlWZFpBd2FiQlJvU0luS1dCRktVeg?oc=5",
+          "source": "Business Standard",
+          "tags": [
+            "other"
+          ],
+          "confidence": "M",
+          "affected_tickers": []
+        }
+      ],
+      "focus_stocks": [
+        {
+          "ticker": "ARVIND",
+          "score": -7,
+          "severity_weight": 3,
+          "primary_signal": "Promoter Selling",
+          "coverage_count": 24,
+          "pe_vs_peers": "14% below peers",
+          "deep_link": "#stock/ARVIND/snapshot"
+        },
+        {
+          "ticker": "PGIL",
+          "score": 3,
+          "severity_weight": 3,
+          "primary_signal": "Promoter Selling",
+          "coverage_count": 10,
+          "pe_vs_peers": "In line with peers",
+          "deep_link": "#stock/PGIL/snapshot"
+        },
+        {
+          "ticker": "WELSPUNLIV",
+          "score": -1,
+          "severity_weight": 3,
+          "primary_signal": "Valuation Stretch",
+          "coverage_count": 6,
+          "pe_vs_peers": "98% above peers",
+          "deep_link": "#stock/WELSPUNLIV/snapshot"
+        }
+      ],
+      "threats": [
+        {
+          "name": "K.P.R. Mill",
+          "detail": "+9.6% revenue growth"
+        },
+        {
+          "name": "Vardhman Textiles",
+          "detail": "+13.3% revenue growth"
+        }
+      ],
+      "suppressed": []
+    },
+    {
+      "id": "logistics_heavy_capital",
+      "name": "Logistics & Capital Goods",
+      "stance_line": "1 new, 0 escalated",
+      "median_pe": 52.5,
+      "vs_peers_pct": null,
+      "counts": {
+        "new": 1,
+        "escalated": 0
+      },
+      "delta": 3,
+      "news": [
+        {
+          "date": "09 Oct 2026",
+          "headline": "CONCOR Share Price Rise Brings Logistics Peer Comparison",
+          "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxNeG9SbzY3a3VaME05SWZMZUljSExoNmRyOFNSd0NqVkplWHo1QU5KOUlwQUFmRmh6Q0NwTEZob1ZGdkxtTnNwZTJadk9IMGFnTjFvTlYzSGRVYlJhTXZUMDQxOWFSdUg3SkJZbm9yZ0pPSlo2cG1WSDFyY1VyZUJrYkdIeDF5TXpqbml1V25oTGZ2MmlGVmc?oc=5",
+          "source": "Univest",
+          "tags": [
+            "other"
+          ],
+          "confidence": "M",
+          "affected_tickers": [
+            "CONCOR"
+          ]
+        },
+        {
+          "date": "12 Oct 2026",
+          "headline": "Ports & logistics Q2 preview: Adani Ports leads growth, CONCOR to face softer volumes",
+          "url": "https://news.google.com/rss/articles/CBMi2AFBVV95cUxNVkxBajVqR2M2T1ctYU5Sa1dTQ0Fsa0VUQktFcXJiOTNha2dIN3NtTFd3aUs0QWNiMGIxM2MweVdFTHo0WXlwM0tTVXV1V1V1cy1XdFQ1eFlIRWtOdTNoTTRiaFp0WFFsclNDQWItYWJaZExWRVA2SXpHc2lrSERfNnRWVUcxbUVIRExtbGF2MjhUZldXSDF1QzV2dlBBSU1MZEh4NkpaWXVXXzJyd1M0SFUySkNWcUZvN2hxcU9maTBtUEZQYXhEZnRZWWM3UW5JcVhDN2xKTjHSAd4BQVVfeXFMTW9kbWJuSFZxbzFhUmdBdjlSamQwWG1fdDNLc2VDeE83amFlR1pMLXhSVWc5c29pbXVlcjBaTF9lUk1ZZVlGbFpIMjB0RmJhcFRwTjVrYldpdi1xNXE3ZlNTX2s1TXRyVGJ3WDBmdzkxSm81MEFaVTJBd1pqZzBKSjNGRWw0N0tZVGJ3TG42SGhhVWpzcDJVMDZVYWxwU2UzOGlmamdWVGZGQ2N2cUdPRWduUTg5VTVKb0paRlRHM2kxbnBfdUhCTkROUERIb0pFb295WndCMkdEY0dDTVBR?oc=5",
+          "source": "ET Infra",
+          "tags": [
+            "other"
+          ],
+          "confidence": "M",
+          "affected_tickers": [
+            "CONCOR"
+          ]
+        },
+        {
+          "date": "15 Oct 2026",
+          "headline": "CONCOR organises Trade Meet at ICD Jodhpur to strengthen EXIM Trade and Logistics Connectivity",
+          "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxOSXZ4OUt6SkFtSzdjbk4wT0FlMGJyMVEyQ21laXpvTjFWY0hldlVSWnhEUmpEY25xNlpTMmVUUnBBanJMNVFJdjN2UUtuWFpuaG5MWklXaDVIY0lDclZlVElneDlrdFZFZy1UeGVOSWhIYnQ2N3pac1VBUzlNTjF6MXpTeVdLbkdPVWNOZTNHMHVYNUx5WjhpMWVWZWFaRVAzTmFfdHZZbktWR2IwSHVSMC1RaDFQTjlKZmhfSDhtbDJTRGxZZEJGTl9GNlFKa29ueXZlUXNB?oc=5",
+          "source": "India Shipping News",
+          "tags": [
+            "other"
+          ],
+          "confidence": "M",
+          "affected_tickers": [
+            "CONCOR"
+          ]
+        }
+      ],
+      "focus_stocks": [
+        {
+          "ticker": "CONCOR",
+          "score": 6,
+          "severity_weight": 3,
+          "primary_signal": "Revenue Contraction",
+          "coverage_count": 30,
+          "pe_vs_peers": "47% below peers",
+          "deep_link": "#stock/CONCOR/snapshot"
+        },
+        {
+          "ticker": "CUMMINSIND",
+          "score": 3,
+          "severity_weight": 3,
+          "primary_signal": "FII Selling",
+          "coverage_count": 1,
+          "pe_vs_peers": "In line with peers",
+          "deep_link": "#stock/CUMMINSIND/snapshot"
+        },
+        {
+          "ticker": "BHEL",
+          "score": 8,
+          "severity_weight": 2,
+          "primary_signal": "Valuation Stretch",
+          "coverage_count": 32,
+          "pe_vs_peers": "In line with peers",
+          "deep_link": "#stock/BHEL/snapshot"
+        }
+      ],
+      "threats": [
+        {
+          "name": "Delhivery",
+          "detail": "+27.8% revenue growth"
+        },
+        {
+          "name": "Shadowfax Technologies",
+          "detail": "+66.3% revenue growth"
+        }
+      ],
+      "suppressed": []
+    },
+    {
+      "id": "data_center_support",
+      "name": "Data Center Support",
+      "stance_line": "1 new, 0 escalated",
+      "median_pe": 32.2,
+      "vs_peers_pct": null,
+      "counts": {
+        "new": 1,
+        "escalated": 0
+      },
+      "delta": 2,
+      "news": [
+        {
+          "date": "15 Oct 2026",
+          "headline": "Union Commerce and Industry Minister Shri Piyush Goyal Launches National Strategic Trade Command Centre at Vanijya Bhawan",
+          "url": "https://news.google.com/rss/articles/CBMifkFVX3lxTE1sSDNDamFxaXd0blcySDktRF91MXh6bHoxMUZ5XzYtdWM0R1ZkWEFwRlM3cXRKdFBWeERHODNjaVhDU0pENll4VEU0NVRIRTJuVl9ETHkzbTBERklaeEphaGZhVnlxaGVEVkg5V0VBQWRVZGdaZVEycVhxaVVDdw?oc=5",
+          "source": "Press Information Bureau",
+          "tags": [
+            "other"
+          ],
+          "confidence": "M",
+          "affected_tickers": []
+        },
+        {
+          "date": "15 Oct 2026",
+          "headline": "Vice-President inaugurates KAUMARACON-2026 and launches digital initiatives of the All India Institute of Ayurveda",
+          "url": "https://news.google.com/rss/articles/CBMifkFVX3lxTE42VDZXQm02T0xOaFBFbG5rR3ZLSjJJYTh5TG1wOW1fV0tmd2ZpaUFxTzJWcVZjVEJlOTdvYTZjWVVhLUlHc1RabXUwN1JsTGtHNjIyWGJKMERsaXJFT0dmdUtoUk9aWlgxYjd5QS1rT1U4VnVTMHcwcXZrdm1nZw?oc=5",
+          "source": "Press Information Bureau",
+          "tags": [
+            "other"
+          ],
+          "confidence": "M",
+          "affected_tickers": []
+        },
+        {
+          "date": "16 Oct 2026",
+          "headline": "Schneider Electric Boosts Outlook Again After Data-Center Demand Lifts Sales",
+          "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxNR0V2aVY1ajM5TmFYMXZvQXV2N3pKYUVPQjhRQVBsUnNXek41TFBNUkVGMFNoTzlralFrdmE3bUJyLUNDRTJ1Q1g3bTNmT0ctajQxdmg5NnI3SjhGT2VCRnRDY1lMRDRxdnp6VkpVajFTeU5HQmJjZXR5TXNFV0k2YXdsNEh4TENHcGJXSkwwWV81OHFBd2ZBMEtLeHlxRkZ3eEtORFNYUHlxUjJERnppbE52djVuN1djcldJVm9rZC0?oc=5",
+          "source": "WSJ",
+          "tags": [
+            "other"
+          ],
+          "confidence": "M",
+          "affected_tickers": [
+            "SCHNEIDER"
+          ]
+        },
+        {
+          "date": "16 Oct 2026",
+          "headline": "Schneider Electric raises 2026 targets again on booming data centre demand",
+          "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxPVEZLQW16bU1UV1ZPTjFUNzZkOWp4bkw2QkRkRGVxZktlU1NpbWpEaXBWT0c0cmROS3FKUlh1dk9FZk9PN3kyRElfQ0hKeDR2cW1WcEpaUWkzZ24yOV9kTmYxMDZFdjYxd1pZcHVUVGZ3VkFsbWI5dFFPQ2NQbjZUWVFTaHJSSGIzdnNWc2ljTFlScFFBNDJha2dlLWNPYm4wc0FwRW94X2c2Mk1QLUY4LUc1RklFTjg?oc=5",
+          "source": "Reuters",
+          "tags": [
+            "other"
+          ],
+          "confidence": "M",
+          "affected_tickers": [
+            "SCHNEIDER"
+          ]
+        }
+      ],
+      "focus_stocks": [
+        {
+          "ticker": "GODREJPROP",
+          "score": -3,
+          "severity_weight": 4,
+          "primary_signal": "Margin Compression",
+          "coverage_count": 8,
+          "pe_vs_peers": "In line with peers",
           "deep_link": "#stock/GODREJPROP/snapshot"
         },
         {
@@ -179,17 +680,17 @@
           "score": 5,
           "severity_weight": 4,
           "primary_signal": "Promoter Exit",
-          "coverage_count": 4,
-          "pe_vs_peers": "468% above peers",
+          "coverage_count": 3,
+          "pe_vs_peers": "487% above peers",
           "deep_link": "#stock/STLTECH/snapshot"
         },
         {
           "ticker": "SCHNEIDER",
-          "score": 7,
+          "score": 0,
           "severity_weight": 3,
           "primary_signal": "Margin Compression",
-          "coverage_count": 12,
-          "pe_vs_peers": "326% above peers",
+          "coverage_count": 14,
+          "pe_vs_peers": "344% above peers",
           "deep_link": "#stock/SCHNEIDER/snapshot"
         }
       ],
@@ -206,54 +707,33 @@
       "suppressed": []
     },
     {
-      "id": "semiconductors_equipment",
-      "name": "Semiconductors & Equipment",
-      "stance_line": "2 new, 0 escalated",
-      "median_pe": 123.0,
+      "id": "surveillance_security",
+      "name": "Surveillance & CCTV",
+      "stance_line": "1 new, 0 escalated",
+      "median_pe": 90.5,
       "vs_peers_pct": null,
       "counts": {
-        "new": 2,
+        "new": 1,
         "escalated": 0
       },
-      "delta": 7,
+      "delta": 1,
       "news": [
         {
-          "date": "13 Oct 2026",
-          "headline": "Government of India taking steps to encourage domestic manufacturing of semiconductors & promote country's digital transformation and self-reliance",
-          "url": "https://news.google.com/rss/articles/CBMifkFVX3lxTE8xei1uam9hdlpuMXNpUWpCX3U2LVBUMFFDQmlIbDlOOVlDTFdQOGxYeG1JZFAxaXRZVjRCNVRaSm9lSW5YdWlzOXIzU1FHMm1zSTYta2p6NVV0N21vXy1LeC1aME5Fcl9lcnNyWmRER21ZQ2JIcEs1NGtpWmE2QQ?oc=5",
-          "source": "www.pib.gov.in",
+          "date": "15 Oct 2026",
+          "headline": "Global Drone Market to Grow at 9.8% CAGR as AI-Powered UAVs, Autonomous Flight Technologies and Rising Defense Investments Drive Growth, says Maximize Market Research",
+          "url": "https://news.google.com/rss/articles/CBMiwAJBVV95cUxOM1pYcjBUNVNabzNid1M3emVqV2NvbVVXTzhvbzJ3ZElHRHdobkcwTG8xUEVXYkZWNG94dkg0VkFxUkpjdEJBYVZCall4QVFsdmVOTHpSaUlTOEVpbjhKWG41cGExdDh0UEFJaWZMTXI2RW5hRU1Cd1p3aW12Z1RsZml0U0RMT2tMaURlQjl4eUVYQl9RdWpWTzROTXlRVERkRkt1UGQ3YzlDLVZYNHN0VnFCTDI4N2ZlSTVON0JoSWlrMHFaaWM5dHVlRmVncl9wYnRuUVA3Y2cwOFlCbHNkbTFDSVM0VklYc0xEdDNzdlVuV3FWU0dYb1VYYjdJMXJvXzJsUk5GMWxkd2V6T3NoUFBGUzhSZjNrMi1ZRm11ZTlBYTNYbURGWDVSblAtbkJnUUt3amJoVHl3WnV0cnp1aw?oc=5",
+          "source": "PR Newswire",
           "tags": [
-            "policy"
+            "tie_up"
           ],
           "confidence": "M",
-          "policy": {
-            "measure": "incentive_scheme",
-            "status": "in_force",
-            "direction": "tailwind"
-          },
-          "affected_tickers": []
-        },
-        {
-          "date": "14 Oct 2026",
-          "headline": "Cabinet approves Semicon 2.0",
-          "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxOdy1MMF9SUmNKNnZ1SDNPR1E2M0hHWjF4cjlfSVp4MkRSaTJfTGRnYXBhcTVXSEQ0YVJnYVF5aTZSUEY3Z3ZUd2pMeEhURVFCUVpMbWkySDd3QUh0c25nNWpITFk5UEVIbElDNmVUSExjSHU2WTRrRjNvZXpMNGdhSw?oc=5",
-          "source": "pib.gov.in",
-          "tags": [
-            "policy"
-          ],
-          "confidence": "M",
-          "policy": {
-            "measure": "approval",
-            "status": "approved",
-            "direction": "tailwind"
-          },
           "affected_tickers": []
         },
         {
           "date": "13 Oct 2026",
-          "headline": "PM chairs Semiconductor Roundtable with leading CEOs",
-          "url": "https://news.google.com/rss/articles/CBMifEFVX3lxTE5Sa2tqUVR5djBXUVdxc2NBbU5UYjE0SE5peFB1TlYzd1Q1aF91UkdGN1NDUnFGeGFzNXhxTmFOS1prZGZKQ25zYlV4TmUxVklBdzByaWh0YV9EVDY2a1U3Z2xqUVVRZ1VvdGxLYlJlaVhpVXhyOHN2WENXdkQ?oc=5",
-          "source": "pib.gov.in",
+          "headline": "INDIAN NAVY SET TO COMMISSION INDIGENOUS MULTI PURPOSE WARSHIP SAMARTHAK",
+          "url": "https://news.google.com/rss/articles/CBMifkFVX3lxTE8xSlA0QTJPVmliVkFFcEpycVd2UUJrUXFWSjBmZ0gyWEtrMXRuY3phNHVkU0F1bVZRRHJNeDZ4d2daak5Kc0stYzRqYVUzelpoMzh3NGJia1REeWJ0TURQWWwzVkdMNUJtSGF2WGd3ZFVfSUJlX2NYYXd2dGx2QQ?oc=5",
+          "source": "Press Information Bureau",
           "tags": [
             "other"
           ],
@@ -262,9 +742,127 @@
         },
         {
           "date": "14 Oct 2026",
-          "headline": "Semiconductor test gear maker Teradyne to buy $300 million stake in FormFactor",
-          "url": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxOdmY1U1hFeUJIRDk0eUgzNi1aLTNMdFpTemFVc254NTRQWEpjRHM2dVM5cjJSZVM4YjBaSWlBOGpLVGxWWjB6T0QwVF9JM0pwM0hNSTFjN1hOYmMyaTBzS0lmV2JGektaYk1XVjNBcjRCMXZxS2h5NFpEYUtHMXh4Q0lHb3pGakpaczVZVUFid0JsOHVIdlhmNWFZOGs1R21FMHRWYzE1c2s5cUd2Y05MaFdJemZoekdib0h3S3NPdzlENFl4eG5iZEw1U0ZVaHZUYXRSYkZqcnNVNEMxUEdQWWUzZWZGU29DN0E40gHvAUFVX3lxTE9MZVh4RFFDQ3BZVS1WT2psRVlhXzdFUHZyUXpvek5HN3pyVnF3Q3puX1ZBYkljZVk5V0J4M1BZUWo3RTRPY1doUUI4Y21lc2FyYm02aGtYbktFQUpnWlVXdnhuc3FWck0ya190Z0Z5c01Zd3B4VndjRFRDXzdVU1BCVFhYWTlPUWYxYUl5R1d4STNsQjBpbkV1cU1MRFgxY3c1VlhSWE95d1RzWGVlY2Z5SWRMeTBiY2ozTWx6b2lidVNDb0lBRl9JWXBkVmdTbmVISzZGSUN1czlFZ2tqUUV2YUU0NGxXWVc1dkR5X3Qw?oc=5",
-          "source": "electronics.economictimes.indiatimes.com",
+          "headline": "Aditya Infotech Shares In Focus As Motilal Oswal Sees Strong Growth Ahead; Check Target Price",
+          "url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxNekV5VW9xT2tLNlJyZ041bTdHSmw2Y3FhaE5tamR3eFB6UEM2MkxLUWlfZ29aV1ZDUVN4eUVQVWFCUU5sWGtTbi1ncFk1YjlTSURDTDExZngxamhadUZCczVTeUZRTkljQlFKU0RHdUhJUmdTdGE5bTExQzgxVFphN2JrUVk5S1B1ZGZtZzlqRUNlbm5XZnlIM05xTjkzNVRGM2VNWHA3YUpFNGFaNTVlQTNwdk5XOE9aZE5NSlZsMW0tQWpqcW5ObV8td1dLU2stNVE?oc=5",
+          "source": "NDTV Profit",
+          "tags": [
+            "other"
+          ],
+          "confidence": "M",
+          "affected_tickers": [
+            "CPPLUS"
+          ]
+        },
+        {
+          "date": "14 Oct 2026",
+          "headline": "Aditya Infotech shares jump 6% as Motilal Oswal sees strong growth runway",
+          "url": "https://news.google.com/rss/articles/CBMi1wFBVV95cUxNNlJrZmdlc1A3SmJWaXVlMFdlUGl6LWR5aWdXYWU5VFRBZXNFVS16a0JqT1laTWx6cjEwR3NHYlhEbVBCSlhRem5aQ2pYaDJNY1REbTFFdURJYVBtdTlUZnJrSm9KS2pJZG1CNUN3SmRMazNPODNZcHItaHFkLTdXNzZLb3VCSHhqZjFBSDBiRXV3MDVUX3kwU0lnS2t1dWFPUVdZM3o3Uk1DRW1qSXFIajE3QjNzZl9lWEhPZTlJU05abGVHaE9sZlJuNHlDQjlCeDFzeGl5c9IB3AFBVV95cUxPM3lPTzhkU1pjc0IwTXhFSjRaNW9aVjRjY0hEMGNpOVFScVljblUxTGxoeDZScDV0VXFLWUhEWFVYNVFEUEpINERoc1M2cE4xcDBHdENuNlh1Q29uamtOWlE1SWJ4SHZ0Q2ZUbWtucVgyYXpUR3lpanhPY2pCSERiVmlOb3VFZ2REb2gyOHBDMW1XcUFtbktpNlV5NC03SzdoVkROWEhRc0NRUEF0a1BZUnlta1JyUnJmWmVXc3NuRTZHSWxFcmNMd08xaHJfSHBtLWIzMUhua2ZjM1pl?oc=5",
+          "source": "Business Today",
+          "tags": [
+            "other"
+          ],
+          "confidence": "M",
+          "affected_tickers": [
+            "CPPLUS"
+          ]
+        }
+      ],
+      "focus_stocks": [
+        {
+          "ticker": "IDEAFORGE",
+          "score": 3,
+          "severity_weight": 4,
+          "primary_signal": "Promoter Exit",
+          "coverage_count": 42,
+          "pe_vs_peers": "Extreme outlier (excluded from peer stats)",
+          "deep_link": "#stock/IDEAFORGE/snapshot"
+        },
+        {
+          "ticker": "CPPLUS",
+          "score": 7,
+          "severity_weight": 4,
+          "primary_signal": "Promoter Exit",
+          "coverage_count": 6,
+          "pe_vs_peers": "16% above peers",
+          "deep_link": "#stock/CPPLUS/snapshot"
+        },
+        {
+          "ticker": "OPTIEMUS",
+          "score": 1,
+          "severity_weight": 3,
+          "primary_signal": "Valuation Stretch",
+          "coverage_count": 5,
+          "pe_vs_peers": "In line with peers",
+          "deep_link": "#stock/OPTIEMUS/snapshot"
+        }
+      ],
+      "threats": [
+        {
+          "name": "Tata Technologies",
+          "detail": "+28.4% revenue growth"
+        },
+        {
+          "name": "Netweb Technologies India",
+          "detail": "+172.1% revenue growth"
+        }
+      ],
+      "suppressed": []
+    },
+    {
+      "id": "big_cap_industries",
+      "name": "Big Cap Industries",
+      "stance_line": "No change this cycle; carrying news only",
+      "median_pe": 21.2,
+      "vs_peers_pct": null,
+      "counts": {
+        "new": 0,
+        "escalated": 0
+      },
+      "delta": 0,
+      "news": [
+        {
+          "date": "12 Oct 2026",
+          "headline": "Five Years of PM GatiShakti: Transforming India’s Infrastructure Planning",
+          "url": "https://news.google.com/rss/articles/CBMifkFVX3lxTE9ROTBCNGUyUU94Mnl0REl4TEp4M0tFakJzNjFlR3ZDMHpFaUhOOUU5UFhVREhRQmRDeE5iN3BmN1Y2cldxRE1JWXF5VGx2Qm1sWUhQcHJBWDR0V0J5c3NKWnNZNUhYQ1U4Y2I1TXpOZkphY2ZDZlhJOExINzBWUQ?oc=5",
+          "source": "pib.gov.in",
+          "tags": [
+            "other"
+          ],
+          "confidence": "M",
+          "affected_tickers": []
+        },
+        {
+          "date": "13 Oct 2026",
+          "headline": "PM GatiShakti National Master Plan completes five years of transforming India’s infrastructure landscape",
+          "url": "https://news.google.com/rss/articles/CBMifEFVX3lxTE0tU1AyaUotX196ajR1ZDJjOV9Va2ZrUzdRVHhZaERnajVIcElZZ2xfTHhQNUR4UTF1ZFU4VlJ2MWVmbDNHd1VCd1pRaDZQY0M1aFlqMGEzRVVseFRlYUtVOHczWlVJd0FzZ2hCa3pIamRwNUdIQjJSaGxMMl8?oc=5",
+          "source": "Press Information Bureau",
+          "tags": [
+            "other"
+          ],
+          "confidence": "M",
+          "affected_tickers": []
+        },
+        {
+          "date": "14 Oct 2026",
+          "headline": "PM to Inaugurate and Dedicate Five Development Projects Worth Around ₹3,350 Crore in Ladakh on 15 October",
+          "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTE9PbmppaFZoRE0tM0RoVWlVLWZ0ekNZMWNZUHlUNU1DVTF0cHhnWXFNRW44eVlFejB5cWpYaWp1Rk9JcUd5M0d0cHBtcHUwalpDelhQZFNRa1lMdF9VNDJjMkFJVFI0anFZMkR5dmRiQ1lodU54MmdVZFVlbw?oc=5",
+          "source": "Press Information Bureau",
+          "tags": [
+            "other"
+          ],
+          "confidence": "M",
+          "policy": {
+            "measure": "procurement",
+            "status": "in_force",
+            "direction": null
+          },
+          "affected_tickers": []
+        },
+        {
+          "date": "14 Oct 2026",
+          "headline": "L&T Q2 FY27 Results Date: What to Track This Quarter",
+          "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxNU2hNNjViRVJSYnU3WW0zUzc5Y1VYN2M5UGo5b3hlMVBRNlRpTlc1cVpjeGtCaF9IX0l1ektjdlJiMWN2NG1Kckk0c2pCbjAxbnB4OEFTTlhXaV9OMG5ZNFdqR195YndFM2U4OUN6bWluZjFXLTlESWtoYUhiSEJOM2lhcmxwSGlQaGcxUDk4T2p4bC1hbEJsUk9qaDQyMEE1X2E0U1FkWHBzU2Z5QlhqelpEVmx2Wk1wWGdEZy1CRkhSN2QyRXp4NC13NVRrVTQ?oc=5",
+          "source": "Kalkine India",
           "tags": [
             "other"
           ],
@@ -274,86 +872,163 @@
       ],
       "focus_stocks": [
         {
-          "ticker": "DIACABS",
-          "score": 4,
-          "severity_weight": 4,
-          "primary_signal": "Promoter Exit",
-          "coverage_count": 6,
-          "pe_vs_peers": "In line with peers",
-          "deep_link": "#stock/DIACABS/snapshot"
-        },
-        {
-          "ticker": "MTARTECH",
-          "score": 7,
-          "severity_weight": 4,
-          "primary_signal": "FII Outflow",
-          "coverage_count": 3,
-          "pe_vs_peers": "34% above peers",
-          "deep_link": "#stock/MTARTECH/snapshot"
-        },
-        {
-          "ticker": "SPELS",
-          "score": -3,
+          "ticker": "BPCL",
+          "score": 2,
           "severity_weight": 4,
           "primary_signal": "Margin Compression",
-          "coverage_count": 1,
-          "pe_vs_peers": null,
-          "deep_link": "#stock/SPELS/snapshot"
+          "coverage_count": 14,
+          "pe_vs_peers": "61% below peers",
+          "deep_link": "#stock/BPCL/snapshot"
+        },
+        {
+          "ticker": "HINDPETRO",
+          "score": -1,
+          "severity_weight": 4,
+          "primary_signal": "FII Outflow",
+          "coverage_count": 4,
+          "pe_vs_peers": "108% above peers",
+          "deep_link": "#stock/HINDPETRO/snapshot"
+        },
+        {
+          "ticker": "IOC",
+          "score": 1,
+          "severity_weight": 3,
+          "primary_signal": "Margin Compression",
+          "coverage_count": 15,
+          "pe_vs_peers": "75% below peers",
+          "deep_link": "#stock/IOC/snapshot"
         }
       ],
       "threats": [
         {
-          "name": "Infosys",
-          "detail": "+14.0% revenue growth"
+          "name": "M R P L",
+          "detail": "+43.6% revenue growth"
         },
         {
-          "name": "HCL Technologies",
-          "detail": "+11.5% revenue growth"
+          "name": "Chennai Petroleum Corporation",
+          "detail": "+84.8% revenue growth"
         }
       ],
-      "suppressed": [
-        "SPELS"
-      ]
+      "suppressed": []
     },
     {
-      "id": "cybersecurity",
-      "name": "Cybersecurity",
-      "stance_line": "2 new, 0 escalated",
-      "median_pe": 26.1,
+      "id": "clean_energy",
+      "name": "Clean Energy",
+      "stance_line": "No change this cycle; carrying news only",
+      "median_pe": 48.7,
       "vs_peers_pct": null,
       "counts": {
-        "new": 2,
+        "new": 0,
         "escalated": 0
       },
-      "delta": 6,
+      "delta": 0,
       "news": [
         {
-          "date": "09 Oct 2026",
-          "headline": "PRESS RELEASE ON the 382nd REPORT OF The Department-related Parliamentary Standing Committee on Education, Women, Children, Youth and Sports on \"Reforms and Strengthening of the National Testing Agency (NTA)\"",
-          "url": "https://news.google.com/rss/articles/CBMifkFVX3lxTE5Wci1QV0pXVVdzd2FROUlfTmdMeld4SlI5WWk3N0k2b2ZjSFlOODR3cXYtZVcxQXNmR3dmMkVESzFsZ1RiZ2lUSkU1eS1icEctc2pqWFkyb3FMQlJiMjNuZmxVdmpEV0tGbnpDYkVfc29pY1FoTjJPVS16ZVc2UQ?oc=5",
-          "source": "PIB",
-          "tags": [
-            "other"
-          ],
-          "confidence": "M",
-          "affected_tickers": []
-        },
-        {
-          "date": "12 Oct 2026",
-          "headline": "India–UK Bilateral Talks Explore Expanded Cooperation in Space, Civil Nuclear Energy and Emerging Technologies: Dr. Jitendra Singh",
-          "url": "https://news.google.com/rss/articles/CBMifEFVX3lxTE9rLUltdVczUVRjN3J6XzVYSDJpNXF6NktfWTZEaXcyOG1MUDl1aWx1emlhZDUwWUlSTkt1ZWJrMVlFVXgwOU1xRWVCc3VBQk40UG5BSDBzZk12Wl9GaERTRkliamxlU2liOVlXTUVwTVJ3T0gyT1p3TjN4dVA?oc=5",
+          "date": "13 Oct 2026",
+          "headline": "CEA Brainstorming Event: Making Indian Power Sector AI Enabled",
+          "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTE5rdWp6cEduQmYtZGo2V0o4YzkyRVVRWTdrcWlzeklvRWtnLW5lMXFVeWQ0VDdXaGlSM3pyRlJGdldsdVo3Nk5mNk5qYzBUZ19IckkwblZaUl9IdXRlbFdnYkYxZFNjOXdqTjc2OVJ2SFRhcFVKVTNIRmRDUQ?oc=5",
           "source": "pib.gov.in",
           "tags": [
             "other"
           ],
           "confidence": "M",
+          "affected_tickers": []
+        },
+        {
+          "date": "13 Oct 2026",
+          "headline": "India’s Energy Journey: Expanding Capacity, Strengthening Security",
+          "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxNdjVEZlhMWkFkZ3RjRUNBakVVVUEtZ2xLX3hmMkplZzFfMlAyS0hRLUdabTEwS3Exa3FaQTBUQnpUbVJHclYtUHpjQXRVV2F0d0hOM2VlODdFcFFiaVdfb0JRbVlTOTB2YkF3SWZZcW1mZ280TDJxSFdmM3c4VHp3LVkzYWZqRkhSOHc?oc=5",
+          "source": "www.pib.gov.in",
+          "tags": [
+            "other"
+          ],
+          "confidence": "M",
+          "affected_tickers": []
+        },
+        {
+          "date": "14 Oct 2026",
+          "headline": "PM to Inaugurate and Dedicate Five Development Projects Worth Around ₹3,350 Crore in Ladakh on 15 October",
+          "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTE9PbmppaFZoRE0tM0RoVWlVLWZ0ekNZMWNZUHlUNU1DVTF0cHhnWXFNRW44eVlFejB5cWpYaWp1Rk9JcUd5M0d0cHBtcHUwalpDelhQZFNRa1lMdF9VNDJjMkFJVFI0anFZMkR5dmRiQ1lodU54MmdVZFVlbw?oc=5",
+          "source": "Press Information Bureau",
+          "tags": [
+            "other"
+          ],
+          "confidence": "M",
           "policy": {
-            "measure": "trade_agreement",
-            "status": "proposed",
+            "measure": "procurement",
+            "status": "in_force",
             "direction": null
           },
           "affected_tickers": []
         },
+        {
+          "date": "14 Oct 2026",
+          "headline": "Suzlon, BHEL, Adani Power, Tata Power, Adani Energy, Waaree shares: Targets, Q2 preview",
+          "url": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxPeTRnNTNSYjJFaWUwOHpDWUZDTkl1WkhjbnYzMWQ5WUdrUUdyRTVJMFoyaG82clJaNDZnZ3FmLVEyQnFkN0pEQ1lrdWprQ0NyVUh4T1Zac2hXV2JyclF2TTdhSXN0b3ZVbFhlZjU3dk5aM2g4UmFDcTdGTzRPblIwb0RmdS1ST3AtV21URW50ODlqMDZVRTZUQnBjYzJwemI0ZUNtZDdCanJwTzU5Mkt2ODV2UlVZcXJDOVY4QUcxV21wNGg2c1p3VlBwSWFlcGN4T0ZjYkZPSHlXN1h5NXBYcGxn0gHnAUFVX3lxTFAwcWhTNWJhaVIxN3hMbTBBOWhZRW15bC1LNlZseUsyMGhiMndId3A0NGVIYTI3M18yMExXNnZ5RzZwZjI1aVlTc05xSE9PZk5hN3RSYk1SNHFMMkdWOFFCdy1wcmNGTnE4aTVoVmxLTXJlN2dpVDE2YVJvbUh6cVdNRkN6N3duNEdkUUpiNkN2S05vYWRIa3EzaEM0NEZ0R003LUU3d2lxdlM3NldWWWdXem5YamwwVVQtd2d4a1ZuVUVVWHVZQzRQNjFCelBaMzM0OWZmMllqZ3ZsblVfLS1ycHVzWGxBMA?oc=5",
+          "source": "Business Today",
+          "tags": [
+            "other"
+          ],
+          "confidence": "M",
+          "affected_tickers": [
+            "SUZLON",
+            "ADANIPOWER"
+          ]
+        }
+      ],
+      "focus_stocks": [
+        {
+          "ticker": "ACMESOLAR",
+          "score": -1,
+          "severity_weight": 4,
+          "primary_signal": "Promoter Exit",
+          "coverage_count": 12,
+          "pe_vs_peers": "In line with peers",
+          "deep_link": "#stock/ACMESOLAR/snapshot"
+        },
+        {
+          "ticker": "SUZLON",
+          "score": 13,
+          "severity_weight": 3,
+          "primary_signal": "Revenue Contraction",
+          "coverage_count": 21,
+          "pe_vs_peers": "63% below peers",
+          "deep_link": "#stock/SUZLON/snapshot"
+        },
+        {
+          "ticker": "ADANIPOWER",
+          "score": 12,
+          "severity_weight": 2,
+          "primary_signal": "Valuation Stretch",
+          "coverage_count": 21,
+          "pe_vs_peers": "45% below peers",
+          "deep_link": "#stock/ADANIPOWER/snapshot"
+        }
+      ],
+      "threats": [
+        {
+          "name": "A B B",
+          "detail": "+21.0% revenue growth"
+        },
+        {
+          "name": "Hitachi Energy",
+          "detail": "+68.6% revenue growth"
+        }
+      ],
+      "suppressed": []
+    },
+    {
+      "id": "cybersecurity",
+      "name": "Cybersecurity",
+      "stance_line": "No change this cycle; carrying news only",
+      "median_pe": 26.6,
+      "vs_peers_pct": null,
+      "counts": {
+        "new": 0,
+        "escalated": 0
+      },
+      "delta": 0,
+      "news": [
         {
           "date": "13 Oct 2026",
           "headline": "CEA Brainstorming Event: Making Indian Power Sector AI Enabled",
@@ -367,9 +1042,31 @@
         },
         {
           "date": "14 Oct 2026",
-          "headline": "The hidden network: Inside the phishing infrastructure ecosystem powering global cybercrime",
-          "url": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxONV9iSXFLTTFZZVZ3ek1HbzAwOEtXeVNfRl80TFJuUHlPQUd3eVhIMWhidGxucmoySTBnU1JqeTg5bzVFSjE5NXNlalR3YjQzd2N0b05xclZuVmEweUhkRE5OOGI3dE9uQmMxSXl4bU02RUJEZ2U1eEZDM09rcHc0ZEJ0OUZJZ2pub1M3QzVPckd1M3ZmbDBCb25UZWJnNWQtTUNpUU1xcXd2emNnb0o4QnhWNTQxVFlkNnhzZmlfYS1zMVhIOXJfTUUxMnppcU1tLUhBRnl4SjU1VVE1S3R0cUd3?oc=5",
-          "source": "Microsoft",
+          "headline": "Close defence-academia-industry collaboration key to accelerating development & adoption of indigenous tech amid evolving nature of warfare: Raksha Mantri",
+          "url": "https://news.google.com/rss/articles/CBMifkFVX3lxTFBhU2liRklZcUo2Qy1Pb1oxdGxJUlJkdFZWTTVZVkM2RnBnR2JVQ2xWSVNhdHhUYUtYTUpXaWJFSFk3QVQ3VEpJN0QtcERkbVlvRlZEYUVEWFd4bWRzV2ducGhwOGRHb2VyNUIzTk5La0doaVVkUGl5WEdjbkdQdw?oc=5",
+          "source": "Press Information Bureau",
+          "tags": [
+            "other"
+          ],
+          "confidence": "M",
+          "affected_tickers": []
+        },
+        {
+          "date": "14 Oct 2026",
+          "headline": "The quantum clock is ticking: Why India’s telecom networks must prepare today for tomorrow’s quantum threat",
+          "url": "https://news.google.com/rss/articles/CBMi2wFBVV95cUxNMFVocE82WmdtZDRJVHZJaWxiN1p4X2kwMk4xOHMxTl9kS3EyckJuM3BUbFZ3UExSenpYdVd4UVM3MUpUVGhzTXRGMTd6NTJYcW5UNjBrSmVnanFteWhyZUViTWlVcDhZd0dTSWR3VGZkTk1kQm5WSmJmS1lLdDJoTzFfUU13S3o0RVIwM0t0clQ3ZEpVQWFYU3RLZ0hLbmlLbWlGY3E1YkozTUdEZ3RQZW5Ma3dvYkNfRU1felBQb01WLU9aN3p5VGM3Zjc4YVV2cHJXdjA1TWpNR1U?oc=5",
+          "source": "Communications Today",
+          "tags": [
+            "other"
+          ],
+          "confidence": "M",
+          "affected_tickers": []
+        },
+        {
+          "date": "15 Oct 2026",
+          "headline": "Weekly Intelligence Report – 16 Oct 2026",
+          "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTFBFcmJIcS1tbUMyZW1NQUFqam5JWUsxWERMdVQwdWloTmZUcDhRSHdlYmluRTAzVUxLMl85b3RUUnNiNnROSWZqYnR5czRCQ29oWFByWDRpLUNRVHFpT1FqV2JBOFNMMURURnlqY2tmOGVqWGlZcXNr?oc=5",
+          "source": "Cyfirma",
           "tags": [
             "other"
           ],
@@ -383,13 +1080,13 @@
           "score": -4,
           "severity_weight": 4,
           "primary_signal": "Promoter Exit",
-          "coverage_count": 0,
-          "pe_vs_peers": "220% above peers",
+          "coverage_count": 1,
+          "pe_vs_peers": "217% above peers",
           "deep_link": "#stock/CAPILLARY/snapshot"
         },
         {
           "ticker": "QUICKHEAL",
-          "score": 3,
+          "score": 2,
           "severity_weight": 3,
           "primary_signal": "Revenue Contraction",
           "coverage_count": 1,
@@ -402,7 +1099,7 @@
           "severity_weight": 2,
           "primary_signal": "Valuation Stretch",
           "coverage_count": 49,
-          "pe_vs_peers": "40% below peers",
+          "pe_vs_peers": "39% below peers",
           "deep_link": "#stock/TCS/snapshot"
         }
       ],
@@ -421,16 +1118,220 @@
       ]
     },
     {
-      "id": "hospitality_travel",
-      "name": "Hospitality & Travel",
-      "stance_line": "3 new, 0 escalated",
-      "median_pe": 39.1,
+      "id": "fmcg",
+      "name": "FMCG & Consumption",
+      "stance_line": "No change this cycle; carrying news only",
+      "median_pe": 42.4,
       "vs_peers_pct": null,
       "counts": {
-        "new": 3,
+        "new": 0,
         "escalated": 0
       },
-      "delta": 6,
+      "delta": 0,
+      "news": [
+        {
+          "date": "14 Oct 2026",
+          "headline": "Government Constitutes Committee to Examine Issues Relating to Sugarcane Farmers and the Sugar Sector",
+          "url": "https://news.google.com/rss/articles/CBMifkFVX3lxTFBnYWg4YklFMmFTdkdKamhoYkdtNW9ZVUlfSmhQTzdqQkJuV2EyM2xiSFBBWThTamhpbUlNOU83SmtscGUtbG9qdk5YWGtMT1FTcld3OVZwUUdMV3lqQU84Y3V5am1CckhXNFNNZE9zZTVYSUI2bTN4Y2hHNHlFUQ?oc=5",
+          "source": "Press Information Bureau",
+          "tags": [
+            "policy"
+          ],
+          "confidence": "M",
+          "policy": {
+            "measure": "regulation",
+            "status": "in_force",
+            "direction": "mixed"
+          },
+          "affected_tickers": []
+        },
+        {
+          "date": "14 Oct 2026",
+          "headline": "5.54% Inflation Bites Before Diwali: FMCG Companies Face Weak Demand in Rural Markets",
+          "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxOc214SEd0TnBpY3UtX0NIVzJ3QkxrSlYwTTREbmtWMzBCSHRSaE1PaHAwb2JMSnp2V3BzUm83UVhkUzE4ZjZ2aTA4OUMtRFNnZ0xMaWtuREZHWTNXZ2E0TmJvWGhFbFVXN2lydFl1bzZMVUYxUDUtXzY3VHlfVVNoYg?oc=5",
+          "source": "NiftyTrader",
+          "tags": [
+            "other"
+          ],
+          "confidence": "M",
+          "affected_tickers": []
+        },
+        {
+          "date": "14 Oct 2026",
+          "headline": "'Small' pains: Inflation squeeze likely to choke FMCG volume growth again",
+          "url": "https://news.google.com/rss/articles/CBMi5wFBVV95cUxPbjRPXzV0Z1VrSGZ2UnVWQjdFLTFMcUoxOHloR3ZoZjEwbEFHTUhxU1BHbnAyVTJlbUhzdUU1R2lwMVV5bXlYS0QzLXlDSC1Hb3VZWDFGMUotUUY2ckM2VllYMFJJOXFKcF9FbGJsX29rOVlacG1LV2lGdVg2aGFxZHRZREJBWTA4V0xDSHFGRWV5T19pUkl6TjlkdFFfNmlIY3pfOU1hOGR6SXVvektYUXVzQi1xNVhSSXFlR3ZySUxoWXlXTWg1aU1IN3l2Nm92TUh0STZObzhlS2FOWWx3NHdWOHB1OWPSAewBQVVfeXFMUHVTZHNnZGpDVEVaVm5rUzVlVGR2VTAxamFDckhrYXUxTENBTjRiNG5rNVhSNkRpUHREOFh0blVJVUtjWjNQakFqa0NaMFRWM0dDM1hudzB3eXZpUjM3a2R6Y2NxcDZua3pjOXQtZ2c4MUpleVVTT21fbWYzZG90Y2lJWFY0eXdSMzlySy1rUHRPaGlTei1tUWlRazlUdjNQaUJ1SDV0U3NzRUlnWjBDYUhCSWRJa25MUWFscWhGVENaVkR3YXE2MnR1STNBanBlYXNhOUQtNmEwenp5VndhdTZaaWFhT0V0dUZUX2g?oc=5",
+          "source": "The Economic Times",
+          "tags": [
+            "other"
+          ],
+          "confidence": "M",
+          "affected_tickers": []
+        },
+        {
+          "date": "14 Oct 2026",
+          "headline": "Festive FMCG sales off to a slow start as inflation squeezes household spending",
+          "url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxPTUtjLURHbXFFZDJEcUU1MmxIMTJGeTBMNXptbFRPWjhNQXAzRzgzdjJHWFU4Q2lyRlNWWWxnZnFOMnRlbmVHeHpKbUdIclVaelhJNlQtLXV5Qm9kZHlPOEFKT2pZRTJnUVE2Z29TbHhfWFQzNFBtVEFLYm1TUjhUUW1lMDV2WXlNUGEyWmN2aGZTMGMzRVdBT052dVBsY1ZpVl8temZUbW1VejFVdmt4THZNakdyemU2NEJNcGI5Ny1yWmxrSWtObVd2Y0NaamlKeHc?oc=5",
+          "source": "Moneycontrol.com",
+          "tags": [
+            "other"
+          ],
+          "confidence": "M",
+          "affected_tickers": []
+        }
+      ],
+      "focus_stocks": [
+        {
+          "ticker": "ITC",
+          "score": -1,
+          "severity_weight": 4,
+          "primary_signal": "Margin Compression",
+          "coverage_count": 10,
+          "pe_vs_peers": "61% below peers",
+          "deep_link": "#stock/ITC/snapshot"
+        },
+        {
+          "ticker": "VBL",
+          "score": 9,
+          "severity_weight": 3,
+          "primary_signal": "FII Selling",
+          "coverage_count": 8,
+          "pe_vs_peers": "In line with peers",
+          "deep_link": "#stock/VBL/snapshot"
+        },
+        {
+          "ticker": "TATACONSUM",
+          "score": 0,
+          "severity_weight": 3,
+          "primary_signal": "Revenue Contraction",
+          "coverage_count": 3,
+          "pe_vs_peers": "39% above peers",
+          "deep_link": "#stock/TATACONSUM/snapshot"
+        }
+      ],
+      "threats": [
+        {
+          "name": "Valencia Nutrit.",
+          "detail": "-39.5% revenue growth"
+        },
+        {
+          "name": "Orient Beverages",
+          "detail": "+14.1% revenue growth"
+        }
+      ],
+      "suppressed": []
+    },
+    {
+      "id": "healthcare_hospitals",
+      "name": "Healthcare & Hospitals",
+      "stance_line": "No change this cycle; carrying news only",
+      "median_pe": 53.6,
+      "vs_peers_pct": null,
+      "counts": {
+        "new": 0,
+        "escalated": 0
+      },
+      "delta": 0,
+      "news": [
+        {
+          "date": "13 Oct 2026",
+          "headline": "Towards a TB-Free India",
+          "url": "https://news.google.com/rss/articles/CBMifEFVX3lxTE5PbWYzaEp6WGtEM0Jyb0VBOWxDNzE3LW1VNldrdkdYZWE1Mk53eXJWODlORFM4YjFaTk9hNTl2NUNKcTRRUjdtRXJCU0c5a3BQa2FTcmw4bmg5VVdqUTNnOW9zT2dha3VadExxU1dkVXVBcGZZZFpMQ01jQU0?oc=5",
+          "source": "Press Information Bureau",
+          "tags": [
+            "other"
+          ],
+          "confidence": "M",
+          "affected_tickers": []
+        },
+        {
+          "date": "14 Oct 2026",
+          "headline": "Apollo Hospitals, Max Health, Fortis: Healthcare stocks to post strong Q2 earnings; volumes, capacity additions in focus",
+          "url": "https://news.google.com/rss/articles/CBMihAJBVV95cUxPSWZ4UFQ3ckw5NWRKNFJRZUl3a0pMcEwxT1VsMmRCM1NHd1FYX2VkY2JMUXlNRzIwZHB1NFhqOVd5OVJITGZwN0VyWkJpSmRPa2hNeUdKbUxTWVg2MnBsTnozWk1CY0hQa2V3WHdjSVN0N25ZLWlTN085THJmSHFqQ043NW9EbURYLTc3WlhlWkR2R3dING5EcXVnVExmRV9WNlBLdGhkbHA0Y3BWWXpqeEZxOFNYZnZqTDlKVFVBWGxzNUVqeVlRalp2Q2pURXhtUWc3NjVzdUZhOEttbU9EdkNsejdUS1hGOVRjMGtBR2t4OWRCUS00bEJySEYzVXpYTHU3Vw?oc=5",
+          "source": "Upstox",
+          "tags": [
+            "other"
+          ],
+          "confidence": "M",
+          "affected_tickers": [
+            "APOLLOHOSP",
+            "FORTIS"
+          ]
+        },
+        {
+          "date": "15 Oct 2026",
+          "headline": "Update on PM-ABHIM",
+          "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE84aDBxdkVSMFlUZk1qZ1ZSbEFnNk1uMHpEYXpIdFlqQVN2dFNBWEdMZ3RyRTU4bk5iMEc1R1BRYWptWWVMb2lPOTZNWEhhZHNJaE5ESlBST3dpUGI4NmJkOXVNWXBGd0p4V2VRenc4MDY?oc=5",
+          "source": "www.pib.gov.in",
+          "tags": [
+            "other"
+          ],
+          "confidence": "M",
+          "affected_tickers": []
+        },
+        {
+          "date": "15 Oct 2026",
+          "headline": "Update on Progress of AB-PMJAY and ABDM",
+          "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTFBzUWYzZUtsQnFKUmp3NEdwTGFiMEdzN1NLTmFCSm9jdjBHU2pZZngxcC16LUpUUkl3bVBESTNwcmExRXZQc3FlOHdNX0Z5UG8zSEVweWo5MzRNdnc4dTNwSWdPLWtpY2xjV1o2Uzg1M0M?oc=5",
+          "source": "Press Information Bureau",
+          "tags": [
+            "other"
+          ],
+          "confidence": "M",
+          "affected_tickers": []
+        }
+      ],
+      "focus_stocks": [
+        {
+          "ticker": "MAXHEALTH",
+          "score": -2,
+          "severity_weight": 4,
+          "primary_signal": "FII Outflow",
+          "coverage_count": 4,
+          "pe_vs_peers": "In line with peers",
+          "deep_link": "#stock/MAXHEALTH/snapshot"
+        },
+        {
+          "ticker": "FORTIS",
+          "score": 3,
+          "severity_weight": 2,
+          "primary_signal": "Margin Compression",
+          "coverage_count": 28,
+          "pe_vs_peers": "In line with peers",
+          "deep_link": "#stock/FORTIS/snapshot"
+        },
+        {
+          "ticker": "APOLLOHOSP",
+          "score": 2,
+          "severity_weight": 2,
+          "primary_signal": "Valuation Stretch",
+          "coverage_count": 3,
+          "pe_vs_peers": "In line with peers",
+          "deep_link": "#stock/APOLLOHOSP/snapshot"
+        }
+      ],
+      "threats": [
+        {
+          "name": "Manipal Health",
+          "detail": "+38.1% revenue growth"
+        },
+        {
+          "name": "Aster DM Quality",
+          "detail": "+21.6% revenue growth"
+        }
+      ],
+      "suppressed": []
+    },
+    {
+      "id": "hospitality_travel",
+      "name": "Hospitality & Travel",
+      "stance_line": "No change this cycle; carrying news only",
+      "median_pe": 38.6,
+      "vs_peers_pct": null,
+      "counts": {
+        "new": 0,
+        "escalated": 0
+      },
+      "delta": 0,
       "news": [
         {
           "date": "13 Oct 2026",
@@ -485,8 +1386,8 @@
           "score": -2,
           "severity_weight": 4,
           "primary_signal": "Margin Compression",
-          "coverage_count": 4,
-          "pe_vs_peers": "40% above peers",
+          "coverage_count": 5,
+          "pe_vs_peers": "44% above peers",
           "deep_link": "#stock/INDHOTEL/snapshot"
         },
         {
@@ -504,7 +1405,7 @@
           "severity_weight": 3,
           "primary_signal": "Revenue Contraction",
           "coverage_count": 4,
-          "pe_vs_peers": "14% below peers",
+          "pe_vs_peers": "11% below peers",
           "deep_link": "#stock/CHALET/snapshot"
         }
       ],
@@ -523,37 +1424,15 @@
     {
       "id": "industrial_manufacturing",
       "name": "Industrial Manufacturing",
-      "stance_line": "1 new, 0 escalated",
+      "stance_line": "No change this cycle; carrying news only",
       "median_pe": 62.1,
       "vs_peers_pct": null,
       "counts": {
-        "new": 1,
+        "new": 0,
         "escalated": 0
       },
-      "delta": 2,
+      "delta": 0,
       "news": [
-        {
-          "date": "12 Oct 2026",
-          "headline": "Energy management at Stoelzle Glass Group",
-          "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxQVlE2MXRRUGdFczIyZlowVWRmM3V4enRxaGljS1hJUGxfa3plXzNzMmhJZ1l1Vy14ZWhsNy0wNWpVNFJFbjBnb2RyS2pGZXZMUVFJN3NObUw4a1BjellZT284OFV1bTBOMWJDVUxsb2pqenkwNlE5Vmc1VjZFZ1FLaEFsSTVsZ3VlOGJxVVpYcmtZSUVXN29pSGxn?oc=5",
-          "source": "Siemens",
-          "tags": [
-            "other"
-          ],
-          "confidence": "M",
-          "affected_tickers": []
-        },
-        {
-          "date": "13 Oct 2026",
-          "headline": "Nut Bolt Manufacturing Plant Setup in India",
-          "url": "https://news.google.com/rss/articles/CBMihwFBVV95cUxQQnVVOHZoMlFoem1CNHA0R3E2SFJqYm4zVUVqMHlPSWJSRlpkcS1zeFkzNmdUOC1LQWFrZGk1THNPcWY4QXByc1owYzBJb1E1bktuZlpxNDU3dHF6MmkwV2pVLUhSNXVodGt3NGFvclBuTkFQbUtTdTVqcTRRN0oyblBwbHg3Z1E?oc=5",
-          "source": "IMARC Group",
-          "tags": [
-            "other"
-          ],
-          "confidence": "M",
-          "affected_tickers": []
-        },
         {
           "date": "14 Oct 2026",
           "headline": "BEML Discloses Q2 Stake Holding By Abakkus Flexi Cap Fund",
@@ -566,10 +1445,32 @@
           "affected_tickers": []
         },
         {
-          "date": "14 Oct 2026",
-          "headline": "IBM and Siemens Collaborate on Research to Advance Nanostack Architecture",
-          "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxOZkdSRDNIZ2xhQnh5eUk5clpnLWl2Q1VDOVFRbXhUSGV5Z3dSYlY4ckN2OE9FRkpaZ3A4Z3VuNjJ0VndidXNfV3JlMlZRQUNiSEFmVFlGYUY1d0FQY1FkcnVVblk0SzlUM0VPbC1qMFR6RVluTjlpbFdBelpqSDlvc1lhNFZiNVZzbm9QM0stSFRKRTlTYWQwVkpCQ0xieThrV19tWUd3NjBickdlUHc?oc=5",
-          "source": "IBM Newsroom",
+          "date": "15 Oct 2026",
+          "headline": "Union Commerce and Industry Minister Shri Piyush Goyal Launches National Strategic Trade Command Centre at Vanijya Bhawan",
+          "url": "https://news.google.com/rss/articles/CBMifkFVX3lxTE1sSDNDamFxaXd0blcySDktRF91MXh6bHoxMUZ5XzYtdWM0R1ZkWEFwRlM3cXRKdFBWeERHODNjaVhDU0pENll4VEU0NVRIRTJuVl9ETHkzbTBERklaeEphaGZhVnlxaGVEVkg5V0VBQWRVZGdaZVEycVhxaVVDdw?oc=5",
+          "source": "Press Information Bureau",
+          "tags": [
+            "other"
+          ],
+          "confidence": "M",
+          "affected_tickers": []
+        },
+        {
+          "date": "15 Oct 2026",
+          "headline": "Earnings call transcript: Elecon Engineering posts stronger Q2 FY27 growth By Investing.com",
+          "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxQd1FFVk1vdWVjeTRSSGNucUprdXo1cExGM2U5eXlpcms4bHJneUNYZ19RcWlQdU9Pc2RydUMwdHBIZHV6ZVNCb1dQVHRKLWx5aktZTC0tMzNWNjRXSlp4elIwZTNFb2QwckN4TTluYjdCY0xiREhLNlBnQ1lGMmM4ZU5aR3QySkFidDFRT2pmOGFHUXlxRDRjY0gwUXV1OWtEVFljWXV6QkFQNEU1OFAyRjhReFlvaUxTMWdvOVZVNG95MHVwRUNkcFBzMWwyUkE?oc=5",
+          "source": "Investing.com India",
+          "tags": [
+            "other"
+          ],
+          "confidence": "M",
+          "affected_tickers": []
+        },
+        {
+          "date": "15 Oct 2026",
+          "headline": "Toyota Kirloskar Motor to Add 1 Lakh Units of Capacity at Bidadi From 2027: PTI",
+          "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxQM0lVN1NfU2xJTGJOUG9iblVJSGY1WmsyS3ZFXzUxUUtIYzVxd1N4eEpwQkYtTmZwQ3B2cHlIeFY2VTkyMFdrdXNjaGkyOGdEdU1EM0c3SFMtdnJYT3g1SkgwMGlHSDJNRWxaOWVqcnFHTHBaXzlsZkNWZDVxX2QtSTVJc3J1RmFmSTRYbUpDYkdVUkI2NWg1NFVpM0Zma2ZLTERrTDJVUEJUQmZPMXhLZkl6U3BLMUnSAb8BQVVfeXFMUEczNzRLY0gyNnkxZWJhbkRVVW04VTdPQk9kcEFHZmtITW1iNTgySlJ5T3pVNFVINFJfVk1lT0kzUWVwV09HOTN0b3pzYjhYS3JYT09zeWlyQTRXMDJybnRyMHgtaGFHX1I2Wm5oSXJuUkN2eUliLVY0cWNCM1ZKYTdROVpjM1Y4dTI3anlSMjh3V1J2T3hlN1NwMy1ZdU0ybXh1UFZ1VTU4Wk1OVHN5LWcwa0ZVelJBUjRYSThpajQ?oc=5",
+          "source": "Autocar Professional",
           "tags": [
             "other"
           ],
@@ -588,22 +1489,22 @@
           "deep_link": "#stock/ELGIEQUIP/snapshot"
         },
         {
+          "ticker": "THERMAX",
+          "score": 1,
+          "severity_weight": 3,
+          "primary_signal": "Revenue Contraction",
+          "coverage_count": 4,
+          "pe_vs_peers": "16% above peers",
+          "deep_link": "#stock/THERMAX/snapshot"
+        },
+        {
           "ticker": "KIRLOSENG",
           "score": -1,
           "severity_weight": 3,
           "primary_signal": "Revenue Contraction",
           "coverage_count": 3,
-          "pe_vs_peers": "14% below peers",
+          "pe_vs_peers": "16% below peers",
           "deep_link": "#stock/KIRLOSENG/snapshot"
-        },
-        {
-          "ticker": "THERMAX",
-          "score": -4,
-          "severity_weight": 3,
-          "primary_signal": "Revenue Contraction",
-          "coverage_count": 2,
-          "pe_vs_peers": "14% above peers",
-          "deep_link": "#stock/THERMAX/snapshot"
         }
       ],
       "threats": [
@@ -614,515 +1515,6 @@
         {
           "name": "Hitachi Energy",
           "detail": "+68.6% revenue growth"
-        }
-      ],
-      "suppressed": []
-    },
-    {
-      "id": "banking_financials",
-      "name": "Banking & Financials",
-      "stance_line": "No change this cycle; carrying news only",
-      "median_pe": 14.2,
-      "vs_peers_pct": null,
-      "counts": {
-        "new": 0,
-        "escalated": 0
-      },
-      "delta": 0,
-      "news": [
-        {
-          "date": "14 Oct 2026",
-          "headline": "Cabinet approves continuation of the National Social Assistance Programme for five years from 2026-27 to 2030-31",
-          "url": "https://news.google.com/rss/articles/CBMifkFVX3lxTE0taUJmQkRlMDRRV3J1NUF5MmVVbHlPdnk1YWU0dDJZVW5mc1VDX243ajd5SS1CUndlVklQZ2lVc05DcVF6M1ItRnI5a2lRUFRfal9hNkk2RTM0dnN5TnBLSHh5dXZOYnJoNm9Xa2Fya3pVUWRiNFptV2RvMTgwQQ?oc=5",
-          "source": "Press Information Bureau",
-          "tags": [
-            "policy"
-          ],
-          "confidence": "M",
-          "policy": {
-            "measure": "subsidy_or_funding",
-            "status": "approved",
-            "direction": null
-          },
-          "affected_tickers": []
-        },
-        {
-          "date": "12 Oct 2026",
-          "headline": "Union Minister Jyotiraditya M. Scindia Inaugurates and Lays Foundation Stones for Development Projects of ₹331 Crore in Mizoram",
-          "url": "https://news.google.com/rss/articles/CBMifEFVX3lxTE0zZXdIOEh3N1lQWk5rbmltWGdwNUFOWldCQmVBbWp2X2Mzcy1WOUw2YlZfYl95UTc1VWdLcUU1SXAydHVOeklxYTFPaVhFSkVwbVZBajhpVU4xTTNGOFo5d2Y5cnJaWUJoVDh6UDEwb2hNS05fU0ExX2Faeng?oc=5",
-          "source": "pib.gov.in",
-          "tags": [
-            "other"
-          ],
-          "confidence": "M",
-          "affected_tickers": []
-        },
-        {
-          "date": "13 Oct 2026",
-          "headline": "HDFC Bank shares climb 0.84% as Q2 results loom; sellers still dominate",
-          "url": "https://news.google.com/rss/articles/CBMi2AFBVV95cUxONWRydlhHRDhYNEsybFppdmJCT256UEZOUlRRLVc3ODRRanhaX0xBdjJPVjNMR2dfMzU1ZDBqSkNWNkQwMGt0cVRYOExTOUVOOWZrTXpNdWRKOFpGa0RFMFRwTUs1RTVVaHFwWmRvOUxzb2VhRGhlRk1tdEhiMW5Zc2gtSGNUZVh3QkZPYWJhUDhIcEFuUXp4bmJidGxNa3ZGWG9mSVQxX1RYNkJTT2NQUEprYWVhZURXdWRlOGFZOHg2bGRETnV3ZmV6LXlSZjN3aTNuTXRVVjPSAd8BQVVfeXFMTkpOSFA5ZXJ3cEtLWlZYT2dyRXFDZm9mUC1YQXA0a3NlNU04SW1XbFVkaDk5UmlfM0dKN0hnczdnMTJvOW0yTWpsdzhtOG1UQlR3Y1BFWldvVnJHdFhJbjRYR3BsRG9WQmNNT3lvSmxpT3h2bDhoUmxrUmhWRUt2eVIwUF9FbGVsQUd5Sm1FeU5LcU5rWkhUT2UzNHZTVVJWZWk1d0xhd3ZhRUMwclBXdjMxN254Q0Vta1JRNE5WZlZaUW5DZDJtaWFMSVYxUUFnbGw3MU9qbWw3VnBqUlZfaw?oc=5",
-          "source": "BusinessLine",
-          "tags": [
-            "other"
-          ],
-          "confidence": "M",
-          "affected_tickers": [
-            "HDFCBANK"
-          ]
-        },
-        {
-          "date": "14 Oct 2026",
-          "headline": "Frequently Asked Questions (FAQs) on Strategic Restructuring of IDBI Bank Ltd.",
-          "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE8zQXRoWnNVbUtfQ2w3c1hnc3JhRzRiam5tVTNDUi1ES0VYeDZaZHZSZTZ5LW93SzB3TnFnbmstdzc0NE5FdndSeEFkaHhUYXRLR1FwZnY2Qmdaa01mU1p5ZjlfeG5KOGdD?oc=5",
-          "source": "www.pib.gov.in",
-          "tags": [
-            "other"
-          ],
-          "confidence": "M",
-          "affected_tickers": []
-        }
-      ],
-      "focus_stocks": [
-        {
-          "ticker": "HDFCBANK",
-          "score": 3,
-          "severity_weight": 3,
-          "primary_signal": "FII Selling",
-          "coverage_count": 8,
-          "pe_vs_peers": "In line with peers",
-          "deep_link": "#stock/HDFCBANK/snapshot"
-        },
-        {
-          "ticker": "ICICIBANK",
-          "score": 10,
-          "severity_weight": 2,
-          "primary_signal": "Valuation Stretch",
-          "coverage_count": 10,
-          "pe_vs_peers": "25% above peers",
-          "deep_link": "#stock/ICICIBANK/snapshot"
-        },
-        {
-          "ticker": "SBIN",
-          "score": 14,
-          "severity_weight": 2,
-          "primary_signal": "Institutional Buying",
-          "coverage_count": 4,
-          "pe_vs_peers": "26% below peers",
-          "deep_link": "#stock/SBIN/snapshot"
-        }
-      ],
-      "threats": [
-        {
-          "name": "Kotak Mah. Bank",
-          "detail": "+6.4% revenue growth"
-        },
-        {
-          "name": "Axis Bank",
-          "detail": "+9.9% revenue growth"
-        }
-      ],
-      "suppressed": []
-    },
-    {
-      "id": "big_cap_industries",
-      "name": "Big Cap Industries",
-      "stance_line": "No change this cycle; carrying news only",
-      "median_pe": 21.5,
-      "vs_peers_pct": null,
-      "counts": {
-        "new": 0,
-        "escalated": 0
-      },
-      "delta": 0,
-      "news": [
-        {
-          "date": "12 Oct 2026",
-          "headline": "Five Years of PM GatiShakti: Transforming India’s Infrastructure Planning",
-          "url": "https://news.google.com/rss/articles/CBMifkFVX3lxTE9ROTBCNGUyUU94Mnl0REl4TEp4M0tFakJzNjFlR3ZDMHpFaUhOOUU5UFhVREhRQmRDeE5iN3BmN1Y2cldxRE1JWXF5VGx2Qm1sWUhQcHJBWDR0V0J5c3NKWnNZNUhYQ1U4Y2I1TXpOZkphY2ZDZlhJOExINzBWUQ?oc=5",
-          "source": "pib.gov.in",
-          "tags": [
-            "other"
-          ],
-          "confidence": "M",
-          "affected_tickers": []
-        },
-        {
-          "date": "12 Oct 2026",
-          "headline": "PIB Backgrounder",
-          "url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxPeTF2a1hvUW02WUdFQ2lRYnZKblJqUkRsQzhwbHFpUjBrZjBfSGlPWDJWSTUxd011azFVWmRMVGdTZ1NNZWg1emV2WC1SZVdIVHQ3T0tJNGdyRDN5UUZlb0dLbGpVRzJqVGcxWVFuTXNRckota29OSjZEbGY0Tng4ODY2NWFOUQ?oc=5",
-          "source": "pib.gov.in",
-          "tags": [
-            "other"
-          ],
-          "confidence": "M",
-          "affected_tickers": []
-        },
-        {
-          "date": "14 Oct 2026",
-          "headline": "PM to Inaugurate and Dedicate Five Development Projects Worth Around ₹3,350 Crore in Ladakh on 15 October",
-          "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTE9PbmppaFZoRE0tM0RoVWlVLWZ0ekNZMWNZUHlUNU1DVTF0cHhnWXFNRW44eVlFejB5cWpYaWp1Rk9JcUd5M0d0cHBtcHUwalpDelhQZFNRa1lMdF9VNDJjMkFJVFI0anFZMkR5dmRiQ1lodU54MmdVZFVlbw?oc=5",
-          "source": "www.pib.gov.in",
-          "tags": [
-            "other"
-          ],
-          "confidence": "M",
-          "policy": {
-            "measure": "procurement",
-            "status": "in_force",
-            "direction": null
-          },
-          "affected_tickers": []
-        },
-        {
-          "date": "14 Oct 2026",
-          "headline": "L&T Q2 FY27 Results Date: What to Track This Quarter",
-          "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxNU2hNNjViRVJSYnU3WW0zUzc5Y1VYN2M5UGo5b3hlMVBRNlRpTlc1cVpjeGtCaF9IX0l1ektjdlJiMWN2NG1Kckk0c2pCbjAxbnB4OEFTTlhXaV9OMG5ZNFdqR195YndFM2U4OUN6bWluZjFXLTlESWtoYUhiSEJOM2lhcmxwSGlQaGcxUDk4T2p4bC1hbEJsUk9qaDQyMEE1X2E0U1FkWHBzU2Z5QlhqelpEVmx2Wk1wWGdEZy1CRkhSN2QyRXp4NC13NVRrVTQ?oc=5",
-          "source": "Kalkine India",
-          "tags": [
-            "other"
-          ],
-          "confidence": "M",
-          "affected_tickers": []
-        }
-      ],
-      "focus_stocks": [
-        {
-          "ticker": "BPCL",
-          "score": 9,
-          "severity_weight": 4,
-          "primary_signal": "Margin Compression",
-          "coverage_count": 11,
-          "pe_vs_peers": "62% below peers",
-          "deep_link": "#stock/BPCL/snapshot"
-        },
-        {
-          "ticker": "HINDPETRO",
-          "score": -1,
-          "severity_weight": 4,
-          "primary_signal": "FII Outflow",
-          "coverage_count": 0,
-          "pe_vs_peers": "106% above peers",
-          "deep_link": "#stock/HINDPETRO/snapshot"
-        },
-        {
-          "ticker": "IOC",
-          "score": 8,
-          "severity_weight": 3,
-          "primary_signal": "Margin Compression",
-          "coverage_count": 9,
-          "pe_vs_peers": "75% below peers",
-          "deep_link": "#stock/IOC/snapshot"
-        }
-      ],
-      "threats": [
-        {
-          "name": "M R P L",
-          "detail": "+43.6% revenue growth"
-        },
-        {
-          "name": "C P C L",
-          "detail": "+84.8% revenue growth"
-        }
-      ],
-      "suppressed": []
-    },
-    {
-      "id": "clean_energy",
-      "name": "Clean Energy",
-      "stance_line": "No change this cycle; carrying news only",
-      "median_pe": 48.7,
-      "vs_peers_pct": null,
-      "counts": {
-        "new": 0,
-        "escalated": 0
-      },
-      "delta": 0,
-      "news": [
-        {
-          "date": "13 Oct 2026",
-          "headline": "CEA Brainstorming Event: Making Indian Power Sector AI Enabled",
-          "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTE5rdWp6cEduQmYtZGo2V0o4YzkyRVVRWTdrcWlzeklvRWtnLW5lMXFVeWQ0VDdXaGlSM3pyRlJGdldsdVo3Nk5mNk5qYzBUZ19IckkwblZaUl9IdXRlbFdnYkYxZFNjOXdqTjc2OVJ2SFRhcFVKVTNIRmRDUQ?oc=5",
-          "source": "pib.gov.in",
-          "tags": [
-            "other"
-          ],
-          "confidence": "M",
-          "affected_tickers": []
-        },
-        {
-          "date": "13 Oct 2026",
-          "headline": "India’s Energy Journey: Expanding Capacity, Strengthening Security",
-          "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxNdjVEZlhMWkFkZ3RjRUNBakVVVUEtZ2xLX3hmMkplZzFfMlAyS0hRLUdabTEwS3Exa3FaQTBUQnpUbVJHclYtUHpjQXRVV2F0d0hOM2VlODdFcFFiaVdfb0JRbVlTOTB2YkF3SWZZcW1mZ280TDJxSFdmM3c4VHp3LVkzYWZqRkhSOHc?oc=5",
-          "source": "www.pib.gov.in",
-          "tags": [
-            "other"
-          ],
-          "confidence": "M",
-          "affected_tickers": []
-        },
-        {
-          "date": "14 Oct 2026",
-          "headline": "PM to Inaugurate and Dedicate Five Development Projects Worth Around ₹3,350 Crore in Ladakh on 15 October",
-          "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTE9PbmppaFZoRE0tM0RoVWlVLWZ0ekNZMWNZUHlUNU1DVTF0cHhnWXFNRW44eVlFejB5cWpYaWp1Rk9JcUd5M0d0cHBtcHUwalpDelhQZFNRa1lMdF9VNDJjMkFJVFI0anFZMkR5dmRiQ1lodU54MmdVZFVlbw?oc=5",
-          "source": "www.pib.gov.in",
-          "tags": [
-            "other"
-          ],
-          "confidence": "M",
-          "policy": {
-            "measure": "procurement",
-            "status": "in_force",
-            "direction": null
-          },
-          "affected_tickers": []
-        },
-        {
-          "date": "14 Oct 2026",
-          "headline": "India’s clean energy transition now central to economic resilience: Pralhad Joshi",
-          "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxOcUF6dkRtaktDTTA2MzJReHhRMHhfQ2NYV0dlVjVBR1NCdWt5aHRrYmNaOTNpTmpvcmxVb0JQcXZZZ1dyNUY1eGxVY1c0RERvRnlrNmJDVWJNV1FhU19NZF85eWtlNGw4SEhvdjNZNHdMV3d2U1ZuMnVzYnd4VjFITW9vNHRBS1FiajNjUHlELTFLS1VyaVBVNkVvZ2liZHA4X2MxbTlkYnY?oc=5",
-          "source": "DD News",
-          "tags": [
-            "other"
-          ],
-          "confidence": "M",
-          "affected_tickers": []
-        }
-      ],
-      "focus_stocks": [
-        {
-          "ticker": "ACMESOLAR",
-          "score": 6,
-          "severity_weight": 4,
-          "primary_signal": "Promoter Exit",
-          "coverage_count": 6,
-          "pe_vs_peers": "In line with peers",
-          "deep_link": "#stock/ACMESOLAR/snapshot"
-        },
-        {
-          "ticker": "SUZLON",
-          "score": 16,
-          "severity_weight": 3,
-          "primary_signal": "Revenue Contraction",
-          "coverage_count": 20,
-          "pe_vs_peers": "63% below peers",
-          "deep_link": "#stock/SUZLON/snapshot"
-        },
-        {
-          "ticker": "ADANIPOWER",
-          "score": 12,
-          "severity_weight": 2,
-          "primary_signal": "Valuation Stretch",
-          "coverage_count": 19,
-          "pe_vs_peers": "46% below peers",
-          "deep_link": "#stock/ADANIPOWER/snapshot"
-        }
-      ],
-      "threats": [
-        {
-          "name": "A B B",
-          "detail": "+21.0% revenue growth"
-        },
-        {
-          "name": "Hitachi Energy",
-          "detail": "+68.6% revenue growth"
-        }
-      ],
-      "suppressed": []
-    },
-    {
-      "id": "fmcg",
-      "name": "FMCG & Consumption",
-      "stance_line": "No change this cycle; carrying news only",
-      "median_pe": 43.2,
-      "vs_peers_pct": null,
-      "counts": {
-        "new": 0,
-        "escalated": 0
-      },
-      "delta": 0,
-      "news": [
-        {
-          "date": "13 Oct 2026",
-          "headline": "FMCG demand to stay resilient despite El Niño, says Nuvama; Bajaj Consumer, Nestlé in focus",
-          "url": "https://news.google.com/rss/articles/CBMi2wJBVV95cUxNWmZGS2ZhME1uZkJqandiVTkxMjg0clp2VXV3MEFQblFHTmlFNjRsU0V5T2pxMjRIaTdiR2s2UlhlakNuT2IwZ2hlSi0zck1XYU1RbnMzRm04RzV6d25ncHJNbjhVSmlPYnFSU1V0dGtFWVdkUFdDcldnUVlwMGRQQllNVzdVeUFoaGRKM3ROdnZyLVJPTEdtQ0ZYbzVpRTIyRzhHamFMZXVReEd5TEwxOHZIaTN6T0xfTnBlTkhIakZFa3pGT2ppazU3UF9pR3RVWVNVZFZrTlF4MklUVFpzcEIxYXNfX2MxZDFDbWtCSzk0WDJYWXdHU1pGcHNhUlh4b1Zhb1ZwekljSU9EZmM1NnlPZTZDTHRUMVlEZW9uMnNLX25CNFl0VUM5TWpUV21lZlF4MEVWLUw5bWI2RHg4dWNMTjJvbzVjS0hvUFJNcGRLbDlMRjh3TU15c9IB4AJBVV95cUxOZ1pZdkF6NGJCUHcyYlBrZXpRU2FSOWtyQXl2OEgyV1lNWmIxR01iWjJKZ1QyYmR0Tko4Z1hwcWJ4SHptTWFqTFBwLWJGdHlLbWxlY1VOVHZvd0JNM2ZsWFZVX1ZyWm1KcHBiQTRaYW8zTXhnaXF6QlNXZWVrWGFQV2o5TVdiUWhpZmlnM0tGQ1RFMUwzeTktdEQ1d19iZ0tTRHFNYnQydWFJaExPWWI0NjVDSmJ1bW5aNkJFbElxU2tlNkN4R1p6d2RPWlZUVGpza3lONS1zMkN5Nzd6eUt2UWUwd1VoWWRwOXRPOG1TSWZSNGpuT0hycVlHVFdfLXhmU3hreUZLMG4zWkNJOF9iaGU4NU5iRDZWQVZuT3VISUhxZTNyOXhJZkZKaHZ2S2NJc2pOeDJiZ1N3WXBzaDZ2OUdsYy1MMlMwc0VOdzI2cjdfeENXUlpvMGRuZVVvTTJT?oc=5",
-          "source": "CNBC TV18",
-          "tags": [
-            "other"
-          ],
-          "confidence": "M",
-          "affected_tickers": []
-        },
-        {
-          "date": "14 Oct 2026",
-          "headline": "5.54% Inflation Bites Before Diwali: FMCG Companies Face Weak Demand in Rural Markets",
-          "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxOc214SEd0TnBpY3UtX0NIVzJ3QkxrSlYwTTREbmtWMzBCSHRSaE1PaHAwb2JMSnp2V3BzUm83UVhkUzE4ZjZ2aTA4OUMtRFNnZ0xMaWtuREZHWTNXZ2E0TmJvWGhFbFVXN2lydFl1bzZMVUYxUDUtXzY3VHlfVVNoYg?oc=5",
-          "source": "NiftyTrader",
-          "tags": [
-            "other"
-          ],
-          "confidence": "M",
-          "affected_tickers": []
-        },
-        {
-          "date": "14 Oct 2026",
-          "headline": "'Small' pains: Inflation squeeze likely to choke FMCG volume growth again",
-          "url": "https://news.google.com/rss/articles/CBMi5wFBVV95cUxPbjRPXzV0Z1VrSGZ2UnVWQjdFLTFMcUoxOHloR3ZoZjEwbEFHTUhxU1BHbnAyVTJlbUhzdUU1R2lwMVV5bXlYS0QzLXlDSC1Hb3VZWDFGMUotUUY2ckM2VllYMFJJOXFKcF9FbGJsX29rOVlacG1LV2lGdVg2aGFxZHRZREJBWTA4V0xDSHFGRWV5T19pUkl6TjlkdFFfNmlIY3pfOU1hOGR6SXVvektYUXVzQi1xNVhSSXFlR3ZySUxoWXlXTWg1aU1IN3l2Nm92TUh0STZObzhlS2FOWWx3NHdWOHB1OWPSAewBQVVfeXFMUHVTZHNnZGpDVEVaVm5rUzVlVGR2VTAxamFDckhrYXUxTENBTjRiNG5rNVhSNkRpUHREOFh0blVJVUtjWjNQakFqa0NaMFRWM0dDM1hudzB3eXZpUjM3a2R6Y2NxcDZua3pjOXQtZ2c4MUpleVVTT21fbWYzZG90Y2lJWFY0eXdSMzlySy1rUHRPaGlTei1tUWlRazlUdjNQaUJ1SDV0U3NzRUlnWjBDYUhCSWRJa25MUWFscWhGVENaVkR3YXE2MnR1STNBanBlYXNhOUQtNmEwenp5VndhdTZaaWFhT0V0dUZUX2g?oc=5",
-          "source": "The Economic Times",
-          "tags": [
-            "other"
-          ],
-          "confidence": "M",
-          "affected_tickers": []
-        },
-        {
-          "date": "14 Oct 2026",
-          "headline": "Festive FMCG sales off to a slow start as inflation squeezes household spending",
-          "url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxPTUtjLURHbXFFZDJEcUU1MmxIMTJGeTBMNXptbFRPWjhNQXAzRzgzdjJHWFU4Q2lyRlNWWWxnZnFOMnRlbmVHeHpKbUdIclVaelhJNlQtLXV5Qm9kZHlPOEFKT2pZRTJnUVE2Z29TbHhfWFQzNFBtVEFLYm1TUjhUUW1lMDV2WXlNUGEyWmN2aGZTMGMzRVdBT052dVBsY1ZpVl8temZUbW1VejFVdmt4THZNakdyemU2NEJNcGI5Ny1yWmxrSWtObVd2Y0NaamlKeHc?oc=5",
-          "source": "Moneycontrol.com",
-          "tags": [
-            "other"
-          ],
-          "confidence": "M",
-          "affected_tickers": []
-        }
-      ],
-      "focus_stocks": [
-        {
-          "ticker": "ITC",
-          "score": 6,
-          "severity_weight": 4,
-          "primary_signal": "Margin Compression",
-          "coverage_count": 10,
-          "pe_vs_peers": "61% below peers",
-          "deep_link": "#stock/ITC/snapshot"
-        },
-        {
-          "ticker": "VBL",
-          "score": 9,
-          "severity_weight": 3,
-          "primary_signal": "FII Selling",
-          "coverage_count": 8,
-          "pe_vs_peers": "In line with peers",
-          "deep_link": "#stock/VBL/snapshot"
-        },
-        {
-          "ticker": "TATACONSUM",
-          "score": 0,
-          "severity_weight": 3,
-          "primary_signal": "Revenue Contraction",
-          "coverage_count": 3,
-          "pe_vs_peers": "39% above peers",
-          "deep_link": "#stock/TATACONSUM/snapshot"
-        }
-      ],
-      "threats": [
-        {
-          "name": "Valencia Nutrit.",
-          "detail": "-39.5% revenue growth"
-        },
-        {
-          "name": "Orient Beverages",
-          "detail": "+14.1% revenue growth"
-        }
-      ],
-      "suppressed": []
-    },
-    {
-      "id": "healthcare_hospitals",
-      "name": "Healthcare & Hospitals",
-      "stance_line": "No change this cycle; carrying news only",
-      "median_pe": 54.2,
-      "vs_peers_pct": null,
-      "counts": {
-        "new": 0,
-        "escalated": 0
-      },
-      "delta": 0,
-      "news": [
-        {
-          "date": "12 Oct 2026",
-          "headline": "Affordable and Accessible Healthcare for All",
-          "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE5UUjEtcWZkMHdlbm1qa1RKQTlBbWRHM0x1SVZfSlkyTllRWm9hRHhSNE1xRHJLNXZ1b2s1dlp0OHVSaEFIWG9UWUduTXJJbmhVRm9rMndZSjhkWW5INlBkY001RE9RNGM4YWpYNFVzNklUQmptNldQag?oc=5",
-          "source": "Press Information Bureau",
-          "tags": [
-            "other"
-          ],
-          "confidence": "M",
-          "affected_tickers": []
-        },
-        {
-          "date": "13 Oct 2026",
-          "headline": "PIB Backgrounder",
-          "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxQNUxqS1Vabk1mVzhpbVlVRDRUQXpSbHpSMzFyZnJ0eV85a08yc052clgwaldHcktueHN6Uk1ZUDBuTnlzUVBfbDNPaU80bHZjWFdUVDlNeXR5Yno4d1pab05NbWNFbUZmNGdsbmk0NndWUUVvNzIxLWNrOWF5U0NnQ3hqTjBybWVwZlE?oc=5",
-          "source": "Press Information Bureau",
-          "tags": [
-            "other"
-          ],
-          "confidence": "M",
-          "affected_tickers": []
-        },
-        {
-          "date": "14 Oct 2026",
-          "headline": "Apollo Hospitals, Max Health, Fortis: Healthcare stocks to post strong Q2 earnings; volumes, capacity additions in focus",
-          "url": "https://news.google.com/rss/articles/CBMihAJBVV95cUxPSWZ4UFQ3ckw5NWRKNFJRZUl3a0pMcEwxT1VsMmRCM1NHd1FYX2VkY2JMUXlNRzIwZHB1NFhqOVd5OVJITGZwN0VyWkJpSmRPa2hNeUdKbUxTWVg2MnBsTnozWk1CY0hQa2V3WHdjSVN0N25ZLWlTN085THJmSHFqQ043NW9EbURYLTc3WlhlWkR2R3dING5EcXVnVExmRV9WNlBLdGhkbHA0Y3BWWXpqeEZxOFNYZnZqTDlKVFVBWGxzNUVqeVlRalp2Q2pURXhtUWc3NjVzdUZhOEttbU9EdkNsejdUS1hGOVRjMGtBR2t4OWRCUS00bEJySEYzVXpYTHU3Vw?oc=5",
-          "source": "Upstox",
-          "tags": [
-            "other"
-          ],
-          "confidence": "M",
-          "affected_tickers": [
-            "FORTIS"
-          ]
-        },
-        {
-          "date": "14 Oct 2026",
-          "headline": "Paras Health Ranks Joint Third Nationally As Inpatient Volumes Rise 42.5%",
-          "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxPQl81aVhIYWFjM3Y2QVIyV09mcW9YN2VOd0RWck1YeUIyaF9sZzluRmlEMmFvUlVjOHk2VUtURjNfclJ4bDVKQVRpeUMyR1RhMXRLZUtGQW5nM184el9uWFZnUUdNRmRCR2p5WmY0SGlHMHg3aDVkNkRpMW96ZjFpZFFobldZcnRXWnNtbk43VDJoWjdSVUtOUHZuQkhKZldlQmlWSEQybmlZV003YUhtRENJTnFWVUNPOTU3RzBR?oc=5",
-          "source": "BW Healthcare World",
-          "tags": [
-            "other"
-          ],
-          "confidence": "M",
-          "affected_tickers": []
-        }
-      ],
-      "focus_stocks": [
-        {
-          "ticker": "MAXHEALTH",
-          "score": -2,
-          "severity_weight": 4,
-          "primary_signal": "FII Outflow",
-          "coverage_count": 4,
-          "pe_vs_peers": "In line with peers",
-          "deep_link": "#stock/MAXHEALTH/snapshot"
-        },
-        {
-          "ticker": "FORTIS",
-          "score": 3,
-          "severity_weight": 2,
-          "primary_signal": "Margin Compression",
-          "coverage_count": 27,
-          "pe_vs_peers": "In line with peers",
-          "deep_link": "#stock/FORTIS/snapshot"
-        },
-        {
-          "ticker": "APOLLOHOSP",
-          "score": 2,
-          "severity_weight": 2,
-          "primary_signal": "Valuation Stretch",
-          "coverage_count": 1,
-          "pe_vs_peers": "In line with peers",
-          "deep_link": "#stock/APOLLOHOSP/snapshot"
-        }
-      ],
-      "threats": [
-        {
-          "name": "Manipal Health",
-          "detail": "+38.1% revenue growth"
-        },
-        {
-          "name": "Aster DM Quality",
-          "detail": "+21.6% revenue growth"
         }
       ],
       "suppressed": []
@@ -1131,7 +1523,7 @@
       "id": "manufacturing_electronics",
       "name": "Manufacturing & Electronics",
       "stance_line": "No change this cycle; carrying news only",
-      "median_pe": 88.2,
+      "median_pe": 85.2,
       "vs_peers_pct": null,
       "counts": {
         "new": 0,
@@ -1139,22 +1531,6 @@
       },
       "delta": 0,
       "news": [
-        {
-          "date": "11 Oct 2026",
-          "headline": "Electronics Components Manufacturing Scheme",
-          "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE12VUkzTklPM1ZFQ2pob1VOT0hrbEpKUFNRSVo3V2ctVFRXNGhCU3V3a2FHUTlCT0RHdVllT2VxYmpJdFUtbXYycFk3NnMxc3VJbUQtaWtXSFY1eXR5TVFJN3FhZzdPQ2hNZ2s4QVJ4R0tOVWZpOW5n?oc=5",
-          "source": "PIB",
-          "tags": [
-            "policy"
-          ],
-          "confidence": "M",
-          "policy": {
-            "measure": "incentive_scheme",
-            "status": "in_force",
-            "direction": "tailwind"
-          },
-          "affected_tickers": []
-        },
         {
           "date": "14 Oct 2026",
           "headline": "Production Linked Incentive (PLI) Scheme:",
@@ -1187,12 +1563,23 @@
           ],
           "confidence": "M",
           "affected_tickers": []
+        },
+        {
+          "date": "15 Oct 2026",
+          "headline": "Manufacturing Momentum:Building a Self-Reliant India",
+          "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTFB4bURIRzRXR3NvZ0l3MThoaUhRVjFnczVXYTd0dnRMeWlWMGJKcG5iWG44Qnd0OENfV3NST2tDNFFnbDYxMHo4cTJNNng1ZE9ENEJEcEp1RkxYSklLclZvNm1RcFFBdm1xUHUwaDhDX1FsblkxX090QQ?oc=5",
+          "source": "www.pib.gov.in",
+          "tags": [
+            "other"
+          ],
+          "confidence": "M",
+          "affected_tickers": []
         }
       ],
       "focus_stocks": [
         {
           "ticker": "SYRMA",
-          "score": 5,
+          "score": -2,
           "severity_weight": 3,
           "primary_signal": "Margin Compression",
           "coverage_count": 41,
@@ -1201,11 +1588,11 @@
         },
         {
           "ticker": "KAYNES",
-          "score": 1,
+          "score": 2,
           "severity_weight": 3,
           "primary_signal": "FII Selling",
           "coverage_count": 30,
-          "pe_vs_peers": "28% below peers",
+          "pe_vs_peers": "26% below peers",
           "deep_link": "#stock/KAYNES/snapshot"
         },
         {
@@ -1213,8 +1600,8 @@
           "score": 12,
           "severity_weight": 3,
           "primary_signal": "New Entrant",
-          "coverage_count": 25,
-          "pe_vs_peers": "52% below peers",
+          "coverage_count": 24,
+          "pe_vs_peers": "53% below peers",
           "deep_link": "#stock/DIXON/snapshot"
         }
       ],
@@ -1231,10 +1618,10 @@
       "suppressed": []
     },
     {
-      "id": "midcap_it",
-      "name": "Midcap IT",
+      "id": "semiconductors_equipment",
+      "name": "Semiconductors & Equipment",
       "stance_line": "No change this cycle; carrying news only",
-      "median_pe": 38.9,
+      "median_pe": 122.0,
       "vs_peers_pct": null,
       "counts": {
         "new": 0,
@@ -1243,81 +1630,87 @@
       "delta": 0,
       "news": [
         {
-          "date": "12 Oct 2026",
-          "headline": "Union Finance Minister Smt. Nirmala Sitharaman concludes successful visit to Singapore, focusing on strengthening investment and financial cooperation",
-          "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTFBXWE5SZTkwZkpidWU2SjBhb1laYVVMUjdFenozSldza0Z4bUV5QmFxN016Z0pacTc5dnZYdG4wQ2dFMW53T2thbkVfa2xxc2l0SkE4ckJaZFE4RWZXdGxveHVQS3dUdldE?oc=5",
+          "date": "13 Oct 2026",
+          "headline": "Government of India taking steps to encourage domestic manufacturing of semiconductors & promote country's digital transformation and self-reliance",
+          "url": "https://news.google.com/rss/articles/CBMifkFVX3lxTE8xei1uam9hdlpuMXNpUWpCX3U2LVBUMFFDQmlIbDlOOVlDTFdQOGxYeG1JZFAxaXRZVjRCNVRaSm9lSW5YdWlzOXIzU1FHMm1zSTYta2p6NVV0N21vXy1LeC1aME5Fcl9lcnNyWmRER21ZQ2JIcEs1NGtpWmE2QQ?oc=5",
           "source": "www.pib.gov.in",
           "tags": [
-            "other"
+            "policy"
           ],
           "confidence": "M",
+          "policy": {
+            "measure": "incentive_scheme",
+            "status": "in_force",
+            "direction": "tailwind"
+          },
           "affected_tickers": []
         },
         {
-          "date": "12 Oct 2026",
-          "headline": "केंद्रीय वित्त मंत्री श्रीमती निर्मला सीतारमण ने निवेश और वित्तीय सहयोग को सुदृढ़ करने पर केंद्रित सिंगापुर की अपनी सफल यात्रा का समापन किया",
-          "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE5mX3JEazFiOWNHUE5Nb05DcGg2TVhnS2kwQ2tjY1RqUWVMUUFPSGw3SnBQX1FSYTNLY2tjdk1NaDd4UHhHNGhMSDA1YXZIVjBWOWFSaXl4bm9yamlHRmdWQU5abFloMy1GNW1n?oc=5",
+          "date": "14 Oct 2026",
+          "headline": "Cabinet approves Semicon 2.0",
+          "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxOdy1MMF9SUmNKNnZ1SDNPR1E2M0hHWjF4cjlfSVp4MkRSaTJfTGRnYXBhcTVXSEQ0YVJnYVF5aTZSUEY3Z3ZUd2pMeEhURVFCUVpMbWkySDd3QUh0c25nNWpITFk5UEVIbElDNmVUSExjSHU2WTRrRjNvZXpMNGdhSw?oc=5",
           "source": "pib.gov.in",
           "tags": [
+            "policy"
+          ],
+          "confidence": "M",
+          "policy": {
+            "measure": "approval",
+            "status": "approved",
+            "direction": "tailwind"
+          },
+          "affected_tickers": []
+        },
+        {
+          "date": "14 Oct 2026",
+          "headline": "Semiconductor test gear maker Teradyne to buy $300 million stake in FormFactor",
+          "url": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxOdmY1U1hFeUJIRDk0eUgzNi1aLTNMdFpTemFVc254NTRQWEpjRHM2dVM5cjJSZVM4YjBaSWlBOGpLVGxWWjB6T0QwVF9JM0pwM0hNSTFjN1hOYmMyaTBzS0lmV2JGektaYk1XVjNBcjRCMXZxS2h5NFpEYUtHMXh4Q0lHb3pGakpaczVZVUFid0JsOHVIdlhmNWFZOGs1R21FMHRWYzE1c2s5cUd2Y05MaFdJemZoekdib0h3S3NPdzlENFl4eG5iZEw1U0ZVaHZUYXRSYkZqcnNVNEMxUEdQWWUzZWZGU29DN0E40gHvAUFVX3lxTE9MZVh4RFFDQ3BZVS1WT2psRVlhXzdFUHZyUXpvek5HN3pyVnF3Q3puX1ZBYkljZVk5V0J4M1BZUWo3RTRPY1doUUI4Y21lc2FyYm02aGtYbktFQUpnWlVXdnhuc3FWck0ya190Z0Z5c01Zd3B4VndjRFRDXzdVU1BCVFhYWTlPUWYxYUl5R1d4STNsQjBpbkV1cU1MRFgxY3c1VlhSWE95d1RzWGVlY2Z5SWRMeTBiY2ozTWx6b2lidVNDb0lBRl9JWXBkVmdTbmVISzZGSUN1czlFZ2tqUUV2YUU0NGxXWVc1dkR5X3Qw?oc=5",
+          "source": "electronics.economictimes.indiatimes.com",
+          "tags": [
             "other"
           ],
           "confidence": "M",
           "affected_tickers": []
         },
         {
-          "date": "13 Oct 2026",
-          "headline": "Persistent Systems Opens Third Facility In Hyderabad To Boost AI Services",
-          "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxOSjYwQmZKUlRlbTJkajRwdFF6cDIyR0ZJXzBSMk5nVUpOalNSbFNjbGttUXZ5V1ZxWkRuOTNBak5sSDg1UUNybFNvM3d3Vkt3Zm1qempiallsSnd1cmV1LU5PYnI0eUQyc1RTSUl6TFlTZ2RrNWtPaHhrdjhkUEV0VzlnZzRzX1pjWFNRMFpCTjZiNjZFbU90TXlUeFo4dFhQ?oc=5",
-          "source": "Sahi",
+          "date": "16 Oct 2026",
+          "headline": "Semiconductor and AI Revolution",
+          "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTFA2RzJwZ2V0b0lyVFc2UnNHUmdjLTJEVmFTNllJVGQwNHM2X3pHMUhjME8zX1FzZU5UV0hrY1lSVndib2YzVkxpVU54RjhKN25NaTdyNjBaYS1IbDU5cmFIZk1PZm9XejNTVjFtbWpDemZqUXp1MFl3?oc=5",
+          "source": "Press Information Bureau",
           "tags": [
             "other"
           ],
           "confidence": "M",
-          "affected_tickers": [
-            "PERSISTENT"
-          ]
-        },
-        {
-          "date": "13 Oct 2026",
-          "headline": "Persistent Systems Adds Hyderabad Facility for BFSI Clients",
-          "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxNVGFGeS1qbFlFN0NIcS1Kbno1QUxDS1FKQzFSeWVGZC1YYlFqNUQ3NTMwSGt0MnBIcTJtTU1SWExPa2RhUGlFaHlaeFFNMUVmcmc0SHoxdlgyOTNCelp5ZXVnNERPR2RtVFFYYUZzQ1NRTWkzcm41WEx4cDVWa1IyY2l1UlEyVzZVdFVCVXJGSlNueWQwV3ozN3B2S3FQdw?oc=5",
-          "source": "Analytics India Magazine",
-          "tags": [
-            "other"
-          ],
-          "confidence": "M",
-          "affected_tickers": [
-            "PERSISTENT"
-          ]
+          "affected_tickers": []
         }
       ],
       "focus_stocks": [
         {
-          "ticker": "COFORGE",
-          "score": 9,
+          "ticker": "DIACABS",
+          "score": 4,
+          "severity_weight": 4,
+          "primary_signal": "Promoter Exit",
+          "coverage_count": 6,
+          "pe_vs_peers": "In line with peers",
+          "deep_link": "#stock/DIACABS/snapshot"
+        },
+        {
+          "ticker": "MTARTECH",
+          "score": 0,
           "severity_weight": 4,
           "primary_signal": "FII Outflow",
-          "coverage_count": 25,
-          "pe_vs_peers": "15% above peers",
-          "deep_link": "#stock/COFORGE/snapshot"
+          "coverage_count": 5,
+          "pe_vs_peers": "30% above peers",
+          "deep_link": "#stock/MTARTECH/snapshot"
         },
         {
-          "ticker": "PERSISTENT",
-          "score": 8,
-          "severity_weight": 2,
+          "ticker": "SPELS",
+          "score": -3,
+          "severity_weight": 4,
           "primary_signal": "Margin Compression",
-          "coverage_count": 20,
-          "pe_vs_peers": "20% above peers",
-          "deep_link": "#stock/PERSISTENT/snapshot"
-        },
-        {
-          "ticker": "LTTS",
-          "score": 11,
-          "severity_weight": 2,
-          "primary_signal": "Valuation Stretch",
-          "coverage_count": 16,
-          "pe_vs_peers": "25% below peers",
-          "deep_link": "#stock/LTTS/snapshot"
+          "coverage_count": 1,
+          "pe_vs_peers": null,
+          "deep_link": "#stock/SPELS/snapshot"
         }
       ],
       "threats": [
@@ -1330,303 +1723,9 @@
           "detail": "+11.5% revenue growth"
         }
       ],
-      "suppressed": []
-    },
-    {
-      "id": "surveillance_security",
-      "name": "Surveillance & CCTV",
-      "stance_line": "No change this cycle; carrying news only",
-      "median_pe": 88.2,
-      "vs_peers_pct": null,
-      "counts": {
-        "new": 0,
-        "escalated": 0
-      },
-      "delta": 0,
-      "news": [
-        {
-          "date": "12 Oct 2026",
-          "headline": "EXERCISE TARANG SHAKTI 2026: POWER IN PARTNERSHIP, STRENGTH IN SELF-RELIANCE",
-          "url": "https://news.google.com/rss/articles/CBMifkFVX3lxTE1Pb2RETWpjYktaQ2RPWmRHOFBDa3NCOXhkajd6cVY1Wk9DbFp5TXdhbWFkem5KSzJCRHVWRVVTNXZmNnlrYlU4OEk2cE5rNnlRWGtWRW9jZjVaVUNscHk2SzBsOWV1Y0VUQWJDTjd5WUM4THVCS0RBaEp0aHJUQQ?oc=5",
-          "source": "pib.gov.in",
-          "tags": [
-            "tie_up"
-          ],
-          "confidence": "M",
-          "affected_tickers": []
-        },
-        {
-          "date": "13 Oct 2026",
-          "headline": "INDIAN NAVY SET TO COMMISSION INDIGENOUS MULTI PURPOSE WARSHIP SAMARTHAK",
-          "url": "https://news.google.com/rss/articles/CBMifkFVX3lxTE8xSlA0QTJPVmliVkFFcEpycVd2UUJrUXFWSjBmZ0gyWEtrMXRuY3phNHVkU0F1bVZRRHJNeDZ4d2daak5Kc0stYzRqYVUzelpoMzh3NGJia1REeWJ0TURQWWwzVkdMNUJtSGF2WGd3ZFVfSUJlX2NYYXd2dGx2QQ?oc=5",
-          "source": "pib.gov.in",
-          "tags": [
-            "other"
-          ],
-          "confidence": "M",
-          "affected_tickers": []
-        },
-        {
-          "date": "14 Oct 2026",
-          "headline": "Aditya Infotech shares jump 6% as Motilal Oswal sees strong growth runway",
-          "url": "https://news.google.com/rss/articles/CBMi1wFBVV95cUxNNlJrZmdlc1A3SmJWaXVlMFdlUGl6LWR5aWdXYWU5VFRBZXNFVS16a0JqT1laTWx6cjEwR3NHYlhEbVBCSlhRem5aQ2pYaDJNY1REbTFFdURJYVBtdTlUZnJrSm9KS2pJZG1CNUN3SmRMazNPODNZcHItaHFkLTdXNzZLb3VCSHhqZjFBSDBiRXV3MDVUX3kwU0lnS2t1dWFPUVdZM3o3Uk1DRW1qSXFIajE3QjNzZl9lWEhPZTlJU05abGVHaE9sZlJuNHlDQjlCeDFzeGl5c9IB3AFBVV95cUxPM3lPTzhkU1pjc0IwTXhFSjRaNW9aVjRjY0hEMGNpOVFScVljblUxTGxoeDZScDV0VXFLWUhEWFVYNVFEUEpINERoc1M2cE4xcDBHdENuNlh1Q29uamtOWlE1SWJ4SHZ0Q2ZUbWtucVgyYXpUR3lpanhPY2pCSERiVmlOb3VFZ2REb2gyOHBDMW1XcUFtbktpNlV5NC03SzdoVkROWEhRc0NRUEF0a1BZUnlta1JyUnJmWmVXc3NuRTZHSWxFcmNMd08xaHJfSHBtLWIzMUhua2ZjM1pl?oc=5",
-          "source": "Business Today",
-          "tags": [
-            "other"
-          ],
-          "confidence": "M",
-          "affected_tickers": [
-            "CPPLUS"
-          ]
-        },
-        {
-          "date": "14 Oct 2026",
-          "headline": "Aditya Infotech Shares In Focus As Motilal Oswal Sees Strong Growth Ahead; Check Target Price",
-          "url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxNekV5VW9xT2tLNlJyZ041bTdHSmw2Y3FhaE5tamR3eFB6UEM2MkxLUWlfZ29aV1ZDUVN4eUVQVWFCUU5sWGtTbi1ncFk1YjlTSURDTDExZngxamhadUZCczVTeUZRTkljQlFKU0RHdUhJUmdTdGE5bTExQzgxVFphN2JrUVk5S1B1ZGZtZzlqRUNlbm5XZnlIM05xTjkzNVRGM2VNWHA3YUpFNGFaNTVlQTNwdk5XOE9aZE5NSlZsMW0tQWpqcW5ObV8td1dLU2stNVE?oc=5",
-          "source": "NDTV Profit",
-          "tags": [
-            "other"
-          ],
-          "confidence": "M",
-          "affected_tickers": [
-            "CPPLUS"
-          ]
-        }
-      ],
-      "focus_stocks": [
-        {
-          "ticker": "IDEAFORGE",
-          "score": 3,
-          "severity_weight": 4,
-          "primary_signal": "Promoter Exit",
-          "coverage_count": 41,
-          "pe_vs_peers": "Extreme outlier (excluded from peer stats)",
-          "deep_link": "#stock/IDEAFORGE/snapshot"
-        },
-        {
-          "ticker": "CPPLUS",
-          "score": 7,
-          "severity_weight": 4,
-          "primary_signal": "Promoter Exit",
-          "coverage_count": 6,
-          "pe_vs_peers": "20% above peers",
-          "deep_link": "#stock/CPPLUS/snapshot"
-        },
-        {
-          "ticker": "ADSL",
-          "score": 6,
-          "severity_weight": 3,
-          "primary_signal": "Revenue Contraction",
-          "coverage_count": 4,
-          "pe_vs_peers": "82% below peers",
-          "deep_link": "#stock/ADSL/snapshot"
-        }
-      ],
-      "threats": [
-        {
-          "name": "Tata Technolog.",
-          "detail": "+28.4% revenue growth"
-        },
-        {
-          "name": "Netweb Technol.",
-          "detail": "+172.1% revenue growth"
-        }
-      ],
-      "suppressed": []
-    },
-    {
-      "id": "textiles_apparel",
-      "name": "Textiles & Apparel",
-      "stance_line": "No change this cycle; carrying news only",
-      "median_pe": 37.3,
-      "vs_peers_pct": null,
-      "counts": {
-        "new": 0,
-        "escalated": 0
-      },
-      "delta": 0,
-      "news": [
-        {
-          "date": "12 Oct 2026",
-          "headline": "India’s Textile Industry Targets $350 Billion by 2030: What It Means for MSMEs",
-          "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxNNXVFaV8xT0xuT0hjeVExMnI4MnhVOG1VbVBWaFBKWDRBc1llOVVWUHZsMFBBYmhnUjhVMVNiUlNPWk1yX3Q3dEdFeWxRbWZ0UHdhdlZobmVOai00V00tWDlLNXZHLUtTbWEyaXF0d1NEVzNodU5NMk1vTTdvLTBOZVh1RUhRUGVBT2c?oc=5",
-          "source": "SME Futures",
-          "tags": [
-            "other"
-          ],
-          "confidence": "M",
-          "affected_tickers": []
-        },
-        {
-          "date": "13 Oct 2026",
-          "headline": "Manufacturing Momentum:Building a Self-Reliant India",
-          "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE9zazRZV0FSRlE2VW05MVA5aVZWRmhfQS1iU3J2NEFzdUg0T2RDX19VZU1lUkFfT3Vsc0RyRWZKczF3cnYwRERPLWtIYm9Za2M0dWxCTnJ4VHYzc0gtZVRndGFJbG9rdXFLeDFrRG1uaU1nVzEtQV9F?oc=5",
-          "source": "www.pib.gov.in",
-          "tags": [
-            "other"
-          ],
-          "confidence": "M",
-          "affected_tickers": []
-        },
-        {
-          "date": "14 Oct 2026",
-          "headline": "Textile stocks Gokaldas, Indo Count, PDS, Filatex soar up to 6%; here's why",
-          "url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxNaDdqOVNPdlVMSXoxUnhyeVdKV3ZjdjN6RjBLYlFScnpQck1aUXNhYzdpYm9YX3lyMFJuMDhablV2SU1OUlFlTFpJMHZSZU1HMHVpVWxCVkZ3bUphOExpNm9fSUpfcjByTjZyV1g1aTdpaWRBYjE3LVJsRlJLblpLdzJmQ2hkcXJfMmctZVZFdWJ3MU0tdmZyQV9sWUlVTnBHVkk0eEtUQVpwTDRBOGtmSzFjeDdsdG1vazc0T1M3M3ZGaXdRSGFjTDFFcDN4X3VGeC1V0gHYAUFVX3lxTE1NYUM5UWJTWWRIcVJUVV91SEp0UjZLY2U4Qk9nd1JUd2t5bjJQN0R5SEhOWUZuWE01dDM0YlVWZ0RXWWlqXzR4b0hPQzltcmZGbFJGYmxOSUxXZUphU1Byb25WNTJVLUlNSWpCUFIxSTd4UU5BVE9EN0VueERHTi1BekdNR2VQaEhxVnk5OUZYWWVUWU1qbHpCUnN0WFZaa0dSSTU1V2h3RFpyX2VWSEJpUnd3bU1lYnNrT184Y2VLaC1udmlWZFpBd2FiQlJvU0luS1dCRktVeg?oc=5",
-          "source": "Business Standard",
-          "tags": [
-            "other"
-          ],
-          "confidence": "M",
-          "affected_tickers": []
-        },
-        {
-          "date": "14 Oct 2026",
-          "headline": "Welspun Living advances AI-Powered Manufacturing with WelVisionAi",
-          "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxNSHk3RGVLZC1vcjU0bnctRVZrcTdsbDJ5TkdaOW8zM3RrbFY4M29uZ2lvaURLNUZIcC1FNDkyaE5aRERoVEdIU3NEMFpaRHl0bUNXSUl1NjF0THJxSjlXNHhaNENfN1U4VE85WTZFQVhiUGdMSHhia2tKTEl6dWpuSEUtVm4yU3F4U1dmSmc2aExfdFdvUkRvY1JPZkNZeWVWclNDTUd3?oc=5",
-          "source": "The Textile Magazine",
-          "tags": [
-            "other"
-          ],
-          "confidence": "M",
-          "affected_tickers": [
-            "WELSPUNLIV"
-          ]
-        }
-      ],
-      "focus_stocks": [
-        {
-          "ticker": "GOKEX",
-          "score": -2,
-          "severity_weight": 4,
-          "primary_signal": "FII Outflow",
-          "coverage_count": 3,
-          "pe_vs_peers": "32% above peers",
-          "deep_link": "#stock/GOKEX/snapshot"
-        },
-        {
-          "ticker": "ARVIND",
-          "score": 0,
-          "severity_weight": 3,
-          "primary_signal": "Promoter Selling",
-          "coverage_count": 24,
-          "pe_vs_peers": "14% below peers",
-          "deep_link": "#stock/ARVIND/snapshot"
-        },
-        {
-          "ticker": "WELSPUNLIV",
-          "score": -1,
-          "severity_weight": 3,
-          "primary_signal": "Valuation Stretch",
-          "coverage_count": 7,
-          "pe_vs_peers": "102% above peers",
-          "deep_link": "#stock/WELSPUNLIV/snapshot"
-        }
-      ],
-      "threats": [
-        {
-          "name": "K P R Mill Ltd",
-          "detail": "+9.6% revenue growth"
-        },
-        {
-          "name": "Vardhman Textile",
-          "detail": "+13.3% revenue growth"
-        }
-      ],
-      "suppressed": []
-    },
-    {
-      "id": "aerospace_defence",
-      "name": "Aerospace & Defence",
-      "stance_line": "No change this cycle; carrying news only",
-      "median_pe": 45.5,
-      "vs_peers_pct": null,
-      "counts": {
-        "new": 0,
-        "escalated": 0
-      },
-      "delta": 0,
-      "news": [
-        {
-          "date": "14 Oct 2026",
-          "headline": "Bharat Electronics Receives Orders Worth ₹533 Crore Across Defence Systems",
-          "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxPOWZ0ZUE1UHkxVjZUMFFlYVZxdEh5ZEQtV0d6VjRUMnZDVzR6VE9LdGg4WnFiZTBnWTRJbTNWSnkzdUdVYUxWcENRMUFsaTNUWE1pVXdLU2pGUWZmVjBVNEdTZFdHZWd0czN0aHRqeXF5azl0NDNXQ1ZwdndVd21ZdE0wM1BsOFg3MW1wcjRXYjNSNXNrX2ZVcFRINVk1Y00t?oc=5",
-          "source": "Sahi",
-          "tags": [
-            "order_win"
-          ],
-          "confidence": "M",
-          "affected_tickers": [
-            "BEL"
-          ]
-        },
-        {
-          "date": "14 Oct 2026",
-          "headline": "Bharat Electronics Secures Fresh Orders Worth Rs 533 Crore For Drones, Jammers, Avionics And Defence Electronics",
-          "url": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxNUWFJUGRaMkFLZUJ0LVBndkNvLWZDdHZUd2htWGx1bXhrOXRBR0NDc2p2eVpjZmoxX200YlNEQkhrbjJPR3BPdlRkV3A3TzNCbmdVZGFvcTM0ODRVT0hHcUszd0hMZ1VBc0FRY21XdXNWdEVraXA1Y0RSd1F0c1BtUnpEMnp3RjVrcnAwN1JvQ0poU0w1eDV3Z2NPV1ZvdXJaVFExTDFaZVBYX1l2NWRJMlVpM084cWdKLTRycTRfTTFVVGxTTktQZkp4MmtsTW9laEFMdk03dWt4cC1Ba250SC1NT1U2Z1BxNHfSAeoBQVVfeXFMTVFhSVBkWjJBS2VCdC1QZ3ZDby1mQ3R2VHdobVhsdW14azl0QUdDQ3NqdnlaY2ZqMV9tNGJTREJIa24yT0dwT3ZUZFdwN08zQm5nVWRhb3EzNDg0VU9IR3FLM3dITGdVQXNBUWNtV3VzVnRFa2lwNWNEUndRdHNQbVJ6RDJ6d0Y1a3JwMDdSb0NKaFNMNXg1d2djT1dWb3VyWlRRMUwxWmVQWF9ZdjVkSTJVaTNPOHFnSi00cnE0X00xVVRsU05LUGZKeDJrbE1vZWhBTHZNN3VreHAtQWtudEgtTU9VNmdQcTR3?oc=5",
-          "source": "Swarajya",
-          "tags": [
-            "order_win"
-          ],
-          "confidence": "M",
-          "affected_tickers": [
-            "BEL"
-          ]
-        },
-        {
-          "date": "15 Oct 2026",
-          "headline": "HDFC Defence Fund increase stake in HAL, Mazagon Dock, Bharat Electronics and 7 others in September",
-          "url": "https://news.google.com/rss/articles/CBMi9gFBVV95cUxPNHBxU0Q1ZllDNU95QXJoQ0ZOcmlhVW04UTNmanBqRjRWMHJVdW9EUi1IVjljdEdGdXJPS1ZBTmljeGFKdnFJS1kxZ3R2ZlZ6dEl3VlY3ekZ4SGJnRFZLdGhqREQtSEVKQnBFRTBJUXdZUlJveGxNSGZoSFF0UllWclJfNEFRMzB4b1pzMll3M29mRF9hMnVOaVQ3V3Q0QzN5cmIxXzBIOUZzQmZPOEZhQWh1X0RsU1JubnZkS3NVb3dLb3AwQVZ6bmhDN2FIRGhyaGtrNjZma053cjBsQ2dyZVRta3BwRmJFalg1VElVM1pvTGUyTXfSAfsBQVVfeXFMUGpMRUt5RzVYMWVlNXFxR0xVX3F4YWw0dUh6ZUtPRS11bmJmMnpNUUdIWGdDeFJQREdwTWxDWlhLYjJZM3ZWNm9HYXhvMFIzLVdZWTBJeW9acUhfalZCSzhoY08wN2JISDJZOEp6VzBENDRIaUVJS1FBVGRoUzI3aUxFVTRrR3JyZnBXNHRDVTA3U0dCUWJOTlU5ejhiZDRGT29PUGtTS2xDX2Q0VDJKQUF6ZTR5UHRsUy1sVVFuSnJSTi1Edm1OQUNBa1l0ckF2UWhaRVkzNXdrTnl0WEJScGZRaUxyMFJWSUNSdGhtazVHT2RPaEdIR1FNQ28?oc=5",
-          "source": "The Economic Times",
-          "tags": [
-            "other"
-          ],
-          "confidence": "M",
-          "affected_tickers": [
-            "HAL",
-            "BEL"
-          ]
-        }
-      ],
-      "focus_stocks": [
-        {
-          "ticker": "ASTRAMICRO",
-          "score": 0,
-          "severity_weight": 4,
-          "primary_signal": "Margin Compression",
-          "coverage_count": 2,
-          "pe_vs_peers": "80% above peers",
-          "deep_link": "#stock/ASTRAMICRO/snapshot"
-        },
-        {
-          "ticker": "BEL",
-          "score": 7,
-          "severity_weight": 3,
-          "primary_signal": "FII Selling",
-          "coverage_count": 19,
-          "pe_vs_peers": "In line with peers",
-          "deep_link": "#stock/BEL/snapshot"
-        },
-        {
-          "ticker": "HAL",
-          "score": 7,
-          "severity_weight": 3,
-          "primary_signal": "Revenue Contraction",
-          "coverage_count": 9,
-          "pe_vs_peers": "22% below peers",
-          "deep_link": "#stock/HAL/snapshot"
-        }
-      ],
-      "threats": [
-        {
-          "name": "Bharat Dynamics",
-          "detail": "+130.8% revenue growth"
-        },
-        {
-          "name": "Garden Reach Sh.",
-          "detail": "+38.5% revenue growth"
-        }
-      ],
-      "suppressed": []
+      "suppressed": [
+        "SPELS"
+      ]
     }
   ]
 }
