@@ -113,7 +113,7 @@
             "reader": "llm"
           }
         ],
-        "read": 14,
+        "read": 13,
         "unread": 0
       },
       "HDFCBANK": {
@@ -123,7 +123,7 @@
         "thesis": "Largest private lender; post-merger deposit repricing and a direct read on retail credit demand.",
         "challenged": [],
         "supported": [],
-        "read": 3,
+        "read": 4,
         "unread": 0
       },
       "ICICIBANK": {
@@ -133,7 +133,7 @@
         "thesis": "Retail-led credit growth with sector-leading asset quality and digital lending scale.",
         "challenged": [],
         "supported": [],
-        "read": 3,
+        "read": 4,
         "unread": 0
       },
       "SBIN": {
@@ -480,7 +480,7 @@
             "reader": "llm"
           }
         ],
-        "read": 15,
+        "read": 14,
         "unread": 0
       },
       "NTPCGREEN": {
@@ -518,7 +518,17 @@
         "sector": "cybersecurity",
         "thesis": "Expanding sovereign cloud and secure cyber command centers globally for enterprise clients.",
         "challenged": [],
-        "supported": [],
+        "supported": [
+          {
+            "headline": "TCS partners with Zoho Corp’s ManageEngine to supercharge sovereign cloud adoption in India",
+            "claim": "sovereign cloud",
+            "because": "sovereign cloud adoption",
+            "date": "2026-10-14",
+            "link": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxNR0Q2LUxCWGtmU3FEeGUwSm91TnYxcVNiZnR5Wkt1bkhYREg4Zk1BVmxzRDV4SDdRNHNkWG9SeC1VUEtyYkxDa0FaRXAxcVQtRVNBenU1M2FqXzFpVjhaaGlpbW5IdDJTcElWMXd3elhVZ05UWFdLR2RRVUFhN3hwaDkybW1Yb21MZ1AwclZMYmVrU3ZkSFZTS01EOUlSUmhUN3BwdFJ4ZEtyenc1b0xXY2phdllSbFZhb2E3MmMxdWFBXzg4cWFIeg?oc=5",
+            "source": "Tata Consultancy Services",
+            "reader": "llm"
+          }
+        ],
         "read": 15,
         "unread": 0
       },
@@ -542,8 +552,8 @@
         "read": 9,
         "unread": 0,
         "not_about": [
-          "Schneider Electric Boosts Outlook Again After Data-Center Demand Lifts Sales",
           "Schneider Electric raises 2026 targets again on booming data centre demand",
+          "Schneider Electric Boosts Outlook Again After Data-Center Demand Lifts Sales",
           "Schneider Electric Unveils World's First Software-Defined Medium Voltage Switchgear to Expand AI-Ready Data Center Power Portfolio",
           "Precision Optics Enabling Lunar Navigation: Schneider-Kreuznach’s Role in NASA’s Artemis Missions",
           "Schneider Electric and AMD release first Helios platform reference design to accelerate AI Factory deployment",
@@ -699,7 +709,7 @@
         "thesis": "Largest hospital network; bed-capacity expansion and the Heal-in-India medical tourism push.",
         "challenged": [],
         "supported": [],
-        "read": 2,
+        "read": 1,
         "unread": 0
       },
       "MAXHEALTH": {
@@ -1231,15 +1241,6 @@
             "reader": "llm"
           },
           {
-            "headline": "Persistent Systems Adds Hyderabad Facility for BFSI Clients",
-            "claim": "High-growth digital engineering and enterprise AI services provider",
-            "because": "Persistent Systems Adds Hyderabad Facility for BFSI Clients",
-            "date": "2026-10-13",
-            "link": "https://news.google.com/rss/articles/CBMingFBVV95cUxNVGFGeS1qbFlFN0NIcS1Kbno1QUxDS1FKQzFSeWVGZC1YYlFqNUQ3NTMwSGt0MnBIcTJtTU1SWExPa2RhUGlFaHlaeFFNMUVmcmc0SHoxdlgyOTNCelp5ZXVnNERPR2RtVFFYYUZzQ1NRTWkzcm41WEx4cDVWa1IyY2l1UlEyVzZVdFVCVXJGSlNueWQwV3ozN3B2S3FQdw?oc=5",
-            "source": "Analytics India Magazine",
-            "reader": "llm"
-          },
-          {
             "headline": "Persistent expands Hyderabad BFSI delivery footprint with third facility",
             "claim": "High-growth digital engineering and enterprise AI services provider",
             "because": "Persistent expands Hyderabad BFSI delivery footprint with third facility",
@@ -1276,7 +1277,7 @@
             "reader": "llm"
           }
         ],
-        "read": 14,
+        "read": 15,
         "unread": 0
       },
       "COFORGE": {
@@ -1505,6 +1506,16 @@
           "Grønn Vekst Retains Garden Waste Handling Contract with Follo Ren Iks"
         ]
       },
+      "ASMTEC": {
+        "ticker": "ASMTEC",
+        "name": "ASM Technologies",
+        "sector": "semiconductors_equipment",
+        "thesis": "Engineering design services for semiconductor equipment makers under India Semiconductor Mission (ISM) 2.0.",
+        "challenged": [],
+        "supported": [],
+        "read": 1,
+        "unread": 0
+      },
       "SPELS": {
         "ticker": "SPELS",
         "name": "SPEL Semiconductor",
@@ -1582,6 +1593,16 @@
         "read": 1,
         "unread": 0
       },
+      "UTLSOLAR": {
+        "ticker": "UTLSOLAR",
+        "name": "Fujiyama Power",
+        "sector": "semiconductors_equipment",
+        "thesis": "Rooftop solar products maker (inverters, panels, batteries) riding residential solar subsidies, with revenue more than doubling.",
+        "challenged": [],
+        "supported": [],
+        "read": 1,
+        "unread": 0
+      },
       "METROBRAND": {
         "ticker": "METROBRAND",
         "name": "Metro Brands",
@@ -1589,7 +1610,7 @@
         "thesis": "Exclusive retail rights for Fila and Foot Locker in India, expanding athleisure footprint rapidly.",
         "challenged": [],
         "supported": [],
-        "read": 2,
+        "read": 1,
         "unread": 0
       },
       "CAMPUS": {
@@ -1599,7 +1620,7 @@
         "thesis": "Dominant direct-to-consumer sports footwear brand in tier-2/3 cities, major beneficiary of fitness trends.",
         "challenged": [],
         "supported": [],
-        "read": 3,
+        "read": 2,
         "unread": 0,
         "not_about": [
           "TCS' HyperVault Secures 264 Acres For Massive 1GW AI Data Center Campus In Hyderabad"
@@ -1625,6 +1646,35 @@
         "read": 11,
         "unread": 0
       },
+      "BATAINDIA": {
+        "ticker": "BATAINDIA",
+        "name": "Bata India",
+        "sector": "sports_athleisure",
+        "thesis": "India's largest footwear retailer, relying on festive demand and premiumisation to restore sales growth under a new MD and CEO.",
+        "challenged": [],
+        "supported": [
+          {
+            "headline": "Bata India Limited (NSE: BATAINDIA) in Focus on Festive Footwear Demand",
+            "claim": "relying on festive demand",
+            "because": "Focus on Festive Footwear Demand",
+            "date": "2026-10-01",
+            "link": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQNTF5Q1FXLW1aa3RQa3BwRnQtNjBaWnRzRjFRaFpENVc2MkEwQjJ1dVZqajVmQ1poSlhPc1o4Y29QRW10WGF6ODlXQWxnZjVPUVcwZVgxZ0ZvbFgtWWhYY3VCOTZTT011R3JUX0lGYnB1em1YZWtQbmpkRGtVVlBpOWRjQzRNR0Ztc3FSSmpOQjFCQzBfV3dCSW5BeHZFUEZNUk1Bb25EMjJNMFBRc2lTT0tVMVNHTjVNWmtWNU9PaW1iU0d0?oc=5",
+            "source": "Kalkine India",
+            "reader": "llm"
+          },
+          {
+            "headline": "Bata India BATAINDIA Central Government Approval New MD CEO",
+            "claim": "under a new MD and CEO",
+            "because": "Central Government Approval New MD CEO",
+            "date": "2026-09-17",
+            "link": "https://news.google.com/rss/articles/CBMiygFBVV95cUxQS0h5V2RoRExIX1dLWEpYQTlldTFiQ3E5YjFEOTlkOUVmUHlWTDhrSy1fMzZJM2RCRGR1cEhoMEExXzU1cklDQllvM3lXaE9GXzYtVEZsZ2VESmlKUW5iU0c5S1VQNWl2eDhaYmlacURFbTlSaUFDR3RVcEFBWEdXVERsMEQzRElIQ3FIZnJMSnVQYnBqRWhMbmhzNUhMSGZrbmQ5MVI2YmVmTWZiRDQzQXdtdTNFVUVPaTlaclI0VTNKZ1hsek1xU3Rn?oc=5",
+            "source": "Kalkine India",
+            "reader": "llm"
+          }
+        ],
+        "read": 3,
+        "unread": 0
+      },
       "CPPLUS": {
         "ticker": "CPPLUS",
         "name": "Aditya Infotech (CP PLUS)",
@@ -1632,7 +1682,7 @@
         "thesis": "CCTV market leader (35%+ share) newly listed, scaling domestic camera manufacturing under PLI.",
         "challenged": [],
         "supported": [],
-        "read": 3,
+        "read": 4,
         "unread": 0
       },
       "ADSL": {
@@ -1846,20 +1896,19 @@
       }
     },
     "no_thesis": [
-      "SBC",
       "THELEELA"
     ],
     "challenged": 0,
     "status": {
-      "cached": 366,
-      "read": 52,
+      "cached": 409,
+      "read": 13,
       "pending": 0,
       "skipped": "",
       "confirmed": 0,
       "refused": 0,
       "checks_pending": 0,
       "checks_skipped": "",
-      "model": "gemini-3.8-flash"
+      "model": "gemini-flash-latest"
     }
   }
 }

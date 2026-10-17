@@ -2,19 +2,6 @@
   "ticker": "GOKEX",
   "items": [
     {
-      "date": "13 Oct 2026",
-      "headline": "Gokaldas Exports shares jump 5% on ₹350 crore investment plan in BRFL Textiles",
-      "source_url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxOaUx4VlpialJ4dWpSMXNsanFocEtScWFneHJybUtmOFl0R0t5ak5HcmdVSS1XeVFXNml2bGxxUUN1S2lDR1lraHZNQ3ZaMTZiYjZrZ3FfYUUxRjQ2RVdFMUMzTi1DRmFLdjdXMS1tT2NfSFppQ2REZWY4bjJzZ25BdDkyeTR1bUJkcGpKV0JvVlZyUnRDS3UydnZZeDRudUt5N0RaeFhGNkFPV0JhS3lyYXp5TS05NHl0Zl9CUWVGYWtiTWRYY1BKZElZZ2o2Ync?oc=5",
-      "source_label": "Upstox",
-      "event_type": "",
-      "source_kind": "Sector news",
-      "event_tags": [
-        "Sector news"
-      ],
-      "confidence": "M",
-      "status": "counted"
-    },
-    {
       "date": "29 Sep 2026",
       "headline": "Gokaldas Exports Limited has submitted the Exchange a copy Srutinizers report of  Annual General Meeting held on September 28, 2026. Further, the company has informed the Exchange regarding voting results.",
       "source_url": "https://nsearchives.nseindia.com/corporate/GOKEX_29092026133505_votingresultsandscrutiniserreport.pdf",
@@ -52,7 +39,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (248 days old)"
+      "exclusion_reason": "aged >120d (249 days old)"
     },
     {
       "date": "Thu, 18 Jun 2026 07:00:00 GMT",
@@ -65,7 +52,8 @@
         "Filing"
       ],
       "confidence": "M",
-      "status": "counted"
+      "status": "excluded",
+      "exclusion_reason": "aged >120d (121 days old)"
     },
     {
       "date": "Wed, 04 Feb 2026 08:00:00 GMT",
@@ -79,7 +67,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (254 days old)"
+      "exclusion_reason": "aged >120d (255 days old)"
     }
   ]
 }

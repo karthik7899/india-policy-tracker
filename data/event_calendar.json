@@ -1,6 +1,6 @@
 {
   "value": {
-    "as_of": "2026-10-16",
+    "as_of": "2026-10-17",
     "ahead_days": 45,
     "back_days": 14,
     "upcoming": [
@@ -159,6 +159,17 @@
         "sector": "data_center_support"
       },
       {
+        "ticker": "BEL",
+        "date": "2026-10-30",
+        "kind": "results",
+        "title": "Board meeting: Financial Results",
+        "detail": "To consider and approve the financial results for the period ended September 30, 2026",
+        "source": "NSE event calendar",
+        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
+        "name": "Bharat Electronics",
+        "sector": "aerospace_defence"
+      },
+      {
         "ticker": "IOC",
         "date": "2026-10-30",
         "kind": "results",
@@ -168,6 +179,17 @@
         "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
         "name": "Indian Oil Corporation",
         "sector": "big_cap_industries"
+      },
+      {
+        "ticker": "ITC",
+        "date": "2026-11-02",
+        "kind": "results",
+        "title": "Board meeting: Financial Results",
+        "detail": "To consider and approve the financial results for the period ended September 30, 2026",
+        "source": "NSE event calendar",
+        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
+        "name": "ITC",
+        "sector": "fmcg"
       },
       {
         "ticker": "APOLLOHOSP",
@@ -225,17 +247,6 @@
         "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
         "name": "Fujiyama Power",
         "sector": "semiconductors_equipment"
-      },
-      {
-        "ticker": "SBC",
-        "date": "2026-10-15",
-        "kind": "results",
-        "title": "Board meeting: Financial Results",
-        "detail": "To consider and approve the financial results for the period ended September 30, 2026",
-        "source": "NSE event calendar",
-        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
-        "name": "SBC Exports",
-        "sector": "sports_athleisure"
       },
       {
         "ticker": "PERSISTENT",
@@ -320,7 +331,9 @@
       "OFSS": "2026-10-23",
       "STLTECH": "2026-10-23",
       "ANANTRAJ": "2026-10-28",
+      "BEL": "2026-10-30",
       "IOC": "2026-10-30",
+      "ITC": "2026-11-02",
       "APOLLOHOSP": "2026-11-04",
       "CUMMINSIND": "2026-11-04",
       "MPHASIS": "2026-11-05",
@@ -328,7 +341,7 @@
     },
     "sources": {
       "nse": {
-        "event_calendar": 567,
+        "event_calendar": 617,
         "corporate_actions": 28
       },
       "nse_errors": [],
