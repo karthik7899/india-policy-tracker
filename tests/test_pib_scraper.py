@@ -384,7 +384,9 @@ APPEAL = (
     "Appeal to Employees of Public Sector Banks for Ensuring Uninterrupted Services"
 )
 BONUS = "Cabinet approves Productivity Linked Bonus for Railway Employees"
-KAYNES = "Kaynes Semicon Private Limited among PLI approvals"
+KAYNES = "Kaynes Semicon Private Limited among PLI approvals for semiconductors"
+# Names a company and no scheme: nothing says it competes with a holding.
+NOVA = "Nova Motors Limited gets PLI approval"
 TEXTILES = "PLI Scheme for Textiles: 10 more applicants approved"
 
 RSS = _rss(
@@ -405,8 +407,14 @@ RSS = _rss(
         "https://news.google.com/rss/articles/three",
         "Thu, 08 Oct 2026 06:00:00 GMT",
         # A cluster summary: related headlines in a list, none of them companies.
-        "<a href='x'>Kaynes Semicon Private Limited among PLI approvals</a>"
+        f"<a href='x'>{KAYNES}</a>"
         "<ol><li><a href='y'>Govt approves PLI for drone makers</a></li></ol>",
+    ),
+    (
+        f"{NOVA} - PIB",
+        "https://news.google.com/rss/articles/seven",
+        "Fri, 09 Oct 2026 06:00:00 GMT",
+        "",
     ),
     (
         # Dated by Google weeks after PIB posted it in September.
@@ -610,13 +618,14 @@ def test_releases_are_found_on_pibs_own_lists_and_read_from_pib(monkeypatch, cap
     assert asked["releases"] == ["2319001", "2317001", "2311234", "2310500", "2318500"]
     line = _line(caplog)
     assert line.startswith(
-        "PLI approvals: 6 search result(s) in the last 30 days, 6 release(s); "
+        "PLI approvals: 7 search result(s) in the last 30 days, 7 release(s); "
         "5 found on PIB's lists of releases (2 month(s) read), "
         "1 of them about no scheme and not read, "
         "1 more it titles as a scheme's; 5 release(s) read from PIB"
     )
     assert "left out under schemes no holding works in: Pharmaceuticals 2" in line
-    assert "2 name(s) left out from releases that name no scheme" in line
+    # The bonus release's two, and the headline that names no scheme.
+    assert "3 name(s) left out where no scheme is named" in line
     assert line.endswith("5 new candidate(s) after removing duplicates and holdings.")
 
 
@@ -630,6 +639,7 @@ def test_holdings_menus_and_other_schemes_are_left_out(monkeypatch):
     assert not names & {"Lupin Limited", "Cipla Limited"}
     assert not names & {"Rail Vikas Nigam Limited", "IRCON International Limited"}
     assert not names & {"Bank of Baroda Limited", "Canara Bank Limited"}
+    assert "Nova Motors Limited" not in names
     # The page around the release, and a cluster summary's other headlines.
     for junk in (
         "Ministry of Heavy Industries",
@@ -657,8 +667,10 @@ def test_pib_refusing_its_list_is_reported_and_asked_once(monkeypatch, caplog):
         found, asked = _run(monkeypatch, list_status=403)
     assert asked["get"].count(pib.LIST_URL) == 1
     assert asked["post"] == []
-    # Every story falls back to its headline.
+    # Every story falls back to its headline, and only a headline that names
+    # its scheme can name a competitor.
     assert [c["name"] for c in found] == ["Kaynes Semicon Private Limited"]
+    assert found[0]["sector"] == "Semiconductors"
     line = _line(caplog)
     assert "0 found on PIB's lists of releases (0 month(s) read)" in line
     assert "the list of releases returned HTTP 403" in line

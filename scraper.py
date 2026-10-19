@@ -911,17 +911,17 @@ async def scrape_pib_pli_approvals_async(
     off_scheme, no_scheme, seen, candidates = {}, 0, set(), []
     for comp in found:
         scheme_sectors = comp.pop("scheme_sectors", None)
-        if scheme_sectors is None and comp["found_in"] == "release page":
-            # A release that names no scheme is not about one: PIB's
-            # appeal to bank employees came up in the PLI search too.
+        if scheme_sectors is None:
+            # Under no scheme it names, nothing says the company competes
+            # with a holding: PIB's appeal to bank employees came up in the
+            # PLI search, and a headline can name a company and no scheme.
             no_scheme += 1
             continue
-        if scheme_sectors is not None:
-            mine = [s for s in scheme_sectors if s in sectors_held]
-            if not mine:
-                off_scheme[comp["sector"]] = off_scheme.get(comp["sector"], 0) + 1
-                continue
-            comp["watch_sectors"] = mine
+        mine = [s for s in scheme_sectors if s in sectors_held]
+        if not mine:
+            off_scheme[comp["sector"]] = off_scheme.get(comp["sector"], 0) + 1
+            continue
+        comp["watch_sectors"] = mine
         key = _name_key(comp["name"])
         if key in seen or _is_held(key, held_keys):
             continue
@@ -985,7 +985,7 @@ async def scrape_pib_pli_approvals_async(
             else ""
         )
         + (
-            f"; {no_scheme} name(s) left out from releases that name no scheme"
+            f"; {no_scheme} name(s) left out where no scheme is named"
             if no_scheme
             else ""
         )
