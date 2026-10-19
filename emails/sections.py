@@ -372,6 +372,11 @@ def build_read_through_html(read_throughs: Any, limit: int = MAX_READ_THROUGHS) 
 
     Risk rows first, because an opportunity that scrolls off is a missed idea
     and a risk that scrolls off is a missed position.
+
+    Each row says how the news travels (its transmission: demand pull,
+    competitive threat, input shock) beside the rule that found it, and, when
+    the trigger is not binding — an MoU, a lowest bid, a rumour — says so in
+    the row itself, so a soft lead is never read as a firm one.
     """
     rows = [r for r in (read_throughs or []) if isinstance(r, dict)]
     if not rows:
@@ -387,6 +392,19 @@ def build_read_through_html(read_throughs: Any, limit: int = MAX_READ_THROUGHS) 
             f"<li style='margin-bottom:2px;'>{_esc(step)}</li>"
             for step in (row.get("chain") or [])
         )
+        how = " · ".join(
+            _esc(str(v).replace("_", " "))
+            for v in (row.get("transmission"), row.get("mechanism"))
+            if v
+        )
+        unsure = str(row.get("strength_note") or "")
+        unsure = (
+            f"""
+                <span style="color: #fbbf24; font-size: 11px;">
+                    &mdash; {_esc(unsure)}</span>"""
+            if unsure
+            else ""
+        )
         blocks.append(f"""
         <div style="border-left: 3px solid {colour}; padding: 4px 0 4px 10px;
                     margin-bottom: 14px;">
@@ -394,7 +412,7 @@ def build_read_through_html(read_throughs: Any, limit: int = MAX_READ_THROUGHS) 
                 <span style="color: {colour};">{mark}</span>
                 <strong>{sector}</strong>
                 <span style="color: #6b7280; font-size: 11px; text-transform: uppercase;">
-                    {_esc(str(row.get('mechanism', '')).replace('_', ' '))}</span>
+                    {how}</span>{unsure}
             </div>
             <p style="font-size: 12px; color: #9ca3af; margin: 4px 0 6px 0;">
                 {_esc(row.get('trigger', ''))}</p>

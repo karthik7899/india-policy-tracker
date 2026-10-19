@@ -34,6 +34,23 @@ it walked so a reader can reject it in one glance. That is why:
 Conservative by construction. A false read-through — telling someone their
 holding is threatened when it is not — costs more trust than a miss costs
 information, because the miss is invisible and the false alarm is not.
+
+TRANSMISSION AND STRENGTH. Each result says how the news travels, whichever
+way it pushes (its ``direction``):
+
+  * demand_pull — a customer or demand anchor buys more or less from the
+    holdings it reaches (anchor_pull, anchor_shift, most partner news);
+  * competitive_threat — a rival, or a customer's choice of one, presses on
+    share or margin (displacement, rival_move, a partner working with a
+    rival);
+  * input_shock — something the holdings buy gets dearer or cheaper
+    (input_squeeze).
+
+And how binding the triggering event is: ``strength`` is hard (a completed
+award, order or approval), soft (an MoU, a lowest bid, an intention) or
+reported (a rumour), and ``weight`` is that strength's multiplier
+(event_engine.STRENGTH_WEIGHT) times the weakest link's. Results are ranked
+by it, so a lowest bid never outranks the Letter of Award it may become.
 """
 
 import datetime
@@ -105,9 +122,83 @@ _EASING_MARKERS = (
     "eases",
     "easing",
 )
+# Duty on what is bought in moves its price the same way for every buyer
+# here: "Centre Waives Cotton Import Duty" made cotton cheaper for every
+# textile holding, and matched neither list. A change, not a mention:
+# "importers challenge anti-dumping duty" reports no new cost. The verb
+# governs the duty, a few words at most and no clause between ("cuts jobs as
+# duty hike bites" cut no duty). Export duties and bans are left out: China
+# curbing rare earths makes them scarcer here, India curbing sugar exports
+# makes sugar cheaper here, and a headline rarely says which it is.
+_DUTY = r"(?<!export\s)\bdut(?:y|ies)\b"
+_DUTY_GAP = r"\s+(?:(?!(?:as|amid|after|while|but|and|despite)\b)[\w%&₹.-]+\s+){0,3}?"
+_DUTY_SQUEEZE_RE = re.compile(
+    r"\b(?:hikes?|hiked|raises?|raised|imposes?|imposed|increases?|increased|"
+    r"levies|levied|slaps?|slapped)"
+    + _DUTY_GAP
+    + _DUTY
+    + r"|"
+    + _DUTY
+    + r"\s+(?:hikes?|hiked|raised|imposed|increased|levied)\b",
+    re.IGNORECASE,
+)
+_DUTY_EASING_RE = re.compile(
+    r"\b(?:waives?|waived|cuts?|slashe?s|slashed|removes?|removed|scraps?|"
+    r"scrapped|exempts?|exempted|lowers?|lowered)"
+    + _DUTY_GAP
+    + _DUTY
+    + r"|"
+    + _DUTY
+    + r"\s+(?:cuts?|waived|slashed|removed|scrapped|lowered)\b"
+    + r"|\bduty[\s-]free\b",
+    re.IGNORECASE,
+)
+# A change said not to happen is none: "Centre will not impose import duty on
+# copper". A hedged one ("may impose") is graded reported, like any rumour.
+_DUTY_DENIED_RE = re.compile(
+    r"\b(?:not|no|never|won't|unlikely\s+to|rules?\s+out|ruled\s+out|denies|"
+    r"denied|refuses?\s+to|declines?\s+to)\s+(?:[\w-]+\s+){0,2}$",
+    re.IGNORECASE,
+)
+
+
+def _duty_change(pattern, text):
+    """Does the text report this duty change, rather than deny it?"""
+    return any(
+        not _DUTY_DENIED_RE.search(text[: m.start()]) for m in pattern.finditer(text)
+    )
+
+
+# A material named only to say who uses something else is not the thing in
+# short supply. "Helium, key for semiconductor manufacturing, faces shortage"
+# and "semiconductor skills shortage" both raised input risk on ten holdings,
+# as though chips were scarce. Read off the word that follows the material.
+_USED_BY = {
+    "manufacturing", "manufacturer", "manufacturers", "maker", "makers",
+    "making", "industry", "industries", "sector", "skills", "skill", "labour",
+    "labor", "talent", "workforce", "workers", "worker", "engineers", "jobs",
+    "design", "designers", "stocks", "stock", "shares", "companies",
+    "company", "firms", "firm", "ecosystem", "mission", "policy", "plant",
+    "plants", "fab", "fabs", "factory", "factories", "hub", "park",
+    "packaging", "startup", "startups", "giant", "giants", "major", "majors",
+    "estates", "estate",
+}  # fmt: skip
+# ...or the word before it: "blue-chip stocks" are not chips.
+_NOT_AFTER = {"blue"}
 
 # A chain is only as strong as its weakest link.
 _CONFIDENCE_ORDER = {"curated": 2, "harvested": 1}
+_LINK_WEIGHT = {"curated": 1.0, "harvested": 0.5}
+
+# How each mechanism transmits; partner news decides per verdict.
+_TRANSMISSION = {
+    "displacement": "competitive_threat",
+    "rival_move": "competitive_threat",
+    "input_squeeze": "input_shock",
+    "anchor_shift": "demand_pull",
+    "anchor_pull": "demand_pull",
+}
+TRANSMISSIONS = ("demand_pull", "competitive_threat", "input_shock")
 
 _MATERIAL_RE_CACHE: Dict[str, Any] = {}
 
@@ -129,15 +220,54 @@ def material_in(text, material):
     So: a plain word-boundary match, case-insensitive, with one addition —
     an optional trailing generation number, because HBM4 is HBM and DDR5 is
     DDR. Digits only, so "RAM" still cannot match "RAMP" or "Gurugram" and
-    "steel" cannot match "Steelcase".
+    "steel" cannot match "Steelcase". A plural counts: "Memory Chips" and
+    "PCBs" are the material.
     """
+    pattern = _material_re(material)
+    return bool(pattern and pattern.search(str(text or "")))
+
+
+def _material_re(material):
     if not material:
-        return False
+        return None
     pattern = _MATERIAL_RE_CACHE.get(material)
     if pattern is None:
-        pattern = re.compile(rf"\b{re.escape(str(material))}\d*\b", re.IGNORECASE)
+        pattern = re.compile(
+            rf"\b{re.escape(str(material))}(?:\d+|e?s)?\b", re.IGNORECASE
+        )
         _MATERIAL_RE_CACHE[material] = pattern
-    return bool(pattern.search(str(text or "")))
+    return pattern
+
+
+def input_named(text, material):
+    """Is the text about this input itself — not naming it only to say who
+    uses something else ("semiconductor manufacturing", "chip makers") or as
+    part of another word ("blue-chip")?"""
+    pattern = _material_re(material)
+    if pattern is None:
+        return False
+    text = str(text or "")
+    for m in pattern.finditer(text):
+        after = re.match(r"[\s-]+([A-Za-z]+)", text[m.end() :])
+        before = re.search(r"([A-Za-z]+)[\s-]+$", text[: m.start()])
+        if after and after.group(1).lower() in _USED_BY:
+            continue
+        if before and before.group(1).lower() in _NOT_AFTER:
+            continue
+        return True
+    return False
+
+
+def edge_input_named(text, edge):
+    """Does the text name this input_cost edge's input, in a sense the edge
+    covers? An edge's ``not_scope`` lists the kinds it does not: the EMS
+    holdings buy mature-node parts, so "China's AI Chip Supply Shortage" is
+    not a chip squeeze on them."""
+    if not input_named(text, str(edge.get("src", ""))):
+        return False
+    return not any(
+        material_in(text, str(t)) for t in edge.get("not_scope") or [] if str(t)
+    )
 
 
 def _edges(graph, etype):
@@ -191,26 +321,41 @@ def _flag(
     confidence,
     note,
     tickers=None,
+    transmission=None,
 ):
     # A sector-level chain lands on every holding in the sector; a chain that
-    # ends at one company (a partner edge) lands on that company only, and
-    # widening it to the sector would assert exposure nobody has shown.
+    # ends at one company (a partner edge, or an edge whose destination is a
+    # holding: coal → ADANIPOWER) lands on that company only, and widening it
+    # to the sector would assert exposure nobody has shown.
+    held = _holding_sectors(watchlist)
+    if not tickers and str(sector).upper() in held:
+        tickers = [str(sector).upper()]
+        sector = held[str(sector).upper()]
     tickers = tickers or _sector_holdings(watchlist, sector)
     if not tickers:
         # Nothing held in the sector this chain lands on. The reasoning may be
         # perfectly sound and is still not actionable here, and reporting it
         # would be noise dressed as insight.
         return None
+    from analysis.event_engine import STRENGTH_SAYS, STRENGTH_WEIGHT, event_strength
+
+    strength = event_strength(event)
     return {
         "trigger": str(event.get("headline", ""))[:180],
         "date": event.get("date", ""),
         "mechanism": mechanism,
+        "transmission": transmission or _TRANSMISSION.get(mechanism, "demand_pull"),
         "direction": direction,
         "sector": sector,
         "tickers": sorted(tickers),
         "chain": chain,
         "confidence": confidence,
         "certainty": event.get("certainty", ""),
+        "strength": strength,
+        "strength_note": STRENGTH_SAYS.get(strength, ""),
+        "weight": round(
+            STRENGTH_WEIGHT.get(strength, 1.0) * _LINK_WEIGHT.get(confidence, 0.5), 3
+        ),
         "note": note,
     }
 
@@ -303,12 +448,21 @@ def _input_squeeze(event, graph, watchlist):
     headline. "iPhone priced higher on RAM shortage" is a statement about
     every device assembler's bill of materials, ours included.
     """
+    from analysis.event_engine import without_negated_scarcity
+
     out = []
     headline = str(event.get("headline", ""))
-    lower = headline.lower()
+    # "Reprices Copper Without a Global Shortage" reports no shortage. One
+    # company spared from a shortage still reports it, and every other buyer
+    # of the input still pays.
+    lower = without_negated_scarcity(headline).lower()
 
-    squeezing = any(m in lower for m in _SQUEEZE_MARKERS)
-    easing = any(m in lower for m in _EASING_MARKERS)
+    squeezing = any(m in lower for m in _SQUEEZE_MARKERS) or _duty_change(
+        _DUTY_SQUEEZE_RE, headline
+    )
+    easing = any(m in lower for m in _EASING_MARKERS) or _duty_change(
+        _DUTY_EASING_RE, headline
+    )
     # Both at once is a headline describing a turn ("shortage eases"), which
     # is an easing. Neither means this is not a price story at all.
     if easing:
@@ -318,20 +472,29 @@ def _input_squeeze(event, graph, watchlist):
     else:
         return out
 
+    held = _holding_sectors(watchlist)
     seen = set()
     for edge in _edges(graph, "input_cost"):
         material = str(edge.get("src", ""))
         # Word-boundary matched: "RAM" must not fire on "programme" or
-        # "Gurugram", and "memory" must not fire on "memorial".
-        if not material_in(headline, material):
+        # "Gurugram", and "memory" must not fire on "memorial". And named as
+        # the thing in short supply, not as who uses it (input_named), and
+        # not as a kind the edge rules out (edge_input_named).
+        if not edge_input_named(headline, edge):
             continue
         sector = edge.get("dst")
         if (material.lower(), sector) in seen:
             continue
         seen.add((material.lower(), sector))
+        buyer = (
+            str(sector).upper()
+            if str(sector).upper() in held
+            else f"our {str(sector).replace('_', ' ')} holdings"
+        )
         chain = [
             f"headline reports {material} {verb}",
-            f"{material} is an input to our {str(sector).replace('_', ' ')} holdings",
+            f"{material} is an input to {buyer}"
+            + (f" ({edge['note']})" if edge.get("note") else ""),
         ]
         flag = _flag(
             event,
@@ -387,6 +550,142 @@ def _anchor_shift(event, graph, watchlist):
             chain,
             _weakest(anchor),
             f"Demand anchor disturbance, not a company-specific signal.",
+        )
+        if flag:
+            out.append(flag)
+    return out
+
+
+# What a demand anchor does that is more work for its suppliers.
+_PULL_TYPES = ("capacity_add", "order_win")
+_PULL_SAYS = {"capacity_add": "is adding capacity", "order_win": "won an order"}
+
+
+def _anchor_pull(event, graph, watchlist):
+    """A demand anchor builds or wins work in a line one of our sectors
+    supplies: the good-news mirror of _anchor_shift.
+
+    Held to more than its mirror, because good news is cheap: the headline
+    must be about the line the edge reaches — that sector's own vocabulary
+    (``domains``) — since an anchor's money spent on something else is
+    nobody's demand here ("Vascon receives Letter of Intent for an office"
+    names Qualcomm as the client). An order the anchor placed went to whoever
+    won it, not to us. Never a rumour, and never when a holding is named:
+    first-order attribution has that.
+    """
+    out = []
+    etype = event.get("event_type")
+    if etype not in _PULL_TYPES or event.get("actors"):
+        return out
+    from analysis.event_engine import _named_as_customer, event_clause, event_strength
+
+    if event_strength(event) == "reported":
+        return out
+    domains = set(event.get("domains") or [])
+    held = _holding_sectors(watchlist)
+    clause = event_clause(event)
+    for anchor in _edges(graph, "anchor_demand"):
+        src = anchor.get("src")
+        if not any(_same(src, n) for n in event.get("external") or []):
+            continue
+        dst = str(anchor.get("dst") or "")
+        if held.get(dst.upper(), dst) not in domains:
+            continue
+        if etype == "order_win" and _named_as_customer(
+            clause, event.get("phrase"), "", str(src)
+        ):
+            continue
+        reach = (
+            dst.upper()
+            if dst.upper() in held
+            else f"our {dst.replace('_', ' ')} holdings"
+        )
+        chain = [
+            f"{src} {_PULL_SAYS[etype]}",
+            f"{src} anchors demand for {reach}"
+            + (f" ({anchor['note']})" if anchor.get("note") else ""),
+        ]
+        flag = _flag(
+            event,
+            "anchor_pull",
+            "opportunity",
+            dst,
+            watchlist,
+            chain,
+            _weakest(anchor),
+            f"More work for {src} is more to buy from its suppliers; a "
+            f"hypothesis until it shows in their orders.",
+        )
+        if flag:
+            out.append(flag)
+    return out
+
+
+# What a rival does that gains it ground.
+_RIVAL_GAINS = ("capacity_add", "order_win", "tie_up", "acquisition")
+_RIVAL_SAYS = {
+    "capacity_add": "is adding capacity",
+    "order_win": "won work",
+    "tie_up": "tied up with a partner",
+    "acquisition": "is acquiring",
+}
+
+
+def _rival_move(event, graph, watchlist):
+    """A rival of a holding gains ground in the line where they compete.
+
+    A curated competitor edge that ends at a holding carries the ``scope``
+    of the rivalry: Tata Electronics competes with SPEL in chip assembly and
+    test, not in phones. The rival adding capacity, winning work, tying up or
+    buying in that line is pressure on the holding's share or margin. News
+    about the rival's other lines is not ours, and news naming the holding
+    is first-order.
+    """
+    out = []
+    etype = event.get("event_type")
+    if etype not in _RIVAL_GAINS:
+        return out
+    from analysis.event_engine import _named_as_customer, event_clause
+
+    held = _holding_sectors(watchlist)
+    actors = {str(a).upper() for a in event.get("actors") or []}
+    headline = str(event.get("headline", ""))
+    clause = event_clause(event)
+    for edge in _edges(graph, "competitor"):
+        if not edge.get("scope"):
+            continue
+        rival, ours = edge.get("src"), str(edge.get("dst") or "").upper()
+        if ours not in held or ours in actors:
+            continue
+        if not any(_same(rival, n) for n in event.get("external") or []):
+            continue
+        if etype == "order_win" and _named_as_customer(
+            clause, event.get("phrase"), "", str(rival)
+        ):
+            continue  # the rival placed the order; someone else won it
+        # The rival's own name is not its line ("Tata Electronics" holds no
+        # packaging word), as for a partner.
+        place = PartnerScope(edge, held[ours]).place(
+            re.sub(rf"\b{re.escape(str(rival))}\b", " ", headline, flags=re.IGNORECASE)
+        )
+        if place != "venture":
+            continue
+        chain = [
+            f"{rival} {_RIVAL_SAYS[etype]}, in the line where it competes with {ours}",
+            f"{rival} competes with {ours}"
+            + (f" ({edge['note']})" if edge.get("note") else ""),
+        ]
+        flag = _flag(
+            event,
+            "rival_move",
+            "risk",
+            held[ours],
+            watchlist,
+            chain,
+            _weakest(edge),
+            f"A stronger rival in {ours}'s line presses on its share or its "
+            f"pricing; the headline does not say how much of the market.",
+            tickers=[ours],
         )
         if flag:
             out.append(flag)
@@ -466,8 +765,8 @@ def screen_partner_news(event, partner, holding, scope, rivals=()):
     """Is this news about a partner good, bad or mixed for our holding — or
     not the holding's to read at all?
 
-    ``(direction, reason, verdict)`` or None. Built on three questions, each
-    answered from the headline:
+    ``(direction, reason, verdict, transmission)`` or None. Built on three
+    questions, each answered from the headline:
 
       * Where does it land? In the venture's own line, in another of the
         partner's lines, or on the partner as a whole (PartnerScope).
@@ -494,6 +793,10 @@ def screen_partner_news(event, partner, holding, scope, rivals=()):
         if it is this venture.
       * Anything else is the partner's news, not ours: Kaga winning a
         Japanese order says nothing about the Syrma venture.
+
+    ``transmission`` is how it reaches the holding: through the work the
+    venture gets (demand_pull), a rival's gain (competitive_threat), or the
+    partner's input costs (input_shock).
     """
     etype = event.get("event_type")
     headline = str(event.get("headline", ""))
@@ -521,23 +824,27 @@ def screen_partner_news(event, partner, holding, scope, rivals=()):
     if etype in _PARTNER_TROUBLE:
         if place == "other":
             return None
+        channel = "input_shock" if etype == "input_cost_shock" else "demand_pull"
         if place == "venture":
             return (
                 "risk",
                 "in the venture's own line",
                 f"bad for {holding}: trouble in the venture's line reaches the venture",
+                channel,
             )
         return (
             "risk",
             f"about {partner} as a whole",
             f"bad for {holding}, less directly: a partner under pressure invests "
             f"less in its ventures",
+            channel,
         )
     if etype in ("tie_up", "acquisition", "order_win") and rival:
         return (
             "risk",
             f"{rival} competes with {holding}",
             f"bad for {holding}: its partner is working with a competitor",
+            "competitive_threat",
         )
     if place != "venture":
         return None
@@ -547,12 +854,14 @@ def screen_partner_news(event, partner, holding, scope, rivals=()):
                 "risk",
                 f"{partner} is the customer, in the venture's line",
                 f"bad for {holding}: work in the venture's line is going elsewhere",
+                "competitive_threat",
             )
         if in_india:
             return (
                 "opportunity",
                 "work in the venture's line, in India",
                 f"good for {holding}: it can flow through the venture",
+                "demand_pull",
             )
         return None
     if not in_india:
@@ -563,6 +872,7 @@ def screen_partner_news(event, partner, holding, scope, rivals=()):
             "a partnership in the venture's line, in India",
             f"bad for {holding} if this is the venture: check whether it names "
             f"{holding}'s",
+            "demand_pull",
         )
     if etype in ("capacity_add", "tie_up", "acquisition"):
         return (
@@ -570,6 +880,7 @@ def screen_partner_news(event, partner, holding, scope, rivals=()):
             "in the venture's line, in India",
             f"either way for {holding}: the venture's own business, or {partner} "
             f"going round it",
+            "demand_pull",
         )
     return None
 
@@ -634,7 +945,7 @@ def _partner_news(event, graph, watchlist, peers=None):
             )
             if not verdict:
                 continue
-            direction, reason, judgement = verdict
+            direction, reason, judgement, transmission = verdict
             basis = str(edge.get("evidence") or "")
             chain = [
                 f"{partner}: {what}",
@@ -657,6 +968,7 @@ def _partner_news(event, graph, watchlist, peers=None):
                 f"{judgement[:1].upper()}{judgement[1:]}. The headline does not "
                 f"say how much of {ours}'s business the venture is.",
                 tickers=[ours],
+                transmission=transmission,
             )
             if flag:
                 out.append(flag)
@@ -668,7 +980,8 @@ def _dedupe(flags):
 
     The same headline can reach one sector by several chains — two suppliers
     to the same customer, say. Showing it four times reads as four problems.
-    The surviving row keeps the best-evidenced chain.
+    The surviving row keeps the best-weighted chain: the better evidenced,
+    since the event is the same.
     """
     best = {}
     for flag in flags:
@@ -683,9 +996,7 @@ def _dedupe(flags):
             tuple(flag.get("tickers") or ()),
         )
         current = best.get(key)
-        if current is None or _CONFIDENCE_ORDER.get(
-            flag["confidence"], 1
-        ) > _CONFIDENCE_ORDER.get(current["confidence"], 1):
+        if current is None or flag.get("weight", 0) > current.get("weight", 0):
             best[key] = flag
     return list(best.values())
 
@@ -727,6 +1038,8 @@ def compute_read_throughs(
             flags.extend(_displacement(event, graph, watchlist))
             flags.extend(_input_squeeze(event, graph, watchlist))
             flags.extend(_anchor_shift(event, graph, watchlist))
+            flags.extend(_anchor_pull(event, graph, watchlist))
+            flags.extend(_rival_move(event, graph, watchlist))
             flags.extend(_partner_news(event, graph, watchlist, peers))
 
         # The raw corpus carries no dates — it is this run's collection — so
@@ -742,7 +1055,9 @@ def compute_read_throughs(
 
         flags = _dedupe(flags)
 
-        # Risk before opportunity, curated before harvested, then newest.
+        # Risk before opportunity, then by weight (how binding the event,
+        # times how well evidenced its weakest link: a lowest bid never
+        # outranks a Letter of Award), then newest.
         #
         # The date has to be inverted rather than sorted as a string: ISO dates
         # ascend, so the obvious tuple put the OLDEST flag first while the
@@ -758,7 +1073,7 @@ def compute_read_throughs(
                 recency = 1  # undated sorts last, never ahead of a real date
             return (
                 flag["direction"] != "risk",
-                -_CONFIDENCE_ORDER.get(flag["confidence"], 1),
+                -flag.get("weight", 0),
                 recency,
             )
 
@@ -771,13 +1086,21 @@ def compute_read_throughs(
                 for d in ("risk", "opportunity", "mixed")
             }
             mechanisms = sorted({f["mechanism"] for f in flags})
+            by_channel = {
+                t: sum(1 for f in flags if f.get("transmission") == t)
+                for t in TRANSMISSIONS
+            }
+            soft = sum(1 for f in flags if f.get("strength") != "hard")
             log.info(
                 f"Read-through: {len(flags)} second-order flag(s) across "
                 f"{len({f['sector'] for f in flags})} sector(s) "
                 f"({by_direction['risk']} risk, {by_direction['opportunity']} "
                 f"opportunity"
                 + (f", {by_direction['mixed']} mixed" if by_direction["mixed"] else "")
-                + f"; {', '.join(mechanisms)})."
+                + f"; {', '.join(mechanisms)}; "
+                + ", ".join(f"{t.replace('_', ' ')} {n}" for t, n in by_channel.items())
+                + (f"; {soft} from soft or reported news, weighed down" if soft else "")
+                + ")."
             )
         else:
             # Stated even when empty. A silent zero here is indistinguishable

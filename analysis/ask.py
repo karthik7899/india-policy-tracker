@@ -345,7 +345,17 @@ def _holding_extract(ticker: str, src: Dict[str, Any]) -> Dict[str, Any]:
             if str(w.get("ticker", "")).upper() == ticker
         ][:10],
         "read_throughs": [
-            {k: r.get(k) for k in ("trigger", "date", "direction", "chain")}
+            {
+                k: r.get(k)
+                for k in (
+                    "trigger",
+                    "date",
+                    "direction",
+                    "transmission",
+                    "strength",
+                    "chain",
+                )
+            }
             for r in b.get("read_throughs") or []
             if ticker in [str(t).upper() for t in r.get("tickers") or []]
         ][:5],

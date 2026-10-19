@@ -173,6 +173,7 @@ EVENT_PATTERNS: Dict[str, tuple] = {
     "partnership_end": (
         re.compile(
             r"\b(?:exits?|exited|exiting|quits?|ends|ended|terminates?|terminated|"
+            r"suspends?|suspended|"
             r"dissolves?|dissolved|winds?\s+up|wound\s+up|calls?\s+off|called\s+off|"
             r"scraps?|scrapped|cancels?|cancell?ed|pulls?\s+out\s+of|"
             r"pulled\s+out\s+of|walks?\s+away\s+from|walked\s+away\s+from)"
@@ -215,11 +216,20 @@ EVENT_PATTERNS: Dict[str, tuple] = {
         ),
     ),
     "tie_up": (
+        # "Dixon Technologies and Gemtek Form Optical Transceiver JV": what
+        # the venture makes sits between the verb and "JV".
         re.compile(
-            r"\b(?:forms?|formed|forming|to form)\s+(?:an?\s+)?(?:jv|joint venture)\b"
+            r"\b(?:forms?|formed|forming|to form)\s+(?:an?\s+)?"
+            r"(?:(?!(?:to|for|with)\b)[\w&₹.-]+\s+){0,3}?(?:jv|joint venture)s?\b"
         ),
         re.compile(r"\bjv with\b"),
         re.compile(r"\b(?:signs?|signed|inks?|inked)\s+(?:an?\s+)?mous?\b"),
+        # Headlines call an MoU a pact: "BHEL signs strategic pact with
+        # thyssenkrupp nucera", "Dixon Technologies' subsidiary signs pact with
+        # Longcheer" were no event at all. Graded announced, as an MoU is.
+        re.compile(
+            r"\b(?:signs?|signed|inks?|inked)\s+(?:an?\s+)?(?:[\w-]+\s+){0,2}?pacts?\b"
+        ),
         # "LTTS and Anthropic Partner to Transform Engineering": a plural
         # subject takes the bare verb, which "partners with" never matches.
         re.compile(r"\band\s+[\w.&' -]{1,40}?\s+partner\s+(?:to|for|on|in)\b"),
@@ -242,9 +252,13 @@ EVENT_PATTERNS: Dict[str, tuple] = {
         re.compile(
             r"\b(?:receives?|received|receipt of|gets?|bags?)\s+(?:an?\s+)?loa\b"
         ),
+        # "Declared L-1 bidder" and "L1 bidder for" too. All of them are
+        # graded announced, not completed (_CERTAINTY_PATTERNS).
         re.compile(
-            r"\b(?:emerges?|emerged)\s+(?:as\s+)?(?:the\s+)?(?:l-?1|lowest\s+bidder)\b"
+            r"\b(?:emerges?|emerged|declared|becomes?|became)\s+(?:as\s+)?(?:the\s+)?"
+            r"(?:l[\s-]?1|lowest\s+bidder)\b"
         ),
+        re.compile(r"\bl[\s-]?1\s+bidder\b"),
     ),
     "capacity_add": (
         re.compile(
@@ -342,7 +356,71 @@ CERTAINTY_MARKERS = (
     ),
 )
 
+# Shapes of the same grades that substrings cannot express. "X and Y sign MoU"
+# has the plural verb, which "signs mou" never matched: 11 of the 34 MoUs in
+# the October 2026 corpus were graded completed, as firm as a Letter of
+# Award. "RVNL emerges L-1 bidder" has the hyphen, which "emerges l1" never
+# matched, so a lowest bid written that way became a won order.
+_CERTAINTY_PATTERNS = {
+    "reported": (
+        # Looking for a deal is not one: "AMD CEO says continues to explore
+        # foundry partnership with Samsung" was filed as a completed tie-up.
+        re.compile(
+            r"\bexplor(?:e|es|ed)\s+(?:an?\s+|the\s+)?(?:[\w-]+\s+){0,4}?"
+            r"(?:partnerships?|tie-?ups?|alliances?|jvs?|joint\s+ventures?|"
+            r"deals?|mergers?|acquisitions?|collaborations?|stake|options)\b"
+        ),
+    ),
+    "announced": (
+        # An MoU is an intention whatever verb signs it.
+        re.compile(r"\bmous?\b"),
+        # A pact signed, as headlines call an MoU.
+        re.compile(
+            r"\b(?:signs?|signed|inks?|inked)\s+(?:an?\s+)?(?:[\w-]+\s+){0,2}?pacts?\b"
+        ),
+        # The lowest bid, however written: L1, L-1, L 1.
+        re.compile(r"\bl[\s-]?1\s+(?:bidder|bid|position)\b"),
+        re.compile(
+            r"\b(?:emerges?|emerged|declared|becomes?|became)\s+(?:as\s+)?"
+            r"(?:the\s+)?l[\s-]?1\b"
+        ),
+        # Not there yet: "Dixon-Vivo JV inches close to final approval".
+        re.compile(r"\binch(?:es|ed)?\s+clos(?:e|er)\b|\bnears\b|\bnearing\b"),
+    ),
+}
+
 CERTAINTY_COMPLETED = "completed"
+_CERTAINTY_RANK = {"reported": 0, "announced": 1, CERTAINTY_COMPLETED: 2}
+
+
+def _weaker(stored: Optional[str], seen: str) -> str:
+    """The less settled of two grades; ``seen`` when nothing was stored."""
+    if stored not in _CERTAINTY_RANK:
+        return seen
+    return min(stored, seen, key=lambda g: _CERTAINTY_RANK.get(g, 2))
+
+
+# How binding an event is, in the words policy_impact uses for a measure
+# (PR #211): a completed award, order or approval is hard; an MoU, a lowest
+# bid or a stated intention is soft; a rumour is reported. Read-throughs and
+# graph-routed signals weigh them by STRENGTH_WEIGHT, as the policy balance
+# weighs a draft at half a notified rule.
+EVENT_STRENGTH = {"completed": "hard", "announced": "soft", "reported": "reported"}
+STRENGTH_WEIGHT = {"hard": 1.0, "soft": 0.5, "reported": 0.25}
+# What a reader is told about a trigger that is not binding. A read-through
+# carries it as ``strength_note``, so the email, the dashboard and Ask say it
+# in the same words.
+STRENGTH_SAYS = {
+    "soft": "not yet binding: an MoU, a lowest bid or an intention",
+    "reported": "reported, not confirmed",
+}
+
+
+def event_strength(event: Dict[str, Any]) -> str:
+    """``hard`` / ``soft`` / ``reported`` for an event, from its certainty."""
+    certainty = event.get("certainty") or classify_certainty(event_clause(event))
+    return EVENT_STRENGTH.get(certainty, "hard")
+
 
 # Clause boundaries. Semicolons and dashes separate independent statements in
 # headline style; a comma followed by a market-reaction verb usually does too.
@@ -365,6 +443,51 @@ NEGATION_MARKERS = _DENIALS + (
     "shelves",
 )
 
+# A scarcity said not to exist: "US Tariff Threat Reprices Copper Without a
+# Global Shortage" was a supply disruption, and a copper squeeze on five
+# holdings. At most one qualifier between, and never a preposition, so "no end
+# to the shortage" and "no relief from shortage" still are one.
+_NEGATED_SCARCITY_RE = re.compile(
+    r"\b(?:without|no|not|avert(?:s|ed|ing)?|avoid(?:s|ed|ing)?)\s+"
+    r"(?:an?\s+|any\s+)?(?:(?!(?:to|of|from|in|for|on|with|the)\b)[\w-]+\s+)?"
+    r"(?:shortages?|scarcity|crunch)\b",
+    re.IGNORECASE,
+)
+
+
+def without_negated_scarcity(text: str) -> str:
+    """The text with any scarcity it says is absent taken out."""
+    return _NEGATED_SCARCITY_RE.sub(" ", text or "")
+
+
+# Spared, not hit: "Nvidia and Broadcom Insulated from US Data Centre Power
+# Shortage" was a supply disruption at two demand anchors, and raised risk on
+# six electronics and semiconductor holdings. Only the statement that says so
+# is skipped, not its whole clause: "Nvidia insulated from chip shortage as
+# TSMC halts production" holds TSMC's stoppage, read as a statement of its
+# own so that Nvidia is no party to it.
+_SPARED = (
+    "insulated from",
+    "shielded from",
+    "immune to",
+    "unaffected by",
+    "unscathed by",
+)
+_STATEMENT_RE = re.compile(
+    r"\s*,\s*|\s+(?:as|while|but|amid|after|despite|though|although|because|"
+    r"since|whereas)\s+",
+    re.IGNORECASE,
+)
+
+
+def _statements(clause: str) -> List[str]:
+    """A clause as it is read: whole, or split into its statements when one
+    of them says someone is spared."""
+    if not any(s in clause.lower() for s in _SPARED):
+        return [clause]
+    return [p for p in _STATEMENT_RE.split(clause) if p.strip()] or [clause]
+
+
 # Which way an event leans for the sectors whose turf it lands on.
 _EVENT_DIRECTION = {
     "partnership_end": "risk",
@@ -385,6 +508,12 @@ _RISK_TYPES = ("supply_disruption", "input_cost_shock")
 # partner's news through the partner screen, and a demand anchor's weaker
 # business through _anchor_shift. Read-throughs are never graded.
 _COMPANY_ONLY_TYPES = ("partnership_end", "business_weakness")
+# What an anchor does that changes how much it buys from the sectors its
+# edges reach: builds, orders, loses supply, pays more. Its tie-ups and
+# purchases are not among them: "TCS and Google partner on an AI centre" is
+# not demand for electronics holdings, and who an anchor picks over whom is
+# read_through's displacement, not a signal.
+_DEMAND_TYPES = ("capacity_add", "order_win") + _RISK_TYPES
 _MAX_SIGNALS_PER_SECTOR = 3
 
 
@@ -402,7 +531,9 @@ def classify_certainty(text: str) -> str:
     """``reported`` / ``announced`` / ``completed`` for one clause."""
     lower = (text or "").lower()
     for level, markers in CERTAINTY_MARKERS:
-        if any(m in lower for m in markers):
+        if any(m in lower for m in markers) or any(
+            p.search(lower) for p in _CERTAINTY_PATTERNS.get(level, ())
+        ):
             return level
     return CERTAINTY_COMPLETED
 
@@ -415,9 +546,17 @@ def first_event_clause(headline: str):
     statements ("ITC Hotels to acquire GHK for Rs 155 crore; shares decline
     5%"), and matching across both lets one claim or cancel the other.
     """
-    for clause in split_clauses(headline):
+    for clause in (s for c in split_clauses(headline) for s in _statements(c)):
         clause_lower = clause.lower()
+        if any(s in clause_lower for s in _SPARED):
+            continue  # spared, not hit
         hit_type, hit_phrase = match_event_type(clause_lower)
+        if hit_type == "supply_disruption":
+            # Read again without any scarcity the clause says is absent;
+            # whatever else it holds may still count.
+            hit_type, hit_phrase = match_event_type(
+                without_negated_scarcity(clause_lower)
+            )
         if any(neg in clause_lower for neg in NEGATION_MARKERS):
             # A denial; others may still count. Calling off a partnership is
             # not one: there the ending is the news.
@@ -510,8 +649,12 @@ def graph_entities(clause: str, graph: Dict[str, Any]) -> List[str]:
 
     Matched with the same word-boundary and person-guard rules as every other
     attribution here, so "Mr Apple" or "Broadcom Institute" cannot enrol an
-    entity that is not really the subject.
+    entity that is not really the subject. An alias counts as its entity
+    ("Taiwan Semiconductor" is TSMC) and is recorded under the canonical name,
+    which is the name the edges use.
     """
+    from analysis.entity_graph import names_mentioned
+
     names = sorted(
         {
             str(edge.get("src"))
@@ -523,9 +666,12 @@ def graph_entities(clause: str, graph: Dict[str, Any]) -> List[str]:
             for edge in (graph or {}).get("edges", [])
             if edge.get("type") in ("competitor", "supplier_customer")
             and edge.get("dst")
+            # A scoped competitor edge runs from a rival to a holding, and a
+            # holding is an actor, not an outside entity.
+            and not (edge.get("type") == "competitor" and edge.get("scope"))
         }
     )
-    return [name for name in names if title_matches_company(clause, "", name)]
+    return names_mentioned(clause, names, graph)
 
 
 def _counterparties(event_type, clause, actors, holdings):
@@ -614,7 +760,7 @@ def classify_headlines(
 
             events.append(
                 {
-                    "headline": headline[:180],
+                    "headline": headline[:HEADLINE_KEPT],
                     "event_type": event_type,
                     "phrase": phrase,
                     "certainty": certainty,
@@ -658,9 +804,10 @@ def event_clause(event: Dict[str, Any]) -> str:
     headline = event.get("headline") or ""
     return next(
         (
-            c
+            s
             for c in split_clauses(headline)
-            if event.get("phrase") and event["phrase"] in c.lower()
+            for s in _statements(c)
+            if event.get("phrase") and event["phrase"] in s.lower()
         ),
         headline,
     )
@@ -670,6 +817,9 @@ def event_clause(event: Dict[str, Any]) -> str:
 # grows, and entries classified by an older version of the engine outlive
 # every fix made since.
 EVENT_RETENTION_DAYS = 45
+
+# A stored event keeps this much of its headline.
+HEADLINE_KEPT = 180
 
 # The most events kept, newest first, once the stale ones have gone.
 EVENTS_KEPT = 120
@@ -693,8 +843,12 @@ def refresh_merged_events(
 
     So every merged event is re-attributed with the current rules. An event
     that no longer names anything we track is dropped, which is how those
-    three finally disappear. Certainty is filled in for rows that predate the
-    field.
+    three finally disappear. It is read again with the current vocabulary
+    too: one it now reads as no event at all ("Nvidia and Broadcom Insulated
+    from US Data Centre Power Shortage") is dropped, one it reads as another
+    type is retyped ("Amazon suspends partnership" ended one), and every one
+    is graded again, so an MoU or lowest bid that older rules filed as
+    completed does not keep full weight for its 45 days.
 
     Then the newest EVENTS_KEPT are kept, by article date. The cap used to be
     applied before this, to the merged list in classification order: a run
@@ -720,6 +874,7 @@ def refresh_merged_events(
         ).isoformat()
 
         dropped_stale = dropped_orphan = reattributed = redated = 0
+        dropped_unread = retyped = 0
         for event in events:
             if not isinstance(event, dict):
                 continue
@@ -740,7 +895,6 @@ def refresh_merged_events(
                 dropped_stale += 1
                 continue
 
-            clause = event_clause(event)
             if event.get("reader") == "llm":
                 # The LLM's parties, not the matcher's reading of the whole
                 # headline — re-deriving would attribute every holding the
@@ -752,6 +906,32 @@ def refresh_merged_events(
                 else:
                     dropped_orphan += 1
                 continue
+            # Read again, as classify_headlines would read it today — unless
+            # the headline was cut when it was stored: what was cut (the
+            # phrase, a "reportedly", a denial) may be what decided it, so the
+            # stored reading stands.
+            headline = str(event.get("headline") or "")
+            whole = len(headline) < HEADLINE_KEPT
+            found = first_event_clause(headline) if whole else None
+            if found:
+                clause, etype, phrase = found
+                if etype != event.get("event_type"):
+                    event["direction"] = _EVENT_DIRECTION.get(etype, "opportunity")
+                    retyped += 1
+                event["event_type"], event["phrase"] = etype, phrase
+                event["certainty"] = classify_certainty(clause)
+            elif whole:
+                dropped_unread += 1
+                continue
+            else:
+                clause = event_clause(event)
+                # Graded from what is left, but never firmer than it was:
+                # the weakest reading wins, so the cut part could only have
+                # weakened it. An MoU an older version filed as completed is
+                # soft; a "reportedly" past the cut stays reported.
+                event["certainty"] = _weaker(
+                    event.get("certainty"), classify_certainty(clause)
+                )
             actors = clause_actors(
                 clause, event.get("event_type"), event.get("phrase"), holdings
             )
@@ -773,8 +953,6 @@ def refresh_merged_events(
 
             event["actors"] = actors
             event["external"] = external
-            if not event.get("certainty"):
-                event["certainty"] = classify_certainty(clause)
             # Re-derived like actors, so the 45 days of tie-ups already in the
             # corpus gain their counterparty on the first run after this
             # shipped rather than only the ones classified from then on.
@@ -787,10 +965,26 @@ def refresh_merged_events(
                 event["counterparties"] = counterparties
             refreshed.append(event)
 
-        if dropped_stale or dropped_orphan or reattributed or redated:
+        # A stored copy retyped to what today's run read the same headline as
+        # is that event twice; the first is kept, as the merge keeps it.
+        seen = set()
+        unique = []
+        for event in refreshed:
+            key = (event.get("headline"), event.get("event_type"))
+            if key not in seen:
+                seen.add(key)
+                unique.append(event)
+        refreshed = unique
+
+        if any(
+            (dropped_stale, dropped_orphan, dropped_unread, reattributed)
+            + (redated, retyped)
+        ):
             log.info(
                 f"Event corpus refresh: {reattributed} re-attributed, "
                 f"{redated} re-dated to the article's date, "
+                f"{retyped} retyped, "
+                f"{dropped_unread} no longer read as an event, "
                 f"{dropped_orphan} no longer touch the watchlist, "
                 f"{dropped_stale} past {EVENT_RETENTION_DAYS}d retention."
             )
@@ -898,7 +1092,17 @@ def compute_supply_stress(
     """Rolling count of supply-side events per sector — the forward-looking
     counterpart of the (lagging) reported-OPM margin ladder. Domains come
     from Tier-1 vocabulary plus the graph's input_cost edges (a headline
-    naming a tracked input routes to the sectors exposed to it)."""
+    naming a tracked input routes to the sectors exposed to it).
+
+    An input is named as a word, not a substring — "RAM" was found in
+    "programme" — not where it only says who uses something else
+    ("semiconductor manufacturing"), and not as a kind its edge rules out;
+    read_through.edge_input_named decides, as it does for read-throughs.
+    An edge that ends at one holding (coal → ADANIPOWER) adds nothing here:
+    stress is per sector, and the edge says the rest of the sector is not
+    exposed."""
+    from analysis.read_through import edge_input_named
+
     stress: Dict[str, int] = {}
     try:
         cutoff = (
@@ -922,9 +1126,9 @@ def compute_supply_stress(
             if str(event.get("date", "")) < cutoff:
                 continue
             sectors = set(event.get("domains") or [])
-            lower = str(event.get("headline", "")).lower()
+            headline = str(event.get("headline", ""))
             for edge in input_edges:
-                if str(edge.get("src", "")).lower() in lower:
+                if edge_input_named(headline, edge):
                     sectors.add(edge.get("dst"))
             for sector in sectors:
                 if sector in SECTOR_METADATA:
@@ -1051,6 +1255,9 @@ def market_event_signals(
                             else {}
                         ),
                         "evidence": evidence_level(event),
+                        # Weighs its size when the alert is escalated: a
+                        # lowest bid is not yet the award.
+                        "strength": event_strength(event),
                     }
                 )
 
@@ -1067,13 +1274,17 @@ def market_event_signals(
             # own plant as good news for Dixon. Nor for news about one
             # company's own fortunes, which only a named link carries.
             named_here = set(event.get("actors") or [])
+            # Only what moves an anchor's demand or supply, and never a
+            # rumour: a hypothesis carried down an edge onto holdings that
+            # are not named is a hypothesis about a hypothesis.
+            strength = event_strength(event)
             anchor_edges = (
                 []
-                if etype in _COMPANY_ONLY_TYPES
+                if etype not in _DEMAND_TYPES or strength == "reported"
                 else [
                     e
                     for e in match_anchor_edges(headline, graph)
-                    if e.get("type") != "partner"
+                    if e.get("type") == "anchor_demand"
                 ]
             )
             for edge in anchor_edges:
@@ -1090,9 +1301,10 @@ def market_event_signals(
                             "direction": event.get("direction", "opportunity"),
                             "category": "Ecosystem Signal",
                             "signal": (
-                                f"{edge.get('src')} → {edge.get('type')} edge: "
-                                f"“{headline}”"
+                                f"{edge.get('src')} → {edge.get('type')} edge"
+                                f"{qualifier}: “{headline}”"
                             ),
+                            "strength": strength,
                         }
                     )
 

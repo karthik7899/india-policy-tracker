@@ -63,6 +63,26 @@ def _where(repo):
     }
 
 
+def _place(repo, ticker, sector):
+    """Put a holding in a sector of the copied watchlist, unconfirmed.
+
+    The tests are about applying a decision, not about where a holding sits
+    today: decisions applied from the dashboard (#224-#226) moved OFSS and
+    ADANIPOWER in the committed file, and tests that read their starting
+    sector from it broke without a line of code changing."""
+    path = repo / "watchlist.json"
+    w = json.loads(path.read_text())
+    for stocks in w.values():
+        for s in list(stocks or []):
+            if isinstance(s, dict) and s.get("ticker") == ticker:
+                stocks.remove(s)
+                s.pop("sector_confirmed", None)
+                w.setdefault(sector, []).append(s)
+                path.write_text(json.dumps(w))
+                return
+    raise AssertionError(f"{ticker} is not in the watchlist")
+
+
 # ---------------------------------------------------------------------------
 # the id both sides compute
 # ---------------------------------------------------------------------------
@@ -162,6 +182,8 @@ def test_partner_requests_that_do_not_fit_are_skipped(repo):
 def test_a_holding_moves_or_is_kept_and_stops_being_flagged(repo):
     from analysis.sector_fit import audit_watchlist
 
+    _place(repo, "OFSS", "cybersecurity")
+    _place(repo, "ADANIPOWER", "clean_energy")
     report = da.apply_decisions(
         {
             "v": 1,
@@ -195,6 +217,7 @@ def test_a_kept_holding_moved_later_is_checked_again():
 
 
 def test_moves_that_do_not_fit_are_skipped(repo):
+    _place(repo, "OFSS", "cybersecurity")
     report = da.apply_decisions(
         {
             "v": 1,

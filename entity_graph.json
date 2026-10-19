@@ -313,6 +313,123 @@
       "note": "DRAM and high-bandwidth memory"
     },
     {
+      "src": "Tata Electronics",
+      "dst": "CGPOWER",
+      "type": "competitor",
+      "evidence": "curated",
+      "note": "Tata Electronics' Assam assembly-and-test plant bids for the same chip packaging work as CG Semi's Sanand OSAT. Only its OSAT line competes; its fab and phone assembly do not.",
+      "added": "2026-10-19",
+      "scope": [
+        "osat",
+        "assembly and test",
+        "assembly, test",
+        "atmp",
+        "packaging",
+        "chip assembly",
+        "semiconductor assembly"
+      ]
+    },
+    {
+      "src": "Tata Electronics",
+      "dst": "KAYNES",
+      "type": "competitor",
+      "evidence": "curated",
+      "note": "Tata Electronics' Assam assembly-and-test plant bids for the same chip packaging work as Kaynes Semicon's Sanand OSAT. Only its OSAT line competes; its fab and phone assembly do not.",
+      "added": "2026-10-19",
+      "scope": [
+        "osat",
+        "assembly and test",
+        "assembly, test",
+        "atmp",
+        "packaging",
+        "chip assembly",
+        "semiconductor assembly"
+      ]
+    },
+    {
+      "src": "Tata Electronics",
+      "dst": "SPELS",
+      "type": "competitor",
+      "evidence": "curated",
+      "note": "Tata Electronics' Assam assembly-and-test plant bids for the same chip packaging work as SPEL's own assembly and test lines. Only its OSAT line competes; its fab and phone assembly do not.",
+      "added": "2026-10-19",
+      "scope": [
+        "osat",
+        "assembly and test",
+        "assembly, test",
+        "atmp",
+        "packaging",
+        "chip assembly",
+        "semiconductor assembly"
+      ]
+    },
+    {
+      "src": "ABF substrate",
+      "dst": "SPELS",
+      "type": "input_cost",
+      "evidence": "curated",
+      "note": "Package substrates are an OSAT's main bought-in material",
+      "added": "2026-10-19"
+    },
+    {
+      "src": "aluminium",
+      "dst": "DIACABS",
+      "type": "input_cost",
+      "evidence": "curated",
+      "note": "Aluminium is the main metal in the conductors Diamond Power makes",
+      "added": "2026-10-19"
+    },
+    {
+      "src": "aluminum",
+      "dst": "DIACABS",
+      "type": "input_cost",
+      "evidence": "curated",
+      "note": "Aluminium is the main metal in the conductors Diamond Power makes",
+      "added": "2026-10-19"
+    },
+    {
+      "src": "chip",
+      "dst": "manufacturing_electronics",
+      "type": "input_cost",
+      "evidence": "curated",
+      "note": "Chips are bought in for every board an EMS holding assembles",
+      "added": "2026-10-19",
+      "not_scope": [
+        "AI chip",
+        "AI accelerator",
+        "GPU"
+      ]
+    },
+    {
+      "src": "chip",
+      "dst": "surveillance_security",
+      "type": "input_cost",
+      "evidence": "curated",
+      "note": "Cameras, drones and recorders are built around bought-in chips",
+      "added": "2026-10-19",
+      "not_scope": [
+        "AI chip",
+        "AI accelerator",
+        "GPU"
+      ]
+    },
+    {
+      "src": "coal",
+      "dst": "ADANIPOWER",
+      "type": "input_cost",
+      "evidence": "curated",
+      "note": "Thermal generation burns coal; merchant sales carry its price without pass-through",
+      "added": "2026-10-19"
+    },
+    {
+      "src": "coffee",
+      "dst": "TATACONSUM",
+      "type": "input_cost",
+      "evidence": "curated",
+      "note": "Coffee is Tata Consumer's second plantation commodity",
+      "added": "2026-10-19"
+    },
+    {
       "src": "copper",
       "dst": "clean_energy",
       "type": "input_cost",
@@ -327,6 +444,14 @@
       "note": "copper cost exposure",
       "evidence": "curated",
       "added": "2026-07-10"
+    },
+    {
+      "src": "copper",
+      "dst": "DIACABS",
+      "type": "input_cost",
+      "evidence": "curated",
+      "note": "Copper is the other metal in Diamond Power's cables",
+      "added": "2026-10-19"
     },
     {
       "src": "cotton",
@@ -360,6 +485,22 @@
       "added": "2026-09-13"
     },
     {
+      "src": "EVA",
+      "dst": "CAMPUS",
+      "type": "input_cost",
+      "evidence": "curated",
+      "note": "EVA is a sole material in Campus's sports shoes",
+      "added": "2026-10-19"
+    },
+    {
+      "src": "EVA",
+      "dst": "RELAXO",
+      "type": "input_cost",
+      "evidence": "curated",
+      "note": "EVA is a main sole and slipper material in Relaxo's footwear",
+      "added": "2026-10-19"
+    },
+    {
       "src": "freight",
       "dst": "logistics_heavy_capital",
       "type": "input_cost",
@@ -376,6 +517,14 @@
       "added": "2026-07-10"
     },
     {
+      "src": "germanium",
+      "dst": "STLTECH",
+      "type": "input_cost",
+      "evidence": "curated",
+      "note": "Germanium dopes the core of the optical fibre STL draws; China restricts its export",
+      "added": "2026-10-19"
+    },
+    {
       "src": "HBM",
       "dst": "data_center_support",
       "type": "input_cost",
@@ -388,6 +537,14 @@
       "type": "input_cost",
       "evidence": "curated",
       "added": "2026-09-13"
+    },
+    {
+      "src": "IC substrate",
+      "dst": "SPELS",
+      "type": "input_cost",
+      "evidence": "curated",
+      "note": "Package substrates are an OSAT's main bought-in material",
+      "added": "2026-10-19"
     },
     {
       "src": "lithium",
@@ -427,6 +584,38 @@
       "added": "2026-09-13"
     },
     {
+      "src": "PCB",
+      "dst": "manufacturing_electronics",
+      "type": "input_cost",
+      "evidence": "curated",
+      "note": "Bare boards are an EMS bill-of-materials input",
+      "added": "2026-10-19"
+    },
+    {
+      "src": "PET resin",
+      "dst": "VBL",
+      "type": "input_cost",
+      "evidence": "curated",
+      "note": "PET resin makes the bottles; the other large raw material",
+      "added": "2026-10-19"
+    },
+    {
+      "src": "printed circuit board",
+      "dst": "manufacturing_electronics",
+      "type": "input_cost",
+      "evidence": "curated",
+      "note": "Bare boards are an EMS bill-of-materials input",
+      "added": "2026-10-19"
+    },
+    {
+      "src": "PVC",
+      "dst": "RELAXO",
+      "type": "input_cost",
+      "evidence": "curated",
+      "note": "PVC is a sole and strap material in Relaxo's footwear",
+      "added": "2026-10-19"
+    },
+    {
       "src": "RAM",
       "dst": "manufacturing_electronics",
       "type": "input_cost",
@@ -456,6 +645,22 @@
       "note": "rare earth cost exposure",
       "evidence": "curated",
       "added": "2026-07-10"
+    },
+    {
+      "src": "rubber",
+      "dst": "CAMPUS",
+      "type": "input_cost",
+      "evidence": "curated",
+      "note": "Rubber is a sole material in Campus's own manufacturing",
+      "added": "2026-10-19"
+    },
+    {
+      "src": "rubber",
+      "dst": "RELAXO",
+      "type": "input_cost",
+      "evidence": "curated",
+      "note": "Rubber is a sole material in Relaxo's mass-market footwear",
+      "added": "2026-10-19"
     },
     {
       "src": "semiconductor",
@@ -488,6 +693,30 @@
       "note": "steel cost exposure",
       "evidence": "curated",
       "added": "2026-07-10"
+    },
+    {
+      "src": "sugar",
+      "dst": "VBL",
+      "type": "input_cost",
+      "evidence": "curated",
+      "note": "Sugar is one of the bottler's two largest raw materials",
+      "added": "2026-10-19"
+    },
+    {
+      "src": "tea",
+      "dst": "TATACONSUM",
+      "type": "input_cost",
+      "evidence": "curated",
+      "note": "Tea is Tata Consumer's largest commodity input",
+      "added": "2026-10-19"
+    },
+    {
+      "src": "wheat",
+      "dst": "ITC",
+      "type": "input_cost",
+      "evidence": "curated",
+      "note": "Wheat is the input to ITC's atta and biscuits",
+      "added": "2026-10-19"
     },
     {
       "src": "Aareal Bank",
@@ -610,6 +839,32 @@
       "link": "https://news.google.com/rss/articles/CBMixgJBVV95cUxOVkdzdERTTlN2RDZQR2dwMDFWeXpkTHhRNnVpZGhIQl95dUtjRnUydnBtTzRHUkRtQnBEMlZYanpnZHNnZFZXSUowTjJEQjZPWVZTZldTako4dzdrTU9ibVJhcEIyY1ZWUTFnOVJiTXFxYUc4WVlKaGwya3hzVEptUUpMaDR6ZnQxSWtLQThrUDhvdTU0dnNWUW5EeUlVWXVCb0lKbmNRQ1luU2RQMXl0RnlnMi1FYmxJWjROSXcxN3VLMFU5LTc1SWtGMThYN243VThFQzliYTRPU3hIS1Z3U0pBUVhQTURJQWJBOUgzVFlDc1VFS2tMWVE5NkFaMHBzNWQwanVHaDd5eVlfdkY0WERvakItQ2tWWjl0eUlhNEtUVjFGVU5QUTVtZlZQcGp1YVpKTE9Sc2FaZEpKNjlpU3ZGTHVVQdIBywJBVV95cUxQZkhqT0NybERZa08zMVpiT3hxNlRBYlVwVGgtdWZDT1kxTmtWY21Wbng1TkkxSlc3cmVVUEdHbXZBU1hGNi13MVQxU2Z2Yi04UDl2Ti0yZjE5cDVIYzRTbm9DQmExcXl4WU1pNEppNnduV1hwdjllNGh3QzR5YjNTemdRN0NEd21tUVZLczl4bnFYSHh3b3hMd2Zrek1lV1U4QTFodTdJZWNEMWhHcnkwQ0JtV3QwVzZoRXo4RGZ6bUFKS0pPSEpmQThFb0lRcEVUekpxQkhGZENGaVl5QVNJSGJWa3FkalhDN3dfSnhxQk1zUVc4Vk1WZk10Z3hTelBrakU1eUV0NnpmNGc0WDl3RWxqc2VJNWtXWGttUk1LQ3J2X014RUZFVnh5VzVkYmVicWF5czd3UEo0LXlVanVUTV9LZF9TdkpnZm9r?oc=5"
     },
     {
+      "src": "Gemtek",
+      "dst": "DIXON",
+      "type": "partner",
+      "evidence": "Dixon Technologies and Gemtek Form Optical Transceiver JV for Future Growth",
+      "note": "Optical transceiver joint venture with Taiwan-based Gemtek Technology, agreement signed 7 Oct 2026. Gemtek's broadband, Wi-Fi and IoT lines are its own.",
+      "added": "2026-10-19",
+      "scope": [
+        "optical transceiver",
+        "transceiver",
+        "optical module",
+        "optical interconnect",
+        "optical networking",
+        "800G",
+        "1.6T"
+      ],
+      "not_scope": [
+        "wi-fi",
+        "wifi",
+        "router",
+        "broadband",
+        "cpe",
+        "small cell",
+        "iot"
+      ]
+    },
+    {
       "src": "Gigabyte",
       "dst": "DIXON",
       "type": "partner",
@@ -721,13 +976,6 @@
       "link": "https://news.google.com/rss/articles/CBMi2AFBVV95cUxPNU9iaXpvN2FSZlpkYkl3OVl1Y1RrWEptUV9iVHh0dWpzQ2pIaFhEcmpGUnR0YXk0eE14bWg0T0hnVU85Tng4RkZMV0VwcEgweDcyVzRjSmxEY0w5TmdsYW9aNlU2MUlSdWU1VzJOX0RidjVrWEx4QVVFcU9wR0JLNjBDMkl4aGN5cjFuN3dETzhHaUptbzZBa0Etc2JmZFRGU0QyRG92SEpCc2NaNjBtM3lEaEdnYVZaSURVc2trbEQ5T0pKZFl4YkpMelAybk1mVWpFWXpTTXE?oc=5"
     },
     {
-      "src": "TATAPOWER",
-      "dst": "SUZLON",
-      "type": "partner",
-      "evidence": "Suzlon crosses 1 GW partnership with Tata Power following a DevCo led new 400MW EPC order",
-      "added": "2026-07-10"
-    },
-    {
       "src": "Titagarh",
       "dst": "BHEL",
       "type": "partner",
@@ -834,5 +1082,110 @@
       "added": "2026-09-13",
       "note": "Leading-edge foundry"
     }
-  ]
+  ],
+  "aliases": {
+    "Airbus": [
+      "Airbus Group",
+      "Airbus SE"
+    ],
+    "Amazon": [
+      "Amazon Web Services",
+      "AWS"
+    ],
+    "AMD": [
+      "Advanced Micro Devices"
+    ],
+    "Apple": [
+      "iPhone",
+      "iPad"
+    ],
+    "BMCT": [
+      "Bharat Mumbai Container Terminals"
+    ],
+    "Boeing": [
+      "Boeing Co",
+      "Boeing Company"
+    ],
+    "Carlsberg": [
+      "Carlsberg Group"
+    ],
+    "Corning": [
+      "Corning Incorporated"
+    ],
+    "CXMT": [
+      "ChangXin Memory",
+      "ChangXin Memory Technologies",
+      "Changxin"
+    ],
+    "Elemaster": [
+      "Elemaster Group"
+    ],
+    "Foxconn": [
+      "Hon Hai",
+      "Hon Hai Precision",
+      "Hon Hai Technology Group",
+      "Bharat FIH",
+      "FIH Mobile"
+    ],
+    "Gigabyte": [
+      "Gigabyte Technology"
+    ],
+    "Google": [
+      "Alphabet"
+    ],
+    "Lockheed Martin": [
+      "Lockheed"
+    ],
+    "Longcheer": [
+      "Longcheer Technology"
+    ],
+    "Marvell": [
+      "Marvell Technology"
+    ],
+    "Meta": [
+      "Meta Platforms",
+      "Facebook"
+    ],
+    "Micron": [
+      "Micron Technology"
+    ],
+    "Nothing Electronics": [
+      "Nothing Technology",
+      "Nothing Phone"
+    ],
+    "Qualcomm": [
+      "Qualcomm Technologies"
+    ],
+    "Safran": [
+      "Safran Electronics & Defense",
+      "Safran Electronics and Defense"
+    ],
+    "Samsung": [
+      "Samsung Electronics"
+    ],
+    "SAS": [
+      "SAS Institute"
+    ],
+    "SK Hynix": [
+      "Hynix"
+    ],
+    "Tata Power": [
+      "Tata Power Renewable Energy",
+      "Tata Power Renewable",
+      "TATAPOWER"
+    ],
+    "Titagarh": [
+      "Titagarh Rail Systems",
+      "Titagarh Rail",
+      "Titagarh Wagons"
+    ],
+    "TSMC": [
+      "Taiwan Semiconductor",
+      "Taiwan Semiconductor Manufacturing"
+    ],
+    "Vivo": [
+      "Vivo Mobile",
+      "Vivo Mobile India"
+    ]
+  }
 }

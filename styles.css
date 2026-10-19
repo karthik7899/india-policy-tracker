@@ -337,6 +337,17 @@ body {
   color: var(--muted); font-size: 11px;
   text-transform: uppercase; letter-spacing: 0.04em;
 }
+/* How the news travels, read before the rule that found it. */
+.rt-channel {
+  color: var(--ink-2); font-size: 11px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+/* A trigger that is not binding: an MoU, a lowest bid, a rumour. */
+.rt-strength {
+  font-size: 11px; padding: 1px 8px; border-radius: 999px;
+  color: var(--warning);
+  border: 1px solid color-mix(in oklab, var(--warning) 50%, var(--border));
+}
 .rt-trigger { margin: 6px 0 8px; font-size: 13px; color: var(--ink-2); max-width: 78ch; }
 .rt-chain {
   margin: 0 0 8px; padding-left: 20px;

@@ -366,7 +366,32 @@ def test_graph_roundtrip_and_validation(tmp_path):
     assert save_entity_graph(graph, path)
     loaded = load_entity_graph(path)
     assert len(loaded["edges"]) == 1
-    assert load_entity_graph(str(tmp_path / "missing.json")) == {"edges": []}
+    assert load_entity_graph(str(tmp_path / "missing.json")) == {
+        "edges": [],
+        "aliases": {},
+    }
+
+
+def test_a_save_that_only_adds_edges_keeps_the_aliases(tmp_path):
+    """Self-growth saves a graph it may have built without aliases. Dropping
+    them would undo every name they map, silently, on the next run."""
+    path = str(tmp_path / "graph.json")
+    save_entity_graph(
+        {
+            "edges": [
+                {
+                    "src": "TSMC",
+                    "dst": "semiconductors_equipment",
+                    "type": "anchor_demand",
+                }
+            ],
+            "aliases": {"TSMC": ["Taiwan Semiconductor"], "Bad": "not a list"},
+        },
+        path,
+    )
+    assert load_entity_graph(path)["aliases"] == {"TSMC": ["Taiwan Semiconductor"]}
+    save_entity_graph({"edges": [{"src": "A", "dst": "B", "type": "partner"}]}, path)
+    assert load_entity_graph(path)["aliases"] == {"TSMC": ["Taiwan Semiconductor"]}
 
 
 def test_match_anchor_edges_uses_word_boundary_matching():
@@ -427,19 +452,74 @@ def test_relational_edges_reach_a_sector_in_two_hops():
     """A competitor or supplier edge that leads nowhere we hold is inert.
 
     Every one of them exists to complete a read-through chain, and a chain
-    ends at an anchor_demand edge. One that cannot reach a sector is either a
-    typo in an entity name or a relationship nobody can act on; both are worth
-    catching here rather than discovering as a silently missing flag.
+    ends at an anchor_demand edge — or, for a rival in one of a holding's
+    lines, at the holding itself: a scoped competitor edge. One that cannot
+    reach the book is either a typo in an entity name or a relationship
+    nobody can act on; both are worth catching here rather than discovering
+    as a silently missing flag.
     """
     graph = load_entity_graph(os.path.join(_REPO_ROOT, "entity_graph.json"))
     anchored = {
         str(e["src"]).lower() for e in graph["edges"] if e["type"] == "anchor_demand"
     }
+    with open(os.path.join(_REPO_ROOT, "watchlist.json"), encoding="utf-8") as f:
+        held = {
+            str(s.get("ticker")).upper()
+            for stocks in json.load(f).values()
+            if isinstance(stocks, list)
+            for s in stocks
+            if isinstance(s, dict) and s.get("ticker")
+        }
     for edge in graph["edges"]:
         if edge["type"] not in ("competitor", "supplier_customer"):
             continue
+        if edge["type"] == "competitor" and edge.get("scope"):
+            assert str(edge["dst"]).upper() in held, f"rival of no holding: {edge}"
+            continue
         ends = {str(edge["src"]).lower(), str(edge["dst"]).lower()}
         assert ends & anchored, f"neither end anchors to a sector: {edge}"
+
+
+def test_committed_aliases_are_unambiguous():
+    """An alias belongs to one entity, an entity the edges use, and to nobody
+    we hold: an alias that matched a holding's name would file the holding's
+    own news as an outside entity's."""
+    graph = load_entity_graph(os.path.join(_REPO_ROOT, "entity_graph.json"))
+    aliases = graph["aliases"]
+    assert len(aliases) >= 20
+    entities = {str(e["src"]).lower() for e in graph["edges"]} | {
+        str(e["dst"]).lower() for e in graph["edges"]
+    }
+    with open(os.path.join(_REPO_ROOT, "watchlist.json"), encoding="utf-8") as f:
+        held = {
+            str(s.get(k) or "").lower()
+            for stocks in json.load(f).values()
+            if isinstance(stocks, list)
+            for s in stocks
+            if isinstance(s, dict)
+            for k in ("ticker", "name")
+        } - {""}
+    owner = {}
+    for canonical, others in aliases.items():
+        assert canonical.lower() in entities, f"alias of no edge's entity: {canonical}"
+        for alias in others:
+            key = alias.lower()
+            assert key not in owner, f"{alias} belongs to {owner[key]} and {canonical}"
+            assert key not in entities, f"{alias} is itself an entity"
+            assert key not in held, f"{alias} is a holding"
+            owner[key] = canonical
+
+
+def test_google_cloud_is_not_google():
+    """Its headlines are IT-services deals ("TCS, Google Cloud launch Gemini
+    centre"), and Google's edges are demand for data centres and devices. As
+    an alias it would have read TCS's software centre as hardware demand."""
+    graph = load_entity_graph(os.path.join(_REPO_ROOT, "entity_graph.json"))
+    assert "google cloud" not in {a.lower() for a in graph["aliases"].get("Google", [])}
+    assert (
+        match_anchor_edges("TCS, Google Cloud open Gemini centre in Kolkata", graph)
+        == []
+    )
 
 
 def test_committed_graph_json_parses_raw():
@@ -715,8 +795,9 @@ def test_external_only_events_do_not_reach_the_warning_engine(monkeypatch):
     data = {
         "market_events": [
             {
-                "headline": "MegaCorp ties up with a rival for smartphone chips",
-                "event_type": "tie_up",
+                "headline": "MegaCorp commits $30 billion to new smartphone chip plants",
+                "event_type": "capacity_add",
+                "certainty": "completed",
                 "domains": [],
                 "actors": [],
                 "external": ["MegaCorp"],
@@ -730,6 +811,64 @@ def test_external_only_events_do_not_reach_the_warning_engine(monkeypatch):
     # The same event, once it genuinely touches a sector, still produces one.
     data["market_events"][0]["domains"] = ["manufacturing_electronics"]
     assert ee.market_event_signals(data, _WATCHLIST) != []
+
+
+def _ecosystem(headline, event_type, certainty):
+    import analysis.event_engine as ee
+
+    data = {
+        "market_events": [
+            {
+                "headline": headline,
+                "event_type": event_type,
+                "certainty": certainty,
+                "domains": ["manufacturing_electronics"],
+                "actors": [],
+                "external": ["MegaCorp"],
+                "direction": ee._EVENT_DIRECTION[event_type],
+                "date": _TODAY,
+            }
+        ]
+    }
+    return [
+        a
+        for a in ee.market_event_signals(data, _WATCHLIST)
+        if a["category"] == "Ecosystem Signal"
+    ]
+
+
+def test_an_anchor_edge_carries_what_moves_demand_not_who_partners_whom(
+    monkeypatch,
+):
+    """A tie-up or a purchase by an anchor is not demand for the sectors its
+    edges reach: "TCS and Google partner on an AI centre" told electronics
+    holdings nothing. Building, ordering and losing supply do."""
+    import analysis.entity_graph as eg
+
+    monkeypatch.setattr(eg, "load_entity_graph", lambda path=None: _GRAPH)
+    assert (
+        _ecosystem("MegaCorp ties up with a rival for chips", "tie_up", "completed")
+        == []
+    )
+    assert (
+        _ecosystem("MegaCorp acquires a chip startup", "acquisition", "completed") == []
+    )
+    built = _ecosystem("MegaCorp opens new chip plant", "capacity_add", "completed")
+    assert built and {a["strength"] for a in built} == {"hard"}
+    halted = _ecosystem(
+        "MegaCorp halts chip production", "supply_disruption", "completed"
+    )
+    assert halted and {a["direction"] for a in halted} == {"risk"}
+
+
+def test_a_rumour_travels_down_no_edge_and_a_soft_event_says_so(monkeypatch):
+    import analysis.entity_graph as eg
+
+    monkeypatch.setattr(eg, "load_entity_graph", lambda path=None: _GRAPH)
+    assert _ecosystem("MegaCorp may build chip plant", "capacity_add", "reported") == []
+    soft = _ecosystem("MegaCorp plans new chip plant", "capacity_add", "announced")
+    assert soft and all(a["strength"] == "soft" for a in soft)
+    assert all("(announced)" in a["signal"] for a in soft)
 
 
 class TestAClassifiedEventCitesItsArticle:
@@ -1105,3 +1244,251 @@ def test_a_headlines_certainty_is_read_from_its_event_clause():
         == "completed"
     )
     assert headline_certainty("Sensex closes higher") is None
+
+
+# ---------------------------------------------------------------------------
+# How binding: MoUs, lowest bids and explorations, as the corpus writes them
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize(
+    "headline,grade",
+    [
+        # The plural verb "signs mou" never matched: 11 of 34 corpus MoUs
+        # were graded as firm as a Letter of Award.
+        ("Astra Microwave, BEL Sign MoU for Defence Electronics", "announced"),
+        ("RITES and CONCOR sign pact for logistics infrastructure", "announced"),
+        # The hyphen "emerges l1" never matched.
+        ("RVNL emerges L-1 bidder for Rs 500 crore project", "announced"),
+        ("KEC declared L-1 in Rs 1,200 crore transmission tender", "announced"),
+        ("Dixon-Vivo joint venture inches close to final govt approval", "announced"),
+        # Looking for a partner is not having one...
+        (
+            "AMD CEO says continues to explore foundry partnership with Samsung",
+            "reported",
+        ),
+        # ...but a tie-up formed to explore something is formed.
+        (
+            "Siemens and FuelCell Energy collaborate to explore fuel cell solutions",
+            "completed",
+        ),
+        ("RVNL receives LoA from NHAI for Rs 500 crore", "completed"),
+    ],
+)
+def test_soft_and_firm_events_are_graded_as_written(headline, grade):
+    assert classify_certainty(headline) == grade
+
+
+def test_an_l1_bid_weighs_half_an_award_down_every_edge():
+    from analysis.event_engine import STRENGTH_WEIGHT, event_strength
+
+    bid = {"headline": "RVNL emerges L-1 bidder for Rs 500 crore project"}
+    award = {"headline": "RVNL receives LoA from NHAI for Rs 500 crore"}
+    rumour = {"headline": "BEL likely to win Rs 2,000 crore order"}
+    assert [event_strength(e) for e in (award, bid, rumour)] == [
+        "hard",
+        "soft",
+        "reported",
+    ]
+    assert STRENGTH_WEIGHT["soft"] == STRENGTH_WEIGHT["hard"] / 2
+
+
+@pytest.mark.parametrize(
+    "headline,expected",
+    [
+        # Spared, not hit.
+        ("Nvidia and Broadcom Insulated from US Data Centre Power Shortage", None),
+        # A scarcity said not to exist.
+        ("US Tariff Threat Reprices Copper Without a Global Shortage", None),
+        ("Automakers avert chip shortage with early orders", None),
+        # Still a shortage: the negation is of something else.
+        ("No end to the chip shortage", "supply_disruption"),
+        ("No relief from memory shortage for phone makers", "supply_disruption"),
+        (
+            "Amazon suspends partnership with 21 Air after Miami crash",
+            "partnership_end",
+        ),
+        # What the venture makes sits between the verb and "JV".
+        ("Dixon Technologies and Gemtek Form Optical Transceiver JV", "tie_up"),
+        # Headlines call an MoU a pact.
+        ("BHEL signs strategic pact with thyssenkrupp nucera India", "tie_up"),
+        ("IndieSemiC, Kaynes Semicon sign pact for OSAT collaboration", "tie_up"),
+    ],
+)
+def test_what_a_headline_says_happened(headline, expected):
+    found = first_event_clause(headline)
+    assert (found[1] if found else None) == expected
+
+
+def test_supply_stress_reads_an_input_as_a_word_and_within_its_edge():
+    """The substring test found "RAM" in "programme". An edge's not_scope
+    keeps an AI-chip shortage off the cameras' chips, and an edge that ends at
+    one holding says nothing about its sector."""
+    graph = {
+        "edges": [
+            {"src": "RAM", "dst": "manufacturing_electronics", "type": "input_cost"},
+            {
+                "src": "chip",
+                "dst": "surveillance_security",
+                "type": "input_cost",
+                "not_scope": ["AI chip"],
+            },
+            {"src": "coal", "dst": "ADANIPOWER", "type": "input_cost"},
+        ]
+    }
+
+    def event(headline):
+        return {
+            "event_type": "supply_disruption",
+            "domains": [],
+            "headline": headline,
+            "date": _TODAY,
+        }
+
+    assert (
+        compute_supply_stress(
+            [
+                event("Government programme hit by shortage"),
+                event("China's AI chip shortage deepens"),
+                event("Coal shortage hits power plants"),
+            ],
+            graph,
+        )
+        == {}
+    )
+    assert compute_supply_stress(
+        [event("RAM shortage deepens"), event("Chip shortage hits camera makers")],
+        graph,
+    ) == {"manufacturing_electronics": 1, "surveillance_security": 1}
+
+
+def test_a_stored_event_is_read_again_under_the_current_rules():
+    """Events are kept for 45 days. A grade, a type or a whole event that
+    older rules got wrong must not ride along for all of them: a stored MoU
+    graded completed would keep full weight down every edge."""
+    wl = {
+        "manufacturing_electronics": [
+            {"ticker": "DIXON", "name": "Dixon Technologies"}
+        ],
+        "aerospace_defence": [
+            {"ticker": "BEL", "name": "Bharat Electronics"},
+            {"ticker": "ASTRAMICRO", "name": "Astra Microwave Products"},
+        ],
+    }
+    base = {"certainty": "completed", "domains": [], "date": _TODAY}
+    mou = dict(
+        base,
+        headline="Astra Microwave, BEL Sign MoU for Defence Electronics",
+        event_type="tie_up",
+        phrase="mou",
+    )
+    suspended = dict(
+        base,
+        headline="Dixon suspends partnership with Vivo",
+        event_type="tie_up",
+        phrase="partnership with",
+        direction="opportunity",
+    )
+    spared = dict(
+        base,
+        headline="Dixon insulated from memory shortage",
+        event_type="supply_disruption",
+        phrase="shortage",
+        domains=["manufacturing_electronics"],
+    )
+    # Today's run read that headline as the end of a partnership; the stored
+    # copy, once retyped, is the same event and not a second one.
+    todays = dict(suspended, event_type="partnership_end", direction="risk")
+
+    kept = refresh_merged_events([todays, mou, suspended, spared], wl)
+    by_headline = {}
+    for event in kept:
+        by_headline.setdefault(event["headline"], []).append(event)
+
+    assert by_headline[mou["headline"]][0]["certainty"] == "announced"
+    (ended,) = by_headline[suspended["headline"]]
+    assert (ended["event_type"], ended["direction"]) == ("partnership_end", "risk")
+    assert spared["headline"] not in by_headline
+
+
+def test_a_headline_cut_when_stored_keeps_its_reading():
+    """A stored event keeps HEADLINE_KEPT characters of its headline, and the
+    phrase it was read from can run past the cut. Read again, the cut text
+    holds no event, and this run's own events would vanish before they were
+    ever stored."""
+    from analysis.event_engine import HEADLINE_KEPT
+
+    wl = {
+        "manufacturing_electronics": [{"ticker": "DIXON", "name": "Dixon Technologies"}]
+    }
+    full = (
+        "Dixon Technologies, the Noida-based electronics maker that assembles "
+        "phones, televisions and laptops for global brands from plants across "
+        "Uttar Pradesh and Andhra Pradesh, wins order worth Rs 500 crore"
+    )
+    assert full.lower().find("wins order") + len("wins order") > HEADLINE_KEPT
+    events = classify_headlines({"corporate_agreements": [{"title": full}]}, wl)
+    assert [len(e["headline"]) for e in events] == [HEADLINE_KEPT]
+    kept = refresh_merged_events(events, wl)
+    assert [(e["event_type"], e["actors"]) for e in kept] == [("order_win", ["DIXON"])]
+
+
+def test_only_the_statement_that_someone_is_spared_is_skipped():
+    from analysis.event_engine import graph_entities
+
+    found = first_event_clause(
+        "Nvidia insulated from chip shortage as TSMC halts production"
+    )
+    assert found[:2] == ("TSMC halts production", "supply_disruption")
+    # Whoever is spared is no party to the rest.
+    graph = {
+        "edges": [
+            {"src": "Nvidia", "dst": "x", "type": "anchor_demand"},
+            {"src": "TSMC", "dst": "y", "type": "anchor_demand"},
+        ]
+    }
+    assert graph_entities(found[0], graph) == ["TSMC"]
+    # Another event beside it stands; the spared statement alone is nothing.
+    assert (
+        first_event_clause(
+            "Dixon wins order worth Rs 500 crore, unaffected by tariffs"
+        )[1]
+        == "order_win"
+    )
+    assert first_event_clause("Dixon unaffected by weak demand") is None
+
+
+def test_a_cut_headline_is_graded_from_what_is_left_and_never_firmer():
+    """Not read again, but graded again from its visible part: the weakest
+    reading wins, so a firmer grade than the one stored is never right."""
+    from analysis.event_engine import HEADLINE_KEPT
+
+    wl = {
+        "aerospace_defence": [
+            {"ticker": "BEL", "name": "Bharat Electronics"},
+            {"ticker": "ASTRAMICRO", "name": "Astra Microwave Products"},
+        ]
+    }
+    tail = " for radar subsystems, electronic warfare suites" * 4
+    mou = {
+        "headline": ("Astra Microwave, BEL Sign MoU for Defence Electronics" + tail)[
+            :HEADLINE_KEPT
+        ],
+        "event_type": "tie_up",
+        "phrase": "mou",
+        # Filed before the plural verb was read.
+        "certainty": "completed",
+        "domains": [],
+        "date": _TODAY,
+    }
+    rumour = dict(
+        mou,
+        headline=("Astra Microwave and BEL partner on radar" + tail)[:HEADLINE_KEPT],
+        phrase="partner",
+        # Its "reportedly" was past the cut.
+        certainty="reported",
+    )
+    assert len(mou["headline"]) == len(rumour["headline"]) == HEADLINE_KEPT
+    kept = {e["headline"]: e for e in refresh_merged_events([mou, rumour], wl)}
+    assert kept[mou["headline"]]["certainty"] == "announced"
+    assert kept[rumour["headline"]]["certainty"] == "reported"

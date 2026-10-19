@@ -47,6 +47,29 @@ export function sizeLabel(pctOfRevenue, band) {
   return `${figure}% of revenue${band ? ` \u00b7 ${band}` : ""}`;
 }
 
+/**
+ * How a read-through reaches the holding: "demand pull", "competitive
+ * threat" or "input shock" (analysis/read_through.TRANSMISSIONS). Empty for a
+ * row written before rows carried it.
+ */
+export function transmissionLabel(transmission) {
+  return String(transmission || "").replace(/_/g, " ");
+}
+
+/**
+ * What a read-through's trigger falls short of \u2014 "not yet binding: an MoU, a
+ * lowest bid or an intention", "reported, not confirmed" \u2014 or "" when it is
+ * binding. The words travel with the row (strength_note) so the email and the
+ * dashboard say the same thing; the fallback covers a row with the grade and
+ * not the words.
+ */
+export function strengthLabel(row) {
+  const strength = row?.strength;
+  if (!strength || strength === "hard") return "";
+  if (row.strength_note) return String(row.strength_note);
+  return strength === "soft" ? "not yet binding" : "reported, not confirmed";
+}
+
 /** A signed percentage, always with its sign — the sign is the information. */
 export function pct(value, decimals = 1) {
   const n = num(value);

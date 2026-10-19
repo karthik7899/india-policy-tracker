@@ -936,6 +936,7 @@ def annotate_order_materiality(warnings, watchlist):
     occasionally adds nothing.
     """
     try:
+        from analysis.event_engine import STRENGTH_WEIGHT
         from models.core import CompanyFinancials
 
         fins = {}
@@ -976,13 +977,28 @@ def annotate_order_materiality(warnings, watchlist):
             # number attached to a risk alert makes the risk larger, but this
             # rule only knows how to read order-shaped upside, so it leaves
             # risk severities to the rules that set them.
-            if pct >= MATERIAL_ESCALATION_PCT and w.get("direction") == "opportunity":
+            #
+            # A soft event counts at its strength (event_engine.STRENGTH_WEIGHT):
+            # a ₹2,000 crore lowest bid or MoU needs twice the size of a
+            # ₹2,000 crore Letter of Award to escalate, because it may never
+            # become one. The size shown is the headline's own.
+            weight = STRENGTH_WEIGHT.get(w.get("strength"), 1.0)
+            if (
+                pct * weight >= MATERIAL_ESCALATION_PCT
+                and w.get("direction") == "opportunity"
+            ):
                 new_sev = _ESCALATE.get(w.get("severity"))
                 if new_sev:
                     w["severity"] = new_sev
                     w["signal"] = (
                         f"{w.get('signal') or ''} "
-                        f"(sized at {pct:.1f}% of trailing revenue)"
+                        f"(sized at {pct:.1f}% of trailing revenue"
+                        + (
+                            f", counted at {weight:g}× as not yet binding"
+                            if weight < 1
+                            else ""
+                        )
+                        + ")"
                     ).strip()
                     escalated += 1
 
