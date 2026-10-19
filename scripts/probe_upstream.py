@@ -572,9 +572,13 @@ def probe_nse_calendar():
 # address could not be checked from the development sandbox, which refuses
 # pib.gov.in.
 _PIB_FEEDS = (
+    # The plain address redirected a runner to the Hindi feed (lang=2, reg=48);
+    # the site keeps its language and region in these two parameters.
+    "https://pib.gov.in/RssMain.aspx?ModId=6&Lang=1&Regid=3&reg=3&lang=1",
     "https://pib.gov.in/RssMain.aspx?ModId=6&Lang=1&Regid=3",
-    "https://www.pib.gov.in/RssMain.aspx?ModId=6&Lang=1&Regid=3",
 )
+# PIB's list of every release on a day, by ministry.
+_PIB_ALL_RELEASES = "https://pib.gov.in/allRel.aspx?reg=3&lang=1"
 _PLI_WORDS = ("pli", "production linked incentive", "production-linked incentive")
 
 
@@ -681,8 +685,67 @@ async def probe_pib_pli():
             _save("pib_rss.xml", body)
             break
 
+        # 2b. The day's list of every release, and whether an earlier day can
+        # be asked for: the feed holds 20 releases, a few hours of PIB's day.
+        print(f"\n{'=' * 72}\nPIB ALL RELEASES {_PIB_ALL_RELEASES}\n{'=' * 72}")
+        try:
+            status, ctype, final, page = await get(_PIB_ALL_RELEASES)
+            soup = BeautifulSoup(page, "lxml")
+            prids = [
+                (a.get_text(" ", strip=True), a.get("href", ""))
+                for a in soup.find_all("a", href=True)
+                if "PRID=" in a.get("href", "")
+            ]
+            print(f"  HTTP {status}, {len(page)} bytes, final {final[:100]}")
+            print(f"  release links: {len(prids)}")
+            for text, href in prids[:8]:
+                print(f"    - {text[:90]} | {href[:90]}")
+            pli_links = [
+                (t, h) for t, h in prids if any(w in t.lower() for w in _PLI_WORDS)
+            ]
+            print(f"  PLI titles  : {len(pli_links)}")
+            form = soup.find("form")
+            print(f"  form action : {form.get('action') if form else None}")
+            for field in soup.find_all(["input", "select"]):
+                name = field.get("name") or ""
+                if not name:
+                    continue
+                if field.name == "select":
+                    options = [
+                        (o.get("value"), o.get_text(strip=True))
+                        for o in field.find_all("option")
+                    ]
+                    chosen = [
+                        o.get("value")
+                        for o in field.find_all("option")
+                        if o.has_attr("selected")
+                    ]
+                    print(
+                        f"    select {name} ({len(options)} options, selected {chosen}): "
+                        f"{options[:4]}"
+                    )
+                elif field.get("type") == "hidden":
+                    print(f"    hidden {name} ({len(field.get('value') or '')} chars)")
+                else:
+                    print(f"    input  {name} type={field.get('type')}")
+            hrefs = sorted(
+                {
+                    a.get("href").split("?")[0]
+                    for a in soup.find_all("a", href=True)
+                    if "pib" in a.get("href") or a.get("href").startswith("/")
+                }
+            )
+            print(f"  link targets: {hrefs[:25]}")
+            if pli_links:
+                release_links = [
+                    urllib.parse.urljoin(final, pli_links[0][1])
+                ] + release_links
+            _save("pib_all_releases.html", page)
+        except Exception as e:  # noqa: BLE001 - the release page is asked regardless
+            print(f"  FAILED: {type(e).__name__}: {str(e)[:200]}")
+
         # 3. One release page, read by the real parser.
-        for link in release_links:
+        for link in release_links[:1]:
             print(f"\n{'=' * 72}\nPIB RELEASE {link}\n{'=' * 72}")
             status, ctype, final, page = await get(link)
             soup = BeautifulSoup(page, "lxml")
