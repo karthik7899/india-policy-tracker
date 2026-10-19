@@ -17,11 +17,11 @@ named.
 
 ---
 
-## Google News never links to PIB; PIB's own list of a day's releases does
+## Google News never links to PIB; PIB's own list of a month's releases does
 
-**Measured 2026-10-19**, runs 39235376433, 39259347814 and 39264070803
-(`probe_upstream.py --source pib-pli`, which now runs the scraper's own path a
-step at a time).
+**Measured 2026-10-19**, runs 39235376433, 39259347814, 39264070803 and
+39265315717 (`probe_upstream.py --source pib-pli`, which now runs the
+scraper's own path a step at a time).
 
 **Google News** answers the PLI search (30 results for 30 days), but its links
 lead to Google's own page: HTTP 200, 584 KB, titled "Google News", never naming
@@ -44,9 +44,11 @@ menu does, is that day's list: 77 releases for 25 September, each linked as
 dates are when Google saw a page, not when PIB posted it: "India's GDP
 Performance", dated 17 October by Google, is PRID 2305422 from early September,
 and the ECMS release Google dated 15 October is on September's list. Day lists
-asked for Google's day and the day before found one story in twenty. Many of
-the rest are PIB backgrounders ("India's Drone Ecosystem"), which are not on
-the list of releases at all.
+asked for Google's day and the day before found one story in twenty; the two
+months' lists found six. Most of the rest are PIB backgrounders ("India's
+Drone Ecosystem"), which are not on the list of releases at all, and a
+backgrounder that is ("Electronics Components Manufacturing Scheme", PRID
+2311234) names no company.
 
 **A release page is a shell.** The release is in
 `iframe#ContentPlaceHolder1_iframepressrealese`, and the shell's sidebar of
