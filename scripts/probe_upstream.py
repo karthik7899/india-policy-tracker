@@ -797,9 +797,13 @@ async def probe_pib_pli():
                         f"    {len(links)} release link(s); the page now shows day "
                         f"{picked.get('value') if picked else '?'}"
                     )
+                    others = []
                     for text, href in links:
-                        if any(w in text.lower() for w in _PLI_WORDS):
+                        if re.search(
+                            r"\bpli\b|production[ -]linked incentive", text, re.I
+                        ):
                             print(f"    PLI: {text[:100]} | {href}")
+                            others.append(urllib.parse.urljoin(final, href))
                     hit = next(
                         (
                             href
@@ -811,13 +815,15 @@ async def probe_pib_pli():
                     )
                     if hit:
                         print(f"    MATCHED the Google News title -> {hit}")
-                        release_links = [urllib.parse.urljoin(final, hit)]
+                        matched = urllib.parse.urljoin(final, hit)
+                        release_links = [matched] + [o for o in others if o != matched]
                         break
         except Exception as e:  # noqa: BLE001 - the release page is asked regardless
             print(f"  FAILED: {type(e).__name__}: {str(e)[:200]}")
 
-        # 3. One release page, read by the real parser.
-        for link in release_links[:1]:
+        # 3. Release pages, read by the real parser, with where the release's
+        # own text sits in PIB's page.
+        for link in release_links[:2]:
             if "PRID=" in link and "lang=" not in link:
                 link += "&reg=3&lang=1"
             print(f"\n{'=' * 72}\nPIB RELEASE {link}\n{'=' * 72}")
@@ -828,6 +834,43 @@ async def probe_pib_pli():
                 f"  title       : {(soup.title.get_text(strip=True) if soup.title else '')[:120]}"
             )
             print(f"  is release  : {_is_pib_release(page)}")
+
+            def label(el):
+                return (
+                    f"{el.name}"
+                    + (f"#{el.get('id')}" if el.get("id") else "")
+                    + "".join(f".{c}" for c in (el.get("class") or []))
+                )
+
+            long_p = next(
+                (
+                    p
+                    for p in soup.find_all("p")
+                    if len(p.get_text(" ", strip=True)) > 150
+                ),
+                None,
+            )
+            if long_p is not None:
+                chain = [label(a) for a in list(long_p.parents)[:7]]
+                print(
+                    f"  first long paragraph: {long_p.get_text(' ', strip=True)[:120]}"
+                )
+                print(f"  its ancestors: {' < '.join(chain)}")
+            for el in soup.find_all(True, id=True):
+                key = (el.get("id") or "").lower()
+                if any(
+                    k in key
+                    for k in ("release", "content", "detail", "innner", "inner")
+                ):
+                    print(
+                        f"    candidate {label(el)[:80]}: {len(el.get_text(' ', strip=True))} chars, "
+                        f"{len(el.find_all('p'))} <p>, {len(el.find_all('table'))} <table>, "
+                        f"{len(el.find_all('li'))} <li>"
+                    )
+            for h in soup.find_all(["h1", "h2", "h3"])[:6]:
+                print(
+                    f"    heading {label(h)[:60]}: {h.get_text(' ', strip=True)[:90]}"
+                )
             tables = soup.find_all("table")
             print(f"  tables      : {len(tables)}")
             for t, table in enumerate(tables[:3]):
