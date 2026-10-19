@@ -162,6 +162,7 @@ _OFFICIAL_WORDS = {
 _NOT_NAMES = {
     "msme", "msmes", "startup", "startups", "psu", "psus", "cpse", "cpses",
     "oem", "oems", "india", "indian", "total", "grandtotal", "name", "others",
+    "sno", "srno",
 }  # fmt: skip
 _BLOCK_TAGS = (
     "p", "div", "li", "td", "th", "tr", "table", "ul", "ol", "h1", "h2", "h3",
@@ -288,17 +289,27 @@ def _name_like(text):
 
 def _table_names(table):
     """The cells of a table's name column, found by its heading. A table
-    whose first row names no such column is layout, not a list of
+    whose first rows name no such column is layout, not a list of
     beneficiaries: PIB sets its ministry's name in one."""
     rows = table.find_all("tr")
-    if len(rows) < 2:
-        return []
-    heads = [c.get_text(" ", strip=True) for c in rows[0].find_all(["th", "td"])]
-    column = next((i for i, h in enumerate(heads) if _NAME_HEADER_RE.search(h)), None)
+    column = None
+    # The heading can follow a title row ("Annexure", "List of applicants").
+    for at, row in enumerate(rows[:3]):
+        heads = [c.get_text(" ", strip=True) for c in row.find_all(["th", "td"])]
+        column = next(
+            (
+                i
+                for i, h in enumerate(heads)
+                if len(heads) > 1 and len(h) <= 40 and _NAME_HEADER_RE.search(h)
+            ),
+            None,
+        )
+        if column is not None:
+            break
     if column is None:
         return []
     names = []
-    for row in rows[1:]:
+    for row in rows[at + 1 :]:
         cells = row.find_all(["td", "th"])
         if len(cells) > column:
             name = _clean_name(cells[column].get_text(" ", strip=True))
@@ -725,9 +736,10 @@ async def _locate_on_pib(stories, index, today):
     month's releases: each story's own, found by its title whatever day
     Google gave it, and every release PIB titles as an incentive scheme's.
 
-    Returns them most relevant and then newest first (PRIDs rise with time),
-    and the stories not on the lists, whose names can come only from their
-    headlines.
+    Returns them most relevant and then newest first (PRIDs rise with time);
+    the stories not on the lists, whose names can come only from their
+    headlines; and how many the lists had that are about no scheme, which are
+    not read.
     """
     from providers import pib
 
@@ -765,7 +777,11 @@ async def _locate_on_pib(stories, index, today):
         key=lambda r: (_relevance(r["title"]), int(r["prid"])),
         reverse=True,
     )
-    return ranked, unfound
+    # "12 Years of Make in India" mentions PLI, and its few names are filed
+    # under whichever scheme the page last mentioned.
+    general = [r for r in ranked if not _relevance(r["title"])]
+    unfound += [r["story"] for r in general if "story" in r]
+    return [r for r in ranked if _relevance(r["title"])], unfound, len(general)
 
 
 def _held(watchlist, registered):
@@ -834,7 +850,9 @@ async def scrape_pib_pli_approvals_async(
     stories = _stories(entries)
 
     index = pib.MonthIndex(session)
-    ranked, unread = await _locate_on_pib(stories, index, today or pib.today_in_india())
+    ranked, unread, general = await _locate_on_pib(
+        stories, index, today or pib.today_in_india()
+    )
     to_read = ranked[:MAX_PLI_RELEASES]
     unread += [r["story"] for r in ranked[MAX_PLI_RELEASES:] if "story" in r]
 
@@ -938,8 +956,8 @@ async def scrape_pib_pli_approvals_async(
         )
 
     # One line that says where an empty result came from.
-    located = sum(1 for r in ranked if "story" in r)
-    listed_pli = len(ranked) - located
+    located = sum(1 for r in ranked if "story" in r) + general
+    listed_pli = len(ranked) + general - located
     by_source = {
         source: sum(1 for c in found if c["found_in"] == source)
         for source in ("release page", "headline")
@@ -952,6 +970,7 @@ async def scrape_pib_pli_approvals_async(
             f"{len(stories)} release(s)"
         )
         + f"; {located} found on PIB's lists of releases ({index.read} month(s) read)"
+        + (f", {general} of them about no scheme and not read" if general else "")
         + (f", {listed_pli} more it titles as a scheme's" if listed_pli else "")
         + (f"; {index.failed}" if index.failed else "")
         + f"; {from_releases} release(s) read from PIB"

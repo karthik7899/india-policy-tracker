@@ -246,9 +246,18 @@ def test_a_table_is_read_only_down_its_name_column():
       <tr><td>2</td><td>Amber Enterprises India Limited</td><td>500</td></tr>
       <tr><td></td><td>Total</td><td>620</td></tr>
     </table>
-    <table><tr><td>Ministry of Commerce and Industry :</td></tr></table>"""
+    <table><tr><td>Ministry of Commerce and Industry :</td></tr></table>
+    <table>
+      <tr><td colspan="2">Annexure-I: list of applicants approved</td></tr>
+      <tr><td>S. No.</td><td>Applicant</td></tr>
+      <tr><td>1</td><td>Nova Cooling Systems</td></tr>
+    </table>"""
     names = [c["name"] for c in _extract_pli_data_from_html(html, "PLI approvals")]
-    assert names == ["Zenith Cooling Systems", "Amber Enterprises India Limited"]
+    assert names == [
+        "Zenith Cooling Systems",
+        "Amber Enterprises India Limited",
+        "Nova Cooling Systems",
+    ]
 
 
 # --- PIB's list of releases -------------------------------------------------
@@ -374,6 +383,7 @@ COMPONENTS = (
 APPEAL = (
     "Appeal to Employees of Public Sector Banks for Ensuring Uninterrupted Services"
 )
+BONUS = "Cabinet approves Productivity Linked Bonus for Railway Employees"
 KAYNES = "Kaynes Semicon Private Limited among PLI approvals"
 TEXTILES = "PLI Scheme for Textiles: 10 more applicants approved"
 
@@ -411,6 +421,12 @@ RSS = _rss(
         "Fri, 16 Oct 2026 06:00:00 GMT",
         "",
     ),
+    (
+        f"{BONUS} - PIB",
+        "https://news.google.com/rss/articles/six",
+        "Wed, 14 Oct 2026 06:00:00 GMT",
+        "",
+    ),
 )
 
 # What each month's list holds.
@@ -418,6 +434,7 @@ MONTHS = {
     OCTOBER: [
         ("Prime Minister greets citizens", "2325041"),
         (PHARMA, "2319001"),
+        (BONUS, "2318500"),
         (APPEAL, "2318000"),
         (WHITE_GOODS, "2317001"),
         ("Cabinet approves a rail line", "2317003"),
@@ -474,6 +491,12 @@ RELEASES = {
         "06 OCT 2026",
         "<p>Bank of Baroda Limited and Canara Bank Limited employees are asked "
         "to ensure services.</p>",
+    ),
+    "2318500": _release_page(
+        BONUS,
+        "10 OCT 2026",
+        "<p>Staff of Rail Vikas Nigam Limited and IRCON International Limited "
+        "are covered.</p>",
     ),
 }
 
@@ -582,12 +605,14 @@ def test_releases_are_found_on_pibs_own_lists_and_read_from_pib(monkeypatch, cap
         ("0", "9", "ctl00$ContentPlaceHolder1$ddlday", "VS"),
     ]
     assert asked["get"].count(pib.LIST_URL) == 1
-    # Schemes' releases first, newest first; the rest after.
-    assert asked["releases"] == ["2319001", "2317001", "2311234", "2310500", "2318000"]
+    # Schemes' releases first, newest first; then any that may name a
+    # scheme's beneficiaries. The appeal to bank staff is about no scheme.
+    assert asked["releases"] == ["2319001", "2317001", "2311234", "2310500", "2318500"]
     line = _line(caplog)
     assert line.startswith(
-        "PLI approvals: 5 search result(s) in the last 30 days, 5 release(s); "
-        "4 found on PIB's lists of releases (2 month(s) read), "
+        "PLI approvals: 6 search result(s) in the last 30 days, 6 release(s); "
+        "5 found on PIB's lists of releases (2 month(s) read), "
+        "1 of them about no scheme and not read, "
         "1 more it titles as a scheme's; 5 release(s) read from PIB"
     )
     assert "left out under schemes no holding works in: Pharmaceuticals 2" in line
@@ -603,6 +628,7 @@ def test_holdings_menus_and_other_schemes_are_left_out(monkeypatch):
     assert "Welspun Living Limited" not in names
     # Under a scheme no holding works in, or no scheme at all.
     assert not names & {"Lupin Limited", "Cipla Limited"}
+    assert not names & {"Rail Vikas Nigam Limited", "IRCON International Limited"}
     assert not names & {"Bank of Baroda Limited", "Canara Bank Limited"}
     # The page around the release, and a cluster summary's other headlines.
     for junk in (

@@ -601,9 +601,10 @@ async def probe_pib_pli():
             f"\n{'=' * 72}\nPIB: its lists of this month's and last month's releases\n{'=' * 72}"
         )
         index = pib.MonthIndex(session)
-        ranked, unfound = await scraper._locate_on_pib(
+        ranked, unfound, general = await scraper._locate_on_pib(
             stories, index, pib.today_in_india()
         )
+        print(f"  {general} found that are about no scheme, not read")
         for first, links in index.months.items():
             print(f"  {first:%B %Y}: {len(links)} release(s)")
         if index.failed:
