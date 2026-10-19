@@ -890,6 +890,27 @@ async def probe_pib_pli():
                     print(f"      {cells[:4]}")
             items = soup.find_all("li")
             print(f"  list items  : {len(items)}")
+            # The release's own markup, so the parser is built on what PIB
+            # sends: the probe's file is unreachable once uploaded.
+            body_class = "innner-page-main-about-us-content-right-part"
+            bodies = soup.find_all("div", class_=body_class)
+            print(f"  body divs   : {len(bodies)}")
+            for li in items:
+                inside = li.find_parent("div", class_=body_class) is not None
+                print(
+                    f"    li ({'body' if inside else 'page'}): "
+                    f"{li.get_text(' ', strip=True)[:80]}"
+                )
+            if bodies:
+                body = BeautifulSoup(str(bodies[0]), "lxml")
+                for el in body.find_all(True):
+                    el.attrs = {
+                        k: v for k, v in el.attrs.items() if k in ("id", "class")
+                    }
+                compact = " ".join(str(body.body or body).split())
+                print(f"  body html ({len(compact)} chars):")
+                for at in range(0, min(len(compact), 9000), 180):
+                    print(f"    {compact[at:at + 180]}")
             names = _extract_pli_data_from_html(
                 page, soup.title.get_text() if soup.title else ""
             )
