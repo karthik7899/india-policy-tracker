@@ -132,10 +132,10 @@ _BOUNDARY_WORDS = (
     }
 )
 
-# A name that is one of these is not a counterparty. States and regulators
-# sign MoUs constantly and are not commercial relationships a holding's
-# fortunes ride on; a country is a qualifier, not a party.
-_NOT_A_COMPANY = {
+# Countries and the nationalities headlines most often qualify a company
+# with: "JV with French company Safran" is a JV with Safran. The new-entrant
+# radar reads the same words to tell a foreign company from ours.
+_COUNTRIES = {
     "india",
     "indian",
     "china",
@@ -146,24 +146,6 @@ _NOT_A_COMPANY = {
     "usa",
     "uk",
     "eu",
-    "government",
-    "govt",
-    "centre",
-    "center",
-    "cabinet",
-    "ministry",
-    "state",
-    "union",
-    "sebi",
-    "rbi",
-    "nse",
-    "bse",
-    "exchange",
-    "company",
-    "firm",
-    "group",
-    # Nationalities and the countries headlines most often qualify a partner
-    # with: "JV with French company Safran" is a JV with Safran.
     "american",
     "british",
     "canadian",
@@ -190,6 +172,31 @@ _NOT_A_COMPANY = {
     "russia",
     "singapore",
     "taiwan",
+    "philippines",
+    "philippine",
+    "filipino",
+}
+
+# A name that is one of these is not a counterparty. States and regulators
+# sign MoUs constantly and are not commercial relationships a holding's
+# fortunes ride on; a country is a qualifier, not a party.
+_NOT_A_COMPANY = _COUNTRIES | {
+    "government",
+    "govt",
+    "centre",
+    "center",
+    "cabinet",
+    "ministry",
+    "state",
+    "union",
+    "sebi",
+    "rbi",
+    "nse",
+    "bse",
+    "exchange",
+    "company",
+    "firm",
+    "group",
     "foreign",
     "global",
     "south",

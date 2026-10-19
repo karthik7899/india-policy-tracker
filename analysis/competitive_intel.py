@@ -13,9 +13,11 @@ threat naming the incumbents.
 """
 
 import re
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Tuple
 
-from analysis.parsing import title_matches_company
+from analysis.counterparty import _COUNTRIES, _NON_COMMERCIAL
+from analysis.parsing import _FUNCTION_WORDS, title_matches_company
+from analysis.policy_impact import _STATES
 from config import SECTOR_METADATA
 from logger import log
 
@@ -110,11 +112,77 @@ SECTOR_BATTLEGROUNDS: Dict[str, tuple] = {
     "sports_athleisure": ("footwear manufacturing", "athleisure"),
 }
 
+
+def _terms_re(terms) -> "re.Pattern[str]":
+    """Any of ``terms`` as whole words, plural allowed, spaces or hyphens
+    between the words.
+
+    These were substring tests, and a substring is not a word: "ems" sat
+    inside "Systems", so "Tripura University sets up Indian Knowledge Systems
+    Corner" was an electronics incursion against five holdings; "oppo" sat
+    inside "Opportunities" and "enters" inside "data centers". "PCBs" and
+    "Electrolysers" are still the words they were.
+    """
+    words = (
+        r"[\s-]+".join(re.escape(word) for word in re.split(r"[\s-]+", term))
+        for term in terms
+    )
+    return re.compile(r"\b(?:" + "|".join(words) + r")(?:e?s)?\b", re.IGNORECASE)
+
+
+_ENTRY_MOVE_RE = _terms_re(_ENTRY_MOVES)
+_BATTLEGROUND_RES = {
+    sector: _terms_re(terms) for sector, terms in SECTOR_BATTLEGROUNDS.items()
+}
+
+
+def battleground_sectors(text: str) -> List[str]:
+    """The sectors whose battleground vocabulary ``text`` uses."""
+    text = str(text or "")
+    return [sector for sector, rx in _BATTLEGROUND_RES.items() if rx.search(text)]
+
+
 # A capitalized company-ish name directly followed by an entry verb
 # ("Amber eyes ...", "Syrma SGS wins order ...").
 _CHALLENGER_RE = re.compile(
     r"\b([A-Z][A-Za-z0-9&]+(?:\s+[A-Z][A-Za-z0-9&]+){0,2})\s+"
     r"(?:eyes|enters|targets|forays|sets|wins|bags|begins|starts|expands|ramps|plans)\b"
+)
+
+_FOREIGN = _COUNTRIES - {"india", "indian"}
+_PLACE_SUFFIX_RE = re.compile(r"(?:['’]s?|-based)$", re.IGNORECASE)
+_DESCRIPTOR_RE = re.compile(r"[a-z][a-z'’-]*")
+
+
+def _introduced_as_foreign(before: str) -> bool:
+    """Whether the words right before a name introduce it as foreign:
+    "Philippines' Globe Telecom", "US-based Lumen", "Taiwanese electronics
+    giant Foxconn". As counterparty.py reads "French company Safran": a place,
+    then at most three lowercase descriptors, then the name."""
+    words = before.split()
+    descriptors = 0
+    while (
+        words
+        and descriptors < 3
+        and _DESCRIPTOR_RE.fullmatch(words[-1])
+        and words[-1] not in _FUNCTION_WORDS
+    ):
+        words.pop()
+        descriptors += 1
+    return bool(words) and _PLACE_SUFFIX_RE.sub("", words[-1]).lower() in _FOREIGN
+
+
+# Signs that a move touches India: the country, a state, or rupees.
+_INDIA_RE = re.compile(
+    r"\b(?:india|indian|rs|inr|crores?|lakhs?|"
+    + "|".join(
+        form
+        for forms in _STATES.values()
+        for form in forms
+        if not form.startswith("(?-i:")  # "UP", "MP", "HP": too ambiguous
+    )
+    + r")\b|₹",
+    re.IGNORECASE,
 )
 
 # Actors that are never a corporate challenger.
@@ -123,6 +191,7 @@ _NON_COMPANIES = {
     "centre",
     "center",
     "government",
+    "govt",
     "cabinet",
     "ministry",
     "minister",
@@ -138,6 +207,9 @@ _NON_COMPANIES = {
     "china",
     "us",
     "usa",
+    # Universities, institutes and industry bodies, as counterparty.py reads
+    # them: a university setting up a library corner enters no market.
+    *_NON_COMMERCIAL,
 }
 
 
@@ -221,10 +293,20 @@ def collect_sources(
     return sources
 
 
-def _extract_challenger(headline: str, data: Dict[str, Any]) -> str:
+def _extract_challenger(headline: str, data: Dict[str, Any]) -> Tuple[str, str]:
     """Name the company making the move — a known listed peer from the
     Screener radar when possible (most reliable), else the capitalized name
-    driving the entry verb."""
+    driving the entry verb — and the turf it moves onto: the headline without
+    that name.
+
+    The name is not the turf. "Ai+ Smartphone enters New Zealand Cricket
+    partnership" names a phone brand; it is not a move onto smartphones.
+
+    A name the headline introduces as foreign, with no sign of India
+    anywhere, is not on our holdings' turf at all: "Philippines' Globe
+    Telecom targets US$1 billion AI and data centre investment" is a Manila
+    story. A listed peer is Indian by construction and needs no such sign.
+    """
     for rows in (data.get("peer_competitors") or {}).values():
         for peer in rows or []:
             if not isinstance(peer, dict):
@@ -232,15 +314,18 @@ def _extract_challenger(headline: str, data: Dict[str, Any]) -> str:
             if title_matches_company(
                 headline, peer.get("ticker", ""), peer.get("name", "")
             ):
-                return str(peer.get("name") or peer.get("ticker"))
+                return str(peer.get("name") or peer.get("ticker")), headline
 
     match = _CHALLENGER_RE.search(headline)
-    if match:
-        candidate = match.group(1).strip()
-        tokens = candidate.lower().split()
-        if all(tok not in _NON_COMPANIES for tok in tokens):
-            return candidate
-    return ""
+    if not match:
+        return "", ""
+    candidate = match.group(1).strip()
+    if any(tok in _NON_COMPANIES for tok in candidate.lower().split()):
+        return "", ""
+    start, end = match.span(1)
+    if _introduced_as_foreign(headline[:start]) and not _INDIA_RE.search(headline):
+        return "", ""
+    return candidate, headline[:start] + headline[end:]
 
 
 def detect_new_entrants(
@@ -254,15 +339,19 @@ def detect_new_entrants(
     try:
         headlines = collect_headlines(data, watchlist)
         for headline in headlines:
-            lower = headline.lower()
-            if not any(move in lower for move in _ENTRY_MOVES):
+            if not _ENTRY_MOVE_RE.search(headline):
+                continue
+            if not any(
+                (watchlist or {}).get(s) for s in battleground_sectors(headline)
+            ):
+                continue
+            challenger, turf = _extract_challenger(headline, data)
+            if not challenger:
                 continue
 
-            for sector, battleground in SECTOR_BATTLEGROUNDS.items():
+            for sector in battleground_sectors(turf):
                 holdings = (watchlist or {}).get(sector) or []
                 if not holdings:
-                    continue
-                if not any(term in lower for term in battleground):
                     continue
 
                 # The incumbent expanding on its own turf is not a threat.
@@ -274,10 +363,6 @@ def detect_new_entrants(
                     if isinstance(s, dict)
                 )
                 if incumbent_move:
-                    continue
-
-                challenger = _extract_challenger(headline, data)
-                if not challenger:
                     continue
 
                 pair = (sector, challenger.lower())
