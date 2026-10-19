@@ -251,6 +251,25 @@ def test_an_anchor_shift_only_fires_on_risk_direction():
     assert flags[0]["sector"] == "manufacturing_electronics"
 
 
+def test_an_anchors_weaker_business_reads_through_and_its_partnership_end_does_not():
+    """Less demand from an anchor is the sector's to read; an anchor leaving
+    one partner can send the work either way."""
+    weaker = _event(
+        "Google cuts full-year revenue guidance",
+        event_type="business_weakness",
+        external=["Google"],
+        direction="risk",
+    )
+    assert [f["mechanism"] for f in _run([weaker])] == ["anchor_shift"]
+    ended = _event(
+        "Google ends partnership with Marvell",
+        event_type="partnership_end",
+        external=["Google", "Marvell"],
+        direction="risk",
+    )
+    assert _run([ended]) == []
+
+
 def test_confidence_reports_the_weakest_link_not_the_strongest():
     graph = {
         "edges": [

@@ -353,6 +353,13 @@ def build_data_quality_html(
 
 MAX_READ_THROUGHS = 4
 
+# A partner's news can cut either way (read_through.screen_partner_news).
+_DIRECTION_STYLE = {
+    "risk": ("#f87171", "▼"),
+    "opportunity": ("#4ade80", "▲"),
+    "mixed": ("#fbbf24", "◆"),
+}
+
 
 def build_read_through_html(read_throughs: Any, limit: int = MAX_READ_THROUGHS) -> str:
     """Second-order flags, with the chain that produced them.
@@ -373,8 +380,7 @@ def build_read_through_html(read_throughs: Any, limit: int = MAX_READ_THROUGHS) 
     rows = sorted(rows, key=lambda r: r.get("direction") != "risk")[:limit]
     blocks = []
     for row in rows:
-        colour = "#f87171" if row.get("direction") == "risk" else "#4ade80"
-        mark = "▼" if row.get("direction") == "risk" else "▲"
+        colour, mark = _DIRECTION_STYLE.get(row.get("direction"), ("#4ade80", "▲"))
         sector = _esc(str(row.get("sector", "")).replace("_", " ")).title()
         tickers = ", ".join(_esc(t) for t in (row.get("tickers") or [])[:6])
         chain = "".join(

@@ -12,10 +12,12 @@ challenger is not already one of that sector's own holdings — raises a
 threat naming the incumbents.
 """
 
+import datetime
 import re
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 from analysis.counterparty import _COUNTRIES, _NON_COMMERCIAL
+from analysis.event_evidence import article_date
 from analysis.parsing import _FUNCTION_WORDS, title_matches_company
 from analysis.policy_impact import _STATES
 from config import SECTOR_METADATA
@@ -172,7 +174,42 @@ def _introduced_as_foreign(before: str) -> bool:
     return bool(words) and _PLACE_SUFFIX_RE.sub("", words[-1]).lower() in _FOREIGN
 
 
-# Signs that a move touches India: the country, a state, or rupees.
+# Where plants and offices are announced without the state: "Vivo sets up
+# own smartphone plant in Greater Noida".
+_INDIAN_CITIES = (
+    "noida",
+    "gurugram",
+    "gurgaon",
+    "manesar",
+    "delhi",
+    "mumbai",
+    "pune",
+    "nagpur",
+    "ahmedabad",
+    "gandhinagar",
+    "sanand",
+    "dholera",
+    "surat",
+    "vadodara",
+    "bengaluru",
+    "bangalore",
+    "hosur",
+    "chennai",
+    "sriperumbudur",
+    "oragadam",
+    "coimbatore",
+    "hyderabad",
+    "visakhapatnam",
+    "vizag",
+    "tirupati",
+    "kolkata",
+    "bhubaneswar",
+    "lucknow",
+    "jaipur",
+    "indore",
+)
+
+# Signs that a move touches India: the country, a state, a city, or rupees.
 _INDIA_RE = re.compile(
     r"\b(?:india|indian|rs|inr|crores?|lakhs?|"
     + "|".join(
@@ -181,9 +218,17 @@ _INDIA_RE = re.compile(
         for form in forms
         if not form.startswith("(?-i:")  # "UP", "MP", "HP": too ambiguous
     )
+    + "|"
+    + "|".join(_INDIAN_CITIES)
     + r")\b|₹",
     re.IGNORECASE,
 )
+
+
+def mentions_india(text: str) -> bool:
+    """India, an Indian state or a rupee amount anywhere in ``text``."""
+    return bool(_INDIA_RE.search(str(text or "")))
+
 
 # Actors that are never a corporate challenger.
 _NON_COMPANIES = {
@@ -323,13 +368,39 @@ def _extract_challenger(headline: str, data: Dict[str, Any]) -> Tuple[str, str]:
     if any(tok in _NON_COMPANIES for tok in candidate.lower().split()):
         return "", ""
     start, end = match.span(1)
-    if _introduced_as_foreign(headline[:start]) and not _INDIA_RE.search(headline):
+    if _introduced_as_foreign(headline[:start]) and not mentions_india(headline):
         return "", ""
     return candidate, headline[:start] + headline[end:]
 
 
+# The event engine keeps events this long (EVENT_RETENTION_DAYS). An older
+# article is history the feeds still serve, not a company moving in: "Amber
+# eyes 20% of Oppo India volumes", from 22 June, raised a fresh High alert on
+# five holdings every run in October.
+RADAR_MAX_AGE_DAYS = 45
+
+
+def _stale_headlines(
+    data: Dict[str, Any], watchlist: Dict[str, Any], today: str
+) -> set:
+    """Lower-cased headlines whose article is older than RADAR_MAX_AGE_DAYS.
+
+    Dated by the item collect_headlines keeps, the first one with that text.
+    An undated item is kept: there is nothing to judge its age by.
+    """
+    cutoff = (
+        datetime.date.fromisoformat(today) - datetime.timedelta(days=RADAR_MAX_AGE_DAYS)
+    ).isoformat()
+    dated: Dict[str, Optional[str]] = {}
+    for text, item in _headline_items(data, watchlist):
+        key = str(text or "").strip().lower()
+        if key and key not in dated:
+            dated[key] = article_date(item.get("date"))
+    return {key for key, day in dated.items() if day and day < cutoff}
+
+
 def detect_new_entrants(
-    data: Dict[str, Any], watchlist: Dict[str, Any]
+    data: Dict[str, Any], watchlist: Dict[str, Any], today: str = ""
 ) -> List[Dict[str, Any]]:
     """Returns one entry per (sector, challenger) incursion detected:
     {sector, sector_label, challenger, headline, incumbents}."""
@@ -337,8 +408,14 @@ def detect_new_entrants(
     seen_pairs = set()
 
     try:
+        today = today or datetime.date.today().isoformat()
+        stale = _stale_headlines(data, watchlist, today)
         headlines = collect_headlines(data, watchlist)
+        aged = 0
         for headline in headlines:
+            if headline.lower() in stale:
+                aged += 1
+                continue
             if not _ENTRY_MOVE_RE.search(headline):
                 continue
             if not any(
@@ -389,6 +466,11 @@ def detect_new_entrants(
             log.info(
                 f"New-entrant radar: {len(results)} incursion(s) detected: "
                 + "; ".join(f"{r['challenger']} → {r['sector']}" for r in results)
+            )
+        if aged:
+            log.info(
+                f"New-entrant radar: {aged} headline(s) older than "
+                f"{RADAR_MAX_AGE_DAYS} days left out."
             )
     except Exception as e:
         log.warning(f"New-entrant radar failed safely: {e!r}")

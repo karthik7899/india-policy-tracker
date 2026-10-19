@@ -767,6 +767,10 @@ def reconcile(
         if not pair:
             continue
         covered.add(key)
+        if event.get("event_type") not in EVENT_TYPES:
+            # A type the reader is never asked for (business_weakness,
+            # partnership_end): its "none" is not a disagreement.
+            continue
         _, reading = pair
         llm_actors, _ = resolve_parties(reading["parties"], holdings)
         actors = set(event.get("actors") or [])

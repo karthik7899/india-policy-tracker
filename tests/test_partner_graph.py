@@ -214,6 +214,14 @@ def test_a_nationality_is_a_qualifier_not_the_party():
     ) == ["Safran"]
 
 
+def test_a_place_written_based_is_a_qualifier_too():
+    """Proposed for review as a partner called "London"."""
+    assert extract_counterparties(
+        "Optiemus Infracom board approves JV with London-based Nothing Electronics",
+        [("OPTIEMUS", "Optiemus Infracom")],
+    ) == ["Nothing Electronics"]
+
+
 def test_a_piece_of_our_own_name_is_not_a_party():
     """ "Technology" ends a name run, so "L&T Technology Services" was cut and
     "L&T" read as somebody else. The second "with" belongs to the purpose
@@ -603,15 +611,11 @@ def test_no_read_through_when_the_holding_is_named():
 
 
 def test_a_partners_good_news_is_not_ours_by_default():
-    assert (
-        compute_read_throughs(
-            [_risk("Vivo wins large order", direction="opportunity")],
-            GRAPH,
-            WATCHLIST,
-            today=TODAY,
-        )
-        == []
-    )
+    win = {
+        **_risk("Vivo wins large order", direction="opportunity"),
+        "event_type": "order_win",
+    }
+    assert compute_read_throughs([win], GRAPH, WATCHLIST, today=TODAY) == []
 
 
 def test_one_partner_shared_by_two_holdings_flags_both():

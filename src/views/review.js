@@ -27,7 +27,16 @@ import {
 } from "../core/review.js";
 
 const PAGE = 10;
-const EVENT_TYPES = ["acquisition", "capacity_add", "input_cost_shock", "order_win", "supply_disruption", "tie_up"];
+const EVENT_TYPES = [
+  "acquisition",
+  "business_weakness",
+  "capacity_add",
+  "input_cost_shock",
+  "order_win",
+  "partnership_end",
+  "supply_disruption",
+  "tie_up",
+];
 const STANCES = ["contradicts", "supports", "unrelated"];
 const DIRECTIONS = ["tailwind", "headwind", "mixed"];
 const KIND_LABEL = { thesis: "Thesis check", policy: "Policy reader", event: "Event reader" };

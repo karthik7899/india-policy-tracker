@@ -22,6 +22,7 @@ from analysis.competitive_intel import (  # noqa: E402
 from analysis.event_engine import (  # noqa: E402
     classify_headlines,
     compute_supply_stress,
+    first_event_clause,
     market_event_signals,
 )
 from config import SECTOR_METADATA  # noqa: E402
@@ -252,7 +253,9 @@ def test_a_partner_edge_does_not_echo_the_headline_that_named_the_holding(
     signals = ee.market_event_signals({"market_events": [event]}, _WATCHLIST)
     assert [s["category"] for s in signals] == ["Corporate Move"]
 
-    # News about the partner alone still reaches the holding through it.
+    # News about the partner alone is judged by the partner screen
+    # (read_through.screen_partner_news), not passed along with the partner's
+    # own direction: Vivo opening its own plant is not good news for Dixon.
     event = {
         **event,
         "headline": "Vivo faces export curbs on smartphone parts",
@@ -261,8 +264,84 @@ def test_a_partner_edge_does_not_echo_the_headline_that_named_the_holding(
         "direction": "risk",
     }
     signals = ee.market_event_signals({"market_events": [event]}, _WATCHLIST)
-    eco = [s for s in signals if s["category"] == "Ecosystem Signal"]
-    assert [s["ticker"] for s in eco] == ["DIXON"]
+    assert [s for s in signals if s["category"] == "Ecosystem Signal"] == []
+
+
+def test_business_weakness_and_partnership_end_are_read():
+    for headline, etype in (
+        (
+            "Corning sales fall 12% in third quarter on weak smartphone demand",
+            "business_weakness",
+        ),
+        ("Corning cuts full-year revenue guidance", "business_weakness"),
+        ("Kaga Electronics posts net loss, plans job cuts", "business_weakness"),
+        (
+            "Vivo exits its 50:50 joint venture with Dixon Technologies",
+            "partnership_end",
+        ),
+        # Calling off a partnership is the event, not a denial of one.
+        ("Dixon calls off proposed JV with Longcheer", "partnership_end"),
+        ("Dixon and Vivo part ways", "partnership_end"),
+    ):
+        found = first_event_clause(headline)
+        assert found and found[1] == etype, headline
+    for headline in (
+        "Dixon denies reports of exiting JV with Vivo",
+        "Optiemus CFO parts ways with company",  # a person leaving
+        "Sensex ends higher as TCS signs agreement with SAS",
+        "Paytm narrows net loss",
+        "Happiest Minds shares fall 12% after ITC merger plan",  # the price
+        "TCS scraps acquisition plan",  # still a denial of a move
+    ):
+        found = first_event_clause(headline)
+        assert not found or found[1] not in (
+            "business_weakness",
+            "partnership_end",
+        ), headline
+    # A JV ended reads as a risk for the holding named in it.
+    events = classify_headlines(
+        _data("Vivo exits joint venture with Dixon"), _WATCHLIST
+    )
+    assert [(e["event_type"], e["direction"], e["actors"]) for e in events] == [
+        ("partnership_end", "risk", ["DIXON"])
+    ]
+
+
+def test_company_news_is_not_spread_by_vocabulary_or_anchor(monkeypatch):
+    """A holding's weaker quarter is graded from its filed numbers, and one
+    company's results are not a sector's: no warning from either."""
+    import analysis.entity_graph as eg
+
+    graph = {
+        "edges": [
+            {
+                "src": "Apple",
+                "dst": "manufacturing_electronics",
+                "type": "anchor_demand",
+            }
+        ]
+    }
+    monkeypatch.setattr(eg, "load_entity_graph", lambda path=None: graph)
+    events = [
+        {
+            "headline": "Dixon Q2 profit falls 8% on one-offs",
+            "event_type": "business_weakness",
+            "domains": [],
+            "actors": ["DIXON"],
+            "direction": "risk",
+            "date": _TODAY,
+        },
+        {
+            "headline": "Apple iPhone sales fall in China; smartphone demand slows",
+            "event_type": "business_weakness",
+            "domains": ["manufacturing_electronics"],
+            "actors": [],
+            "external": ["Apple"],
+            "direction": "risk",
+            "date": _TODAY,
+        },
+    ]
+    assert market_event_signals({"market_events": events}, _WATCHLIST) == []
 
 
 def test_signals_never_raise():
@@ -473,8 +552,39 @@ def test_rumoured_disruption_is_excluded_from_supply_stress():
 
 from analysis.event_engine import (  # noqa: E402
     EVENT_RETENTION_DAYS,
+    EVENTS_KEPT,
     refresh_merged_events,
 )
+
+
+def test_the_newest_events_are_kept_once_the_stale_have_gone():
+    """Regression for 19 Oct: the cap ran first, on classification order.
+    Months of re-read agreements filled all 120 places, were then dropped as
+    stale, and the day's one global event (classified last) was already cut."""
+    wl = {
+        "manufacturing_electronics": [{"ticker": "DIXON", "name": "Dixon Technologies"}]
+    }
+
+    def event(n, date):
+        return {
+            "headline": f"Dixon wins order number {n}",
+            "event_type": "order_win",
+            "phrase": "wins order",
+            "domains": [],
+            "actors": ["DIXON"],
+            "date": date,
+        }
+
+    stale = [event(n, "2026-06-01") for n in range(130)]
+    kept = refresh_merged_events(
+        stale + [event("fresh", "2026-10-18")], wl, today="2026-10-19"
+    )
+    assert [e["headline"] for e in kept] == ["Dixon wins order number fresh"]
+
+    recent = [event(n, f"2026-10-{n % 18 + 1:02d}") for n in range(150)]
+    kept = refresh_merged_events(recent, wl, today="2026-10-19")
+    assert len(kept) == EVENTS_KEPT
+    assert kept[0]["date"] == "2026-10-18" and kept[-1]["date"] >= "2026-10-01"
 
 
 def test_reattribution_drops_a_correction_that_the_matcher_now_rejects():

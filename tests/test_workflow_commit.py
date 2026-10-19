@@ -24,6 +24,7 @@ import re
 import pytest
 
 from analysis.entity_graph import GRAPH_PATH, PROPOSALS_PATH
+from analysis.entrant_watch import WATCH_PATH
 from analysis.llm_reader import CACHE_PATH as LLM_CACHE_PATH
 from analysis.thesis_check import CACHE_PATH as THESIS_CACHE_PATH
 from dashboard.sidecars import DATA_DIR
@@ -60,6 +61,7 @@ def _git_add_paths():
         # Absolute in their module, and at the repo root.
         os.path.basename(GRAPH_PATH),
         os.path.basename(PROPOSALS_PATH),
+        os.path.basename(WATCH_PATH),
         os.path.basename(LLM_CACHE_PATH),
         os.path.basename(THESIS_CACHE_PATH),
         os.path.basename(MASTER_PATH),

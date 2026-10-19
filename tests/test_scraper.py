@@ -431,3 +431,34 @@ def test_clean_news_item_drops_the_read_more_tail_before_sentiment():
     sentiment.assert_called_once_with(
         "Article Title", "This is a summary that gets cut off"
     )
+
+
+def test_every_company_tied_to_a_holding_is_searched():
+    """One search used to cover the first 12 anchors alphabetically; Nvidia,
+    TSMC and Samsung were never searched, and no holding's partner was."""
+    from scraper import company_queries, watched_company_names
+
+    graph = {
+        "edges": [
+            {"src": "Corning", "dst": "OPTIEMUS", "type": "partner"},
+            {"src": "copper", "dst": "clean_energy", "type": "input_cost"},
+        ]
+        + [
+            {
+                "src": f"Anchor {i:02d}",
+                "dst": "semiconductors_equipment",
+                "type": "anchor_demand",
+            }
+            for i in range(20)
+        ]
+    }
+    names = watched_company_names(
+        graph, holdings=["OPTIEMUS"], extra=["Amber Enterprises"]
+    )
+    assert "Corning" in names and "Amber Enterprises" in names
+    assert "OPTIEMUS" not in names and "copper" not in names
+    queries = company_queries(names)
+    assert all(any(f'"{n}"' in q for q in queries) for n in names)
+    assert all(q.count('" OR "') < 8 for q in queries)  # eight names at most
+    # Results and demand, not only deals: "Corning sales fall" is the news.
+    assert all("sales OR revenue" in q for q in queries)

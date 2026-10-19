@@ -262,6 +262,31 @@ def test_a_foreign_company_abroad_is_not_on_our_turf():
     # A function word ends the qualifier: China is not Amber's.
     entrants = _entrants("US tariffs hit China as Amber eyes laptop PCB orders")
     assert [e["challenger"] for e in entrants] == ["Amber"]
+    # A city places a move in India as well as a state does.
+    entrants = _entrants("Taiwan's Foxconn sets up smartphone plant in Sriperumbudur")
+    assert [e["challenger"] for e in entrants] == ["Foxconn"]
+
+
+def test_an_old_article_is_not_a_new_entrant():
+    """Regression for 19 Oct: "Amber eyes 20% of Oppo India volumes", dated
+    22 June, raised a fresh High alert on five holdings every run."""
+    from analysis.competitive_intel import RADAR_MAX_AGE_DAYS
+    from analysis.event_engine import EVENT_RETENTION_DAYS
+
+    assert RADAR_MAX_AGE_DAYS == EVENT_RETENTION_DAYS
+
+    def run(date):
+        item = {"title": "Amber eyes 20% of Oppo India volumes"}
+        if date:
+            item["date"] = date
+        return detect_new_entrants(
+            {"corporate_agreements": [item]}, _WATCHLIST, today="2026-10-19"
+        )
+
+    assert run("Mon, 22 Jun 2026 05:50:06 GMT") == []
+    assert len(run("Mon, 05 Oct 2026 05:50:06 GMT")) == 1
+    # Nothing to judge an undated item's age by: it is kept.
+    assert len(run(None)) == 1
 
 
 # ---------------------------------------------------------------------------

@@ -42,6 +42,8 @@ _KIND = {
     "capacity_add": "capacity",
     "supply_disruption": "supply disruption",
     "input_cost_shock": "input cost",
+    "business_weakness": "weaker business",
+    "partnership_end": "partnership ended",
 }
 
 

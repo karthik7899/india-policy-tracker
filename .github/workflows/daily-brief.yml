@@ -155,7 +155,7 @@ jobs:
           # of this list strands them as unstaged changes, which is not a
           # cosmetic omission: git pull --rebase refuses to run at all, so the
           # commit below is made and then never pushed.
-          git add dashboard_data.json history.json watchlist.json rotation_ledger.json isin_master.json registered_names.json entity_graph.json entity_graph_proposals.json llm_cache.json thesis_cache.json news/ data/
+          git add dashboard_data.json history.json watchlist.json rotation_ledger.json isin_master.json registered_names.json entity_graph.json entity_graph_proposals.json watched_entrants.json llm_cache.json thesis_cache.json news/ data/
 
           # Anything the run rewrote that is not on that list would fail the
           # rebase two steps down with "cannot pull with rebase", which says

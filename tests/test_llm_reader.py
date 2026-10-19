@@ -199,6 +199,17 @@ def _rules_event(headline, event_type, actors):
     }
 
 
+def test_a_type_the_reader_is_never_asked_for_is_not_disputed():
+    """It has no "business_weakness" to answer with, so its "none" for one is
+    not a disagreement."""
+    headline = "Suzlon Q2 profit falls 30%"
+    events = [_rules_event(headline, "business_weakness", ["SUZLON"])]
+    readings = {headline: ground(headline, _answer("none", []))}
+    events, stats = reconcile(events, readings, WATCHLIST)
+    assert "corroborated" not in events[0]
+    assert stats == {"corroborated": 0, "disagreed": 0, "llm_only": 0}
+
+
 def test_agreement_is_marked_corroborated():
     events = [_rules_event(SUZLON, "order_win", ["SUZLON"])]
     readings = {SUZLON: ground(SUZLON, _answer("order_win", ["Suzlon"]))}

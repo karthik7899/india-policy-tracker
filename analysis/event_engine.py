@@ -29,7 +29,11 @@ from config import SECTOR_METADATA
 from logger import log
 
 # What happened — each type is (vocabulary, direction-for-domain-sectors).
+# Checked in this order, first match wins.
 EVENT_VOCABULARY: Dict[str, tuple] = {
+    # Before tie_up, whose "joint venture" it contains: "Vivo exits joint
+    # venture with Dixon" was read as a new tie-up. Shapes in EVENT_PATTERNS.
+    "partnership_end": (),
     "tie_up": (
         "joint venture",
         "strategic partnership",
@@ -107,6 +111,36 @@ EVENT_VOCABULARY: Dict[str, tuple] = {
         "input costs rise",
         "costlier imports",
     ),
+    # One company's own business getting weaker. Without it "Corning sales
+    # fall 12%" was no event at all, so nothing linked to Corning could hear
+    # of it. Shapes with a verb in EVENT_PATTERNS.
+    "business_weakness": (
+        "profit warning",
+        "misses estimates",
+        "missed estimates",
+        "misses expectations",
+        "below estimates",
+        "weak demand",
+        "demand slowdown",
+        "slowing demand",
+        "swings to loss",
+        "slips into loss",
+        "posts net loss",
+        "reports net loss",
+        "widens loss",
+        "loss widens",
+        "layoffs",
+        "lays off",
+        "job cuts",
+        "cuts jobs",
+        # Entering it, not the word: "NCLT dismisses insolvency plea against
+        # Suzlon" is good news for Suzlon.
+        "files for bankruptcy",
+        "files for insolvency",
+        "bankruptcy filing",
+        "chapter 11",
+        "enters administration",
+    ),
 }
 
 # Shapes the literal phrases above cannot express, because headlines put
@@ -120,7 +154,66 @@ EVENT_VOCABULARY: Dict[str, tuple] = {
 # The gap is bounded — at most six words — so a verb in one statement cannot
 # reach an "order" several phrases later.
 _GAP = r"(?:\W+[\w$₹.%'-]+){0,6}?\W+"
+# A tighter gap where a loose one reads across statements: "Sensex ends
+# higher as TCS signs agreement" is not TCS ending an agreement.
+_SHORT_GAP = r"(?:\s+[\w$₹.%:'-]+){0,3}?\s+"
+_PARTNERSHIP = r"(?:joint\s+ventures?|jvs?|partnerships?|alliances?|tie-?ups?|collaborations?|mous?|pacts?|agreements?)"
+# What a weaker business reports falling, and the ways it falls.
+_WEAK_SUBJECT = (
+    r"(?:sales|revenues?|net\s+profits?|profits?|earnings|net\s+income|ebitda|"
+    r"margins?|shipments|orders|order\s+inflows?|demand)"
+)
+_WEAK_VERB = (
+    r"(?:falls?|fell|fallen|declines?|declined|drops?|dropped|slumps?|slumped|"
+    r"plunges?|plunged|slides?|slid|shrinks?|shrank|contracts?|contracted|"
+    r"dips?|dipped|tumbles?|tumbled|sinks?|sank|weakens?|weakened|"
+    r"slows?|slowed|down|lower)"
+)
 EVENT_PATTERNS: Dict[str, tuple] = {
+    "partnership_end": (
+        re.compile(
+            r"\b(?:exits?|exited|exiting|quits?|ends|ended|terminates?|terminated|"
+            r"dissolves?|dissolved|winds?\s+up|wound\s+up|calls?\s+off|called\s+off|"
+            r"scraps?|scrapped|cancels?|cancell?ed|pulls?\s+out\s+of|"
+            r"pulled\s+out\s+of|walks?\s+away\s+from|walked\s+away\s+from)"
+            + _SHORT_GAP
+            + _PARTNERSHIP
+            + r"\b"
+        ),
+        # Two companies: "Dixon and Vivo part ways". Not "parts ways", which
+        # is mostly an executive leaving.
+        re.compile(r"\bpart\s+ways\b"),
+        re.compile(
+            r"\b"
+            + _PARTNERSHIP
+            + r"\s+(?:ends|ended|terminated|dissolved|collapses|collapsed|"
+            r"falls\s+through|fell\s+through|called\s+off|scrapped)\b"
+        ),
+    ),
+    "business_weakness": (
+        # "Q3 sales fall 12%", "net profit declines sharply", "revenue lower".
+        re.compile(
+            r"\b"
+            + _WEAK_SUBJECT
+            + r"(?:\s+(?:sharply|steeply|further|marginally|slightly|again))?\s+"
+            + _WEAK_VERB
+            + r"\b"
+        ),
+        # "a decline in quarterly revenue"
+        re.compile(
+            r"\b(?:fall|decline|drop|slump|dip|plunge|slide)\s+in\s+(?:\w+\s+)?"
+            + _WEAK_SUBJECT
+            + r"\b"
+        ),
+        # "NCLT admits insolvency plea against ..."
+        re.compile(r"\b(?:admits?|admitted)\s+(?:an?\s+)?insolvency\b"),
+        # "cuts full-year revenue guidance", "lowers FY27 outlook"
+        re.compile(
+            r"\b(?:cuts?|lowers?|lowered|slashe?s|slashed|trims?|trimmed|"
+            r"reduces?|reduced|withdraws?|withdrew)\s+(?:its\s+)?"
+            r"(?:[\w-]+\s+){0,2}?(?:guidance|outlook|forecast)\b"
+        ),
+    ),
     "tie_up": (
         re.compile(
             r"\b(?:forms?|formed|forming|to form)\s+(?:an?\s+)?(?:jv|joint venture)\b"
@@ -158,6 +251,19 @@ EVENT_PATTERNS: Dict[str, tuple] = {
             r"\b(?:inaugurat\w*|opens|opened)"
             + _GAP
             + r"(?:facility|plant|factory|unit)\b"
+        ),
+        # "Vivo sets up own smartphone plant": the literal "sets up plant"
+        # needs the words side by side.
+        re.compile(
+            r"\b(?:sets?|setting)\s+up" + _GAP + r"(?:facility|plant|factory|unit)\b"
+        ),
+    ),
+    "supply_disruption": (
+        # "Corning halts Gorilla Glass production": the same, for a stoppage.
+        re.compile(
+            r"\b(?:halts?|halted|suspends?|suspended)"
+            + _GAP
+            + r"(?:production|operations|output|manufacturing)\b"
         ),
     ),
 }
@@ -245,12 +351,14 @@ _CLAUSE_RE = re.compile(r"\s*[;—–]\s*|\s+-\s+|\s*\|\s*")
 # A negated move is not a move — "denies plans to enter" must classify as
 # nothing rather than as an entry. Scoped to a clause, so a denial in one
 # statement no longer cancels a genuine event in another.
-NEGATION_MARKERS = (
+_DENIALS = (
     "denies",
     "rules out",
     "no plans",
     "refutes",
     "dismisses report",
+)
+NEGATION_MARKERS = _DENIALS + (
     "calls off",
     "cancels",
     "scraps",
@@ -259,15 +367,24 @@ NEGATION_MARKERS = (
 
 # Which way an event leans for the sectors whose turf it lands on.
 _EVENT_DIRECTION = {
+    "partnership_end": "risk",
     "tie_up": "opportunity",
     "acquisition": "opportunity",
     "order_win": "opportunity",
     "capacity_add": "opportunity",
     "supply_disruption": "risk",
     "input_cost_shock": "risk",
+    "business_weakness": "risk",
 }
 
 _RISK_TYPES = ("supply_disruption", "input_cost_shock")
+# About one company, so never a warning on a sector's holdings, by
+# vocabulary or by an anchor edge: "smartphone sales fall" is not a supply
+# shock for every electronics holding. They reach other holdings only as
+# read-throughs along a link in the graph (analysis/read_through.py): a
+# partner's news through the partner screen, and a demand anchor's weaker
+# business through _anchor_shift. Read-throughs are never graded.
+_COMPANY_ONLY_TYPES = ("partnership_end", "business_weakness")
 _MAX_SIGNALS_PER_SECTOR = 3
 
 
@@ -300,9 +417,15 @@ def first_event_clause(headline: str):
     """
     for clause in split_clauses(headline):
         clause_lower = clause.lower()
-        if any(neg in clause_lower for neg in NEGATION_MARKERS):
-            continue  # this clause is a denial; others may still count
         hit_type, hit_phrase = match_event_type(clause_lower)
+        if any(neg in clause_lower for neg in NEGATION_MARKERS):
+            # A denial; others may still count. Calling off a partnership is
+            # not one: there the ending is the news.
+            if hit_type == "partnership_end" and not any(
+                d in clause_lower for d in _DENIALS
+            ):
+                return clause, hit_type, hit_phrase
+            continue
         if hit_type:
             return clause, hit_type, hit_phrase
     return None
@@ -548,6 +671,9 @@ def event_clause(event: Dict[str, Any]) -> str:
 # every fix made since.
 EVENT_RETENTION_DAYS = 45
 
+# The most events kept, newest first, once the stale ones have gone.
+EVENTS_KEPT = 120
+
 
 def refresh_merged_events(
     events: List[Dict[str, Any]],
@@ -568,7 +694,14 @@ def refresh_merged_events(
     So every merged event is re-attributed with the current rules. An event
     that no longer names anything we track is dropped, which is how those
     three finally disappear. Certainty is filled in for rows that predate the
-    field. Cheap enough to do unconditionally — the list is capped at 120.
+    field.
+
+    Then the newest EVENTS_KEPT are kept, by article date. The cap used to be
+    applied before this, to the merged list in classification order: a run
+    re-reads months of stored agreements and launches, so on 19 Oct old
+    articles filled all 120 places, were then dropped here as stale, and the
+    day's one global event (classified last) had already been cut. 44 events
+    survived, none of them global.
     """
     if not events:
         return []
@@ -661,10 +794,12 @@ def refresh_merged_events(
                 f"{dropped_orphan} no longer touch the watchlist, "
                 f"{dropped_stale} past {EVENT_RETENTION_DAYS}d retention."
             )
+        # Stable, so events of one day keep their order.
+        refreshed.sort(key=lambda e: str(e.get("date", "")), reverse=True)
     except Exception as e:  # noqa: BLE001 - housekeeping must not break a run
         log.warning(f"Event corpus refresh failed safely: {e!r}")
-        return events
-    return refreshed
+        return events[:EVENTS_KEPT]
+    return refreshed[:EVENTS_KEPT]
 
 
 def _financials_by_ticker(watchlist: Dict[str, Any]) -> Dict[str, Any]:
@@ -871,7 +1006,13 @@ def market_event_signals(
             qualifier = (
                 f" ({certainty})" if certainty and certainty != "completed" else ""
             )
-            for ticker in event.get("actors") or []:
+            # A holding's own weaker quarter is graded from its filed numbers
+            # (Screener's margin and revenue warnings). The headline stays its
+            # news; warning on it as well would count the same quarter twice.
+            attributed = (
+                [] if etype == "business_weakness" else event.get("actors") or []
+            )
+            for ticker in attributed:
                 alerts.append(
                     {
                         "ticker": ticker,
@@ -919,8 +1060,23 @@ def market_event_signals(
             # a plant" read again down the Elemaster → Syrma partner edge
             # would count it twice. The same rule as read_through's partner
             # exposure.
+            #
+            # Not for a partner's news: whether that is good or bad for the
+            # holding is a judgement (read_through.screen_partner_news), and
+            # passing the partner's own direction along read Vivo opening its
+            # own plant as good news for Dixon. Nor for news about one
+            # company's own fortunes, which only a named link carries.
             named_here = set(event.get("actors") or [])
-            for edge in match_anchor_edges(headline, graph):
+            anchor_edges = (
+                []
+                if etype in _COMPANY_ONLY_TYPES
+                else [
+                    e
+                    for e in match_anchor_edges(headline, graph)
+                    if e.get("type") != "partner"
+                ]
+            )
+            for edge in anchor_edges:
                 dst = edge.get("dst")
                 dst_tickers = [dst] if dst in names else by_sector.get(dst, [])
                 dst_tickers = [t for t in dst_tickers if t not in named_here]

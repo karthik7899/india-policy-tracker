@@ -772,13 +772,15 @@ class _RequestPacer:
             await asyncio.sleep(delay)
 
 
-async def fetch_all_screener_fundamentals(watchlist):
+async def fetch_all_screener_fundamentals(watchlist, entrants=()):
     """Loads Screener fundamentals into each stock and discovers peer competitors.
 
     Returns (peer_competitors, industry_tables):
       - peer_competitors: {sector: [row, ...]} of Screener industry peers NOT
         in the watchlist — the competitor-discovery radar, merged across every
-        industry scanned for that sector.
+        industry scanned for that sector. Watched entrants
+        (analysis/entrant_watch.py), given as ``(ticker, name, sector)``, are
+        added to the sector they entered, marked ``watched_entrant``.
       - industry_tables: [{sector, via_ticker, rows}, ...] — one entry per
         industry scanned, kept apart so market share is measured within an
         industry rather than across a sector's several industries.
@@ -865,8 +867,61 @@ async def fetch_all_screener_fundamentals(watchlist):
         )
 
         peer_results = await _fetch_industry_tables(holdings, throttled, session)
+        entrant_rows = await _fetch_entrant_rows(
+            entrants, request, throttled, session, watchlist_tickers
+        )
 
-    return _assemble_peer_views(peer_results, ticker_to_sector, watchlist_tickers)
+    peer_competitors, industry_tables = _assemble_peer_views(
+        peer_results, ticker_to_sector, watchlist_tickers
+    )
+    for sector, row in entrant_rows:
+        bucket = peer_competitors.setdefault(sector, [])
+        if all(r.get("ticker") != row.get("ticker") for r in bucket):
+            bucket.append(row)
+    return peer_competitors, industry_tables
+
+
+async def _fetch_entrant_rows(entrants, request, throttled, session, held):
+    """``[(sector, row)]``: each watched entrant's own row of its industry's
+    peer table, for the sector it entered.
+
+    Amber files under household appliances, so no electronics holding's peer
+    table carries it, and once the radar's headline aged out nothing compared
+    Amber's growth with Dixon's. Its page gives the peers API id, the API its
+    row — the same fields every peer row has. Its industry's other companies
+    are left out: they did not enter anything.
+    """
+    rows = []
+    entrants = [e for e in entrants or [] if str(e[0]).upper() not in held]
+    for ticker, name, sector in entrants:
+        try:
+            _, _fields, warehouse_id = await fetch_screener_async(
+                session, ticker, sector, 0.0, request, name=name
+            )
+            if not warehouse_id:
+                continue
+            result = await throttled(fetch_peers_async(session, ticker, warehouse_id))
+        except Exception as e:  # noqa: BLE001 - enhancement data, never fatal
+            log.warning(f"Watched entrant {ticker}: Screener row unavailable ({e!r}).")
+            continue
+        own = next(
+            (
+                r
+                for r in result.rows
+                if str(r.get("ticker", "")).upper() == ticker.upper()
+            ),
+            None,
+        )
+        if own:
+            rows.append((sector, {**own, "watched_entrant": True}))
+    if entrants:
+        log.info(
+            f"Watched entrants: {len(rows)} of {len(entrants)} compared with their "
+            f"sector's holdings"
+            + (f" ({', '.join(r['ticker'] for _, r in rows)})" if rows else "")
+            + "."
+        )
+    return rows
 
 
 async def _fetch_industry_tables(holdings, throttled, session):

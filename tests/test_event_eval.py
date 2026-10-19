@@ -29,6 +29,8 @@ EVENT_TYPES = {
     "capacity_add",
     "supply_disruption",
     "input_cost_shock",
+    "business_weakness",
+    "partnership_end",
 }
 
 # Holdout recall was 0.60 before the gap-tolerant patterns and 0.83 after.
