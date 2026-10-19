@@ -359,6 +359,11 @@ def _anchor_shift(event, graph, watchlist):
     out = []
     if event.get("direction") != "risk":
         return out
+    # An anchor ending a partnership says nothing settled about demand: Apple
+    # leaving one assembler can send the work to ours. Its weaker business
+    # does — "iPhone sales fall" is less to build for every EMS holding.
+    if event.get("event_type") == "partnership_end":
+        return out
     named = event.get("external") or []
     if not named:
         return out

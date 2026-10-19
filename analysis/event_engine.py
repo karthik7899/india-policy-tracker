@@ -378,10 +378,12 @@ _EVENT_DIRECTION = {
 }
 
 _RISK_TYPES = ("supply_disruption", "input_cost_shock")
-# About one company, so never spread across a sector by vocabulary or by an
-# anchor edge: "smartphone sales fall" is not a supply shock for every
-# electronics holding. They reach others only through a named link
-# (analysis/read_through.py).
+# About one company, so never a warning on a sector's holdings, by
+# vocabulary or by an anchor edge: "smartphone sales fall" is not a supply
+# shock for every electronics holding. They reach other holdings only as
+# read-throughs along a link in the graph (analysis/read_through.py): a
+# partner's news through the partner screen, and a demand anchor's weaker
+# business through _anchor_shift. Read-throughs are never graded.
 _COMPANY_ONLY_TYPES = ("partnership_end", "business_weakness")
 _MAX_SIGNALS_PER_SECTOR = 3
 
