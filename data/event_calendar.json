@@ -1,31 +1,9 @@
 {
   "value": {
-    "as_of": "2026-10-17",
+    "as_of": "2026-10-19",
     "ahead_days": 45,
     "back_days": 14,
     "upcoming": [
-      {
-        "ticker": "HDFCBANK",
-        "date": "2026-10-17",
-        "kind": "results",
-        "title": "Board meeting: Financial Results",
-        "detail": "To consider and approve the unaudited standalone and consolidated financial results of the Bank for the quarter/half-year ending September 30, 2026",
-        "source": "NSE event calendar",
-        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
-        "name": "HDFC Bank",
-        "sector": "banking_financials"
-      },
-      {
-        "ticker": "ICICIBANK",
-        "date": "2026-10-17",
-        "kind": "results",
-        "title": "Board meeting: Financial Results",
-        "detail": "To inter alia consider and approve the unaudited financial results (standalone and consolidated) for the quarter and six months ending September 30, 2026.",
-        "source": "NSE event calendar",
-        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
-        "name": "ICICI Bank",
-        "sector": "banking_financials"
-      },
       {
         "ticker": "LTTS",
         "date": "2026-10-19",
@@ -238,6 +216,28 @@
     ],
     "recent": [
       {
+        "ticker": "ICICIBANK",
+        "date": "2026-10-17",
+        "kind": "results",
+        "title": "Board meeting: Financial Results",
+        "detail": "To inter alia consider and approve the unaudited financial results (standalone and consolidated) for the quarter and six months ending September 30, 2026.",
+        "source": "NSE event calendar",
+        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
+        "name": "ICICI Bank",
+        "sector": "banking_financials"
+      },
+      {
+        "ticker": "HDFCBANK",
+        "date": "2026-10-17",
+        "kind": "results",
+        "title": "Board meeting: Financial Results",
+        "detail": "To consider and approve the unaudited standalone and consolidated financial results of the Bank for the quarter/half-year ending September 30, 2026",
+        "source": "NSE event calendar",
+        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
+        "name": "HDFC Bank",
+        "sector": "banking_financials"
+      },
+      {
         "ticker": "UTLSOLAR",
         "date": "2026-10-15",
         "kind": "fund_raising",
@@ -317,8 +317,6 @@
     ],
     "macro": [],
     "next_results": {
-      "HDFCBANK": "2026-10-17",
-      "ICICIBANK": "2026-10-17",
       "LTTS": "2026-10-19",
       "ADANIGREEN": "2026-10-21",
       "INDHOTEL": "2026-10-21",
@@ -341,7 +339,7 @@
     },
     "sources": {
       "nse": {
-        "event_calendar": 617,
+        "event_calendar": 652,
         "corporate_actions": 28
       },
       "nse_errors": [],

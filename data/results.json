@@ -1,9 +1,50 @@
 {
   "value": {
-    "as_of": "2026-10-17",
+    "as_of": "2026-10-19",
     "tracking_since": "2026-10-10",
-    "reported_today": [],
+    "reported_today": [
+      "HDFCBANK",
+      "ICICIBANK"
+    ],
     "scorecards": [
+      {
+        "ticker": "ICICIBANK",
+        "name": "ICICI Bank",
+        "sector": "banking_financials",
+        "detected": "2026-10-19",
+        "quarter": "Sep 2026",
+        "quarters": 8,
+        "sales_cr": 55992.0,
+        "sales_qoq_pct": 7.2,
+        "sales_rank": 1,
+        "sales_yoy_pct": 16.2,
+        "eps": 22.75,
+        "eps_yoy_pct": 21.7,
+        "opm_pct": -16.0,
+        "opm_change_pp": -4.0,
+        "margin_basis": "financing",
+        "net_profit_cr": 17389.0,
+        "summary": "Revenue ₹55,992 Cr, +16.2% on a year ago (+7.2% on the quarter before), the highest of 8 quarters; EPS 22.75, +21.7% on a year ago; financing margin -16%, -4.0 pts on the quarter before."
+      },
+      {
+        "ticker": "HDFCBANK",
+        "name": "HDFC Bank",
+        "sector": "banking_financials",
+        "detected": "2026-10-19",
+        "quarter": "Sep 2026",
+        "quarters": 8,
+        "sales_cr": 95132.0,
+        "sales_qoq_pct": 5.0,
+        "sales_rank": 1,
+        "sales_yoy_pct": 9.4,
+        "eps": 13.43,
+        "eps_yoy_pct": 5.3,
+        "opm_pct": -6.0,
+        "opm_change_pp": 11.0,
+        "margin_basis": "financing",
+        "net_profit_cr": 21537.0,
+        "summary": "Revenue ₹95,132 Cr, +9.4% on a year ago (+5.0% on the quarter before), the highest of 8 quarters; EPS 13.43, +5.3% on a year ago; financing margin -6%, +11.0 pts on the quarter before."
+      },
       {
         "ticker": "PERSISTENT",
         "name": "Persistent Systems",
