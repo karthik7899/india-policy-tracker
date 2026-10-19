@@ -568,7 +568,164 @@ def probe_nse_calendar():
         session.close()
 
 
+# PIB's own feed of press releases. Candidates rather than one URL: the
+# address could not be checked from the development sandbox, which refuses
+# pib.gov.in.
+_PIB_FEEDS = (
+    "https://pib.gov.in/RssMain.aspx?ModId=6&Lang=1&Regid=3",
+    "https://www.pib.gov.in/RssMain.aspx?ModId=6&Lang=1&Regid=3",
+)
+_PLI_WORDS = ("pli", "production linked incentive", "production-linked incentive")
+
+
+async def probe_pib_pli():
+    """Where the PLI scraper's names went.
+
+    The daily log reads "5 link(s) led to a page that was not the release":
+    the releases are found through Google News, and its links lead to its own
+    page. This asks what that page actually is, whether PIB's own RSS feed
+    answers a runner, and what a PLI release page is made of — its tables,
+    its lists, the names the real parser takes from it — so the fix is built
+    on PIB's markup rather than on a guess at it.
+    """
+    import re
+
+    import aiohttp
+    import feedparser
+    from bs4 import BeautifulSoup
+
+    from scraper import _extract_pli_data_from_html, _is_pib_release
+
+    found_names = False
+    async with aiohttp.ClientSession() as session:
+
+        async def get(url):
+            async with session.get(url, timeout=20, allow_redirects=True) as r:
+                return (
+                    r.status,
+                    r.headers.get("Content-Type", ""),
+                    str(r.url),
+                    await r.text(),
+                )
+
+        # 1. Google News, as the scraper asks it, and where its first link goes.
+        import urllib.parse
+
+        query = (
+            'site:pib.gov.in "PLI" AND ("provisionally selected" OR "approved" '
+            'OR "incentive scheme" OR "applications approved")'
+        )
+        rss = (
+            "https://news.google.com/rss/search?q="
+            + urllib.parse.quote(f"{query} when:30d")
+            + "&hl=en-IN&gl=IN&ceid=IN:en"
+        )
+        print(f"\n{'=' * 72}\nGOOGLE NEWS SEARCH (the scraper's discovery)\n{'=' * 72}")
+        try:
+            status, ctype, _final, body = await get(rss)
+            feed = feedparser.parse(body)
+            print(f"  HTTP {status}, {len(feed.entries)} item(s)")
+            for entry in feed.entries[:5]:
+                print(
+                    f"    - {entry.get('published', '')[:16]} | "
+                    f"{entry.get('title', '')[:110]}"
+                )
+            if feed.entries:
+                link = feed.entries[0].get("link", "")
+                status, ctype, final, page = await get(link)
+                soup = BeautifulSoup(page, "lxml")
+                title = soup.title.get_text(strip=True) if soup.title else ""
+                print(f"  first link  : {link[:90]}...")
+                print(f"  lands on    : HTTP {status}, {final[:120]}")
+                print(f"  page title  : {title[:120]}")
+                print(f"  is release  : {_is_pib_release(page)} ({len(page)} bytes)")
+                spots = [m.start() for m in re.finditer(r"pib\.gov\.in", page)][:3]
+                for at in spots:
+                    context = " ".join(page[max(0, at - 80) : at + 120].split())
+                    print(f"    mentions pib.gov.in: ...{context}...")
+                if not spots:
+                    print("    the page never mentions pib.gov.in")
+        except Exception as e:  # noqa: BLE001 - PIB's own feed is asked regardless
+            print(f"  FAILED: {type(e).__name__}: {str(e)[:200]}")
+
+        # 2. PIB's own feed.
+        release_links = []
+        for url in _PIB_FEEDS:
+            print(f"\n{'=' * 72}\nPIB RSS {url}\n{'=' * 72}")
+            try:
+                status, ctype, final, body = await get(url)
+            except Exception as e:  # noqa: BLE001 - report and try the next
+                print(f"  FAILED: {type(e).__name__}: {str(e)[:200]}")
+                continue
+            feed = feedparser.parse(body)
+            print(
+                f"  HTTP {status}, {ctype or 'unstated'}, {len(body)} bytes, final {final[:100]}"
+            )
+            print(f"  entries     : {len(feed.entries)}")
+            if not feed.entries:
+                print(f"  body        : {' '.join(body.split())[:300]}")
+                continue
+            pli = [
+                e
+                for e in feed.entries
+                if any(w in e.get("title", "").lower() for w in _PLI_WORDS)
+            ]
+            for entry in feed.entries[:5]:
+                print(
+                    f"    - {entry.get('published', '')[:25]} | {entry.get('title', '')[:90]} | {entry.get('link', '')[:80]}"
+                )
+            print(f"  PLI titles  : {len(pli)}")
+            for entry in pli[:5]:
+                print(f"    * {entry.get('title', '')[:110]} | {entry.get('link', '')}")
+            release_links = [e.get("link") for e in (pli or feed.entries)[:1]]
+            _save("pib_rss.xml", body)
+            break
+
+        # 3. One release page, read by the real parser.
+        for link in release_links:
+            print(f"\n{'=' * 72}\nPIB RELEASE {link}\n{'=' * 72}")
+            status, ctype, final, page = await get(link)
+            soup = BeautifulSoup(page, "lxml")
+            print(f"  HTTP {status}, {len(page)} bytes, final {final[:100]}")
+            print(
+                f"  title       : {(soup.title.get_text(strip=True) if soup.title else '')[:120]}"
+            )
+            print(f"  is release  : {_is_pib_release(page)}")
+            tables = soup.find_all("table")
+            print(f"  tables      : {len(tables)}")
+            for t, table in enumerate(tables[:3]):
+                rows = table.find_all("tr")
+                print(f"    table {t}: {len(rows)} row(s)")
+                for row in rows[:8]:
+                    cells = [
+                        c.get_text(" ", strip=True)[:40]
+                        for c in row.find_all(["td", "th"])
+                    ]
+                    print(f"      {cells[:4]}")
+            items = soup.find_all("li")
+            print(f"  list items  : {len(items)}")
+            names = _extract_pli_data_from_html(
+                page, soup.title.get_text() if soup.title else ""
+            )
+            print(f"  PARSED      : {len(names)} name(s) by the current parser")
+            for c in names[:15]:
+                print(f"    > {c['name']}")
+            text = soup.get_text("\n")
+            lines = [
+                ln.strip()
+                for ln in text.splitlines()
+                if re.search(r"\b(Ltd|Limited|Pvt)\b", ln)
+            ]
+            print(f"  lines naming a company (Ltd/Limited/Pvt): {len(lines)}")
+            for ln in lines[:15]:
+                print(f"    | {ln[:140]}")
+            _save("pib_release.html", page)
+            found_names = bool(lines or names)
+    return found_names
+
+
 SOURCES = {
+    "pib-pli": ("async-noarg", probe_pib_pli),
     "screener-peers": ("async", probe_screener_peers),
     "screener-accounts": ("async", probe_screener_accounts),
     "nse-isin": ("async-noarg", probe_nse_isin),

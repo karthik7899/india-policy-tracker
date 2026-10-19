@@ -23,6 +23,7 @@ on:
         default: all
         options:
           - all
+          - pib-pli
           - screener-peers
           - screener-accounts
           - nse-isin
