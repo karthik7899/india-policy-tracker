@@ -568,7 +568,118 @@ def probe_nse_calendar():
         session.close()
 
 
+async def probe_pib_pli():
+    """The PLI scraper's own path, a step at a time, against the live sites.
+
+    Google News for the stories; PIB's lists of this month's and last month's
+    releases for each story's release, and for the releases PIB titles as a
+    scheme's; each release's own page for the names, with the scheme each was
+    read under, before the scraper keeps those under a scheme a holding works
+    in; then the scraper itself, end to end, on today's watchlist. What the
+    probes that built it found is in docs/upstream-findings.md.
+    """
+    import re
+
+    import aiohttp
+    import feedparser
+    from bs4 import BeautifulSoup
+
+    import scraper
+    from config import load_watchlist
+    from providers import pib
+    from providers.isin_master import load_registered_names
+    from utils import fetch_text_async
+
+    async with aiohttp.ClientSession() as session:
+        print(f"\n{'=' * 72}\nGOOGLE NEWS: which releases there were\n{'=' * 72}")
+        status, xml = await fetch_text_async(session, scraper.pli_search_url())
+        entries = feedparser.parse(xml).entries if status == 200 else []
+        stories = scraper._stories(entries)
+        print(f"  HTTP {status}: {len(entries)} result(s), {len(stories)} release(s)")
+
+        print(
+            f"\n{'=' * 72}\nPIB: its lists of this month's and last month's releases\n{'=' * 72}"
+        )
+        index = pib.MonthIndex(session)
+        ranked, unfound, general = await scraper._locate_on_pib(
+            stories, index, pib.today_in_india()
+        )
+        print(f"  {general} found that are about no scheme, not read")
+        for first, links in index.months.items():
+            print(f"  {first:%B %Y}: {len(links)} release(s)")
+        if index.failed:
+            print(f"  {index.failed}")
+        for item in ranked:
+            source = "Google" if "story" in item else "PIB title"
+            print(
+                f"    {scraper._relevance(item['title'])} PRID {item['prid']} "
+                f"({source}): {item['title'][:85]}"
+            )
+        listed = [
+            (t, prid, set(pib.title_words(t)))
+            for links in index.months.values()
+            for t, prid, _ in links
+        ]
+        for story in unfound:
+            want = set(pib.title_words(story["title"]))
+            near = max(
+                ((len(want & w) / len(want | w), prid, t) for t, prid, w in listed),
+                default=(0, "", ""),
+            )
+            print(f"    not on the lists: {story['title'][:90]}")
+            if want and near[0] >= 0.3:
+                print(f"      nearest ({near[0]:.2f}) PRID {near[1]}: {near[2][:90]}")
+
+        print(f"\n{'=' * 72}\nPIB: what each release to be read names\n{'=' * 72}")
+        for item in ranked[: scraper.MAX_PLI_RELEASES]:
+            status, page = await fetch_text_async(
+                session, pib.release_url(item["prid"]), timeout=20
+            )
+            release = pib.read_release(page) if status == 200 else None
+            print(f"  PRID {item['prid']}: HTTP {status}, {len(page)} bytes")
+            if release is None:
+                print("    no release text on the page")
+                continue
+            print(f"    {release['date']} {release['title'][:90]}")
+            names = scraper._extract_pli_data_from_html(
+                release["html"], release["title"], release["date"]
+            )
+            for c in names:
+                print(f"    > {c['name']} | {c['sector']} | {c['scheme_sectors']}")
+            if not names:
+                # Where names might be that the parser does not take.
+                body = BeautifulSoup(release["html"], "lxml")
+                for t, table in enumerate(body.find_all("table")[:4]):
+                    for row in table.find_all("tr")[:4]:
+                        cells = [
+                            c.get_text(" ", strip=True)[:30]
+                            for c in row.find_all(["td", "th"])
+                        ]
+                        print(f"      table {t}: {cells[:5]}")
+                lines = scraper._text_lines(body)
+                hits = [
+                    ln for ln in lines if re.search(r"Limited|Ltd|Pvt|LLP|Private", ln)
+                ]
+                print(f"      {len(lines)} line(s); {len(hits)} with a legal word")
+                for ln in hits[:6]:
+                    print(f"      | {ln[:150]}")
+                for ln in lines[:6]:
+                    print(f"      : {ln[:150]}")
+
+        print(f"\n{'=' * 72}\nTHE SCRAPER, end to end\n{'=' * 72}")
+        found = await scraper.scrape_pib_pli_approvals_async(
+            session, load_watchlist(), registered=load_registered_names()
+        )
+        for c in found:
+            print(
+                f"    * {c['name']} ({c['status']}, {c.get('ticker')}) | "
+                f"{c['sector']} | {c['found_in']} | {c['announcement'][:60]}"
+            )
+    return bool(index.read)
+
+
 SOURCES = {
+    "pib-pli": ("async-noarg", probe_pib_pli),
     "screener-peers": ("async", probe_screener_peers),
     "screener-accounts": ("async", probe_screener_accounts),
     "nse-isin": ("async-noarg", probe_nse_isin),
