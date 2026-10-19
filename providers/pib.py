@@ -6,12 +6,15 @@ a 584 KB page titled "Google News" that never names the bureau. PIB's RSS
 feed is no way round that. Whatever the address asks for, it redirects to the
 Hindi feed, and it holds the last 20 releases, a few hours of PIB's day.
 
-What works is PIB's list of every release on a given day, allRel.aspx: an
-ASP.NET form that its day menu posts back to itself, here posted with the day
-wanted. Its links carry each release's PRID. The release page itself is a
-shell around an iframe, and the shell's sidebar of other releases is what the
-parser used to read as company names, so the iframe's own page is read
-instead, and only the block that holds the release's text.
+What works is PIB's list of its releases, allRel.aspx: an ASP.NET form whose
+day menu posts it back to itself. Posted with the day at "All", it lists a
+whole month: 953 releases for October 2026 to the 19th, 1,429 for September.
+A whole month, because Google dates a PIB page when Google saw it, which can
+be weeks after PIB posted it. The list's links carry each release's PRID. The
+release page itself is a shell around an iframe, and the shell's sidebar of
+other releases is what the parser used to read as company names, so the
+iframe's own page is read instead, and only the block that holds the
+release's text.
 """
 
 import datetime
@@ -67,12 +70,28 @@ def form_fields(html):
     return fields
 
 
-def shown_day(fields):
-    """The day the list on a page is for, read from its own day menus."""
+def shown_month(fields):
+    """The month a page lists in full, read from its own menus, or None
+    when it lists a single day or says nothing."""
     try:
-        return datetime.date(int(fields[_YEAR]), int(fields[_MONTH]), int(fields[_DAY]))
+        if str(fields[_DAY]) != "0":
+            return None
+        return datetime.date(int(fields[_YEAR]), int(fields[_MONTH]), 1)
     except (KeyError, TypeError, ValueError):
         return None
+
+
+def months_to(today, count):
+    """The first day of ``today``'s month and of each of the ``count - 1``
+    months before it, newest first."""
+    months = [today.replace(day=1)]
+    while len(months) < count:
+        months.append((months[-1] - datetime.timedelta(days=1)).replace(day=1))
+    return months
+
+
+def today_in_india():
+    return datetime.datetime.now(_IST).date()
 
 
 def release_links(html):
@@ -102,7 +121,12 @@ def same_title(a, b):
 
     Short titles must match whole: "PLI Scheme" begins a dozen releases.
     """
-    short, full = sorted((title_words(a), title_words(b)), key=len)
+    return same_words(title_words(a), title_words(b))
+
+
+def same_words(a, b):
+    """``same_title`` for titles already split by ``title_words``."""
+    short, full = sorted((a, b), key=len)
     if not short or short == full:
         return bool(short)
     n = len(short)
@@ -156,26 +180,27 @@ def read_release(html):
     }
 
 
-class DayIndex:
-    """PIB's lists of releases, a day at a time, each asked for once a run.
+class MonthIndex:
+    """PIB's lists of every release in a month, each asked for once a run.
 
-    The list page is fetched once, for its form and for today's list. Every
-    other day is that form posted back with the day, month and year changed,
-    which is what the page's own day menu does. The first failure stops any
-    further asking, so an unreachable site costs one timeout, not one a day.
+    The list page is fetched once, for its form. Each month is that form
+    posted back with the day menu at "All" and the month and year set, as the
+    page's own menus would. The first failure stops any further asking, so an
+    unreachable site costs one timeout, not one a month.
     """
 
     def __init__(self, session):
         self.session = session
         self.fields = None
-        self.days = {}
+        self.months = {}
         self.read = 0
         self.failed = ""
 
-    async def releases_on(self, day):
-        """``release_links`` for ``day``, or None if PIB did not answer."""
-        if day in self.days:
-            return self.days[day]
+    async def releases_in(self, first):
+        """``release_links`` for the month ``first`` begins, or None if PIB
+        did not answer."""
+        if first in self.months:
+            return self.months[first]
         if self.failed:
             return None
         from utils import fetch_text_async, post_form_async
@@ -187,41 +212,36 @@ class DayIndex:
                 )
                 if status != 200:
                     return self._stop(f"the list of releases returned HTTP {status}")
-                self.read += 1
                 self.fields = form_fields(html)
                 if _DAY not in self.fields:
                     return self._stop("the list of releases has no day menu")
-                today = shown_day(self.fields)
-                if today is not None:
-                    self.days[today] = release_links(html)
-                if day in self.days:
-                    return self.days[day]
             data = dict(self.fields)
             data.update(
                 {
-                    _DAY: str(day.day),
-                    _MONTH: str(day.month),
-                    _YEAR: str(day.year),
+                    _DAY: "0",
+                    _MONTH: str(first.month),
+                    _YEAR: str(first.year),
                     "__EVENTTARGET": _DAY,
                     "__EVENTARGUMENT": "",
                 }
             )
+            # A month's list is a megabyte or more.
             status, html = await post_form_async(
-                self.session, LIST_URL, data, timeout=30
+                self.session, LIST_URL, data, timeout=60
             )
         except Exception as e:
             return self._stop(f"the list of releases failed ({type(e).__name__})")
         if status != 200:
             return self._stop(f"the list of releases returned HTTP {status}")
-        self.read += 1
-        if shown_day(form_fields(html)) != day:
-            # The page came back with some other day: the form no longer
-            # does what its menu did, and every other ask would do the same.
-            self.days[day] = []
-            self._stop(f"the list of releases would not show {day.isoformat()}")
+        if shown_month(form_fields(html)) != first:
+            # The page came back with something else: the form no longer
+            # does what its menus did, and every other ask would do the same.
+            self.months[first] = []
+            self._stop(f"the list of releases would not show {first:%B %Y}")
             return []
-        self.days[day] = release_links(html)
-        return self.days[day]
+        self.read += 1
+        self.months[first] = release_links(html)
+        return self.months[first]
 
     def _stop(self, why):
         self.failed = why

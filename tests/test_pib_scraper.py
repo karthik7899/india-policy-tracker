@@ -99,6 +99,10 @@ domestic manufacturing of critical APIs.</span></span></h3>
 <h3><span><strong><span>b) </span></strong><strong><span>PLI Scheme for
 Pharmaceuticals : Driving High-Value Pharmaceutical Manufacturing</span></strong>
 </span></h3>
+<h3><span><span><span>The scheme supports manufacturing across categories including
+<strong>biopharmaceuticals, complex generics, patented and off-patent drugs</strong>,
+along with specified APIs, DIs and KSMs not covered under the Bulk Drugs PLI
+Scheme.</span></span></span></h3>
 <p><span><span>Companies such as Sun Pharmaceutical Industries Limited,
 AurobindoPharma Limited, Dr. Reddy’s Laboratories Limited, Lupin Limited, Cipla
 Limited, Intas Pharmaceuticals Limited, Torrent Pharmaceuticals Limited have
@@ -247,17 +251,20 @@ def test_a_table_is_read_only_down_its_name_column():
     assert names == ["Zenith Cooling Systems", "Amber Enterprises India Limited"]
 
 
-# --- PIB's list of a day's releases -------------------------------------------
+# --- PIB's list of releases -------------------------------------------------
 
 import datetime  # noqa: E402
 
 from providers import pib  # noqa: E402
 
 TODAY = datetime.date(2026, 10, 19)
+OCTOBER = datetime.date(2026, 10, 1)
+SEPTEMBER = datetime.date(2026, 9, 1)
 
 
-def _list_page(day, releases):
-    """PIB's allRel.aspx as it answers, cut down to what is read from it."""
+def _list_page(year, month, day, releases):
+    """PIB's allRel.aspx as it answers, cut down to what is read from it. Day
+    "0" is the day menu's "All": the whole month."""
 
     def menu(name, value, values):
         options = "".join(
@@ -277,25 +284,35 @@ def _list_page(day, releases):
         "<input type='hidden' name='__EVENTVALIDATION' value='EV'/>"
         "<input type='image' name='ctl00$ContentPlaceHolder1$Print1$print'/>"
         + menu("ctl00$Bar1$ddlLang", "1", ["2", "1", "3"])
-        + menu("ctl00$ContentPlaceHolder1$ddlday", str(day.day), [str(d) for d in range(32)])
-        + menu("ctl00$ContentPlaceHolder1$ddlMonth", str(day.month), [str(m) for m in range(1, 13)])
-        + menu("ctl00$ContentPlaceHolder1$ddlYear", str(day.year), ["2026", "2025"])
+        + menu("ctl00$ContentPlaceHolder1$ddlday", str(day), [str(d) for d in range(32)])
+        + menu("ctl00$ContentPlaceHolder1$ddlMonth", str(month), [str(m) for m in range(1, 13)])
+        + menu("ctl00$ContentPlaceHolder1$ddlYear", str(year), ["2026", "2025"])
         + f"<ul>{links}</ul></form></body></html>"
     )  # fmt: skip
 
 
 def test_the_form_is_posted_back_as_a_browser_would():
-    fields = pib.form_fields(_list_page(TODAY, []))
+    fields = pib.form_fields(_list_page(2026, 10, 19, []))
     assert fields["__VIEWSTATE"] == "VS"
     assert fields["ctl00$Bar1$ddlLang"] == "1"
     assert fields["ctl00$ContentPlaceHolder1$ddlday"] == "19"
     assert "ctl00$ContentPlaceHolder1$Print1$print" not in fields
-    assert pib.shown_day(fields) == TODAY
+    # A day's list is not a month's.
+    assert pib.shown_month(fields) is None
+    assert pib.shown_month(pib.form_fields(_list_page(2026, 9, 0, []))) == SEPTEMBER
+
+
+def test_this_month_and_the_last_are_asked_for():
+    assert pib.months_to(TODAY, 2) == [OCTOBER, SEPTEMBER]
+    assert pib.months_to(datetime.date(2026, 1, 5), 2) == [
+        datetime.date(2026, 1, 1),
+        datetime.date(2025, 12, 1),
+    ]
 
 
 def test_release_links_carry_the_prid_once_each():
     page = _list_page(
-        TODAY, [("PLI for drones", "2325001"), ("PLI for drones", "2325001")]
+        2026, 10, 0, [("PLI for drones", "2325001"), ("PLI for drones", "2325001")]
     )
     assert pib.release_links(page) == [
         (
@@ -313,7 +330,7 @@ def test_a_google_headline_is_matched_to_pibs_title():
     )
     assert pib.same_title(f"{pib_title} - Press Information Bureau", pib_title)
     assert pib.same_title(pib_title.replace("’", "'") + " - www.pib.gov.in", pib_title)
-    # Cut short, as a list can show it.
+    # Cut short, as a list can show it, mid-word.
     assert pib.same_title(pib_title, pib_title[:80])
     # A short title must match whole: "PLI Scheme for" begins many.
     assert not pib.same_title(
@@ -322,7 +339,7 @@ def test_a_google_headline_is_matched_to_pibs_title():
     assert not pib.same_title("Untitled - Press Information Bureau", pib_title)
 
 
-def test_a_story_is_looked_for_under_indias_date():
+def test_a_story_is_dated_by_indias_day():
     # 19:30 GMT on 5 Oct is 01:00 on 6 Oct in Delhi.
     assert pib.ist_day("Mon, 05 Oct 2026 19:30:00 GMT") == datetime.date(2026, 10, 6)
     assert pib.ist_day("Mon, 05 Oct 2026 10:00:00 GMT") == datetime.date(2026, 10, 5)
@@ -349,15 +366,21 @@ def _rss(*items):
 
 
 WHITE_GOODS = "PLI Scheme for White Goods: 24 applicants selected in the fourth round"
-TEXTILES = "PLI Scheme for Textiles: 10 more applicants approved"
 PHARMA = "PLI Scheme for Pharmaceuticals: beneficiaries expand capacity"
+COMPONENTS = (
+    "Government approves 29 more proposals under the Electronics Component "
+    "Manufacturing Scheme (ECMS)"
+)
+APPEAL = (
+    "Appeal to Employees of Public Sector Banks for Ensuring Uninterrupted Services"
+)
 KAYNES = "Kaynes Semicon Private Limited among PLI approvals"
+TEXTILES = "PLI Scheme for Textiles: 10 more applicants approved"
 
 RSS = _rss(
     (
         f"{WHITE_GOODS} - Press Information Bureau",
         "https://news.google.com/rss/articles/one",
-        # Late on 5 Oct in GMT: 6 Oct in India, and PIB posted it on the 5th.
         "Mon, 05 Oct 2026 19:30:00 GMT",
         "",
     ),
@@ -375,21 +398,35 @@ RSS = _rss(
         "<a href='x'>Kaynes Semicon Private Limited among PLI approvals</a>"
         "<ol><li><a href='y'>Govt approves PLI for drone makers</a></li></ol>",
     ),
+    (
+        # Dated by Google weeks after PIB posted it in September.
+        f"{COMPONENTS} - PIB",
+        "https://news.google.com/rss/articles/four",
+        "Thu, 15 Oct 2026 06:00:00 GMT",
+        "",
+    ),
+    (
+        f"{APPEAL} - PIB",
+        "https://news.google.com/rss/articles/five",
+        "Fri, 16 Oct 2026 06:00:00 GMT",
+        "",
+    ),
 )
 
-# What each day's list holds.
-DAYS = {
-    TODAY: [("Prime Minister greets citizens", "2325041")],
-    datetime.date(2026, 10, 8): [("Cabinet approves a rail line", "2320001")],
-    datetime.date(2026, 10, 7): [
+# What each month's list holds.
+MONTHS = {
+    OCTOBER: [
+        ("Prime Minister greets citizens", "2325041"),
         (PHARMA, "2319001"),
-        ("Prime Minister greets citizens", "2319002"),
-    ],
-    datetime.date(2026, 10, 6): [("Cabinet approves a rail line", "2318001")],
-    datetime.date(2026, 10, 5): [
+        (APPEAL, "2318000"),
         (WHITE_GOODS, "2317001"),
-        (TEXTILES, "2317002"),
         ("Cabinet approves a rail line", "2317003"),
+    ],
+    SEPTEMBER: [
+        (COMPONENTS, "2311234"),
+        # A scheme's release Google did not carry.
+        (TEXTILES, "2310500"),
+        ("Cabinet approves a rail line", "2310001"),
     ],
 }
 
@@ -415,16 +452,28 @@ RELEASES = {
         "<tr><td>2</td><td>Acme Electronics Ltd</td></tr>"
         "<tr><td>3</td><td>Zenith Cooling Systems</td></tr></table>",
     ),
-    "2317002": _release_page(
-        TEXTILES,
-        "05 OCT 2026",
-        "<p>Welspun Living Limited and Zeta Fabrics Private Limited are among "
-        "those approved.</p>",
-    ),
     "2319001": _release_page(
         PHARMA,
         "07 OCT 2026",
         "<p>Companies such as Lupin Limited and Cipla Limited have expanded.</p>",
+    ),
+    "2311234": _release_page(
+        COMPONENTS,
+        "12 SEP 2026",
+        "<p>Proposals approved include those of Delta Components Private Limited "
+        "for multi-layer PCBs.</p>",
+    ),
+    "2310500": _release_page(
+        TEXTILES,
+        "08 SEP 2026",
+        "<p>Welspun Living Limited and Zeta Fabrics Private Limited are among "
+        "those approved.</p>",
+    ),
+    "2318000": _release_page(
+        APPEAL,
+        "06 OCT 2026",
+        "<p>Bank of Baroda Limited and Canara Bank Limited employees are asked "
+        "to ensure services.</p>",
     ),
 }
 
@@ -442,26 +491,28 @@ def _run(monkeypatch, search=(200, RSS), list_status=200):
     import utils
     from analysis import parsing
 
-    asked = {"get": [], "post": [], "resolved": []}
+    asked = {"get": [], "post": [], "resolved": [], "releases": []}
 
     async def fake_fetch(session, url, headers=None, timeout=15):
         asked["get"].append(url)
         if url == pib.LIST_URL:
-            return list_status, _list_page(TODAY, DAYS[TODAY])
+            return list_status, _list_page(2026, 10, 19, MONTHS[OCTOBER][:1])
         query = urllib.parse.parse_qs(urllib.parse.urlparse(url).query)
         if "PRID" in query:
             prid = query["PRID"][0]
+            asked["releases"].append(prid)
             return (200, RELEASES[prid]) if prid in RELEASES else (404, "")
         return search
 
     async def fake_post(session, url, data, headers=None, timeout=30):
         asked["post"].append(data)
-        day = datetime.date(
+        first = datetime.date(
             int(data["ctl00$ContentPlaceHolder1$ddlYear"]),
             int(data["ctl00$ContentPlaceHolder1$ddlMonth"]),
-            int(data["ctl00$ContentPlaceHolder1$ddlday"]),
+            1,
         )
-        return 200, _list_page(day, DAYS.get(day, []))
+        day = data["ctl00$ContentPlaceHolder1$ddlday"]
+        return 200, _list_page(first.year, first.month, day, MONTHS.get(first, []))
 
     async def fake_resolve(name, session):
         asked["resolved"].append(name)
@@ -471,7 +522,9 @@ def _run(monkeypatch, search=(200, RSS), list_status=200):
     monkeypatch.setattr(utils, "post_form_async", fake_post)
     monkeypatch.setattr(parsing, "resolve_ticker_from_name_async", fake_resolve)
     found = asyncio.run(
-        scraper.scrape_pib_pli_approvals_async(None, WATCHLIST, registered=REGISTERED)
+        scraper.scrape_pib_pli_approvals_async(
+            None, WATCHLIST, registered=REGISTERED, today=TODAY
+        )
     )
     return found, asked
 
@@ -482,12 +535,13 @@ def _line(caplog):
     )
 
 
-def test_releases_are_found_on_pibs_own_list_and_read_from_pib(monkeypatch, caplog):
+def test_releases_are_found_on_pibs_own_lists_and_read_from_pib(monkeypatch, caplog):
     with caplog.at_level(logging.INFO):
         found, asked = _run(monkeypatch)
     by_name = {c["name"]: c for c in found}
     assert sorted(by_name) == [
         "Amber Enterprises India Limited",
+        "Delta Components Private Limited",
         "Kaynes Semicon Private Limited",
         "Zenith Cooling Systems",
         "Zeta Fabrics Private Limited",
@@ -505,32 +559,40 @@ def test_releases_are_found_on_pibs_own_list_and_read_from_pib(monkeypatch, capl
     assert (amber["ticker"], amber["status"]) == ("AMBER", "Listed Peer")
     assert "Amber Enterprises India Limited" not in asked["resolved"]
     assert by_name["Zenith Cooling Systems"]["status"] == "Unlisted"
-    # The same day's other PLI release, which Google did not carry.
+    # Found on September's list although Google dated it in October.
+    delta = by_name["Delta Components Private Limited"]
+    assert (delta["sector"], delta["date"]) == ("Electronic Components", "2026-09-12")
+    # A scheme's release Google did not carry.
     assert by_name["Zeta Fabrics Private Limited"]["sector"] == "Textiles"
     # Not on PIB's lists: read from its headline.
     assert by_name["Kaynes Semicon Private Limited"]["found_in"] == "headline"
     assert by_name["Kaynes Semicon Private Limited"]["status"] == "Listed Peer"
-    # PIB's lists were asked for by day: today's came with the page; each
-    # other day was the form posted back with that day.
+    # Each month was the form posted back with the day menu at "All".
     posted = [
-        (d["ctl00$ContentPlaceHolder1$ddlday"], d["__EVENTTARGET"], d["__VIEWSTATE"])
+        (
+            d["ctl00$ContentPlaceHolder1$ddlday"],
+            d["ctl00$ContentPlaceHolder1$ddlMonth"],
+            d["__EVENTTARGET"],
+            d["__VIEWSTATE"],
+        )
         for d in asked["post"]
     ]
     assert posted == [
-        ("8", "ctl00$ContentPlaceHolder1$ddlday", "VS"),
-        ("7", "ctl00$ContentPlaceHolder1$ddlday", "VS"),
-        ("6", "ctl00$ContentPlaceHolder1$ddlday", "VS"),
-        ("5", "ctl00$ContentPlaceHolder1$ddlday", "VS"),
+        ("0", "10", "ctl00$ContentPlaceHolder1$ddlday", "VS"),
+        ("0", "9", "ctl00$ContentPlaceHolder1$ddlday", "VS"),
     ]
     assert asked["get"].count(pib.LIST_URL) == 1
+    # Schemes' releases first, newest first; the rest after.
+    assert asked["releases"] == ["2319001", "2317001", "2311234", "2310500", "2318000"]
     line = _line(caplog)
     assert line.startswith(
-        "PLI approvals: 3 search result(s) in the last 30 days, 3 release(s); "
-        "2 found on PIB's lists of releases (5 day list(s) read), "
-        "1 more PLI release(s) on those days; 3 release(s) read from PIB"
+        "PLI approvals: 5 search result(s) in the last 30 days, 5 release(s); "
+        "4 found on PIB's lists of releases (2 month(s) read), "
+        "1 more it titles as a scheme's; 5 release(s) read from PIB"
     )
     assert "left out under schemes no holding works in: Pharmaceuticals 2" in line
-    assert line.endswith("4 new candidate(s) after removing duplicates and holdings.")
+    assert "2 name(s) left out from releases that name no scheme" in line
+    assert line.endswith("5 new candidate(s) after removing duplicates and holdings.")
 
 
 def test_holdings_menus_and_other_schemes_are_left_out(monkeypatch):
@@ -539,8 +601,9 @@ def test_holdings_menus_and_other_schemes_are_left_out(monkeypatch):
     # Holdings: by name, and by NSE's registered name.
     assert "Acme Electronics Ltd" not in names
     assert "Welspun Living Limited" not in names
-    # Under a scheme no holding works in.
+    # Under a scheme no holding works in, or no scheme at all.
     assert not names & {"Lupin Limited", "Cipla Limited"}
+    assert not names & {"Bank of Baroda Limited", "Canara Bank Limited"}
     # The page around the release, and a cluster summary's other headlines.
     for junk in (
         "Ministry of Heavy Industries",
@@ -551,6 +614,18 @@ def test_holdings_menus_and_other_schemes_are_left_out(monkeypatch):
         assert junk not in names
 
 
+def test_reading_stops_at_the_cap_and_the_rest_fall_back_to_headlines(
+    monkeypatch,
+):
+    monkeypatch.setattr(scraper, "MAX_PLI_RELEASES", 2)
+    found, asked = _run(monkeypatch)
+    assert asked["releases"] == ["2319001", "2317001"]
+    by_name = {c["name"]: c["found_in"] for c in found}
+    assert by_name["Amber Enterprises India Limited"] == "release page"
+    # The components story's headline names no company, so it adds nothing.
+    assert "Delta Components Private Limited" not in by_name
+
+
 def test_pib_refusing_its_list_is_reported_and_asked_once(monkeypatch, caplog):
     with caplog.at_level(logging.INFO):
         found, asked = _run(monkeypatch, list_status=403)
@@ -559,33 +634,50 @@ def test_pib_refusing_its_list_is_reported_and_asked_once(monkeypatch, caplog):
     # Every story falls back to its headline.
     assert [c["name"] for c in found] == ["Kaynes Semicon Private Limited"]
     line = _line(caplog)
-    assert "0 found on PIB's lists of releases (0 day list(s) read)" in line
+    assert "0 found on PIB's lists of releases (0 month(s) read)" in line
     assert "the list of releases returned HTTP 403" in line
 
 
-def test_a_list_that_will_not_change_day_stops_the_asking(monkeypatch):
+def test_a_list_that_will_not_show_the_month_stops_the_asking(monkeypatch):
     import utils
 
     async def fake_fetch(session, url, headers=None, timeout=15):
-        return 200, _list_page(TODAY, [])
+        return 200, _list_page(2026, 10, 19, [])
 
     async def fake_post(session, url, data, headers=None, timeout=30):
-        return 200, _list_page(TODAY, [])
+        return 200, _list_page(2026, 10, 19, [])
 
     monkeypatch.setattr(utils, "fetch_text_async", fake_fetch)
     monkeypatch.setattr(utils, "post_form_async", fake_post)
-    index = pib.DayIndex(None)
-    day = datetime.date(2026, 10, 5)
-    assert asyncio.run(index.releases_on(day)) == []
-    assert "would not show 2026-10-05" in index.failed
-    assert asyncio.run(index.releases_on(datetime.date(2026, 10, 4))) is None
+    index = pib.MonthIndex(None)
+    assert asyncio.run(index.releases_in(SEPTEMBER)) == []
+    assert "would not show September 2026" in index.failed
+    assert asyncio.run(index.releases_in(datetime.date(2026, 8, 1))) is None
 
 
-def test_an_empty_search_says_so(monkeypatch, caplog):
+def test_an_empty_search_still_reads_pibs_scheme_releases(monkeypatch, caplog):
     with caplog.at_level(logging.INFO):
         found, asked = _run(monkeypatch, search=(404, ""))
+    # Without Google, the releases PIB titles as a scheme's are still read.
+    assert sorted(c["name"] for c in found) == [
+        "Amber Enterprises India Limited",
+        "Delta Components Private Limited",
+        "Zenith Cooling Systems",
+        "Zeta Fabrics Private Limited",
+    ]
+    line = _line(caplog)
+    assert line.startswith(
+        "PLI approvals: search returned HTTP 404; 0 found on PIB's lists of "
+        "releases (2 month(s) read), 4 more it titles as a scheme's"
+    )
+    assert line.endswith("4 new candidate(s) after removing duplicates and holdings.")
+
+
+def test_nothing_anywhere_says_so(monkeypatch, caplog):
+    with caplog.at_level(logging.INFO):
+        found, _ = _run(monkeypatch, search=(404, ""), list_status=503)
     assert found == []
-    assert asked["post"] == []
     line = _line(caplog)
     assert line.startswith("PLI approvals: search returned HTTP 404")
+    assert "the list of releases returned HTTP 503" in line
     assert line.endswith("0 new candidate(s) after removing duplicates and holdings.")

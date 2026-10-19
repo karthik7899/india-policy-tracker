@@ -571,15 +571,15 @@ def probe_nse_calendar():
 async def probe_pib_pli():
     """The PLI scraper's own path, a step at a time, against the live sites.
 
-    Google News for the stories; PIB's list of each story's day for its
-    release; each release's own page for the names, with the scheme each was
+    Google News for the stories; PIB's lists of this month's and last month's
+    releases for each story's release, and for the releases PIB titles as a
+    scheme's; each release's own page for the names, with the scheme each was
     read under, before the scraper keeps those under a scheme a holding works
     in; then the scraper itself, end to end, on today's watchlist. What the
     probes that built it found is in docs/upstream-findings.md.
     """
     import aiohttp
     import feedparser
-    from bs4 import BeautifulSoup
 
     import scraper
     from config import load_watchlist
@@ -593,114 +593,29 @@ async def probe_pib_pli():
         entries = feedparser.parse(xml).entries if status == 200 else []
         stories = scraper._stories(entries)
         print(f"  HTTP {status}: {len(entries)} result(s), {len(stories)} release(s)")
-        for story in stories[:12]:
-            days = ", ".join(d.isoformat() for d in sorted(story["days"]))
-            print(f"    - [{days}] {story['title'][:100]}")
 
-        print(f"\n{'=' * 72}\nPIB: each release on its day's list\n{'=' * 72}")
-        index = pib.DayIndex(session)
-        located, extras, unfound = await scraper._locate_on_pib(stories, index)
         print(
-            f"  {index.read} day list(s) read{'; ' + index.failed if index.failed else ''}"
+            f"\n{'=' * 72}\nPIB: its lists of this month's and last month's releases\n{'=' * 72}"
         )
-        for item in located:
+        index = pib.MonthIndex(session)
+        ranked, unfound = await scraper._locate_on_pib(
+            stories, index, pib.today_in_india()
+        )
+        for first, links in index.months.items():
+            print(f"  {first:%B %Y}: {len(links)} release(s)")
+        if index.failed:
+            print(f"  {index.failed}")
+        for item in ranked:
+            source = "Google" if "story" in item else "PIB title"
             print(
-                f"    found   {item['day']} PRID {item['prid']}: {item['title'][:80]}"
-            )
-        for item in extras:
-            print(
-                f"    same day {item['day']} PRID {item['prid']}: {item['title'][:80]}"
+                f"    {scraper._relevance(item['title'])} PRID {item['prid']} "
+                f"({source}): {item['title'][:85]}"
             )
         for story in unfound:
-            print(f"    not found: {story['title'][:90]}")
-        # Why a story was not found: each list's size, and the nearest title
-        # to the story's on any day read.
-        for day, links in sorted(index.days.items()):
-            sample = links[0][0][:70] if links else "-"
-            print(f"    list {day}: {len(links)} release(s); first: {sample}")
-        for story in unfound[:12]:
-            want = set(pib.title_words(story["title"]))
-            scored = [
-                (
-                    len(want & set(pib.title_words(t)))
-                    / len(want | set(pib.title_words(t))),
-                    day,
-                    prid,
-                    t,
-                )
-                for day, links in index.days.items()
-                for t, prid, _ in links
-            ]
-            if scored and want:
-                score, day, prid, t = max(scored)
-                print(
-                    f"    nearest to '{story['title'][:45]}': {score:.2f}, {day} PRID {prid}: {t[:75]}"
-                )
+            print(f"    not on the lists: {story['title'][:90]}")
 
-        # A whole month at once: the day menu's first option is "All". If it
-        # answers, Google's dates (which can be when Google saw a page, not
-        # when PIB posted it) stop mattering.
-        print(f"\n{'=' * 72}\nPIB: a whole month's list (day menu 'All')\n{'=' * 72}")
-        import datetime
-
-        from utils import post_form_async
-
-        if index.fields:
-            ministries = BeautifulSoup(
-                (await fetch_text_async(session, pib.LIST_URL, timeout=20))[1], "lxml"
-            ).find("select", {"name": "ctl00$ContentPlaceHolder1$ddlMinistry"})
-            if ministries is not None:
-                names = [
-                    f"{o.get('value')}={o.get_text(strip=True)[:28]}"
-                    for o in ministries.find_all("option")
-                ]
-                print(f"  ministry menu ({len(names)}): {'; '.join(names)[:1500]}")
-            this_month = datetime.date.today().replace(day=1)
-            last_month = (this_month - datetime.timedelta(days=1)).replace(day=1)
-            for month in (this_month, last_month):
-                data = dict(index.fields)
-                data.update(
-                    {
-                        "ctl00$ContentPlaceHolder1$ddlday": "0",
-                        "ctl00$ContentPlaceHolder1$ddlMonth": str(month.month),
-                        "ctl00$ContentPlaceHolder1$ddlYear": str(month.year),
-                        "__EVENTTARGET": "ctl00$ContentPlaceHolder1$ddlday",
-                        "__EVENTARGUMENT": "",
-                    }
-                )
-                try:
-                    status, html = await post_form_async(
-                        session, pib.LIST_URL, data, timeout=90
-                    )
-                except Exception as e:  # noqa: BLE001 - report and go on
-                    print(f"  {month:%Y-%m}: FAILED {type(e).__name__}: {e}")
-                    continue
-                links = pib.release_links(html)
-                shown = pib.form_fields(html)
-                pli = [x for x in links if scraper._PLI_TITLE_RE.search(x[0])]
-                print(
-                    f"  {month:%Y-%m}: HTTP {status}, {len(html)} bytes, "
-                    f"{len(links)} release(s), {len(pli)} PLI-titled; the page shows "
-                    f"day {shown.get('ctl00$ContentPlaceHolder1$ddlday')!r} month "
-                    f"{shown.get('ctl00$ContentPlaceHolder1$ddlMonth')!r}"
-                )
-                for title, prid, _ in pli[:20]:
-                    print(f"    PLI: PRID {prid}: {title[:95]}")
-                for story in unfound[:20]:
-                    hit = next(
-                        (x for x in links if pib.same_title(x[0], story["title"])), None
-                    )
-                    if hit:
-                        print(f"    has '{story['title'][:55]}' as PRID {hit[1]}")
-                if links:
-                    at = html.find(f"PRID={links[0][1]}")
-                    context = BeautifulSoup(html[max(0, at - 1500) : at], "lxml")
-                    print(
-                        f"    before the first link: ...{context.get_text(' | ', strip=True)[-300:]}"
-                    )
-
-        print(f"\n{'=' * 72}\nPIB: what each release names\n{'=' * 72}")
-        for item in (located + extras)[: scraper.MAX_PLI_RELEASES]:
+        print(f"\n{'=' * 72}\nPIB: what each release to be read names\n{'=' * 72}")
+        for item in ranked[: scraper.MAX_PLI_RELEASES]:
             status, page = await fetch_text_async(
                 session, pib.release_url(item["prid"]), timeout=20
             )
@@ -724,7 +639,7 @@ async def probe_pib_pli():
                 f"    * {c['name']} ({c['status']}, {c.get('ticker')}) | "
                 f"{c['sector']} | {c['found_in']} | {c['announcement'][:60]}"
             )
-    return bool(located)
+    return bool(index.read)
 
 
 SOURCES = {

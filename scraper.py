@@ -191,6 +191,11 @@ _SCHEME_PLI_RE = re.compile(
 )
 
 
+# How far into a line a scheme may be named and still be what the line is
+# about: "a) PLI Scheme for ...", "The Government approved the PLI Scheme for".
+_OPENS_LINE = 40
+
+
 def _schemes_named(text):
     """``(position, scheme)`` for each PLI scheme ``text`` names, in order."""
     return [
@@ -346,9 +351,11 @@ def _extract_pli_data_from_html(html, title, published_date="", title_only=False
     Scheme for Bulk Drugs for Resilient Pharmaceutical Supply Chain" is about
     bulk drugs), or names only one. A release about several ("... India's
     Pharmaceutical, Bulk Drugs and Medical Devices ...") gives each company
-    the scheme its text last named as the scheme before it ("b) PLI Scheme for
-    Pharmaceuticals"), failing that the last it mentioned at all, a company's
-    own name aside. ``title_only`` reads the scheme from the title alone, for
+    the scheme of the section it is in, a line that opens by naming the scheme
+    ("b) PLI Scheme for Pharmaceuticals"); failing that, the last scheme the
+    text mentioned, a company's own name aside. A scheme named deep in a
+    paragraph is a passing reference ("... APIs not covered under the Bulk
+    Drugs PLI Scheme") and opens no section. ``title_only`` reads the scheme from the title alone, for
     a headline whose summary is other outlets' headlines. ``scheme_sectors``
     is the watchlist sectors that compete under that scheme, or None when no
     scheme could be told.
@@ -371,7 +378,7 @@ def _extract_pli_data_from_html(html, title, published_date="", title_only=False
     for line in lines:
         names = _names_in_line(line)
         spans = [(at, at + len(raw)) for at, raw in names]
-        meant = _schemes_meant(line)
+        meant = [(pos, lab) for pos, lab in _schemes_meant(line) if pos <= _OPENS_LINE]
         mentioned = [
             (pos, label)
             for pos, label in _schemes_named(line)
@@ -626,16 +633,25 @@ async def fetch_state_policy_async(session, today=None):
     return items
 
 
-# Releases read from PIB per run, and PIB's lists of a day's releases asked
-# for. A list is about 200 KB and a release about 130 KB, and PIB is a
+# Releases read from PIB per run, and the months of PIB's list of releases
+# asked for: this one and the last, so a run on the 1st still sees 30 days. A
+# month's list is about a megabyte and a release about 130 KB, and PIB is a
 # government site: each is asked for in turn, never in parallel.
 MAX_PLI_RELEASES = 8
-MAX_PIB_DAYS = 8
+PIB_MONTHS = 2
 # Release fetches that may fail before PIB is left alone for the run.
 _PIB_FAILURES = 2
 # Names looked up on Yahoo at once.
 _RESOLVE_AT_ONCE = 5
-_PLI_TITLE_RE = re.compile(r"\bpli\b|production[\s-]+linked\s+incentive", re.I)
+# A release about an incentive scheme: PLI, and the newer schemes run the
+# same way ("Electronics Component Manufacturing Scheme").
+_PLI_TITLE_RE = re.compile(
+    r"\bpli\b|production[\s-]+linked\s+incentive|\bmanufacturing\s+scheme\b", re.I
+)
+# What a title says when the release may name a scheme's beneficiaries.
+_SCHEME_NEWS_RE = re.compile(
+    r"\b(?:schemes?|incentives?|approv\w*|selected|beneficiar\w*)\b", re.I
+)
 
 
 def pli_search_url():
@@ -688,76 +704,68 @@ def _stories(entries):
         day = pib.ist_day(entry.get("published"))
         if day:
             story["days"].add(day)
-    # PLI in the title first: the search also finds PIB's backgrounders,
-    # which mention the scheme in passing and are not on its list of releases.
     return sorted(
         stories.values(),
-        key=lambda s: (
-            bool(_PLI_TITLE_RE.search(s["title"])),
-            max(s["days"], default=datetime.date.min),
-        ),
+        key=lambda s: max(s["days"], default=datetime.date.min),
         reverse=True,
     )
 
 
-def _days_to_ask(days):
-    """Each day Google dated a story, oldest first, then the day before it:
-    Google dates a story when it saw it, which can be after PIB posted it."""
-    asked = []
-    for day in sorted(days):
-        for d in (day, day - datetime.timedelta(days=1)):
-            if d not in asked:
-                asked.append(d)
-    return asked
+def _relevance(title):
+    """2 for a release about an incentive scheme, 1 for one that may name a
+    scheme's beneficiaries, 0 for the rest: Google's search also finds PIB
+    pages that mention PLI in passing ("India's GDP Performance")."""
+    if _PLI_TITLE_RE.search(title):
+        return 2
+    return int(bool(_SCHEME_RE.search(title) or _SCHEME_NEWS_RE.search(title)))
 
 
-async def _locate_on_pib(stories, index):
-    """Each story's release on PIB's list of its day's releases.
+async def _locate_on_pib(stories, index, today):
+    """The releases to read, from PIB's lists of this month's and last
+    month's releases: each story's own, found by its title whatever day
+    Google gave it, and every release PIB titles as an incentive scheme's.
 
-    Returns the releases found, those days' other PLI releases, and the
-    stories not found, whose names can come only from their headlines.
+    Returns them most relevant and then newest first (PRIDs rise with time),
+    and the stories not on the lists, whose names can come only from their
+    headlines.
     """
     from providers import pib
 
-    located, extras, unfound, queued = [], [], [], set()
+    listed = {}
+    for first in pib.months_to(today, PIB_MONTHS):
+        releases = await index.releases_in(first)
+        if releases is None:
+            break
+        for title, prid, link in releases:
+            listed.setdefault(prid, (title, link, pib.title_words(title)))
+    chosen, unfound = {}, []
     for story in stories:
-        hit = None
-        if (
-            len(located) < MAX_PLI_RELEASES
-            and len(pib.title_words(story["title"])) >= 3
-        ):
-            # Its own days, then any day already read, which costs nothing.
-            days = _days_to_ask(story["days"])
-            days += sorted(set(index.days) - set(days), reverse=True)
-            for day in days:
-                if day not in index.days and index.read >= MAX_PIB_DAYS:
-                    continue
-                releases = await index.releases_on(day)
-                if releases is None:
-                    if index.failed:
-                        break
-                    continue
-                match = next(
-                    (r for r in releases if pib.same_title(r[0], story["title"])), None
-                )
-                if match:
-                    hit = {"title": match[0], "prid": match[1], "link": match[2]}
-                    hit.update(day=day, story=story)
-                    extras += [
-                        {"title": t, "prid": prid, "link": link, "day": day}
-                        for t, prid, link in releases
-                        if prid != match[1] and _PLI_TITLE_RE.search(t)
-                    ]
-                    break
-        if hit is None:
+        want = pib.title_words(story["title"])
+        match = None
+        if len(want) >= 3:
+            match = next(
+                (
+                    p
+                    for p, (_, _, words) in listed.items()
+                    if pib.same_words(want, words)
+                ),
+                None,
+            )
+        if match is None:
             unfound.append(story)
-        elif hit["prid"] not in queued:
-            queued.add(hit["prid"])
-            located.append(hit)
-    extras = [
-        e for e in {e["prid"]: e for e in extras}.values() if e["prid"] not in queued
-    ]
-    return located, extras, unfound
+            continue
+        title, link, _ = listed[match]
+        chosen.setdefault(match, {"prid": match, "title": title, "link": link})
+        chosen[match].setdefault("story", story)
+    for prid, (title, link, _) in listed.items():
+        if prid not in chosen and _PLI_TITLE_RE.search(title):
+            chosen[prid] = {"prid": prid, "title": title, "link": link}
+    ranked = sorted(
+        chosen.values(),
+        key=lambda r: (_relevance(r["title"]), int(r["prid"])),
+        reverse=True,
+    )
+    return ranked, unfound
 
 
 def _held(watchlist, registered):
@@ -784,16 +792,19 @@ def _is_held(key, held_keys):
     return key in held_keys or any(len(k) >= 6 and key.startswith(k) for k in held_keys)
 
 
-async def scrape_pib_pli_approvals_async(session, watchlist, registered=None):
+async def scrape_pib_pli_approvals_async(
+    session, watchlist, registered=None, today=None
+):
     """PLI beneficiaries named in PIB releases from the last 30 days.
 
     Google News says which releases there were, but every link it gives
     leads to its own page, not to pib.gov.in, and this returned nothing on
     every run from at least mid-September 2026. Each story is now found by
-    its title on PIB's own list of that day's releases, and the release is
-    read from PIB: its text only, not the site's menus and sidebars. Those
-    days' other PLI releases are read as well. A story PIB's list does not
-    have is read from its headline, which names a company only now and then.
+    its title on PIB's own list of this month's and last month's releases,
+    and read from PIB: the release's text only, not the site's menus and
+    sidebars. Every release on those lists that PIB titles as an incentive
+    scheme's is read too. A story the lists do not have is read from its
+    headline, which names a company only now and then.
 
     A beneficiary is reported only under a scheme some holding works in
     (config.PLI_SCHEMES), and not when it is a holding: a holding's own
@@ -822,10 +833,10 @@ async def scrape_pib_pli_approvals_async(session, watchlist, registered=None):
         search_note = f"search failed ({type(e).__name__})"
     stories = _stories(entries)
 
-    index = pib.DayIndex(session)
-    located, extras, unread = await _locate_on_pib(stories, index)
-    to_read = (located + extras)[:MAX_PLI_RELEASES]
-    unread += [r["story"] for r in located if r not in to_read]
+    index = pib.MonthIndex(session)
+    ranked, unread = await _locate_on_pib(stories, index, today or pib.today_in_india())
+    to_read = ranked[:MAX_PLI_RELEASES]
+    unread += [r["story"] for r in ranked[MAX_PLI_RELEASES:] if "story" in r]
 
     found, from_releases, failed, no_text = [], 0, 0, 0
     for item in to_read:
@@ -854,9 +865,7 @@ async def scrape_pib_pli_approvals_async(session, watchlist, registered=None):
             unread += [story] if story else []
             continue
         title = release["title"] or item["title"]
-        names = _extract_pli_data_from_html(
-            release["html"], title, release["date"] or item["day"].isoformat()
-        )
+        names = _extract_pli_data_from_html(release["html"], title, release["date"])
         from_releases += 1
         for comp in names:
             comp.update(announcement=title, link=item["link"], found_in="release page")
@@ -881,9 +890,14 @@ async def scrape_pib_pli_approvals_async(session, watchlist, registered=None):
     for symbol, name in registered.items():
         by_key.setdefault(_name_key(name), set()).add(symbol)
     sectors_held = set(watchlist)
-    off_scheme, seen, candidates = {}, set(), []
+    off_scheme, no_scheme, seen, candidates = {}, 0, set(), []
     for comp in found:
         scheme_sectors = comp.pop("scheme_sectors", None)
+        if scheme_sectors is None and comp["found_in"] == "release page":
+            # A release that names no scheme is not about one: PIB's
+            # appeal to bank employees came up in the PLI search too.
+            no_scheme += 1
+            continue
         if scheme_sectors is not None:
             mine = [s for s in scheme_sectors if s in sectors_held]
             if not mine:
@@ -924,6 +938,8 @@ async def scrape_pib_pli_approvals_async(session, watchlist, registered=None):
         )
 
     # One line that says where an empty result came from.
+    located = sum(1 for r in ranked if "story" in r)
+    listed_pli = len(ranked) - located
     by_source = {
         source: sum(1 for c in found if c["found_in"] == source)
         for source in ("release page", "headline")
@@ -935,13 +951,8 @@ async def scrape_pib_pli_approvals_async(session, watchlist, registered=None):
             or f"{len(entries)} search result(s) in the last 30 days, "
             f"{len(stories)} release(s)"
         )
-        + (
-            f"; {len(located)} found on PIB's lists of releases "
-            f"({index.read} day list(s) read)"
-            if stories
-            else ""
-        )
-        + (f", {len(extras)} more PLI release(s) on those days" if extras else "")
+        + f"; {located} found on PIB's lists of releases ({index.read} month(s) read)"
+        + (f", {listed_pli} more it titles as a scheme's" if listed_pli else "")
         + (f"; {index.failed}" if index.failed else "")
         + f"; {from_releases} release(s) read from PIB"
         + (f", {no_text} without a release's text" if no_text else "")
@@ -952,6 +963,11 @@ async def scrape_pib_pli_approvals_async(session, watchlist, registered=None):
             "; left out under schemes no holding works in: "
             + ", ".join(f"{s} {n}" for s, n in sorted(off_scheme.items()))
             if off_scheme
+            else ""
+        )
+        + (
+            f"; {no_scheme} name(s) left out from releases that name no scheme"
+            if no_scheme
             else ""
         )
         + f"; {len(deduped)} new candidate(s) after removing duplicates and "
