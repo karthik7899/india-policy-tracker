@@ -579,6 +579,7 @@ async def probe_pib_pli():
     """
     import aiohttp
     import feedparser
+    from bs4 import BeautifulSoup
 
     import scraper
     from config import load_watchlist
@@ -635,6 +636,68 @@ async def probe_pib_pli():
                 print(
                     f"    nearest to '{story['title'][:45]}': {score:.2f}, {day} PRID {prid}: {t[:75]}"
                 )
+
+        # A whole month at once: the day menu's first option is "All". If it
+        # answers, Google's dates (which can be when Google saw a page, not
+        # when PIB posted it) stop mattering.
+        print(f"\n{'=' * 72}\nPIB: a whole month's list (day menu 'All')\n{'=' * 72}")
+        import datetime
+
+        from utils import post_form_async
+
+        if index.fields:
+            ministries = BeautifulSoup(
+                (await fetch_text_async(session, pib.LIST_URL, timeout=20))[1], "lxml"
+            ).find("select", {"name": "ctl00$ContentPlaceHolder1$ddlMinistry"})
+            if ministries is not None:
+                names = [
+                    f"{o.get('value')}={o.get_text(strip=True)[:28]}"
+                    for o in ministries.find_all("option")
+                ]
+                print(f"  ministry menu ({len(names)}): {'; '.join(names)[:1500]}")
+            this_month = datetime.date.today().replace(day=1)
+            last_month = (this_month - datetime.timedelta(days=1)).replace(day=1)
+            for month in (this_month, last_month):
+                data = dict(index.fields)
+                data.update(
+                    {
+                        "ctl00$ContentPlaceHolder1$ddlday": "0",
+                        "ctl00$ContentPlaceHolder1$ddlMonth": str(month.month),
+                        "ctl00$ContentPlaceHolder1$ddlYear": str(month.year),
+                        "__EVENTTARGET": "ctl00$ContentPlaceHolder1$ddlday",
+                        "__EVENTARGUMENT": "",
+                    }
+                )
+                try:
+                    status, html = await post_form_async(
+                        session, pib.LIST_URL, data, timeout=90
+                    )
+                except Exception as e:  # noqa: BLE001 - report and go on
+                    print(f"  {month:%Y-%m}: FAILED {type(e).__name__}: {e}")
+                    continue
+                links = pib.release_links(html)
+                shown = pib.form_fields(html)
+                pli = [x for x in links if scraper._PLI_TITLE_RE.search(x[0])]
+                print(
+                    f"  {month:%Y-%m}: HTTP {status}, {len(html)} bytes, "
+                    f"{len(links)} release(s), {len(pli)} PLI-titled; the page shows "
+                    f"day {shown.get('ctl00$ContentPlaceHolder1$ddlday')!r} month "
+                    f"{shown.get('ctl00$ContentPlaceHolder1$ddlMonth')!r}"
+                )
+                for title, prid, _ in pli[:20]:
+                    print(f"    PLI: PRID {prid}: {title[:95]}")
+                for story in unfound[:20]:
+                    hit = next(
+                        (x for x in links if pib.same_title(x[0], story["title"])), None
+                    )
+                    if hit:
+                        print(f"    has '{story['title'][:55]}' as PRID {hit[1]}")
+                if links:
+                    at = html.find(f"PRID={links[0][1]}")
+                    context = BeautifulSoup(html[max(0, at - 1500) : at], "lxml")
+                    print(
+                        f"    before the first link: ...{context.get_text(' | ', strip=True)[-300:]}"
+                    )
 
         print(f"\n{'=' * 72}\nPIB: what each release names\n{'=' * 72}")
         for item in (located + extras)[: scraper.MAX_PLI_RELEASES]:
