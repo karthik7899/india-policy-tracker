@@ -1456,3 +1456,39 @@ def test_only_the_statement_that_someone_is_spared_is_skipped():
         == "order_win"
     )
     assert first_event_clause("Dixon unaffected by weak demand") is None
+
+
+def test_a_cut_headline_is_graded_from_what_is_left_and_never_firmer():
+    """Not read again, but graded again from its visible part: the weakest
+    reading wins, so a firmer grade than the one stored is never right."""
+    from analysis.event_engine import HEADLINE_KEPT
+
+    wl = {
+        "aerospace_defence": [
+            {"ticker": "BEL", "name": "Bharat Electronics"},
+            {"ticker": "ASTRAMICRO", "name": "Astra Microwave Products"},
+        ]
+    }
+    tail = " for radar subsystems, electronic warfare suites" * 4
+    mou = {
+        "headline": ("Astra Microwave, BEL Sign MoU for Defence Electronics" + tail)[
+            :HEADLINE_KEPT
+        ],
+        "event_type": "tie_up",
+        "phrase": "mou",
+        # Filed before the plural verb was read.
+        "certainty": "completed",
+        "domains": [],
+        "date": _TODAY,
+    }
+    rumour = dict(
+        mou,
+        headline=("Astra Microwave and BEL partner on radar" + tail)[:HEADLINE_KEPT],
+        phrase="partner",
+        # Its "reportedly" was past the cut.
+        certainty="reported",
+    )
+    assert len(mou["headline"]) == len(rumour["headline"]) == HEADLINE_KEPT
+    kept = {e["headline"]: e for e in refresh_merged_events([mou, rumour], wl)}
+    assert kept[mou["headline"]]["certainty"] == "announced"
+    assert kept[rumour["headline"]]["certainty"] == "reported"

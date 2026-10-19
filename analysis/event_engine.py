@@ -390,6 +390,15 @@ _CERTAINTY_PATTERNS = {
 }
 
 CERTAINTY_COMPLETED = "completed"
+_CERTAINTY_RANK = {"reported": 0, "announced": 1, CERTAINTY_COMPLETED: 2}
+
+
+def _weaker(stored: Optional[str], seen: str) -> str:
+    """The less settled of two grades; ``seen`` when nothing was stored."""
+    if stored not in _CERTAINTY_RANK:
+        return seen
+    return min(stored, seen, key=lambda g: _CERTAINTY_RANK.get(g, 2))
+
 
 # How binding an event is, in the words policy_impact uses for a measure
 # (PR #211): a completed award, order or approval is hard; an MoU, a lowest
@@ -916,8 +925,13 @@ def refresh_merged_events(
                 continue
             else:
                 clause = event_clause(event)
-                if not event.get("certainty"):
-                    event["certainty"] = classify_certainty(clause)
+                # Graded from what is left, but never firmer than it was:
+                # the weakest reading wins, so the cut part could only have
+                # weakened it. An MoU an older version filed as completed is
+                # soft; a "reportedly" past the cut stays reported.
+                event["certainty"] = _weaker(
+                    event.get("certainty"), classify_certainty(clause)
+                )
             actors = clause_actors(
                 clause, event.get("event_type"), event.get("phrase"), holdings
             )
