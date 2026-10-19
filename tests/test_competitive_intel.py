@@ -243,14 +243,15 @@ def test_the_challengers_own_name_is_not_the_turf():
 
 def test_a_foreign_company_abroad_is_not_on_our_turf():
     watchlist = {"data_center_support": [{"ticker": "ANANTRAJ", "name": "Anant Raj"}]}
-    assert (
-        _entrants(
-            "Philippines' Globe Telecom targets US$1 billion AI and data centre "
-            "investment by 2027",
-            watchlist=watchlist,
-        )
-        == []
-    )
+    for headline in (
+        "Philippines' Globe Telecom targets US$1 billion AI and data centre "
+        "investment by 2027",
+        "US-based Lumen targets data centre push",
+        # The place before more than one descriptor (review on #221).
+        "Taiwanese electronics giant Foxconn targets US$1 billion data centre "
+        "investment",
+    ):
+        assert _entrants(headline, watchlist=watchlist) == [], headline
     # Coming to India is exactly what the radar is for.
     for headline in (
         "Taiwan's Foxconn eyes Indian EMS market",
@@ -258,6 +259,9 @@ def test_a_foreign_company_abroad_is_not_on_our_turf():
     ):
         entrants = _entrants(headline)
         assert [e["challenger"] for e in entrants] == ["Foxconn"], headline
+    # A function word ends the qualifier: China is not Amber's.
+    entrants = _entrants("US tariffs hit China as Amber eyes laptop PCB orders")
+    assert [e["challenger"] for e in entrants] == ["Amber"]
 
 
 # ---------------------------------------------------------------------------

@@ -16,7 +16,7 @@ import re
 from typing import Any, Dict, List, Tuple
 
 from analysis.counterparty import _COUNTRIES, _NON_COMMERCIAL
-from analysis.parsing import title_matches_company
+from analysis.parsing import _FUNCTION_WORDS, title_matches_company
 from analysis.policy_impact import _STATES
 from config import SECTOR_METADATA
 from logger import log
@@ -149,14 +149,28 @@ _CHALLENGER_RE = re.compile(
     r"(?:eyes|enters|targets|forays|sets|wins|bags|begins|starts|expands|ramps|plans)\b"
 )
 
-# A name introduced as foreign: "Philippines' Globe Telecom", "Japanese firm
-# Murata", "US-based Lumen". The place is read off the words right before it.
-_FOREIGN_INTRO_RE = re.compile(
-    r"\b([A-Za-z]+)(?:['’]s?|-based)?\s+"
-    r"(?:(?:firm|company|major|giant|group|maker|operator)\s+)?$",
-    re.IGNORECASE,
-)
 _FOREIGN = _COUNTRIES - {"india", "indian"}
+_PLACE_SUFFIX_RE = re.compile(r"(?:['’]s?|-based)$", re.IGNORECASE)
+_DESCRIPTOR_RE = re.compile(r"[a-z][a-z'’-]*")
+
+
+def _introduced_as_foreign(before: str) -> bool:
+    """Whether the words right before a name introduce it as foreign:
+    "Philippines' Globe Telecom", "US-based Lumen", "Taiwanese electronics
+    giant Foxconn". As counterparty.py reads "French company Safran": a place,
+    then at most three lowercase descriptors, then the name."""
+    words = before.split()
+    descriptors = 0
+    while (
+        words
+        and descriptors < 3
+        and _DESCRIPTOR_RE.fullmatch(words[-1])
+        and words[-1] not in _FUNCTION_WORDS
+    ):
+        words.pop()
+        descriptors += 1
+    return bool(words) and _PLACE_SUFFIX_RE.sub("", words[-1]).lower() in _FOREIGN
+
 
 # Signs that a move touches India: the country, a state, or rupees.
 _INDIA_RE = re.compile(
@@ -309,8 +323,7 @@ def _extract_challenger(headline: str, data: Dict[str, Any]) -> Tuple[str, str]:
     if any(tok in _NON_COMPANIES for tok in candidate.lower().split()):
         return "", ""
     start, end = match.span(1)
-    intro = _FOREIGN_INTRO_RE.search(headline[:start])
-    if intro and intro.group(1).lower() in _FOREIGN and not _INDIA_RE.search(headline):
+    if _introduced_as_foreign(headline[:start]) and not _INDIA_RE.search(headline):
         return "", ""
     return candidate, headline[:start] + headline[end:]
 
