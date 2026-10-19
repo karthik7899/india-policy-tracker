@@ -17,6 +17,49 @@ named.
 
 ---
 
+## Google News never links to PIB; PIB's own list of a day's releases does
+
+**Measured 2026-10-19**, runs 39235376433 and 39259347814 (`probe_upstream.py
+--source pib-pli`, which now runs the scraper's own path a step at a time).
+
+**Google News** answers the PLI search (30 results for 30 days), but its links
+lead to Google's own page: HTTP 200, 584 KB, titled "Google News", never naming
+pib.gov.in. The scraper took that page for the release and found no names in
+it; the daily log said "5 link(s) led to a page that was not the release".
+
+**PIB's RSS feed** is no way round it. `RssMain.aspx?ModId=6&Lang=1&Regid=3`
+redirects to `Lang=2&reg=48`, the Hindi feed, whatever the address asks for,
+and holds 20 releases: a few hours of PIB's day.
+
+**`allRel.aspx?reg=3&lang=1`**, PIB Delhi's list in English, is an ASP.NET form.
+A GET is today's list. The form posted back with `ddlday`, `ddlMonth` and
+`ddlYear` set and `__EVENTTARGET=ctl00$ContentPlaceHolder1$ddlday`, as its day
+menu does, is that day's list: 77 releases for 25 September, each linked as
+`/PressReleaseDetail.aspx?PRID=N`. Use the www host; the bare one redirects. A
+Google headline matched PIB's title on the list for its own day.
+
+**A release page is a shell.** The release is in
+`iframe#ContentPlaceHolder1_iframepressrealese`, and the shell's sidebar of
+other releases is where the old parser found its names.
+`PressReleaseIframePage.aspx?PRID=N&reg=3&lang=1` is the release alone (130 KB).
+Its text is in `div.innner-page-main-about-us-content-right-part` (sic), with
+the title in `h1#Titleh2` and "Posted On: 25 SEP 2026 4:36PM by PIB Delhi" in
+`#PrDateTime`. The page's ten `<li>` and its one table (the ministry's name)
+are outside that block, and the release's text is on the page twice.
+
+**How a release names companies**: in running text, in `<strong>`, with a
+legal suffix ("Lyfius Pharma Pvt. Ltd., a subsidiary of Aurobindo Pharma
+Limited"), and as "Companies such as GE Healthcare, Siemens, Philips, Varex,
+Nipro and Omron", without one. The old parser read "Dr. Reddy's Laboratories
+Limited" as "Laboratories Limited" (it allowed no stop or apostrophe inside a
+name), missed "Pvt. Ltd." and every name without a suffix, and took any phrase
+ending "Industries" for a company. All 18 companies named that day were under
+the pharmaceutical, bulk drug and medical device schemes, which no holding works
+in: the reason the scraper now reports a beneficiary only under a scheme one
+does (`config.PLI_SCHEMES`).
+
+---
+
 ## Screener's peer tables cut names short; NSE's equity list has them whole
 
 **Measured 2026-10-15**, run 38730401675 (`probe_upstream.py --source

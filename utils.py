@@ -230,6 +230,24 @@ async def fetch_text_async(session, url, headers=None, timeout=15):
         return response.status, await response.text()
 
 
+@retry_network(max_retries=3, base_delay=2.0)
+async def post_form_async(session, url, data, headers=None, timeout=30):
+    """``fetch_text_async`` for a form's post: the page its submit returns.
+
+    Retried like a fetch, which is safe only for a form that asks rather than
+    changes anything, such as a search or a page's date menu.
+    """
+    async with session.post(
+        url, data=data, headers=headers, timeout=timeout
+    ) as response:
+        if response.status in (408, 429, 500, 502, 503, 504):
+            raise TransientNetworkError(
+                f"HTTP {response.status} for {url}",
+                retry_after=retry_after_of(response),
+            )
+        return response.status, await response.text()
+
+
 import threading  # noqa: E402
 
 _THREAD_SESSIONS = threading.local()

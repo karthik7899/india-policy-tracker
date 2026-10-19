@@ -579,6 +579,90 @@ STATE_INDUSTRY_QUERIES = {
     for state in ("Gujarat", "Maharashtra", "Tamil Nadu", "Karnataka", "Telangana")
 }
 
+# The PLI schemes, the words a PIB release names each by, and the watchlist
+# sectors whose companies compete for it. A beneficiary is an emerging
+# competitor only under a scheme some holding works in: on 25 September PIB
+# named eighteen pharmaceutical, bulk-drug and medical-device companies, and
+# no holding makes any of those. Longer words are tried first, so "active
+# pharmaceutical ingredient" is a bulk drug, not a pharmaceutical.
+PLI_SCHEMES = [
+    (
+        "Mobile Phones",
+        ("mobile phone", "mobile manufacturing", "smartphone", "mobile"),
+        ("manufacturing_electronics", "surveillance_security"),
+    ),
+    (
+        "Electronic Components",
+        ("electronic component", "electronics component", "ecms"),
+        ("manufacturing_electronics", "semiconductors_equipment"),
+    ),
+    (
+        "IT Hardware",
+        ("it hardware", "laptop", "tablet pc", "personal computer", "server"),
+        ("manufacturing_electronics", "surveillance_security"),
+    ),
+    (
+        "Telecom",
+        ("telecom", "networking product"),
+        ("data_center_support", "surveillance_security", "manufacturing_electronics"),
+    ),
+    (
+        "White Goods",
+        ("white goods", "air conditioner", "led light"),
+        ("manufacturing_electronics",),
+    ),
+    (
+        "Semiconductors",
+        ("semiconductor", "osat", "display fab"),
+        ("semiconductors_equipment", "manufacturing_electronics"),
+    ),
+    (
+        "Solar PV",
+        ("solar", "pv module"),
+        ("clean_energy", "semiconductors_equipment"),
+    ),
+    (
+        "ACC Battery",
+        ("advanced chemistry cell", "acc battery", "battery", "batteries"),
+        ("clean_energy", "big_cap_industries"),
+    ),
+    (
+        "Automobile",
+        ("automobile", "auto component", "automotive"),
+        ("logistics_heavy_capital", "industrial_manufacturing"),
+    ),
+    (
+        "Drones",
+        ("drone",),
+        ("aerospace_defence", "surveillance_security"),
+    ),
+    (
+        "Textiles",
+        ("textile", "man-made fibre", "man made fibre", "apparel"),
+        ("textiles_apparel", "sports_athleisure"),
+    ),
+    ("Footwear", ("footwear", "leather"), ("sports_athleisure",)),
+    (
+        "Food Processing",
+        ("food processing", "food product", "processed food"),
+        ("fmcg",),
+    ),
+    ("Specialty Steel", ("specialty steel", "speciality steel"), ()),
+    (
+        "Bulk Drugs",
+        (
+            "bulk drug",
+            "active pharmaceutical ingredient",
+            "key starting material",
+            "drug intermediate",
+            "api",
+        ),
+        (),
+    ),
+    ("Medical Devices", ("medical device", "medtech"), ()),
+    ("Pharmaceuticals", ("pharmaceutical", "pharma"), ()),
+]
+
 
 def _normalize_watchlist(watchlist):
     """Canonicalize every stock record's typed fields on load (see

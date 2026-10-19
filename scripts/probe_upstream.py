@@ -568,367 +568,77 @@ def probe_nse_calendar():
         session.close()
 
 
-# PIB's own feed of press releases. Candidates rather than one URL: the
-# address could not be checked from the development sandbox, which refuses
-# pib.gov.in.
-_PIB_FEEDS = (
-    # The plain address redirected a runner to the Hindi feed (lang=2, reg=48);
-    # the site keeps its language and region in these two parameters.
-    "https://pib.gov.in/RssMain.aspx?ModId=6&Lang=1&Regid=3&reg=3&lang=1",
-    "https://pib.gov.in/RssMain.aspx?ModId=6&Lang=1&Regid=3",
-)
-# PIB's list of every release on a day, by ministry.
-_PIB_ALL_RELEASES = "https://pib.gov.in/allRel.aspx?reg=3&lang=1"
-_PLI_WORDS = ("pli", "production linked incentive", "production-linked incentive")
-
-
 async def probe_pib_pli():
-    """Where the PLI scraper's names went.
+    """The PLI scraper's own path, a step at a time, against the live sites.
 
-    The daily log reads "5 link(s) led to a page that was not the release":
-    the releases are found through Google News, and its links lead to its own
-    page. This asks what that page actually is, whether PIB's own RSS feed
-    answers a runner, and what a PLI release page is made of — its tables,
-    its lists, the names the real parser takes from it — so the fix is built
-    on PIB's markup rather than on a guess at it.
+    Google News for the stories; PIB's list of each story's day for its
+    release; each release's own page for the names, with the scheme each was
+    read under, before the scraper keeps those under a scheme a holding works
+    in; then the scraper itself, end to end, on today's watchlist. What the
+    probes that built it found is in docs/upstream-findings.md.
     """
-    import re
-
     import aiohttp
     import feedparser
-    from bs4 import BeautifulSoup
 
-    from scraper import _extract_pli_data_from_html, _is_pib_release
+    import scraper
+    from config import load_watchlist
+    from providers import pib
+    from providers.isin_master import load_registered_names
+    from utils import fetch_text_async
 
-    found_names = False
     async with aiohttp.ClientSession() as session:
+        print(f"\n{'=' * 72}\nGOOGLE NEWS: which releases there were\n{'=' * 72}")
+        status, xml = await fetch_text_async(session, scraper.pli_search_url())
+        entries = feedparser.parse(xml).entries if status == 200 else []
+        stories = scraper._stories(entries)
+        print(f"  HTTP {status}: {len(entries)} result(s), {len(stories)} release(s)")
+        for story in stories[:12]:
+            days = ", ".join(d.isoformat() for d in sorted(story["days"]))
+            print(f"    - [{days}] {story['title'][:100]}")
 
-        async def get(url):
-            async with session.get(url, timeout=20, allow_redirects=True) as r:
-                return (
-                    r.status,
-                    r.headers.get("Content-Type", ""),
-                    str(r.url),
-                    await r.text(),
-                )
-
-        # 1. Google News, as the scraper asks it, and where its first link goes.
-        import urllib.parse
-
-        query = (
-            'site:pib.gov.in "PLI" AND ("provisionally selected" OR "approved" '
-            'OR "incentive scheme" OR "applications approved")'
+        print(f"\n{'=' * 72}\nPIB: each release on its day's list\n{'=' * 72}")
+        index = pib.DayIndex(session)
+        located, extras, unfound = await scraper._locate_on_pib(stories, index)
+        print(
+            f"  {index.read} day list(s) read{'; ' + index.failed if index.failed else ''}"
         )
-        rss = (
-            "https://news.google.com/rss/search?q="
-            + urllib.parse.quote(f"{query} when:30d")
-            + "&hl=en-IN&gl=IN&ceid=IN:en"
+        for item in located:
+            print(
+                f"    found   {item['day']} PRID {item['prid']}: {item['title'][:80]}"
+            )
+        for item in extras:
+            print(
+                f"    same day {item['day']} PRID {item['prid']}: {item['title'][:80]}"
+            )
+        for story in unfound:
+            print(f"    not found: {story['title'][:90]}")
+
+        print(f"\n{'=' * 72}\nPIB: what each release names\n{'=' * 72}")
+        for item in (located + extras)[: scraper.MAX_PLI_RELEASES]:
+            status, page = await fetch_text_async(
+                session, pib.release_url(item["prid"]), timeout=20
+            )
+            release = pib.read_release(page) if status == 200 else None
+            print(f"  PRID {item['prid']}: HTTP {status}, {len(page)} bytes")
+            if release is None:
+                print("    no release text on the page")
+                continue
+            print(f"    {release['date']} {release['title'][:90]}")
+            for c in scraper._extract_pli_data_from_html(
+                release["html"], release["title"], release["date"]
+            ):
+                print(f"    > {c['name']} | {c['sector']} | {c['scheme_sectors']}")
+
+        print(f"\n{'=' * 72}\nTHE SCRAPER, end to end\n{'=' * 72}")
+        found = await scraper.scrape_pib_pli_approvals_async(
+            session, load_watchlist(), registered=load_registered_names()
         )
-        print(f"\n{'=' * 72}\nGOOGLE NEWS SEARCH (the scraper's discovery)\n{'=' * 72}")
-        google_items = []
-        try:
-            status, ctype, _final, body = await get(rss)
-            feed = feedparser.parse(body)
-            google_items = list(feed.entries)
-            print(f"  HTTP {status}, {len(feed.entries)} item(s)")
-            for entry in feed.entries[:5]:
-                print(
-                    f"    - {entry.get('published', '')[:16]} | "
-                    f"{entry.get('title', '')[:110]}"
-                )
-            if feed.entries:
-                link = feed.entries[0].get("link", "")
-                status, ctype, final, page = await get(link)
-                soup = BeautifulSoup(page, "lxml")
-                title = soup.title.get_text(strip=True) if soup.title else ""
-                print(f"  first link  : {link[:90]}...")
-                print(f"  lands on    : HTTP {status}, {final[:120]}")
-                print(f"  page title  : {title[:120]}")
-                print(f"  is release  : {_is_pib_release(page)} ({len(page)} bytes)")
-                spots = [m.start() for m in re.finditer(r"pib\.gov\.in", page)][:3]
-                for at in spots:
-                    context = " ".join(page[max(0, at - 80) : at + 120].split())
-                    print(f"    mentions pib.gov.in: ...{context}...")
-                if not spots:
-                    print("    the page never mentions pib.gov.in")
-        except Exception as e:  # noqa: BLE001 - PIB's own feed is asked regardless
-            print(f"  FAILED: {type(e).__name__}: {str(e)[:200]}")
-
-        # 2. PIB's own feed.
-        release_links = []
-        for url in _PIB_FEEDS:
-            print(f"\n{'=' * 72}\nPIB RSS {url}\n{'=' * 72}")
-            try:
-                status, ctype, final, body = await get(url)
-            except Exception as e:  # noqa: BLE001 - report and try the next
-                print(f"  FAILED: {type(e).__name__}: {str(e)[:200]}")
-                continue
-            feed = feedparser.parse(body)
+        for c in found:
             print(
-                f"  HTTP {status}, {ctype or 'unstated'}, {len(body)} bytes, final {final[:100]}"
+                f"    * {c['name']} ({c['status']}, {c.get('ticker')}) | "
+                f"{c['sector']} | {c['found_in']} | {c['announcement'][:60]}"
             )
-            print(f"  entries     : {len(feed.entries)}")
-            if not feed.entries:
-                print(f"  body        : {' '.join(body.split())[:300]}")
-                continue
-            pli = [
-                e
-                for e in feed.entries
-                if any(w in e.get("title", "").lower() for w in _PLI_WORDS)
-            ]
-            for entry in feed.entries[:5]:
-                print(
-                    f"    - {entry.get('published', '')[:25]} | {entry.get('title', '')[:90]} | {entry.get('link', '')[:80]}"
-                )
-            print(f"  PLI titles  : {len(pli)}")
-            for entry in pli[:5]:
-                print(f"    * {entry.get('title', '')[:110]} | {entry.get('link', '')}")
-            release_links = [e.get("link") for e in (pli or feed.entries)[:1]]
-            _save("pib_rss.xml", body)
-            break
-
-        # 2b. The day's list of every release, and whether an earlier day can
-        # be asked for: the feed holds 20 releases, a few hours of PIB's day.
-        print(f"\n{'=' * 72}\nPIB ALL RELEASES {_PIB_ALL_RELEASES}\n{'=' * 72}")
-        try:
-            status, ctype, final, page = await get(_PIB_ALL_RELEASES)
-            soup = BeautifulSoup(page, "lxml")
-            prids = [
-                (a.get_text(" ", strip=True), a.get("href", ""))
-                for a in soup.find_all("a", href=True)
-                if "PRID=" in a.get("href", "")
-            ]
-            print(f"  HTTP {status}, {len(page)} bytes, final {final[:100]}")
-            print(f"  release links: {len(prids)}")
-            for text, href in prids[:8]:
-                print(f"    - {text[:90]} | {href[:90]}")
-            pli_links = [
-                (t, h) for t, h in prids if any(w in t.lower() for w in _PLI_WORDS)
-            ]
-            print(f"  PLI titles  : {len(pli_links)}")
-            form = soup.find("form")
-            print(f"  form action : {form.get('action') if form else None}")
-            for field in soup.find_all(["input", "select"]):
-                name = field.get("name") or ""
-                if not name:
-                    continue
-                if field.name == "select":
-                    options = [
-                        (o.get("value"), o.get_text(strip=True))
-                        for o in field.find_all("option")
-                    ]
-                    chosen = [
-                        o.get("value")
-                        for o in field.find_all("option")
-                        if o.has_attr("selected")
-                    ]
-                    print(
-                        f"    select {name} ({len(options)} options, selected {chosen}): "
-                        f"{options[:4]}"
-                    )
-                elif field.get("type") == "hidden":
-                    print(f"    hidden {name} ({len(field.get('value') or '')} chars)")
-                else:
-                    print(f"    input  {name} type={field.get('type')}")
-            hrefs = sorted(
-                {
-                    a.get("href").split("?")[0]
-                    for a in soup.find_all("a", href=True)
-                    if "pib" in a.get("href") or a.get("href").startswith("/")
-                }
-            )
-            print(f"  link targets: {hrefs[:25]}")
-            if pli_links:
-                release_links = [
-                    urllib.parse.urljoin(final, pli_links[0][1])
-                ] + release_links
-            _save("pib_all_releases.html", page)
-
-            # 2c. The day a Google News PLI item was published, asked for
-            # through the page's own form, and the item's title found in it.
-            import datetime
-            from email.utils import parsedate_to_datetime
-
-            pli_items = [
-                e
-                for e in google_items
-                if any(w in e.get("title", "").lower() for w in _PLI_WORDS)
-            ]
-            target = pli_items[0] if pli_items else None
-            if target and form:
-                title = target.get("title", "").rsplit(" - ", 1)[0].strip()
-                day = parsedate_to_datetime(target.get("published")).date()
-                print(
-                    f"\n{'=' * 72}\nPIB ALL RELEASES ON {day} (form post)\n{'=' * 72}"
-                )
-                print(f"  looking for: {title[:110]}")
-                fields = {}
-                for field in form.find_all(["input", "select"]):
-                    name = field.get("name")
-                    if not name or field.get("type") == "image":
-                        continue
-                    if field.name == "select":
-                        chosen = field.find("option", selected=True) or field.find(
-                            "option"
-                        )
-                        fields[name] = chosen.get("value") if chosen else ""
-                    else:
-                        fields[name] = field.get("value") or ""
-                for when in (day, day + datetime.timedelta(days=1)):
-                    data = dict(fields)
-                    data["ctl00$ContentPlaceHolder1$ddlday"] = str(when.day)
-                    data["ctl00$ContentPlaceHolder1$ddlMonth"] = str(when.month)
-                    data["ctl00$ContentPlaceHolder1$ddlYear"] = str(when.year)
-                    data["__EVENTTARGET"] = "ctl00$ContentPlaceHolder1$ddlday"
-                    async with session.post(final, data=data, timeout=30) as r:
-                        posted = await r.text()
-                        print(f"  {when}: HTTP {r.status}, {len(posted)} bytes")
-                    psoup = BeautifulSoup(posted, "lxml")
-                    links = [
-                        (a.get_text(" ", strip=True), a.get("href", ""))
-                        for a in psoup.find_all("a", href=True)
-                        if "PRID=" in a.get("href", "")
-                    ]
-                    shown = psoup.find(
-                        "select", {"name": "ctl00$ContentPlaceHolder1$ddlday"}
-                    )
-                    picked = shown.find("option", selected=True) if shown else None
-                    print(
-                        f"    {len(links)} release link(s); the page now shows day "
-                        f"{picked.get('value') if picked else '?'}"
-                    )
-                    others = []
-                    for text, href in links:
-                        if re.search(
-                            r"\bpli\b|production[ -]linked incentive", text, re.I
-                        ):
-                            print(f"    PLI: {text[:100]} | {href}")
-                            others.append(urllib.parse.urljoin(final, href))
-                    hit = next(
-                        (
-                            href
-                            for text, href in links
-                            if " ".join(text.lower().split())[:60]
-                            == " ".join(title.lower().split())[:60]
-                        ),
-                        None,
-                    )
-                    if hit:
-                        print(f"    MATCHED the Google News title -> {hit}")
-                        matched = urllib.parse.urljoin(final, hit)
-                        release_links = [matched] + [o for o in others if o != matched]
-                        break
-        except Exception as e:  # noqa: BLE001 - the release page is asked regardless
-            print(f"  FAILED: {type(e).__name__}: {str(e)[:200]}")
-
-        # 3. Release pages, read by the real parser, with where the release's
-        # own text sits in PIB's page.
-        for link in release_links[:2]:
-            # The detail page is a shell: the release itself is in an iframe
-            # (iframe#ContentPlaceHolder1_iframepressrealese), and the shell's
-            # sidebar of other releases is what the parser read as names.
-            link = link.replace(
-                "PressReleaseDetail.aspx", "PressReleaseIframePage.aspx"
-            )
-            if "PRID=" in link and "lang=" not in link:
-                link += "&reg=3&lang=1"
-            print(f"\n{'=' * 72}\nPIB RELEASE {link}\n{'=' * 72}")
-            status, ctype, final, page = await get(link)
-            soup = BeautifulSoup(page, "lxml")
-            print(f"  HTTP {status}, {len(page)} bytes, final {final[:100]}")
-            print(
-                f"  title       : {(soup.title.get_text(strip=True) if soup.title else '')[:120]}"
-            )
-            print(f"  is release  : {_is_pib_release(page)}")
-
-            def label(el):
-                return (
-                    f"{el.name}"
-                    + (f"#{el.get('id')}" if el.get("id") else "")
-                    + "".join(f".{c}" for c in (el.get("class") or []))
-                )
-
-            long_p = next(
-                (
-                    p
-                    for p in soup.find_all("p")
-                    if len(p.get_text(" ", strip=True)) > 150
-                ),
-                None,
-            )
-            if long_p is not None:
-                chain = [label(a) for a in list(long_p.parents)[:7]]
-                print(
-                    f"  first long paragraph: {long_p.get_text(' ', strip=True)[:120]}"
-                )
-                print(f"  its ancestors: {' < '.join(chain)}")
-            for el in soup.find_all(True, id=True):
-                key = (el.get("id") or "").lower()
-                if any(
-                    k in key
-                    for k in ("release", "content", "detail", "innner", "inner")
-                ):
-                    print(
-                        f"    candidate {label(el)[:80]}: {len(el.get_text(' ', strip=True))} chars, "
-                        f"{len(el.find_all('p'))} <p>, {len(el.find_all('table'))} <table>, "
-                        f"{len(el.find_all('li'))} <li>"
-                    )
-            for h in soup.find_all(["h1", "h2", "h3"])[:6]:
-                print(
-                    f"    heading {label(h)[:60]}: {h.get_text(' ', strip=True)[:90]}"
-                )
-            tables = soup.find_all("table")
-            print(f"  tables      : {len(tables)}")
-            for t, table in enumerate(tables[:3]):
-                rows = table.find_all("tr")
-                print(f"    table {t}: {len(rows)} row(s)")
-                for row in rows[:8]:
-                    cells = [
-                        c.get_text(" ", strip=True)[:40]
-                        for c in row.find_all(["td", "th"])
-                    ]
-                    print(f"      {cells[:4]}")
-            items = soup.find_all("li")
-            print(f"  list items  : {len(items)}")
-            # The release's own markup, so the parser is built on what PIB
-            # sends: the probe's file is unreachable once uploaded.
-            body_class = "innner-page-main-about-us-content-right-part"
-            bodies = soup.find_all("div", class_=body_class)
-            print(f"  body divs   : {len(bodies)}")
-            for li in items:
-                inside = li.find_parent("div", class_=body_class) is not None
-                print(
-                    f"    li ({'body' if inside else 'page'}): "
-                    f"{li.get_text(' ', strip=True)[:80]}"
-                )
-            if bodies:
-                body = BeautifulSoup(str(bodies[0]), "lxml")
-                for el in body.find_all(True):
-                    el.attrs = {
-                        k: v for k, v in el.attrs.items() if k in ("id", "class")
-                    }
-                compact = " ".join(str(body.body or body).split())
-                print(f"  body html ({len(compact)} chars):")
-                for at in range(0, min(len(compact), 9000), 180):
-                    print(f"    {compact[at:at + 180]}")
-            names = _extract_pli_data_from_html(
-                page, soup.title.get_text() if soup.title else ""
-            )
-            print(f"  PARSED      : {len(names)} name(s) by the current parser")
-            for c in names[:15]:
-                print(f"    > {c['name']}")
-            text = soup.get_text("\n")
-            lines = [
-                ln.strip()
-                for ln in text.splitlines()
-                if re.search(r"\b(Ltd|Limited|Pvt)\b", ln)
-            ]
-            print(f"  lines naming a company (Ltd/Limited/Pvt): {len(lines)}")
-            for ln in lines[:15]:
-                print(f"    | {ln[:140]}")
-            _save("pib_release.html", page)
-            found_names = bool(lines or names)
-    return found_names
+    return bool(located)
 
 
 SOURCES = {

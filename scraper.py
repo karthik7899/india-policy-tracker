@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 import urllib.parse
 import re
 from logger import log
-from config import SECTOR_QUERIES, GLOBAL_EVENT_QUERIES
+from config import SECTOR_QUERIES, GLOBAL_EVENT_QUERIES, PLI_SCHEMES
 from providers.rss import fetch_query_feed_async
 from providers.nse_announcements import fetch_filings as nse_fetch_filings
 from providers import bse_announcements
@@ -84,97 +84,328 @@ def _is_navigation(li):
     return False
 
 
-def _extract_pli_data_from_html(html, title, published_date=""):
-    companies = []
-    soup = BeautifulSoup(html, "lxml")
-    text = soup.get_text(separator=" ")
+# --- PLI beneficiaries in a release's text -----------------------------------
+#
+# A name is taken only with evidence that it is a company: a legal suffix
+# ("Limited", "Pvt. Ltd.", "LLP"), PIB's own "Companies such as A, B and C", or
+# a table column or list that is plainly a list of names. A capitalised phrase
+# alone is not enough. PIB's menus, ministries and scheme names are
+# capitalised too, and the parser that took every one of them, and any phrase
+# ending in "Industries" or "Electronics", reported "Heavy Industries" and
+# "Food Processing Industries" as companies. It also read "Dr. Reddy's
+# Laboratories Limited" as "Laboratories Limited", because it allowed no full
+# stop or apostrophe inside a name.
 
-    # 1. Sector extraction
-    sector = "Manufacturing"
-    title_lower = title.lower()
-    # ⚡ Bolt Optimization: Slice first, then lower, outside the loop to avoid redundant O(N) operations
-    text_prefix_lower = text[:500].lower()
-    for s in [
-        "automobile",
-        "auto components",
-        "white goods",
-        "it hardware",
-        "textile",
-        "telecom",
-        "solar",
-        "drone",
-        "pharmaceutical",
-        "medical devices",
-        "food processing",
-        "specialty steel",
-    ]:
-        if s in title_lower or s in text_prefix_lower:
-            sector = s.title()
-            break
+# One word of a name: capitalised, or a brand such as "ideaForge", with the
+# apostrophe and ampersand of "Dr. Reddy's" and "M&M"; an abbreviation; or a
+# word in brackets, as in "Dixon Technologies (India) Limited". Only an
+# abbreviation ends in a stop, so a name never runs on into the next
+# sentence: "... by Aurobindo. Kinvan Private Limited has ...".
+_ABBREVIATION = (
+    r"(?:(?:Dr|Mr|Mrs|Ms|Pvt|Co|Corp|Inc|Bros|St|Jr|Sr|Mfg|Intl|Ltd|LTD)\."
+    r"|(?:[A-Z]\.)+)"
+)
+_NAME_WORD = (
+    rf"(?:{_ABBREVIATION}|[A-Z][\w'’&-]*|[a-z]+[A-Z][\w'’&-]*" r"|\([A-Z][\w'’.&-]*\))"
+)
+_LEGAL_WORDS = r"(?:Limited|LIMITED|Ltd|LTD|LLP)"
+_LEGAL_SUFFIX = (
+    r"(?:(?:Private|PRIVATE|Pvt|PVT)(?:\.\s*|\s+)(?:Limited|LIMITED|Ltd|LTD)\.?"
+    r"|(?:Limited|LIMITED|Ltd|LTD)\.?|LLP)"
+)
+# A name that ends in a legal suffix. Its words may not themselves be one, so
+# "Lupin Limited and Cipla Limited" is two names.
+_COMPANY_RE = re.compile(
+    rf"(?<![\w'’.&-])(?!{_LEGAL_WORDS}\b){_NAME_WORD}"
+    rf"(?:\s+(?:(?!{_LEGAL_WORDS}\b){_NAME_WORD}|&|of))*?"
+    rf"\s+{_LEGAL_SUFFIX}(?!\w)"
+)
+_ENDS_LEGAL_RE = re.compile(rf"\s{_LEGAL_SUFFIX}$")
+_LEGAL_WORD_RE = re.compile(r"(?i:private|pvt|limited|ltd|llp)")
+# "Companies such as Lyfius Pharma, Kinvan Private Limited and ...": PIB names
+# beneficiaries this way, often without a suffix ("GE Healthcare, Siemens").
+_SUCH_AS_RE = re.compile(
+    r"\b(?:companies|firms|manufacturers|players|beneficiaries|applicants)\s+"
+    r"(?:such\s+as|like|including|namely)\s+",
+    re.I,
+)
+_LISTED_NAME_RE = re.compile(rf"{_NAME_WORD}(?:\s+(?:{_NAME_WORD}|&|of))*")
+_LIST_SEP_RE = re.compile(r"\s*,\s*(?:and\s+)?|\s+and\s+")
+# What introduces a list of names that carry no suffix.
+_LIST_CUE_RE = re.compile(
+    r"\b(?:companies|applicants|beneficiaries|firms|manufacturers)\b", re.I
+)
+_NAME_HEADER_RE = re.compile(
+    r"\b(?:name|applicant|company|companies|beneficiar\w*|firm|manufacturer)s?\b",
+    re.I,
+)
+_MS_RE = re.compile(r"\bM/[sS]\b\.?\s*")
+_NUMBERING_RE = re.compile(r"^(?:\(?\d{1,3}[.)]|\(?[ivx]{1,4}\)|[a-z]\))\s+")
+_ABBREVIATION_RE = re.compile(r"\s*\([A-Z0-9&.\- ]{2,12}\)$")
+# Words that begin a sentence rather than a name: "Notably Kinvan ..."
+_LEAD_WORDS = {
+    "the", "this", "these", "those", "its", "their", "notably", "also",
+    "further", "furthermore", "moreover", "besides", "additionally",
+    "similarly", "meanwhile", "thus", "here", "under", "through", "with", "by",
+    "for", "from", "in", "at", "on", "of", "and", "as", "among", "amongst",
+    "including", "while", "after", "companies", "company", "firms", "firm",
+    "beneficiaries", "beneficiary", "applicants", "applicant", "messrs",
+    "shri",
+}  # fmt: skip
+# A name with any of these words is the government's, not a company's.
+_OFFICIAL_WORDS = {
+    "ministry", "department", "scheme", "schemes", "pli", "government", "govt",
+    "programme", "mission", "crore", "lakh", "incentive", "incentives",
+    "minister", "secretary", "bureau", "cabinet", "parliament", "sabha",
+}  # fmt: skip
+# Read as a name by the shape of the words, and not one.
+_NOT_NAMES = {
+    "msme", "msmes", "startup", "startups", "psu", "psus", "cpse", "cpses",
+    "oem", "oems", "india", "indian", "total", "grandtotal", "name", "others",
+}  # fmt: skip
+_BLOCK_TAGS = (
+    "p", "div", "li", "td", "th", "tr", "table", "ul", "ol", "h1", "h2", "h3",
+    "h4", "h5", "h6", "section", "article", "blockquote", "center",
+)  # fmt: skip
+_SCHEME_KEYS = sorted(
+    ((key, label) for label, keys, _ in PLI_SCHEMES for key in keys),
+    key=lambda pair: -len(pair[0]),
+)
+_SCHEME_RE = re.compile(
+    r"\b(?P<key>"
+    + "|".join(re.escape(key) for key, _ in _SCHEME_KEYS)
+    + r")(?:s|es)?\b",
+    re.I,
+)
+_SCHEME_LABEL = {key: label for key, label in _SCHEME_KEYS}
+_SCHEME_SECTORS = {label: list(sectors) for label, _, sectors in PLI_SCHEMES}
+# A scheme named as the scheme: "PLI Scheme for Bulk Drugs", "the textile
+# PLI". Any other mention may be in passing ("... a resilient pharmaceutical
+# supply chain"), or inside a company's name ("Lyfius Pharma").
+_SCHEME_FOR_RE = re.compile(r"\b(?:PLI|incentive)\s+(?:scheme\s+)?for\s+", re.I)
+_SCHEME_PLI_RE = re.compile(
+    r"\b(?P<key>"
+    + "|".join(re.escape(key) for key, _ in _SCHEME_KEYS)
+    + r")(?:s|es)?\s+PLI\b",
+    re.I,
+)
 
-    # 2. Scheme extraction
-    scheme = "PLI Scheme"
-    if "2.0" in title_lower or "2.0" in text[:500]:
-        scheme = "PLI 2.0"
 
-    # 3. Extract companies from tables
-    for table in soup.find_all("table"):
-        for row in table.find_all("tr"):
-            cols = row.find_all(["td", "th"])
-            if cols:
-                cell_text = cols[0].get_text(strip=True)
-                # Filter out headers and junk
-                if (
-                    len(cell_text) > 3
-                    and len(cell_text) < 100
-                    and not cell_text.lower()
-                    in [
-                        "company",
-                        "company name",
-                        "s. no.",
-                        "s.no",
-                        "name",
-                        "applicant",
-                    ]
-                ):
-                    # Ensure it's not a multi-line chunk that regex failed on earlier
-                    if "\n" not in cell_text:
-                        companies.append(cell_text)
+def _schemes_named(text):
+    """``(position, scheme)`` for each PLI scheme ``text`` names, in order."""
+    return [
+        (m.start(), _SCHEME_LABEL[m.group("key").lower()])
+        for m in _SCHEME_RE.finditer(text or "")
+    ]
 
-    # 4. Extract companies from lists, leaving out a page's navigation
-    for ul in soup.find_all("ul"):
-        for li in ul.find_all("li"):
-            if _is_navigation(li):
-                continue
-            li_text = li.get_text(strip=True)
-            if len(li_text) > 3 and len(li_text) < 100 and "\n" not in li_text:
-                companies.append(li_text)
 
-    # 5. Regex fallback on text
-    corp_pattern = re.compile(
-        r"\b([A-Z][a-zA-Z0-9&]+(?:\s+[A-Z][a-zA-Z0-9&]+)*)\s+(?:Ltd|Limited|Corp|Corporation|Enterprises|Solutions|Electronics|Industries|Apparels|Defence|Semiconductors|Company)\b"
+def _schemes_meant(text):
+    """``(position, scheme)`` for each scheme ``text`` names as the scheme."""
+    text = text or ""
+    found = []
+    for m in _SCHEME_FOR_RE.finditer(text):
+        named = _SCHEME_RE.search(text, m.end(), m.end() + 80)
+        if named:
+            found.append((m.start(), _SCHEME_LABEL[named.group("key").lower()]))
+    found += [
+        (m.start(), _SCHEME_LABEL[m.group("key").lower()])
+        for m in _SCHEME_PLI_RE.finditer(text)
+    ]
+    return sorted(found)
+
+
+# Marks where one block of a page ends. Not a newline: the line breaks in the
+# HTML's source are spaces to a reader, and fall inside names.
+_BLOCK_END = "\x1e"
+
+
+def _text_lines(soup):
+    """The text a block at a time: a name never runs from one paragraph,
+    cell or heading into the next, as it would in the page's text read
+    whole."""
+    copy = BeautifulSoup(str(soup), "lxml")
+    for br in copy.find_all("br"):
+        br.replace_with(_BLOCK_END)
+    for tag in copy.find_all(_BLOCK_TAGS):
+        tag.insert_before(_BLOCK_END)
+        tag.append(_BLOCK_END)
+    lines = (" ".join(part.split()) for part in copy.get_text().split(_BLOCK_END))
+    return [line for line in lines if line]
+
+
+def _clean_name(raw):
+    name = _MS_RE.sub("", " ".join(str(raw or "").split()))
+    name = _NUMBERING_RE.sub("", name)
+    name = _ABBREVIATION_RE.sub("", name).strip(" ,;:-–")
+    words = name.split()
+    while words and words[0].lower().strip(".,") in _LEAD_WORDS:
+        words.pop(0)
+    while words and words[-1].lower() in ("of", "&", "and"):
+        words.pop()
+    name = " ".join(words)
+    if name.endswith(".") and not re.search(r"\b(?:Ltd|Pvt|Co|Inc|Corp)\.$", name):
+        name = name[:-1]
+    return name
+
+
+def _name_key(name):
+    """A name without its case, punctuation, spaces and legal suffix, so
+    "AurobindoPharma Limited" and "Aurobindo Pharma Ltd." are one company."""
+    plain = str(name or "").lower().replace("’", "").replace("'", "")
+    return "".join(
+        word
+        for word in re.findall(r"[a-z0-9]+", plain.replace("&", " and "))
+        if word not in ("private", "pvt", "limited", "ltd", "llp", "the")
     )
-    for m in corp_pattern.finditer(text):
-        companies.append(m.group(0))
 
-    # Clean and deduplicate
-    unique_companies = []
-    seen_lower = set()
-    for c in companies:
-        c_clean = re.sub(r"^\d+[\.\)]\s*", "", c).strip()
-        cl = c_clean.lower()
-        if cl not in seen_lower and len(c_clean) > 3 and len(c_clean) < 80:
-            seen_lower.add(cl)
-            unique_companies.append(
-                {
-                    "name": c_clean,
-                    "sector": sector,
-                    "scheme": scheme,
-                    "date": published_date,
-                }
-            )
 
-    return unique_companies
+def _is_company(name):
+    words = name.split()
+    if not words or not 2 <= len(name) <= 80 or len(words) > 10:
+        return False
+    if not (name[0].isupper() or re.match(r"[a-z]+[A-Z]", name)):
+        return False
+    if {w.lower().strip(".,()") for w in words} & _OFFICIAL_WORDS:
+        return False
+    if all(_LEGAL_WORD_RE.fullmatch(w.strip(".,")) for w in words):
+        return False
+    return _name_key(name) not in _NOT_NAMES
+
+
+def _name_like(text):
+    """Whether a cell or list item has the shape of a name: a few words,
+    each capitalised or a joining word."""
+    words = text.split()
+    if not 1 <= len(words) <= 8 or re.search(r"[:;?!]", text):
+        return False
+    return all(re.fullmatch(_NAME_WORD, w) or w in ("&", "of", "and") for w in words)
+
+
+def _table_names(table):
+    """The cells of a table's name column, found by its heading. A table
+    whose first row names no such column is layout, not a list of
+    beneficiaries: PIB sets its ministry's name in one."""
+    rows = table.find_all("tr")
+    if len(rows) < 2:
+        return []
+    heads = [c.get_text(" ", strip=True) for c in rows[0].find_all(["th", "td"])]
+    column = next((i for i, h in enumerate(heads) if _NAME_HEADER_RE.search(h)), None)
+    if column is None:
+        return []
+    names = []
+    for row in rows[1:]:
+        cells = row.find_all(["td", "th"])
+        if len(cells) > column:
+            name = _clean_name(cells[column].get_text(" ", strip=True))
+            if name and _name_like(name):
+                names.append(name)
+    return names
+
+
+def _list_names(soup):
+    """Names from lists that are lists of names: mostly name-shaped, and
+    either one of them carries a legal suffix or the text before the list
+    says what it lists ("... the following applicants:")."""
+    names = []
+    for block in soup.find_all(["ul", "ol"]):
+        items = [
+            li for li in block.find_all("li", recursive=False) if not _is_navigation(li)
+        ]
+        texts = [_clean_name(li.get_text(" ", strip=True)) for li in items]
+        shaped = [t for t in texts if t and _name_like(t)]
+        if not shaped or len(shaped) * 2 < len(texts):
+            continue
+        before = block.find_previous_sibling()
+        cue = before.get_text(" ", strip=True)[-300:] if before else ""
+        if any(_ENDS_LEGAL_RE.search(t) for t in shaped) or _LIST_CUE_RE.search(cue):
+            names += shaped
+    return names
+
+
+def _names_in_line(line):
+    """``(position, name)`` for each company a line of text names."""
+    found = [(m.start(), m.group(0)) for m in _COMPANY_RE.finditer(line)]
+    for cue in _SUCH_AS_RE.finditer(line):
+        at = cue.end()
+        while True:
+            item = _LISTED_NAME_RE.match(line, at)
+            if not item:
+                break
+            found.append((item.start(), item.group(0)))
+            sep = _LIST_SEP_RE.match(line, item.end())
+            if not sep:
+                break
+            at = sep.end()
+    return found
+
+
+def _extract_pli_data_from_html(html, title, published_date="", title_only=False):
+    """PLI beneficiaries a release names, each with the scheme it is under.
+
+    The scheme is the title's when the title names one as the scheme ("PLI
+    Scheme for Bulk Drugs for Resilient Pharmaceutical Supply Chain" is about
+    bulk drugs), or names only one. A release about several ("... India's
+    Pharmaceutical, Bulk Drugs and Medical Devices ...") gives each company
+    the scheme its text last named as the scheme before it ("b) PLI Scheme for
+    Pharmaceuticals"), failing that the last it mentioned at all, a company's
+    own name aside. ``title_only`` reads the scheme from the title alone, for
+    a headline whose summary is other outlets' headlines. ``scheme_sectors``
+    is the watchlist sectors that compete under that scheme, or None when no
+    scheme could be told.
+    """
+    soup = BeautifulSoup(html or "", "lxml")
+    lines = [_MS_RE.sub("", line) for line in _text_lines(soup)]
+    text = " ".join(lines)
+    in_title = [label for _, label in _schemes_named(title)]
+    meant = [label for _, label in _schemes_meant(title)]
+    whole = (meant or (in_title if len(set(in_title)) == 1 else [None]))[0]
+    in_text = [label for _, label in _schemes_meant(text) + _schemes_named(text)]
+    first = whole or (in_title or ([] if title_only else in_text) or [None])[0]
+    scheme = (
+        "PLI 2.0" if "2.0" in (title or "") or "2.0" in text[:500] else "PLI Scheme"
+    )
+
+    found = [(n, first) for t in soup.find_all("table") for n in _table_names(t)]
+    found += [(n, first) for n in _list_names(soup)]
+    meant_before = mentioned_before = None
+    for line in lines:
+        names = _names_in_line(line)
+        spans = [(at, at + len(raw)) for at, raw in names]
+        meant = _schemes_meant(line)
+        mentioned = [
+            (pos, label)
+            for pos, label in _schemes_named(line)
+            if not any(start <= pos < end for start, end in spans)
+        ]
+        for at, raw in names:
+            label = first if title_only else whole
+            for marks, carried in (
+                (meant, meant_before),
+                (mentioned, mentioned_before),
+            ):
+                if label is None and not title_only:
+                    before = [lab for pos, lab in marks if pos < at]
+                    label = before[-1] if before else carried
+            found.append((_clean_name(raw), label or first))
+        meant_before = meant[-1][1] if meant else meant_before
+        mentioned_before = mentioned[-1][1] if mentioned else mentioned_before
+
+    companies, seen = [], set()
+    for name, label in found:
+        key = _name_key(name)
+        if not key or key in seen or not _is_company(name):
+            continue
+        seen.add(key)
+        companies.append(
+            {
+                "name": name,
+                "sector": label or "Manufacturing",
+                "scheme": scheme,
+                "date": published_date,
+                "scheme_sectors": _SCHEME_SECTORS[label] if label else None,
+            }
+        )
+    return companies
 
 
 # Company names per search: few enough that one busy name (Apple, Google)
@@ -395,18 +626,28 @@ async def fetch_state_policy_async(session, today=None):
     return items
 
 
-# Releases read per run, to limit requests.
-MAX_PLI_RELEASES = 5
+# Releases read from PIB per run, and PIB's lists of a day's releases asked
+# for. A list is about 200 KB and a release about 130 KB, and PIB is a
+# government site: each is asked for in turn, never in parallel.
+MAX_PLI_RELEASES = 8
+MAX_PIB_DAYS = 8
+# Release fetches that may fail before PIB is left alone for the run.
+_PIB_FAILURES = 2
+# Names looked up on Yahoo at once.
+_RESOLVE_AT_ONCE = 5
+_PLI_TITLE_RE = re.compile(r"\bpli\b|production[\s-]+linked\s+incentive", re.I)
 
-# Every PIB release page names the bureau; Google News's own page for the same
-# story does not. Names are read from a fetched page only when it is the
-# release, because the parser takes every table cell and list item on a page
-# for a company name.
-_PIB_MARKER = "press information bureau"
 
-
-def _is_pib_release(html):
-    return _PIB_MARKER in (html or "")[:200_000].lower()
+def pli_search_url():
+    """The Google News search that says which PLI releases PIB has posted."""
+    query = (
+        'site:pib.gov.in "PLI" AND ("provisionally selected" OR "approved" OR '
+        '"incentive scheme" OR "applications approved")'
+    )
+    return (
+        "https://news.google.com/rss/search?q="
+        f"{urllib.parse.quote(f'{query} when:30d')}&hl=en-IN&gl=IN&ceid=IN:en"
+    )
 
 
 def _headline_text(title, summary):
@@ -421,106 +662,250 @@ def _headline_text(title, summary):
     return f"{title} {plain}".strip()
 
 
-async def scrape_pib_pli_approvals_async(session, watchlist):
+def _stories(entries):
+    """One story per headline, newest first, with each day Google dated it.
+
+    Google carries some PIB stories twice, weeks apart, under one title.
+    """
+    from providers import pib
+
+    stories = {}
+    for entry in entries:
+        title = pib.strip_site(entry.get("title", ""))
+        key = " ".join(pib.title_words(title))
+        if not key:
+            continue
+        story = stories.setdefault(
+            key,
+            {
+                "title": title,
+                "link": entry.get("link", ""),
+                "summary": entry.get("summary", ""),
+                "published": entry.get("published", ""),
+                "days": set(),
+            },
+        )
+        day = pib.ist_day(entry.get("published"))
+        if day:
+            story["days"].add(day)
+    return sorted(
+        stories.values(),
+        key=lambda s: max(s["days"], default=datetime.date.min),
+        reverse=True,
+    )
+
+
+def _days_to_ask(days):
+    """Each day Google dated a story, oldest first, then the day before it:
+    Google dates a story when it saw it, which can be after PIB posted it."""
+    asked = []
+    for day in sorted(days):
+        for d in (day, day - datetime.timedelta(days=1)):
+            if d not in asked:
+                asked.append(d)
+    return asked
+
+
+async def _locate_on_pib(stories, index):
+    """Each story's release on PIB's list of its day's releases.
+
+    Returns the releases found, those days' other PLI releases, and the
+    stories not found, whose names can come only from their headlines.
+    """
+    from providers import pib
+
+    located, extras, unfound, queued = [], [], [], set()
+    for story in stories:
+        hit = None
+        if (
+            len(located) < MAX_PLI_RELEASES
+            and len(pib.title_words(story["title"])) >= 3
+        ):
+            for day in _days_to_ask(story["days"]):
+                if day not in index.days and index.read >= MAX_PIB_DAYS:
+                    break
+                releases = await index.releases_on(day)
+                if releases is None:
+                    break
+                match = next(
+                    (r for r in releases if pib.same_title(r[0], story["title"])), None
+                )
+                if match:
+                    hit = {"title": match[0], "prid": match[1], "link": match[2]}
+                    hit.update(day=day, story=story)
+                    extras += [
+                        {"title": t, "prid": prid, "link": link, "day": day}
+                        for t, prid, link in releases
+                        if prid != match[1] and _PLI_TITLE_RE.search(t)
+                    ]
+                    break
+        if hit is None:
+            unfound.append(story)
+        elif hit["prid"] not in queued:
+            queued.add(hit["prid"])
+            located.append(hit)
+    extras = [
+        e for e in {e["prid"]: e for e in extras}.values() if e["prid"] not in queued
+    ]
+    return located, extras, unfound
+
+
+def _held(watchlist, registered):
+    """The keys of every name and ticker we hold, and the NSE symbols."""
+    keys, tickers = set(), set()
+    for stocks in watchlist.values():
+        for stock in stocks if isinstance(stocks, list) else []:
+            if not isinstance(stock, dict):
+                continue
+            ticker = str(stock.get("ticker") or "").upper()
+            for name in (stock.get("name"), ticker, registered.get(ticker)):
+                if name:
+                    keys.add(_name_key(name))
+            if ticker:
+                tickers.add(ticker)
+    keys.discard("")
+    return keys, tickers
+
+
+def _is_held(key, held_keys):
+    """Whether a name's key is a holding's: the same, or a holding's name
+    with more after it, as "Dixon Technologies (India)" is "Dixon
+    Technologies". Short keys must match whole."""
+    return key in held_keys or any(len(k) >= 6 and key.startswith(k) for k in held_keys)
+
+
+async def scrape_pib_pli_approvals_async(session, watchlist, registered=None):
     """PLI beneficiaries named in PIB releases from the last 30 days.
 
-    Releases are found through Google News, and a Google News link can lead
-    to Google's own page rather than to pib.gov.in. That page came back as an
-    ordinary success, so the fallback to the headline -- which ran only when
-    the fetch raised -- never ran, and this returned nothing on every run from
-    at least mid-September 2026 without saying so. Names are now read from
-    the release when the link leads there and from the headline and summary
-    otherwise, and every step is counted in one log line. A headline names a
-    company only now and then; a beneficiary list lives in the release.
+    Google News says which releases there were, but every link it gives
+    leads to its own page, not to pib.gov.in, and this returned nothing on
+    every run from at least mid-September 2026. Each story is now found by
+    its title on PIB's own list of that day's releases, and the release is
+    read from PIB: its text only, not the site's menus and sidebars. Those
+    days' other PLI releases are read as well. A story PIB's list does not
+    have is read from its headline, which names a company only now and then.
+
+    A beneficiary is reported only under a scheme some holding works in
+    (config.PLI_SCHEMES), and not when it is a holding: a holding's own
+    approval is not a competitor. ``registered`` is NSE's registered names by
+    symbol, which settle most tickers without asking Yahoo.
     """
-    log.info("Scraping PIB for PLI approval announcements (Async)...")
-    query = 'site:pib.gov.in "PLI" AND ("provisionally selected" OR "approved" OR "incentive scheme" OR "applications approved")'
-    encoded_query = urllib.parse.quote(f"{query} when:30d")
-    rss_url = f"https://news.google.com/rss/search?q={encoded_query}&hl=en-IN&gl=IN&ceid=IN:en"
-
-    emerging_pli_competitors = []
-    tally = {"releases": 0, "release page": 0, "headline": 0, "elsewhere": 0}
-    failed = 0
-    search_note = ""
-
+    from analysis.event_evidence import article_date
+    from providers import pib
     from utils import fetch_text_async
 
+    if registered is None:
+        from providers.isin_master import load_registered_names
+
+        registered = load_registered_names()
+    log.info("Scraping PIB for PLI approval announcements (Async)...")
+    search_note = ""
+    entries = []
     try:
-        status, xml_data = await fetch_text_async(session, rss_url, timeout=15)
+        status, xml_data = await fetch_text_async(session, pli_search_url(), timeout=15)
         if status != 200:
             search_note = f"search returned HTTP {status}"
         else:
-            feed = feedparser.parse(xml_data)
-            entries = feed.entries[:MAX_PLI_RELEASES]
-            tally["releases"] = len(entries)
-            for entry in entries:
-                title = entry.get("title", "")
-                link = entry.get("link", "")
-                published = entry.get("published", "")
-
-                extracted, source = [], "headline"
-                try:
-                    art_status, art_html = await fetch_text_async(
-                        session, link, timeout=15
-                    )
-                    if art_status == 200 and _is_pib_release(art_html):
-                        extracted = _extract_pli_data_from_html(
-                            art_html, title, published
-                        )
-                        source = "release page"
-                    else:
-                        tally["elsewhere"] += 1
-                except Exception as ex:
-                    failed += 1
-                    log.warning(f"PLI release fetch failed: {type(ex).__name__}: {ex}")
-                if not extracted:
-                    extracted = _extract_pli_data_from_html(
-                        _headline_text(title, entry.get("summary", "")),
-                        title,
-                        published,
-                    )
-                    source = "headline"
-                tally[source] += len(extracted)
-                for comp in extracted:
-                    comp["announcement"] = title.split(" - ")[0]
-                    comp["link"] = link
-                    comp["found_in"] = source
-                    emerging_pli_competitors.append(comp)
-
+            entries = feedparser.parse(xml_data).entries
     except Exception as e:
         log.error(f"Error scraping PIB PLI approvals: {e}")
         search_note = f"search failed ({type(e).__name__})"
+    stories = _stories(entries)
 
-    # Deduplicate before returning (can have same company in different RSS entries)
-    deduped = []
-    seen = set()
+    index = pib.DayIndex(session)
+    located, extras, unread = await _locate_on_pib(stories, index)
+    to_read = (located + extras)[:MAX_PLI_RELEASES]
+    unread += [r["story"] for r in located if r not in to_read]
+
+    found, from_releases, failed, no_text = [], 0, 0, 0
+    for item in to_read:
+        story = item.get("story")
+        if failed >= _PIB_FAILURES:
+            unread += [story] if story else []
+            continue
+        try:
+            status, page = await fetch_text_async(
+                session, pib.release_url(item["prid"]), timeout=20
+            )
+        except Exception as ex:
+            status, page = None, ""
+            log.warning(
+                f"PLI release {item['prid']} fetch failed: {type(ex).__name__}: {ex}"
+            )
+        if status != 200:
+            failed += 1
+            if status is not None:
+                log.warning(f"PLI release {item['prid']}: HTTP {status}.")
+            unread += [story] if story else []
+            continue
+        release = pib.read_release(page)
+        if release is None:
+            no_text += 1
+            unread += [story] if story else []
+            continue
+        title = release["title"] or item["title"]
+        names = _extract_pli_data_from_html(
+            release["html"], title, release["date"] or item["day"].isoformat()
+        )
+        from_releases += 1
+        for comp in names:
+            comp.update(announcement=title, link=item["link"], found_in="release page")
+        found += names
+
+    for story in unread:
+        names = _extract_pli_data_from_html(
+            _headline_text(story["title"], story["summary"]),
+            story["title"],
+            article_date(story["published"]) or "",
+            title_only=True,
+        )
+        for comp in names:
+            comp.update(
+                announcement=story["title"], link=story["link"], found_in="headline"
+            )
+        found += names
+
+    # Only under a scheme a holding works in, once each, and not a holding.
+    held_keys, held_tickers = _held(watchlist, registered)
+    by_key = {}
+    for symbol, name in registered.items():
+        by_key.setdefault(_name_key(name), set()).add(symbol)
+    sectors_held = set(watchlist)
+    off_scheme, seen, candidates = {}, set(), []
+    for comp in found:
+        scheme_sectors = comp.pop("scheme_sectors", None)
+        if scheme_sectors is not None:
+            mine = [s for s in scheme_sectors if s in sectors_held]
+            if not mine:
+                off_scheme[comp["sector"]] = off_scheme.get(comp["sector"], 0) + 1
+                continue
+            comp["watch_sectors"] = mine
+        key = _name_key(comp["name"])
+        if key in seen or _is_held(key, held_keys):
+            continue
+        seen.add(key)
+        symbols = by_key.get(key, set())
+        comp["ticker"] = next(iter(symbols)) if len(symbols) == 1 else None
+        if comp["ticker"] in held_tickers:
+            continue
+        candidates.append(comp)
+
     from analysis.parsing import resolve_ticker_from_name_async
 
-    # Existing names in watchlist to ignore
-    existing_names = set()
-    for sector, stocks in watchlist.items():
-        for s in stocks:
-            if s.get("name"):
-                existing_names.add(str(s["name"]).lower())
-            if s.get("ticker"):
-                existing_names.add(str(s["ticker"]).lower())
+    gate = asyncio.Semaphore(_RESOLVE_AT_ONCE)
 
-    unique_candidates = []
-    for comp in emerging_pli_competitors:
-        name_lower = comp["name"].lower()
-        if name_lower not in seen and name_lower not in existing_names:
-            seen.add(name_lower)
-            unique_candidates.append(comp)
+    async def _resolve(comp):
+        if comp["ticker"]:
+            return comp["ticker"]
+        async with gate:
+            ticker, _ = await resolve_ticker_from_name_async(comp["name"], session)
+        return ticker
 
-    # Concurrently resolve tickers using asyncio.gather
-    resolution_tasks = [
-        resolve_ticker_from_name_async(comp["name"], session)
-        for comp in unique_candidates
-    ]
-    resolution_results = await asyncio.gather(*resolution_tasks)
-
-    for comp, result in zip(unique_candidates, resolution_results):
-        ticker, _ = result
+    tickers = await asyncio.gather(*(_resolve(c) for c in candidates))
+    deduped = []
+    for comp, ticker in zip(candidates, tickers):
+        if ticker and str(ticker).upper() in held_tickers:
+            continue
         comp["ticker"] = ticker
         comp["status"] = "Listed Peer" if ticker else "Unlisted"
         deduped.append(comp)
@@ -529,17 +914,36 @@ async def scrape_pib_pli_approvals_async(session, watchlist):
         )
 
     # One line that says where an empty result came from.
+    by_source = {
+        source: sum(1 for c in found if c["found_in"] == source)
+        for source in ("release page", "headline")
+    }
     log.info(
         "PLI approvals: "
-        + (search_note or f"{tally['releases']} release(s) in the last 30 days")
-        + f"; {tally['release page']} name(s) from release pages, "
-        f"{tally['headline']} from headlines"
         + (
-            f"; {tally['elsewhere']} link(s) led to a page that was not the release"
-            if tally["elsewhere"]
+            search_note
+            or f"{len(entries)} search result(s) in the last 30 days, "
+            f"{len(stories)} release(s)"
+        )
+        + (
+            f"; {len(located)} found on PIB's lists of releases "
+            f"({index.read} day list(s) read)"
+            if stories
             else ""
         )
+        + (f", {len(extras)} more PLI release(s) on those days" if extras else "")
+        + (f"; {index.failed}" if index.failed else "")
+        + f"; {from_releases} release(s) read from PIB"
+        + (f", {no_text} without a release's text" if no_text else "")
         + (f"; {failed} fetch(es) failed" if failed else "")
+        + f"; {by_source['release page']} name(s) from releases, "
+        f"{by_source['headline']} from headlines"
+        + (
+            "; left out under schemes no holding works in: "
+            + ", ".join(f"{s} {n}" for s, n in sorted(off_scheme.items()))
+            if off_scheme
+            else ""
+        )
         + f"; {len(deduped)} new candidate(s) after removing duplicates and "
         "holdings."
     )

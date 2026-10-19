@@ -245,7 +245,9 @@ async def run_pipeline():
     # Gather additional policy and institutional feeds asynchronously
     async with aiohttp.ClientSession() as session:
         log.info("Starting concurrent policy and institutional feeds scraping...")
-        pli_task = scrape_pib_pli_approvals_async(session, watchlist)
+        pli_task = scrape_pib_pli_approvals_async(
+            session, watchlist, registered=registered_names
+        )
         adv_rss_task = fetch_advanced_rss_feeds_async(session, watchlist)
         sebi_task = check_sebi_sid_filings_async(session)
         inst_task = fetch_institutional_activity_async(session, watchlist)
