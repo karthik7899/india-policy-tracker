@@ -444,16 +444,16 @@ _COMPANY_TERMS = (
 def watched_company_names(graph, holdings=(), extra=()):
     """Every company the graph ties to what we hold, plus ``extra``.
 
-    The demand anchors, every holding's partners, and whoever else is being
-    watched (new entrants the radar flagged). Holdings themselves are left
-    out: their own news is searched for by sector.
+    The demand anchors, every holding's partners and rivals, and whoever else
+    is being watched (new entrants the radar flagged). Holdings themselves
+    are left out: their own news is searched for by sector.
     """
     held = {str(t).upper() for t in holdings}
     names = {str(n) for n in extra}
     for edge in (graph or {}).get("edges", []):
         if edge.get("type") == "anchor_demand":
             names.add(str(edge.get("src")))
-        elif edge.get("type") == "partner":
+        elif edge.get("type") in ("partner", "competitor"):
             names |= {
                 str(end)
                 for end in (edge.get("src"), edge.get("dst"))

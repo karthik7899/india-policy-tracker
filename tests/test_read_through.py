@@ -502,3 +502,348 @@ def test_the_real_dram_headline_reaches_every_exposed_sector():
         "manufacturing_electronics",
     ]
     assert all(f["direction"] == "risk" for f in flags)
+
+
+# ---------------------------------------------------------------------------
+# Transmission and strength
+# ---------------------------------------------------------------------------
+
+
+def test_email_row_says_how_it_travels_and_when_its_news_is_not_binding():
+    from emails.sections import build_read_through_html
+
+    soft = dict(
+        _ROW,
+        mechanism="rival_move",
+        transmission="competitive_threat",
+        strength="soft",
+        strength_note="not yet binding: an MoU, a lowest bid or an intention",
+    )
+    html = build_read_through_html([soft])
+    assert "competitive threat · rival move" in html
+    assert "not yet binding: an MoU, a lowest bid or an intention" in html
+
+    hard = dict(soft, strength="hard", strength_note="")
+    assert "not yet binding" not in build_read_through_html([hard])
+    # A row from before rows carried a transmission still names its rule.
+    assert "displacement" in build_read_through_html([_ROW])
+
+
+def test_unknown_names_and_unheld_destinations_raise_nothing(caplog):
+    """Names the graph has never seen, edges to a sector and a holding we do
+    not have, and edges missing an end. compute_read_throughs turns any
+    exception into an empty list, so a KeyError here would not fail loudly:
+    it would silently drop the one flag below that is real."""
+    graph = {
+        "edges": [
+            {"src": "MegaCorp", "dst": "no_such_sector", "type": "anchor_demand"},
+            {"src": "coal", "dst": "NOTHELD", "type": "input_cost"},
+            {
+                "src": "Rivalco",
+                "dst": "NOTHELD",
+                "type": "competitor",
+                "scope": ["packaging"],
+            },
+            {"src": "Partnerco", "dst": "NOTHELD", "type": "partner"},
+            {"src": "Ghost", "type": "partner"},
+            {"type": "anchor_demand"},
+            {
+                "src": "copper",
+                "dst": "clean_energy",
+                "type": "input_cost",
+                "evidence": "curated",
+            },
+        ]
+    }
+    events = [
+        _event(
+            "MegaCorp opens new plant",
+            event_type="capacity_add",
+            external=["MegaCorp"],
+            domains=["manufacturing_electronics"],
+        ),
+        _event("Rivalco ties up for chip packaging", external=["Rivalco"]),
+        _event(
+            "Partnerco hit by shortage",
+            event_type="supply_disruption",
+            direction="risk",
+            external=["Partnerco", "Unknown Corp"],
+        ),
+        # The bare minimum a stored event might carry.
+        {
+            "headline": "Unknown Corp wins order",
+            "date": TODAY,
+            "event_type": "order_win",
+        },
+    ]
+    with caplog.at_level("WARNING"):
+        flags = compute_read_throughs(
+            events,
+            graph,
+            WATCHLIST,
+            today=TODAY,
+            headlines=["Coal shortage deepens as copper prices surge"],
+        )
+    assert "failed safely" not in caplog.text
+    assert [(f["sector"], f["tickers"]) for f in flags] == [
+        ("clean_energy", ["SUZLON"])
+    ]
+
+
+# ---------------------------------------------------------------------------
+# The committed graph: entities we do not hold, reaching holdings we do
+#
+# Read through entity_graph.json and watchlist.json as a daily run reads them,
+# so a broken alias, a mistyped destination or an edge that lost its scope
+# fails here rather than in a briefing.
+# ---------------------------------------------------------------------------
+
+
+def _committed(*headlines):
+    from analysis.entity_graph import load_entity_graph
+    from analysis.event_engine import classify_headlines
+    from config import load_watchlist
+
+    graph, watchlist = load_entity_graph(), load_watchlist()
+    events = classify_headlines(
+        {"corporate_agreements": [{"title": h} for h in headlines]}, watchlist, graph
+    )
+    flags = compute_read_throughs(
+        events, graph, watchlist, today=TODAY, headlines=list(headlines)
+    )
+    return events, flags, watchlist
+
+
+def _held(watchlist, sector):
+    return sorted(s["ticker"] for s in watchlist.get(sector) or [])
+
+
+def test_a_foundry_named_in_full_reaches_the_holdings_it_anchors():
+    """No holding is named, and the foundry is written out in full, which the
+    company matcher used to read as some other company. The alias makes it
+    TSMC, and TSMC's anchor edges carry the disruption to both sectors it
+    drives."""
+    events, flags, watchlist = _committed(
+        "Taiwan Semiconductor Manufacturing halts production after earthquake"
+    )
+    assert [e["external"] for e in events] == [["TSMC"]]
+    assert {f["sector"] for f in flags} == {
+        "manufacturing_electronics",
+        "semiconductors_equipment",
+    }
+    for f in flags:
+        assert f["mechanism"] == "anchor_shift"
+        assert (f["transmission"], f["direction"], f["strength"]) == (
+            "demand_pull",
+            "risk",
+            "hard",
+        )
+        assert f["tickers"] == _held(watchlist, f["sector"])
+        assert f["chain"][0] == "TSMC hit by supply disruption"
+
+
+@pytest.mark.parametrize(
+    "headline,says",
+    [
+        (
+            "Hon Hai Precision to set up new smartphone assembly plant in Tamil Nadu",
+            "Foxconn is adding capacity",
+        ),
+        (
+            "Bharat FIH wins order to assemble smartphones in India",
+            "Foxconn won an order",
+        ),
+    ],
+)
+def test_an_ems_anchor_by_any_of_its_names_is_demand_for_our_ems_holdings(
+    headline, says
+):
+    events, flags, watchlist = _committed(headline)
+    assert [e["external"] for e in events] == [["Foxconn"]]
+    (flag,) = flags
+    assert flag["mechanism"] == "anchor_pull"
+    assert (flag["transmission"], flag["direction"]) == ("demand_pull", "opportunity")
+    assert flag["tickers"] == _held(watchlist, "manufacturing_electronics")
+    assert flag["chain"][0] == says
+
+
+def test_the_same_anchor_news_raises_an_ecosystem_signal_on_the_sector():
+    from analysis.event_engine import market_event_signals
+
+    events, _, watchlist = _committed(
+        "Hon Hai Precision to set up new smartphone assembly plant in Tamil Nadu"
+    )
+    signals = [
+        a
+        for a in market_event_signals({"market_events": events}, watchlist)
+        if a["category"] == "Ecosystem Signal"
+    ]
+    assert signals
+    assert {a["ticker"] for a in signals} <= set(
+        _held(watchlist, "manufacturing_electronics")
+    )
+    for a in signals:
+        assert a["signal"].startswith("Foxconn → anchor_demand edge")
+        assert a["strength"] == "hard"
+
+
+@pytest.mark.parametrize(
+    "headline,direction",
+    [
+        ("Gemtek hit by optical transceiver component shortage", "risk"),
+        (
+            "Gemtek wins 800G optical module order from Indian telecom operator",
+            "opportunity",
+        ),
+        # Wi-Fi gear is Gemtek's own business; the venture makes transceivers.
+        ("Gemtek wins Wi-Fi router order in India", None),
+    ],
+)
+def test_the_optical_jv_partners_news_reaches_dixon_only_in_the_jvs_line(
+    headline, direction
+):
+    events, flags, _ = _committed(headline)
+    assert [e["external"] for e in events] == [["Gemtek"]]
+    if direction is None:
+        assert flags == []
+        return
+    (flag,) = flags
+    assert flag["mechanism"] == "partner_exposure"
+    assert flag["tickers"] == ["DIXON"]
+    assert (flag["direction"], flag["transmission"]) == (direction, "demand_pull")
+
+
+def test_a_rival_gaining_ground_in_chip_packaging_presses_on_each_osat_holding():
+    _, flags, watchlist = _committed(
+        "Tata Electronics partners with Besi to advance semiconductor packaging in Assam"
+    )
+    sector_of = {s["ticker"]: k for k, v in watchlist.items() for s in v or []}
+    assert sorted(t for f in flags for t in f["tickers"]) == [
+        "CGPOWER",
+        "KAYNES",
+        "SPELS",
+    ]
+    for f in flags:
+        assert f["mechanism"] == "rival_move"
+        assert (f["transmission"], f["direction"]) == ("competitive_threat", "risk")
+        # One holding's line, not its whole sector, filed under its own sector.
+        (ticker,) = f["tickers"]
+        assert f["sector"] == sector_of[ticker]
+
+
+@pytest.mark.parametrize(
+    "headline",
+    [
+        "Nexperia Partners With Tata Electronics for Semiconductor Manufacturing "
+        "in India",
+        "Fujifilm and Tata Electronics Announce Strategic Partnership to "
+        "Accelerate Semiconductor Materials Ecosystem in India",
+    ],
+)
+def test_the_rivals_news_outside_that_line_is_not_ours(headline):
+    events, flags, _ = _committed(headline)
+    assert [e["external"] for e in events] == [["Tata Electronics"]]
+    assert flags == []
+
+
+def test_a_lowest_bid_counts_for_half_a_letter_of_award_and_ranks_below_it():
+    """PR #211's line, carried into read-throughs: "emerges L-1" is a bid
+    that may still be lost, a Letter of Award is the work."""
+    from analysis.event_engine import STRENGTH_SAYS
+
+    _, flags, _ = _committed(
+        "Tata Electronics emerges L-1 bidder for chip packaging contract",
+        "Tata Electronics receives Letter of Award for chip packaging contract",
+    )
+    assert [(f["strength"], f["weight"]) for f in flags] == [("hard", 1.0)] * 3 + [
+        ("soft", 0.5)
+    ] * 3
+    award, bid = flags[0], flags[-1]
+    assert "Letter of Award" in award["trigger"] and award["strength_note"] == ""
+    assert "L-1" in bid["trigger"]
+    assert bid["strength_note"] == STRENGTH_SAYS["soft"]
+
+
+def test_an_mou_is_soft_however_it_is_signed():
+    _, flags, _ = _committed("Tata Electronics signs MoU with Besi for chip packaging")
+    assert flags and {(f["strength"], f["weight"]) for f in flags} == {("soft", 0.5)}
+
+
+def test_an_input_edge_to_one_holding_lands_on_it_and_not_its_sector():
+    """Coal is Adani Power's fuel, not Suzlon's: the edge ends at the holding,
+    and widening it to clean energy would assert exposure nobody has shown."""
+    _, flags, _ = _committed("Coal prices surge as monsoon floods mines")
+    (flag,) = flags
+    assert flag["tickers"] == ["ADANIPOWER"]
+    assert flag["sector"] == "clean_energy"
+    assert (flag["mechanism"], flag["transmission"]) == ("input_squeeze", "input_shock")
+    assert flag["chain"][1].startswith("coal is an input to ADANIPOWER")
+
+
+@pytest.mark.parametrize(
+    "headline",
+    [
+        # A material named to say who uses something else.
+        "Helium, key for semiconductor manufacturing, faces shortage",
+        "Semiconductor skills shortage worsens",
+        # Part of another word.
+        "Blue-chip stocks rally amid shortage of sellers",
+        # A scarcity said not to exist.
+        "US Tariff Threat Reprices Copper Without a Global Shortage",
+        # A kind the edge rules out: the EMS holdings buy mature-node parts.
+        "China's AI chip shortage deepens",
+    ],
+)
+def test_the_committed_input_edges_hold_their_guards(headline):
+    assert _committed(headline)[1] == []
+
+
+@pytest.mark.parametrize(
+    "headline,sectors,direction",
+    [
+        (
+            "Mature-node chip shortage deepens",
+            {"manufacturing_electronics", "surveillance_security"},
+            "risk",
+        ),
+        # A plural is the material.
+        (
+            "PCBs get costlier as AI servers soak up capacity",
+            {"manufacturing_electronics"},
+            "risk",
+        ),
+        # A duty waived makes the input cheaper for every buyer here.
+        (
+            "Centre waives cotton import duty till December",
+            {"textiles_apparel"},
+            "opportunity",
+        ),
+    ],
+)
+def test_the_committed_input_edges_still_fire(headline, sectors, direction):
+    flags = _committed(headline)[1]
+    assert {f["sector"] for f in flags} == sectors
+    assert {f["direction"] for f in flags} == {direction}
+    assert {f["transmission"] for f in flags} == {"input_shock"}
+
+
+def test_every_read_through_says_how_it_travels_and_how_binding_it_is():
+    from analysis.event_engine import STRENGTH_SAYS, STRENGTH_WEIGHT
+    from analysis.read_through import TRANSMISSIONS
+
+    _, flags, _ = _committed(
+        "Taiwan Semiconductor Manufacturing halts production after earthquake",
+        "Hon Hai Precision to set up new smartphone assembly plant in Tamil Nadu",
+        "Gemtek hit by optical transceiver component shortage",
+        "Tata Electronics emerges L-1 bidder for chip packaging contract",
+        "Coal prices surge as monsoon floods mines",
+        "Centre waives cotton import duty till December",
+        "Copper shortage could be the undoing of the electrification push",
+    )
+    assert {f["transmission"] for f in flags} == set(TRANSMISSIONS)
+    assert {f["strength"] for f in flags} == {"hard", "soft", "reported"}
+    for f in flags:
+        assert f["transmission"] in TRANSMISSIONS, f
+        assert f["strength_note"] == STRENGTH_SAYS.get(f["strength"], "")
+        link = 1.0 if f["confidence"] == "curated" else 0.5
+        assert f["weight"] == round(STRENGTH_WEIGHT[f["strength"]] * link, 3)

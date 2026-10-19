@@ -18,7 +18,7 @@
 
 import { el, mount, emptyState, disclosure } from "../core/dom.js";
 import { href } from "../core/router.js";
-import { shortDate } from "../core/format.js";
+import { shortDate, strengthLabel, transmissionLabel } from "../core/format.js";
 import { loadGraph, loadProposals } from "../core/data.js";
 
 const TYPE_LABEL = {
@@ -310,12 +310,20 @@ function readThroughPanel(rows, params) {
               DIRECTION_MARK[r.direction] || "•",
             ),
             el("span", { class: "rt-sector" }, String(r.sector || "").replace(/_/g, " ")),
+            r.transmission
+              ? el("span", { class: "rt-channel" }, transmissionLabel(r.transmission))
+              : null,
             el("span", { class: "rt-mech" }, String(r.mechanism || "").replace(/_/g, " ")),
             el(
               "span",
               { class: "rt-confidence" },
               r.confidence === "curated" ? "curated links" : "harvested links",
             ),
+            // A lowest bid or a rumour is said so beside the conclusion, not
+            // left for the reader to infer from the headline.
+            strengthLabel(r)
+              ? el("span", { class: `rt-strength rt-strength-${r.strength}` }, strengthLabel(r))
+              : null,
           ),
           el("p", { class: "rt-trigger" }, r.trigger || ""),
           el(

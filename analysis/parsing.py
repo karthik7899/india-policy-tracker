@@ -53,6 +53,13 @@ _CORP_CONTINUATIONS = {
     "jv",
     "joint",
     "consortium",
+    # "Apple CEO Calls Memory Shortage an Absolute Crisis" is about Apple. A
+    # title before a name is a person ("CEO Arvind Krishna"); after one, it is
+    # the company's own officer.
+    "ceo",
+    "cfo",
+    "chairman",
+    "chief",
 }
 
 # Title-Case headlines capitalize verbs too ("Suzlon Wins 300MW Order"), so a
@@ -268,6 +275,9 @@ def title_matches_company(title, ticker, name):
                     and nxt_clean not in _HEADLINE_VERBS
                     and nxt_clean not in _FUNCTION_WORDS
                     and not _PERIOD_RE.match(nxt_clean)
+                    # A model code: "Airbus A320neo", "Nvidia H100". Never a
+                    # surname, nor the next word of another company's name.
+                    and not any(ch.isdigit() for ch in tokens[i + 1])
                 ):
                     # "Arvind Krishna" (a person) or "ITC Hotels" (a
                     # different listed company that starts with our token).

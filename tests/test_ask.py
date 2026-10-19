@@ -721,3 +721,27 @@ def test_a_results_question_gets_the_reported_figures(tmp_path):
 def test_a_holding_without_reported_figures_says_nothing_rather_than_zero(tmp_path):
     ctx = ask.build_context("Why is SYRMA broken?", _sources(tmp_path))
     assert ctx["holdings_asked_about"][0]["reported"] == {}
+
+
+def test_a_read_through_reaches_the_extract_with_how_it_travels(tmp_path):
+    """The answer can say a lead is a lowest bid or a rumour only if the
+    extract tells it so."""
+    src = _sources(tmp_path)
+    src["briefing"]["read_throughs"] = [
+        {
+            "trigger": "Elemaster signs MoU for a new plant in India",
+            "date": "2026-10-08",
+            "direction": "mixed",
+            "mechanism": "partner_exposure",
+            "transmission": "demand_pull",
+            "strength": "soft",
+            "weight": 0.5,
+            "tickers": ["SYRMA"],
+            "chain": ["Elemaster: new capacity", "Elemaster is a partner of SYRMA"],
+        }
+    ]
+    (h,) = ask.build_context("Why is SYRMA broken?", src)["holdings_asked_about"]
+    (row,) = h["read_throughs"]
+    assert (row["transmission"], row["strength"]) == ("demand_pull", "soft")
+    # A ranking number, not something to quote.
+    assert "weight" not in row

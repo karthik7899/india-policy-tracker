@@ -10,8 +10,26 @@ Edge types:
   partner           tie-up/JV (undirected — keyword harvesting can't infer
                     direction reliably, and routing doesn't need it)
   competitor        rivals (regenerated live from Screener peers, so rarely
-                    persisted here)
-  input_cost        commodity/input keyword → cost-exposed sector
+                    persisted here); one curated with a ``scope`` ends at a
+                    holding, for a rival in one of its lines
+  input_cost        commodity/input keyword → cost-exposed sector or holding;
+                    a ``not_scope`` names kinds of the input the exposure
+                    does not cover ("AI chip" for boards of mature-node parts)
+
+Aliases are data too: {canonical name: [other names]}. An edge names an
+entity once, and headlines name it many ways. The matcher accepts a one-word
+name only when the next word does not start another name, so that "ITC
+Hotels" is never ITC, and that same rule read "Samsung Electronics", "Micron
+Technology" and "Corning Incorporated" as companies other than Samsung,
+Micron and Corning. Every edge involving them missed the commonest way they
+are written. An alias also carries a parent ("Alphabet"), a subsidiary ("Hon
+Hai", "Bharat FIH") or a product only its maker sells ("iPhone"). Matching
+an alias yields the canonical name, so edges, chains and proposals meet one
+spelling.
+
+An alias must mean what the edges mean. "Google Cloud" is not one: its
+headlines are IT-services deals (TCS, Accenture, Wipro), while Google's
+edges are demand for data centres and devices.
 
 The graph never blocks anything: an empty or missing file degrades every
 consumer to Tier-1 vocabulary routing.
@@ -69,34 +87,96 @@ def _valid_edge(edge: Any) -> bool:
     )
 
 
+def _valid_aliases(raw: Any) -> Dict[str, List[str]]:
+    """{canonical: [alias, ...]}, keeping only non-empty strings."""
+    if not isinstance(raw, dict):
+        return {}
+    aliases = {}
+    for name, others in raw.items():
+        if not isinstance(name, str) or not name.strip():
+            continue
+        kept = [
+            str(o).strip()
+            for o in (others if isinstance(others, list) else [])
+            if isinstance(o, str) and o.strip()
+        ]
+        if kept:
+            aliases[name.strip()] = kept
+    return aliases
+
+
 def load_entity_graph(path: str = GRAPH_PATH) -> Dict[str, Any]:
-    """Committed graph; {"edges": []} on any problem — consumers degrade to
-    Tier-1 routing, never break."""
+    """Committed graph; {"edges": [], "aliases": {}} on any problem —
+    consumers degrade to Tier-1 routing, never break."""
     import json
 
     try:
         with open(path, "r", encoding="utf-8") as f:
             data = json.load(f)
         edges = [e for e in (data.get("edges") or []) if _valid_edge(e)]
-        return {"edges": edges}
+        return {"edges": edges, "aliases": _valid_aliases(data.get("aliases"))}
     except FileNotFoundError:
-        return {"edges": []}
+        return {"edges": [], "aliases": {}}
     except Exception as e:
         log.warning(f"Could not load entity_graph.json: {e}")
-        return {"edges": []}
+        return {"edges": [], "aliases": {}}
 
 
 def save_entity_graph(graph: Dict[str, Any], path: str = GRAPH_PATH) -> bool:
+    """Write the edges, and the aliases with them.
+
+    A graph built without an "aliases" key keeps the ones already in the
+    file: this is called by self-growth steps that only add edges, and a save
+    that dropped the aliases would quietly undo every name they map.
+    """
     try:
         edges = sorted(
             (e for e in graph.get("edges", []) if _valid_edge(e)),
             key=lambda e: (e["type"], str(e["src"]).lower(), str(e["dst"]).lower()),
         )
-        atomic_write_json({"edges": edges}, path)
+        if "aliases" in graph:
+            aliases = _valid_aliases(graph.get("aliases"))
+        else:
+            aliases = load_entity_graph(path).get("aliases", {})
+        atomic_write_json(
+            {
+                "edges": edges,
+                "aliases": {k: aliases[k] for k in sorted(aliases, key=str.lower)},
+            },
+            path,
+        )
         return True
     except Exception as e:
         log.warning(f"Could not save entity_graph.json: {e}")
         return False
+
+
+def canonical_name(name: str, graph: Dict[str, Any]) -> str:
+    """The graph's own spelling of ``name``: the canonical name an alias
+    belongs to, matched without regard to case; ``name`` itself otherwise."""
+    wanted = str(name or "").strip().lower()
+    for canonical, others in ((graph or {}).get("aliases") or {}).items():
+        if wanted == canonical.lower() or wanted in (o.lower() for o in others):
+            return canonical
+    return name
+
+
+def names_mentioned(
+    text: str, names: Iterable[str], graph: Dict[str, Any]
+) -> List[str]:
+    """Which of ``names`` (canonical) ``text`` mentions, by the name itself or
+    any of its aliases, with the same word-boundary and person-guard rules as
+    every other attribution."""
+    aliases = (graph or {}).get("aliases") or {}
+    lowered = {k.lower(): v for k, v in aliases.items()}
+    return [
+        name
+        for name in names
+        if any(
+            title_matches_company(text, "", form)
+            for form in [name] + list(lowered.get(str(name).lower(), ()))
+        )
+    ]
 
 
 def _edge_key(edge: Dict[str, Any]):
@@ -107,17 +187,19 @@ def _edge_key(edge: Dict[str, Any]):
 
 
 def match_anchor_edges(headline: str, graph: Dict[str, Any]) -> List[Dict[str, Any]]:
-    """Edges whose src entity is actually mentioned in the headline —
-    word-boundary + person-guard matching, same standard as everywhere else.
-    input_cost edges are excluded (their src is a commodity keyword handled
-    by the stress computation, not a company name)."""
-    hits = []
-    for edge in (graph or {}).get("edges", []):
-        if edge.get("type") in ("input_cost",):
-            continue
-        if title_matches_company(headline, "", str(edge.get("src", ""))):
-            hits.append(edge)
-    return hits
+    """Edges whose src entity is actually mentioned in the headline, by its
+    name or an alias — word-boundary + person-guard matching, same standard
+    as everywhere else. input_cost edges are excluded (their src is a
+    commodity keyword handled by the stress computation, not a company
+    name)."""
+    edges = [e for e in (graph or {}).get("edges", []) if e.get("type") != "input_cost"]
+    named = {
+        n.lower()
+        for n in names_mentioned(
+            headline, sorted({str(e.get("src", "")) for e in edges}), graph
+        )
+    }
+    return [e for e in edges if str(e.get("src", "")).lower() in named]
 
 
 def harvest_partner_edges(
@@ -294,7 +376,9 @@ def apply_accepted_proposals(
                 continue
             if status != "accepted":
                 continue
-            name = str(p.get("counterparty") or p.get("proposed_as") or "").strip()
+            name = canonical_name(
+                str(p.get("counterparty") or p.get("proposed_as") or "").strip(), graph
+            )
             holding = str(p.get("holding") or "").upper()
             if not name or not holding:
                 continue
@@ -457,6 +541,8 @@ def record_partner_proposals(
                 if _is_namesake(elsewhere, holding, headline):
                     continue  # somebody else's deal under our name
                 for name in event.get("counterparties") or []:
+                    # "Hon Hai" is Foxconn: one pair, under the graph's name.
+                    name = canonical_name(name, graph)
                     edge = {"src": name, "dst": holding, "type": "partner"}
                     if _edge_key(edge) in known_edges:
                         continue  # already in the graph; nothing to review

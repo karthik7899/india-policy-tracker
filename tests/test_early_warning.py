@@ -317,6 +317,31 @@ class TestOrderMateriality:
         annotate_order_materiality([alert], self.WATCHLIST)
         assert alert["severity"] == "Critical"
 
+    def test_a_lowest_bid_needs_twice_the_size_to_escalate(self):
+        """An L-1 bid or an MoU may never become the award (PR #211), so it
+        counts at half its size; the size shown is still its own, and the
+        alert says why it counted for less."""
+        from analysis.early_warning import annotate_order_materiality
+
+        # 8% of revenue: enough as an award, not as a lowest bid.
+        award = dict(
+            self._alert(["Midcap wins order worth Rs 160 crore"]), strength="hard"
+        )
+        bid = dict(
+            self._alert(["Midcap emerges L-1 bidder for Rs 160 crore order"]),
+            strength="soft",
+        )
+        big_bid = dict(
+            self._alert(["Midcap emerges L-1 bidder for Rs 500 crore order"]),
+            strength="soft",
+        )
+        annotate_order_materiality([award, bid, big_bid], self.WATCHLIST)
+
+        assert award["severity"] == "High"
+        assert (bid["severity"], bid["materiality_pct"]) == ("Medium", 8.0)
+        assert big_bid["severity"] == "High"
+        assert "counted at 0.5× as not yet binding" in big_bid["signal"]
+
     def test_risk_alerts_are_never_escalated_on_order_size(self):
         """Direction is a property of the finding, not of its size."""
         from analysis.early_warning import annotate_order_materiality

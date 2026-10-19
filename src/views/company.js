@@ -33,7 +33,7 @@ import {
 } from "./companies.js";
 import { pickBook, positionOf } from "../core/portfolio.js";
 import { eventsFor, scorecardFor, kindLabel } from "../core/calendar.js";
-import { pct } from "../core/format.js";
+import { pct, strengthLabel, transmissionLabel } from "../core/format.js";
 
 const EDGE_LABEL = {
   partner: "partner",
@@ -173,6 +173,14 @@ function partnersSection(links, proposals, ticker) {
 // A partner's news can cut either way (analysis/read_through.py).
 const TAG_CLASS = { risk: "risk", opportunity: "opp", mixed: "mixed" };
 
+/** "input shock · reported, not confirmed: <chain>" — how it travels, how
+ * binding the news is, then the reasoning. */
+export function readThroughMeta(r) {
+  const how = [transmissionLabel(r?.transmission), strengthLabel(r)].filter(Boolean).join(" · ");
+  const chain = (r?.chain || []).join(" → ");
+  return how && chain ? `${how}: ${chain}` : how || chain;
+}
+
 function readThroughSection(rows) {
   if (!rows.length) return null;
   return panel(
@@ -188,7 +196,7 @@ function readThroughSection(rows) {
           el("span", { class: `tag tag-${TAG_CLASS[r.direction] || "opp"}` }, r.direction || ""),
           " ",
           r.trigger || "",
-          el("span", { class: "evidence-meta" }, (r.chain || []).join(" → ")),
+          el("span", { class: "evidence-meta" }, readThroughMeta(r)),
         ),
       ),
     ),
