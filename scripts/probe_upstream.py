@@ -625,9 +625,11 @@ async def probe_pib_pli():
             + "&hl=en-IN&gl=IN&ceid=IN:en"
         )
         print(f"\n{'=' * 72}\nGOOGLE NEWS SEARCH (the scraper's discovery)\n{'=' * 72}")
+        google_items = []
         try:
             status, ctype, _final, body = await get(rss)
             feed = feedparser.parse(body)
+            google_items = list(feed.entries)
             print(f"  HTTP {status}, {len(feed.entries)} item(s)")
             for entry in feed.entries[:5]:
                 print(
@@ -741,11 +743,83 @@ async def probe_pib_pli():
                     urllib.parse.urljoin(final, pli_links[0][1])
                 ] + release_links
             _save("pib_all_releases.html", page)
+
+            # 2c. The day a Google News PLI item was published, asked for
+            # through the page's own form, and the item's title found in it.
+            import datetime
+            from email.utils import parsedate_to_datetime
+
+            pli_items = [
+                e
+                for e in google_items
+                if any(w in e.get("title", "").lower() for w in _PLI_WORDS)
+            ]
+            target = pli_items[0] if pli_items else None
+            if target and form:
+                title = target.get("title", "").rsplit(" - ", 1)[0].strip()
+                day = parsedate_to_datetime(target.get("published")).date()
+                print(
+                    f"\n{'=' * 72}\nPIB ALL RELEASES ON {day} (form post)\n{'=' * 72}"
+                )
+                print(f"  looking for: {title[:110]}")
+                fields = {}
+                for field in form.find_all(["input", "select"]):
+                    name = field.get("name")
+                    if not name or field.get("type") == "image":
+                        continue
+                    if field.name == "select":
+                        chosen = field.find("option", selected=True) or field.find(
+                            "option"
+                        )
+                        fields[name] = chosen.get("value") if chosen else ""
+                    else:
+                        fields[name] = field.get("value") or ""
+                for when in (day, day + datetime.timedelta(days=1)):
+                    data = dict(fields)
+                    data["ctl00$ContentPlaceHolder1$ddlday"] = str(when.day)
+                    data["ctl00$ContentPlaceHolder1$ddlMonth"] = str(when.month)
+                    data["ctl00$ContentPlaceHolder1$ddlYear"] = str(when.year)
+                    data["__EVENTTARGET"] = "ctl00$ContentPlaceHolder1$ddlday"
+                    async with session.post(final, data=data, timeout=30) as r:
+                        posted = await r.text()
+                        print(f"  {when}: HTTP {r.status}, {len(posted)} bytes")
+                    psoup = BeautifulSoup(posted, "lxml")
+                    links = [
+                        (a.get_text(" ", strip=True), a.get("href", ""))
+                        for a in psoup.find_all("a", href=True)
+                        if "PRID=" in a.get("href", "")
+                    ]
+                    shown = psoup.find(
+                        "select", {"name": "ctl00$ContentPlaceHolder1$ddlday"}
+                    )
+                    picked = shown.find("option", selected=True) if shown else None
+                    print(
+                        f"    {len(links)} release link(s); the page now shows day "
+                        f"{picked.get('value') if picked else '?'}"
+                    )
+                    for text, href in links:
+                        if any(w in text.lower() for w in _PLI_WORDS):
+                            print(f"    PLI: {text[:100]} | {href}")
+                    hit = next(
+                        (
+                            href
+                            for text, href in links
+                            if " ".join(text.lower().split())[:60]
+                            == " ".join(title.lower().split())[:60]
+                        ),
+                        None,
+                    )
+                    if hit:
+                        print(f"    MATCHED the Google News title -> {hit}")
+                        release_links = [urllib.parse.urljoin(final, hit)]
+                        break
         except Exception as e:  # noqa: BLE001 - the release page is asked regardless
             print(f"  FAILED: {type(e).__name__}: {str(e)[:200]}")
 
         # 3. One release page, read by the real parser.
         for link in release_links[:1]:
+            if "PRID=" in link and "lang=" not in link:
+                link += "&reg=3&lang=1"
             print(f"\n{'=' * 72}\nPIB RELEASE {link}\n{'=' * 72}")
             status, ctype, final, page = await get(link)
             soup = BeautifulSoup(page, "lxml")
