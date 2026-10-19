@@ -578,8 +578,11 @@ async def probe_pib_pli():
     in; then the scraper itself, end to end, on today's watchlist. What the
     probes that built it found is in docs/upstream-findings.md.
     """
+    import re
+
     import aiohttp
     import feedparser
+    from bs4 import BeautifulSoup
 
     import scraper
     from config import load_watchlist
@@ -611,8 +614,20 @@ async def probe_pib_pli():
                 f"    {scraper._relevance(item['title'])} PRID {item['prid']} "
                 f"({source}): {item['title'][:85]}"
             )
+        listed = [
+            (t, prid, set(pib.title_words(t)))
+            for links in index.months.values()
+            for t, prid, _ in links
+        ]
         for story in unfound:
+            want = set(pib.title_words(story["title"]))
+            near = max(
+                ((len(want & w) / len(want | w), prid, t) for t, prid, w in listed),
+                default=(0, "", ""),
+            )
             print(f"    not on the lists: {story['title'][:90]}")
+            if want and near[0] >= 0.3:
+                print(f"      nearest ({near[0]:.2f}) PRID {near[1]}: {near[2][:90]}")
 
         print(f"\n{'=' * 72}\nPIB: what each release to be read names\n{'=' * 72}")
         for item in ranked[: scraper.MAX_PLI_RELEASES]:
@@ -625,10 +640,30 @@ async def probe_pib_pli():
                 print("    no release text on the page")
                 continue
             print(f"    {release['date']} {release['title'][:90]}")
-            for c in scraper._extract_pli_data_from_html(
+            names = scraper._extract_pli_data_from_html(
                 release["html"], release["title"], release["date"]
-            ):
+            )
+            for c in names:
                 print(f"    > {c['name']} | {c['sector']} | {c['scheme_sectors']}")
+            if not names:
+                # Where names might be that the parser does not take.
+                body = BeautifulSoup(release["html"], "lxml")
+                for t, table in enumerate(body.find_all("table")[:4]):
+                    for row in table.find_all("tr")[:4]:
+                        cells = [
+                            c.get_text(" ", strip=True)[:30]
+                            for c in row.find_all(["td", "th"])
+                        ]
+                        print(f"      table {t}: {cells[:5]}")
+                lines = scraper._text_lines(body)
+                hits = [
+                    ln for ln in lines if re.search(r"Limited|Ltd|Pvt|LLP|Private", ln)
+                ]
+                print(f"      {len(lines)} line(s); {len(hits)} with a legal word")
+                for ln in hits[:6]:
+                    print(f"      | {ln[:150]}")
+                for ln in lines[:6]:
+                    print(f"      : {ln[:150]}")
 
         print(f"\n{'=' * 72}\nTHE SCRAPER, end to end\n{'=' * 72}")
         found = await scraper.scrape_pib_pli_approvals_async(
