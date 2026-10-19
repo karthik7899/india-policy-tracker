@@ -770,12 +770,15 @@ def test_an_mou_is_soft_however_it_is_signed():
 
 
 def test_an_input_edge_to_one_holding_lands_on_it_and_not_its_sector():
-    """Coal is Adani Power's fuel, not Suzlon's: the edge ends at the holding,
-    and widening it to clean energy would assert exposure nobody has shown."""
-    _, flags, _ = _committed("Coal prices surge as monsoon floods mines")
+    """Coal is Adani Power's fuel, not its sector-mates': the edge ends at the
+    holding, and widening it to the sector would assert exposure nobody has
+    shown. It follows the holding wherever the watchlist files it — a
+    dashboard decision moved Adani Power out of clean energy."""
+    _, flags, watchlist = _committed("Coal prices surge as monsoon floods mines")
+    sector_of = {s["ticker"]: k for k, v in watchlist.items() for s in v or []}
     (flag,) = flags
     assert flag["tickers"] == ["ADANIPOWER"]
-    assert flag["sector"] == "clean_energy"
+    assert flag["sector"] == sector_of["ADANIPOWER"]
     assert (flag["mechanism"], flag["transmission"]) == ("input_squeeze", "input_shock")
     assert flag["chain"][1].startswith("coal is an input to ADANIPOWER")
 
