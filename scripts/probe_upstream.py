@@ -824,6 +824,12 @@ async def probe_pib_pli():
         # 3. Release pages, read by the real parser, with where the release's
         # own text sits in PIB's page.
         for link in release_links[:2]:
+            # The detail page is a shell: the release itself is in an iframe
+            # (iframe#ContentPlaceHolder1_iframepressrealese), and the shell's
+            # sidebar of other releases is what the parser read as names.
+            link = link.replace(
+                "PressReleaseDetail.aspx", "PressReleaseIframePage.aspx"
+            )
             if "PRID=" in link and "lang=" not in link:
                 link += "&reg=3&lang=1"
             print(f"\n{'=' * 72}\nPIB RELEASE {link}\n{'=' * 72}")
