@@ -2,22 +2,6 @@
   "_how_to_review": "Partner edges proposed from completed tie-up headlines. Nothing here reaches the graph until you set status to 'accepted'; 'rejected' stops the pair being proposed again. You may correct 'counterparty' before accepting (e.g. 'Vivo Mobile' -> 'Vivo') — it is the name the graph will match in future headlines. Leave 'proposed_as' alone: it is how the pipeline recognises the same pair next time.",
   "proposals": [
     {
-      "holding": "OPTIEMUS",
-      "counterparty": "London",
-      "proposed_as": "London",
-      "status": "pending",
-      "first_seen": "2026-09-22",
-      "last_seen": "2026-09-22",
-      "evidence": [
-        {
-          "headline": "Optiemus Infracom board approves JV with London-based Nothing Electronics",
-          "date": "2026-09-22",
-          "link": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxQc1BKM1RQeWRpTUxIcENsQ1hseUU1X182ZGJiQllEMGQ4ZjBjX3NLVzA3b1pYel9xVEtDVzhTaXpqSkFNMy1DOVhvT1JPSzZUcDZHV1hPREpQNGRMUV8taU1hSTZFbG00MUxoLWFud1ptdk8xVVFBb2luc2tfR05Fc1E0MExfR2N5YXVGUTdCSW04M1NnOUhDYWNYTUpxUUstOXNvTnF4UXdXLS1rcENMVVhmWmc1MThIa2V4RU11RmxpN2ZQVE1SdUxLNXgxOW0ycVhqZURuRHJKQ3RoLXFqaGFhb1NsUFQxTy1z0gHwAUFVX3lxTFBSU3FiZGc0Q3VFalZSWm52M2NRdHQ2YXNIbnB1YV9ONEZ6bl9IOUZaWHpFR2h4Qm5tNVNXQXlMY1ZHNTM5eEVTNms3eGVUNTNJbzlOMF93STg3MHRqMWpwaDNtR1RuWF9hLW1Qc3hLN0ZEbVFDbjdhdDhFczE3Vnhtc2VJOTZtdExlcDExcjZ5UFlZTWxPTWVRUU9VSHlMTXJ2cVdyU3N2YkNvUlZKX001U201UFJkQnVDM2dVN3lITFlUd096dGNjc2NVZ3F3Wm9WaVlTYmk1ZmlPdTR4VkdvRkFHZmNDMTltOUZnZnF1RQ?oc=5",
-          "source": "Business Standard"
-        }
-      ]
-    },
-    {
       "holding": "SYRMA",
       "counterparty": "Brings KLEVV Products",
       "proposed_as": "Brings KLEVV Products",
@@ -408,6 +392,22 @@
           "date": "2026-09-25",
           "link": "https://news.google.com/rss/articles/CBMic0FVX3lxTE50cFdVVDZVNDczTEdXamhrcnBUSG9uV1B2Y25qMjdBLUg3MnFtR0hfbVBvLUptOFByODIzeGtYbDR4ZDdZblZJSWFRVllZUHVLVnJ0bXdRUVFMNHFFLTF4amloM1YyWFRpOTJQMGJxMDVyUk0?oc=5",
           "source": "L&T Technology Services"
+        }
+      ]
+    },
+    {
+      "holding": "OPTIEMUS",
+      "counterparty": "Nothing Electronics",
+      "proposed_as": "London",
+      "status": "accepted",
+      "first_seen": "2026-09-22",
+      "last_seen": "2026-09-22",
+      "evidence": [
+        {
+          "headline": "Optiemus Infracom board approves JV with London-based Nothing Electronics",
+          "date": "2026-09-22",
+          "link": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxQc1BKM1RQeWRpTUxIcENsQ1hseUU1X182ZGJiQllEMGQ4ZjBjX3NLVzA3b1pYel9xVEtDVzhTaXpqSkFNMy1DOVhvT1JPSzZUcDZHV1hPREpQNGRMUV8taU1hSTZFbG00MUxoLWFud1ptdk8xVVFBb2luc2tfR05Fc1E0MExfR2N5YXVGUTdCSW04M1NnOUhDYWNYTUpxUUstOXNvTnF4UXdXLS1rcENMVVhmWmc1MThIa2V4RU11RmxpN2ZQVE1SdUxLNXgxOW0ycVhqZURuRHJKQ3RoLXFqaGFhb1NsUFQxTy1z0gHwAUFVX3lxTFBSU3FiZGc0Q3VFalZSWm52M2NRdHQ2YXNIbnB1YV9ONEZ6bl9IOUZaWHpFR2h4Qm5tNVNXQXlMY1ZHNTM5eEVTNms3eGVUNTNJbzlOMF93STg3MHRqMWpwaDNtR1RuWF9hLW1Qc3hLN0ZEbVFDbjdhdDhFczE3Vnhtc2VJOTZtdExlcDExcjZ5UFlZTWxPTWVRUU9VSHlMTXJ2cVdyU3N2YkNvUlZKX001U201UFJkQnVDM2dVN3lITFlUd096dGNjc2NVZ3F3Wm9WaVlTYmk1ZmlPdTR4VkdvRkFHZmNDMTltOUZnZnF1RQ?oc=5",
+          "source": "Business Standard"
         }
       ]
     },

@@ -170,6 +170,9 @@ function partnersSection(links, proposals, ticker) {
   );
 }
 
+// A partner's news can cut either way (analysis/read_through.py).
+const TAG_CLASS = { risk: "risk", opportunity: "opp", mixed: "mixed" };
+
 function readThroughSection(rows) {
   if (!rows.length) return null;
   return panel(
@@ -182,7 +185,7 @@ function readThroughSection(rows) {
         el(
           "li",
           {},
-          el("span", { class: `tag tag-${r.direction === "risk" ? "risk" : "opp"}` }, r.direction || ""),
+          el("span", { class: `tag tag-${TAG_CLASS[r.direction] || "opp"}` }, r.direction || ""),
           " ",
           r.trigger || "",
           el("span", { class: "evidence-meta" }, (r.chain || []).join(" → ")),

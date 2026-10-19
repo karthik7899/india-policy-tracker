@@ -91,6 +91,10 @@ def screen_sector_candidates(
             for row in rows or []:
                 if not isinstance(row, dict) or not row.get("ticker"):
                     continue
+                if row.get("watched_entrant"):
+                    # In the comparison to be watched, as a challenger from
+                    # another industry; not offered to the watchlist for it.
+                    continue
                 ticker = str(row["ticker"]).upper()
                 if ticker.isdigit():
                     continue

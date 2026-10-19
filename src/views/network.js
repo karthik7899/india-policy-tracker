@@ -38,7 +38,7 @@ const TYPE_LABEL = {
 // Partners get their own panel, keyed by the holding they belong to.
 const TERMINAL_TYPES = new Set(["anchor_demand", "input_cost"]);
 
-const DIRECTION_MARK = { risk: "▼", opportunity: "▲" };
+const DIRECTION_MARK = { risk: "▼", opportunity: "▲", mixed: "◆" };
 
 // Type carries meaning, so it is labelled, never colour-only. Three types sits
 // inside the categorical cap, but a label costs nothing and survives both CVD

@@ -474,19 +474,26 @@ def _builds_on_holding(name: str, holdings: Iterable[Tuple[str, str]]) -> bool:
     return False
 
 
+_BASED_RE = re.compile(r"-based\b", re.IGNORECASE)
+
+
 def _past_qualifier(run, runs, text):
     """The name a nationality introduces: "French company Safran" -> Safran.
 
     A run made only of qualifier words, followed by at most three lowercase
-    descriptors and then a name, stands for that name. Anything else is
-    returned unchanged for the usual checks to judge.
+    descriptors and then a name, stands for that name. So does any place
+    written "<place>-based": "JV with London-based Nothing Electronics" was
+    proposed as a partner called London. Anything else is returned unchanged
+    for the usual checks to judge.
     """
-    if not all(_clean(t) in _NOT_A_COMPANY for t in run[2].split()):
+    based = _BASED_RE.match(text, run[1])
+    if not based and not all(_clean(t) in _NOT_A_COMPANY for t in run[2].split()):
         return run
-    nxt = next((r for r in runs if r[0] > run[1]), None)
+    after = based.end() if based else run[1]
+    nxt = next((r for r in runs if r[0] >= after), None)
     if not nxt:
         return run
-    gap = text[run[1] : nxt[0]].split()
+    gap = text[after : nxt[0]].split()
     if len(gap) <= 3 and all(
         w.isalpha() and w.islower() and w not in _FUNCTION_WORDS for w in gap
     ):

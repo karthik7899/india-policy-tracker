@@ -325,11 +325,13 @@ body {
 }
 .rt-risk { border-left-color: var(--critical); }
 .rt-opportunity { border-left-color: var(--good); }
+.rt-mixed { border-left-color: var(--warning); }
 
 .rt-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; }
 .rt-mark { font-size: 11px; }
 .rt-risk .rt-mark { color: var(--critical); }
 .rt-opportunity .rt-mark { color: var(--good); }
+.rt-mixed .rt-mark { color: var(--warning); }
 .rt-sector { font-weight: 600; text-transform: capitalize; }
 .rt-mech, .rt-confidence {
   color: var(--muted); font-size: 11px;
@@ -441,6 +443,7 @@ td .disclose-summary { padding: 2px 0; }
    the words "risk" / "opportunity" rather than relying on colour. */
 .tag-risk { border-color: var(--critical); color: var(--critical); }
 .tag-opp { border-color: var(--good); color: var(--good); }
+.tag-mixed { border-color: var(--warning); color: var(--warning); }
 
 /* Companies view: one card per holding, activity beside policy. */
 .company-grid {

@@ -177,32 +177,78 @@ def _extract_pli_data_from_html(html, title, published_date=""):
     return unique_companies
 
 
-async def fetch_global_event_feeds_async(session):
-    """Global market-event headlines: supply-chain shocks, big tie-ups, and
-    anchor-company moves whose second-order impact lands on Indian holdings.
+# Company names per search: few enough that one busy name (Apple, Google)
+# does not take every result, enough to cover the graph in a few requests.
+_COMPANY_BATCH = 8
+# Results kept per company search; the vocabulary searches keep 5.
+_COMPANY_RESULTS = 8
+# What a company search looks for: its deals, and how its business is doing.
+# Results and demand matter as much as deals — "Corning sales fall" is what
+# reaches the Optiemus venture.
+_COMPANY_TERMS = (
+    "deal OR partnership OR investment OR order OR expansion OR supply OR "
+    "sales OR revenue OR profit OR results OR guidance OR demand OR "
+    "layoffs OR shutdown"
+)
 
-    Queries are entity-free vocabulary from config plus one query assembled
-    at runtime from the entity graph's anchor nodes — so which companies get
-    watched is data, never code. Enhancement channel: fail-safe, capped, and
-    never blocks the briefing.
+
+def watched_company_names(graph, holdings=(), extra=()):
+    """Every company the graph ties to what we hold, plus ``extra``.
+
+    The demand anchors, every holding's partners, and whoever else is being
+    watched (new entrants the radar flagged). Holdings themselves are left
+    out: their own news is searched for by sector.
+    """
+    held = {str(t).upper() for t in holdings}
+    names = {str(n) for n in extra}
+    for edge in (graph or {}).get("edges", []):
+        if edge.get("type") == "anchor_demand":
+            names.add(str(edge.get("src")))
+        elif edge.get("type") == "partner":
+            names |= {
+                str(end)
+                for end in (edge.get("src"), edge.get("dst"))
+                if str(end).upper() not in held
+            }
+    unique = {}
+    for name in names:
+        name = name.strip()
+        if len(name) >= 3:
+            unique.setdefault(name.lower(), name)
+    return sorted(unique.values(), key=str.lower)
+
+
+def company_queries(names, batch=_COMPANY_BATCH):
+    """News searches covering ``names``, ``batch`` to a search.
+
+    There used to be one search, of the first 12 anchors alphabetically:
+    Nvidia, TSMC, Samsung, Micron, Microsoft and Qualcomm were never searched,
+    and no holding's partner was searched at all.
+    """
+    return [
+        "("
+        + " OR ".join(f'"{n}"' for n in names[i : i + batch])
+        + f") AND ({_COMPANY_TERMS})"
+        for i in range(0, len(names), batch)
+    ]
+
+
+async def fetch_global_event_feeds_async(session, holdings=(), watched=()):
+    """Global market-event headlines: supply-chain shocks, big tie-ups, and
+    the news of companies tied to our holdings, whose second-order impact
+    lands on them.
+
+    Queries are entity-free vocabulary from config plus company searches
+    assembled at runtime from the entity graph (watched_company_names) — so
+    which companies get watched is data, never code. Enhancement channel:
+    fail-safe, capped, and never blocks the briefing.
     """
     from analysis.entity_graph import load_entity_graph
     from utils import fetch_text_async
 
-    queries = list(GLOBAL_EVENT_QUERIES)
-    anchors = sorted(
-        {
-            str(e.get("src"))
-            for e in load_entity_graph().get("edges", [])
-            if e.get("type") == "anchor_demand"
-        }
-    )
-    if anchors:
-        anchor_q = " OR ".join(f'"{a}"' for a in anchors[:12])
-        queries.append(
-            f"({anchor_q}) AND (deal OR partnership OR investment OR "
-            f"order OR expansion OR supply)"
-        )
+    queries = [(q, 5) for q in GLOBAL_EVENT_QUERIES]
+    names = watched_company_names(load_entity_graph(), holdings, watched)
+    queries += [(q, _COMPANY_RESULTS) for q in company_queries(names)]
 
     items = []
     seen = set()
@@ -222,12 +268,12 @@ async def fetch_global_event_feeds_async(session):
         return None
 
     # ⚡ Bolt Optimization: Batch fetch global event feed queries concurrently to prevent event-loop blocking from sequential IO.
-    feeds = await asyncio.gather(*(_fetch_query(q) for q in queries))
+    feeds = await asyncio.gather(*(_fetch_query(q) for q, _ in queries))
 
-    for feed in feeds:
+    for feed, (_, keep) in zip(feeds, queries):
         if not feed:
             continue
-        for entry in feed.entries[:5]:
+        for entry in feed.entries[:keep]:
             title = entry.get("title", "").split(" - ")[0].strip()
             if not title or title.lower() in seen:
                 continue
@@ -241,7 +287,11 @@ async def fetch_global_event_feeds_async(session):
                 }
             )
 
-    log.info(f"Global event feed: {len(items)} headlines collected.")
+    log.info(
+        f"Global event feed: {len(items)} headlines collected "
+        f"({len(names)} companies searched in {len(queries) - len(GLOBAL_EVENT_QUERIES)} "
+        f"batch(es))."
+    )
     return items
 
 

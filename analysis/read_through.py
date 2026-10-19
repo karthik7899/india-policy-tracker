@@ -398,28 +398,212 @@ def _holding_sectors(watchlist):
     }
 
 
-def _partner_exposure(event, graph, watchlist):
-    """A holding's partner was hit by something that does not name the holding.
+class PartnerScope:
+    """What a venture makes, so a partner's news can be placed: in the
+    venture's own line, in another of the partner's lines, or about the
+    partner as a whole.
+
+    A curated edge says so itself (``scope``, ``not_scope``): Corning's
+    venture with Optiemus is cover glass for phones, and Corning's optical
+    fibre is another business. Otherwise the line is read off the headline
+    that proposed the edge ("... Joint Venture With Kaga Electronics To
+    Produce PCBs"), falling back to the holding's own sector. Any other
+    sector's vocabulary is another line.
+    """
+
+    def __init__(self, edge, holding_sector):
+        from analysis.competitive_intel import (
+            SECTOR_BATTLEGROUNDS,
+            _terms_re,
+            battleground_sectors,
+        )
+
+        terms = [str(t) for t in edge.get("scope") or [] if str(t).strip()]
+        if not terms:
+            sectors = set(battleground_sectors(edge.get("evidence")))
+            sectors |= {holding_sector} & set(SECTOR_BATTLEGROUNDS)
+            terms = [t for s in sorted(sectors) for t in SECTOR_BATTLEGROUNDS[s]]
+        own = {t.lower() for t in terms}
+        others = [str(t) for t in edge.get("not_scope") or [] if str(t).strip()] + [
+            t
+            for vocabulary in SECTOR_BATTLEGROUNDS.values()
+            for t in vocabulary
+            if t.lower() not in own
+        ]
+        self._line = _terms_re(terms) if terms else None
+        self._other = _terms_re(others) if others else None
+
+    def place(self, text):
+        """'venture', 'other' or 'whole'."""
+        if self._line and self._line.search(text or ""):
+            return "venture"
+        if self._other and self._other.search(text or ""):
+            return "other"
+        return "whole"
+
+
+# Risk events that reach a venture through its partner.
+_PARTNER_TROUBLE = ("business_weakness", "supply_disruption", "input_cost_shock")
+
+_WHAT = {
+    "business_weakness": "a weaker business",
+    "supply_disruption": "a supply disruption",
+    "input_cost_shock": "an input-cost shock",
+    "partnership_end": "a partnership ending",
+    "tie_up": "a new tie-up",
+    "acquisition": "an acquisition",
+    "order_win": "an order",
+    "capacity_add": "new capacity",
+}
+
+
+def screen_partner_news(event, partner, holding, scope, rivals=()):
+    """Is this news about a partner good, bad or mixed for our holding — or
+    not the holding's to read at all?
+
+    ``(direction, reason, verdict)`` or None. Built on three questions, each
+    answered from the headline:
+
+      * Where does it land? In the venture's own line, in another of the
+        partner's lines, or on the partner as a whole (PartnerScope).
+      * Is it in India? Partner news elsewhere moves the partner, not
+        necessarily a venture here.
+      * Who else is in it? A rival of the holding (another holding in its
+        sector, a Screener peer) turns a partner's deal against us.
+
+    The rules, in order:
+
+      * The partner in trouble (weaker results, a supply disruption, an input
+        shock): bad, unless it is about another of its lines. Company-wide
+        trouble is bad too, less directly: a partner under pressure invests
+        less in its ventures.
+      * The partner dealing with a rival of the holding: bad.
+      * The partner placing work in the venture's line elsewhere (it is the
+        customer in the order): bad.
+      * The partner winning work in the venture's line in India: good — that
+        work can flow through the venture.
+      * The partner adding capacity, tying up or buying in the venture's line
+        in India: mixed — the venture's own plant, or the partner going round
+        it; the headline rarely says which.
+      * The partner ending a partnership in the venture's line in India: bad
+        if it is this venture.
+      * Anything else is the partner's news, not ours: Kaga winning a
+        Japanese order says nothing about the Syrma venture.
+    """
+    etype = event.get("event_type")
+    headline = str(event.get("headline", ""))
+    # The partner's name is not its line: "vivo" is electronics vocabulary,
+    # and "Vivo wins large order" says nothing about phones.
+    place = scope.place(
+        re.sub(rf"\b{re.escape(str(partner))}\b", " ", headline, flags=re.IGNORECASE)
+    )
+    from analysis.competitive_intel import mentions_india
+    from analysis.event_engine import _named_as_customer, event_clause
+    from analysis.parsing import title_matches_company
+
+    in_india = mentions_india(headline)
+    clause = event_clause(event)
+    rival = next(
+        (
+            name or ticker
+            for ticker, name in rivals
+            if not _same(name, partner)
+            and title_matches_company(clause, ticker or "", name or "")
+        ),
+        None,
+    )
+
+    if etype in _PARTNER_TROUBLE:
+        if place == "other":
+            return None
+        if place == "venture":
+            return (
+                "risk",
+                "in the venture's own line",
+                f"bad for {holding}: trouble in the venture's line reaches the venture",
+            )
+        return (
+            "risk",
+            f"about {partner} as a whole",
+            f"bad for {holding}, less directly: a partner under pressure invests "
+            f"less in its ventures",
+        )
+    if etype in ("tie_up", "acquisition", "order_win") and rival:
+        return (
+            "risk",
+            f"{rival} competes with {holding}",
+            f"bad for {holding}: its partner is working with a competitor",
+        )
+    if place != "venture":
+        return None
+    if etype == "order_win":
+        if _named_as_customer(clause, event.get("phrase"), "", partner):
+            return (
+                "risk",
+                f"{partner} is the customer, in the venture's line",
+                f"bad for {holding}: work in the venture's line is going elsewhere",
+            )
+        if in_india:
+            return (
+                "opportunity",
+                "work in the venture's line, in India",
+                f"good for {holding}: it can flow through the venture",
+            )
+        return None
+    if not in_india:
+        return None
+    if etype == "partnership_end":
+        return (
+            "risk",
+            "a partnership in the venture's line, in India",
+            f"bad for {holding} if this is the venture: check whether it names "
+            f"{holding}'s",
+        )
+    if etype in ("capacity_add", "tie_up", "acquisition"):
+        return (
+            "mixed",
+            "in the venture's line, in India",
+            f"either way for {holding}: the venture's own business, or {partner} "
+            f"going round it",
+        )
+    return None
+
+
+def _rivals(watchlist, sector, holding, peers):
+    """(ticker, name) of whoever competes with ``holding``: the other holdings
+    in its sector and the sector's Screener peers."""
+    out = [
+        (s.get("ticker"), s.get("name"))
+        for s in (watchlist or {}).get(sector) or []
+        if isinstance(s, dict) and s.get("ticker") and s.get("ticker") != holding
+    ]
+    out += [
+        (p.get("ticker"), p.get("name"))
+        for p in (peers or {}).get(sector) or []
+        if isinstance(p, dict) and (p.get("ticker") or p.get("name"))
+    ]
+    return out
+
+
+def _partner_news(event, graph, watchlist, peers=None):
+    """News that names a holding's partner and not the holding.
 
     "Vivo faces export curbs" names Vivo and nobody we hold. Dixon's smartphone
     joint venture is with Vivo, so the news is Dixon's to read — and nothing
     else in the pipeline can see that, because the relationship lived in a
     headline that was classified and forgotten. Partner edges are where it is
-    remembered now (see entity_graph.record_partner_proposals).
+    remembered (see entity_graph.record_partner_proposals). Whether the news
+    is good or bad for the holding is screen_partner_news's judgement, not the
+    partner's own direction.
 
-    Risk only, like _anchor_shift and for the same reason: a partner's good
-    news is not ours by default — Kaga winning a Japanese order says nothing
-    about the Syrma venture — while its disruption plausibly is. And never
-    when the holding is named: first-order attribution already has that event,
-    and repeating it as a hypothesis would count it twice.
+    Never when the holding is named: first-order attribution already has that
+    event, and repeating it as a hypothesis would count it twice.
     """
     out = []
-    if event.get("direction") != "risk":
-        return out
     named = event.get("external") or []
     actors = {str(a).upper() for a in event.get("actors") or []}
     sectors = _holding_sectors(watchlist)
-    etype = str(event.get("event_type", "")).replace("_", " ")
+    what = _WHAT.get(event.get("event_type"), "news")
 
     for edge in _edges(graph, "partner"):
         # Undirected: either end may be the holding.
@@ -435,26 +619,38 @@ def _partner_exposure(event, graph, watchlist):
                 or str(partner or "").upper() in actors
             ):
                 continue
+            scope = PartnerScope(edge, sectors[ours])
+            verdict = screen_partner_news(
+                event,
+                partner,
+                ours,
+                scope,
+                _rivals(watchlist, sectors[ours], ours, peers),
+            )
+            if not verdict:
+                continue
+            direction, reason, judgement = verdict
             basis = str(edge.get("evidence") or "")
             chain = [
-                f"{partner} hit by {etype}",
+                f"{partner}: {what}",
                 f"{partner} is a partner of {ours}"
                 + (
                     f" (“{basis[:90]}”)"
                     if basis and basis.lower() != "curated"
                     else (f" ({edge['note']})" if edge.get("note") else "")
                 ),
+                f"{reason[:1].upper()}{reason[1:]}: {judgement}",
             ]
             flag = _flag(
                 event,
                 "partner_exposure",
-                "risk",
+                direction,
                 sectors[ours],
                 watchlist,
                 chain,
                 _weakest(edge),
-                f"A shared venture carries its partner's disruptions; the "
-                f"headline does not say whether this one reaches {ours}'s.",
+                f"{judgement[:1].upper()}{judgement[1:]}. The headline does not "
+                f"say how much of {ours}'s business the venture is.",
                 tickers=[ours],
             )
             if flag:
@@ -497,6 +693,7 @@ def compute_read_throughs(
     today: str = "",
     limit: int = 40,
     headlines: List[str] = None,
+    peers: Dict[str, Any] = None,
 ) -> List[Dict[str, Any]]:
     """Second-order implications of recent news for what we actually hold.
 
@@ -525,7 +722,7 @@ def compute_read_throughs(
             flags.extend(_displacement(event, graph, watchlist))
             flags.extend(_input_squeeze(event, graph, watchlist))
             flags.extend(_anchor_shift(event, graph, watchlist))
-            flags.extend(_partner_exposure(event, graph, watchlist))
+            flags.extend(_partner_news(event, graph, watchlist, peers))
 
         # The raw corpus carries no dates — it is this run's collection — so
         # everything in it is today by construction.
@@ -564,13 +761,18 @@ def compute_read_throughs(
         flags = flags[:limit]
 
         if flags:
-            risks = sum(1 for f in flags if f["direction"] == "risk")
+            by_direction = {
+                d: sum(1 for f in flags if f["direction"] == d)
+                for d in ("risk", "opportunity", "mixed")
+            }
             mechanisms = sorted({f["mechanism"] for f in flags})
             log.info(
                 f"Read-through: {len(flags)} second-order flag(s) across "
                 f"{len({f['sector'] for f in flags})} sector(s) "
-                f"({risks} risk, {len(flags) - risks} opportunity; "
-                f"{', '.join(mechanisms)})."
+                f"({by_direction['risk']} risk, {by_direction['opportunity']} "
+                f"opportunity"
+                + (f", {by_direction['mixed']} mixed" if by_direction["mixed"] else "")
+                + f"; {', '.join(mechanisms)})."
             )
         else:
             # Stated even when empty. A silent zero here is indistinguishable

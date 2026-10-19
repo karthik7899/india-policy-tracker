@@ -124,6 +124,11 @@ async def run_pipeline():
     # be put back, marked, rather than lost (analysis/last_good.py).
     prior_values = last_good.snapshot(watchlist)
     prior_industry_shares = snapshot_prior_industry_shares(watchlist)
+    # Challengers the radar flagged before: searched for and compared with
+    # their sector's holdings after their headline has aged out.
+    from analysis import entrant_watch
+
+    watched_entrants = entrant_watch.load_watched()
 
     # Gather news data async
     data = await fetch_all_feeds_async()
@@ -174,7 +179,9 @@ async def run_pipeline():
 
     # Fetch Screener.in fundamentals async; also returns Screener's industry
     # peer tables — a competitor-discovery channel independent of headlines.
-    peer_competitors, industry_tables = await fetch_all_screener_fundamentals(watchlist)
+    peer_competitors, industry_tables = await fetch_all_screener_fundamentals(
+        watchlist, entrants=entrant_watch.screener_entrants(watched_entrants)
+    )
     # Screener's peer tables cut long names to about fifteen characters, and
     # these rows are both shown and matched against headlines.
     competitors_renamed = company_names.name_rows(peer_competitors, registered_names)
@@ -249,7 +256,17 @@ async def run_pipeline():
         isin_refresh_task = refresh_isin_master_async(
             session, isin_master, names=registered_names
         )
-        global_events_task = fetch_global_event_feeds_async(session)
+        global_events_task = fetch_global_event_feeds_async(
+            session,
+            holdings=[
+                st.get("ticker")
+                for sec, stocks in watchlist.items()
+                if isinstance(stocks, list)
+                for st in stocks
+                if isinstance(st, dict) and st.get("ticker")
+            ],
+            watched=entrant_watch.search_names(watched_entrants),
+        )
         state_policy_task = fetch_state_policy_async(session)
         # Results dates, ex-dates and AGMs ahead, from NSE's own calendars.
         # Rotation has already run, so this is today's watchlist.
@@ -317,7 +334,9 @@ async def run_pipeline():
         data["sebi_filings"] = merged_sebi
         data["institutional_activity"] = merged_inst
         data["corporate_filings"] = merged_filings
-        data["global_market_news"] = global_market_news[:30]
+        # Room for the company searches: every anchor, partner and watched
+        # entrant, eight to a search (scraper.company_queries).
+        data["global_market_news"] = global_market_news[:80]
         # State policy accumulates like the other feeds, but only for as long
         # as the policy balance looks back: an older measure is already
         # history, and the reader has read it.
@@ -414,9 +433,10 @@ async def run_pipeline():
         # matcher reaches events carried over from earlier runs instead of
         # only applying to today's.
         data["market_events"] = refresh_merged_events(
+            # Capped inside, after the stale events have gone.
             store.deduplicate_and_merge(
                 "market_events", events, ["headline", "event_type"]
-            )[:120],
+            ),
             watchlist,
             graph=graph,
             sources=collect_sources(data, watchlist),
@@ -485,6 +505,8 @@ async def run_pipeline():
             graph,
             watchlist,
             headlines=collect_headlines(data, watchlist),
+            # Whose deals with a holding's partner read against the holding.
+            peers=data.get("peer_competitors"),
         )
 
         # The price-based counterpart of supply_stress above. That one counts
@@ -547,6 +569,19 @@ async def run_pipeline():
     # Enterprises moving on mobile manufacturing = a Dixon problem) before
     # the early-warning engine runs.
     data["new_entrants"] = detect_new_entrants(data, watchlist)
+    watched_entrants = entrant_watch.update_watched(
+        watched_entrants, data["new_entrants"], registered_names
+    )
+    entrant_watch.save_watched(watched_entrants)
+    if watched_entrants:
+        log.info(
+            f"Entrants watched: {len(watched_entrants)} — "
+            + "; ".join(
+                f"{w['name']}{' (' + w['ticker'] + ')' if w.get('ticker') else ''} "
+                f"→ {w['sector']}, last flagged {w['last_seen']}"
+                for w in watched_entrants
+            )
+        )
 
     # Tag each warning against the previous run so the dashboard can lead
     # with what is new rather than re-presenting yesterday's standing
