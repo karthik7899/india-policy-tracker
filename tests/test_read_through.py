@@ -862,8 +862,16 @@ def test_every_read_through_says_how_it_travels_and_how_binding_it_is():
         ("Copper importers challenge anti-dumping duty", None),
         # An export duty moves the price here the other way, if at all.
         ("Govt cuts export duty on copper", None),
+        # A change said not to happen.
+        ("Centre will not impose import duty on copper", None),
+        ("Govt rules out hike in copper import duty", None),
     ],
 )
 def test_a_duty_change_moves_an_input_and_a_mention_does_not(headline, direction):
     flags = _run(headlines=[headline])
     assert [f["direction"] for f in flags] == ([direction] if direction else [])
+
+
+def test_a_hedged_duty_change_counts_as_a_rumour():
+    (flag,) = _run(headlines=["Govt may impose anti-dumping duty on copper"])
+    assert (flag["direction"], flag["strength"]) == ("risk", "reported")

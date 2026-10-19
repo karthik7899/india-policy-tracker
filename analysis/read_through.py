@@ -153,6 +153,21 @@ _DUTY_EASING_RE = re.compile(
     + r"|\bduty[\s-]free\b",
     re.IGNORECASE,
 )
+# A change said not to happen is none: "Centre will not impose import duty on
+# copper". A hedged one ("may impose") is graded reported, like any rumour.
+_DUTY_DENIED_RE = re.compile(
+    r"\b(?:not|no|never|won't|unlikely\s+to|rules?\s+out|ruled\s+out|denies|"
+    r"denied|refuses?\s+to|declines?\s+to)\s+(?:[\w-]+\s+){0,2}$",
+    re.IGNORECASE,
+)
+
+
+def _duty_change(pattern, text):
+    """Does the text report this duty change, rather than deny it?"""
+    return any(
+        not _DUTY_DENIED_RE.search(text[: m.start()]) for m in pattern.finditer(text)
+    )
+
 
 # A material named only to say who uses something else is not the thing in
 # short supply. "Helium, key for semiconductor manufacturing, faces shortage"
@@ -437,14 +452,16 @@ def _input_squeeze(event, graph, watchlist):
 
     out = []
     headline = str(event.get("headline", ""))
-    # "Reprices Copper Without a Global Shortage" reports no shortage.
+    # "Reprices Copper Without a Global Shortage" reports no shortage. One
+    # company spared from a shortage still reports it, and every other buyer
+    # of the input still pays.
     lower = without_negated_scarcity(headline).lower()
 
-    squeezing = any(m in lower for m in _SQUEEZE_MARKERS) or bool(
-        _DUTY_SQUEEZE_RE.search(headline)
+    squeezing = any(m in lower for m in _SQUEEZE_MARKERS) or _duty_change(
+        _DUTY_SQUEEZE_RE, headline
     )
-    easing = any(m in lower for m in _EASING_MARKERS) or bool(
-        _DUTY_EASING_RE.search(headline)
+    easing = any(m in lower for m in _EASING_MARKERS) or _duty_change(
+        _DUTY_EASING_RE, headline
     )
     # Both at once is a headline describing a turn ("shortage eases"), which
     # is an easing. Neither means this is not a price story at all.

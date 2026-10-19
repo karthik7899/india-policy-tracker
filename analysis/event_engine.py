@@ -432,14 +432,6 @@ NEGATION_MARKERS = _DENIALS + (
     "cancels",
     "scraps",
     "shelves",
-    # Spared, not hit: "Nvidia and Broadcom Insulated from US Data Centre
-    # Power Shortage" was a supply disruption at two demand anchors, and
-    # raised risk on six electronics and semiconductor holdings.
-    "insulated from",
-    "shielded from",
-    "immune to",
-    "unaffected by",
-    "unscathed by",
 )
 
 # A scarcity said not to exist: "US Tariff Threat Reprices Copper Without a
@@ -457,6 +449,34 @@ _NEGATED_SCARCITY_RE = re.compile(
 def without_negated_scarcity(text: str) -> str:
     """The text with any scarcity it says is absent taken out."""
     return _NEGATED_SCARCITY_RE.sub(" ", text or "")
+
+
+# Spared, not hit: "Nvidia and Broadcom Insulated from US Data Centre Power
+# Shortage" was a supply disruption at two demand anchors, and raised risk on
+# six electronics and semiconductor holdings. Only the statement that says so
+# is skipped, not its whole clause: "Nvidia insulated from chip shortage as
+# TSMC halts production" holds TSMC's stoppage, read as a statement of its
+# own so that Nvidia is no party to it.
+_SPARED = (
+    "insulated from",
+    "shielded from",
+    "immune to",
+    "unaffected by",
+    "unscathed by",
+)
+_STATEMENT_RE = re.compile(
+    r"\s*,\s*|\s+(?:as|while|but|amid|after|despite|though|although|because|"
+    r"since|whereas)\s+",
+    re.IGNORECASE,
+)
+
+
+def _statements(clause: str) -> List[str]:
+    """A clause as it is read: whole, or split into its statements when one
+    of them says someone is spared."""
+    if not any(s in clause.lower() for s in _SPARED):
+        return [clause]
+    return [p for p in _STATEMENT_RE.split(clause) if p.strip()] or [clause]
 
 
 # Which way an event leans for the sectors whose turf it lands on.
@@ -517,8 +537,10 @@ def first_event_clause(headline: str):
     statements ("ITC Hotels to acquire GHK for Rs 155 crore; shares decline
     5%"), and matching across both lets one claim or cancel the other.
     """
-    for clause in split_clauses(headline):
+    for clause in (s for c in split_clauses(headline) for s in _statements(c)):
         clause_lower = clause.lower()
+        if any(s in clause_lower for s in _SPARED):
+            continue  # spared, not hit
         hit_type, hit_phrase = match_event_type(clause_lower)
         if hit_type == "supply_disruption":
             # Read again without any scarcity the clause says is absent;
@@ -729,7 +751,7 @@ def classify_headlines(
 
             events.append(
                 {
-                    "headline": headline[:180],
+                    "headline": headline[:HEADLINE_KEPT],
                     "event_type": event_type,
                     "phrase": phrase,
                     "certainty": certainty,
@@ -773,9 +795,10 @@ def event_clause(event: Dict[str, Any]) -> str:
     headline = event.get("headline") or ""
     return next(
         (
-            c
+            s
             for c in split_clauses(headline)
-            if event.get("phrase") and event["phrase"] in c.lower()
+            for s in _statements(c)
+            if event.get("phrase") and event["phrase"] in s.lower()
         ),
         headline,
     )
@@ -785,6 +808,9 @@ def event_clause(event: Dict[str, Any]) -> str:
 # grows, and entries classified by an older version of the engine outlive
 # every fix made since.
 EVENT_RETENTION_DAYS = 45
+
+# A stored event keeps this much of its headline.
+HEADLINE_KEPT = 180
 
 # The most events kept, newest first, once the stale ones have gone.
 EVENTS_KEPT = 120
@@ -871,16 +897,27 @@ def refresh_merged_events(
                 else:
                     dropped_orphan += 1
                 continue
-            # Read again, as classify_headlines would read it today.
-            found = first_event_clause(str(event.get("headline", "")))
-            if not found:
+            # Read again, as classify_headlines would read it today — unless
+            # the headline was cut when it was stored: what was cut (the
+            # phrase, a "reportedly", a denial) may be what decided it, so the
+            # stored reading stands.
+            headline = str(event.get("headline") or "")
+            whole = len(headline) < HEADLINE_KEPT
+            found = first_event_clause(headline) if whole else None
+            if found:
+                clause, etype, phrase = found
+                if etype != event.get("event_type"):
+                    event["direction"] = _EVENT_DIRECTION.get(etype, "opportunity")
+                    retyped += 1
+                event["event_type"], event["phrase"] = etype, phrase
+                event["certainty"] = classify_certainty(clause)
+            elif whole:
                 dropped_unread += 1
                 continue
-            clause, etype, phrase = found
-            if etype != event.get("event_type"):
-                event["direction"] = _EVENT_DIRECTION.get(etype, "opportunity")
-                retyped += 1
-            event["event_type"], event["phrase"] = etype, phrase
+            else:
+                clause = event_clause(event)
+                if not event.get("certainty"):
+                    event["certainty"] = classify_certainty(clause)
             actors = clause_actors(
                 clause, event.get("event_type"), event.get("phrase"), holdings
             )
@@ -902,7 +939,6 @@ def refresh_merged_events(
 
             event["actors"] = actors
             event["external"] = external
-            event["certainty"] = classify_certainty(clause)
             # Re-derived like actors, so the 45 days of tie-ups already in the
             # corpus gain their counterparty on the first run after this
             # shipped rather than only the ones classified from then on.

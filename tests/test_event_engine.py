@@ -1409,3 +1409,50 @@ def test_a_stored_event_is_read_again_under_the_current_rules():
     (ended,) = by_headline[suspended["headline"]]
     assert (ended["event_type"], ended["direction"]) == ("partnership_end", "risk")
     assert spared["headline"] not in by_headline
+
+
+def test_a_headline_cut_when_stored_keeps_its_reading():
+    """A stored event keeps HEADLINE_KEPT characters of its headline, and the
+    phrase it was read from can run past the cut. Read again, the cut text
+    holds no event, and this run's own events would vanish before they were
+    ever stored."""
+    from analysis.event_engine import HEADLINE_KEPT
+
+    wl = {
+        "manufacturing_electronics": [{"ticker": "DIXON", "name": "Dixon Technologies"}]
+    }
+    full = (
+        "Dixon Technologies, the Noida-based electronics maker that assembles "
+        "phones, televisions and laptops for global brands from plants across "
+        "Uttar Pradesh and Andhra Pradesh, wins order worth Rs 500 crore"
+    )
+    assert full.lower().find("wins order") + len("wins order") > HEADLINE_KEPT
+    events = classify_headlines({"corporate_agreements": [{"title": full}]}, wl)
+    assert [len(e["headline"]) for e in events] == [HEADLINE_KEPT]
+    kept = refresh_merged_events(events, wl)
+    assert [(e["event_type"], e["actors"]) for e in kept] == [("order_win", ["DIXON"])]
+
+
+def test_only_the_statement_that_someone_is_spared_is_skipped():
+    from analysis.event_engine import graph_entities
+
+    found = first_event_clause(
+        "Nvidia insulated from chip shortage as TSMC halts production"
+    )
+    assert found[:2] == ("TSMC halts production", "supply_disruption")
+    # Whoever is spared is no party to the rest.
+    graph = {
+        "edges": [
+            {"src": "Nvidia", "dst": "x", "type": "anchor_demand"},
+            {"src": "TSMC", "dst": "y", "type": "anchor_demand"},
+        ]
+    }
+    assert graph_entities(found[0], graph) == ["TSMC"]
+    # Another event beside it stands; the spared statement alone is nothing.
+    assert (
+        first_event_clause(
+            "Dixon wins order worth Rs 500 crore, unaffected by tariffs"
+        )[1]
+        == "order_win"
+    )
+    assert first_event_clause("Dixon unaffected by weak demand") is None
