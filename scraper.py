@@ -688,9 +688,14 @@ def _stories(entries):
         day = pib.ist_day(entry.get("published"))
         if day:
             story["days"].add(day)
+    # PLI in the title first: the search also finds PIB's backgrounders,
+    # which mention the scheme in passing and are not on its list of releases.
     return sorted(
         stories.values(),
-        key=lambda s: max(s["days"], default=datetime.date.min),
+        key=lambda s: (
+            bool(_PLI_TITLE_RE.search(s["title"])),
+            max(s["days"], default=datetime.date.min),
+        ),
         reverse=True,
     )
 
@@ -721,12 +726,17 @@ async def _locate_on_pib(stories, index):
             len(located) < MAX_PLI_RELEASES
             and len(pib.title_words(story["title"])) >= 3
         ):
-            for day in _days_to_ask(story["days"]):
+            # Its own days, then any day already read, which costs nothing.
+            days = _days_to_ask(story["days"])
+            days += sorted(set(index.days) - set(days), reverse=True)
+            for day in days:
                 if day not in index.days and index.read >= MAX_PIB_DAYS:
-                    break
+                    continue
                 releases = await index.releases_on(day)
                 if releases is None:
-                    break
+                    if index.failed:
+                        break
+                    continue
                 match = next(
                     (r for r in releases if pib.same_title(r[0], story["title"])), None
                 )

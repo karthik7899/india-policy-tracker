@@ -612,6 +612,29 @@ async def probe_pib_pli():
             )
         for story in unfound:
             print(f"    not found: {story['title'][:90]}")
+        # Why a story was not found: each list's size, and the nearest title
+        # to the story's on any day read.
+        for day, links in sorted(index.days.items()):
+            sample = links[0][0][:70] if links else "-"
+            print(f"    list {day}: {len(links)} release(s); first: {sample}")
+        for story in unfound[:12]:
+            want = set(pib.title_words(story["title"]))
+            scored = [
+                (
+                    len(want & set(pib.title_words(t)))
+                    / len(want | set(pib.title_words(t))),
+                    day,
+                    prid,
+                    t,
+                )
+                for day, links in index.days.items()
+                for t, prid, _ in links
+            ]
+            if scored and want:
+                score, day, prid, t = max(scored)
+                print(
+                    f"    nearest to '{story['title'][:45]}': {score:.2f}, {day} PRID {prid}: {t[:75]}"
+                )
 
         print(f"\n{'=' * 72}\nPIB: what each release names\n{'=' * 72}")
         for item in (located + extras)[: scraper.MAX_PLI_RELEASES]:
