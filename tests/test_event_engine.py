@@ -1310,6 +1310,9 @@ def test_an_l1_bid_weighs_half_an_award_down_every_edge():
         ),
         # What the venture makes sits between the verb and "JV".
         ("Dixon Technologies and Gemtek Form Optical Transceiver JV", "tie_up"),
+        # Headlines call an MoU a pact.
+        ("BHEL signs strategic pact with thyssenkrupp nucera India", "tie_up"),
+        ("IndieSemiC, Kaynes Semicon sign pact for OSAT collaboration", "tie_up"),
     ],
 )
 def test_what_a_headline_says_happened(headline, expected):
@@ -1357,3 +1360,52 @@ def test_supply_stress_reads_an_input_as_a_word_and_within_its_edge():
         [event("RAM shortage deepens"), event("Chip shortage hits camera makers")],
         graph,
     ) == {"manufacturing_electronics": 1, "surveillance_security": 1}
+
+
+def test_a_stored_event_is_read_again_under_the_current_rules():
+    """Events are kept for 45 days. A grade, a type or a whole event that
+    older rules got wrong must not ride along for all of them: a stored MoU
+    graded completed would keep full weight down every edge."""
+    wl = {
+        "manufacturing_electronics": [
+            {"ticker": "DIXON", "name": "Dixon Technologies"}
+        ],
+        "aerospace_defence": [
+            {"ticker": "BEL", "name": "Bharat Electronics"},
+            {"ticker": "ASTRAMICRO", "name": "Astra Microwave Products"},
+        ],
+    }
+    base = {"certainty": "completed", "domains": [], "date": _TODAY}
+    mou = dict(
+        base,
+        headline="Astra Microwave, BEL Sign MoU for Defence Electronics",
+        event_type="tie_up",
+        phrase="mou",
+    )
+    suspended = dict(
+        base,
+        headline="Dixon suspends partnership with Vivo",
+        event_type="tie_up",
+        phrase="partnership with",
+        direction="opportunity",
+    )
+    spared = dict(
+        base,
+        headline="Dixon insulated from memory shortage",
+        event_type="supply_disruption",
+        phrase="shortage",
+        domains=["manufacturing_electronics"],
+    )
+    # Today's run read that headline as the end of a partnership; the stored
+    # copy, once retyped, is the same event and not a second one.
+    todays = dict(suspended, event_type="partnership_end", direction="risk")
+
+    kept = refresh_merged_events([todays, mou, suspended, spared], wl)
+    by_headline = {}
+    for event in kept:
+        by_headline.setdefault(event["headline"], []).append(event)
+
+    assert by_headline[mou["headline"]][0]["certainty"] == "announced"
+    (ended,) = by_headline[suspended["headline"]]
+    assert (ended["event_type"], ended["direction"]) == ("partnership_end", "risk")
+    assert spared["headline"] not in by_headline

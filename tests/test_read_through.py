@@ -850,3 +850,20 @@ def test_every_read_through_says_how_it_travels_and_how_binding_it_is():
         assert f["strength_note"] == STRENGTH_SAYS.get(f["strength"], "")
         link = 1.0 if f["confidence"] == "curated" else 0.5
         assert f["weight"] == round(STRENGTH_WEIGHT[f["strength"]] * link, 3)
+
+
+@pytest.mark.parametrize(
+    "headline,direction",
+    [
+        ("Govt imposes anti-dumping duty on copper rods from China", "risk"),
+        ("Anti-dumping duty imposed on copper rods", "risk"),
+        ("Centre waives copper import duty till March", "opportunity"),
+        # A mention is not a change.
+        ("Copper importers challenge anti-dumping duty", None),
+        # An export duty moves the price here the other way, if at all.
+        ("Govt cuts export duty on copper", None),
+    ],
+)
+def test_a_duty_change_moves_an_input_and_a_mention_does_not(headline, direction):
+    flags = _run(headlines=[headline])
+    assert [f["direction"] for f in flags] == ([direction] if direction else [])

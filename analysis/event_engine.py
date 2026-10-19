@@ -224,6 +224,12 @@ EVENT_PATTERNS: Dict[str, tuple] = {
         ),
         re.compile(r"\bjv with\b"),
         re.compile(r"\b(?:signs?|signed|inks?|inked)\s+(?:an?\s+)?mous?\b"),
+        # Headlines call an MoU a pact: "BHEL signs strategic pact with
+        # thyssenkrupp nucera", "Dixon Technologies' subsidiary signs pact with
+        # Longcheer" were no event at all. Graded announced, as an MoU is.
+        re.compile(
+            r"\b(?:signs?|signed|inks?|inked)\s+(?:an?\s+)?(?:[\w-]+\s+){0,2}?pacts?\b"
+        ),
         # "LTTS and Anthropic Partner to Transform Engineering": a plural
         # subject takes the bare verb, which "partners with" never matches.
         re.compile(r"\band\s+[\w.&' -]{1,40}?\s+partner\s+(?:to|for|on|in)\b"),
@@ -802,8 +808,12 @@ def refresh_merged_events(
 
     So every merged event is re-attributed with the current rules. An event
     that no longer names anything we track is dropped, which is how those
-    three finally disappear. Certainty is filled in for rows that predate the
-    field.
+    three finally disappear. It is read again with the current vocabulary
+    too: one it now reads as no event at all ("Nvidia and Broadcom Insulated
+    from US Data Centre Power Shortage") is dropped, one it reads as another
+    type is retyped ("Amazon suspends partnership" ended one), and every one
+    is graded again, so an MoU or lowest bid that older rules filed as
+    completed does not keep full weight for its 45 days.
 
     Then the newest EVENTS_KEPT are kept, by article date. The cap used to be
     applied before this, to the merged list in classification order: a run
@@ -829,6 +839,7 @@ def refresh_merged_events(
         ).isoformat()
 
         dropped_stale = dropped_orphan = reattributed = redated = 0
+        dropped_unread = retyped = 0
         for event in events:
             if not isinstance(event, dict):
                 continue
@@ -849,7 +860,6 @@ def refresh_merged_events(
                 dropped_stale += 1
                 continue
 
-            clause = event_clause(event)
             if event.get("reader") == "llm":
                 # The LLM's parties, not the matcher's reading of the whole
                 # headline — re-deriving would attribute every holding the
@@ -861,6 +871,16 @@ def refresh_merged_events(
                 else:
                     dropped_orphan += 1
                 continue
+            # Read again, as classify_headlines would read it today.
+            found = first_event_clause(str(event.get("headline", "")))
+            if not found:
+                dropped_unread += 1
+                continue
+            clause, etype, phrase = found
+            if etype != event.get("event_type"):
+                event["direction"] = _EVENT_DIRECTION.get(etype, "opportunity")
+                retyped += 1
+            event["event_type"], event["phrase"] = etype, phrase
             actors = clause_actors(
                 clause, event.get("event_type"), event.get("phrase"), holdings
             )
@@ -882,8 +902,7 @@ def refresh_merged_events(
 
             event["actors"] = actors
             event["external"] = external
-            if not event.get("certainty"):
-                event["certainty"] = classify_certainty(clause)
+            event["certainty"] = classify_certainty(clause)
             # Re-derived like actors, so the 45 days of tie-ups already in the
             # corpus gain their counterparty on the first run after this
             # shipped rather than only the ones classified from then on.
@@ -896,10 +915,26 @@ def refresh_merged_events(
                 event["counterparties"] = counterparties
             refreshed.append(event)
 
-        if dropped_stale or dropped_orphan or reattributed or redated:
+        # A stored copy retyped to what today's run read the same headline as
+        # is that event twice; the first is kept, as the merge keeps it.
+        seen = set()
+        unique = []
+        for event in refreshed:
+            key = (event.get("headline"), event.get("event_type"))
+            if key not in seen:
+                seen.add(key)
+                unique.append(event)
+        refreshed = unique
+
+        if any(
+            (dropped_stale, dropped_orphan, dropped_unread, reattributed)
+            + (redated, retyped)
+        ):
             log.info(
                 f"Event corpus refresh: {reattributed} re-attributed, "
                 f"{redated} re-dated to the article's date, "
+                f"{retyped} retyped, "
+                f"{dropped_unread} no longer read as an event, "
                 f"{dropped_orphan} no longer touch the watchlist, "
                 f"{dropped_stale} past {EVENT_RETENTION_DAYS}d retention."
             )

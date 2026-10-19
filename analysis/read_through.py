@@ -124,19 +124,33 @@ _EASING_MARKERS = (
 )
 # Duty on what is bought in moves its price the same way for every buyer
 # here: "Centre Waives Cotton Import Duty" made cotton cheaper for every
-# textile holding, and matched neither list. Export bans are left out: China
+# textile holding, and matched neither list. A change, not a mention:
+# "importers challenge anti-dumping duty" reports no new cost. The verb
+# governs the duty, a few words at most and no clause between ("cuts jobs as
+# duty hike bites" cut no duty). Export duties and bans are left out: China
 # curbing rare earths makes them scarcer here, India curbing sugar exports
 # makes sugar cheaper here, and a headline rarely says which it is.
+_DUTY = r"(?<!export\s)\bdut(?:y|ies)\b"
+_DUTY_GAP = r"\s+(?:(?!(?:as|amid|after|while|but|and|despite)\b)[\w%&₹.-]+\s+){0,3}?"
 _DUTY_SQUEEZE_RE = re.compile(
-    r"\b(?:hikes?|hiked|raises?|raised|imposes?|imposed|increases?|increased)\b"
-    r"[^.;:]{0,40}?\b(?:import|customs|anti-dumping|safeguard)\s+duty\b"
-    r"|\banti-dumping\b|\bsafeguard\s+duty\b",
+    r"\b(?:hikes?|hiked|raises?|raised|imposes?|imposed|increases?|increased|"
+    r"levies|levied|slaps?|slapped)"
+    + _DUTY_GAP
+    + _DUTY
+    + r"|"
+    + _DUTY
+    + r"\s+(?:hikes?|hiked|raised|imposed|increased|levied)\b",
     re.IGNORECASE,
 )
 _DUTY_EASING_RE = re.compile(
     r"\b(?:waives?|waived|cuts?|slashe?s|slashed|removes?|removed|scraps?|"
-    r"scrapped|exempts?|exempted|lowers?|lowered)\b[^.;:]{0,40}?\bduty\b"
-    r"|\bduty[\s-]free\b",
+    r"scrapped|exempts?|exempted|lowers?|lowered)"
+    + _DUTY_GAP
+    + _DUTY
+    + r"|"
+    + _DUTY
+    + r"\s+(?:cuts?|waived|slashed|removed|scrapped|lowered)\b"
+    + r"|\bduty[\s-]free\b",
     re.IGNORECASE,
 )
 
