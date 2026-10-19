@@ -19,7 +19,7 @@ import re
 from typing import Any, Dict, List, Optional
 
 from analysis.competitive_intel import (
-    SECTOR_BATTLEGROUNDS,
+    battleground_sectors,
     collect_headlines,
     collect_sources,
 )
@@ -458,8 +458,6 @@ def classify_headlines(
         ]
         sources = collect_sources(data, watchlist)
         for headline in collect_headlines(data, watchlist):
-            lower = headline.lower()
-
             # Classified within its event clause (first_event_clause), so
             # the actors and any negation are that statement's own.
             found = first_event_clause(headline)
@@ -473,11 +471,7 @@ def classify_headlines(
 
             # Domains stay headline-wide: unlike actors they are topical
             # rather than relational, and Tier 1 routing is deliberately loose.
-            domains = [
-                sector
-                for sector, battleground in SECTOR_BATTLEGROUNDS.items()
-                if any(term in lower for term in battleground)
-            ]
+            domains = battleground_sectors(headline)
             # An event naming a graph entity is kept even when it touches no
             # sector vocabulary and none of our tickers. That is exactly the
             # shape of the events worth reading through — "Google taps Marvell

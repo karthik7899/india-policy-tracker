@@ -10,6 +10,7 @@ from bs4 import BeautifulSoup
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from analysis.competitive_intel import (  # noqa: E402
+    battleground_sectors,
     detect_new_entrants,
     new_entrant_signals,
 )
@@ -180,6 +181,83 @@ def test_radar_never_raises_on_garbage():
     assert detect_new_entrants(None, None) == []
     assert detect_new_entrants({"corporate_agreements": "junk"}, _WATCHLIST) == []
     assert new_entrant_signals({}, _WATCHLIST) == []
+
+
+def _entrants(*titles, watchlist=None):
+    data = {"corporate_agreements": [{"title": t} for t in titles]}
+    return detect_new_entrants(data, watchlist or _WATCHLIST)
+
+
+def test_a_turf_word_inside_another_word_is_not_turf():
+    """Regression for 17 Oct: "ems" inside "Systems" made a university's
+    library corner an electronics incursion, and broke the theses of all
+    five electronics holdings."""
+    assert (
+        _entrants(
+            "Tripura University sets up Indian Knowledge Systems Corner in "
+            "Central Library"
+        )
+        == []
+    )
+    assert _entrants("Amber sets up defence systems unit") == []
+    assert battleground_sectors("Persistent Systems wins $650M+ order") == []
+    assert (
+        battleground_sectors("APEDA MoU to Strengthen Global Food Trade Opportunities")
+        == []
+    )
+
+
+def test_an_entry_move_inside_another_word_is_not_a_move():
+    """ "enters" sits inside "centers"."""
+    watchlist = {"data_center_support": [{"ticker": "ANANTRAJ", "name": "Anant Raj"}]}
+    assert _entrants("Amber plans data centers in Pune", watchlist=watchlist) == []
+
+
+def test_plurals_and_hyphens_still_count():
+    assert battleground_sectors(
+        "Hystar and BHEL Partner to Manufacture PEM Electrolysers in India"
+    ) == ["clean_energy"]
+    assert battleground_sectors(
+        "Syrma SGS Tech Forms Joint Venture With Kaga Electronics India To Produce PCBs"
+    ) == ["manufacturing_electronics"]
+    assert battleground_sectors("ReNew to build a data-centre park in MMR") == [
+        "data_center_support"
+    ]
+    assert len(_entrants("Amber wins orders for laptop PCBs")) == 1
+
+
+def test_an_institution_is_not_a_challenger():
+    assert _entrants("IIT Madras sets up PCB design lab") == []
+
+
+def test_the_challengers_own_name_is_not_the_turf():
+    """ "Ai+ Smartphone" is a phone brand; its cricket sponsorship is not a
+    move onto smartphones."""
+    assert (
+        _entrants(
+            "Ai+ Smartphone enters New Zealand Cricket partnership for India’s tour"
+        )
+        == []
+    )
+
+
+def test_a_foreign_company_abroad_is_not_on_our_turf():
+    watchlist = {"data_center_support": [{"ticker": "ANANTRAJ", "name": "Anant Raj"}]}
+    assert (
+        _entrants(
+            "Philippines' Globe Telecom targets US$1 billion AI and data centre "
+            "investment by 2027",
+            watchlist=watchlist,
+        )
+        == []
+    )
+    # Coming to India is exactly what the radar is for.
+    for headline in (
+        "Taiwan's Foxconn eyes Indian EMS market",
+        "Taiwan's Foxconn sets up smartphone plant in Tamil Nadu",
+    ):
+        entrants = _entrants(headline)
+        assert [e["challenger"] for e in entrants] == ["Foxconn"], headline
 
 
 # ---------------------------------------------------------------------------

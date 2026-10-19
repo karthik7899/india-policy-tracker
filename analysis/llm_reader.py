@@ -750,7 +750,7 @@ def reconcile(
     reading is not enough to route news onto the book.
     """
     from analysis.event_engine import _EVENT_DIRECTION, graph_entities
-    from analysis.competitive_intel import SECTOR_BATTLEGROUNDS, collect_sources
+    from analysis.competitive_intel import battleground_sectors, collect_sources
 
     stats = {"corroborated": 0, "disagreed": 0, "llm_only": 0}
     if not readings:
@@ -798,11 +798,7 @@ def reconcile(
             "event_type": etype,
             "phrase": None,
             "certainty": reading["certainty"],
-            "domains": [
-                s
-                for s, terms in SECTOR_BATTLEGROUNDS.items()
-                if any(t in lower for t in terms)
-            ],
+            "domains": battleground_sectors(headline),
             "actors": actors,
             "external": graph_entities(headline, graph) if graph else [],
             "direction": _EVENT_DIRECTION.get(etype, "opportunity"),

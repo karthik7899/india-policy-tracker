@@ -92,6 +92,22 @@ def test_untracked_domains_are_dropped():
     assert events == []
 
 
+def test_a_sector_word_inside_another_word_is_not_a_domain():
+    """ "ems" sits inside "Systems" and "oppo" inside "Opportunities": a
+    Persistent Systems order was routed to the electronics holdings as an
+    EMS story, and a food-trade MoU as an Oppo one."""
+    events = classify_headlines(
+        _data(
+            "Persistent Systems wins $650M+ order for strategic services",
+            "APEDA Signs MoU with Gulfood Organiser to Strengthen Global Food "
+            "Trade Opportunities",
+            "Suzlon bags 306 MW wind turbine orders from Yanara in Rajasthan",
+        ),
+        _WATCHLIST,
+    )
+    assert [e["domains"] for e in events] == [["clean_energy"]]
+
+
 def test_classifier_never_raises():
     assert classify_headlines(None, None) == []
     assert classify_headlines({"corporate_agreements": "junk"}, _WATCHLIST) == []
