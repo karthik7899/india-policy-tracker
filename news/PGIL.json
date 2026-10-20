@@ -32,9 +32,10 @@
       "headline": "Pearl Global expands Bangladesh footprint; adds 7 million pieces of garment capacity",
       "source_url": "https://news.google.com/rss/articles/CBMi1wFBVV95cUxOV1dOUXJYTGpya0lleEgxT0R1MXc4T1lWOGd5RTlnSy1lazA4RlVZX3hqdXQzd3prOThYc3pGR1dZZV9JU2dfNzVfZGNOV2s3QUwwNDREMUFGc2JfTS1vaHMwMmRrS1hPMk9xMjI1LUV0VHdvcURiTThtTk1KeEQwMzhnVGJEOG1wUmFrVEJHWGFodFVVeXQ4TVByUWYwdFFtVGFJVE0xWmwyYWU5NzM1a2RUODBneHU5LVNjMDlwVVN3aUlyMDZNYVNndXF1MkpRVEh5VHdPUQ?oc=5",
       "source_label": "tradingview.com",
-      "event_type": "",
+      "event_type": "capacity_add",
       "source_kind": "Launch",
       "event_tags": [
+        "capacity_add",
         "Launch"
       ],
       "confidence": "M",
@@ -49,6 +50,34 @@
       "source_kind": "Launch",
       "event_tags": [
         "Launch"
+      ],
+      "confidence": "M",
+      "status": "counted"
+    },
+    {
+      "date": "Tue, 22 Sep 2026 07:00:00 GMT",
+      "headline": "Pearl Global Industries (NSE: PGIL) Expands Bangladesh Apparel Capacity",
+      "source_url": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxPdjlpbnhSOENaeU5YMnlUeHhLX0Q3bWljYXRyZVNpY2VnYXlXRE9NLTVRQ0hBYzdkVXNySHA2UVlNQkN0OFN4dFJvR1ZDV251SnRFSUxnVFVoVURJQVRPYXp4d2xjTEs0U1VFQjhLMHNWZ2duZnJBRDFXZmZUelJJMkQwWGFaZm82VklESG83TjBTV1pDbzB4RW9xTDhSRmRLYm5DMy1KSUdlcVlzdnM3bUdMV0x0WWluUllzVXlCZWx6MWdqQnRjejZZamx2eTFDdUJxMzdQbVNSREVvZnd6QVRR?oc=5",
+      "source_label": "Kalkine India",
+      "event_type": "capacity_add",
+      "source_kind": "Filing",
+      "event_tags": [
+        "capacity_add",
+        "Filing"
+      ],
+      "confidence": "M",
+      "status": "counted"
+    },
+    {
+      "date": "Tue, 22 Sep 2026 07:00:00 GMT",
+      "headline": "Pearl Global commissions new garment manufacturing unit in Bangladesh",
+      "source_url": "https://news.google.com/rss/articles/CBMi8wFBVV95cUxNc2lHam84Zkp2WnZGX0J0U1dKZVRET0J1M1lPM2hJVDBZMlhkcm4xd1RtR0wwNVBZZXlvT0Z5U0xwUExkdm9FZ3djbGU3Ym9MX25RdEQyVWhucGk4WDI0YXAwRGZMYjdhQTBwdUhPOHBlRnB5ajJrd0t4azhON0ZZcl9SblRmM1BlR3B6X3psOWt2TWhBSU45UEhpVUdKZTVnNk40RUpNN2xoVUFKaHY2RHVVVXV0aURpQ2c4ejlTenVHclhTZHFiT1NZekpuX1RmWlFYVjMxZXN5ejBXTHpmX3dmSF9hZnJmVlhGTGl3UWVobGs?oc=5",
+      "source_label": "Fibre2Fashion",
+      "event_type": "capacity_add",
+      "source_kind": "Filing",
+      "event_tags": [
+        "capacity_add",
+        "Filing"
       ],
       "confidence": "M",
       "status": "counted"
@@ -92,7 +121,8 @@
         "Filing"
       ],
       "confidence": "M",
-      "status": "counted"
+      "status": "merged",
+      "exclusion_reason": "merged: duplicate phrasing of “Pearl Global Industries (NSE: PGIL) Expands Bangladesh Appar”"
     },
     {
       "date": "Fri, 09 Jan 2026 08:00:00 GMT",
@@ -106,7 +136,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (283 days old)"
+      "exclusion_reason": "aged >120d (284 days old)"
     },
     {
       "date": "28 Sep 2026",
@@ -199,7 +229,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (252 days old)"
+      "exclusion_reason": "aged >120d (253 days old)"
     },
     {
       "date": "Wed, 12 Nov 2025 08:00:00 GMT",
@@ -213,7 +243,52 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (341 days old)"
+      "exclusion_reason": "aged >120d (342 days old)"
+    },
+    {
+      "date": "2026-09-22",
+      "headline": "Pearl Global commissions new garment manufacturing unit in Bangladesh",
+      "source_url": "https://news.google.com/rss/articles/CBMi8wFBVV95cUxNc2lHam84Zkp2WnZGX0J0U1dKZVRET0J1M1lPM2hJVDBZMlhkcm4xd1RtR0wwNVBZZXlvT0Z5U0xwUExkdm9FZ3djbGU3Ym9MX25RdEQyVWhucGk4WDI0YXAwRGZMYjdhQTBwdUhPOHBlRnB5ajJrd0t4azhON0ZZcl9SblRmM1BlR3B6X3psOWt2TWhBSU45UEhpVUdKZTVnNk40RUpNN2xoVUFKaHY2RHVVVXV0aURpQ2c4ejlTenVHclhTZHFiT1NZekpuX1RmWlFYVjMxZXN5ejBXTHpmX3dmSF9hZnJmVlhGTGl3UWVobGs?oc=5",
+      "source_label": "Fibre2Fashion",
+      "event_type": "capacity_add",
+      "source_kind": "Event",
+      "event_tags": [
+        "capacity_add",
+        "Event"
+      ],
+      "confidence": "H",
+      "status": "merged",
+      "exclusion_reason": "merged: duplicate phrasing of “Pearl Global commissions new garment manufacturing unit in B”"
+    },
+    {
+      "date": "2026-09-22",
+      "headline": "Pearl Global expands Bangladesh footprint; adds 7 million pieces of garment capacity",
+      "source_url": "https://news.google.com/rss/articles/CBMi1wFBVV95cUxOV1dOUXJYTGpya0lleEgxT0R1MXc4T1lWOGd5RTlnSy1lazA4RlVZX3hqdXQzd3prOThYc3pGR1dZZV9JU2dfNzVfZGNOV2s3QUwwNDREMUFGc2JfTS1vaHMwMmRrS1hPMk9xMjI1LUV0VHdvcURiTThtTk1KeEQwMzhnVGJEOG1wUmFrVEJHWGFodFVVeXQ4TVByUWYwdFFtVGFJVE0xWmwyYWU5NzM1a2RUODBneHU5LVNjMDlwVVN3aUlyMDZNYVNndXF1MkpRVEh5VHdPUQ?oc=5",
+      "source_label": "tradingview.com",
+      "event_type": "capacity_add",
+      "source_kind": "Event",
+      "event_tags": [
+        "capacity_add",
+        "Event"
+      ],
+      "confidence": "L",
+      "status": "merged",
+      "exclusion_reason": "merged: duplicate phrasing of “Pearl Global expands Bangladesh footprint; adds 7 million pi”"
+    },
+    {
+      "date": "2026-09-22",
+      "headline": "Pearl Global Industries (NSE: PGIL) Expands Bangladesh Apparel Capacity",
+      "source_url": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxPdjlpbnhSOENaeU5YMnlUeHhLX0Q3bWljYXRyZVNpY2VnYXlXRE9NLTVRQ0hBYzdkVXNySHA2UVlNQkN0OFN4dFJvR1ZDV251SnRFSUxnVFVoVURJQVRPYXp4d2xjTEs0U1VFQjhLMHNWZ2duZnJBRDFXZmZUelJJMkQwWGFaZm82VklESG83TjBTV1pDbzB4RW9xTDhSRmRLYm5DMy1KSUdlcVlzdnM3bUdMV0x0WWluUllzVXlCZWx6MWdqQnRjejZZamx2eTFDdUJxMzdQbVNSREVvZnd6QVRR?oc=5",
+      "source_label": "Kalkine India",
+      "event_type": "capacity_add",
+      "source_kind": "Event",
+      "event_tags": [
+        "capacity_add",
+        "Event"
+      ],
+      "confidence": "L",
+      "status": "merged",
+      "exclusion_reason": "merged: duplicate phrasing of “Pearl Global Industries (NSE: PGIL) Expands Bangladesh Appar”"
     }
   ]
 }

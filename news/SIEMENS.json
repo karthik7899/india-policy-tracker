@@ -2,6 +2,20 @@
   "ticker": "SIEMENS",
   "items": [
     {
+      "date": "19 Oct 2026",
+      "headline": "Siemens partners with NVIDIA to advance AI-driven, autonomous fact ...",
+      "source_url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxPRlpjNDhhNElaeVYxT1JuVXY5MWVvYUlOaWpNanllTklOZVF0Qllpcm5zTDliZnVjZENvZUsxNWZSZjl5T2lWcjlnOXhlUUtDUHZaYzhWRGlnYmJxSWllRjBwblRVUEJUZVFJLXFQWXJfOUJkV200NGxRQUpvdzRTUEctVjNOY293MG1WNzJzLUotSmk3Mmx5WGxsM00wV1UteEd2RF95V1FwcDM3TzI5Qg?oc=5",
+      "source_label": "Siemens press",
+      "event_type": "tie_up",
+      "source_kind": "Sector news",
+      "event_tags": [
+        "tie_up",
+        "Sector news"
+      ],
+      "confidence": "M",
+      "status": "counted"
+    },
+    {
       "date": "Mon, 20 Jul 2026 13:02:38 GMT",
       "headline": "Siemens to acquire Precision Innovations to expand AI-powered system-on-a-chip design exploration and optimization",
       "source_url": "https://news.google.com/rss/articles/CBMifEFVX3lxTE9ZNl96bGFqRGxMOWEzZlZzaUlKN1RmWXpyalpiMzc0VjlWVm43a0wwanhqb1VmdFNOZXFZX29BbGhuS2Z4WDVvVDBkZUhiVm05QzgwUEIyZ1A1XzhycGNfdHFhN0x5d1FFY2d1ejk4aUFpalZvenplVGJWQXM?oc=5",
@@ -91,7 +105,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (286 days old)"
+      "exclusion_reason": "aged >120d (287 days old)"
     },
     {
       "date": "Thu, 23 Jul 2026 12:03:30 GMT",
@@ -196,7 +210,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (187 days old)"
+      "exclusion_reason": "aged >120d (188 days old)"
     },
     {
       "date": "Wed, 15 Apr 2026 07:00:00 GMT",
@@ -210,7 +224,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (187 days old)"
+      "exclusion_reason": "aged >120d (188 days old)"
     },
     {
       "date": "Tue, 09 Dec 2025 08:00:00 GMT",
@@ -224,7 +238,22 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (314 days old)"
+      "exclusion_reason": "aged >120d (315 days old)"
+    },
+    {
+      "date": "2026-10-19",
+      "headline": "Siemens partners with NVIDIA to advance AI-driven, autonomous fact ...",
+      "source_url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxPRlpjNDhhNElaeVYxT1JuVXY5MWVvYUlOaWpNanllTklOZVF0Qllpcm5zTDliZnVjZENvZUsxNWZSZjl5T2lWcjlnOXhlUUtDUHZaYzhWRGlnYmJxSWllRjBwblRVUEJUZVFJLXFQWXJfOUJkV200NGxRQUpvdzRTUEctVjNOY293MG1WNzJzLUotSmk3Mmx5WGxsM00wV1UteEd2RF95V1FwcDM3TzI5Qg?oc=5",
+      "source_label": "Siemens press",
+      "event_type": "tie_up",
+      "source_kind": "Event",
+      "event_tags": [
+        "tie_up",
+        "Event"
+      ],
+      "confidence": "H",
+      "status": "merged",
+      "exclusion_reason": "merged: duplicate phrasing of “Siemens partners with NVIDIA to advance AI-driven, autonomou”"
     }
   ]
 }

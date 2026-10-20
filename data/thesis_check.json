@@ -104,7 +104,7 @@
             "reader": "llm"
           }
         ],
-        "read": 13,
+        "read": 14,
         "unread": 0
       },
       "HDFCBANK": {
@@ -114,7 +114,7 @@
         "thesis": "Largest private lender; post-merger deposit repricing and a direct read on retail credit demand.",
         "challenged": [],
         "supported": [],
-        "read": 2,
+        "read": 3,
         "unread": 0
       },
       "ICICIBANK": {
@@ -124,7 +124,7 @@
         "thesis": "Retail-led credit growth with sector-leading asset quality and digital lending scale.",
         "challenged": [],
         "supported": [],
-        "read": 2,
+        "read": 3,
         "unread": 0
       },
       "SBIN": {
@@ -163,7 +163,7 @@
             "reader": "llm"
           }
         ],
-        "read": 6,
+        "read": 5,
         "unread": 0
       },
       "KPIL": {
@@ -266,6 +266,35 @@
           }
         ],
         "read": 13,
+        "unread": 0
+      },
+      "ADANIPOWER": {
+        "ticker": "ADANIPOWER",
+        "name": "Adani Power",
+        "sector": "big_cap_industries",
+        "thesis": "Large private thermal power producer, adding capacity through acquisitions such as the GVK Energy bid and selling under long-term power purchase agreements.",
+        "challenged": [],
+        "supported": [
+          {
+            "headline": "Adani Power Limited has informed the Exchange about Letter of Award",
+            "claim": "adding capacity through acquisitions such as the GVK Energy bid and selling under long-term power purchase agreements",
+            "because": "Adani Power Limited has informed the Exchange about Letter of Award",
+            "date": "2026-10-14",
+            "link": "https://nsearchives.nseindia.com/corporate/ADANIPOWER_14102026105706_APLLoAfromUttarakhand13102026.pdf",
+            "source": "NSE",
+            "reader": "llm"
+          },
+          {
+            "headline": "Adani Power (NSE:ADANIPOWER): Has It Been Named Successful Bidder for GVK Energy?",
+            "claim": "adding capacity through acquisitions such as the GVK Energy bid",
+            "because": "Named Successful Bidder for GVK Energy",
+            "date": "2026-09-07",
+            "link": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxPTFlzeXdMbWZEM09IR3FRRDhhM3g1dlBGUXRtbnFJS01ORTVRY2ZJYjNOR0Zfb0V6OEdqLWZDRUgwc0F6YjgzeXpVYUxSRHR6ME9GTTBVSkl6MG1RUkU0SVhDSnFtTDN6c1NXN0lmVWFnMlJjN2k0cTZUN012Q1hVRExsMkRyMi1hWHNhNzJxLUNKZlpVdC10bTYxUmZyNVhrMHpQT2YtREtuT1djTEZEWlo3MGowVFc2blUyYU9ISUJyQQ?oc=5",
+            "source": "Kalkine India",
+            "reader": "llm"
+          }
+        ],
+        "read": 14,
         "unread": 0
       },
       "SUZLON": {
@@ -454,35 +483,6 @@
         "read": 11,
         "unread": 0
       },
-      "ADANIPOWER": {
-        "ticker": "ADANIPOWER",
-        "name": "Adani Power",
-        "sector": "clean_energy",
-        "thesis": "Large private thermal power producer, adding capacity through acquisitions such as the GVK Energy bid and selling under long-term power purchase agreements.",
-        "challenged": [],
-        "supported": [
-          {
-            "headline": "Adani Power Limited has informed the Exchange about Letter of Award",
-            "claim": "adding capacity through acquisitions such as the GVK Energy bid and selling under long-term power purchase agreements",
-            "because": "Adani Power Limited has informed the Exchange about Letter of Award",
-            "date": "2026-10-14",
-            "link": "https://nsearchives.nseindia.com/corporate/ADANIPOWER_14102026105706_APLLoAfromUttarakhand13102026.pdf",
-            "source": "NSE",
-            "reader": "llm"
-          },
-          {
-            "headline": "Adani Power (NSE:ADANIPOWER): Has It Been Named Successful Bidder for GVK Energy?",
-            "claim": "adding capacity through acquisitions such as the GVK Energy bid",
-            "because": "Named Successful Bidder for GVK Energy",
-            "date": "2026-09-07",
-            "link": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxPTFlzeXdMbWZEM09IR3FRRDhhM3g1dlBGUXRtbnFJS01ORTVRY2ZJYjNOR0Zfb0V6OEdqLWZDRUgwc0F6YjgzeXpVYUxSRHR6ME9GTTBVSkl6MG1RUkU0SVhDSnFtTDN6c1NXN0lmVWFnMlJjN2k0cTZUN012Q1hVRExsMkRyMi1hWHNhNzJxLUNKZlpVdC10bTYxUmZyNVhrMHpQT2YtREtuT1djTEZEWlo3MGowVFc2blUyYU9ISUJyQQ?oc=5",
-            "source": "Kalkine India",
-            "reader": "llm"
-          }
-        ],
-        "read": 14,
-        "unread": 0
-      },
       "NTPCGREEN": {
         "ticker": "NTPCGREEN",
         "name": "NTPC Green Energy",
@@ -510,6 +510,16 @@
           }
         ],
         "read": 9,
+        "unread": 0
+      },
+      "UTLSOLAR": {
+        "ticker": "UTLSOLAR",
+        "name": "Fujiyama Power",
+        "sector": "clean_energy",
+        "thesis": "Rooftop solar products maker (inverters, panels, batteries) riding residential solar subsidies, with revenue more than doubling.",
+        "challenged": [],
+        "supported": [],
+        "read": 1,
         "unread": 0
       },
       "TCS": {
@@ -549,10 +559,11 @@
         "thesis": "Critical supplier of electrical distribution, smart grids, and high-efficiency cooling for data centers.",
         "challenged": [],
         "supported": [],
-        "read": 9,
+        "read": 10,
         "unread": 0,
         "not_about": [
           "Schneider Electric raises 2026 targets again on booming data centre demand",
+          "Schneider Electric Boosts Outlook Again After Data-Center Demand Lifts Sales",
           "Schneider’s $23.6bn bid for PTC faces investor scepticism",
           "Schneider Electric Unveils World's First Software-Defined Medium Voltage Switchgear to Expand AI-Ready Data Center Power Portfolio",
           "Precision Optics Enabling Lunar Navigation: Schneider-Kreuznach’s Role in NASA’s Artemis Missions",
@@ -622,6 +633,53 @@
         "read": 4,
         "unread": 0
       },
+      "DIACABS": {
+        "ticker": "DIACABS",
+        "name": "Diamond Power",
+        "sector": "data_center_support",
+        "thesis": "Power cable and conductor maker out of insolvency, winning state utility orders such as PuVVNL's on a fast-growing order book.",
+        "challenged": [],
+        "supported": [
+          {
+            "headline": "Diamond Power Infrastructure Limited has informed the Exchange about Bagging/Receiving of orders/contracts",
+            "claim": "winning state utility orders such as PuVVNL's on a fast-growing order book",
+            "because": "Bagging/Receiving of orders/contracts",
+            "date": "2026-09-17",
+            "link": "https://nsearchives.nseindia.com/corporate/DIACABS_17092026125851_Regulation_30-Receipt_of_Letter_of_Award.pdf",
+            "source": "NSE",
+            "reader": "llm"
+          },
+          {
+            "headline": "Diamond Power Infrastructure DIACABS NCLT Exit Completed",
+            "claim": "out of insolvency",
+            "because": "NCLT Exit Completed",
+            "date": "2026-09-11",
+            "link": "https://news.google.com/rss/articles/CBMixAFBVV95cUxOdWZseUJfY3o3U05nWmQ4Z2xDVkFMQThxWFFLOTBaeGZuSkMxVWtuUmhOZDROV2RzaW54RWEyUjI5M0pXeTgyaXE0VGVwaVV4ZVlpSTdrNnVMYzZFMzBrSHFsS2pua21GLVc2YXpHZE9JRExKN0tvaXFCb0oyUmkxRmZoWUdVWmI5dUVkdHN6RTBoR2N6Nk1DNDNTN25wNkZ5Q3BoVG4xTFhBTmZESzc0Nm5CLW9KS1Q2WGZRV3ZTMGFLVjZp?oc=5",
+            "source": "Kalkine India",
+            "reader": "llm"
+          },
+          {
+            "headline": "Diacabs wins Rs 61.04 crore order from PuVVNL for 33 kV HT XLPE cables",
+            "claim": "winning state utility orders such as PuVVNL's on a fast-growing order book",
+            "because": "wins Rs 61.04 crore order from PuVVNL for 33 kV HT XLPE cables",
+            "date": "2026-08-14",
+            "link": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxOTXdfRU8zZW84SjhxZERMLXl1dlRCWGwyNE1oMTd2RF93NGZkcUFUZmxJNDNZNzlUbmJrYTVSa1V3bFBySjZtNXJPTThyNXBUU2FfWDBmMUI0YkxnQ3pSV2NTckdXQXdEVVdTTDNLLS1WNXpmaWZVV19obldyWG9IUTNfTndGa1VFU1VyR3JvRktwOWxQUnpSTE5DeDhJTFFJLWRpT0QwVTVDcXh0ejBSSXgzUEowaEFtSHdnOGl6ZVJiVW5wSnNjTWpMeXNwSGw1?oc=5",
+            "source": "scanx.trade",
+            "reader": "llm"
+          },
+          {
+            "headline": "Diamond Power Infrastructure (NSE:DIACABS) Hits All-Time High on Strong Order Book",
+            "claim": "fast-growing order book",
+            "because": "Hits All-Time High on Strong Order Book",
+            "date": "2026-07-07",
+            "link": "https://news.google.com/rss/articles/CBMiugFBVV95cUxNRHB1TkF2bnBGUUlFdE9BVl9XVjRGTkVlRHBYSFo5blllRWhmRDV0Qm5LU1FDZnBfaHRzTUVJV1pTTzdYV21iSjJ3Qk5CTzBUNEJqZFJPZWZCay14VGNEVk5yLVR1YVVaV010Tk1mZGRBV3ZnR0huTkhrUTNWNUlFUnJ6Ylp1ZTZuTUxyNGkwWDc0OHFnT1YxUmpTdllEMER2ZHpYbjEzMUxWVXA2bjJESDNEcjZ0Zk01MXc?oc=5",
+            "source": "Kalkine India",
+            "reader": "llm"
+          }
+        ],
+        "read": 6,
+        "unread": 0
+      },
       "VBL": {
         "ticker": "VBL",
         "name": "Varun Beverages (PepsiCo)",
@@ -666,7 +724,7 @@
             "reader": "llm"
           }
         ],
-        "read": 7,
+        "read": 8,
         "unread": 0
       },
       "TATACONSUM": {
@@ -797,8 +855,18 @@
         "sector": "hospitality_travel",
         "thesis": "Taj operator scaling asset-light management contracts against record domestic travel demand.",
         "challenged": [],
-        "supported": [],
-        "read": 3,
+        "supported": [
+          {
+            "headline": "The Indian Hotels Company Limited has informed the Exchange about Scheme of Arrangement between Oriental Hotels Limited and The Indian Hotels Company Limited and their respective s",
+            "claim": "Taj operator scaling asset-light management contracts against record domestic travel demand",
+            "because": "Scheme of Arrangement between Oriental Hotels Limited and The Indian Hotels Company Limited",
+            "date": "2026-10-20",
+            "link": "https://nsearchives.nseindia.com/corporate/bakhtawar_irani_tajhotels_com_24082026085942_Reg_30_IHCL_FINAL.pdf",
+            "source": "NSE",
+            "reader": "llm"
+          }
+        ],
+        "read": 5,
         "unread": 0
       },
       "CHALET": {
@@ -808,7 +876,7 @@
         "thesis": "Business-hotel portfolio near airports and office hubs, geared to corporate travel recovery.",
         "challenged": [],
         "supported": [],
-        "read": 1,
+        "read": 2,
         "unread": 0
       },
       "LEMONTREE": {
@@ -819,6 +887,24 @@
         "challenged": [],
         "supported": [
           {
+            "headline": "Lemon Tree Hotels Limited has informed the Exchange regarding a press release dated September 24, 2026, titled \"the Company has signed a License Agreement viz. Lemon Tree Hotel, Pa",
+            "claim": "expanding into tier-2 cities",
+            "because": "Lemon Tree Hotel, Pa",
+            "date": "2026-10-20",
+            "link": "https://nsearchives.nseindia.com/corporate/LEMONTREE_24092026203539_License_Agreement.pdf",
+            "source": "NSE",
+            "reader": "llm"
+          },
+          {
+            "headline": "Lemon Tree Hotels signs Keys Select property in Bareilly",
+            "claim": "expanding into tier-2 cities",
+            "because": "signs Keys Select property in Bareilly",
+            "date": "2026-10-14",
+            "link": "https://news.google.com/rss/articles/CBMiswFBVV95cUxPbkp3d3hwWlN5RXhXTmJ3VGlCS2hjcGIxMUUySnBYcXZaOGx5SUg0VDJYa3drNjFjT1hTTHRrTFY4cEFNUGJUQzRzTlo2V1VoN0pqNVE1ekJpWTdmNWJzY0s2Ul83N0RzSzkwRGVwZFgxTUlJQnJOYWxYYjRJV2l2YkNjSTRVTEtjSldaNDFEY1BVTi1YVHdxU2U4TTVDTUJLNF83S0JaY2trX0VQWlFUUzRSbw?oc=5",
+            "source": "TradingView",
+            "reader": "llm"
+          },
+          {
             "headline": "Lemon Tree Hotels Limited has informed the Exchange regarding a press release dated September 24, 2026, titled \"the Company has signed a License Agreement viz. Lemon Tree Hotel, Patancheru in Telangana.\".",
             "claim": "Mid-market chain expanding into tier-2 cities as UDAN air connectivity widens the travel base",
             "because": "the Company has signed a License Agreement viz. Lemon Tree Hotel, Patancheru in Telangana",
@@ -828,7 +914,7 @@
             "reader": "llm"
           }
         ],
-        "read": 4,
+        "read": 6,
         "unread": 0
       },
       "SIEMENS": {
@@ -838,9 +924,10 @@
         "thesis": "Diversified capital-goods major, expanding local factory automation and grid equipment manufacturing.",
         "challenged": [],
         "supported": [],
-        "read": 10,
+        "read": 11,
         "unread": 0,
         "not_about": [
+          "Siemens partners with NVIDIA to advance AI-driven, autonomous fact ...",
           "Siemens unveils ÖBB Railjet M at InnoTrans",
           "Siemens Unveils SCALANCE XFM-200 Compact, Flat Managed Switches for Cabinet-Critical Installations",
           "Siemens to acquire RTL design automation software company",
@@ -899,6 +986,15 @@
         "challenged": [],
         "supported": [
           {
+            "headline": "Titagarh Rail–BHEL Partnership: How the Vande Bharat Sleeper Project Can Strengthen Long-Term Growth",
+            "claim": "expanding local container manufacturing and green energy grids",
+            "because": "Vande Bharat Sleeper Project Can Strengthen Long-Term Growth",
+            "date": "2026-09-26",
+            "link": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxQbVZQT3BRV3U0UGZJeVBKMXNwSGNtWmQ4dy1ld0tkcFREYzdqR0FnMFpIMExLMTBkRjJNaEw0cWNrRHFIbm8wZUUtcm55eUYwcmE4MU55dURsS2xKV1JLTlF6aHdUSV83cGhLVEFpQXVWa0xDOUNZQ3Y5blhnT19GRWdyVDBkMkN4N09jVVFRcDhQSlJNUnBMcEQ2UHBaMUF0a0FzNWF5YzlXS25qRUNNY3VtdGQ3SUFfU2JhN2dKV2pkWmdNTVBrQ2s5Y2tfcUlyNlo0V3lVNG5yQjBkdXFnVWxn?oc=5",
+            "source": "Dalal Street Investment Journal",
+            "reader": "llm"
+          },
+          {
             "headline": "BHEL receives LNTP from DVC for 800 MW Durgapur project",
             "claim": "State-owned heavy power equipment giant",
             "because": "BHEL receives LNTP from DVC for 800 MW Durgapur project",
@@ -932,15 +1028,6 @@
             "date": "2026-08-18",
             "link": "https://news.google.com/rss/articles/CBMivgFBVV95cUxQR1NlU0s1VTJtS0RCNTliMnJWMktOaXNIazZJS2owc3J4TEpPOUh4OFlMbEFKLVZhZ2UyQzFnVDNlenkwbkp0TlJ3MUx5Z1B4TVdKVE5DcHBsbGtvMHdseFZjY1BUWUpaMDRtbFZUTFUwRGRWVVQtZkNMNklmSWg3QmpzSjByYmFzOVZMZVVaOUtXUGh1cDYyT09DeDcxUWtfUDdaTGl0UnZveDQxU09XWXl3MmdjcUVxSkZneE53?oc=5",
             "source": "SolarQuarter",
-            "reader": "llm"
-          },
-          {
-            "headline": "Hystar, BHEL to localise PEM electrolyser production in India",
-            "claim": "green energy grids",
-            "because": "Hystar, BHEL to localise PEM electrolyser production in India",
-            "date": "2026-08-17",
-            "link": "https://news.google.com/rss/articles/CBMijwFBVV95cUxNUUQteTJkWkFaYXUzZVB0MWNqRzdxN095RmQ3SWE2ZjJMN052VHFQUGR4Z1FTUWZTOUxfdDJMNkVRQTVQNzFEbF9tSjViSXR1Y2o1MS1rOHp5WjRIUXI3VDMyNVVsaWszU2I1ZHFQSlNZdG15SV9LTmpVQjNKUEMwQTRMdTJtdmlBZ3pnbGhBUQ?oc=5",
-            "source": "Asian Power",
             "reader": "llm"
           }
         ],
@@ -1077,6 +1164,15 @@
             "date": "2026-09-21",
             "link": "https://news.google.com/rss/articles/CBMiywFBVV95cUxNVTBWcVR3NGJXWk9hSWRoUXZsNU5SYVUxd2FRSXhkMmhqdGdEUjlEVmU5WWxiRVhJN1JYNExMeXRiMS0zWjNoQk5VZlZFem5uS0g1V1ZvZDV1M3VuYlVfQlpMdFlpVnNXYVlabl96dnhCVTlqUTVNakkwSVJ6TjZ0Tm1WekJ3U05ERXZCVHNlaElfcW5fWVFlRUd2NlBxWU8ycHZ1ZFJoMExua2p3cTctcEgweFMzR2ZaUU1lbG9Lemc1OF9ESTZxNExjVdIB0AFBVV95cUxNRXBpcE5mRjB3cnlCLWJzaTljN2dQXzJKZ3AzYzBIR1RhNWVqSmFXM2lYSzR5dzMyYU1vdm1VakRNSWNaRm5jQ0ZCc2lsVkMyTnpzc2lwY1lPdGJISjRFRXM4RWh2OUdKZk42b2J3M1B2MFVORkt2QkVPM2p0VGFqR2wzTk5rMXBrdWcwRlRNWVZEN0ZSQWJOdXNNQkZoZTFNMG1jM2VCbl92ZDl2U3dsQ2luN3BEZ2pKdXZGQ2NTUVVaVEFRMHVpcUxwOTZDc25C?oc=5",
             "source": "electronics.economictimes.indiatimes.com",
+            "reader": "llm"
+          },
+          {
+            "headline": "Kaynes Receives Strong Customer Inquiries and Ramps Up Capacity",
+            "claim": "High-end electronics and PCBA manufacturing, setting up a state-of-the-art semiconductor OSAT plant",
+            "because": "Receives Strong Customer Inquiries and Ramps Up Capacity",
+            "date": "2026-09-21",
+            "link": "https://news.google.com/rss/articles/CBMikwFBVV95cUxQcDR4Q2lSRjV3NmF1LU1vWEdzblNZM2NheUZqYVZ6dS1oSVhTV2MxclFQaXRQeWtGZFlkVmtyY2dweUVqS0VmdjdwR2ZMZzRUVmw3ZjNQUlppYnk4VXdMUlJUb2lqTkxRUWRYSzdCNkhPbVNzWFhCaDl4V0hkYW1jN1kxdzdpai1XRTRBUUI2a0xQRnc?oc=5",
+            "source": "Sahi",
             "reader": "llm"
           },
           {
@@ -1220,24 +1316,6 @@
         "challenged": [],
         "supported": [
           {
-            "headline": "Persistent Systems Opens Third Facility In Hyderabad To Boost AI Services",
-            "claim": "High-growth digital engineering and enterprise AI services provider",
-            "because": "Persistent Systems Opens Third Facility In Hyderabad To Boost AI Services",
-            "date": "2026-10-13",
-            "link": "https://news.google.com/rss/articles/CBMioAFBVV95cUxOSjYwQmZKUlRlbTJkajRwdFF6cDIyR0ZJXzBSMk5nVUpOalNSbFNjbGttUXZ5V1ZxWkRuOTNBak5sSDg1UUNybFNvM3d3Vkt3Zm1qempiallsSnd1cmV1LU5PYnI0eUQyc1RTSUl6TFlTZ2RrNWtPaHhrdjhkUEV0VzlnZzRzX1pjWFNRMFpCTjZiNjZFbU90TXlUeFo4dFhQ?oc=5",
-            "source": "Sahi",
-            "reader": "llm"
-          },
-          {
-            "headline": "Persistent Systems Adds Hyderabad Facility for BFSI Clients",
-            "claim": "High-growth digital engineering and enterprise AI services provider",
-            "because": "Persistent Systems Adds Hyderabad Facility for BFSI Clients",
-            "date": "2026-10-13",
-            "link": "https://news.google.com/rss/articles/CBMingFBVV95cUxNVGFGeS1qbFlFN0NIcS1Kbno1QUxDS1FKQzFSeWVGZC1YYlFqNUQ3NTMwSGt0MnBIcTJtTU1SWExPa2RhUGlFaHlaeFFNMUVmcmc0SHoxdlgyOTNCelp5ZXVnNERPR2RtVFFYYUZzQ1NRTWkzcm41WEx4cDVWa1IyY2l1UlEyVzZVdFVCVXJGSlNueWQwV3ozN3B2S3FQdw?oc=5",
-            "source": "Analytics India Magazine",
-            "reader": "llm"
-          },
-          {
             "headline": "Persistent expands Hyderabad BFSI delivery footprint with third facility",
             "claim": "High-growth digital engineering and enterprise AI services provider",
             "because": "Persistent expands Hyderabad BFSI delivery footprint with third facility",
@@ -1262,6 +1340,15 @@
             "date": "2026-10-13",
             "link": "https://nsearchives.nseindia.com/corporate/PERSISTENTUSER1_13102026145534_PSLPressRelease13102026Sd.pdf",
             "source": "NSE",
+            "reader": "llm"
+          },
+          {
+            "headline": "Persistent Systems Opens Third Facility In Hyderabad To Boost AI Services",
+            "claim": "High-growth digital engineering and enterprise AI services provider",
+            "because": "Persistent Systems Opens Third Facility In Hyderabad To Boost AI Services",
+            "date": "2026-10-13",
+            "link": "https://news.google.com/rss/articles/CBMioAFBVV95cUxOSjYwQmZKUlRlbTJkajRwdFF6cDIyR0ZJXzBSMk5nVUpOalNSbFNjbGttUXZ5V1ZxWkRuOTNBak5sSDg1UUNybFNvM3d3Vkt3Zm1qempiallsSnd1cmV1LU5PYnI0eUQyc1RTSUl6TFlTZ2RrNWtPaHhrdjhkUEV0VzlnZzRzX1pjWFNRMFpCTjZiNjZFbU90TXlUeFo4dFhQ?oc=5",
+            "source": "Sahi",
             "reader": "llm"
           },
           {
@@ -1368,6 +1455,24 @@
         "challenged": [],
         "supported": [
           {
+            "headline": "MphasiS Limited has informed the Exchange regarding a press release dated September 22, 2026, titled \"Mphasis and Copa Airlines Host Global Quantum Computing Challenge toAccelerate",
+            "claim": "key beneficiary of enterprise cloud and cost-takeout deals",
+            "because": "Host Global Quantum Computing Challenge toAccelerate",
+            "date": "2026-10-20",
+            "link": "https://nsearchives.nseindia.com/corporate/MPHASIS_22092026112035_Press_Release-22_September_2026-signed.pdf",
+            "source": "NSE",
+            "reader": "llm"
+          },
+          {
+            "headline": "MphasiS Limited has informed the Exchange regarding a press release dated September 02, 2026, titled \"Mphasis and TechnoPro Holdings Sign Strategic agreement to Accelerate AI-led E",
+            "claim": "key beneficiary of enterprise cloud and cost-takeout deals",
+            "because": "Sign Strategic agreement to Accelerate AI-led E",
+            "date": "2026-10-20",
+            "link": "https://nsearchives.nseindia.com/corporate/MPHASIS_02092026064304_Press_Release-signed.pdf",
+            "source": "NSE",
+            "reader": "llm"
+          },
+          {
             "headline": "Mphasis extends Social Security Scotland deal in £35.4 million contract",
             "claim": "key beneficiary of enterprise cloud and cost-takeout deals",
             "because": "Mphasis extends Social Security Scotland deal in £35.4 million contract",
@@ -1386,7 +1491,7 @@
             "reader": "llm"
           }
         ],
-        "read": 10,
+        "read": 13,
         "unread": 0
       },
       "LTTS": {
@@ -1396,6 +1501,15 @@
         "thesis": "Engineering R&D services leader, scaling embedded software and semiconductor design-services wins.",
         "challenged": [],
         "supported": [
+          {
+            "headline": "How Kolhapuri chappals took a giant leap with LTTS’ Kala Samruddhi Project | Stories | L&T Corporate",
+            "claim": "Engineering R&D services leader, scaling embedded software and semiconductor design-services wins",
+            "because": "Kala Samruddhi Project",
+            "date": "2026-10-14",
+            "link": "https://news.google.com/rss/articles/CBMirAFBVV95cUxQR2Rpc0NyaWxKbld0dlpNbk9qaVBXWUVmaF9CRnZOS0d3bS1iODNMV1BrWTNRV2NfSFY5UWd2YUhBOURab3VDbWtmTm9UaXBqVjNzb2JLMEFUSWtWUUxidURPVC1tSWxxSHU5bVNxNDVnbW90Mi1waUVfRjJ0NnhKWjM4TmxodTkyNFpZVFFwOEhYVFQ4bktTUDNoUTk3TTdvMTBDcm93V2ozS0Vo?oc=5",
+            "source": "Larsen & Toubro",
+            "reader": "llm"
+          },
           {
             "headline": "L&T Technology Services Unveils NVIDIA-Powered AI Lab for Smart Manufacturing",
             "claim": "scaling embedded software and semiconductor design-services wins",
@@ -1476,15 +1590,6 @@
             "link": "https://news.google.com/rss/articles/CBMi9wFBVV95cUxPQ3FjRWNkRERYSXV5akl3UmRhMnBWVTZwaXpONWVUemNwaWFWbUoyQWpKMENjSkg3MDhwZjUybDF4WVppZ0J2cEhRVXlDVVhQaldBMk56UHZZWEp6NkN5S3B1REREWjR3aWlxczJQdDlxdTZ6MnV1TGdDNUc5Uy10RmlDaklSNU1jbldkSkhaZUZCcmJKN29ZSVBadUUwRXpMR3g4d3dDdlAwQktvQlFlNHNrckdYakV0ajZQTkQzcHREQ3VhYkRNSF9TRC1PZjRpUWJDbGpydjVLdFVBdFVoZG5KT3JFVFhDNFZ3NHhMY24tR0RqR1Bv?oc=5",
             "source": "MSN",
             "reader": "llm"
-          },
-          {
-            "headline": "L&T Technology Services Teams Up With Anthropic To Embed Claude AI In Engineering",
-            "claim": "scaling embedded software and semiconductor design-services wins",
-            "because": "L&T Technology Services Teams Up With Anthropic To Embed Claude AI In Engineering",
-            "date": "2026-07-14",
-            "link": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOY1hMUFIxSjFUNlJrVlJwNWZiZDJ0S0dGejZ0QndhWWVjTFVEbzFiYnlxWVZHRWhxU3YyVS1iMkhwOGhnMWZ5SUFoQnZWaXQzd0NkaVZpX0ZlQnY0b0o3WFJzN0JmcEVhVG5UY3VoMS1GNmh3c3R4TVpJYnpTMWdIanlxMm5wVmdaUXl3d2huV0cyRUI4cWhyWUlKVGRmM2JPT3p2Z3FkLTZCUdIBrAFBVV95cUxQZ20wX3ZGR1lPWTR3aTlqQjY2OXRjY0dTZ2prVzZqNWxleHlYd2oxQzFqNXFYRU9LN1BrVURiYU5KRzh2NjhZaW8zVjlzTEltNWt0OHB5N2FvcmVMa05MQXA0RUN4NE11RTJfNjkxZTlsSlFjSGV5NjN0Z2NjNW9DR1U1VXJWTnBpejdVMWJja3IxTmJVUW9qaEJETHZjX0xUcDFsLVpTVXVWNWhU?oc=5",
-            "source": "Rediff",
-            "reader": "llm"
           }
         ],
         "read": 15,
@@ -1502,16 +1607,6 @@
         "not_about": [
           "Grønn Vekst Retains Garden Waste Handling Contract with Follo Ren Iks"
         ]
-      },
-      "ASMTEC": {
-        "ticker": "ASMTEC",
-        "name": "ASM Technologies",
-        "sector": "semiconductors_equipment",
-        "thesis": "Engineering design services for semiconductor equipment makers under India Semiconductor Mission (ISM) 2.0.",
-        "challenged": [],
-        "supported": [],
-        "read": 1,
-        "unread": 0
       },
       "SPELS": {
         "ticker": "SPELS",
@@ -1533,68 +1628,11 @@
         "read": 2,
         "unread": 0
       },
-      "DIACABS": {
-        "ticker": "DIACABS",
-        "name": "Diamond Power",
-        "sector": "semiconductors_equipment",
-        "thesis": "Power cable and conductor maker out of insolvency, winning state utility orders such as PuVVNL's on a fast-growing order book.",
-        "challenged": [],
-        "supported": [
-          {
-            "headline": "Diamond Power Infrastructure Limited has informed the Exchange about Bagging/Receiving of orders/contracts",
-            "claim": "winning state utility orders such as PuVVNL's on a fast-growing order book",
-            "because": "Bagging/Receiving of orders/contracts",
-            "date": "2026-09-17",
-            "link": "https://nsearchives.nseindia.com/corporate/DIACABS_17092026125851_Regulation_30-Receipt_of_Letter_of_Award.pdf",
-            "source": "NSE",
-            "reader": "llm"
-          },
-          {
-            "headline": "Diamond Power Infrastructure DIACABS NCLT Exit Completed",
-            "claim": "out of insolvency",
-            "because": "NCLT Exit Completed",
-            "date": "2026-09-11",
-            "link": "https://news.google.com/rss/articles/CBMixAFBVV95cUxOdWZseUJfY3o3U05nWmQ4Z2xDVkFMQThxWFFLOTBaeGZuSkMxVWtuUmhOZDROV2RzaW54RWEyUjI5M0pXeTgyaXE0VGVwaVV4ZVlpSTdrNnVMYzZFMzBrSHFsS2pua21GLVc2YXpHZE9JRExKN0tvaXFCb0oyUmkxRmZoWUdVWmI5dUVkdHN6RTBoR2N6Nk1DNDNTN25wNkZ5Q3BoVG4xTFhBTmZESzc0Nm5CLW9KS1Q2WGZRV3ZTMGFLVjZp?oc=5",
-            "source": "Kalkine India",
-            "reader": "llm"
-          },
-          {
-            "headline": "Diacabs wins Rs 61.04 crore order from PuVVNL for 33 kV HT XLPE cables",
-            "claim": "winning state utility orders such as PuVVNL's on a fast-growing order book",
-            "because": "wins Rs 61.04 crore order from PuVVNL for 33 kV HT XLPE cables",
-            "date": "2026-08-14",
-            "link": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxOTXdfRU8zZW84SjhxZERMLXl1dlRCWGwyNE1oMTd2RF93NGZkcUFUZmxJNDNZNzlUbmJrYTVSa1V3bFBySjZtNXJPTThyNXBUU2FfWDBmMUI0YkxnQ3pSV2NTckdXQXdEVVdTTDNLLS1WNXpmaWZVV19obldyWG9IUTNfTndGa1VFU1VyR3JvRktwOWxQUnpSTE5DeDhJTFFJLWRpT0QwVTVDcXh0ejBSSXgzUEowaEFtSHdnOGl6ZVJiVW5wSnNjTWpMeXNwSGw1?oc=5",
-            "source": "scanx.trade",
-            "reader": "llm"
-          },
-          {
-            "headline": "Diamond Power Infrastructure (NSE:DIACABS) Hits All-Time High on Strong Order Book",
-            "claim": "fast-growing order book",
-            "because": "Hits All-Time High on Strong Order Book",
-            "date": "2026-07-07",
-            "link": "https://news.google.com/rss/articles/CBMiugFBVV95cUxNRHB1TkF2bnBGUUlFdE9BVl9XVjRGTkVlRHBYSFo5blllRWhmRDV0Qm5LU1FDZnBfaHRzTUVJV1pTTzdYV21iSjJ3Qk5CTzBUNEJqZFJPZWZCay14VGNEVk5yLVR1YVVaV010Tk1mZGRBV3ZnR0huTkhrUTNWNUlFUnJ6Ylp1ZTZuTUxyNGkwWDc0OHFnT1YxUmpTdllEMER2ZHpYbjEzMUxWVXA2bjJESDNEcjZ0Zk01MXc?oc=5",
-            "source": "Kalkine India",
-            "reader": "llm"
-          }
-        ],
-        "read": 6,
-        "unread": 0
-      },
       "MTARTECH": {
         "ticker": "MTARTECH",
         "name": "MTAR Technologies",
         "sector": "semiconductors_equipment",
         "thesis": "Precision engineering supplier to clean energy, nuclear, space and defence customers, with revenue more than doubling year on year.",
-        "challenged": [],
-        "supported": [],
-        "read": 1,
-        "unread": 0
-      },
-      "UTLSOLAR": {
-        "ticker": "UTLSOLAR",
-        "name": "Fujiyama Power",
-        "sector": "semiconductors_equipment",
-        "thesis": "Rooftop solar products maker (inverters, panels, batteries) riding residential solar subsidies, with revenue more than doubling.",
         "challenged": [],
         "supported": [],
         "read": 1,
@@ -1679,7 +1717,7 @@
         "thesis": "CCTV market leader (35%+ share) newly listed, scaling domestic camera manufacturing under PLI.",
         "challenged": [],
         "supported": [],
-        "read": 3,
+        "read": 2,
         "unread": 0
       },
       "ADSL": {
@@ -1699,6 +1737,15 @@
         "thesis": "Pioneer in tactical and mapping drone systems, primary supplier for Indian Army and police borders.",
         "challenged": [],
         "supported": [
+          {
+            "headline": "Mumbai-based ideaForge Technology has unveiled its latest mapping UAV, the Q6V2 GEO, at its first-ever customer event, PRAGYA 2025. Designed for geospatial intelligence, the lightw",
+            "claim": "Pioneer in tactical and mapping drone systems, primary supplier for Indian Army and police borders",
+            "because": "unveiled its latest mapping UAV, the Q6V2 GEO",
+            "date": "2026-10-20",
+            "link": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxNNnNaYmxIM2VQV0JJbWtPajc5b3ZiYTBnUl9JbkhVUk93VjZHWkdkZlZ5M2o0YXA2QU1lekRoODhHbTB1elFIa3dzOW4yRGVJa3lxR2dtWFFDRlNmbmRlMVQxSHdUZjRuSU5LTGdSSjBzS2ROZ2g2S3d3aGF1TzBKNFJfXy1ZLVVldExxbHdkQTNBTEY1a25aLUs2NlVjVnRkeFd2WnNGTm10LXVrR2FSV1dvMExDM0tZbnhvM0VBWDF4R1dzRzNZT0wxNDJPS3cyVWc?oc=5",
+            "source": "LinkedIn",
+            "reader": "llm"
+          },
           {
             "headline": "TDB signs Rs 151 crore funding agreement with ideaForge Technology for heavy-lift logistics drone YETI",
             "claim": "Pioneer in tactical and mapping drone systems",
@@ -1781,8 +1828,18 @@
         "sector": "surveillance_security",
         "thesis": "Anti-drone systems and combat training simulators, winning repeat Ministry of Defence counter-drone orders.",
         "challenged": [],
-        "supported": [],
-        "read": 2,
+        "supported": [
+          {
+            "headline": "Zen Technologies Cogknit Acquisition and Defence AI Systems Explained",
+            "claim": "Anti-drone systems and combat training simulators, winning repeat Ministry of Defence counter-drone orders",
+            "because": "Cogknit Acquisition and Defence AI Systems Explained",
+            "date": "2026-10-19",
+            "link": "https://news.google.com/rss/articles/CBMi1wFBVV95cUxNYjhRMTVUNXJnSlhid2JRU0haWEZBTnhvenJDOG1leUxNLThYZUpkQmlFOE5qb2w0UlF3SzlYOUludnBKVE1veW13OHVvLTVxWHdubzlXTlRKbGJGeEp2eWtGX3V0QzRuek8yREFlSXJBVS0yYmdKLU1lSXE3MTNyRVV1aFlnVDFJYXVfS24wcFVWSERoX0t0V0Z4d1hOUHlpWVhDVWY1V2EtU3ctSVg3alRJS2FGSl9IeExZYnNoUkxRUE5kTzEwNlYwbVdEVUhsNGhsWVFqcw?oc=5",
+            "source": "Kalkine India",
+            "reader": "llm"
+          }
+        ],
+        "read": 3,
         "unread": 0
       },
       "OPTIEMUS": {
@@ -1886,9 +1943,18 @@
             "link": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxPdjlpbnhSOENaeU5YMnlUeHhLX0Q3bWljYXRyZVNpY2VnYXlXRE9NLTVRQ0hBYzdkVXNySHA2UVlNQkN0OFN4dFJvR1ZDV251SnRFSUxnVFVoVURJQVRPYXp4d2xjTEs0U1VFQjhLMHNWZ2duZnJBRDFXZmZUelJJMkQwWGFaZm82VklESG83TjBTV1pDbzB4RW9xTDhSRmRLYm5DMy1KSUdlcVlzdnM3bUdMV0x0WWluUllzVXlCZWx6MWdqQnRjejZZamx2eTFDdUJxMzdQbVNSREVvZnd6QVRR?oc=5",
             "source": "Kalkine India",
             "reader": "llm"
+          },
+          {
+            "headline": "Pearl Global commissions new garment manufacturing unit in Bangladesh",
+            "claim": "Multi-country apparel exporter with plants in India, Bangladesh, Vietnam and Indonesia",
+            "because": "commissions new garment manufacturing unit in Bangladesh",
+            "date": "2026-09-22",
+            "link": "https://news.google.com/rss/articles/CBMi8wFBVV95cUxNc2lHam84Zkp2WnZGX0J0U1dKZVRET0J1M1lPM2hJVDBZMlhkcm4xd1RtR0wwNVBZZXlvT0Z5U0xwUExkdm9FZ3djbGU3Ym9MX25RdEQyVWhucGk4WDI0YXAwRGZMYjdhQTBwdUhPOHBlRnB5ajJrd0t4azhON0ZZcl9SblRmM1BlR3B6X3psOWt2TWhBSU45UEhpVUdKZTVnNk40RUpNN2xoVUFKaHY2RHVVVXV0aURpQ2c4ejlTenVHclhTZHFiT1NZekpuX1RmWlFYVjMxZXN5ejBXTHpmX3dmSF9hZnJmVlhGTGl3UWVobGs?oc=5",
+            "source": "Fibre2Fashion",
+            "reader": "llm"
           }
         ],
-        "read": 7,
+        "read": 8,
         "unread": 0
       }
     },
@@ -1897,15 +1963,15 @@
     ],
     "challenged": 0,
     "status": {
-      "cached": 412,
-      "read": 8,
+      "cached": 411,
+      "read": 22,
       "pending": 0,
       "skipped": "",
       "confirmed": 0,
       "refused": 0,
       "checks_pending": 0,
       "checks_skipped": "",
-      "model": "gemini-3.8-flash"
+      "model": "gemini-flash-lite-latest"
     }
   }
 }

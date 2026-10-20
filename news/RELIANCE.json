@@ -45,9 +45,10 @@
       "headline": "Reliance Industries unveils major investment proposals across key sectors in Andhra Pradesh",
       "source_url": "https://news.google.com/rss/articles/CBMi2wFBVV95cUxNNUhPUy1Hc3p0dmJWMUh4QjlHYW5OeDZCSkFfSDNMREpQckV5XzZvUUhSNHU2UjMtVk01bzZJN2hfSzh4STVHMjMyWFpCZjhiVG0wWFQxT1QySlpKSXp3UngtVXEybFg3aWJNeGJKVVNkUjJneldLTFdzeVgtN3hCbWNOWEJGbHhEcUQ1RFNLYU9WOFRkdW5YQktNQVl3R3R0ZUI4NDNseThsbHJZVzB1MHpHRG5NbjBma21odVA2QjRCdkF4QW9xcTVZb0Z4bVlzWEZBVTB1UU5qSDQ?oc=5",
       "source_label": "NewsMeter",
-      "event_type": "",
+      "event_type": "capacity_add",
       "source_kind": "Launch",
       "event_tags": [
+        "capacity_add",
         "Launch"
       ],
       "confidence": "M",
@@ -78,7 +79,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (131 days old)"
+      "exclusion_reason": "aged >120d (132 days old)"
     },
     {
       "date": "Tue, 03 Feb 2026 08:00:00 GMT",
@@ -92,7 +93,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (258 days old)"
+      "exclusion_reason": "aged >120d (259 days old)"
     },
     {
       "date": "Fri, 08 May 2026 07:00:00 GMT",
@@ -106,7 +107,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (164 days old)"
+      "exclusion_reason": "aged >120d (165 days old)"
     },
     {
       "date": "Fri, 20 Feb 2026 08:00:00 GMT",
@@ -120,20 +121,22 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (241 days old)"
+      "exclusion_reason": "aged >120d (242 days old)"
     },
     {
-      "date": "Sun, 18 Oct 2026 13:55:24 GMT",
-      "headline": "Gujarat High Court Rejects Decades-Old Land Re-grant Claim Against Reliance Industries",
-      "source_url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxPTDUwSklrcUYtV2NLc0Y3RW9IZXZXd205UGowTkh5MzR3M3BFejgwUGc0S1JoNFVFUjU5MzRqUHNhZXhQdEhKc0hkLU1FUDZCSTlCUVNOZnNlUXZLMDRWU0g0a2dnekNoXzRuTjh3cVZzUmhnbDh1N285Tlk1M19fVlllamNod0VXZDNHaEtGTUd4Y3BpbW1ZbF9qTGxKOUM4VGJMdG51ZWpNMHRkLXRxRE16cw?oc=5",
-      "source_label": "Court Book",
-      "event_type": "",
-      "source_kind": "State policy",
+      "date": "2026-10-04",
+      "headline": "Reliance Industries unveils major investment proposals across key sectors in Andhra Pradesh",
+      "source_url": "https://news.google.com/rss/articles/CBMi2wFBVV95cUxNNUhPUy1Hc3p0dmJWMUh4QjlHYW5OeDZCSkFfSDNMREpQckV5XzZvUUhSNHU2UjMtVk01bzZJN2hfSzh4STVHMjMyWFpCZjhiVG0wWFQxT1QySlpKSXp3UngtVXEybFg3aWJNeGJKVVNkUjJneldLTFdzeVgtN3hCbWNOWEJGbHhEcUQ1RFNLYU9WOFRkdW5YQktNQVl3R3R0ZUI4NDNseThsbHJZVzB1MHpHRG5NbjBma21odVA2QjRCdkF4QW9xcTVZb0Z4bVlzWEZBVTB1UU5qSDQ?oc=5",
+      "source_label": "NewsMeter",
+      "event_type": "capacity_add",
+      "source_kind": "Event",
       "event_tags": [
-        "State policy"
+        "capacity_add",
+        "Event"
       ],
-      "confidence": "M",
-      "status": "counted"
+      "confidence": "L",
+      "status": "merged",
+      "exclusion_reason": "merged: duplicate phrasing of “Reliance Industries unveils major investment proposals acros”"
     }
   ]
 }

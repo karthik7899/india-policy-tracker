@@ -6,9 +6,10 @@
       "headline": "Jindal Stainless, IOC extend lubricant supply agreement by 5 years",
       "source_url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxQMWg4NzRWZV9VZVczYmtPQjhNSGNoZFd1b2VHcW0yLThkN1J2MGluX1A3RWdyNTI4MGpVUW9pMmFTU2dJTlRGbF9kczVyM05LWlZCQ3NYUks4ZVk0cGJTZW1yRTNGekZOYngwVnFOTnQ1UnVPUTRXc1plcm1SNEljTmtoVllhUXV6WUFmS2Y1MXFxbGkzN2FPQUFtWnR6RzZkeENWbWYwZkdEY25vQnpteHhkVk5idw?oc=5",
       "source_label": "Pioneer Daily",
-      "event_type": "",
+      "event_type": "tie_up",
       "source_kind": "Agreement",
       "event_tags": [
+        "tie_up",
         "Agreement"
       ],
       "confidence": "M",
@@ -58,9 +59,10 @@
       "headline": "Prada and IOC unveil Formafantasma-designed Ocean & Climate Village exhibition",
       "source_url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxOc21pZ21sZ0xsSHRZUjVVRlVqVjRzek41NzMwaklaYUVxb213ZW1VNG11UnNWUXVObXY0WkVmQ2w2X2lMSG9wekFBZlJjQVlkOWhDVzd5ZENMWFJjempqWFBlNmQ3cXZyRkFmTXVDby1HWWtNazJSSWs3NGZZaDVRVk9QZ3hXTl9pMEhRV1hTeFZsX040ekE?oc=5",
       "source_label": "Dezeen",
-      "event_type": "",
+      "event_type": "tie_up",
       "source_kind": "Launch",
       "event_tags": [
+        "tie_up",
         "Launch"
       ],
       "confidence": "M",
@@ -111,9 +113,10 @@
       "headline": "IOC launches Trustworthy AI Framework",
       "source_url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxPWWY0YjVBYWxFbGREbHRtMms2UVE1TFdRMmoyZUZDM21BTUhTNmlpOXZOZU5JT3VYeUZEUGcyZDBRbHhzVG95cXVrWEZzbHBJQ05CODdkU3RnbXNzV0lIcl9TZHJyc0pCcmMxQUZNemgtUkJVU2Q3WVA4QW1ZSDNET3dCR0xpd0w5RUJDbm9ScjdJWGd6MEd5WlNXT1RwZUt6WUQwQw?oc=5",
       "source_label": "news.cgtn.com",
-      "event_type": "",
+      "event_type": "capacity_add",
       "source_kind": "Launch",
       "event_tags": [
+        "capacity_add",
         "Launch"
       ],
       "confidence": "M",
@@ -189,9 +192,10 @@
       "headline": "Indian Oil Corporation Limited has informed the Exchange regarding 'Investment Approval for Kochi-Kanyakumari-Thoothukudi Natural Gas Pipeline'.",
       "source_url": "https://nsearchives.nseindia.com/corporate/IOC_21092026133341_2026_09_21_Investment_approval_KTPL_S.pdf",
       "source_label": "NSE",
-      "event_type": "",
+      "event_type": "capacity_add",
       "source_kind": "Filing",
       "event_tags": [
+        "capacity_add",
         "Filing"
       ],
       "confidence": "M",
@@ -209,6 +213,66 @@
       ],
       "confidence": "M",
       "status": "counted"
+    },
+    {
+      "date": "2026-10-13",
+      "headline": "Prada and IOC unveil Formafantasma-designed Ocean & Climate Village exhibition",
+      "source_url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxOc21pZ21sZ0xsSHRZUjVVRlVqVjRzek41NzMwaklaYUVxb213ZW1VNG11UnNWUXVObXY0WkVmQ2w2X2lMSG9wekFBZlJjQVlkOWhDVzd5ZENMWFJjempqWFBlNmQ3cXZyRkFmTXVDby1HWWtNazJSSWs3NGZZaDVRVk9QZ3hXTl9pMEhRV1hTeFZsX040ekE?oc=5",
+      "source_label": "Dezeen",
+      "event_type": "tie_up",
+      "source_kind": "Event",
+      "event_tags": [
+        "tie_up",
+        "Event"
+      ],
+      "confidence": "L",
+      "status": "merged",
+      "exclusion_reason": "merged: duplicate phrasing of “Prada and IOC unveil Formafantasma-designed Ocean & Climate ”"
+    },
+    {
+      "date": "2026-10-06",
+      "headline": "Jindal Stainless, IOC extend lubricant supply agreement by 5 years",
+      "source_url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxQMWg4NzRWZV9VZVczYmtPQjhNSGNoZFd1b2VHcW0yLThkN1J2MGluX1A3RWdyNTI4MGpVUW9pMmFTU2dJTlRGbF9kczVyM05LWlZCQ3NYUks4ZVk0cGJTZW1yRTNGekZOYngwVnFOTnQ1UnVPUTRXc1plcm1SNEljTmtoVllhUXV6WUFmS2Y1MXFxbGkzN2FPQUFtWnR6RzZkeENWbWYwZkdEY25vQnpteHhkVk5idw?oc=5",
+      "source_label": "Pioneer Daily",
+      "event_type": "tie_up",
+      "source_kind": "Event",
+      "event_tags": [
+        "tie_up",
+        "Event"
+      ],
+      "confidence": "L",
+      "status": "merged",
+      "exclusion_reason": "merged: duplicate phrasing of “Jindal Stainless, IOC extend lubricant supply agreement by 5”"
+    },
+    {
+      "date": "2026-09-29",
+      "headline": "IOC launches Trustworthy AI Framework",
+      "source_url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxPWWY0YjVBYWxFbGREbHRtMms2UVE1TFdRMmoyZUZDM21BTUhTNmlpOXZOZU5JT3VYeUZEUGcyZDBRbHhzVG95cXVrWEZzbHBJQ05CODdkU3RnbXNzV0lIcl9TZHJyc0pCcmMxQUZNemgtUkJVU2Q3WVA4QW1ZSDNET3dCR0xpd0w5RUJDbm9ScjdJWGd6MEd5WlNXT1RwZUt6WUQwQw?oc=5",
+      "source_label": "news.cgtn.com",
+      "event_type": "capacity_add",
+      "source_kind": "Event",
+      "event_tags": [
+        "capacity_add",
+        "Event"
+      ],
+      "confidence": "L",
+      "status": "merged",
+      "exclusion_reason": "merged: duplicate phrasing of “IOC launches Trustworthy AI Framework”"
+    },
+    {
+      "date": "2026-09-21",
+      "headline": "Indian Oil Corporation Limited has informed the Exchange regarding 'Investment Approval for Kochi-Kanyakumari-Thoothukudi Natural Gas Pipeline'.",
+      "source_url": "https://nsearchives.nseindia.com/corporate/IOC_21092026133341_2026_09_21_Investment_approval_KTPL_S.pdf",
+      "source_label": "NSE",
+      "event_type": "capacity_add",
+      "source_kind": "Event",
+      "event_tags": [
+        "capacity_add",
+        "Event"
+      ],
+      "confidence": "L",
+      "status": "merged",
+      "exclusion_reason": "merged: duplicate phrasing of “Indian Oil Corporation Limited has informed the Exchange reg”"
     }
   ]
 }

@@ -2,19 +2,6 @@
   "ticker": "ANANTRAJ",
   "items": [
     {
-      "date": "16 Oct 2026",
-      "headline": "Anant Raj Share Price",
-      "source_url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE9SRjhPcU1nWGJiSVdlekJjckt0blUyQUx5QVQ0UVA2UnJ6MDkxRTdYUE5SQ2F2cjhJS3lHb185TGRkRmZYZ0NZd1Q2VHI2MXNaemVCLTFYNUNTMG5aeDNXVWotek9objA?oc=5",
-      "source_label": "Upstox",
-      "event_type": "",
-      "source_kind": "Sector news",
-      "event_tags": [
-        "Sector news"
-      ],
-      "confidence": "M",
-      "status": "counted"
-    },
-    {
       "date": "Wed, 07 Oct 2026 03:23:00 GMT",
       "headline": "Anant Raj (NSE:ANANTRAJ): What Does Its MoU With Haryana Govt and Orange Business Mean?",
       "source_url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxPMTZoRjM2OFczX0xaNlRMekdrck85b1h4VngwYm13VzczWTZjOUZ6YnNhTXFXS1ZvcVFNcldZN1c3YkNyZWRoNmNzMlB4ajdjeGJNcExwRXlPWENRbXZaZlFQS01BRkpuWDROLUVEaWZMT3R1ME13Zk9lbHBSVTB1d0NJeXloeTdZY094RTBxT0ZUQW5lam0yb3BWQ1RENFh1cEVhSF9kbTFZTFFCaG1XX2hFOGstbmEycDFYZ081OWxXcEEzV1M4TERR?oc=5",
@@ -46,9 +33,10 @@
       "headline": "Anant Raj Limited has informed the Exchange about Arrangements for strategic, technical, manufacturing, or marketing tie up",
       "source_url": "https://nsearchives.nseindia.com/corporate/ANANTRAJ_07102026085642_Intimation_MoU_07102026.pdf",
       "source_label": "NSE",
-      "event_type": "",
+      "event_type": "tie_up",
       "source_kind": "Filing",
       "event_tags": [
+        "tie_up",
         "Filing"
       ],
       "confidence": "M",
@@ -105,7 +93,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (311 days old)"
+      "exclusion_reason": "aged >120d (312 days old)"
     },
     {
       "date": "Mon, 11 May 2026 07:00:00 GMT",
@@ -119,7 +107,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (161 days old)"
+      "exclusion_reason": "aged >120d (162 days old)"
     },
     {
       "date": "2026-10-07",
@@ -149,6 +137,21 @@
       ],
       "confidence": "H",
       "status": "counted"
+    },
+    {
+      "date": "2026-10-07",
+      "headline": "Anant Raj Limited has informed the Exchange about Arrangements for strategic, technical, manufacturing, or marketing tie up",
+      "source_url": "https://nsearchives.nseindia.com/corporate/ANANTRAJ_07102026085642_Intimation_MoU_07102026.pdf",
+      "source_label": "NSE",
+      "event_type": "tie_up",
+      "source_kind": "Event",
+      "event_tags": [
+        "tie_up",
+        "Event"
+      ],
+      "confidence": "L",
+      "status": "merged",
+      "exclusion_reason": "merged: duplicate phrasing of “Anant Raj Limited has informed the Exchange about Arrangemen”"
     }
   ]
 }

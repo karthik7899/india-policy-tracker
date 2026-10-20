@@ -1,20 +1,9 @@
 {
   "value": {
-    "as_of": "2026-10-19",
+    "as_of": "2026-10-20",
     "ahead_days": 45,
     "back_days": 14,
     "upcoming": [
-      {
-        "ticker": "LTTS",
-        "date": "2026-10-19",
-        "kind": "results",
-        "title": "Board meeting: Financial Results/Dividend",
-        "detail": "To consider and approve the financial results for the quarter and half year ending September 30, 2026, and interim dividend, if any.",
-        "source": "NSE event calendar",
-        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
-        "name": "L&T Technology Services",
-        "sector": "midcap_it"
-      },
       {
         "ticker": "ADANIGREEN",
         "date": "2026-10-21",
@@ -57,7 +46,7 @@
         "source": "NSE event calendar",
         "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
         "name": "Adani Power",
-        "sector": "clean_energy"
+        "sector": "big_cap_industries"
       },
       {
         "ticker": "BPCL",
@@ -112,7 +101,7 @@
         "source": "NSE event calendar",
         "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
         "name": "Oracle Financial Services Software",
-        "sector": "cybersecurity"
+        "sector": "midcap_it"
       },
       {
         "ticker": "STLTECH",
@@ -126,6 +115,17 @@
         "sector": "data_center_support"
       },
       {
+        "ticker": "TATACONSUM",
+        "date": "2026-10-26",
+        "kind": "results",
+        "title": "Board meeting: Financial Results/Other business matters",
+        "detail": "To consider and approve the financial results for the period ended September 30, 2026 and other business matters",
+        "source": "NSE event calendar",
+        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
+        "name": "Tata Consumer Products",
+        "sector": "fmcg"
+      },
+      {
         "ticker": "ANANTRAJ",
         "date": "2026-10-28",
         "kind": "results",
@@ -135,6 +135,17 @@
         "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
         "name": "Anant Raj",
         "sector": "data_center_support"
+      },
+      {
+        "ticker": "ARVIND",
+        "date": "2026-10-28",
+        "kind": "results",
+        "title": "Board meeting: Financial Results",
+        "detail": "To consider and approve the financial results for the period ended September 30, 2026",
+        "source": "NSE event calendar",
+        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
+        "name": "Arvind",
+        "sector": "textiles_apparel"
       },
       {
         "ticker": "BEL",
@@ -216,6 +227,17 @@
     ],
     "recent": [
       {
+        "ticker": "LTTS",
+        "date": "2026-10-19",
+        "kind": "results",
+        "title": "Board meeting: Financial Results/Dividend",
+        "detail": "To consider and approve the financial results for the quarter and half year ending September 30, 2026, and interim dividend, if any.",
+        "source": "NSE event calendar",
+        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
+        "name": "L&T Technology Services",
+        "sector": "midcap_it"
+      },
+      {
         "ticker": "ICICIBANK",
         "date": "2026-10-17",
         "kind": "results",
@@ -246,7 +268,7 @@
         "source": "NSE event calendar",
         "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
         "name": "Fujiyama Power",
-        "sector": "semiconductors_equipment"
+        "sector": "clean_energy"
       },
       {
         "ticker": "PERSISTENT",
@@ -317,7 +339,6 @@
     ],
     "macro": [],
     "next_results": {
-      "LTTS": "2026-10-19",
       "ADANIGREEN": "2026-10-21",
       "INDHOTEL": "2026-10-21",
       "HINDPETRO": "2026-10-22",
@@ -328,7 +349,9 @@
       "GODREJPROP": "2026-10-23",
       "OFSS": "2026-10-23",
       "STLTECH": "2026-10-23",
+      "TATACONSUM": "2026-10-26",
       "ANANTRAJ": "2026-10-28",
+      "ARVIND": "2026-10-28",
       "BEL": "2026-10-30",
       "IOC": "2026-10-30",
       "ITC": "2026-11-02",
@@ -339,8 +362,8 @@
     },
     "sources": {
       "nse": {
-        "event_calendar": 652,
-        "corporate_actions": 28
+        "event_calendar": 700,
+        "corporate_actions": 30
       },
       "nse_errors": [],
       "filings": 0,
