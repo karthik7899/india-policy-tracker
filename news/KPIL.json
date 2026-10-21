@@ -2,6 +2,20 @@
   "ticker": "KPIL",
   "items": [
     {
+      "date": "21 Oct 2026",
+      "headline": "Kalpataru Projects International Limited has informed the Exchange about Bagging/Receiving of orders/contracts",
+      "source_url": "https://nsearchives.nseindia.com/corporate/KALPATPOWR_21102026084653_SEIntimationPR21102026.pdf",
+      "source_label": "NSE",
+      "event_type": "order_win",
+      "source_kind": "Filing",
+      "event_tags": [
+        "order_win",
+        "Filing"
+      ],
+      "confidence": "M",
+      "status": "counted"
+    },
+    {
       "date": "16 Oct 2026",
       "headline": "Kalpataru Projects International Limited has informed the Exchange about Credit Rating",
       "source_url": "https://nsearchives.nseindia.com/corporate/KALPATPOWR_16102026105124_KPILSEIntimationCreditRatingCRISIL16102026.pdf",
@@ -19,14 +33,14 @@
       "headline": "Kalpataru Projects International Limited has informed the Exchange about Bagging/Receiving of orders/contracts",
       "source_url": "https://nsearchives.nseindia.com/corporate/KALPATPOWR_13102026084709_SEIntimationPR13102026.pdf",
       "source_label": "NSE",
-      "event_type": "order_win",
+      "event_type": "",
       "source_kind": "Filing",
       "event_tags": [
-        "order_win",
         "Filing"
       ],
       "confidence": "M",
-      "status": "counted"
+      "status": "merged",
+      "exclusion_reason": "merged: duplicate phrasing of “Kalpataru Projects International Limited has informed the Ex”"
     },
     {
       "date": "25 Sep 2026",
@@ -81,9 +95,9 @@
       "status": "counted"
     },
     {
-      "date": "2026-10-13",
+      "date": "2026-10-21",
       "headline": "Kalpataru Projects International Limited has informed the Exchange about Bagging/Receiving of orders/contracts",
-      "source_url": "https://nsearchives.nseindia.com/corporate/KALPATPOWR_13102026084709_SEIntimationPR13102026.pdf",
+      "source_url": "https://nsearchives.nseindia.com/corporate/KALPATPOWR_21102026084653_SEIntimationPR21102026.pdf",
       "source_label": "NSE",
       "event_type": "order_win",
       "source_kind": "Event",

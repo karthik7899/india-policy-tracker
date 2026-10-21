@@ -1,6 +1,6 @@
 {
   "value": {
-    "as_of": "2026-10-20",
+    "as_of": "2026-10-21",
     "ahead_days": 45,
     "back_days": 14,
     "upcoming": [
@@ -181,6 +181,17 @@
         "sector": "fmcg"
       },
       {
+        "ticker": "BATAINDIA",
+        "date": "2026-11-03",
+        "kind": "results",
+        "title": "Board meeting: Financial Results",
+        "detail": "Bata India Ltd has informed that the meeting of the Board of Directors of the Company is scheduled on 03/11/2026, inter alia, to consider and approve the Unaudited (Standalone and Consolidated) Finan…",
+        "source": "NSE event calendar",
+        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
+        "name": "Bata India",
+        "sector": "sports_athleisure"
+      },
+      {
         "ticker": "APOLLOHOSP",
         "date": "2026-11-04",
         "kind": "results",
@@ -201,6 +212,17 @@
         "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
         "name": "Cummins India",
         "sector": "logistics_heavy_capital"
+      },
+      {
+        "ticker": "BIRLACABLE",
+        "date": "2026-11-05",
+        "kind": "results",
+        "title": "Board meeting: Financial Results",
+        "detail": "To consider and approve the financial results for the period ended September 30, 2026",
+        "source": "NSE event calendar",
+        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
+        "name": "Birla Cable",
+        "sector": "data_center_support"
       },
       {
         "ticker": "MPHASIS",
@@ -355,15 +377,17 @@
       "BEL": "2026-10-30",
       "IOC": "2026-10-30",
       "ITC": "2026-11-02",
+      "BATAINDIA": "2026-11-03",
       "APOLLOHOSP": "2026-11-04",
       "CUMMINSIND": "2026-11-04",
+      "BIRLACABLE": "2026-11-05",
       "MPHASIS": "2026-11-05",
       "THERMAX": "2026-11-05"
     },
     "sources": {
       "nse": {
-        "event_calendar": 700,
-        "corporate_actions": 30
+        "event_calendar": 724,
+        "corporate_actions": 29
       },
       "nse_errors": [],
       "filings": 0,

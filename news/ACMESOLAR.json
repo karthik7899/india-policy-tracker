@@ -32,10 +32,9 @@
       "headline": "ACME Solar (NSE:ACMESOLAR): Has It Commissioned 66.68 MW Solar and 300 MWh BESS in Rajasthan?",
       "source_url": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxNQ2tCZTZRNVZfLTFMSUNiVm1GTFJlRktHZmVJb1NWWkd2ZUZDTGN4VUI1VGNtY2VCdTZZaTFsOVo4Mnl4bTlOZ2c1OTkyZG9LWk5IdVVRXzZiS3lnaGN4RW83M0JSNEJIejFNV3R0Rk1EZDdjYzBybDlQY3lhdjRpWERLaHQ5M3ZuaW1NNTZXT3BBYWJqVklTYWc1Uk9TSFZZN240TGlnU1U1Vm93ODVhUnFVTS1UTm42VnQ3dVdFSy1iTXZmNUxsdmhIalJnbGtf?oc=5",
       "source_label": "Kalkine India",
-      "event_type": "capacity_add",
+      "event_type": "",
       "source_kind": "Agreement",
       "event_tags": [
-        "capacity_add",
         "Agreement"
       ],
       "confidence": "M",
@@ -228,7 +227,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (191 days old)"
+      "exclusion_reason": "aged >120d (192 days old)"
     },
     {
       "date": "2026-10-19",
@@ -274,21 +273,6 @@
       "confidence": "L",
       "status": "merged",
       "exclusion_reason": "merged: duplicate phrasing of “ACME Solar Holdings (NSE:ACMESOLAR) Sets Up New Renewable En”"
-    },
-    {
-      "date": "2026-09-16",
-      "headline": "ACME Solar (NSE:ACMESOLAR): Has It Commissioned 66.68 MW Solar and 300 MWh BESS in Rajasthan?",
-      "source_url": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxNQ2tCZTZRNVZfLTFMSUNiVm1GTFJlRktHZmVJb1NWWkd2ZUZDTGN4VUI1VGNtY2VCdTZZaTFsOVo4Mnl4bTlOZ2c1OTkyZG9LWk5IdVVRXzZiS3lnaGN4RW83M0JSNEJIejFNV3R0Rk1EZDdjYzBybDlQY3lhdjRpWERLaHQ5M3ZuaW1NNTZXT3BBYWJqVklTYWc1Uk9TSFZZN240TGlnU1U1Vm93ODVhUnFVTS1UTm42VnQ3dVdFSy1iTXZmNUxsdmhIalJnbGtf?oc=5",
-      "source_label": "Kalkine India",
-      "event_type": "capacity_add",
-      "source_kind": "Event",
-      "event_tags": [
-        "capacity_add",
-        "Event"
-      ],
-      "confidence": "L",
-      "status": "merged",
-      "exclusion_reason": "merged: duplicate phrasing of “ACME Solar (NSE:ACMESOLAR): Has It Commissioned 66.68 MW Sol”"
     }
   ]
 }
