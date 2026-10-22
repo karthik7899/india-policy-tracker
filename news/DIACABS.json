@@ -39,7 +39,20 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (511 days old)"
+      "exclusion_reason": "aged >120d (512 days old)"
+    },
+    {
+      "date": "22 Oct 2026",
+      "headline": "Diamond Power Infrastructure Limited has informed the Exchange regarding a press release dated October 22, 2026, titled \"Diamond Power to add another CCV line for cables up to 132 kV\".",
+      "source_url": "https://nsearchives.nseindia.com/corporate/DIACABS_22102026111258_CCV_Line_addition_-_Press_release.pdf",
+      "source_label": "NSE",
+      "event_type": "",
+      "source_kind": "Filing",
+      "event_tags": [
+        "Filing"
+      ],
+      "confidence": "M",
+      "status": "counted"
     },
     {
       "date": "Mon, 31 Aug 2026 22:58:39 GMT",
@@ -91,6 +104,20 @@
         "Filing"
       ],
       "confidence": "M",
+      "status": "counted"
+    },
+    {
+      "date": "2026-10-22",
+      "headline": "Diamond Power Infrastructure Limited has informed the Exchange regarding a press release dated October 22, 2026, titled \"Diamond Power to add another CCV line for cables up to 132 ",
+      "source_url": "https://nsearchives.nseindia.com/corporate/DIACABS_22102026111258_CCV_Line_addition_-_Press_release.pdf",
+      "source_label": "NSE",
+      "event_type": "capacity_add",
+      "source_kind": "Event",
+      "event_tags": [
+        "capacity_add",
+        "Event"
+      ],
+      "confidence": "L",
       "status": "counted"
     }
   ]

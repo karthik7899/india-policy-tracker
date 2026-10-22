@@ -2,6 +2,38 @@
   "_how_to_review": "Partner edges proposed from completed tie-up headlines. Nothing here reaches the graph until you set status to 'accepted'; 'rejected' stops the pair being proposed again. You may correct 'counterparty' before accepting (e.g. 'Vivo Mobile' -> 'Vivo') — it is the name the graph will match in future headlines. Leave 'proposed_as' alone: it is how the pipeline recognises the same pair next time.",
   "proposals": [
     {
+      "holding": "SBIN",
+      "counterparty": "Hatsun Agro",
+      "proposed_as": "Hatsun Agro",
+      "status": "pending",
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "evidence": [
+        {
+          "headline": "Hatsun Agro launches Go-Dhan in partnership with Odisha Govt and State Bank of India",
+          "date": "2026-10-21",
+          "link": "https://news.google.com/rss/articles/CBMizAFBVV95cUxNQnN6Y2ozeUdQV0w1TWZwZDNTSURFZ2lTWHVsMU5OUjA2cUJJSnhFZUE0b3RrQUZzUDRnM0x4QjdKU1F6SlJQTWlKWE1oV1Jqd212UTVrZHVKVV9ySzAyTkkwR2pEY0kweTFfRE5rSkVmaHJ1MWlXMzJ2MEh5X0ZvTnpyeDdWcjlzeFllWFQ1T2ZTZTdScW1GWmVsZDZmNnhiNi1ocld5MzNfdHZDUkpvNmc3NWFJTzc5RnZlWllkbW1kSEdCanNvZTJoU2Y?oc=5",
+          "source": "AgroSpectrum India"
+        }
+      ]
+    },
+    {
+      "holding": "SBIN",
+      "counterparty": "Odisha Govt",
+      "proposed_as": "Odisha Govt",
+      "status": "pending",
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "evidence": [
+        {
+          "headline": "Hatsun Agro launches Go-Dhan in partnership with Odisha Govt and State Bank of India",
+          "date": "2026-10-21",
+          "link": "https://news.google.com/rss/articles/CBMizAFBVV95cUxNQnN6Y2ozeUdQV0w1TWZwZDNTSURFZ2lTWHVsMU5OUjA2cUJJSnhFZUE0b3RrQUZzUDRnM0x4QjdKU1F6SlJQTWlKWE1oV1Jqd212UTVrZHVKVV9ySzAyTkkwR2pEY0kweTFfRE5rSkVmaHJ1MWlXMzJ2MEh5X0ZvTnpyeDdWcjlzeFllWFQ1T2ZTZTdScW1GWmVsZDZmNnhiNi1ocld5MzNfdHZDUkpvNmc3NWFJTzc5RnZlWllkbW1kSEdCanNvZTJoU2Y?oc=5",
+          "source": "AgroSpectrum India"
+        }
+      ]
+    },
+    {
       "holding": "BHEL",
       "counterparty": "Titagarh",
       "proposed_as": "Titagarh",

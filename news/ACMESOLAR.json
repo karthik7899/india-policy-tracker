@@ -2,7 +2,35 @@
   "ticker": "ACMESOLAR",
   "items": [
     {
-      "date": "Wed, 14 Oct 2026 16:59:05 GMT",
+      "date": "Mon, 19 Oct 2026 05:17:34 GMT",
+      "headline": "ACME Solar Signs 300 MW SECI Power Supply PPA; Shares Fall 0.72%",
+      "source_url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxPZ1JqY2dsM2VWUVB1bXRtZVlWRThSTlV6UGtCVzFxYU40a1Iwdi1TRHMtRWlEcXQtVElrNEtzLUZuN0RxMzRid1pKUE9UM2lDN01PYU1NeVBPUVZENlRXQU1XTi1JOVVBb2R3Z3hzamNKTUNTT2YzVlJxblZtV0lpd2NzdDktZWlkd0Y0TEhYSTYzRWMwM0VzN2ZSMA?oc=5",
+      "source_label": "HDFC Sky",
+      "event_type": "order_win",
+      "source_kind": "Agreement",
+      "event_tags": [
+        "order_win",
+        "Agreement"
+      ],
+      "confidence": "M",
+      "status": "counted"
+    },
+    {
+      "date": "Tue, 20 Oct 2026 15:31:47 GMT",
+      "headline": "ACME Solar Secures 300 MW SECI Deal To Supply Peak Power",
+      "source_url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxNZ3NuX2tEak56S3J3TnJRdVhTazNPa0ZwcEVxNHRYY0E3VFd0dmtOV3hlWmg2N20tSEdUeWtvZEhHUkR6S184MzlpODJhR2tZSUVkZGRPYlJDRXgxbGJKaXVMZlUzd1JQVDVHZ3BZZ2NMMHJnNnpYdzZsRlRtT2dUbWd0Mkh2alUzTC1oNTlfSDlObVpsZklTUk9qUnRKREcwRTc0YnVxTmFuNzY3aklSX0xWUQ?oc=5",
+      "source_label": "TradingView",
+      "event_type": "order_win",
+      "source_kind": "Agreement",
+      "event_tags": [
+        "order_win",
+        "Agreement"
+      ],
+      "confidence": "M",
+      "status": "counted"
+    },
+    {
+      "date": "Sun, 18 Oct 2026 03:36:14 GMT",
       "headline": "ACMESOLAR Share Price Today",
       "source_url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE1xX0MyNjBTc05XU3MyNlQ1eENLSVZlMnpONlREZnhUNWI3TFhZblNuOVBpX1pzYm5TbEVhQXphR0NrajdQNFZ1b1U4Q1M0NUNQZ1B3YWVRZkJqMEJhMW1KYQ?oc=5",
       "source_label": "scanx.trade",
@@ -227,7 +255,22 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (192 days old)"
+      "exclusion_reason": "aged >120d (193 days old)"
+    },
+    {
+      "date": "2026-10-20",
+      "headline": "ACME Solar Secures 300 MW SECI Deal To Supply Peak Power",
+      "source_url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxNZ3NuX2tEak56S3J3TnJRdVhTazNPa0ZwcEVxNHRYY0E3VFd0dmtOV3hlWmg2N20tSEdUeWtvZEhHUkR6S184MzlpODJhR2tZSUVkZGRPYlJDRXgxbGJKaXVMZlUzd1JQVDVHZ3BZZ2NMMHJnNnpYdzZsRlRtT2dUbWd0Mkh2alUzTC1oNTlfSDlObVpsZklTUk9qUnRKREcwRTc0YnVxTmFuNzY3aklSX0xWUQ?oc=5",
+      "source_label": "TradingView",
+      "event_type": "order_win",
+      "source_kind": "Event",
+      "event_tags": [
+        "order_win",
+        "Event"
+      ],
+      "confidence": "L",
+      "status": "merged",
+      "exclusion_reason": "merged: duplicate phrasing of “ACME Solar Secures 300 MW SECI Deal To Supply Peak Power”"
     },
     {
       "date": "2026-10-19",
@@ -243,6 +286,21 @@
       "confidence": "L",
       "status": "merged",
       "exclusion_reason": "merged: duplicate phrasing of “ACME Solar Holdings Limited has informed the Exchange regard”"
+    },
+    {
+      "date": "2026-10-19",
+      "headline": "ACME Solar Signs 300 MW SECI Power Supply PPA; Shares Fall 0.72%",
+      "source_url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxPZ1JqY2dsM2VWUVB1bXRtZVlWRThSTlV6UGtCVzFxYU40a1Iwdi1TRHMtRWlEcXQtVElrNEtzLUZuN0RxMzRid1pKUE9UM2lDN01PYU1NeVBPUVZENlRXQU1XTi1JOVVBb2R3Z3hzamNKTUNTT2YzVlJxblZtV0lpd2NzdDktZWlkd0Y0TEhYSTYzRWMwM0VzN2ZSMA?oc=5",
+      "source_label": "HDFC Sky",
+      "event_type": "order_win",
+      "source_kind": "Event",
+      "event_tags": [
+        "order_win",
+        "Event"
+      ],
+      "confidence": "L",
+      "status": "merged",
+      "exclusion_reason": "merged: duplicate phrasing of “ACME Solar Signs 300 MW SECI Power Supply PPA; Shares Fall 0”"
     },
     {
       "date": "2026-10-01",
