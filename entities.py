@@ -20,7 +20,10 @@ fetches succeed; a holding with no ISIN yet simply isn't indexed until it
 is.
 """
 
+import logging
 from typing import Any, Dict, List, Optional
+
+logger = logging.getLogger(__name__)
 
 
 def build_entity_master(watchlist: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
@@ -77,9 +80,21 @@ def find_duplicate_holdings(watchlist: Dict[str, Any]) -> List[Dict[str, Any]]:
 
 
 def resolve_entity_by_isin(
-    isin: Optional[str], entity_master: Dict[str, Dict[str, Any]]
-) -> Optional[Dict[str, Any]]:
-    """Look up an already-tracked holding by ISIN, or ``None``."""
-    if not isin:
-        return None
-    return entity_master.get(isin)
+    isin: str, master: Dict[str, Dict[str, Any]], ticker: Optional[str] = None
+) -> Dict[str, Any]:
+    """
+    Look up a stock entity by ISIN.
+
+    Returns:
+        dict: The mapped entity dict or a fallback structure if unknown.
+    """
+    if isin in master:
+        return master[isin]
+
+    logger.warning(f"ISIN {isin} not found in entity master.")
+    return {
+        "ticker": ticker or "UNKNOWN",
+        "name": "Unknown Entity",
+        "sector": "Unmapped",
+        "isin": isin,
+    }

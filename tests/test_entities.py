@@ -57,5 +57,25 @@ def test_find_duplicate_holdings_empty_when_all_unique():
 def test_resolve_entity_by_isin():
     master = {"INE245A01021": {"isin": "INE245A01021", "ticker": "TATAPOWER"}}
     assert resolve_entity_by_isin("INE245A01021", master)["ticker"] == "TATAPOWER"
-    assert resolve_entity_by_isin("INE000000000", master) is None
-    assert resolve_entity_by_isin(None, master) is None
+
+    fallback = resolve_entity_by_isin("INE000000000", master)
+    assert fallback["ticker"] == "UNKNOWN"
+    assert fallback["name"] == "Unknown Entity"
+
+    fallback_with_ticker = resolve_entity_by_isin(
+        "INE000000000", master, ticker="MYTICKER"
+    )
+    assert fallback_with_ticker["ticker"] == "MYTICKER"
+
+
+def test_resolve_entity_by_isin_fallback():
+    master = {}
+    fallback = resolve_entity_by_isin("INE999999999", master, ticker="FALLBACK")
+    assert fallback["isin"] == "INE999999999"
+    assert fallback["ticker"] == "FALLBACK"
+    assert fallback["name"] == "Unknown Entity"
+    assert fallback["sector"] == "Unmapped"
+
+    fallback_no_ticker = resolve_entity_by_isin("INE999999998", master)
+    assert fallback_no_ticker["isin"] == "INE999999998"
+    assert fallback_no_ticker["ticker"] == "UNKNOWN"

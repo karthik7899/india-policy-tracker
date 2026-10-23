@@ -573,8 +573,14 @@ def auto_curate_watchlist(brief_data, watchlist, screened_candidates=None):
                 sales_yoy = probe.get("sales_yoy")
                 candidate_isin = probe["isin"]
 
-                existing_entity = resolve_entity_by_isin(candidate_isin, entity_master)
-                if existing_entity and existing_entity["ticker"] != ticker:
+                existing_entity = resolve_entity_by_isin(
+                    candidate_isin, entity_master, ticker=ticker
+                )
+                if (
+                    existing_entity
+                    and existing_entity["ticker"] != ticker
+                    and existing_entity["sector"] != "Unmapped"
+                ):
                     log.info(
                         f"Candidate {ticker} shares ISIN {candidate_isin} with "
                         f"existing holding {existing_entity['ticker']} "
