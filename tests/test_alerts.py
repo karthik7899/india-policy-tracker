@@ -5,6 +5,8 @@ import os
 import sys
 from email.header import decode_header, make_header
 
+import pytest
+
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import alerts  # noqa: E402
@@ -84,8 +86,14 @@ def test_implicit_tls_port_skips_starttls(monkeypatch):
     assert _FakeSMTP.instances[0].started_tls is False
 
 
-def test_missing_configuration_is_not_an_error(monkeypatch):
-    _patch(monkeypatch, env={k: v for k, v in _ENV.items() if k != "SMTP_SERVER"})
+@pytest.mark.parametrize(
+    "missing",
+    ["RECEIVER_EMAIL", "SMTP_SERVER", "SMTP_PORT", "SMTP_USERNAME", "SMTP_PASSWORD"],
+)
+def test_missing_configuration_is_not_an_error(monkeypatch, missing):
+    """Any one setting missing, not only the server: nothing is sent and
+    nothing raises."""
+    _patch(monkeypatch, env={k: v for k, v in _ENV.items() if k != missing})
     assert alerts.send_failure_alert() is False
     assert _FakeSMTP.instances == []
 
