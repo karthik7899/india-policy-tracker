@@ -157,7 +157,14 @@ def _sector_label(key: str) -> str:
 
     meta = SECTOR_METADATA.get(key) or {}
     # The config's field is "label"; "name" is kept for any older shape.
-    return meta.get("label") or meta.get("name") or key.replace("_", " ").title()
+    if meta:
+        return meta.get("label") or meta.get("name") or key
+    # Warnings carry the label already, and title-casing it again made
+    # "Midcap It", "Fmcg & Consumption" and "Surveillance & Cctv".
+    labels = {m.get("label") or m.get("name") for m in SECTOR_METADATA.values()}
+    if key in labels:
+        return key
+    return key.replace("_", " ").title()
 
 
 def build_subject(summary: Dict[str, Any], today) -> str:
@@ -186,9 +193,11 @@ def build_subject(summary: Dict[str, Any], today) -> str:
     if summary["escalated"]:
         parts.append(f"{len(summary['escalated'])} Escalated")
     if summary["opportunities_total"]:
-        parts.append(f"{summary['opportunities_total']} Opportunities")
+        n = summary["opportunities_total"]
+        parts.append(f"{n} {'Opportunity' if n == 1 else 'Opportunities'}")
     if not parts:
-        parts.append(f"{summary['new_total']} New Signals")
+        n = summary["new_total"]
+        parts.append(f"{n} New {'Signal' if n == 1 else 'Signals'}")
 
     sectors = ", ".join(_sector_label(k) for k, _ in summary["hot_sectors"][:2])
     tail = f" | {sectors}" if sectors else ""

@@ -16,7 +16,7 @@ import datetime
 import re
 from typing import Any, Dict, List, Optional, Tuple
 
-from analysis.counterparty import _COUNTRIES, _NON_COMMERCIAL
+from analysis.counterparty import _COUNTRIES, _NON_COMMERCIAL, _NOT_A_COMPANY
 from analysis.event_evidence import article_date
 from analysis.parsing import _FUNCTION_WORDS, title_matches_company
 from analysis.policy_impact import _STATES
@@ -258,6 +258,20 @@ _NON_COMPANIES = {
 }
 
 
+def is_challenger_name(name: str) -> bool:
+    """Whether ``name`` can be a company making a move at all.
+
+    No word of it a government, regulator or institute, and not a place on
+    its own: "Russia targets Kyiv servers" put Russia on the watch list for
+    Data Center Support, and its news was searched every run after. Every
+    word, for a place, not any: "Korea Zinc" is a company.
+    """
+    tokens = str(name or "").lower().split()
+    if not tokens or any(tok in _NON_COMPANIES for tok in tokens):
+        return False
+    return not all(tok in _NOT_A_COMPANY for tok in tokens)
+
+
 def _headline_items(data: Dict[str, Any], watchlist: Dict[str, Any]):
     """Yield ``(text, item)`` for every headline, whichever feed carried it.
 
@@ -365,7 +379,7 @@ def _extract_challenger(headline: str, data: Dict[str, Any]) -> Tuple[str, str]:
     if not match:
         return "", ""
     candidate = match.group(1).strip()
-    if any(tok in _NON_COMPANIES for tok in candidate.lower().split()):
+    if not is_challenger_name(candidate):
         return "", ""
     start, end = match.span(1)
     if _introduced_as_foreign(headline[:start]) and not mentions_india(headline):
@@ -391,12 +405,19 @@ def _stale_headlines(
     cutoff = (
         datetime.date.fromisoformat(today) - datetime.timedelta(days=RADAR_MAX_AGE_DAYS)
     ).isoformat()
+    return {key for key, day in collect_dates(data, watchlist).items() if day < cutoff}
+
+
+def collect_dates(data: Dict[str, Any], watchlist: Dict[str, Any]) -> Dict[str, str]:
+    """``{headline_key: article date}`` for the headlines collect_headlines
+    returns, each dated by the item it keeps: the first one with that text.
+    One whose item carries no date is left out."""
     dated: Dict[str, Optional[str]] = {}
     for text, item in _headline_items(data, watchlist):
         key = str(text or "").strip().lower()
         if key and key not in dated:
             dated[key] = article_date(item.get("date"))
-    return {key for key, day in dated.items() if day and day < cutoff}
+    return {key: day for key, day in dated.items() if day}
 
 
 def detect_new_entrants(

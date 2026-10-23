@@ -936,6 +936,34 @@ def test_a_headline_that_dates_itself_outside_the_window_reads_through_nothing()
     assert flag["date"] == recent.isoformat()
 
 
+def test_a_raw_headline_is_dated_by_its_article():
+    """22 Oct: a cotton-duty story from 17 Oct showed as 22 Oct, because a
+    raw headline was dated by the run unless it dated itself."""
+    headline = "RAM shortage worsens as smartphone makers raise prices"
+    key = headline.lower()
+
+    def dated(day):
+        return compute_read_throughs(
+            [],
+            GRAPH,
+            WATCHLIST,
+            today=TODAY,
+            headlines=[headline],
+            published={key: day} if day else None,
+        )
+
+    recent = (datetime.date.today() - datetime.timedelta(days=5)).isoformat()
+    (flag,) = dated(recent)
+    assert flag["date"] == recent
+    # Older than the window, it reads through nothing.
+    assert (
+        dated((datetime.date.today() - datetime.timedelta(days=40)).isoformat()) == []
+    )
+    # The article's date first, then the headline's own, then the run day.
+    (flag,) = dated(None)
+    assert flag["date"] == TODAY
+
+
 def test_email_row_counts_the_other_headlines_of_its_story():
     from emails.sections import build_read_through_html
 

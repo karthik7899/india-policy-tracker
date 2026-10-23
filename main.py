@@ -384,7 +384,11 @@ async def run_pipeline():
 
         # Second reader. Optional: without GEMINI_API_KEY, or on any API
         # failure, it is skipped and the rules carry the run alone.
-        from analysis.competitive_intel import collect_headlines, collect_sources
+        from analysis.competitive_intel import (
+            collect_dates,
+            collect_headlines,
+            collect_sources,
+        )
         from analysis.llm_reader import read_headlines, reconcile
 
         readings, llm_status = read_headlines(collect_headlines(data, watchlist))
@@ -509,6 +513,7 @@ async def run_pipeline():
             headlines=collect_headlines(data, watchlist),
             # Whose deals with a holding's partner read against the holding.
             peers=data.get("peer_competitors"),
+            published=collect_dates(data, watchlist),
         )
 
         # The price-based counterpart of supply_stress above. That one counts

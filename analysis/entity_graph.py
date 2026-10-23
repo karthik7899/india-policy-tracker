@@ -504,14 +504,21 @@ def record_partner_proposals(
     are not Siemens Ltd's partners. They are never queued, and pending
     proposals resting on them are taken back.
 
+    So is a pending proposal whose counterparty the name rules now refuse
+    (analysis/counterparty.py): "Odisha Govt" was queued as SBIN's partner
+    before a government in the name was enough to refuse it.
+
     Returns counts for the log line and tests. Never raises.
     """
+    from analysis.counterparty import _acceptable
+
     counts = {
         "new": 0,
         "seen_again": 0,
         "pending": 0,
         "dropped_stale": 0,
         "dropped_namesake": 0,
+        "dropped_refused": 0,
     }
     try:
         proposals = load_proposals(path)
@@ -609,15 +616,27 @@ def record_partner_proposals(
             if p.get("status") == "pending" and str(p.get("last_seen", "")) < cutoff:
                 counts["dropped_stale"] += 1
                 continue
+            if p.get("status") == "pending" and not _acceptable(
+                str(p.get("counterparty") or "")
+            ):
+                counts["dropped_refused"] += 1
+                continue
             kept.append(p)
         counts["pending"] = sum(1 for p in kept if p.get("status") == "pending")
 
-        if counts["new"] or counts["seen_again"] or counts["dropped_stale"] or trimmed:
+        if (
+            counts["new"]
+            or counts["seen_again"]
+            or counts["dropped_stale"]
+            or counts["dropped_refused"]
+            or trimmed
+        ):
             _save_proposals(kept, path)
         log.info(
             f"Partner proposals: {counts['new']} new, {counts['seen_again']} "
             f"re-sighted, {counts['dropped_stale']} aged out, "
-            f"{counts['dropped_namesake']} dropped as another company's news; "
+            f"{counts['dropped_namesake']} dropped as another company's news, "
+            f"{counts['dropped_refused']} no longer read as a company; "
             f"{counts['pending']} awaiting review."
         )
     except Exception as e:  # noqa: BLE001 - graph growth must never break a run
