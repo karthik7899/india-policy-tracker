@@ -217,6 +217,51 @@ def _range_from_frame(frame):
         return None
 
 
+def _extract_prefetched_metrics(data, yahoo_tickers):
+    """Extracts closing prices and liquidity from the batch yf.download result."""
+    prefetched_prices = {}
+    prefetched_liquidity = {}
+
+    if len(yahoo_tickers) == 1:
+        if not data.empty and "Close" in data and not data["Close"].isna().all():
+            prefetched_prices[yahoo_tickers[0]] = data["Close"].dropna().iloc[-1]
+            prefetched_liquidity[yahoo_tickers[0]] = _liquidity_from_frame(data)
+    else:
+        for ticker in yahoo_tickers:
+            if (
+                ticker in data
+                and not data[ticker].empty
+                and "Close" in data[ticker]
+                and not data[ticker]["Close"].isna().all()
+            ):
+                closes = data[ticker]["Close"].dropna()
+                prefetched_prices[ticker] = closes.iloc[-1]
+                prefetched_liquidity[ticker] = _liquidity_from_frame(data[ticker])
+
+    return prefetched_prices, prefetched_liquidity
+
+
+def _apply_52_week_ranges(year_data, all_stocks, yahoo_tickers):
+    """Parses 1-year weekly data and attaches range/liquidity to stocks."""
+    weekly = {}
+    ranged = 0
+    for stock in all_stocks:
+        symbol = f"{stock['ticker']}.NS"
+        frame = (
+            year_data[symbol]
+            if (len(yahoo_tickers) > 1 and symbol in year_data)
+            else (year_data if len(yahoo_tickers) == 1 else None)
+        )
+        staged = _range_from_frame(frame)
+        series = _weekly_closes(frame)
+        if series:
+            weekly[str(stock["ticker"]).upper()] = series
+        if staged:
+            stock.setdefault(_LIQUIDITY_STAGING_KEY, {}).update(staged)
+            ranged += 1
+    return weekly, ranged
+
+
 def update_live_stock_prices(watchlist):
     """Updates watchlist with live prices from Yahoo Finance.
 
@@ -257,29 +302,9 @@ def update_live_stock_prices(watchlist):
                 timeout=15,
                 progress=False,
             )
-            if len(yahoo_tickers) == 1:
-                if (
-                    not data.empty
-                    and "Close" in data
-                    and not data["Close"].isna().all()
-                ):
-                    prefetched_prices[yahoo_tickers[0]] = (
-                        data["Close"].dropna().iloc[-1]
-                    )
-                    prefetched_liquidity[yahoo_tickers[0]] = _liquidity_from_frame(data)
-            else:
-                for ticker in yahoo_tickers:
-                    if (
-                        ticker in data
-                        and not data[ticker].empty
-                        and "Close" in data[ticker]
-                        and not data[ticker]["Close"].isna().all()
-                    ):
-                        closes = data[ticker]["Close"].dropna()
-                        prefetched_prices[ticker] = closes.iloc[-1]
-                        prefetched_liquidity[ticker] = _liquidity_from_frame(
-                            data[ticker]
-                        )
+            prefetched_prices, prefetched_liquidity = _extract_prefetched_metrics(
+                data, yahoo_tickers
+            )
         except Exception as e:
             log.error(f"Error during batch price download: {e}")
 
@@ -299,24 +324,7 @@ def update_live_stock_prices(watchlist):
                 timeout=20,
                 progress=False,
             )
-            ranged = 0
-            for stock in all_stocks:
-                symbol = f"{stock['ticker']}.NS"
-                frame = (
-                    year[symbol]
-                    if (len(yahoo_tickers) > 1 and symbol in year)
-                    else (year if len(yahoo_tickers) == 1 else None)
-                )
-                staged = _range_from_frame(frame)
-                series = _weekly_closes(frame)
-                if series:
-                    weekly[str(stock["ticker"]).upper()] = series
-                if staged:
-                    # Same staging key discipline as turnover: written to the
-                    # stock, merged into screener after the Screener rebuild
-                    # that would otherwise erase it.
-                    stock.setdefault(_LIQUIDITY_STAGING_KEY, {}).update(staged)
-                    ranged += 1
+            weekly, ranged = _apply_52_week_ranges(year, all_stocks, yahoo_tickers)
             log.info(f"52-week range: {ranged}/{len(all_stocks)} holdings priced.")
         except Exception as e:
             log.warning(f"52-week range download failed safely: {e!r}")
