@@ -400,7 +400,7 @@ async def refresh_isin_master_async(
     # A correction changes the file even when nothing was added, and once the
     # master is saturated "nothing added" is every run. Persisting only on
     # `added` would compute the corrected mapping and then throw it away
-    # daily — the fix would appear to work in the log and never reach disk.
+    # daily — the correction would appear to work in the log and never reach disk.
     if added or corrected:
         atomic_write_json(dict(sorted(master.items())), path)
         log.info(

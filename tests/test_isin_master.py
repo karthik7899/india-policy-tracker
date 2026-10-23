@@ -214,7 +214,7 @@ class _FakeSession:
 
 def test_refresh_adds_new_symbols_and_lets_nse_correct_its_own(tmp_path):
     """This test used to assert that NSE could never overwrite, which was the
-    bug rather than the contract.
+    mistake rather than the contract.
 
     The module always intended the NSE mapping to win a disagreement, and got
     there by merging NSE first. That works only while the master is empty —
@@ -240,7 +240,7 @@ def test_refresh_adds_new_symbols_and_lets_nse_correct_its_own(tmp_path):
 def test_a_correction_alone_is_still_persisted(tmp_path):
     """Once the master is saturated, "nothing added" is every run. Persisting
     only on `added` would compute the corrected mapping and throw it away
-    daily — the fix would look right in the log and never reach disk."""
+    daily — the correction would look right in the log and never reach disk."""
     path = str(tmp_path / "master.json")
     master = {"TATAPOWER": "INE_WRONG", "RELIANCE": "INE002A01018"}
     session = _FakeSession(response=_FakeResponse(200, _EQUITY_CSV))
@@ -316,7 +316,7 @@ def test_a_disagreeing_symbol_is_counted_and_never_applied():
 
 
 def test_an_authoritative_source_corrects_what_it_disagrees_with():
-    """The 140-a-day bug.
+    """The 140-a-day issue.
 
     Merging NSE first was meant to mean the NSE mapping survives. With a
     committed master that is reloaded every run, going first only helps while
