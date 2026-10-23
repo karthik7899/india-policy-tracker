@@ -18,7 +18,7 @@ import os
 import pytest
 
 from config import SECTOR_METADATA
-from scripts.eval_events import LABELS_PATH, score
+from scripts.eval_events import LABELS_PATH, load_holdings, score
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -46,8 +46,17 @@ def labels():
 
 @pytest.fixture(scope="module")
 def watchlist():
-    with open(os.path.join(ROOT, "watchlist.json"), encoding="utf-8") as f:
-        return json.load(f)
+    """The frozen holdings (eval/holdings.json), never the live watchlist:
+    the daily rotation commits that without CI, and on 23 Oct 2026 replacing
+    SCHNEIDER failed this file on main and moved the score."""
+    return load_holdings()
+
+
+def test_the_frozen_holdings_are_well_formed(watchlist):
+    for sector, stocks in watchlist.items():
+        assert sector in SECTOR_METADATA, sector
+        for s in stocks:
+            assert set(s) == {"ticker", "name"} and s["ticker"] and s["name"], s
 
 
 def test_every_label_is_well_formed(labels, watchlist):

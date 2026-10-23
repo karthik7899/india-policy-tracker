@@ -223,6 +223,41 @@ class TestIntakeCap(unittest.TestCase):
             )
         self.assertEqual(order, ["STRONG", "WEAK"])
 
+    def test_a_company_in_two_sectors_is_probed_once(self):
+        """Hitachi Energy came up in two sectors on 23 Oct 2026 and was
+        probed twice at once: no analyst target in one, +39.8% in the
+        other. One probe now serves every sector it comes up in."""
+        import analysis.rotation as rot
+
+        calls = []
+
+        def probe(name, preresolved, isin_master, watchlisted=()):
+            calls.append(preresolved)
+            return {"ticker": preresolved, "full_name": name, "error": "no_market_data"}
+
+        screened = {
+            "clean_energy": [
+                {"name": "Hitachi Energy", "ticker": "POWERINDIA", "growth_pct": 68.6}
+            ],
+            "data_center_support": [
+                {"name": "Hitachi Energy", "ticker": "POWERINDIA", "growth_pct": 68.6},
+                {"name": "Other", "ticker": "OTHER", "growth_pct": 20.0},
+            ],
+        }
+        watchlist = {"clean_energy": [], "data_center_support": []}
+        with patch.object(rot, "_probe_candidate", probe), patch.object(
+            rot, "save_watchlist", lambda *a, **k: None
+        ):
+            emerging, _ = rot.auto_curate_watchlist(
+                {}, watchlist, screened_candidates=screened
+            )
+        self.assertEqual(sorted(calls), ["OTHER", "POWERINDIA"])
+        # Both sectors still record their own verdict on the one reading.
+        for sector in ("clean_energy", "data_center_support"):
+            self.assertTrue(
+                any(r["ticker"] == "POWERINDIA" for r in emerging[sector]), sector
+            )
+
     def test_a_zero_cap_defers_everything_with_a_reason(self):
         screened = {"sec": [{"name": "Cand", "ticker": "C1", "growth_pct": 50.0}]}
         evaluated, emerging = self._run_with(screened, cap=0)

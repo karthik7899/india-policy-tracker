@@ -599,11 +599,14 @@ def test_unknown_names_and_unheld_destinations_raise_nothing(caplog):
 
 
 def _committed(*headlines):
+    """The committed graph read against the frozen holdings
+    (eval/holdings.json): the live watchlist changes with each day's
+    rotation, which is committed without CI."""
     from analysis.entity_graph import load_entity_graph
     from analysis.event_engine import classify_headlines
-    from config import load_watchlist
+    from scripts.eval_events import load_holdings
 
-    graph, watchlist = load_entity_graph(), load_watchlist()
+    graph, watchlist = load_entity_graph(), load_holdings()
     events = classify_headlines(
         {"corporate_agreements": [{"title": h} for h in headlines]}, watchlist, graph
     )
@@ -717,11 +720,9 @@ def test_a_rival_gaining_ground_in_chip_packaging_presses_on_each_osat_holding()
         "Tata Electronics partners with Besi to advance semiconductor packaging in Assam"
     )
     sector_of = {s["ticker"]: k for k, v in watchlist.items() for s in v or []}
-    assert sorted(t for f in flags for t in f["tickers"]) == [
-        "CGPOWER",
-        "KAYNES",
-        "SPELS",
-    ]
+    # SPELS was the third until it was removed from the watchlist on 23 Oct
+    # 2026, and its edges from the graph.
+    assert sorted(t for f in flags for t in f["tickers"]) == ["CGPOWER", "KAYNES"]
     for f in flags:
         assert f["mechanism"] == "rival_move"
         assert (f["transmission"], f["direction"]) == ("competitive_threat", "risk")
@@ -761,7 +762,7 @@ def test_a_lowest_bid_counts_for_half_and_the_award_stands_for_both():
         "Tata Electronics emerges L-1 bidder for chip packaging contract",
         "Tata Electronics receives Letter of Award for chip packaging contract",
     )
-    assert len(both) == len(bids) == 3
+    assert len(both) == len(bids) == 2
     for f in both:
         assert (f["strength"], f["weight"], f["headline_count"]) == ("hard", 1.0, 2)
         assert "Letter of Award" in f["trigger"] and f["strength_note"] == ""

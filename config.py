@@ -253,11 +253,6 @@ STOCK_WATCHLIST = {
             "name": "RIR Power Electronics",
             "catalyst": "Power semiconductor device supplier, building new SiC fab facility under semiconductor PLI.",
         },
-        {
-            "ticker": "SPELS",
-            "name": "SPEL Semiconductor",
-            "catalyst": "First semiconductor OSAT and assembly facility listed, expanding IC testing capabilities.",
-        },
     ],
     "sports_athleisure": [
         {

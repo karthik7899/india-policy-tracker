@@ -35,6 +35,17 @@ sys.path.insert(0, ROOT)
 LABELS_PATH = os.path.join(ROOT, "eval", "event_labels.json")
 POLICY_LABELS_PATH = os.path.join(ROOT, "eval", "policy_labels.json")
 THESIS_LABELS_PATH = os.path.join(ROOT, "eval", "thesis_labels.json")
+# The holdings the labels are scored against, frozen: {sector: [{ticker,
+# name}]}. Scored against the live watchlist, the numbers moved with the
+# rotation. On 23 Oct 2026 it replaced SCHNEIDER, two labelled Schneider
+# acquisitions became misses, and recall fell from 0.899 to 0.873 with no
+# change to the rules. Add a holding here when its headlines are labelled.
+HOLDINGS_PATH = os.path.join(ROOT, "eval", "holdings.json")
+
+
+def load_holdings(path: str = HOLDINGS_PATH) -> Dict[str, Any]:
+    with open(path, encoding="utf-8") as f:
+        return json.load(f)
 
 
 def _review_note(body, which=""):
@@ -457,8 +468,7 @@ def main() -> int:
         return _run_thesis(args)
     with open(LABELS_PATH, encoding="utf-8") as f:
         body = json.load(f)
-    with open(os.path.join(ROOT, "watchlist.json"), encoding="utf-8") as f:
-        watchlist = json.load(f)
+    watchlist = load_holdings()
     labels = body["labels"]
 
     _review_note(body, "")
