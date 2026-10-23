@@ -258,6 +258,46 @@ class TestIntakeCap(unittest.TestCase):
                 any(r["ticker"] == "POWERINDIA" for r in emerging[sector]), sector
             )
 
+    def test_a_headline_name_and_its_ticker_are_judged_on_one_reading(self):
+        """The name is only known to be POWERINDIA once its probe resolves
+        it, so in one batch both are asked (review on #239); the first
+        reading is the one both sectors are judged on."""
+        import analysis.rotation as rot
+
+        def probe(name, preresolved, isin_master, watchlisted=()):
+            reading = "Reading Two" if preresolved else "Reading One"
+            return {
+                "ticker": "POWERINDIA",
+                "full_name": reading,
+                "error": "no_market_data",
+            }
+
+        brief = {
+            "data_center_support": [
+                {"title": "Hitachi Energy wins order for data centre substation"}
+            ]
+        }
+        screened = {
+            "clean_energy": [
+                {"name": "Hitachi Energy", "ticker": "POWERINDIA", "growth_pct": 68.6}
+            ]
+        }
+        watchlist = {"data_center_support": [], "clean_energy": []}
+        with patch.object(rot, "_probe_candidate", probe), patch.object(
+            rot, "save_watchlist", lambda *a, **k: None
+        ), patch.object(rot, "load_registered_names", lambda: {}):
+            emerging, _ = rot.auto_curate_watchlist(
+                brief, watchlist, screened_candidates=screened
+            )
+        names = {
+            sector: [r["name"] for r in emerging[sector] if r["ticker"] == "POWERINDIA"]
+            for sector in ("data_center_support", "clean_energy")
+        }
+        self.assertEqual(
+            names,
+            {"data_center_support": ["Reading One"], "clean_energy": ["Reading One"]},
+        )
+
     def test_a_zero_cap_defers_everything_with_a_reason(self):
         screened = {"sec": [{"name": "Cand", "ticker": "C1", "growth_pct": 50.0}]}
         evaluated, emerging = self._run_with(screened, cap=0)
