@@ -426,6 +426,18 @@ def auto_curate_watchlist(brief_data, watchlist, screened_candidates=None):
     queue.extend((s, n, t) for s, n, t, _ in screened_queue)
 
     intake = 0
+    # One reading per company per run, shared by every sector it comes up in.
+    # Hitachi Energy sat in two sectors' peer tables on 23 Oct 2026 and was
+    # probed twice at once: Yahoo gave one probe no analyst target and the
+    # other a 39.8% upside, so the same company was judged on two readings.
+    # A ticker is probed once. A headline name is only known to be that
+    # ticker once its probe has resolved it, so a name and its ticker in the
+    # same batch still cost two requests; the first reading is the one kept.
+    probed = {}
+
+    def probe_key(candidate):
+        return (candidate[2] or "").upper() or candidate[1].strip().lower()
+
     # Batched: probe a handful of candidates concurrently, then decide over
     # them in queue order. The decision pass is deliberately sequential —
     # the intake cap, watchlisted_tickers and the per-sector slot count all
@@ -443,15 +455,31 @@ def auto_curate_watchlist(brief_data, watchlist, screened_candidates=None):
             # Snapshot taken before the pool starts, so every probe in a
             # batch sees the same membership.
             snapshot = frozenset(watchlisted_tickers)
-            with ThreadPoolExecutor(
-                max_workers=min(PREFETCH_BATCH, len(chunk))
-            ) as pool:
-                probes = list(
-                    pool.map(
-                        lambda c: _probe_candidate(c[1], c[2], isin_master, snapshot),
-                        chunk,
+            fresh = {}
+            for candidate in chunk:
+                if probe_key(candidate) not in probed:
+                    fresh.setdefault(probe_key(candidate), candidate)
+            if fresh:
+                with ThreadPoolExecutor(
+                    max_workers=min(PREFETCH_BATCH, len(fresh))
+                ) as pool:
+                    results = list(
+                        pool.map(
+                            lambda c: _probe_candidate(
+                                c[1], c[2], isin_master, snapshot
+                            ),
+                            fresh.values(),
+                        )
                     )
-                )
+                # In queue order, so the first of a name and its ticker wins:
+                # a headline name resolves to the ticker a screened peer
+                # arrives with, and both are judged on that one reading.
+                for key, result in zip(fresh, results):
+                    ticker = str(result.get("ticker") or "").upper()
+                    if ticker:
+                        result = probed.setdefault(ticker, result)
+                    probed[key] = result
+            probes = [probed[probe_key(c)] for c in chunk]
 
         for (sector, name, preresolved), probe in zip(chunk, probes):
             if intake >= MAX_INTAKE_PER_RUN:

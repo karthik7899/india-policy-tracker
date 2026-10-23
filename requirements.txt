@@ -1,6 +1,11 @@
 feedparser~=6.0
 requests~=2.34
 yfinance~=1.5
+# yfinance's own dependency, held at 3.0: pandas 3.1 deprecates the
+# inplace= arguments yfinance 1.7 uses everywhere, and on 23 Oct 2026 the
+# run printed 2,286 lines of Pandas4Warning. Lift this when yfinance stops
+# passing inplace=.
+pandas~=3.0.6
 curl_cffi~=0.15
 aiohttp~=3.14
 vaderSentiment~=3.3

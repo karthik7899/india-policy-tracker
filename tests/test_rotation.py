@@ -223,6 +223,81 @@ class TestIntakeCap(unittest.TestCase):
             )
         self.assertEqual(order, ["STRONG", "WEAK"])
 
+    def test_a_company_in_two_sectors_is_probed_once(self):
+        """Hitachi Energy came up in two sectors on 23 Oct 2026 and was
+        probed twice at once: no analyst target in one, +39.8% in the
+        other. One probe now serves every sector it comes up in."""
+        import analysis.rotation as rot
+
+        calls = []
+
+        def probe(name, preresolved, isin_master, watchlisted=()):
+            calls.append(preresolved)
+            return {"ticker": preresolved, "full_name": name, "error": "no_market_data"}
+
+        screened = {
+            "clean_energy": [
+                {"name": "Hitachi Energy", "ticker": "POWERINDIA", "growth_pct": 68.6}
+            ],
+            "data_center_support": [
+                {"name": "Hitachi Energy", "ticker": "POWERINDIA", "growth_pct": 68.6},
+                {"name": "Other", "ticker": "OTHER", "growth_pct": 20.0},
+            ],
+        }
+        watchlist = {"clean_energy": [], "data_center_support": []}
+        with patch.object(rot, "_probe_candidate", probe), patch.object(
+            rot, "save_watchlist", lambda *a, **k: None
+        ):
+            emerging, _ = rot.auto_curate_watchlist(
+                {}, watchlist, screened_candidates=screened
+            )
+        self.assertEqual(sorted(calls), ["OTHER", "POWERINDIA"])
+        # Both sectors still record their own verdict on the one reading.
+        for sector in ("clean_energy", "data_center_support"):
+            self.assertTrue(
+                any(r["ticker"] == "POWERINDIA" for r in emerging[sector]), sector
+            )
+
+    def test_a_headline_name_and_its_ticker_are_judged_on_one_reading(self):
+        """The name is only known to be POWERINDIA once its probe resolves
+        it, so in one batch both are asked (review on #239); the first
+        reading is the one both sectors are judged on."""
+        import analysis.rotation as rot
+
+        def probe(name, preresolved, isin_master, watchlisted=()):
+            reading = "Reading Two" if preresolved else "Reading One"
+            return {
+                "ticker": "POWERINDIA",
+                "full_name": reading,
+                "error": "no_market_data",
+            }
+
+        brief = {
+            "data_center_support": [
+                {"title": "Hitachi Energy wins order for data centre substation"}
+            ]
+        }
+        screened = {
+            "clean_energy": [
+                {"name": "Hitachi Energy", "ticker": "POWERINDIA", "growth_pct": 68.6}
+            ]
+        }
+        watchlist = {"data_center_support": [], "clean_energy": []}
+        with patch.object(rot, "_probe_candidate", probe), patch.object(
+            rot, "save_watchlist", lambda *a, **k: None
+        ), patch.object(rot, "load_registered_names", lambda: {}):
+            emerging, _ = rot.auto_curate_watchlist(
+                brief, watchlist, screened_candidates=screened
+            )
+        names = {
+            sector: [r["name"] for r in emerging[sector] if r["ticker"] == "POWERINDIA"]
+            for sector in ("data_center_support", "clean_energy")
+        }
+        self.assertEqual(
+            names,
+            {"data_center_support": ["Reading One"], "clean_energy": ["Reading One"]},
+        )
+
     def test_a_zero_cap_defers_everything_with_a_reason(self):
         screened = {"sec": [{"name": "Cand", "ticker": "C1", "growth_pct": 50.0}]}
         evaluated, emerging = self._run_with(screened, cap=0)

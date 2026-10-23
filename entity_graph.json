@@ -339,31 +339,6 @@
       ]
     },
     {
-      "src": "Tata Electronics",
-      "dst": "SPELS",
-      "type": "competitor",
-      "evidence": "curated",
-      "note": "Tata Electronics' Assam assembly-and-test plant bids for the same chip packaging work as SPEL's own assembly and test lines. Only its OSAT line competes; its fab and phone assembly do not.",
-      "added": "2026-10-19",
-      "scope": [
-        "osat",
-        "assembly and test",
-        "assembly, test",
-        "atmp",
-        "packaging",
-        "chip assembly",
-        "semiconductor assembly"
-      ]
-    },
-    {
-      "src": "ABF substrate",
-      "dst": "SPELS",
-      "type": "input_cost",
-      "evidence": "curated",
-      "note": "Package substrates are an OSAT's main bought-in material",
-      "added": "2026-10-19"
-    },
-    {
       "src": "aluminium",
       "dst": "DIACABS",
       "type": "input_cost",
@@ -537,14 +512,6 @@
       "type": "input_cost",
       "evidence": "curated",
       "added": "2026-09-13"
-    },
-    {
-      "src": "IC substrate",
-      "dst": "SPELS",
-      "type": "input_cost",
-      "evidence": "curated",
-      "note": "Package substrates are an OSAT's main bought-in material",
-      "added": "2026-10-19"
     },
     {
       "src": "lithium",
