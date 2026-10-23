@@ -135,51 +135,22 @@ def _score_policy_events(company, today):
     return int(round(points)), reasons
 
 
-def calculate_aggregate_score(company: Company) -> CompanyScore:
-    fin = company.screener
-    val = company.valuation
-    today = datetime.date.today()
-
-    momentum, reasons = _score_policy_events(company, today)
+def _apply_fallback(momentum: int, reasons: list[str]) -> tuple[int, list[str]]:
     if not reasons:
         momentum += SCORING_CONFIG.sector_mapping_fallback
         reasons.append("Sector benefits from macro policy tailwinds (Fallback)")
+    return momentum, reasons
 
+
+def _score_policy(company: Company, today: datetime.date) -> tuple[int, list[str]]:
+    momentum, reasons = _score_policy_events(company, today)
+    return _apply_fallback(momentum, reasons)
+
+
+def _parse_screener(company: Company, fin, val) -> tuple[int, list[str], list[str]]:
     fundamental = 0
+    reasons = []
     risks = []
-
-    # Data Completeness Confidence Check
-    data_points = 0
-    if fin is not None and getattr(fin, "q_sales", None) is not None:
-        data_points += 1
-    if fin and fin.debt_to_equity is not None:
-        data_points += 1
-    if fin and getattr(fin, "sales_trend", None):
-        data_points += 1
-    if fin and fin.roce is not None:
-        data_points += 1
-    if val and val.moat_status is not None:
-        data_points += 1
-    # Truthiness, not `is not None`: graham.py returns 0.0 for "we cannot value
-    # this company", so `is not None` counted a refusal as a data point and
-    # credited confidence to a holding that has none.
-    if val and val.graham_intrinsic_value:
-        data_points += 1
-
-    if data_points == 0:
-        return CompanyScore(
-            overall_score=momentum,
-            fundamental_score=0,
-            momentum_score=momentum,
-            confidence="Very Low",
-            reasons=reasons,
-            risks=["No financial data available for scoring."],
-            recommendations=["Monitor (Data Unavailable)"],
-        )
-
-    confidence = (
-        "High" if data_points >= 5 else ("Medium" if data_points >= 3 else "Low")
-    )
 
     # Growth momentum, on the seasonally sound measure. The sequential
     # quarter-on-quarter figure this used to read called BHEL a contraction
@@ -310,6 +281,52 @@ def calculate_aggregate_score(company: Company) -> CompanyScore:
         if any(marker in str(alert) for marker in _SCREEN_FAILURES):
             fundamental -= PENALTY_FAILED_SCREEN
             risks.append(str(alert))
+
+    return fundamental, reasons, risks
+
+
+def calculate_aggregate_score(company: Company) -> CompanyScore:
+    fin = company.screener
+    val = company.valuation
+    today = datetime.date.today()
+
+    momentum, reasons = _score_policy(company, today)
+
+    # Data Completeness Confidence Check
+    data_points = 0
+    if fin is not None and getattr(fin, "q_sales", None) is not None:
+        data_points += 1
+    if fin and fin.debt_to_equity is not None:
+        data_points += 1
+    if fin and getattr(fin, "sales_trend", None):
+        data_points += 1
+    if fin and fin.roce is not None:
+        data_points += 1
+    if val and val.moat_status is not None:
+        data_points += 1
+    # Truthiness, not `is not None`: graham.py returns 0.0 for "we cannot value
+    # this company", so `is not None` counted a refusal as a data point and
+    # credited confidence to a holding that has none.
+    if val and val.graham_intrinsic_value:
+        data_points += 1
+
+    if data_points == 0:
+        return CompanyScore(
+            overall_score=momentum,
+            fundamental_score=0,
+            momentum_score=momentum,
+            confidence="Very Low",
+            reasons=reasons,
+            risks=["No financial data available for scoring."],
+            recommendations=["Monitor (Data Unavailable)"],
+        )
+
+    confidence = (
+        "High" if data_points >= 5 else ("Medium" if data_points >= 3 else "Low")
+    )
+
+    fundamental, f_reasons, risks = _parse_screener(company, fin, val)
+    reasons.extend(f_reasons)
 
     overall = fundamental + momentum
     if overall >= SCORING_CONFIG.strong_buy_threshold:
