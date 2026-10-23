@@ -1,10 +1,11 @@
 import asyncio
 import aiohttp
 import feedparser
+import html
+import re
 import datetime  # noqa: F401  (referenced via patch("scraper.datetime...") in tests)
 from bs4 import BeautifulSoup
 import urllib.parse
-import re
 from logger import log
 from config import SECTOR_QUERIES, GLOBAL_EVENT_QUERIES, PLI_SCHEMES
 from providers.rss import fetch_query_feed_async
@@ -685,7 +686,7 @@ def _headline_text(title, summary):
     would read as a company. Without the markup only the parser's
     company-suffix match ("... Ltd", "... Limited") can find a name.
     """
-    plain = BeautifulSoup(summary, "lxml").get_text(" ") if summary else ""
+    plain = html.unescape(re.sub(r"<[^>]+>", " ", summary)) if summary else ""
     return f"{title} {plain}".strip()
 
 
