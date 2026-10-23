@@ -255,7 +255,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (193 days old)"
+      "exclusion_reason": "aged >120d (194 days old)"
     },
     {
       "date": "2026-10-20",
@@ -274,21 +274,6 @@
     },
     {
       "date": "2026-10-19",
-      "headline": "ACME Solar Holdings Limited has informed the Exchange regarding ACME Solar s signs PPA for 300 MW / 1200 MWh assured peak supply SECI FDRE Project at INR 6/unit.",
-      "source_url": "https://nsearchives.nseindia.com/corporate/ACMECS_19102026084958_IntimationPPA19102026.pdf",
-      "source_label": "NSE",
-      "event_type": "order_win",
-      "source_kind": "Event",
-      "event_tags": [
-        "order_win",
-        "Event"
-      ],
-      "confidence": "L",
-      "status": "merged",
-      "exclusion_reason": "merged: duplicate phrasing of “ACME Solar Holdings Limited has informed the Exchange regard”"
-    },
-    {
-      "date": "2026-10-19",
       "headline": "ACME Solar Signs 300 MW SECI Power Supply PPA; Shares Fall 0.72%",
       "source_url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxPZ1JqY2dsM2VWUVB1bXRtZVlWRThSTlV6UGtCVzFxYU40a1Iwdi1TRHMtRWlEcXQtVElrNEtzLUZuN0RxMzRid1pKUE9UM2lDN01PYU1NeVBPUVZENlRXQU1XTi1JOVVBb2R3Z3hzamNKTUNTT2YzVlJxblZtV0lpd2NzdDktZWlkd0Y0TEhYSTYzRWMwM0VzN2ZSMA?oc=5",
       "source_label": "HDFC Sky",
@@ -301,6 +286,21 @@
       "confidence": "L",
       "status": "merged",
       "exclusion_reason": "merged: duplicate phrasing of “ACME Solar Signs 300 MW SECI Power Supply PPA; Shares Fall 0”"
+    },
+    {
+      "date": "2026-10-19",
+      "headline": "ACME Solar Holdings Limited has informed the Exchange regarding ACME Solar s signs PPA for 300 MW / 1200 MWh assured peak supply SECI FDRE Project at INR 6/unit.",
+      "source_url": "https://nsearchives.nseindia.com/corporate/ACMECS_19102026084958_IntimationPPA19102026.pdf",
+      "source_label": "NSE",
+      "event_type": "order_win",
+      "source_kind": "Event",
+      "event_tags": [
+        "order_win",
+        "Event"
+      ],
+      "confidence": "L",
+      "status": "merged",
+      "exclusion_reason": "merged: duplicate phrasing of “ACME Solar Holdings Limited has informed the Exchange regard”"
     },
     {
       "date": "2026-10-01",

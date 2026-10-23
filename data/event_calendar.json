@@ -1,20 +1,9 @@
 {
   "value": {
-    "as_of": "2026-10-22",
+    "as_of": "2026-10-23",
     "ahead_days": 45,
     "back_days": 14,
     "upcoming": [
-      {
-        "ticker": "HINDPETRO",
-        "date": "2026-10-22",
-        "kind": "results",
-        "title": "Board meeting: Financial Results",
-        "detail": "To consider and approve the financial results for the period ended September 30, 2026",
-        "source": "NSE event calendar",
-        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
-        "name": "Hindustan Petroleum Corporation",
-        "sector": "big_cap_industries"
-      },
       {
         "ticker": "ADANIPOWER",
         "date": "2026-10-23",
@@ -104,6 +93,28 @@
         "sector": "fmcg"
       },
       {
+        "ticker": "AVALON",
+        "date": "2026-10-27",
+        "kind": "fund_raising",
+        "title": "Board meeting: Fund Raising",
+        "detail": "To consider Alteration of Articles of Association and Fund Raising, as detailed in the Disclosure enclosed herewith.",
+        "source": "NSE event calendar",
+        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
+        "name": "Avalon Technologies",
+        "sector": "semiconductors_equipment"
+      },
+      {
+        "ticker": "LTTS",
+        "date": "2026-10-27",
+        "kind": "dividend",
+        "title": "Ex-date: Interim Dividend - Rs 20 Per Share",
+        "detail": "record date 2026-10-27",
+        "source": "NSE corporate actions",
+        "link": "https://www.nseindia.com/companies-listing/corporate-filings-actions",
+        "name": "L&T Technology Services",
+        "sector": "midcap_it"
+      },
+      {
         "ticker": "QUICKHEAL",
         "date": "2026-10-27",
         "kind": "results",
@@ -179,6 +190,28 @@
         "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
         "name": "Indian Oil Corporation",
         "sector": "big_cap_industries"
+      },
+      {
+        "ticker": "NTPCGREEN",
+        "date": "2026-10-30",
+        "kind": "results",
+        "title": "Board meeting: Financial Results",
+        "detail": "To consider and approve the financial results for the period ended September 30, 2026",
+        "source": "NSE event calendar",
+        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
+        "name": "NTPC Green Energy",
+        "sector": "clean_energy"
+      },
+      {
+        "ticker": "SYRMA",
+        "date": "2026-10-30",
+        "kind": "results",
+        "title": "Board meeting: Financial Results",
+        "detail": "To consider and approve the financial results for the period ended September 30, 2026",
+        "source": "NSE event calendar",
+        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
+        "name": "Syrma SGS Technology",
+        "sector": "manufacturing_electronics"
       },
       {
         "ticker": "IDEAFORGE",
@@ -267,9 +300,31 @@
         "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
         "name": "Thermax",
         "sector": "industrial_manufacturing"
+      },
+      {
+        "ticker": "ELGIEQUIP",
+        "date": "2026-11-06",
+        "kind": "results",
+        "title": "Board meeting: Financial Results",
+        "detail": "To consider and approve the financial results for the period ended September 30, 2026",
+        "source": "NSE event calendar",
+        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
+        "name": "Elgi Equipments",
+        "sector": "industrial_manufacturing"
       }
     ],
     "recent": [
+      {
+        "ticker": "HINDPETRO",
+        "date": "2026-10-22",
+        "kind": "results",
+        "title": "Board meeting: Financial Results",
+        "detail": "To consider and approve the financial results for the period ended September 30, 2026",
+        "source": "NSE event calendar",
+        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
+        "name": "Hindustan Petroleum Corporation",
+        "sector": "big_cap_industries"
+      },
       {
         "ticker": "INDHOTEL",
         "date": "2026-10-21",
@@ -390,22 +445,10 @@
         "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
         "name": "Bharat Heavy Electricals",
         "sector": "logistics_heavy_capital"
-      },
-      {
-        "ticker": "TCS",
-        "date": "2026-10-08",
-        "kind": "results",
-        "title": "Board meeting: Financial Results/Dividend",
-        "detail": "Approval of the Financial Results and consideration of declaration of second interim dividend",
-        "source": "NSE event calendar",
-        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
-        "name": "Tata Consultancy Services",
-        "sector": "cybersecurity"
       }
     ],
     "macro": [],
     "next_results": {
-      "HINDPETRO": "2026-10-22",
       "ADANIPOWER": "2026-10-23",
       "BPCL": "2026-10-23",
       "CGPOWER": "2026-10-23",
@@ -421,6 +464,8 @@
       "SUZLON": "2026-10-29",
       "BEL": "2026-10-30",
       "IOC": "2026-10-30",
+      "NTPCGREEN": "2026-10-30",
+      "SYRMA": "2026-10-30",
       "IDEAFORGE": "2026-11-02",
       "ITC": "2026-11-02",
       "BATAINDIA": "2026-11-03",
@@ -428,12 +473,13 @@
       "CUMMINSIND": "2026-11-04",
       "BIRLACABLE": "2026-11-05",
       "MPHASIS": "2026-11-05",
-      "THERMAX": "2026-11-05"
+      "THERMAX": "2026-11-05",
+      "ELGIEQUIP": "2026-11-06"
     },
     "sources": {
       "nse": {
-        "event_calendar": 840,
-        "corporate_actions": 39
+        "event_calendar": 954,
+        "corporate_actions": 44
       },
       "nse_errors": [],
       "filings": 0,

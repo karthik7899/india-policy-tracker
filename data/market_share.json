@@ -4,29 +4,38 @@
       {
         "ticker": "BEL",
         "name": "Bharat Electronics",
-        "share_pct": 49.4,
-        "share_prev_pct": 46.9,
-        "change_pp": 2.42,
+        "share_pct": 47.0,
+        "share_prev_pct": 45.7,
+        "change_pp": 1.22,
         "lookback_quarters": 4,
-        "peer_count": 3
+        "peer_count": 4
       },
       {
         "ticker": "HAL",
         "name": "Hindustan Aeronautics",
-        "share_pct": 49.1,
-        "share_prev_pct": 50.9,
-        "change_pp": -1.88,
+        "share_pct": 46.7,
+        "share_prev_pct": 49.6,
+        "change_pp": -2.95,
         "lookback_quarters": 4,
-        "peer_count": 3
+        "peer_count": 4
+      },
+      {
+        "ticker": "BDL",
+        "name": "Bharat Dynamics",
+        "share_pct": 4.8,
+        "share_prev_pct": 2.6,
+        "change_pp": 2.29,
+        "lookback_quarters": 4,
+        "peer_count": 4
       },
       {
         "ticker": "ASTRAMICRO",
         "name": "Astra Microwave",
-        "share_pct": 1.6,
+        "share_pct": 1.5,
         "share_prev_pct": 2.1,
-        "change_pp": -0.54,
+        "change_pp": -0.56,
         "lookback_quarters": 4,
-        "peer_count": 3
+        "peer_count": 4
       }
     ],
     "banking_financials": [
@@ -62,36 +71,36 @@
       {
         "ticker": "RELIANCE",
         "name": "Reliance Industries",
-        "share_pct": 34.7,
-        "share_prev_pct": 35.8,
-        "change_pp": -1.19,
+        "share_pct": 34.9,
+        "share_prev_pct": 36.4,
+        "change_pp": -1.49,
         "lookback_quarters": 4,
         "peer_count": 6
       },
       {
         "ticker": "IOC",
         "name": "Indian Oil Corporation",
-        "share_pct": 29.8,
-        "share_prev_pct": 28.3,
-        "change_pp": 1.53,
+        "share_pct": 30.0,
+        "share_prev_pct": 28.7,
+        "change_pp": 1.32,
         "lookback_quarters": 4,
         "peer_count": 6
       },
       {
         "ticker": "BPCL",
         "name": "Bharat Petroleum Corporation",
-        "share_pct": 16.9,
-        "share_prev_pct": 16.6,
-        "change_pp": 0.38,
+        "share_pct": 17.1,
+        "share_prev_pct": 16.8,
+        "change_pp": 0.25,
         "lookback_quarters": 4,
         "peer_count": 6
       },
       {
         "ticker": "HINDPETRO",
         "name": "Hindustan Petroleum Corporation",
-        "share_pct": 15.7,
-        "share_prev_pct": 16.3,
-        "change_pp": -0.56,
+        "share_pct": 15.2,
+        "share_prev_pct": 15.1,
+        "change_pp": 0.09,
         "lookback_quarters": 4,
         "peer_count": 6
       },
@@ -100,7 +109,7 @@
         "name": "Adani Power",
         "share_pct": 2.1,
         "share_prev_pct": 2.1,
-        "change_pp": 0.04,
+        "change_pp": 0.02,
         "lookback_quarters": 4,
         "peer_count": 6
       },
@@ -109,7 +118,7 @@
         "name": "Kalpataru Projects International",
         "share_pct": 0.7,
         "share_prev_pct": 0.9,
-        "change_pp": -0.19,
+        "change_pp": -0.2,
         "lookback_quarters": 4,
         "peer_count": 6
       }
@@ -183,56 +192,56 @@
     ],
     "data_center_support": [
       {
+        "ticker": "POWERINDIA",
+        "name": "Hitachi Energy",
+        "share_pct": 38.4,
+        "share_prev_pct": 36.9,
+        "change_pp": 1.43,
+        "lookback_quarters": 4,
+        "peer_count": 6
+      },
+      {
         "ticker": "STLTECH",
         "name": "Sterlite Technologies (STL)",
-        "share_pct": 41.0,
-        "share_prev_pct": 32.4,
-        "change_pp": 8.64,
+        "share_pct": 29.4,
+        "share_prev_pct": 25.5,
+        "change_pp": 3.94,
         "lookback_quarters": 4,
         "peer_count": 6
       },
       {
         "ticker": "DIACABS",
         "name": "Diamond Power",
-        "share_pct": 14.8,
-        "share_prev_pct": 9.6,
-        "change_pp": 5.22,
-        "lookback_quarters": 4,
-        "peer_count": 6
-      },
-      {
-        "ticker": "SCHNEIDER",
-        "name": "Schneider Electric Infrastructure",
-        "share_pct": 14.0,
-        "share_prev_pct": 19.8,
-        "change_pp": -5.79,
+        "share_pct": 10.6,
+        "share_prev_pct": 7.5,
+        "change_pp": 3.07,
         "lookback_quarters": 4,
         "peer_count": 6
       },
       {
         "ticker": "ANANTRAJ",
         "name": "Anant Raj",
-        "share_pct": 13.6,
-        "share_prev_pct": 18.8,
-        "change_pp": -5.26,
+        "share_pct": 9.7,
+        "share_prev_pct": 14.8,
+        "change_pp": -5.08,
         "lookback_quarters": 4,
         "peer_count": 6
       },
       {
         "ticker": "GODREJPROP",
         "name": "Godrej Properties",
-        "share_pct": 10.9,
-        "share_prev_pct": 13.8,
-        "change_pp": -2.96,
+        "share_pct": 7.8,
+        "share_prev_pct": 10.9,
+        "change_pp": -3.08,
         "lookback_quarters": 4,
         "peer_count": 6
       },
       {
         "ticker": "BIRLACABLE",
         "name": "Birla Cable",
-        "share_pct": 5.7,
-        "share_prev_pct": 5.6,
-        "change_pp": 0.14,
+        "share_pct": 4.1,
+        "share_prev_pct": 4.4,
+        "change_pp": -0.29,
         "lookback_quarters": 4,
         "peer_count": 6
       }
@@ -541,22 +550,31 @@
     ],
     "semiconductors_equipment": [
       {
+        "ticker": "AVALON",
+        "name": "Avalon Technologies",
+        "share_pct": 70.0,
+        "share_prev_pct": 69.3,
+        "change_pp": 0.74,
+        "lookback_quarters": 4,
+        "peer_count": 3
+      },
+      {
         "ticker": "ASMTEC",
         "name": "ASM Technologies",
-        "share_pct": 96.0,
-        "share_prev_pct": 85.9,
-        "change_pp": 10.13,
+        "share_pct": 28.8,
+        "share_prev_pct": 26.4,
+        "change_pp": 2.41,
         "lookback_quarters": 4,
-        "peer_count": 2
+        "peer_count": 3
       },
       {
         "ticker": "SPELS",
         "name": "SPEL Semiconductor",
-        "share_pct": 4.0,
-        "share_prev_pct": 14.1,
-        "change_pp": -10.13,
+        "share_pct": 1.2,
+        "share_prev_pct": 4.3,
+        "change_pp": -3.14,
         "lookback_quarters": 4,
-        "peer_count": 2
+        "peer_count": 3
       }
     ],
     "sports_athleisure": [

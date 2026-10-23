@@ -2,13 +2,14 @@
   "ticker": "SIEMENS",
   "items": [
     {
-      "date": "19 Oct 2026",
-      "headline": "Siemens targets up to 80% factory automation with AI, board member says",
-      "source_url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQRjVrdExYOGRCNGoxVi1VZXFIZVpaMk9LNUhlc1AxZmdHYmxSVjQwZzlUaFRJRTlfMzd6RmN1Y3FnNzQxSG1lMUZtTDd1T2MxbEo0YTdia3ltMXR0T2Nudnk1OHZlZ0lhYVhGQzgyNV8zSnMzanV5UG5zV1dldTJuSEl1WGc1Q3RwckxrbUh5WWJmM1hrWHhFc1ZpUnJOdzBYbHp2WTd5WjBYQkNRekFyeg?oc=5",
-      "source_label": "Reuters",
-      "event_type": "",
+      "date": "22 Oct 2026",
+      "headline": "Siemens and NVIDIA develop AI-powered manufacturing workflow",
+      "source_url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE5ETzRCUm5pLWtHazVjQ1ZUNl9WdmVaZzk4Z1M1elV0TXNQbDZPYjFNMDlOd25zZ0t2YnpNUWZiQXRJR0pvdGdVTEFQRmlvMm9laGNBVUlZZ0x2cmF6X1A3OTZuTjIwTGpxQUl2dnpyMXdiS1E?oc=5",
+      "source_label": "Manufacturing Today India",
+      "event_type": "tie_up",
       "source_kind": "Sector news",
       "event_tags": [
+        "tie_up",
         "Sector news"
       ],
       "confidence": "M",
@@ -104,7 +105,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (289 days old)"
+      "exclusion_reason": "aged >120d (290 days old)"
     },
     {
       "date": "Thu, 23 Jul 2026 12:03:30 GMT",
@@ -154,6 +155,19 @@
       "source_kind": "Launch",
       "event_tags": [
         "Launch"
+      ],
+      "confidence": "M",
+      "status": "counted"
+    },
+    {
+      "date": "23 Oct 2026",
+      "headline": "Newspaper Notice Regarding Final Hearing Of Company Scheme Petition In Relation To The Scheme Of Amalgamation Of Siemens Rail Automation Private Limited With Siemens Limited And Their Respective Shareholders",
+      "source_url": "https://nsearchives.nseindia.com/corporate/SIEMENS57_23102026120411_SE_Disclosure.pdf",
+      "source_label": "NSE",
+      "event_type": "",
+      "source_kind": "Filing",
+      "event_tags": [
+        "Filing"
       ],
       "confidence": "M",
       "status": "counted"
@@ -209,7 +223,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (190 days old)"
+      "exclusion_reason": "aged >120d (191 days old)"
     },
     {
       "date": "Wed, 15 Apr 2026 07:00:00 GMT",
@@ -223,7 +237,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (190 days old)"
+      "exclusion_reason": "aged >120d (191 days old)"
     },
     {
       "date": "Tue, 09 Dec 2025 08:00:00 GMT",
@@ -237,7 +251,36 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (317 days old)"
+      "exclusion_reason": "aged >120d (318 days old)"
+    },
+    {
+      "date": "2026-10-23",
+      "headline": "Newspaper Notice Regarding Final Hearing Of Company Scheme Petition In Relation To The Scheme Of Amalgamation Of Siemens Rail Automation Private Limited With Siemens Limited And Th",
+      "source_url": "https://nsearchives.nseindia.com/corporate/SIEMENS57_23102026120411_SE_Disclosure.pdf",
+      "source_label": "NSE",
+      "event_type": "acquisition",
+      "source_kind": "Event",
+      "event_tags": [
+        "acquisition",
+        "Event"
+      ],
+      "confidence": "L",
+      "status": "counted"
+    },
+    {
+      "date": "2026-10-22",
+      "headline": "Siemens and NVIDIA develop AI-powered manufacturing workflow",
+      "source_url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE5ETzRCUm5pLWtHazVjQ1ZUNl9WdmVaZzk4Z1M1elV0TXNQbDZPYjFNMDlOd25zZ0t2YnpNUWZiQXRJR0pvdGdVTEFQRmlvMm9laGNBVUlZZ0x2cmF6X1A3OTZuTjIwTGpxQUl2dnpyMXdiS1E?oc=5",
+      "source_label": "Manufacturing Today India",
+      "event_type": "tie_up",
+      "source_kind": "Event",
+      "event_tags": [
+        "tie_up",
+        "Event"
+      ],
+      "confidence": "L",
+      "status": "merged",
+      "exclusion_reason": "merged: duplicate phrasing of “Siemens and NVIDIA develop AI-powered manufacturing workflow”"
     },
     {
       "date": "2026-10-19",
