@@ -408,12 +408,11 @@ def test_newest_read_through_sorts_first_within_a_tier():
     comment promised newest. The email shows four rows; a busy run would have
     buried today's flag behind a ten-day-old one."""
     old = (datetime.date.today() - datetime.timedelta(days=5)).isoformat()
+    # Two claims of equal weight; one claim reported twice is one row.
     flags = compute_read_throughs(
         [
-            _event("Google taps Marvell today", external=["Google", "Marvell"]),
-            _event(
-                "Google taps Marvell earlier", external=["Google", "Marvell"], date=old
-            ),
+            _event("RAM shortage hits device makers", event_type="supply_disruption"),
+            _event("Copper shortage deepens", event_type="supply_disruption", date=old),
         ],
         GRAPH,
         WATCHLIST,
@@ -746,22 +745,26 @@ def test_the_rivals_news_outside_that_line_is_not_ours(headline):
     assert flags == []
 
 
-def test_a_lowest_bid_counts_for_half_a_letter_of_award_and_ranks_below_it():
+def test_a_lowest_bid_counts_for_half_and_the_award_stands_for_both():
     """PR #211's line, carried into read-throughs: "emerges L-1" is a bid
     that may still be lost, a Letter of Award is the work."""
     from analysis.event_engine import STRENGTH_SAYS
 
-    _, flags, _ = _committed(
+    _, bids, _ = _committed(
+        "Tata Electronics emerges L-1 bidder for chip packaging contract"
+    )
+    assert {(f["strength"], f["weight"]) for f in bids} == {("soft", 0.5)}
+    assert all(f["strength_note"] == STRENGTH_SAYS["soft"] for f in bids)
+    # Both in the news, the bid and the award are one claim, and the row is
+    # the award's: a lowest bid never outranks the Letter of Award.
+    _, both, _ = _committed(
         "Tata Electronics emerges L-1 bidder for chip packaging contract",
         "Tata Electronics receives Letter of Award for chip packaging contract",
     )
-    assert [(f["strength"], f["weight"]) for f in flags] == [("hard", 1.0)] * 3 + [
-        ("soft", 0.5)
-    ] * 3
-    award, bid = flags[0], flags[-1]
-    assert "Letter of Award" in award["trigger"] and award["strength_note"] == ""
-    assert "L-1" in bid["trigger"]
-    assert bid["strength_note"] == STRENGTH_SAYS["soft"]
+    assert len(both) == len(bids) == 3
+    for f in both:
+        assert (f["strength"], f["weight"], f["headline_count"]) == ("hard", 1.0, 2)
+        assert "Letter of Award" in f["trigger"] and f["strength_note"] == ""
 
 
 def test_an_mou_is_soft_however_it_is_signed():
@@ -875,3 +878,117 @@ def test_a_duty_change_moves_an_input_and_a_mention_does_not(headline, direction
 def test_a_hedged_duty_change_counts_as_a_rumour():
     (flag,) = _run(headlines=["Govt may impose anti-dumping duty on copper"])
     assert (flag["direction"], flag["strength"]) == ("risk", "reported")
+
+
+# ---------------------------------------------------------------------------
+# One row per claim (20 Oct: one copper story was six rows of ten)
+# ---------------------------------------------------------------------------
+
+
+def test_one_story_from_two_outlets_is_one_row_that_counts_them():
+    flags = _run(
+        headlines=[
+            "LS MnM weighs copper concentrate cuts as shortages squeeze smelter "
+            "profits",
+            "LS MnM weighs output adjustments as copper concentrate shortage "
+            "squeezes smelters",
+        ]
+    )
+    (flag,) = flags
+    assert (flag["sector"], flag["headline_count"]) == ("clean_energy", 2)
+
+
+def test_a_holding_already_in_its_sectors_row_gets_no_second_row():
+    """Diamond Power was moved into data-centre support, which buys copper
+    too: its own copper edge doubled every copper headline."""
+    graph = {
+        "edges": [
+            {"src": "copper", "dst": "data_center_support", "type": "input_cost"},
+            {"src": "copper", "dst": "DIACABS", "type": "input_cost"},
+            {"src": "aluminium", "dst": "DIACABS", "type": "input_cost"},
+        ]
+    }
+    watchlist = {
+        "data_center_support": [
+            {"ticker": "STLTECH", "name": "Sterlite"},
+            {"ticker": "DIACABS", "name": "Diamond Power"},
+        ]
+    }
+
+    def run(headline):
+        return compute_read_throughs(
+            [], graph, watchlist, today=TODAY, headlines=[headline]
+        )
+
+    assert [f["tickers"] for f in run("Copper shortage deepens")] == [
+        ["DIACABS", "STLTECH"]
+    ]
+    # Its own edge still speaks where the sector has none.
+    assert [f["tickers"] for f in run("Aluminium shortage deepens")] == [["DIACABS"]]
+
+
+def test_a_headline_that_dates_itself_outside_the_window_reads_through_nothing():
+    assert _run(headlines=["Market Preview, June 22, 2026: RAM shortage worsens"]) == []
+    recent = datetime.date.today() - datetime.timedelta(days=2)
+    (flag,) = _run(
+        headlines=[f"Market Preview, {recent:%B %d, %Y}: RAM shortage worsens"]
+    )
+    assert flag["date"] == recent.isoformat()
+
+
+def test_email_row_counts_the_other_headlines_of_its_story():
+    from emails.sections import build_read_through_html
+
+    two, three = dict(_ROW, headline_count=2), dict(_ROW, headline_count=3)
+    assert "(+1 more headline)" in build_read_through_html([two])
+    assert "(+2 more headlines)" in build_read_through_html([three])
+    assert "more headline" not in build_read_through_html([_ROW])
+
+
+def test_freight_reaches_the_holdings_that_pay_it_not_those_it_pays():
+    """For CONCOR and TVS Supply Chain freight is the business, not its cost."""
+    _, flags, _ = _committed(
+        "Bringing Goods To India Gets Costlier As Global Freight Rates Surge 130%"
+    )
+    reached = {t for f in flags for t in f["tickers"]}
+    assert {"BHEL", "CUMMINSIND"} <= reached
+    assert not {"CONCOR", "TVSSCS"} & reached
+
+
+def test_a_story_naming_several_inputs_is_still_one_row():
+    """ "Memory chip shortage" names memory, memory chips and chips: three
+    inputs, one story, and another outlet's telling of it is the same one.
+    Keyed on the input alone, it came out as a row per input."""
+    graph = {
+        "edges": [
+            {"src": m, "dst": "manufacturing_electronics", "type": "input_cost"}
+            for m in ("memory", "memory chip", "chip")
+        ]
+    }
+    flags = compute_read_throughs(
+        [],
+        graph,
+        WATCHLIST,
+        today=TODAY,
+        headlines=[
+            "Memory chip shortage deepens",
+            "Memory chip shortages deepen, says TrendForce",
+        ],
+    )
+    (flag,) = flags
+    assert (flag["sector"], flag["headline_count"]) == ("manufacturing_electronics", 2)
+
+
+def test_two_different_stories_about_one_input_stay_two_rows():
+    """Every copper shortage reads "copper scarcer or dearer"; a mine strike
+    in Chile and a smelter in Korea are still two developments, not one
+    story reported twice."""
+    flags = _run(
+        headlines=[
+            "Copper prices surge on Chile mine strike",
+            "LS MnM weighs copper concentrate cuts as shortages squeeze smelter "
+            "profits",
+        ]
+    )
+    assert sorted(f["headline_count"] for f in flags) == [1, 1]
+    assert {f["sector"] for f in flags} == {"clean_energy"}

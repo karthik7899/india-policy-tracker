@@ -10,7 +10,8 @@ loaded before it is overwritten) and lists only what is new:
 
   watchlist   holdings added or dropped
   thesis      grade changes, and thesis-check challenges not seen before
-  events      market events about holdings not seen before
+  events      market events about holdings not seen before, dated since the
+              last run
   policy      policy measures read for the first time
   warnings    alerts that are new or escalated
   portfolio   portfolio limits newly breached, or back within
@@ -20,10 +21,21 @@ Nothing is re-judged; every item is something another step already
 produced, and each says which step.
 """
 
+import datetime
 from typing import Any, Dict, Iterable, List, Optional
 
 MAX_PER_KIND = 8
 _ORDER = {"Broken": 0, "Weakening": 1, "Intact": 2}
+
+
+def _day_before(iso: str) -> str:
+    """The ISO date a day before ``iso``; "" when it is not a date."""
+    try:
+        return (
+            datetime.date.fromisoformat(iso[:10]) - datetime.timedelta(days=1)
+        ).isoformat()
+    except ValueError:
+        return ""
 
 
 def _headlines(rows: Optional[Iterable[Any]], field: str = "headline") -> set:
@@ -101,10 +113,27 @@ def build_changes(
                 )
 
     seen_events = _headlines(prior.get("market_events"))
+    # New news, not news newly kept. An event dated well before the last
+    # run's newest was the last run's to report: when the event cap stopped
+    # cutting older events (#222), 81 of them arrived at once and read as "83
+    # events since the last run". A day's slack keeps an article the feed
+    # was slow to carry.
+    since = _day_before(
+        max(
+            (
+                str(e.get("date") or "")
+                for e in prior.get("market_events") or []
+                if isinstance(e, dict)
+            ),
+            default="",
+        )
+    )
     for e in data.get("market_events") or []:
         if not isinstance(e, dict) or not e.get("actors"):
             continue
         if str(e.get("headline") or "").strip().lower() in seen_events:
+            continue
+        if since and str(e.get("date") or "") < since:
             continue
         items["events"].append(
             {

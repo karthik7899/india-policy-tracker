@@ -750,6 +750,7 @@ def reconcile(
     reading is not enough to route news onto the book.
     """
     from analysis.event_engine import _EVENT_DIRECTION, graph_entities
+    from analysis.event_evidence import article_date, headline_date
     from analysis.competitive_intel import battleground_sectors, collect_sources
 
     stats = {"corroborated": 0, "disagreed": 0, "llm_only": 0}
@@ -806,7 +807,10 @@ def reconcile(
             "actors": actors,
             "external": graph_entities(headline, graph) if graph else [],
             "direction": _EVENT_DIRECTION.get(etype, "opportunity"),
-            "date": today,
+            # Dated as a rules event is (event_engine.classify_headlines).
+            "date": article_date(citation.get("date"))
+            or headline_date(headline, today)
+            or today,
             "reader": "llm",
             "corroborated": False,
         }

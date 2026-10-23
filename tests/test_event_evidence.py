@@ -219,3 +219,61 @@ def test_old_filings_are_pruned_from_the_record():
     old = (datetime.date.today() - datetime.timedelta(days=40)).isoformat()
     kept = prune_filings([{"date": old}, {"date": TODAY}, {"date": ""}])
     assert kept == [{"date": TODAY}]
+
+
+# ---------------------------------------------------------------------------
+# headline_date: only where a headline dates itself
+# ---------------------------------------------------------------------------
+
+
+def test_a_headline_that_dates_itself_is_read():
+    from analysis.event_evidence import headline_date
+
+    today = "2026-10-23"
+    assert (
+        headline_date(
+            "Market Preview, June 22, 2026: Vi Warrant Allotment, BEL ₹1,081-Cr Orders",
+            today,
+        )
+        == "2026-06-22"
+    )
+    assert (
+        headline_date("Stocks To Watch Today, July 8, 2026: ideaForge", today)
+        == "2026-07-08"
+    )
+    assert headline_date("Weekly Intelligence Report – 16 Oct 2026", today) == (
+        "2026-10-16"
+    )
+    assert (
+        headline_date("Startup news and updates: Daily roundup (July 17, 2026)", today)
+        == "2026-07-17"
+    )
+    assert (
+        headline_date(
+            "MphasiS Limited has informed the Exchange regarding a press release "
+            'dated September 02, 2026, titled "Mphasis and TechnoPro Sign"',
+            today,
+        )
+        == "2026-09-02"
+    )
+
+
+def test_other_dates_in_a_headline_are_no_guide_to_when_it_ran():
+    from analysis.event_evidence import headline_date
+
+    today = "2026-10-23"
+    for headline in (
+        "IdeaForge Technology Limited Reports Earnings Results for the First "
+        "Quarter Ended June 30, 2026",
+        "Optiemus Infracom Limited has informed the Exchange about Copy of "
+        "Newspaper Publication issued in compliance with MCA Circular dated May "
+        "05, 2020",
+        "Anant Raj Limited Schedules Board Meeting on May 11, 2026 for Q4FY26",
+        "CONCOR appoints Shri Ajit Kumar Panda as CMD effective Aug 1, 2026",
+        "India-New Zealand FTA to Enter into Force from 20 October 2026",
+        # After today: no publication date.
+        "Results calendar, October 28, 2026: TCS, Infosys",
+        "Dixon wins order worth Rs 500 crore",
+        "",
+    ):
+        assert headline_date(headline, today) is None, headline

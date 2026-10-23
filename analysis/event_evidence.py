@@ -40,6 +40,8 @@ FILING_WINDOW_AFTER = 3
 
 # Two headlines are one story only within this many days of each other.
 STORY_WINDOW_DAYS = 7
+# Share of distinctive words two headlines of one story have in common.
+STORY_OVERLAP = 0.35
 
 # Filing vocabulary per event type. Matched against the filing's own subject
 # text — NSE's "Bagging/Receiving of orders/contracts", a company's "Receipt
@@ -159,6 +161,45 @@ def article_date(raw: Any) -> Optional[str]:
     return None
 
 
+_MONTH = r"(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.?"
+_DATE_TEXT = (
+    rf"(?:{_MONTH}\s+\d{{1,2}}(?:st|nd|rd|th)?,?\s+20\d\d"
+    rf"|\d{{1,2}}(?:st|nd|rd|th)?\s+{_MONTH},?\s+20\d\d)"
+)
+# Only where a headline dates itself. An edition's own date, after its
+# title: "Market Preview, June 22, 2026: ... BEL ₹1,081-Cr Orders" reached
+# the event corpus on 20 Oct as that day's BEL order. Or a press release's:
+# "... has informed the Exchange regarding a press release dated September
+# 02, 2026". Not the other dates a headline carries — a quarter's end, an
+# AGM, a circular from 2020 — which are no guide to when it was written.
+_SELF_DATED = (
+    re.compile(rf"^[^()]{{3,80}}?[,(–-]\s*(?P<d>{_DATE_TEXT})\s*(?:[:)]|$)", re.I),
+    re.compile(rf"\bpress release dated\s+(?P<d>{_DATE_TEXT})", re.I),
+)
+
+
+def headline_date(text: Any, today: str = "") -> Optional[str]:
+    """The ISO date a headline gives for itself (see _SELF_DATED), or None.
+    A date after ``today`` is no publication date."""
+    today = today or datetime.date.today().isoformat()
+    for pattern in _SELF_DATED:
+        m = pattern.search(str(text or ""))
+        if not m:
+            continue
+        words = re.sub(r"(?<=\d)(?:st|nd|rd|th)\b|[,.]", " ", m.group("d")).split()
+        if words[0].isdigit():
+            words = [words[1], words[0], words[2]]
+        try:
+            day = datetime.datetime.strptime(
+                f"{words[0][:3]} {words[1]} {words[2]}", "%b %d %Y"
+            ).date()
+        except ValueError:
+            continue
+        if day.isoformat() <= today:
+            return day.isoformat()
+    return None
+
+
 def _days_between(a: str, b: str) -> Optional[int]:
     try:
         return abs(
@@ -200,7 +241,7 @@ def _same_story(a: Dict[str, Any], b: Dict[str, Any]) -> bool:
     wa, wb = _words(a.get("headline", "")), _words(b.get("headline", ""))
     if not wa or not wb:
         return False
-    return len(wa & wb) / len(wa | wb) >= 0.35
+    return len(wa & wb) / len(wa | wb) >= STORY_OVERLAP
 
 
 def cluster_stories(events: List[Dict[str, Any]]) -> int:

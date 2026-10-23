@@ -1492,3 +1492,60 @@ def test_a_cut_headline_is_graded_from_what_is_left_and_never_firmer():
     kept = {e["headline"]: e for e in refresh_merged_events([mou, rumour], wl)}
     assert kept[mou["headline"]]["certainty"] == "announced"
     assert kept[rumour["headline"]]["certainty"] == "reported"
+
+
+@pytest.mark.parametrize(
+    "headline,grade",
+    [
+        # A thought about a deal, to the end of the statement.
+        ("Reliance weighs stake sale in retail arm", "reported"),
+        ("Tata Electronics considers bid for chip packaging unit", "reported"),
+        # The shortage is stated as fact; only the response is weighed.
+        (
+            "LS MnM weighs copper concentrate cuts as shortages squeeze smelter "
+            "profits",
+            "completed",
+        ),
+        ("Apple CEO Weighs Chinese Memory Chips Amid Shortage", "completed"),
+        # Pressure, not a thought.
+        ("Rupee weakness weighs on Dixon margins", "completed"),
+    ],
+)
+def test_weighing_a_deal_is_a_thought_and_a_shortage_beside_it_is_not(headline, grade):
+    assert classify_certainty(headline) == grade
+
+
+def test_an_event_the_feed_leaves_undated_takes_the_date_its_headline_gives():
+    """Feeds without dates stamped "Market Preview, June 22, 2026: ... BEL
+    ₹1,081-Cr Orders" as the run's own day. Dated by its headline, it ages
+    out with everything else from June."""
+    wl = {"aerospace_defence": [{"ticker": "BEL", "name": "Bharat Electronics"}]}
+    headline = "Market Preview, June 22, 2026: BEL wins orders worth Rs 1,081 crore"
+    (event,) = classify_headlines({"corporate_agreements": [{"title": headline}]}, wl)
+    assert event["date"] == "2026-06-22"
+    assert refresh_merged_events([event], wl, today="2026-10-20") == []
+    # One stored before this, as the run's day, is re-dated and goes too.
+    stored = dict(event, date="2026-10-20")
+    assert refresh_merged_events([stored], wl, today="2026-10-20") == []
+
+
+def test_a_hedge_covers_the_deal_it_governs_whatever_follows():
+    """ "As shares rally" is the market's reaction; the sale is still only
+    weighed. Graded from where the event's own phrase sits."""
+    from analysis.event_engine import headline_certainty
+
+    assert headline_certainty("Reliance weighs stake sale as shares rally") == (
+        "reported"
+    )
+    assert (
+        classify_certainty("Reliance weighs stake sale as shares rally", "stake sale")
+        == "reported"
+    )
+    # The shortage after "as" is stated, not weighed.
+    assert (
+        classify_certainty(
+            "LS MnM weighs copper concentrate cuts as shortages squeeze smelters",
+            "shortage",
+        )
+        == "completed"
+    )
