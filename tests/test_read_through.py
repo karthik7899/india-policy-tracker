@@ -956,7 +956,7 @@ def test_freight_reaches_the_holdings_that_pay_it_not_those_it_pays():
 
 def test_a_story_naming_several_inputs_is_still_one_row():
     """ "Memory chip shortage" names memory, memory chips and chips: three
-    inputs, one story, and another outlet's "chip shortage" is the same one.
+    inputs, one story, and another outlet's telling of it is the same one.
     Keyed on the input alone, it came out as a row per input."""
     graph = {
         "edges": [
@@ -969,7 +969,25 @@ def test_a_story_naming_several_inputs_is_still_one_row():
         graph,
         WATCHLIST,
         today=TODAY,
-        headlines=["Memory chip shortage deepens", "Chip shortage hits phone makers"],
+        headlines=[
+            "Memory chip shortage deepens",
+            "Memory chip shortages deepen, says TrendForce",
+        ],
     )
     (flag,) = flags
     assert (flag["sector"], flag["reports"]) == ("manufacturing_electronics", 2)
+
+
+def test_two_different_stories_about_one_input_stay_two_rows():
+    """Every copper shortage reads "copper scarcer or dearer"; a mine strike
+    in Chile and a smelter in Korea are still two developments, not one
+    story reported twice."""
+    flags = _run(
+        headlines=[
+            "Copper prices surge on Chile mine strike",
+            "LS MnM weighs copper concentrate cuts as shortages squeeze smelter "
+            "profits",
+        ]
+    )
+    assert sorted(f["reports"] for f in flags) == [1, 1]
+    assert {f["sector"] for f in flags} == {"clean_energy"}

@@ -985,16 +985,61 @@ def _partner_news(event, graph, watchlist, peers=None):
     return out
 
 
+def _story_words(text):
+    """A headline's distinctive words (event_evidence._words), a plural
+    folded into its singular: "shortages squeeze smelters" and "shortage
+    squeezes smelters" are one story's words."""
+    from analysis.event_evidence import _words
+
+    return {w[:-1] if len(w) > 4 and w.endswith("s") else w for w in _words(text)}
+
+
+def _squeeze_words():
+    """Words every headline behind an input squeeze shares by construction:
+    its own vocabulary, and the asides headlines wrap it in."""
+    words = {"amid", "amidst", "says", "said"}
+    for phrase in _SQUEEZE_MARKERS + _EASING_MARKERS:
+        words |= _story_words(phrase)
+    return words
+
+
+def _same_story(a, b):
+    """Two flags' headlines telling one story: within a week, and most of
+    their distinctive words in common — event_evidence's test for events,
+    which needs a holding in common that a read-through's headline rarely
+    names.
+
+    For an input squeeze, the words that make it one — the input, "shortage",
+    "amid" — are left out: "Apple CEO weighs Chinese memory chips amid
+    shortage" and "Smartphone shipments fall amid memory chip shortage" share
+    nothing else, and are two developments."""
+    from analysis.event_evidence import STORY_OVERLAP, STORY_WINDOW_DAYS
+    from analysis.event_evidence import _days_between
+
+    gap = _days_between(str(a.get("date", "")), str(b.get("date", "")))
+    if gap is None or gap > STORY_WINDOW_DAYS:
+        return False
+    wa, wb = _story_words(a["trigger"]), _story_words(b["trigger"])
+    if a.get("mechanism") == "input_squeeze":
+        shared = _squeeze_words()
+        for flag in (a, b):
+            shared |= _story_words((flag.get("chain") or [""])[0])
+        wa, wb = wa - shared, wb - shared
+    return bool(wa and wb) and len(wa & wb) / len(wa | wb) >= STORY_OVERLAP
+
+
 def _dedupe(flags):
-    """One row per claim: what happened (the chain's first link), how it
-    travels and which way, and the holdings it lands on.
+    """One row per story and claim: the holdings it lands on, how it travels
+    and which way.
 
     The same headline can reach one sector by several chains — two suppliers
-    to the same customer, say — and the same story reaches the corpus from
-    several outlets: on 20 Oct two reports of one LS MnM copper cut were six
-    of the ten rows. Showing it twice reads as two problems. The surviving
-    row keeps the best-weighted chain, then the newest report, and counts
-    the reports behind it (``reports``).
+    to the same customer, or memory, memory chips and chips in one shortage —
+    and the same story reaches the corpus from several outlets: on 20 Oct two
+    reports of one LS MnM copper cut were six of the ten rows. Showing it
+    twice reads as two problems. Two different copper stories are two
+    developments, though, and stay two rows. The surviving row keeps the
+    best-weighted chain, then the newest report, and counts the reports
+    behind it (``reports``).
     """
     # Tickers are part of the key because a partner chain is scoped to one
     # company: Vivo hitting two EMS holdings' ventures is two rows, and keying
@@ -1012,9 +1057,8 @@ def _dedupe(flags):
 
     out = []
     for rows in groups.values():
-        # Within a group, rows are one claim if they share a headline (one
-        # story naming memory, memory chips and chips) or a first link (one
-        # story in two outlets' words): joined either way, transitively.
+        # Within a group, rows are one if they share a headline or tell the
+        # same story (_same_story): joined either way, transitively.
         parent = list(range(len(rows)))
 
         def root(i):
@@ -1023,16 +1067,12 @@ def _dedupe(flags):
                 i = parent[i]
             return i
 
-        first_with = {}
-        for i, flag in enumerate(rows):
-            for mark in (
-                ("trigger", flag["trigger"]),
-                ("claim", (flag.get("chain") or [flag["trigger"]])[0]),
-            ):
-                if mark in first_with:
-                    parent[root(i)] = root(first_with[mark])
-                else:
-                    first_with[mark] = i
+        for i in range(len(rows)):
+            for j in range(i + 1, len(rows)):
+                if rows[i]["trigger"] == rows[j]["trigger"] or _same_story(
+                    rows[i], rows[j]
+                ):
+                    parent[root(j)] = root(i)
         claims: Dict[int, List[Dict[str, Any]]] = {}
         for i, flag in enumerate(rows):
             claims.setdefault(root(i), []).append(flag)

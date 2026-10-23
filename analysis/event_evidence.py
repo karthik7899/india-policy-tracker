@@ -40,6 +40,8 @@ FILING_WINDOW_AFTER = 3
 
 # Two headlines are one story only within this many days of each other.
 STORY_WINDOW_DAYS = 7
+# Share of distinctive words two headlines of one story have in common.
+STORY_OVERLAP = 0.35
 
 # Filing vocabulary per event type. Matched against the filing's own subject
 # text — NSE's "Bagging/Receiving of orders/contracts", a company's "Receipt
@@ -239,7 +241,7 @@ def _same_story(a: Dict[str, Any], b: Dict[str, Any]) -> bool:
     wa, wb = _words(a.get("headline", "")), _words(b.get("headline", ""))
     if not wa or not wb:
         return False
-    return len(wa & wb) / len(wa | wb) >= 0.35
+    return len(wa & wb) / len(wa | wb) >= STORY_OVERLAP
 
 
 def cluster_stories(events: List[Dict[str, Any]]) -> int:
