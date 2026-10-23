@@ -815,7 +815,7 @@ class TestPeersRetry:
         assert session.calls == 1, "a 200 is an answer; retrying it is pointless"
         assert result.rows == []
         assert result.outcome == sc.OUTCOME_NO_ROWS
-        # And it carries the evidence needed to fix the parser without having
+        # And it carries the evidence needed to update the parser without having
         # to reach Screener by hand.
         assert "table=no" in result.detail
         assert "log in" in result.detail
