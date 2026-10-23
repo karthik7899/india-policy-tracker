@@ -16,6 +16,39 @@ export function esc(value) {
     .replace(/'/g, "&#39;");
 }
 
+function setSafeHTML(node, html) {
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  function sanitize(n) {
+    if (n.nodeType === 1) {
+      const tag = n.tagName.toLowerCase();
+      if (tag === "script" || tag === "iframe" || tag === "object" || tag === "embed" || tag === "base") {
+        n.remove();
+        return;
+      }
+      for (const attr of Array.from(n.attributes)) {
+        if (attr.name.startsWith("on")) {
+          n.removeAttribute(attr.name);
+        } else if (attr.name === "href" || attr.name === "src" || attr.name === "action" || attr.name === "formaction" || attr.name === "xlink:href") {
+          const cleanValue = attr.value.replace(/[\x00-\x20]/g, "").toLowerCase();
+          if (cleanValue.startsWith("javascript:") || cleanValue.startsWith("vbscript:") || cleanValue.startsWith("data:")) {
+            n.removeAttribute(attr.name);
+          }
+        }
+      }
+    }
+    if (n.content) {
+      for (const child of Array.from(n.content.childNodes)) {
+        sanitize(child);
+      }
+    }
+    for (const child of Array.from(n.childNodes)) {
+      sanitize(child);
+    }
+  }
+  sanitize(doc.body);
+  node.replaceChildren(...doc.body.childNodes);
+}
+
 /**
  * Create an element.
  *
@@ -28,7 +61,7 @@ export function el(tag, props = {}, ...children) {
   for (const [key, value] of Object.entries(props)) {
     if (value === null || value === undefined || value === false) continue;
     if (key === "html") {
-      node.innerHTML = value;
+      setSafeHTML(node, value);
     } else if (key === "class") {
       node.className = value;
     } else if (key === "dataset") {
