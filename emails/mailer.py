@@ -1773,61 +1773,7 @@ def _sector_block_news_html(block, coverage_counts=None):
     return "".join(rows)
 
 
-def _render_email(brief_data, watchlist, caps):
-    """Renders the HTML document at the row caps given."""
-    brief_data = _escape_deep(brief_data or {})
-    watchlist = _escape_deep(watchlist or {})
-    today_str = datetime.date.today().strftime("%B %d, %Y")
-
-    style = """
-    <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0b0f19; color: #cbd5e1; margin: 0; padding: 20px; }
-        .preheader { display: none !important; visibility: hidden; opacity: 0; color: transparent; height: 0; width: 0; overflow: hidden; mso-hide: all; }
-        .container { max-width: 650px; margin: 0 auto; background-color: #111827; border-radius: 12px; border: 1px solid #1f2937; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
-        .header { background: linear-gradient(135deg, #1e3a8a, #0f172a); padding: 32px 30px; text-align: center; border-bottom: 2px solid #3b82f6; }
-        .header h1 { margin: 0; font-size: 24px; color: #ffffff; letter-spacing: 0.5px; }
-        .header p { margin: 6px 0 0 0; font-size: 14px; color: #94a3b8; }
-        .cta-button { display: inline-block; margin-top: 18px; padding: 11px 26px; background: linear-gradient(135deg, #3b82f6, #2563eb); color: #ffffff !important; font-size: 13px; font-weight: 600; text-decoration: none; border-radius: 8px; letter-spacing: 0.3px; box-shadow: 0 2px 8px rgba(37,99,235,0.4); }
-        .summary-strip { display: table; width: 100%; border-collapse: collapse; background-color: #0f172a; border-bottom: 1px solid #1f2937; }
-        .stat { display: table-cell; padding: 16px 10px; text-align: center; border-right: 1px solid #1f2937; vertical-align: middle; }
-        .stat:last-child { border-right: none; }
-        .stat-num { font-size: 22px; font-weight: 700; line-height: 1; }
-        .stat-label { font-size: 10px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 6px; }
-        .method-badge { display: inline-block; margin-left: 6px; padding: 1px 6px; font-size: 8px; font-weight: 600; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.3px; vertical-align: middle; }
-        .method-analyst { background-color: #0c2a4d; color: #60a5fa; }
-        .method-fundamental { background-color: #2a230c; color: #fbbf24; }
-        .section-card { padding: 25px; border-bottom: 1px solid #1f2937; }
-        .section-card:last-child { border-bottom: none; }
-        .sector-title { display: flex; align-items: center; font-size: 18px; color: #3b82f6; font-weight: bold; margin-bottom: 15px; }
-        .sector-icon { margin-right: 8px; font-size: 20px; }
-        .news-item { margin-bottom: 15px; padding-bottom: 12px; border-bottom: 1px dashed #374151; }
-        .news-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-        .news-title { font-size: 14px; font-weight: 600; color: #e2e8f0; text-decoration: none; }
-        .news-title:hover { color: #60a5fa; }
-        .meta-line { font-size: 11px; color: #6b7280; margin-top: 4px; }
-        .badge { display: inline-block; padding: 2px 6px; font-size: 10px; font-weight: bold; border-radius: 4px; text-transform: uppercase; }
-        .badge-positive { background-color: #065f46; color: #34d399; }
-        .badge-neutral { background-color: #374151; color: #9ca3af; }
-        .badge-negative { background-color: #7f1d1d; color: #f87171; }
-        .badge-success-alert { background-color: #065f46; color: #34d399; font-size: 9px; padding: 2px 6px; border-radius: 4px; display: inline-block; }
-        .kpi { margin-left: 6px; font-size: 9px; padding: 2px 6px; border-radius: 4px; font-weight: bold; display: inline-block; }
-        .kpi-pos { background-color: #065f46; color: #34d399; }
-        .kpi-neg { background-color: #7f1d1d; color: #f87171; }
-        .kpi-eps-pos { margin-left: 4px; font-size: 8px; padding: 2px 5px; background-color: #1e1b4b; color: #a78bfa; }
-        .kpi-eps-neg { margin-left: 4px; font-size: 8px; padding: 2px 5px; background-color: #2a1215; color: #f87171; }
-        .ew-td { padding: 8px; font-size: 12px; border-bottom: 1px solid #1f2937; }
-        .stock-table { width: 100%; border-collapse: collapse; margin-top: 15px; background-color: #0f172a; border-radius: 8px; overflow: hidden; border: 1px solid #1f2937; }
-        .stock-table th { background-color: #1e293b; color: #94a3b8; font-size: 11px; padding: 8px; text-align: left; text-transform: uppercase; border-bottom: 1px solid #1f2937; }
-        .stock-table td { padding: 8px; font-size: 12px; border-bottom: 1px solid #1f2937; color: #cbd5e1; }
-        .stock-ticker { font-weight: bold; color: #60a5fa; }
-        .stock-growth { font-weight: bold; color: #34d399; }
-        .stock-catalyst { font-size: 11px; color: #94a3b8; padding: 6px 8px 8px 8px !important; background-color: #0b0f19; }
-        .footer { padding: 20px; background-color: #0f172a; text-align: center; font-size: 11px; color: #4b5563; border-top: 1px solid #1f2937; }
-        .footer a { color: #3b82f6; text-decoration: none; }
-    </style>
-    """
-
-    # Headline counts for the summary strip / preview text.
+def _build_header_html(brief_data, watchlist, caps, today_str, style):
     warnings = brief_data.get("early_warnings", [])
     risk_count = sum(1 for w in warnings if w.get("direction") == "risk")
     opp_count = len(warnings) - risk_count
@@ -1835,9 +1781,6 @@ def _render_email(brief_data, watchlist, caps):
         1 for s in (watchlist or {}) if s in SECTOR_METADATA and s != "macro_indicators"
     )
 
-    # Preheader and executive summary both come from the shared day summary,
-    # so the inbox preview, the subject and the body cannot state different
-    # counts. Computed on the unescaped data, then escaped once here.
     summary = build_summary(brief_data, watchlist)
     preheader = html_lib.escape(build_preheader(summary))
     exec_summary_html = _build_exec_summary_html(summary)
@@ -1879,8 +1822,6 @@ def _render_email(brief_data, watchlist, caps):
             </div>
     """
 
-    # Data-freshness banner: warn prominently when the live price refresh
-    # largely failed, so stale numbers are never silently presented as current.
     freshness = brief_data.get("freshness", {}).get("live_prices")
     if freshness and freshness.get("total"):
         updated, total = freshness["updated"], freshness["total"]
@@ -1899,9 +1840,6 @@ def _render_email(brief_data, watchlist, caps):
         brief_data.get("event_calendar"), brief_data.get("results"), caps
     )
 
-    # Early Warning System. Alerts already shown as cards above are not
-    # repeated: the table used to reprint every card, so one holding with
-    # three signals appeared six times in the first screen of the email.
     carded = {
         _alert_key(w)
         for w in (summary.get("critical") or [])[: caps["warnings"]]
@@ -1913,40 +1851,36 @@ def _render_email(brief_data, watchlist, caps):
         brief_data.get("coverage_count"),
     )
 
-    # Research Engine: thesis health, revision momentum, variant perception,
-    # curve stage, rotation track record — all synthesized from data already
-    # computed above, no new fetches.
     body_html += _build_research_engine_html(brief_data, caps)
     body_html += _build_policy_direction_html(
         brief_data.get("policy_impacts"), caps, brief_data.get("policy_partnerships")
     )
     body_html += _build_policy_balance_html(brief_data.get("policy_balance"))
 
+    return body_html
+
+
+def _build_sectors_html(brief_data, watchlist, caps):
     selected_sectors, eligible_total = _sectors_to_render(brief_data, caps)
     blocks_by_id = {
         b.get("id"): b
         for b in (brief_data.get("sector_blocks") or [])
         if isinstance(b, dict)
     }
+
+    body_html = ""
     for sector in selected_sectors:
         news_items = brief_data.get(sector) or []
         block = blocks_by_id.get(sector)
         meta = _escape_deep(SECTOR_METADATA[sector])
         stocks = watchlist.get(sector, [])
 
-        # Format news HTML. The email carries the top items per sector to
-        # stay under Gmail's ~102 KB clip limit; the dashboard has them all.
         news_html = ""
         if block:
             news_html = _sector_block_news_html(block, brief_data.get("coverage_count"))
         elif news_items:
-            # Same rules as the feed sections: no routine disclosure, no
-            # items the LLM reader judged immaterial, gist where there is one.
             news_items = _feed_rows(news_items, "title", watchlist)
             for item in news_items[: caps["news"]]:
-                # Policy direction for this sector, from the LLM reader. The
-                # keyword scorer marked 54 of 72 items "Positive" and none
-                # "Negative", so its badge on every row said nothing.
                 badge = _policy_badge(item.get("policy"))
                 news_html += f"""
                 <div class="news-item">
@@ -1967,9 +1901,6 @@ def _render_email(brief_data, watchlist, caps):
         else:
             news_html = "<p style='font-size: 13px; color: #4b5563; font-style: italic;'>No policy updates tracked in this cycle.</p>"
 
-        # Format stocks HTML table — capped per sector: the email is the
-        # digest, the dashboard is the detail (47 full cards alone were
-        # ~36 KB, pushing even the compact render against Gmail's clip).
         stock_rows = ""
         shown_stocks = stocks[: caps.get("stocks", len(stocks))]
         for s in shown_stocks:
@@ -1978,7 +1909,6 @@ def _render_email(brief_data, watchlist, caps):
             earnings_val = s.get("earnings_growth")
             analyst_count = s.get("analyst_count")
 
-            # Contextual revenue growth badge
             growth_badge = ""
             if growth_val:
                 is_negative = growth_val.startswith("-")
@@ -1987,7 +1917,6 @@ def _render_email(brief_data, watchlist, caps):
                 else:
                     growth_badge = f"<span class='kpi kpi-pos'>{growth_val} YoY</span>"
 
-            # Contextual earnings growth badge
             earnings_badge = ""
             if earnings_val:
                 is_negative = earnings_val.startswith("-")
@@ -2003,8 +1932,6 @@ def _render_email(brief_data, watchlist, caps):
             potential_str = s.get("growth_pct")
             potential_color = "#cbd5e1"
             if potential_str and s.get("upside_capped"):
-                # The fundamental estimate was clamped at this bound; the
-                # number is the bound, not the estimate (dashboard/builder.py).
                 bound = "&le;" if s["upside_capped"] == "floor" else "&ge;"
                 potential_str = f"{bound} {potential_str} (capped)"
                 potential_color = (
@@ -2012,13 +1939,12 @@ def _render_email(brief_data, watchlist, caps):
                 )
             elif potential_str:
                 if potential_str.startswith("-"):
-                    potential_color = "#f87171"  # red
+                    potential_color = "#f87171"
                 elif potential_str.startswith("+"):
-                    potential_color = "#34d399"  # green
+                    potential_color = "#34d399"
             else:
                 potential_str = "—"
 
-            # Disclose how the upside was derived (analyst consensus vs model).
             method = s.get("estimate_method")
             method_badge = ""
             if method == "Analyst Consensus":
@@ -2029,7 +1955,6 @@ def _render_email(brief_data, watchlist, caps):
             target_val = s.get("target")
             target_str = f"₹{target_val}" if target_val else "—"
 
-            # Rating badge with analyst count
             analyst_str = f" ({analyst_count})" if analyst_count else ""
             rating_badge = (
                 f"<span class='badge badge-neutral' style='font-size: 8px; margin-left: 6px; background-color: #1e293b; color: #60a5fa;'>{rating_text}{analyst_str}</span>"
@@ -2049,11 +1974,7 @@ def _render_email(brief_data, watchlist, caps):
                 <td class="stock-growth" style="color: {potential_color} !important;">{potential_str}{method_badge}</td>
             </tr>
             """
-            # The "Catalyst:" line under each stock was dropped: it is a fixed
-            # description from config, identical every morning. It stays on
-            # the dashboard, where reference text belongs.
 
-        # Format emerging players HTML (from dynamic scanner)
         emerging_html = ""
         if (
             "emerging_players" in brief_data
@@ -2063,9 +1984,6 @@ def _render_email(brief_data, watchlist, caps):
             if players:
                 players_list = []
                 for p in players:
-                    # "Shibpur [Unresolved]" was a college, not a competitor:
-                    # a name the scanner could not resolve to a company is
-                    # not worth the reader's attention.
                     if isinstance(p, dict) and p.get("status") == "Unresolved":
                         continue
                     if isinstance(p, dict):
@@ -2127,8 +2045,6 @@ def _render_email(brief_data, watchlist, caps):
             </div>
         """
 
-    # Sectors dropped by the cap are stated, not silently absent. "18
-    # monitored, 6 shown" is a different message from "only 6 exist".
     hidden_sectors = eligible_total - len(selected_sectors)
     if hidden_sectors > 0 or not selected_sectors:
         note = (
@@ -2144,8 +2060,10 @@ def _render_email(brief_data, watchlist, caps):
             "See every sector on the dashboard</a>.</p></div>"
         )
 
-    # Append Corporate Agreements & Product Launches. Each list is filtered
-    # and shortened by _feed_rows(); see there for the rules.
+    return body_html
+
+
+def _build_appendix_html(brief_data, watchlist, caps):
     agreements_html = ""
     agreements = _feed_rows(
         brief_data.get("corporate_agreements", []), "title", watchlist
@@ -2170,8 +2088,6 @@ def _render_email(brief_data, watchlist, caps):
         for item in _feed_rows(
             brief_data.get("product_launches", []), "product", watchlist
         )
-        # "Unknown (Manufacturing): UNESCO unveils ONE OCEAN installation" —
-        # a launch nobody attributed to a company is not ours to report.
         if str(item.get("company") or "").strip().lower() not in ("", "unknown")
     ]
     if launches:
@@ -2204,7 +2120,6 @@ def _render_email(brief_data, watchlist, caps):
         </div>
         """
 
-    # Global Emerging Competitors from PLI
     emerging_competitors = brief_data.get("emerging_competitors", [])
     emerging_html_global = ""
     if emerging_competitors:
@@ -2239,10 +2154,7 @@ def _render_email(brief_data, watchlist, caps):
         </div>
         """
 
-    # Append Institutional Activity & SEBI Filings
     inst_html = ""
-    # Only deals in names we hold. Block deals in Pine Labs, Lenskart and
-    # Groww are market news, not a flow signal for this watchlist.
     inst_activity = _feed_rows(
         brief_data.get("institutional_activity", []),
         "headline",
@@ -2289,13 +2201,11 @@ def _render_email(brief_data, watchlist, caps):
         </div>
         """
 
-    # Append Graham Valuation & Buffett Moat
     valuation_html = ""
     mos = brief_data.get("margin_of_safety", [])
     buffett = brief_data.get("buffett_valuation", [])
 
     if mos or buffett:
-        # Margin of safety items (Graham value screen)
         passed_mos = [
             m for m in mos if m.get("is_defensive_pass") or m.get("is_bargain")
         ]
@@ -2317,7 +2227,6 @@ def _render_email(brief_data, watchlist, caps):
             ]
         )
 
-        # Valuation Warning / Caution List
         caution_list = []
         for sector, stocks in watchlist.items():
             for s in stocks:
@@ -2403,8 +2312,6 @@ def _render_email(brief_data, watchlist, caps):
     )
     sector_growth_html = _build_sector_growth_html(brief_data.get("sector_growth", []))
 
-    # The per-source feeds, now an appendix: "Your Holdings" above carries
-    # the same news by company. A few rows each, for what is not a holding.
     appendix_head = (
         "<div style='padding: 12px 25px 0 25px; color:#64748b; font-size:11px;"
         " text-transform:uppercase; letter-spacing:0.05em;'>Appendix &mdash; latest by"
@@ -2412,7 +2319,8 @@ def _render_email(brief_data, watchlist, caps):
         if (agreements_html or launches_html or filings_html)
         else ""
     )
-    body_html += (
+
+    return (
         sector_valuation_html
         + sector_growth_html
         + appendix_head
@@ -2424,11 +2332,8 @@ def _render_email(brief_data, watchlist, caps):
         + valuation_html
     )
 
-    # Closing sections, in the order the reader needs them: what moved in the
-    # watchlist itself, where valuations sit at the edges, what the run could
-    # not see, and then a single next action. The data-quality note comes last
-    # of the four on purpose -- it qualifies everything above it, so it reads
-    # as a caveat rather than as a disclaimer nobody reaches.
+
+def _build_footer_html(brief_data, watchlist, caps):
     suppressed = [
         {"ticker": s.get("ticker"), "reason": "no analyst or fundamental base"}
         for key, stocks in (watchlist or {}).items()
@@ -2436,13 +2341,11 @@ def _render_email(brief_data, watchlist, caps):
         for s in stocks
         if isinstance(s, dict) and s.get("estimate_method") == "No Estimate"
     ]
-    body_html += (
+
+    body_html = (
         build_watchlist_changes_html(
             brief_data.get("watchlist_changes"), caps.get("changes", MAX_CHANGES)
         )
-        # The cheapest/dearest table repeated Sector Valuation above it
-        # line for line (and double-escaped its labels); only the
-        # "not valued" note is new information, so only that is sent.
         + build_valuation_extremes_html(
             [],
             suppressed,
@@ -2453,6 +2356,7 @@ def _render_email(brief_data, watchlist, caps):
         + build_cta_html(DASHBOARD_URL)
     )
 
+    freshness = brief_data.get("freshness", {}).get("live_prices")
     body_html += f"""
             <div class="footer">
                 <p>This briefing is an automated policy analysis generated using PIB &amp; public financial indicators.</p>
@@ -2464,9 +2368,68 @@ def _render_email(brief_data, watchlist, caps):
     </body>
     </html>
     """
+    return body_html
 
-    # Gmail clips messages over ~102 KB; indentation alone was ~20% of the
-    # document. Whitespace is insignificant in HTML, so compact it.
+
+def _render_email(brief_data, watchlist, caps):
+    """Renders the HTML document at the row caps given."""
+    brief_data = _escape_deep(brief_data or {})
+    watchlist = _escape_deep(watchlist or {})
+    today_str = datetime.date.today().strftime("%B %d, %Y")
+
+    style = """
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0b0f19; color: #cbd5e1; margin: 0; padding: 20px; }
+        .preheader { display: none !important; visibility: hidden; opacity: 0; color: transparent; height: 0; width: 0; overflow: hidden; mso-hide: all; }
+        .container { max-width: 650px; margin: 0 auto; background-color: #111827; border-radius: 12px; border: 1px solid #1f2937; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+        .header { background: linear-gradient(135deg, #1e3a8a, #0f172a); padding: 32px 30px; text-align: center; border-bottom: 2px solid #3b82f6; }
+        .header h1 { margin: 0; font-size: 24px; color: #ffffff; letter-spacing: 0.5px; }
+        .header p { margin: 6px 0 0 0; font-size: 14px; color: #94a3b8; }
+        .cta-button { display: inline-block; margin-top: 18px; padding: 11px 26px; background: linear-gradient(135deg, #3b82f6, #2563eb); color: #ffffff !important; font-size: 13px; font-weight: 600; text-decoration: none; border-radius: 8px; letter-spacing: 0.3px; box-shadow: 0 2px 8px rgba(37,99,235,0.4); }
+        .summary-strip { display: table; width: 100%; border-collapse: collapse; background-color: #0f172a; border-bottom: 1px solid #1f2937; }
+        .stat { display: table-cell; padding: 16px 10px; text-align: center; border-right: 1px solid #1f2937; vertical-align: middle; }
+        .stat:last-child { border-right: none; }
+        .stat-num { font-size: 22px; font-weight: 700; line-height: 1; }
+        .stat-label { font-size: 10px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 6px; }
+        .method-badge { display: inline-block; margin-left: 6px; padding: 1px 6px; font-size: 8px; font-weight: 600; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.3px; vertical-align: middle; }
+        .method-analyst { background-color: #0c2a4d; color: #60a5fa; }
+        .method-fundamental { background-color: #2a230c; color: #fbbf24; }
+        .section-card { padding: 25px; border-bottom: 1px solid #1f2937; }
+        .section-card:last-child { border-bottom: none; }
+        .sector-title { display: flex; align-items: center; font-size: 18px; color: #3b82f6; font-weight: bold; margin-bottom: 15px; }
+        .sector-icon { margin-right: 8px; font-size: 20px; }
+        .news-item { margin-bottom: 15px; padding-bottom: 12px; border-bottom: 1px dashed #374151; }
+        .news-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .news-title { font-size: 14px; font-weight: 600; color: #e2e8f0; text-decoration: none; }
+        .news-title:hover { color: #60a5fa; }
+        .meta-line { font-size: 11px; color: #6b7280; margin-top: 4px; }
+        .badge { display: inline-block; padding: 2px 6px; font-size: 10px; font-weight: bold; border-radius: 4px; text-transform: uppercase; }
+        .badge-positive { background-color: #065f46; color: #34d399; }
+        .badge-neutral { background-color: #374151; color: #9ca3af; }
+        .badge-negative { background-color: #7f1d1d; color: #f87171; }
+        .badge-success-alert { background-color: #065f46; color: #34d399; font-size: 9px; padding: 2px 6px; border-radius: 4px; display: inline-block; }
+        .kpi { margin-left: 6px; font-size: 9px; padding: 2px 6px; border-radius: 4px; font-weight: bold; display: inline-block; }
+        .kpi-pos { background-color: #065f46; color: #34d399; }
+        .kpi-neg { background-color: #7f1d1d; color: #f87171; }
+        .kpi-eps-pos { margin-left: 4px; font-size: 8px; padding: 2px 5px; background-color: #1e1b4b; color: #a78bfa; }
+        .kpi-eps-neg { margin-left: 4px; font-size: 8px; padding: 2px 5px; background-color: #2a1215; color: #f87171; }
+        .ew-td { padding: 8px; font-size: 12px; border-bottom: 1px solid #1f2937; }
+        .stock-table { width: 100%; border-collapse: collapse; margin-top: 15px; background-color: #0f172a; border-radius: 8px; overflow: hidden; border: 1px solid #1f2937; }
+        .stock-table th { background-color: #1e293b; color: #94a3b8; font-size: 11px; padding: 8px; text-align: left; text-transform: uppercase; border-bottom: 1px solid #1f2937; }
+        .stock-table td { padding: 8px; font-size: 12px; border-bottom: 1px solid #1f2937; color: #cbd5e1; }
+        .stock-ticker { font-weight: bold; color: #60a5fa; }
+        .stock-growth { font-weight: bold; color: #34d399; }
+        .stock-catalyst { font-size: 11px; color: #94a3b8; padding: 6px 8px 8px 8px !important; background-color: #0b0f19; }
+        .footer { padding: 20px; background-color: #0f172a; text-align: center; font-size: 11px; color: #4b5563; border-top: 1px solid #1f2937; }
+        .footer a { color: #3b82f6; text-decoration: none; }
+    </style>
+    """
+
+    body_html = _build_header_html(brief_data, watchlist, caps, today_str, style)
+    body_html += _build_sectors_html(brief_data, watchlist, caps)
+    body_html += _build_appendix_html(brief_data, watchlist, caps)
+    body_html += _build_footer_html(brief_data, watchlist, caps)
+
     compact = "\n".join(line.strip() for line in body_html.split("\n") if line.strip())
     return _hoist_inline_styles(compact)
 
