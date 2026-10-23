@@ -15,20 +15,20 @@ def clean_news_item(entry, query_term):
     Strips out standard Google News boilerplate from titles and determines sentiment.
     Returns None if the article is older than 7 days.
     """
-    raw_title = entry.get('title', 'No Title')
-    if raw_title != 'No Title':
+    raw_title = entry.get("title", "No Title")
+    if raw_title != "No Title":
         raw_title = html.unescape(re.sub(r"<[^>]+>", "", raw_title)).strip()
 
-    raw_summary = entry.get('summary', '')
+    raw_summary = entry.get("summary", "")
 
     # Clean up Google News suffix (e.g. " - Times of India")
-    if ' - ' in raw_title:
-        title_parts = raw_title.rsplit(' - ', 1)
+    if " - " in raw_title:
+        title_parts = raw_title.rsplit(" - ", 1)
         title = title_parts[0].strip()
         source = title_parts[1].strip()
     else:
         title = raw_title.strip()
-        source = entry.get('source', {}).get('title', 'Finance Media')
+        source = entry.get("source", {}).get("title", "Finance Media")
 
     link = entry.get("link", "")
 
