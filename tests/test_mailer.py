@@ -230,3 +230,97 @@ def test_a_small_overrun_costs_a_small_trim(monkeypatch):
     assert trimmed < full
     monkeypatch.setattr(mailer, "_SIZE_BUDGET_BYTES", full - 1)
     assert len(mailer.build_html_email(brief, wl).encode()) == trimmed
+
+
+# ---------------------------------------------------------------------------
+# Inline styles hoisted into classes
+# ---------------------------------------------------------------------------
+
+
+def _page(body, css=".a { color: red; }"):
+    return (
+        f"<!DOCTYPE html><html><head><style>{css}</style></head><body>"
+        f'<span class="preheader">p</span><div class="container">{body}</div>'
+        "</body></html>"
+    )
+
+
+def test_repeated_inline_styles_move_into_classes():
+    common = "color: #94a3b8; font-size: 11px;"
+    html = _page(
+        f"<p style='{common}'>a</p>" * 3
+        + f"<span class='kpi' style='{common}'>b</span>"
+        + "<b style='color: blue'>once</b>"
+        + "<i style='color: #34d399 !important;'>i</i>" * 4
+    )
+    out = mailer._hoist_inline_styles(html)
+    assert ".container .s0{color:#94a3b8;font-size:11px}" in out
+    assert out.count('<p class="s0">') == 3
+    # An element's own class keeps its place, with the hoisted one after it.
+    assert "<span class='kpi s0'>" in out
+    # Used once, it saves nothing; with !important, a class could not
+    # outrank what the inline style does.
+    assert "<b style='color: blue'>" in out
+    assert out.count("style='color: #34d399 !important;'") == 4
+    # The stylesheet is minified on the way.
+    assert "<style>.a{color:red}.container .s0{" in out
+
+
+def _element_styles(html):
+    """Per element: tag, classes other than hoisted ones, its declarations
+    (a hoisted class read back from its rule) and its other attributes."""
+    import re
+
+    rules = dict(re.findall(r"\.container \.(s\d+)\{([^}]*)\}", html))
+    out = []
+    for match in mailer._TAG_RE.finditer(html[html.find('<div class="container">') :]):
+        attrs = {
+            a.group(1).lower(): (a.group(2) or "")[1:-1]
+            for a in mailer._ATTR_RE.finditer(match.group(2))
+        }
+        classes = attrs.get("class", "").split()
+        hoisted = [c for c in classes if c in rules]
+        style = attrs.get("style")
+        if hoisted:
+            declared = rules[hoisted[0]]
+        elif style is not None:
+            declared = mailer._declarations(style) or style
+        else:
+            declared = None
+        out.append(
+            (
+                match.group(1).lower(),
+                [c for c in classes if c not in rules],
+                declared,
+                sorted((k, v) for k, v in attrs.items() if k not in ("class", "style")),
+            )
+        )
+    return out
+
+
+def test_a_hoisted_email_keeps_every_elements_style(monkeypatch):
+    """Read back, every element carries exactly the declarations it was
+    rendered with. (The cascade was checked in Chromium on 15-22 Oct 2026's
+    emails: every computed property and box identical at 1024 and 375 px.)"""
+    brief, wl = _bulky_brief(), _bulky_watchlist()
+    hoisted = mailer._render_email(brief, wl, mailer._CAPS_NORMAL)
+    monkeypatch.setattr(mailer, "_hoist_inline_styles", lambda html: html)
+    plain = mailer._render_email(brief, wl, mailer._CAPS_NORMAL)
+
+    assert ".container .s0{" in hoisted
+    assert len(hoisted.encode()) < len(plain.encode())
+    assert _element_styles(hoisted) == _element_styles(plain)
+
+
+def test_the_stylesheet_stays_under_gmails_limit(monkeypatch):
+    import re
+
+    brief, wl = _bulky_brief(), _bulky_watchlist()
+    html = mailer._render_email(brief, wl, mailer._CAPS_NORMAL)
+    css = re.search(r"<style>(.*?)</style>", html, re.S).group(1)
+    assert len(css) <= mailer._STYLE_BUDGET_BYTES
+
+    # With no room left, nothing is hoisted and every style stays inline.
+    monkeypatch.setattr(mailer, "_STYLE_BUDGET_BYTES", 0)
+    html = mailer._render_email(brief, wl, mailer._CAPS_NORMAL)
+    assert ".container .s0" not in html and "style=" in html

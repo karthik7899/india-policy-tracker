@@ -129,6 +129,128 @@ _CAP_LADDER = (
     ("minimal", _CAPS_MINIMAL),
 )
 
+# An inline style used on at least this many elements moves into the
+# stylesheet as a class. Each one is written out in full on every element
+# that carries it: on 22 Oct 2026 style attributes were 26 KB of a 104.6 KB
+# email, and the full caps had not fitted the budget on any day since at
+# least 15 Oct.
+_HOIST_MIN_USES = 3
+# Gmail ignores a <style> block over 16 KB (8,192 characters by some
+# reports), and every hoisted style would go with it.
+_STYLE_BUDGET_BYTES = 8_000
+_CONTAINER_TAG = '<div class="container">'
+
+_TAG_RE = re.compile(
+    r"<([a-zA-Z][\w-]*)"
+    r"((?:\s+[^\s=<>\"'/]+(?:\s*=\s*(?:\"[^\"]*\"|'[^']*'|[^\s\"'=<>`]+))?)*)"
+    r"(\s*/?)>"
+)
+_ATTR_RE = re.compile(
+    r"\s+([^\s=<>\"'/]+)(?:\s*=\s*(\"[^\"]*\"|'[^']*'|[^\s\"'=<>`]+))?"
+)
+
+
+def _declarations(style):
+    """An inline style as ``prop:value;...``, its spacing dropped; None for
+    one that must stay inline: ``!important`` there outranks stylesheet
+    rules that a class could not, and a ``;`` inside quotes or ``url()``
+    would be split as if it ended a declaration."""
+    if "!important" in style or "url(" in style or re.search(r"['\"][^'\"]*;", style):
+        return None
+    out = []
+    for part in style.split(";"):
+        prop, sep, value = part.partition(":")
+        prop, value = prop.strip().lower(), " ".join(value.split())
+        if sep and prop and value:
+            out.append(f"{prop}:{value}")
+    return ";".join(out) or None
+
+
+def _minify_css(css):
+    return re.sub(r"\s*([{};:,])\s*", r"\1", css).replace(";}", "}").strip()
+
+
+def _hoist_inline_styles(html):
+    """The document with its commonest inline styles moved into classes.
+
+    Each becomes a rule under ``.container``, after the stylesheet's own, so
+    it outranks those as the inline style did: (0,2,0) against at most
+    (0,2,0), and later. A stylesheet rule marked ``!important`` still wins,
+    as it did over the inline style. Only elements inside the container are
+    touched. Checked in Chromium on the emails of 15 to 22 Oct 2026, at full
+    and compact caps: every computed property and box of every element
+    unchanged, at 1024 and 375 px.
+    """
+    style_open, style_close = html.find("<style>"), html.find("</style>")
+    start = html.find(_CONTAINER_TAG)
+    if style_open < 0 or style_close < style_open or start < style_close:
+        return html
+    css = _minify_css(html[style_open + len("<style>") : style_close])
+    body_start = start + len(_CONTAINER_TAG)
+    body = html[body_start:]
+
+    uses, attr_bytes = {}, {}
+    for match in _TAG_RE.finditer(body):
+        for attr in _ATTR_RE.finditer(match.group(2)):
+            if attr.group(1).lower() == "style" and attr.group(2):
+                key = _declarations(attr.group(2)[1:-1])
+                if key:
+                    uses[key] = uses.get(key, 0) + 1
+                    attr_bytes[key] = len(attr.group(0))
+
+    # Bytes saved, net of the rule: the attribute gives way to a class of
+    # about ten bytes on each element.
+    def net(key):
+        return uses[key] * (attr_bytes[key] - 10) - (len(key) + 18)
+
+    room = _STYLE_BUDGET_BYTES - len(css)
+    names, rules = {}, []
+    for key in sorted(
+        (k for k in uses if uses[k] >= _HOIST_MIN_USES and net(k) > 0),
+        key=lambda k: (-net(k), k),
+    ):
+        rule = f".container .s{len(names)}{{{key}}}"
+        if len(rule) > room:
+            continue
+        room -= len(rule)
+        names[key] = f"s{len(names)}"
+        rules.append(rule)
+
+    def rewrite(match):
+        attrs = list(_ATTR_RE.finditer(match.group(2)))
+        hoisted = None
+        for attr in attrs:
+            if attr.group(1).lower() == "style" and attr.group(2):
+                hoisted = names.get(_declarations(attr.group(2)[1:-1]) or "")
+        if hoisted is None:
+            return match.group(0)
+        out, classed = [], False
+        for attr in attrs:
+            name, value = attr.group(1).lower(), attr.group(2)
+            if name == "style":
+                continue
+            if name == "class" and value and value[0] in "\"'":
+                out.append(f" class={value[0]}{value[1:-1]} {hoisted}{value[0]}")
+                classed = True
+            else:
+                out.append(attr.group(0))
+        if not classed:
+            out.append(f' class="{hoisted}"')
+        return f"<{match.group(1)}{''.join(out)}{match.group(3)}>"
+
+    if not names:
+        body_out = body
+    else:
+        body_out = _TAG_RE.sub(rewrite, body)
+    return (
+        html[:style_open]
+        + "<style>"
+        + css
+        + "".join(rules)
+        + html[style_close:body_start]
+        + body_out
+    )
+
 
 def coverage_link(ticker, count, dashboard_url=None):
     """ "Coverage (n)" as a deep link to that holding's company page.
@@ -2345,7 +2467,8 @@ def _render_email(brief_data, watchlist, caps):
 
     # Gmail clips messages over ~102 KB; indentation alone was ~20% of the
     # document. Whitespace is insignificant in HTML, so compact it.
-    return "\n".join(line.strip() for line in body_html.split("\n") if line.strip())
+    compact = "\n".join(line.strip() for line in body_html.split("\n") if line.strip())
+    return _hoist_inline_styles(compact)
 
 
 def build_html_email(brief_data, watchlist):
