@@ -124,6 +124,45 @@ def test_build_html_email_success():
     assert "High P/E" in html
 
 
+def test_caution_list_keeps_the_order_the_screens_ran():
+    """Repeats are dropped and the rest keep their order. The list used to go
+    through a set, whose order follows each run's hash seed, so one holding's
+    alerts came out in a different order every morning."""
+    alerts = [
+        "Fails Current Ratio (< 2.0)",
+        "Fails Debt Limit (Debt > Net Assets)",
+        "Fails P/E Screen (P/E 34.0 > 15 & Price > Intrinsic)",
+        "No Dividend Yield",
+        "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)",
+        "Fails Debt Limit (Debt > Net Assets)",
+    ]
+    brief_data = {
+        "margin_of_safety": [
+            {"ticker": "DEF", "name": "Defensive Corp", "price": "50"},
+        ]
+    }
+    watchlist = {
+        "cybersecurity": [
+            {
+                "ticker": "CYB",
+                "name": "Cyber Sec Inc",
+                "price": "150.00",
+                "screener": {"valuation_alerts": alerts},
+            }
+        ]
+    }
+
+    html = build_html_email(brief_data, watchlist)
+
+    assert (
+        "Fails Current Ratio (&lt; 2.0), Fails Debt Limit (Debt &gt; Net Assets), "
+        "Fails P/E Screen (P/E 34.0 &gt; 15 &amp; Price &gt; Intrinsic), "
+        "No Dividend Yield, "
+        "Hyper-Growth Reality Check (P/E &gt; 30 &amp; revenue growth decelerating)"
+        "</td>"
+    ) in html
+
+
 def test_build_html_email_empty():
     """Test building HTML email with empty dictionaries."""
     brief_data = {}

@@ -2331,7 +2331,10 @@ def _render_email(brief_data, watchlist, caps):
                             "ticker": s["ticker"],
                             "name": s["name"],
                             "price": s.get("price", "N/A"),
-                            "alerts": list(set(alerts)),
+                            # Deduplicated in the order the screens ran. A
+                            # set's order follows each run's hash seed, so the
+                            # same alerts were listed in a new order each day.
+                            "alerts": list(dict.fromkeys(alerts)),
                         }
                     )
 
