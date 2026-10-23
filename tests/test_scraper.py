@@ -36,7 +36,7 @@ def test_clean_news_item_basic():
     entry = DotDict(
         {
             "title": "Reliance announces new project - Financial Times",
-            "link": "http://example.com",
+            "link": "https://example.com",
             "published": "Tue, 09 Jan 2024 10:00:00 GMT",
             "published_parsed": (2024, 1, 9, 10, 0, 0, 1, 9, 0),
             "summary": "This is a great positive news.",
@@ -49,7 +49,7 @@ def test_clean_news_item_basic():
     assert result is not None
     assert result["title"] == "Reliance announces new project"
     assert result["source"] == "Financial Times"
-    assert result["link"] == "http://example.com"
+    assert result["link"] == "https://example.com"
     assert result["date"] == "09 Jan 2024"
     assert result["impact"] == "Positive"
     assert result["relevance"] == "Reliance"
@@ -59,7 +59,7 @@ def test_clean_news_item_no_dash_in_title():
     entry = DotDict(
         {
             "title": "Tata Motors launches new EV",
-            "link": "http://example.com/tata",
+            "link": "https://example.com/tata",
             "published": "Tue, 09 Jan 2024 10:00:00 GMT",
             "published_parsed": (2024, 1, 9, 10, 0, 0, 1, 9, 0),
             "summary": "Delay in production reported.",
@@ -79,7 +79,7 @@ def test_clean_news_item_no_source_provided():
     entry = DotDict(
         {
             "title": "Infosys secures new deal",
-            "link": "http://example.com/infy",
+            "link": "https://example.com/infy",
             "published": "Tue, 09 Jan 2024 10:00:00 GMT",
             "published_parsed": (2024, 1, 9, 10, 0, 0, 1, 9, 0),
             "summary": "This is neutral text.",
@@ -185,7 +185,7 @@ def _news_filing(name="Reported filing"):
         "industry": "Corporate",
         "date": "10 Jan 2024",
         "source": "Economic Times",
-        "link": "http://example.com/news",
+        "link": "https://example.com/news",
     }
 
 
@@ -396,7 +396,7 @@ def test_clean_news_item_strips_markup_and_unescapes_entities():
     entry = DotDict(
         {
             "title": "<b>Tech Update</b> &amp; More - NewsSource",
-            "link": "http://example.com",
+            "link": "https://example.com",
             "published": "Tue, 09 Jan 2024 10:00:00 GMT",
             "published_parsed": (2024, 1, 9, 10, 0, 0, 1, 9, 0),
             "summary": "<p>A summary with <i>HTML</i> &amp; stuff.</p>",
@@ -418,7 +418,7 @@ def test_clean_news_item_drops_the_read_more_tail_before_sentiment():
     entry = DotDict(
         {
             "title": "Article Title",
-            "link": "http://example.com",
+            "link": "https://example.com",
             "published": "Tue, 09 Jan 2024 10:00:00 GMT",
             "published_parsed": (2024, 1, 9, 10, 0, 0, 1, 9, 0),
             "summary": "This is a summary that gets cut off... Read more",
