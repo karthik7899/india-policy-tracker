@@ -846,7 +846,7 @@ def event_clause(event: Dict[str, Any]) -> str:
 
 # Events older than this leave the corpus. Without it the list only ever
 # grows, and entries classified by an older version of the engine outlive
-# every fix made since.
+# every improvement made since.
 EVENT_RETENTION_DAYS = 45
 
 # A stored event keeps this much of its headline.
@@ -868,7 +868,7 @@ def refresh_merged_events(
     Events merge across runs, so a correction to the matcher or the vocabulary
     only ever applies to what is classified *today* — yesterday's mistakes are
     carried forward untouched. That is not hypothetical: after the entity
-    boundary fix, three ITC Hotels events stayed attributed to ITC, and since
+    boundary correction, three ITC Hotels events stayed attributed to ITC, and since
     per-stock coverage reads these actors directly, they were still showing on
     ITC's card the next day.
 
@@ -969,7 +969,7 @@ def refresh_merged_events(
             )
             # Re-derived for the same reason actors are: an event carried over
             # from before the graph knew about Marvell would otherwise keep an
-            # empty external list for its whole 45-day retention, and the fix
+            # empty external list for its whole 45-day retention, and the update
             # that taught the graph about Marvell would never reach it.
             external = (
                 graph_entities(clause, graph)
@@ -1069,7 +1069,7 @@ def annotate_event_materiality(
     same clause discipline the classifier already applies.
 
     Recomputed on every run, like attribution, because revenue moves and the
-    guards get fixed. Never raises.
+    guards get updated. Never raises.
     """
     from analysis import materiality
 
