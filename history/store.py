@@ -44,7 +44,7 @@ class HistoryStore:
             try:
                 with open(source, "r", encoding="utf-8") as f:
                     self.data = json.load(f)
-            except Exception as e:
+            except (IOError, json.JSONDecodeError) as e:
                 log.error(f"Failed to load history from {source}: {e}")
                 self.data = {}
         else:

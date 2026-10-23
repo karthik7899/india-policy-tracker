@@ -241,3 +241,19 @@ def test_load_invalid_json(store_paths, caplog):
 
     # Verify the error was logged
     assert any("Failed to load history" in record.message for record in caplog.records)
+
+
+def test_load_corrupted_json(store_paths, caplog):
+    """Test fallback when the file exists but contains invalid JSON, specifically asserting json.JSONDecodeError is caught."""
+    history_path, legacy_path = store_paths
+
+    # Write corrupted JSON that raises JSONDecodeError
+    history_path.write_text("{corrupted: true")
+
+    store = HistoryStore(filepath=str(history_path))
+
+    # Data should be an empty dictionary because JSONDecodeError was caught
+    assert store.data == {}
+
+    # Verify the error was logged
+    assert any("Failed to load history" in record.message for record in caplog.records)
