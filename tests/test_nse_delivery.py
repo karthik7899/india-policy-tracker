@@ -100,6 +100,10 @@ def test_delivery_bands():
     assert nd.classify_delivery(12.0) == "churn"
     assert nd.classify_delivery(40.0) == "mixed"
     assert nd.classify_delivery(70.0) == "delivery-led"
+
+
+def test_classify_delivery_with_none_input():
+    """Missing delivery data should explicitly return 'unknown'."""
     assert nd.classify_delivery(None) == "unknown"
 
 
