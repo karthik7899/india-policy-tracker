@@ -1527,3 +1527,25 @@ def test_an_event_the_feed_leaves_undated_takes_the_date_its_headline_gives():
     # One stored before this, as the run's day, is re-dated and goes too.
     stored = dict(event, date="2026-10-20")
     assert refresh_merged_events([stored], wl, today="2026-10-20") == []
+
+
+def test_a_hedge_covers_the_deal_it_governs_whatever_follows():
+    """ "As shares rally" is the market's reaction; the sale is still only
+    weighed. Graded from where the event's own phrase sits."""
+    from analysis.event_engine import headline_certainty
+
+    assert headline_certainty("Reliance weighs stake sale as shares rally") == (
+        "reported"
+    )
+    assert (
+        classify_certainty("Reliance weighs stake sale as shares rally", "stake sale")
+        == "reported"
+    )
+    # The shortage after "as" is stated, not weighed.
+    assert (
+        classify_certainty(
+            "LS MnM weighs copper concentrate cuts as shortages squeeze smelters",
+            "shortage",
+        )
+        == "completed"
+    )

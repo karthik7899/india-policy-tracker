@@ -33,7 +33,7 @@ import {
 } from "./companies.js";
 import { pickBook, positionOf } from "../core/portfolio.js";
 import { eventsFor, scorecardFor, kindLabel } from "../core/calendar.js";
-import { moreReports, pct, strengthLabel, transmissionLabel } from "../core/format.js";
+import { moreHeadlines, pct, strengthLabel, transmissionLabel } from "../core/format.js";
 
 const EDGE_LABEL = {
   partner: "partner",
@@ -195,7 +195,7 @@ function readThroughSection(rows) {
           {},
           el("span", { class: `tag tag-${TAG_CLASS[r.direction] || "opp"}` }, r.direction || ""),
           " ",
-          (r.trigger || "") + moreReports(r),
+          (r.trigger || "") + moreHeadlines(r),
           el("span", { class: "evidence-meta" }, readThroughMeta(r)),
         ),
       ),

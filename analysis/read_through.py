@@ -1038,8 +1038,10 @@ def _dedupe(flags):
     reports of one LS MnM copper cut were six of the ten rows. Showing it
     twice reads as two problems. Two different copper stories are two
     developments, though, and stay two rows. The surviving row keeps the
-    best-weighted chain, then the newest report, and counts the reports
-    behind it (``reports``).
+    best-weighted chain, then the newest report, and counts the distinct
+    headlines behind it (``headline_count``). Headlines, not outlets: the
+    corpus arrives with repeats across feeds already removed, so it cannot
+    say how many outlets carried a story.
     """
     # Tickers are part of the key because a partner chain is scoped to one
     # company: Vivo hitting two EMS holdings' ventures is two rows, and keying
@@ -1080,7 +1082,7 @@ def _dedupe(flags):
             best = max(
                 claim, key=lambda f: (f.get("weight", 0), str(f.get("date", "")))
             )
-            out.append(dict(best, reports=len({f["trigger"] for f in claim})))
+            out.append(dict(best, headline_count=len({f["trigger"] for f in claim})))
     return out
 
 

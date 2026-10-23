@@ -18,7 +18,7 @@
 
 import { el, mount, emptyState, disclosure } from "../core/dom.js";
 import { href } from "../core/router.js";
-import { moreReports, shortDate, strengthLabel, transmissionLabel } from "../core/format.js";
+import { moreHeadlines, shortDate, strengthLabel, transmissionLabel } from "../core/format.js";
 import { loadGraph, loadProposals } from "../core/data.js";
 
 const TYPE_LABEL = {
@@ -325,7 +325,7 @@ function readThroughPanel(rows, params) {
               ? el("span", { class: `rt-strength rt-strength-${r.strength}` }, strengthLabel(r))
               : null,
           ),
-          el("p", { class: "rt-trigger" }, (r.trigger || "") + moreReports(r)),
+          el("p", { class: "rt-trigger" }, (r.trigger || "") + moreHeadlines(r)),
           el(
             "ol",
             { class: "rt-chain" },

@@ -370,15 +370,6 @@ _CERTAINTY_PATTERNS = {
             r"(?:partnerships?|tie-?ups?|alliances?|jvs?|joint\s+ventures?|"
             r"deals?|mergers?|acquisitions?|collaborations?|stake|options)\b"
         ),
-        # "Weighs" and "considers" as "weighing" and "considering" are, but
-        # only over what follows to the end of the statement: "X weighs stake
-        # sale" is a thought, while "LS MnM weighs copper concentrate cuts as
-        # shortages squeeze smelter profits" states the shortage as fact. Not
-        # "weighs on", which is pressure.
-        re.compile(
-            r"\b(?:weighs|considers)\b(?!\s+on\b)"
-            r"(?![^,;:]*\b(?:as|amid|after|while|despite)\b)"
-        ),
     ),
     "announced": (
         # An MoU is an intention whatever verb signs it.
@@ -427,7 +418,9 @@ STRENGTH_SAYS = {
 
 def event_strength(event: Dict[str, Any]) -> str:
     """``hard`` / ``soft`` / ``reported`` for an event, from its certainty."""
-    certainty = event.get("certainty") or classify_certainty(event_clause(event))
+    certainty = event.get("certainty") or classify_certainty(
+        event_clause(event), event.get("phrase")
+    )
     return EVENT_STRENGTH.get(certainty, "hard")
 
 
@@ -536,13 +529,38 @@ def split_clauses(headline: str) -> List[str]:
     return parts or ([headline] if headline else [])
 
 
-def classify_certainty(text: str) -> str:
-    """``reported`` / ``announced`` / ``completed`` for one clause."""
+# "Weighs" and "considers", as "weighing" and "considering" are, but only over
+# what they govern: from the verb to the end of its statement. "Reliance
+# weighs stake sale as shares rally" weighs the sale; "LS MnM weighs copper
+# concentrate cuts as shortages squeeze smelter profits" states the shortage
+# as fact. Not "weighs on", which is pressure.
+_HEDGE_RE = re.compile(r"\b(?:weighs|considers)\b(?!\s+on\b)")
+_STATEMENT_END_RE = re.compile(r"\b(?:as|amid|after|while|despite)\b|[,;:]")
+
+
+def _hedged(lower: str, phrase: Optional[str]) -> bool:
+    """Is the event weighed or considered rather than done? Read off where
+    its phrase sits; without one, a hedge running to the end of the clause
+    covers whatever the clause reports."""
+    at = lower.find(phrase.lower()) if phrase else -1
+    for m in _HEDGE_RE.finditer(lower):
+        end = _STATEMENT_END_RE.search(lower, m.end())
+        stop = end.start() if end else len(lower)
+        if (m.end() <= at < stop) if at >= 0 else end is None:
+            return True
+    return False
+
+
+def classify_certainty(text: str, phrase: Optional[str] = None) -> str:
+    """``reported`` / ``announced`` / ``completed`` for one clause, whose
+    event (where known) was matched on ``phrase``."""
     lower = (text or "").lower()
     for level, markers in CERTAINTY_MARKERS:
         if any(m in lower for m in markers) or any(
             p.search(lower) for p in _CERTAINTY_PATTERNS.get(level, ())
         ):
+            return level
+        if level == "reported" and _hedged(lower, phrase):
             return level
     return CERTAINTY_COMPLETED
 
@@ -584,7 +602,7 @@ def headline_certainty(headline: str) -> Optional[str]:
     read from its event clause as classify_headlines reads it; None when it
     holds no event. An L-1 bid is "announced": the award is not yet made."""
     found = first_event_clause(headline)
-    return classify_certainty(found[0]) if found else None
+    return classify_certainty(found[0], found[2]) if found else None
 
 
 # Where an order comes from: "from" and the name that follows, up to the next
@@ -742,7 +760,7 @@ def classify_headlines(
             if not found:
                 continue
             clause, event_type, phrase = found
-            certainty = classify_certainty(clause)
+            certainty = classify_certainty(clause, phrase)
             actors = clause_actors(clause, event_type, phrase, holdings)
             external = graph_entities(clause, graph)
             counterparties = _counterparties(event_type, clause, actors, holdings)
@@ -932,7 +950,7 @@ def refresh_merged_events(
                     event["direction"] = _EVENT_DIRECTION.get(etype, "opportunity")
                     retyped += 1
                 event["event_type"], event["phrase"] = etype, phrase
-                event["certainty"] = classify_certainty(clause)
+                event["certainty"] = classify_certainty(clause, phrase)
             elif whole:
                 dropped_unread += 1
                 continue
@@ -943,7 +961,8 @@ def refresh_merged_events(
                 # weakened it. An MoU an older version filed as completed is
                 # soft; a "reportedly" past the cut stays reported.
                 event["certainty"] = _weaker(
-                    event.get("certainty"), classify_certainty(clause)
+                    event.get("certainty"),
+                    classify_certainty(clause, event.get("phrase")),
                 )
             actors = clause_actors(
                 clause, event.get("event_type"), event.get("phrase"), holdings

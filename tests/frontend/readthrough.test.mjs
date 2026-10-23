@@ -45,11 +45,11 @@ test("the company page puts how it travels before the chain", () => {
   assert.equal(readThroughMeta({ chain: ["a", "b"] }), "a → b");
 });
 
-test("a row standing for several reports says how many more", async () => {
-  const { moreReports } = await import("../../src/core/format.js");
-  assert.equal(moreReports({ reports: 2 }), " (+1 more report)");
-  assert.equal(moreReports({ reports: 4 }), " (+3 more reports)");
-  assert.equal(moreReports({ reports: 1 }), "");
-  assert.equal(moreReports({}), "");
-  assert.equal(moreReports(null), "");
+test("a row standing for several headlines says how many more", async () => {
+  const { moreHeadlines } = await import("../../src/core/format.js");
+  assert.equal(moreHeadlines({ headline_count: 2 }), " (+1 more headline)");
+  assert.equal(moreHeadlines({ headline_count: 4 }), " (+3 more headlines)");
+  assert.equal(moreHeadlines({ headline_count: 1 }), "");
+  assert.equal(moreHeadlines({}), "");
+  assert.equal(moreHeadlines(null), "");
 });

@@ -361,18 +361,18 @@ _DIRECTION_STYLE = {
 }
 
 
-def _more_reports(row: Dict[str, Any]) -> str:
-    """ " (+1 more report)" when other outlets carried the same story: one row
+def _more_headlines(row: Dict[str, Any]) -> str:
+    """ " (+1 more headline)" when other headlines told the same story: one row
     stands for them (read_through._dedupe), and says so."""
     try:
-        more = int(row.get("reports") or 1) - 1
+        more = int(row.get("headline_count") or 1) - 1
     except (TypeError, ValueError):
         return ""
     if more < 1:
         return ""
     return (
         f" <span style='color: #6b7280;'>(+{more} more "
-        f"report{'s' if more > 1 else ''})</span>"
+        f"headline{'s' if more > 1 else ''})</span>"
     )
 
 
@@ -430,7 +430,7 @@ def build_read_through_html(read_throughs: Any, limit: int = MAX_READ_THROUGHS) 
                     {how}</span>{unsure}
             </div>
             <p style="font-size: 12px; color: #9ca3af; margin: 4px 0 6px 0;">
-                {_esc(row.get('trigger', ''))}{_more_reports(row)}</p>
+                {_esc(row.get('trigger', ''))}{_more_headlines(row)}</p>
             <ol style="font-size: 12px; color: #d1d5db; margin: 0 0 6px 0;
                        padding-left: 18px;">{chain}</ol>
             <p style="font-size: 12px; color: #93c5fd; margin: 0;">{tickers}</p>

@@ -763,7 +763,7 @@ def test_a_lowest_bid_counts_for_half_and_the_award_stands_for_both():
     )
     assert len(both) == len(bids) == 3
     for f in both:
-        assert (f["strength"], f["weight"], f["reports"]) == ("hard", 1.0, 2)
+        assert (f["strength"], f["weight"], f["headline_count"]) == ("hard", 1.0, 2)
         assert "Letter of Award" in f["trigger"] and f["strength_note"] == ""
 
 
@@ -895,7 +895,7 @@ def test_one_story_from_two_outlets_is_one_row_that_counts_them():
         ]
     )
     (flag,) = flags
-    assert (flag["sector"], flag["reports"]) == ("clean_energy", 2)
+    assert (flag["sector"], flag["headline_count"]) == ("clean_energy", 2)
 
 
 def test_a_holding_already_in_its_sectors_row_gets_no_second_row():
@@ -936,12 +936,13 @@ def test_a_headline_that_dates_itself_outside_the_window_reads_through_nothing()
     assert flag["date"] == recent.isoformat()
 
 
-def test_email_row_counts_the_other_reports_of_its_story():
+def test_email_row_counts_the_other_headlines_of_its_story():
     from emails.sections import build_read_through_html
 
-    assert "(+1 more report)" in build_read_through_html([dict(_ROW, reports=2)])
-    assert "(+2 more reports)" in build_read_through_html([dict(_ROW, reports=3)])
-    assert "more report" not in build_read_through_html([_ROW])
+    two, three = dict(_ROW, headline_count=2), dict(_ROW, headline_count=3)
+    assert "(+1 more headline)" in build_read_through_html([two])
+    assert "(+2 more headlines)" in build_read_through_html([three])
+    assert "more headline" not in build_read_through_html([_ROW])
 
 
 def test_freight_reaches_the_holdings_that_pay_it_not_those_it_pays():
@@ -975,7 +976,7 @@ def test_a_story_naming_several_inputs_is_still_one_row():
         ],
     )
     (flag,) = flags
-    assert (flag["sector"], flag["reports"]) == ("manufacturing_electronics", 2)
+    assert (flag["sector"], flag["headline_count"]) == ("manufacturing_electronics", 2)
 
 
 def test_two_different_stories_about_one_input_stay_two_rows():
@@ -989,5 +990,5 @@ def test_two_different_stories_about_one_input_stay_two_rows():
             "profits",
         ]
     )
-    assert sorted(f["reports"] for f in flags) == [1, 1]
+    assert sorted(f["headline_count"] for f in flags) == [1, 1]
     assert {f["sector"] for f in flags} == {"clean_energy"}

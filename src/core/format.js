@@ -64,13 +64,13 @@ export function transmissionLabel(transmission) {
  * not the words.
  */
 /**
- * " (+1 more report)" when other outlets carried the same story: one
+ * " (+1 more headline)" when other headlines told the same story: one
  * read-through row stands for them (analysis/read_through._dedupe).
  */
-export function moreReports(row) {
-  const more = Number(row?.reports || 1) - 1;
+export function moreHeadlines(row) {
+  const more = Number(row?.headline_count || 1) - 1;
   if (!Number.isFinite(more) || more < 1) return "";
-  return ` (+${more} more report${more > 1 ? "s" : ""})`;
+  return ` (+${more} more headline${more > 1 ? "s" : ""})`;
 }
 
 export function strengthLabel(row) {
