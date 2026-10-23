@@ -504,11 +504,13 @@ async def fetch_global_event_feeds_async(session, holdings=(), watched=()):
 
     async def _fetch_query(query):
         try:
-            encoded = urllib.parse.quote(f"{query} when:3d")
-            url = (
-                f"https://news.google.com/rss/search?q={encoded}"
-                f"&hl=en-IN&gl=IN&ceid=IN:en"
-            )
+            params = {
+                "q": f"{query} when:3d",
+                "hl": "en-IN",
+                "gl": "IN",
+                "ceid": "IN:en",
+            }
+            url = f"https://news.google.com/rss/search?{urllib.parse.urlencode(params)}"
             status, xml_data = await fetch_text_async(session, url, timeout=15)
             if status == 200:
                 return feedparser.parse(xml_data)
@@ -574,10 +576,13 @@ async def fetch_state_policy_async(session, today=None):
 
     async def _fetch(state, kind, query):
         try:
-            url = (
-                "https://news.google.com/rss/search?q="
-                f"{urllib.parse.quote(query + ' when:7d')}&hl=en-IN&gl=IN&ceid=IN:en"
-            )
+            params = {
+                "q": f"{query} when:7d",
+                "hl": "en-IN",
+                "gl": "IN",
+                "ceid": "IN:en",
+            }
+            url = f"https://news.google.com/rss/search?{urllib.parse.urlencode(params)}"
             status, xml_data = await fetch_text_async(session, url, timeout=15)
             if status == 200:
                 return state, kind, feedparser.parse(xml_data)
@@ -671,10 +676,8 @@ def pli_search_url():
         'site:pib.gov.in "PLI" AND ("provisionally selected" OR "approved" OR '
         '"incentive scheme" OR "applications approved")'
     )
-    return (
-        "https://news.google.com/rss/search?q="
-        f"{urllib.parse.quote(f'{query} when:30d')}&hl=en-IN&gl=IN&ceid=IN:en"
-    )
+    params = {"q": f"{query} when:30d", "hl": "en-IN", "gl": "IN", "ceid": "IN:en"}
+    return f"https://news.google.com/rss/search?{urllib.parse.urlencode(params)}"
 
 
 def _headline_text(title, summary):
@@ -1025,8 +1028,10 @@ async def fetch_advanced_rss_feeds_async(session, watchlist):
 
         # Agreements
         agree_q = f'({ticker_query}) AND ("joint venture" OR "strategic partnership" OR "agreement" OR "collaboration" OR "MoU" OR "acquisition" OR "stake purchase")'
-        encoded_agree = urllib.parse.quote(f"{agree_q} when:7d")
-        rss_agree_url = f"https://news.google.com/rss/search?q={encoded_agree}&hl=en-IN&gl=IN&ceid=IN:en"
+        params = {"q": f"{agree_q} when:7d", "hl": "en-IN", "gl": "IN", "ceid": "IN:en"}
+        rss_agree_url = (
+            f"https://news.google.com/rss/search?{urllib.parse.urlencode(params)}"
+        )
 
         from utils import fetch_text_async
 
@@ -1068,8 +1073,15 @@ async def fetch_advanced_rss_feeds_async(session, watchlist):
 
         # Launches
         launch_q = f'({ticker_query}) AND ("product launch" OR "unveils" OR "commercial production" OR "production starts" OR "new facility" OR "new plant" OR "pilot production")'
-        encoded_launch = urllib.parse.quote(f"{launch_q} when:7d")
-        rss_launch_url = f"https://news.google.com/rss/search?q={encoded_launch}&hl=en-IN&gl=IN&ceid=IN:en"
+        params = {
+            "q": f"{launch_q} when:7d",
+            "hl": "en-IN",
+            "gl": "IN",
+            "ceid": "IN:en",
+        }
+        rss_launch_url = (
+            f"https://news.google.com/rss/search?{urllib.parse.urlencode(params)}"
+        )
 
         try:
             async with session.get(rss_launch_url, timeout=15) as resp:
@@ -1284,8 +1296,13 @@ async def _fetch_filing_news_async(session, watchlist):
     async def process_chunk(chunk):
         ticker_query = " OR ".join([f'"{t}"' for t in chunk])
         filing_q = f'({ticker_query}) AND ("NSE" OR "BSE" OR "Exchange Filing" OR "Regulatory Filing") AND ("Agreement" OR "MoU" OR "Acquisition" OR "Expansion" OR "Capacity" OR "Capex" OR "Joint Venture" OR "Technology Transfer")'
-        encoded_filing = urllib.parse.quote(f"{filing_q} when:3d")
-        rss_url = f"https://news.google.com/rss/search?q={encoded_filing}&hl=en-IN&gl=IN&ceid=IN:en"
+        params = {
+            "q": f"{filing_q} when:3d",
+            "hl": "en-IN",
+            "gl": "IN",
+            "ceid": "IN:en",
+        }
+        rss_url = f"https://news.google.com/rss/search?{urllib.parse.urlencode(params)}"
 
         try:
             async with session.get(rss_url, timeout=15) as resp:
@@ -1330,8 +1347,8 @@ async def _fetch_filing_news_async(session, watchlist):
 async def check_sebi_sid_filings_async(session):
     log.info("Checking SEBI filings for thematic funds (Incoming Capital) (Async)...")
     query = 'site:sebi.gov.in "Scheme Information Document" AND ("manufacturing" OR "semiconductors" OR "defence" OR "logistics" OR "technology")'
-    encoded_query = urllib.parse.quote(f"{query} when:30d")
-    rss_url = f"https://news.google.com/rss/search?q={encoded_query}&hl=en-IN&gl=IN&ceid=IN:en"
+    params = {"q": f"{query} when:30d", "hl": "en-IN", "gl": "IN", "ceid": "IN:en"}
+    rss_url = f"https://news.google.com/rss/search?{urllib.parse.urlencode(params)}"
 
     filings = []
     try:
@@ -1436,8 +1453,8 @@ async def fetch_institutional_activity_async(session, watchlist):
         "Fetching institutional activity block deals and mutual fund buying trends (Async)..."
     )
     query = '"block deal" OR "bulk deal" OR "mutual fund buys" OR "FII buying" India'
-    encoded_query = urllib.parse.quote(f"{query} when:7d")
-    rss_url = f"https://news.google.com/rss/search?q={encoded_query}&hl=en-IN&gl=IN&ceid=IN:en"
+    params = {"q": f"{query} when:7d", "hl": "en-IN", "gl": "IN", "ceid": "IN:en"}
+    rss_url = f"https://news.google.com/rss/search?{urllib.parse.urlencode(params)}"
 
     flat_watchlist = [
         (s["ticker"], s["name"], None) for stocks in watchlist.values() for s in stocks
