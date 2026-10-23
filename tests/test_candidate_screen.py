@@ -126,7 +126,9 @@ def test_candidates_for_rotation_shape():
     screened = {
         "sec": [{"ticker": "SYRMA", "name": "Syrma SGS Tech.", "growth_pct": 58.5}]
     }
+    # The growth is what the rotation ranks its intake by: without it every
+    # candidate sorted at 0.0 and the slots went by sector order.
     assert candidates_for_rotation(screened) == {
-        "sec": [{"name": "Syrma SGS Tech.", "ticker": "SYRMA"}]
+        "sec": [{"name": "Syrma SGS Tech.", "ticker": "SYRMA", "growth_pct": 58.5}]
     }
     assert candidates_for_rotation(None) == {}

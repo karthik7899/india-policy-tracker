@@ -197,6 +197,32 @@ class TestIntakeCap(unittest.TestCase):
         evaluated, _ = self._run_with(screened, cap=3)
         self.assertEqual(evaluated, ["STRONG.NS", "MID.NS", "WEAK.NS"])
 
+    def test_the_screen_hands_over_its_ranking(self):
+        """Through the screen's own hand-over, as main.py passes it: the
+        growth used to be left behind there, so every candidate ranked at
+        0.0 and the slots went to whichever sector came first."""
+        import analysis.rotation as rot
+        from analysis.candidate_screen import candidates_for_rotation
+
+        screened = {
+            "aaa": [{"name": "Weak", "ticker": "WEAK", "growth_pct": 16.0}],
+            "sec": [{"name": "Strong", "ticker": "STRONG", "growth_pct": 99.0}],
+        }
+        order = []
+
+        def probe(name, preresolved, isin_master, watchlisted=()):
+            order.append(preresolved)
+            return {"ticker": preresolved, "full_name": name, "error": "no_market_data"}
+
+        watchlist = {"aaa": [], "sec": []}
+        with patch.object(rot, "_probe_candidate", probe), patch.object(
+            rot, "save_watchlist", lambda *a, **k: None
+        ):
+            rot.auto_curate_watchlist(
+                {}, watchlist, screened_candidates=candidates_for_rotation(screened)
+            )
+        self.assertEqual(order, ["STRONG", "WEAK"])
+
     def test_a_zero_cap_defers_everything_with_a_reason(self):
         screened = {"sec": [{"name": "Cand", "ticker": "C1", "growth_pct": 50.0}]}
         evaluated, emerging = self._run_with(screened, cap=0)
@@ -319,6 +345,7 @@ def _candidate(ticker, target=130.0, label=None):
         "rev_growth_raw": 0.4,
         "revenue_growth": "40.0%",
         "qoq_growth": 25.0,
+        "sales_yoy": 40.0,
         "industry": "Solar",
         "keywords": keywords("develops solar and wind power plants"),
     }
@@ -412,7 +439,15 @@ def test_a_candidate_no_analyst_covers_is_given_no_target(monkeypatch):
         def history(self, **kwargs):
             return Hist()
 
-    monkeypatch.setattr(rot, "_screener_qoq_growth", lambda session, t: 25.0)
+    monkeypatch.setattr(
+        rot,
+        "_screener_quarterly_sales",
+        lambda session, t: [
+            ("Sep 2025", 100.0),
+            ("Jun 2026", 110.0),
+            ("Sep 2026", 125.0),
+        ],
+    )
     for info, target, upside in (
         ({"recommendationKey": "buy"}, None, None),
         # A target with no analysts behind it is not a consensus either.
@@ -472,3 +507,140 @@ def test_an_uncovered_holding_goes_only_after_its_thesis_stays_broken():
         )
         assert "OWN" not in held and "NEW" in held
         assert row["reason"] == "Rotated into watchlist replacing OWN."
+
+
+def _quarters_page(rows, headers):
+    """A Screener company page's quarterly table: the label cell first, as
+    Screener wraps an expandable label in a button."""
+    head = "".join(f"<th>{h}</th>" for h in headers)
+    body = "".join(
+        f"<tr><td class='text'><button>{label}&nbsp;<span>+</span></button></td>"
+        + "".join(f"<td>{v}</td>" for v in values)
+        + "</tr>"
+        for label, values in rows
+    )
+    return (
+        "<html><body><section id='quarters'><table><thead><tr><th></th>"
+        f"{head}</tr></thead><tbody>{body}</tbody></table></section></body></html>"
+    )
+
+
+_FIVE_QUARTERS = ("Sep 2025", "Dec 2025", "Mar 2026", "Jun 2026", "Sep 2026")
+
+
+class _Pages:
+    """A session answering each Screener URL with (status, text)."""
+
+    def __init__(self, pages):
+        self.pages = pages
+        self.asked = []
+
+    def get(self, url, **kwargs):
+        self.asked.append(url)
+        status, text = self.pages.get(url, (404, ""))
+
+        class Response:
+            status_code = status
+
+        Response.text = text
+        return Response()
+
+
+def test_a_lenders_revenue_line_is_read_as_its_sales():
+    """Screener's page for a bank says "Revenue" where others say "Sales":
+    the rotation's own regex read nothing there and turned IndusInd Bank,
+    Bank of Baroda and Federal Bank away at a "growth" of exactly 0.0%."""
+    import analysis.rotation as rot
+
+    page = _quarters_page(
+        [("Revenue", ["1,000", "1,020", "1,050", "1,080", "1,200"])], _FIVE_QUARTERS
+    )
+    session = _Pages(
+        {"https://www.screener.in/company/FEDERALBNK/consolidated/": (200, page)}
+    )
+    quarters = rot._screener_quarterly_sales(session, "FEDERALBNK")
+    assert quarters[-1] == ("Sep 2026", 1200.0)
+    assert rot._sales_yoy(quarters) == 20.0
+
+
+def test_a_company_with_no_subsidiaries_is_read_from_its_standalone_page():
+    """Its consolidated page is there and shows no figures, as for BDL, GRSE
+    and Honeywell Automation: the old reader stopped at the HTTP 200."""
+    import analysis.rotation as rot
+
+    blank = _quarters_page([("Sales", ["", "", "", "", ""])], _FIVE_QUARTERS)
+    standalone = _quarters_page(
+        [("Sales", ["500", "450", "900", "300", "650"])], _FIVE_QUARTERS
+    )
+    session = _Pages(
+        {
+            "https://www.screener.in/company/BDL/consolidated/": (200, blank),
+            "https://www.screener.in/company/BDL/": (200, standalone),
+        }
+    )
+    assert rot._sales_yoy(rot._screener_quarterly_sales(session, "BDL")) == 30.0
+
+    # No consolidated page at all (HTTP 404) also falls through to standalone.
+    session = _Pages({"https://www.screener.in/company/BDL/": (200, standalone)})
+    assert rot._screener_quarterly_sales(session, "BDL")[-1] == ("Sep 2026", 650.0)
+
+
+def test_a_refused_page_is_not_asked_again_and_leaves_growth_unmeasured():
+    import analysis.rotation as rot
+
+    session = _Pages({"https://www.screener.in/company/GRSE/consolidated/": (429, "")})
+    assert rot._screener_quarterly_sales(session, "GRSE") is None
+    assert session.asked == ["https://www.screener.in/company/GRSE/consolidated/"]
+    assert rot._sales_yoy(None) is None and rot._sales_qoq(None) is None
+
+
+def test_growth_on_the_year_pairs_quarters_by_their_column_header():
+    """A blank column shifts every value before it, so "four back" would
+    compare September with June."""
+    import analysis.rotation as rot
+    from bs4 import BeautifulSoup
+    from analysis.parsing import extract_row_by_column
+
+    headers = ("Jun 2025",) + _FIVE_QUARTERS
+    page = _quarters_page([("Sales", ["80", "100", "", "95", "105", "130"])], headers)
+    quarters = extract_row_by_column(
+        BeautifulSoup(page, "lxml"), "quarters", r"\bSales\b"
+    )
+    assert ("Dec 2025", 0.0) not in quarters and len(quarters) == 5
+    assert rot._sales_yoy(quarters) == 30.0
+    assert rot._sales_qoq(quarters) == 23.8
+
+    # The same quarter a year earlier missing, or not positive: unmeasured.
+    assert rot._sales_yoy([("Jun 2026", 105.0), ("Sep 2026", 130.0)]) is None
+    assert rot._sales_yoy([("Sep 2025", 0.0), ("Sep 2026", 130.0)]) is None
+    assert rot._sales_yoy([("FY26", 100.0), ("FY27", 130.0)]) is None
+
+
+def test_a_seasonal_dip_on_the_quarter_does_not_keep_out_a_company_growing_on_the_year():
+    """ITC Hotels was turned away at -25.4% on the quarter before, its lean
+    April-June against its January-March peak, while up 14.8% on the year;
+    Kusumgar at -21.1% while up 93.6%."""
+    holdings = [_covered("SUZLON", 5)]
+    held, row, _ = _rotate(holdings, dict(_candidate("NEW"), qoq_growth=-21.1))
+    assert "NEW" in held
+    assert (row["qoq_growth"], row["sales_yoy"]) == (-21.1, 40.0)
+
+    held, row, _ = _rotate(
+        [_covered("SUZLON", 5)],
+        dict(_candidate("NEW"), qoq_growth=-25.4, sales_yoy=14.8),
+    )
+    assert "NEW" not in held
+    assert row["status"] == "Growth Divergence"
+    assert row["reason"] == (
+        "Quarterly sales +14.8% on the same quarter last year, under the 15% bar"
+    )
+
+
+def test_a_candidate_whose_figures_were_not_read_is_unmeasured_not_at_zero():
+    held, row, decisions = _rotate(
+        [_covered("SUZLON", 5)],
+        dict(_candidate("NEW"), qoq_growth=None, sales_yoy=None),
+    )
+    assert "NEW" not in held and decisions == []
+    assert row["status"] == "Unresolved"
+    assert "not measured" in row["reason"] and "0.0" not in row["reason"]

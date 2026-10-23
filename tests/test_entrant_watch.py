@@ -154,3 +154,23 @@ def test_a_watched_entrant_is_compared_not_offered_to_the_watchlist():
         ]
     }
     assert not screen_sector_candidates(peers).get("manufacturing_electronics")
+
+
+def test_a_country_flagged_under_older_rules_is_dropped_as_the_list_is_read(
+    tmp_path,
+):
+    """Russia was flagged on 21 Oct. The list is searched before the radar
+    runs, so it is dropped as it is read, not at the update."""
+    path = tmp_path / "watched.json"
+    russia = {
+        "name": "Russia",
+        "sector": "data_center_support",
+        "ticker": None,
+        "registered_name": None,
+        "first_seen": "2026-10-21",
+        "last_seen": "2026-10-21",
+        "headline": "Ukraine hits Yandex, Russia targets Kyiv servers",
+    }
+    amber = entrant_watch.update_watched([], [AMBER], REGISTERED, today="2026-10-19")
+    path.write_text(json.dumps([russia] + amber))
+    assert [r["name"] for r in entrant_watch.load_watched(str(path))] == ["Amber"]

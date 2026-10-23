@@ -319,3 +319,21 @@ def test_fast_peer_pointed_to_even_when_incumbent_growth_unknown():
     assert threats[0]["ticker"] == "CPPLUS"
     assert threats[0]["severity"] == "Low"
     assert "Syrma" in threats[0]["signal"]
+
+
+def test_a_country_is_not_a_challenger():
+    """Regression for 21 Oct: "Russia targets Kyiv servers" put Russia on the
+    watch list for Data Center Support for 180 days, and its news was searched
+    every run after."""
+    watchlist = {"data_center_support": [{"ticker": "ANANTRAJ", "name": "Anant Raj"}]}
+    for headline in (
+        "Decoded: Why are data centres modern wartime targets? Ukraine hits "
+        "Yandex, Russia targets Kyiv servers, Iran strikes AWS",
+        "South Korea targets data centre investment in India",
+    ):
+        assert _entrants(headline, watchlist=watchlist) == [], headline
+    # Every word a place, not any: a company named after one is a company.
+    entrants = _entrants(
+        "Korea Zinc enters Indian data centre market", watchlist=watchlist
+    )
+    assert [e["challenger"] for e in entrants] == ["Korea Zinc"]

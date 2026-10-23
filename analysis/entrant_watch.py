@@ -34,10 +34,24 @@ WATCH_DAYS = 180
 
 
 def load_watched(path: str = WATCH_PATH) -> List[Dict[str, Any]]:
+    """The watch list, less any name the radar would no longer take as a
+    company. Dropped here rather than at the update, because the list is
+    searched for before the radar runs: a country flagged under older rules
+    would otherwise be searched once more after the rule that refuses it."""
+    from analysis.competitive_intel import is_challenger_name
+
     try:
         with open(path, "r", encoding="utf-8") as f:
             rows = json.load(f)
-        return [r for r in rows if isinstance(r, dict) and r.get("name")]
+        rows = [r for r in rows if isinstance(r, dict) and r.get("name")]
+        refused = [r for r in rows if not is_challenger_name(r["name"])]
+        if refused:
+            log.info(
+                "Entrants watched: dropped "
+                + ", ".join(f"{r['name']} → {r.get('sector')}" for r in refused)
+                + ", not read as a company."
+            )
+        return [r for r in rows if is_challenger_name(r["name"])]
     except FileNotFoundError:
         return []
     except Exception as e:  # noqa: BLE001 - a watch list must never break a run

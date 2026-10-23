@@ -203,6 +203,11 @@ _NOT_A_COMPANY = _COUNTRIES | {
     "north",
 }
 
+# A name with one of these anywhere in it is a government, whatever else it
+# says. The list above refuses a name only when every word of it is on it,
+# so "Odisha Govt" reached the review queue as SBIN's partner.
+_GOVERNMENT = {"govt", "government", "ministry"}
+
 # Charities, universities, research institutes and industry bodies. A CSR
 # partnership, an academic MoU or a council's showcase is real, and is not a
 # relationship that moves a share price.
@@ -436,6 +441,8 @@ def _acceptable(name: str) -> bool:
     if any(t in _PERSON_TITLES for t in lowered):
         return False  # "US President Trump" is a person, not a partner
     if any(t in _NON_COMMERCIAL for t in lowered):
+        return False
+    if any(t in _GOVERNMENT for t in lowered):
         return False
     if all(t in _NOT_A_COMPANY for t in lowered):
         return False

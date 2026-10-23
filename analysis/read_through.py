@@ -1095,6 +1095,7 @@ def compute_read_throughs(
     limit: int = 40,
     headlines: List[str] = None,
     peers: Dict[str, Any] = None,
+    published: Dict[str, str] = None,
 ) -> List[Dict[str, Any]]:
     """Second-order implications of recent news for what we actually hold.
 
@@ -1127,16 +1128,24 @@ def compute_read_throughs(
             flags.extend(_rival_move(event, graph, watchlist))
             flags.extend(_partner_news(event, graph, watchlist, peers))
 
-        # The raw corpus carries no dates — it is this run's collection — so
-        # everything in it is today, unless the headline dates itself:
-        # "Market Preview, June 22, 2026: ..." is not this week's news.
+        # A raw headline is dated as an event is: by its article
+        # (``published``, competitive_intel.collect_dates), else by a date the
+        # headline gives itself ("Market Preview, June 22, 2026: ..."), else
+        # today. It used to be today unless it dated itself, and the corpus is
+        # not only today's: on 22 Oct 2026 a cotton-duty story from 17 Oct
+        # showed as 22 Oct, and 1,204 of the 1,508 headlines scanned were
+        # older than this window.
         from analysis.event_evidence import headline_date
 
         cutoff = (
             datetime.date.fromisoformat(today) - datetime.timedelta(days=window_days)
         ).isoformat()
         for headline in headlines or []:
-            dated = headline_date(headline, today) or today
+            dated = (
+                (published or {}).get(str(headline).strip().lower())
+                or headline_date(headline, today)
+                or today
+            )
             if dated < cutoff:
                 continue
             flags.extend(

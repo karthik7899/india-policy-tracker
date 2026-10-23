@@ -38,6 +38,7 @@ KAYNES = ("KAYNES", "Kaynes Technology")
 BHEL = ("BHEL", "Bharat Heavy Electricals")
 TCS = ("TCS", "Tata Consultancy Services")
 COFORGE = ("COFORGE", "Coforge Ltd")
+SBIN = ("SBIN", "State Bank of India")
 RELIANCE = ("RELIANCE", "Reliance Industries")
 MPHASIS = ("MPHASIS", "Mphasis Ltd")
 SUZLON = ("SUZLON", "Suzlon Energy")
@@ -373,6 +374,7 @@ def test_the_same_pair_in_three_headlines_is_one_proposal_seen_three_times(tmp_p
         "pending": 1,
         "dropped_stale": 0,
         "dropped_namesake": 0,
+        "dropped_refused": 0,
     }
     assert len(_proposals(path)[0]["evidence"]) == 3
 
@@ -804,3 +806,46 @@ def test_namesakes_come_from_the_cache_and_from_today_s_check(tmp_path):
         ("SIEMENS", SIEMENS_AG_DEAL.lower()),
         ("ARVIND", "ibm ceo arvind krishna says"),
     }
+
+
+def test_a_state_government_is_not_a_partner():
+    """ "Odisha Govt" reached the review queue as SBIN's partner: a name was
+    refused only when every word of it was a government word."""
+    assert extract_counterparties(
+        "Hatsun Agro launches Go-Dhan in partnership with Odisha Govt and State "
+        "Bank of India",
+        [SBIN],
+    ) == ["Hatsun Agro"]
+
+
+def test_a_pending_proposal_the_name_rules_now_refuse_is_taken_back(tmp_path):
+    """A decision stands: only what is still waiting for review is re-read."""
+    path = tmp_path / "proposals.json"
+    rows = [
+        ("SBIN", "Odisha Govt", "pending"),
+        ("SBIN", "Hatsun Agro", "pending"),
+        ("TCS", "IIEST", "rejected"),
+    ]
+    path.write_text(
+        json.dumps(
+            {
+                "proposals": [
+                    {
+                        "holding": holding,
+                        "counterparty": name,
+                        "proposed_as": name,
+                        "status": status,
+                        "last_seen": TODAY,
+                        "evidence": [{"headline": name}],
+                    }
+                    for holding, name, status in rows
+                ]
+            }
+        )
+    )
+    counts = record_partner_proposals([], {"edges": []}, path=str(path), today=TODAY)
+    assert counts["dropped_refused"] == 1 and counts["pending"] == 1
+    assert [(p["holding"], p["counterparty"]) for p in _proposals(path)] == [
+        ("SBIN", "Hatsun Agro"),
+        ("TCS", "IIEST"),
+    ]

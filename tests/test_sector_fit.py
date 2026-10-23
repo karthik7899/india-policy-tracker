@@ -168,6 +168,7 @@ def _probe(ticker, profile):
         "rev_growth_raw": 0.4,
         "revenue_growth": "40.0%",
         "qoq_growth": 25.0,
+        "sales_yoy": 40.0,
         "industry": profile[0],
         "keywords": profile[1],
     }

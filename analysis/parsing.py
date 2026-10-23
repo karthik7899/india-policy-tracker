@@ -428,6 +428,41 @@ def extract_row_values(soup, section_id, row_label_pattern):
     return []
 
 
+def extract_row_by_column(soup, section_id, row_label_pattern):
+    """``[(column header, value), ...]`` of a labelled row, in column order.
+
+    extract_row_values drops blank cells, which suits a trend but not a
+    comparison with a named period: one blank quarter shifts every value
+    before it, and "four columns back" is then not the same quarter a year
+    earlier. Blank and non-numeric cells are left out here too, but each value
+    keeps the header of the column it sits in ("Sep 2026").
+    """
+    sec = soup.find("section", id=section_id)
+    if not sec:
+        return []
+    headers = []
+    for tr in sec.find_all("tr"):
+        ths = tr.find_all("th")
+        if ths:
+            headers = [th.get_text(" ", strip=True) for th in ths]
+            break
+    pattern = re.compile(row_label_pattern)
+    for tr in sec.find_all("tr"):
+        tds = tr.find_all("td")
+        if not tds or not pattern.search(tds[0].get_text(" ", strip=True)):
+            continue
+        row = []
+        for i, td in enumerate(tds[1:], start=1):
+            text = td.get_text(strip=True).replace(",", "").replace("%", "")
+            try:
+                value = float(text)
+            except ValueError:
+                continue
+            row.append((headers[i] if i < len(headers) else "", value))
+        return row
+    return []
+
+
 def calculate_trend(values, periods=4):
     if not values:
         return [0] * periods

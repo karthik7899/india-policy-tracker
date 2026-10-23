@@ -100,8 +100,29 @@ class TestSubject:
         )
         subject = summary_mod.build_subject(s, _TODAY)
         assert "1 Critical" in subject
-        assert "1 Opportunities" in subject
+        # One is singular: 7 Oct's subject read "1 Opportunities".
+        assert "1 Opportunity |" in subject
         assert "05 Aug" in subject
+
+    def test_a_sector_named_by_its_label_keeps_its_capitals(self):
+        """Warnings carry the sector's label, and title-casing it again put
+        "Midcap It" and "Fmcg & Consumption" in the subject."""
+        s = summary_mod.build_summary(
+            _brief(
+                [
+                    _warning("TCS", direction="opportunity", sector="Midcap IT"),
+                    _warning("TCS2", direction="opportunity", sector="Midcap IT"),
+                    _warning(
+                        "ITC", direction="opportunity", sector="FMCG & Consumption"
+                    ),
+                ]
+            ),
+            _watchlist(),
+        )
+        subject = summary_mod.build_subject(s, _TODAY)
+        assert subject.endswith("| 3 Opportunities | Midcap IT, FMCG & Consumption")
+        assert summary_mod._sector_label("midcap_it") == "Midcap IT"
+        assert summary_mod._sector_label("some_new_sector") == "Some New Sector"
 
     def test_a_quiet_subject_says_so_and_carries_the_standing_count(self):
         s = summary_mod.build_summary(

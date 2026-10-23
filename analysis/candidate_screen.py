@@ -163,8 +163,19 @@ def candidates_for_rotation(
 
     These arrive with a ticker already resolved by Screener, so they skip the
     name-resolution step that discards most headline-derived candidates.
+
+    The growth comes too: the rotation spends its intake cap strongest
+    first, and without it every candidate sorted at 0.0, so the slots went
+    by sector order instead.
     """
     return {
-        sector: [{"name": c["name"], "ticker": c["ticker"]} for c in rows]
+        sector: [
+            {
+                "name": c["name"],
+                "ticker": c["ticker"],
+                "growth_pct": c.get("growth_pct"),
+            }
+            for c in rows
+        ]
         for sector, rows in (screened or {}).items()
     }

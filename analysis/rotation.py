@@ -124,35 +124,94 @@ MAX_INTAKE_PER_RUN = 3
 PREFETCH_BATCH = 6
 
 
-def _screener_qoq_growth(session, ticker):
-    """Latest quarter-on-quarter sales growth from Screener, or 0.0.
+# The growth a candidate's latest quarter must show over the same quarter a
+# year earlier. It replaced a 15% bar on the quarter before, which seasons
+# decide: a hotel's April-June quarter, a footwear or textile maker's
+# off-season. On 22 Oct 2026 that bar turned away 29 of the 31 candidates it
+# saw, BDL among them at +130.8% on the year. The screen that hands most of
+# them over (analysis/candidate_screen.py) measures growth on the year too.
+MIN_SALES_YOY_PCT = 15.0
 
-    Extracted so the whole candidate probe is one call the thread pool can
-    make. Behaviour is unchanged, including swallowing its own errors: a
-    missing Screener page means an unproven candidate, not a failed run.
+_QUARTER_RE = re.compile(r"^([A-Za-z]{3})[a-z]*\.?\s+(\d{4})$")
+
+
+def _screener_quarterly_sales(session, ticker):
+    """``[(quarter, sales), ...]`` from the candidate's Screener page, oldest
+    first; None when no page showed figures.
+
+    Read as providers/screener.py reads a holding: the consolidated
+    accounts, then the standalone ones when the consolidated page is not
+    there or shows no figures, and a lender's "Revenue" line as its sales.
+    This used a regex of its own that knew neither, and answered 0.0 for
+    anything it could not read: on 22 Oct 2026 ten candidates, three banks
+    among them, were turned away at a "growth" of exactly 0.0%.
+
+    Errors are swallowed, as before: a page that cannot be read leaves the
+    candidate unmeasured, never the run failed.
     """
-    try:
-        url = f"https://www.screener.in/company/{ticker}/consolidated/"
-        r = session.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=10)
+    from bs4 import BeautifulSoup
+    from providers.screener import ACCOUNTS, SALES_ROW, company_url
+    from .parsing import extract_row_by_column
+
+    for accounts in ACCOUNTS:
+        try:
+            r = session.get(
+                company_url(ticker, accounts),
+                headers={"User-Agent": "Mozilla/5.0"},
+                timeout=10,
+            )
+        except Exception as e:  # noqa: BLE001 - one candidate, not the run
+            log.warning(f"{ticker}: Screener {accounts} page not read: {e!r}")
+            return None
+        if r.status_code == 404:
+            continue
         if r.status_code != 200:
-            url = f"https://www.screener.in/company/{ticker}/"
-            r = session.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=10)
-        if r.status_code == 200:
-            qs_match = re.search(r'id="quarters"(.*?)(?:</section>)', r.text, re.DOTALL)
-            if qs_match:
-                row_match = re.search(r"Sales.*?</tr>", qs_match.group(1), re.DOTALL)
-                if row_match:
-                    vals = re.findall(
-                        r"<td[^>]*>\s*([\d,\.\-]+)\s*</td>", row_match.group(0)
-                    )
-                    if len(vals) >= 2:
-                        s1 = float(vals[-1].replace(",", ""))
-                        s2 = float(vals[-2].replace(",", ""))
-                        if s2 > 0:
-                            return ((s1 - s2) / s2) * 100
-    except Exception as e:
-        log.error(f"Error checking candidate QoQ growth on Screener: {e}")
-    return 0.0
+            # After a 429 or a 403 the other view would meet the same answer.
+            log.info(f"{ticker}: Screener {accounts} page: HTTP {r.status_code}.")
+            return None
+        quarters = extract_row_by_column(
+            BeautifulSoup(r.text, "lxml"), "quarters", SALES_ROW
+        )
+        if quarters:
+            return quarters
+    return None
+
+
+def _quarter_key(label):
+    match = _QUARTER_RE.match(str(label or "").strip())
+    return (match.group(1).lower(), int(match.group(2))) if match else None
+
+
+def _sales_yoy(quarters):
+    """The latest quarter's sales against the same quarter a year earlier, in
+    percent; None when that quarter is not on the page or was not positive.
+    Matched by column header, so a blank column cannot pair the wrong two."""
+    if not quarters:
+        return None
+    latest = _quarter_key(quarters[-1][0])
+    if latest is None:
+        return None
+    month, year = latest
+    base = next(
+        (
+            value
+            for label, value in quarters
+            if _quarter_key(label) == (month, year - 1)
+        ),
+        None,
+    )
+    if base is None or base <= 0:
+        return None
+    return round((quarters[-1][1] - base) / base * 100, 1)
+
+
+def _sales_qoq(quarters):
+    """Sales growth on the quarter before, as the competitive-threat warning
+    compares challengers (analysis/early_warning.py); None without two
+    quarters or a positive base."""
+    if not quarters or len(quarters) < 2 or quarters[-2][1] <= 0:
+        return None
+    return round((quarters[-1][1] - quarters[-2][1]) / quarters[-2][1] * 100, 1)
 
 
 def _probe_candidate(name, preresolved, isin_master, watchlisted=()):
@@ -243,7 +302,9 @@ def _probe_candidate(name, preresolved, isin_master, watchlisted=()):
         probe["exception"] = str(e)
         return probe
 
-    probe["qoq_growth"] = _screener_qoq_growth(session, ticker)
+    quarters = _screener_quarterly_sales(session, ticker)
+    probe["sales_yoy"] = _sales_yoy(quarters)
+    probe["qoq_growth"] = _sales_qoq(quarters)
     return probe
 
 
@@ -480,7 +541,8 @@ def auto_curate_watchlist(brief_data, watchlist, screened_candidates=None):
                 rating = probe["rating"]
                 rev_growth_raw = probe["rev_growth_raw"]
                 revenue_growth = probe["revenue_growth"]
-                candidate_qoq_growth = probe["qoq_growth"]
+                candidate_qoq_growth = probe.get("qoq_growth")
+                sales_yoy = probe.get("sales_yoy")
                 candidate_isin = probe["isin"]
 
                 existing_entity = resolve_entity_by_isin(candidate_isin, entity_master)
@@ -506,31 +568,39 @@ def auto_curate_watchlist(brief_data, watchlist, screened_candidates=None):
 
                 # Eligibility check. Target potential is judged only where
                 # analysts set a target; without one, the growth tests decide.
-                negative_potential = growth_pct_val is not None and growth_pct_val <= 0
-                is_eligible = not negative_potential
-                if rev_growth_raw is not None and rev_growth_raw < 0:
-                    is_eligible = False
-                if candidate_qoq_growth < 15.0:
-                    is_eligible = False
-
-                if not is_eligible:
-                    log.info(
-                        f"Candidate {ticker} did not meet positive growth criteria. Skipping."
+                status = None
+                if growth_pct_val is not None and growth_pct_val <= 0:
+                    status, reason_str = (
+                        "Growth Divergence",
+                        "Negative target potential",
                     )
+                elif rev_growth_raw is not None and rev_growth_raw < 0:
+                    status = "Growth Divergence"
                     reason_str = (
-                        "Negative target potential"
-                        if negative_potential
-                        else (
-                            f"Failed growth criteria (YoY revenue {revenue_growth})"
-                            if rev_growth_raw is not None and rev_growth_raw < 0
-                            else f"Failed QoQ growth threshold ({candidate_qoq_growth:.1f}% < 15%)"
-                        )
+                        f"Failed growth criteria (YoY revenue {revenue_growth})"
                     )
+                elif sales_yoy is None:
+                    # Not a failure to grow: no figures were read, so there is
+                    # nothing to admit it on, and saying 0.0% would be a guess.
+                    status = "Unresolved"
+                    reason_str = (
+                        "Quarterly sales not read from Screener, so growth is "
+                        "not measured"
+                    )
+                elif sales_yoy < MIN_SALES_YOY_PCT:
+                    status = "Growth Divergence"
+                    reason_str = (
+                        f"Quarterly sales {sales_yoy:+.1f}% on the same quarter "
+                        f"last year, under the {MIN_SALES_YOY_PCT:.0f}% bar"
+                    )
+
+                if status:
+                    log.info(f"Candidate {ticker} not eligible: {reason_str}.")
                     structured_emerging.setdefault(sector, []).append(
                         {
                             "name": full_name or name,
                             "ticker": ticker,
-                            "status": "Growth Divergence",
+                            "status": status,
                             "reason": reason_str,
                         }
                     )
@@ -624,7 +694,8 @@ def auto_curate_watchlist(brief_data, watchlist, screened_candidates=None):
                             "ticker": ticker,
                             "status": "Watchlisted",
                             "reason": "Added to watchlist (new high-growth pick).",
-                            "qoq_growth": round(candidate_qoq_growth, 1),
+                            "qoq_growth": candidate_qoq_growth,
+                            "sales_yoy": sales_yoy,
                         }
                     )
                 else:
@@ -660,7 +731,8 @@ def auto_curate_watchlist(brief_data, watchlist, screened_candidates=None):
                                 "ticker": ticker,
                                 "status": "Watchlisted",
                                 "reason": f"Rotated into watchlist replacing {weakest_stock['ticker']}.",
-                                "qoq_growth": round(candidate_qoq_growth, 1),
+                                "qoq_growth": candidate_qoq_growth,
+                                "sales_yoy": sales_yoy,
                             }
                         )
                     else:
@@ -673,7 +745,8 @@ def auto_curate_watchlist(brief_data, watchlist, screened_candidates=None):
                                 "ticker": ticker,
                                 "status": "Pipeline",
                                 "reason": f"Pipeline candidate: {why}.",
-                                "qoq_growth": round(candidate_qoq_growth, 1),
+                                "qoq_growth": candidate_qoq_growth,
+                                "sales_yoy": sales_yoy,
                             }
                         )
 
