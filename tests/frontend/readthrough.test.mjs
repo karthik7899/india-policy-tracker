@@ -44,3 +44,12 @@ test("the company page puts how it travels before the chain", () => {
   // A row from before these fields existed still shows its chain.
   assert.equal(readThroughMeta({ chain: ["a", "b"] }), "a → b");
 });
+
+test("a row standing for several reports says how many more", async () => {
+  const { moreReports } = await import("../../src/core/format.js");
+  assert.equal(moreReports({ reports: 2 }), " (+1 more report)");
+  assert.equal(moreReports({ reports: 4 }), " (+3 more reports)");
+  assert.equal(moreReports({ reports: 1 }), "");
+  assert.equal(moreReports({}), "");
+  assert.equal(moreReports(null), "");
+});

@@ -702,3 +702,17 @@ def test_a_chain_can_leave_out_the_lite_models(monkeypatch):
     monkeypatch.setenv("GEMINI_MODEL", "gemini-flash-lite-latest")
     transport, detail = llm_reader.default_transport(exclude=("lite",))
     assert transport is None and "no model left" in detail
+
+
+def test_an_llm_only_event_is_dated_by_its_headline_when_the_feed_is_not():
+    headline = (
+        "Persistent Systems Limited has informed the Exchange regarding a press "
+        "release dated September 21, 2026, titled Persistent to acquire Nagarro"
+    )
+    readings = {
+        headline: ground(
+            headline, _answer("acquisition", ["Persistent Systems", "Nagarro"])
+        )
+    }
+    events, _ = reconcile([], readings, WATCHLIST, today="2026-10-20")
+    assert [e["date"] for e in events] == ["2026-09-21"]

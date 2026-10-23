@@ -502,11 +502,19 @@
     },
     {
       "src": "freight",
-      "dst": "logistics_heavy_capital",
+      "dst": "BHEL",
       "type": "input_cost",
-      "note": "freight cost exposure",
+      "note": "Imports components and ships heavy project cargo; freight is a project cost",
       "evidence": "curated",
-      "added": "2026-07-10"
+      "added": "2026-10-23"
+    },
+    {
+      "src": "freight",
+      "dst": "CUMMINSIND",
+      "type": "input_cost",
+      "note": "Exports engines and gensets and imports components; freight is a cost both ways",
+      "evidence": "curated",
+      "added": "2026-10-23"
     },
     {
       "src": "freight",

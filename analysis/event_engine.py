@@ -23,7 +23,7 @@ from analysis.competitive_intel import (
     collect_headlines,
     collect_sources,
 )
-from analysis.event_evidence import article_date, evidence_level
+from analysis.event_evidence import article_date, evidence_level, headline_date
 from analysis.parsing import title_matches_company
 from config import SECTOR_METADATA
 from logger import log
@@ -369,6 +369,15 @@ _CERTAINTY_PATTERNS = {
             r"\bexplor(?:e|es|ed)\s+(?:an?\s+|the\s+)?(?:[\w-]+\s+){0,4}?"
             r"(?:partnerships?|tie-?ups?|alliances?|jvs?|joint\s+ventures?|"
             r"deals?|mergers?|acquisitions?|collaborations?|stake|options)\b"
+        ),
+        # "Weighs" and "considers" as "weighing" and "considering" are, but
+        # only over what follows to the end of the statement: "X weighs stake
+        # sale" is a thought, while "LS MnM weighs copper concentrate cuts as
+        # shortages squeeze smelter profits" states the shortage as fact. Not
+        # "weighs on", which is pressure.
+        re.compile(
+            r"\b(?:weighs|considers)\b(?!\s+on\b)"
+            r"(?![^,;:]*\b(?:as|amid|after|while|despite)\b)"
         ),
     ),
     "announced": (
@@ -776,7 +785,11 @@ def classify_headlines(
                     # The article's own date, not the run's. Every run
                     # re-reads the accumulated news history, so the run date
                     # re-stamped months-old stories as today's on every run.
-                    "date": article_date(citation.get("date")) or today,
+                    # Where the feed gives none, the date the headline gives
+                    # itself (event_evidence.headline_date).
+                    "date": article_date(citation.get("date"))
+                    or headline_date(headline, today)
+                    or today,
                     "first_seen": today,
                     **(
                         {"link": citation["link"], "source": citation.get("source", "")}
@@ -886,7 +899,7 @@ def refresh_merged_events(
                 ((sources or {}).get(str(event.get("headline", "")).lower()) or {}).get(
                     "date"
                 )
-            )
+            ) or headline_date(event.get("headline"), today)
             if published and published != event.get("date"):
                 event.setdefault("first_seen", event.get("date"))
                 event["date"] = published

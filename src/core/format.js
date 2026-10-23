@@ -63,6 +63,16 @@ export function transmissionLabel(transmission) {
  * dashboard say the same thing; the fallback covers a row with the grade and
  * not the words.
  */
+/**
+ * " (+1 more report)" when other outlets carried the same story: one
+ * read-through row stands for them (analysis/read_through._dedupe).
+ */
+export function moreReports(row) {
+  const more = Number(row?.reports || 1) - 1;
+  if (!Number.isFinite(more) || more < 1) return "";
+  return ` (+${more} more report${more > 1 ? "s" : ""})`;
+}
+
 export function strengthLabel(row) {
   const strength = row?.strength;
   if (!strength || strength === "hard") return "";

@@ -473,16 +473,26 @@ def _input_squeeze(event, graph, watchlist):
         return out
 
     held = _holding_sectors(watchlist)
+    # Word-boundary matched: "RAM" must not fire on "programme" or
+    # "Gurugram", and "memory" must not fire on "memorial". And named as the
+    # thing in short supply, not as who uses it (input_named), and not as a
+    # kind the edge rules out (edge_input_named).
+    named = [e for e in _edges(graph, "input_cost") if edge_input_named(headline, e)]
+    # A holding whose own sector buys the same input is already in that
+    # sector's row: Diamond Power, moved into data-centre support, came out
+    # twice for every copper headline.
+    sector_rows = {
+        (str(e.get("src", "")).lower(), e.get("dst"))
+        for e in named
+        if str(e.get("dst") or "").upper() not in held
+    }
     seen = set()
-    for edge in _edges(graph, "input_cost"):
+    for edge in named:
         material = str(edge.get("src", ""))
-        # Word-boundary matched: "RAM" must not fire on "programme" or
-        # "Gurugram", and "memory" must not fire on "memorial". And named as
-        # the thing in short supply, not as who uses it (input_named), and
-        # not as a kind the edge rules out (edge_input_named).
-        if not edge_input_named(headline, edge):
-            continue
         sector = edge.get("dst")
+        own = str(sector or "").upper()
+        if own in held and (material.lower(), held[own]) in sector_rows:
+            continue
         if (material.lower(), sector) in seen:
             continue
         seen.add((material.lower(), sector))
@@ -976,29 +986,62 @@ def _partner_news(event, graph, watchlist, peers=None):
 
 
 def _dedupe(flags):
-    """One row per (sector, mechanism, trigger, tickers).
+    """One row per claim: what happened (the chain's first link), how it
+    travels and which way, and the holdings it lands on.
 
     The same headline can reach one sector by several chains — two suppliers
-    to the same customer, say. Showing it four times reads as four problems.
-    The surviving row keeps the best-weighted chain: the better evidenced,
-    since the event is the same.
+    to the same customer, say — and the same story reaches the corpus from
+    several outlets: on 20 Oct two reports of one LS MnM copper cut were six
+    of the ten rows. Showing it twice reads as two problems. The surviving
+    row keeps the best-weighted chain, then the newest report, and counts
+    the reports behind it (``reports``).
     """
-    best = {}
+    # Tickers are part of the key because a partner chain is scoped to one
+    # company: Vivo hitting two EMS holdings' ventures is two rows, and keying
+    # on sector alone would silently keep one and drop the other. Sector-wide
+    # flags carry the whole sector, so nothing changes there.
+    groups: Dict[Any, List[Dict[str, Any]]] = {}
     for flag in flags:
-        # Tickers are part of the key because a partner chain is scoped to one
-        # company: Vivo hitting two EMS holdings' ventures is two rows, and
-        # keying on sector alone would silently keep one and drop the other.
-        # Sector-wide flags carry the whole sector, so nothing changes there.
         key = (
             flag["sector"],
             flag["mechanism"],
-            flag["trigger"],
+            flag["direction"],
             tuple(flag.get("tickers") or ()),
         )
-        current = best.get(key)
-        if current is None or flag.get("weight", 0) > current.get("weight", 0):
-            best[key] = flag
-    return list(best.values())
+        groups.setdefault(key, []).append(flag)
+
+    out = []
+    for rows in groups.values():
+        # Within a group, rows are one claim if they share a headline (one
+        # story naming memory, memory chips and chips) or a first link (one
+        # story in two outlets' words): joined either way, transitively.
+        parent = list(range(len(rows)))
+
+        def root(i):
+            while parent[i] != i:
+                parent[i] = parent[parent[i]]
+                i = parent[i]
+            return i
+
+        first_with = {}
+        for i, flag in enumerate(rows):
+            for mark in (
+                ("trigger", flag["trigger"]),
+                ("claim", (flag.get("chain") or [flag["trigger"]])[0]),
+            ):
+                if mark in first_with:
+                    parent[root(i)] = root(first_with[mark])
+                else:
+                    first_with[mark] = i
+        claims: Dict[int, List[Dict[str, Any]]] = {}
+        for i, flag in enumerate(rows):
+            claims.setdefault(root(i), []).append(flag)
+        for claim in claims.values():
+            best = max(
+                claim, key=lambda f: (f.get("weight", 0), str(f.get("date", "")))
+            )
+            out.append(dict(best, reports=len({f["trigger"] for f in claim})))
+    return out
 
 
 def compute_read_throughs(
@@ -1043,11 +1086,20 @@ def compute_read_throughs(
             flags.extend(_partner_news(event, graph, watchlist, peers))
 
         # The raw corpus carries no dates — it is this run's collection — so
-        # everything in it is today by construction.
+        # everything in it is today, unless the headline dates itself:
+        # "Market Preview, June 22, 2026: ..." is not this week's news.
+        from analysis.event_evidence import headline_date
+
+        cutoff = (
+            datetime.date.fromisoformat(today) - datetime.timedelta(days=window_days)
+        ).isoformat()
         for headline in headlines or []:
+            dated = headline_date(headline, today) or today
+            if dated < cutoff:
+                continue
             flags.extend(
                 _input_squeeze(
-                    {"headline": headline, "date": today, "certainty": ""},
+                    {"headline": headline, "date": dated, "certainty": ""},
                     graph,
                     watchlist,
                 )

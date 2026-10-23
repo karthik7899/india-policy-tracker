@@ -187,3 +187,34 @@ def test_the_email_shows_a_capped_upside_as_a_bound():
         _CAPS_NORMAL,
     )
     assert "&le; -50.0% (capped)" in html
+
+
+def test_an_event_dated_before_the_last_run_is_not_new_news():
+    """The event cap once cut older events; when it stopped (#222), 81 of
+    them arrived at once and read as 83 events since the last run."""
+    prior = {
+        "market_events": [
+            {"headline": "Seen yesterday", "actors": ["HAL"], "date": "2026-10-19"}
+        ]
+    }
+    data = {
+        "market_events": [
+            {
+                "headline": "Kept at last, from a fortnight ago",
+                "actors": ["HAL"],
+                "date": "2026-10-05",
+            },
+            # A day's slack for an article the feed was slow to carry.
+            {
+                "headline": "Late from the day before",
+                "actors": ["HAL"],
+                "date": "2026-10-18",
+            },
+            {"headline": "Today's news", "actors": ["HAL"], "date": "2026-10-20"},
+        ]
+    }
+    c = build_changes(data, prior)
+    assert [i["text"] for i in c["items"]["events"]] == [
+        "Late from the day before",
+        "Today's news",
+    ]
