@@ -4,6 +4,7 @@ import email
 import os
 import sys
 from email.header import decode_header, make_header
+import pytest
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
@@ -84,8 +85,11 @@ def test_implicit_tls_port_skips_starttls(monkeypatch):
     assert _FakeSMTP.instances[0].started_tls is False
 
 
-def test_missing_configuration_is_not_an_error(monkeypatch):
-    _patch(monkeypatch, env={k: v for k, v in _ENV.items() if k != "SMTP_SERVER"})
+@pytest.mark.parametrize("missing_key", [
+    "RECEIVER_EMAIL", "SMTP_SERVER", "SMTP_PORT", "SMTP_USERNAME", "SMTP_PASSWORD"
+])
+def test_missing_credentials_returns_false(monkeypatch, missing_key):
+    _patch(monkeypatch, env={k: v for k, v in _ENV.items() if k != missing_key})
     assert alerts.send_failure_alert() is False
     assert _FakeSMTP.instances == []
 
