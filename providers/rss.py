@@ -10,20 +10,25 @@ analyzer = SentimentIntensityAnalyzer()
 
 
 def clean_news_item(entry, query_term):
-    """Formats and cleans an RSS entry. Returns None if the article is older than 7 days."""
-    title = ""
-    if hasattr(entry, "title") and entry.title:
-        title = html.unescape(re.sub(r"<[^>]+>", "", entry.title)).strip()
-    elif entry.get("title"):
-        title = html.unescape(re.sub(r"<[^>]+>", "", entry.get("title"))).strip()
+    """
+    Extracts and normalizes a single news item from a Google News RSS entry.
+    Strips out standard Google News boilerplate from titles and determines sentiment.
+    Returns None if the article is older than 7 days.
+    """
+    raw_title = entry.get('title', 'No Title')
+    if raw_title != 'No Title':
+        raw_title = html.unescape(re.sub(r"<[^>]+>", "", raw_title)).strip()
 
-    title = title.split(" - ")[0]
+    raw_summary = entry.get('summary', '')
 
-    source = entry.get("source", {}).get("title", "Finance Media")
-    if " - " in entry.get("title", ""):
-        parts = entry.get("title", "").split(" - ")
-        if len(parts) > 1:
-            source = parts[-1]
+    # Clean up Google News suffix (e.g. " - Times of India")
+    if ' - ' in raw_title:
+        title_parts = raw_title.rsplit(' - ', 1)
+        title = title_parts[0].strip()
+        source = title_parts[1].strip()
+    else:
+        title = raw_title.strip()
+        source = entry.get('source', {}).get('title', 'Finance Media')
 
     link = entry.get("link", "")
 
@@ -45,7 +50,7 @@ def clean_news_item(entry, query_term):
         except Exception:
             pass
 
-    summary = entry.get("summary", "")
+    summary = raw_summary
     if summary:
         summary = html.unescape(re.sub(r"<[^>]+>", "", summary)).strip()
         # Remove trailing "..." or "Read more" typically found in RSS

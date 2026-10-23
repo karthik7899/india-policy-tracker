@@ -32,6 +32,41 @@ def mock_datetime():
         yield
 
 
+def test_clean_news_item_missing_title():
+    entry = DotDict(
+        {
+            "link": "http://example.com",
+            "published": "Tue, 09 Jan 2024 10:00:00 GMT",
+            "published_parsed": (2024, 1, 9, 10, 0, 0, 1, 9, 0),
+            "summary": "This is a great new development.",
+        }
+    )
+
+    result = clean_news_item(entry, "Reliance")
+
+    assert result is not None
+    assert result["title"] == "No Title"
+    assert result["impact"] == "Positive"
+    assert result["source"] == "Finance Media"
+
+
+def test_clean_news_item_missing_summary():
+    entry = DotDict(
+        {
+            "title": "Reliance announces record profits - Times of India",
+            "link": "http://example.com",
+            "published": "Tue, 09 Jan 2024 10:00:00 GMT",
+            "published_parsed": (2024, 1, 9, 10, 0, 0, 1, 9, 0),
+        }
+    )
+
+    result = clean_news_item(entry, "Reliance")
+
+    assert result is not None
+    assert result["title"] == "Reliance announces record profits"
+    assert result["source"] == "Times of India"
+
+
 def test_clean_news_item_basic():
     entry = DotDict(
         {
