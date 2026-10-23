@@ -435,7 +435,7 @@ async def run_pipeline():
             f"with a sector effect; {len(data['policy_balance'])} sector(s) touched; "
             f"{labelled} sector feed item(s) labelled."
         )
-        # Re-attribute the merged list with the current rules, so a fix to the
+        # Re-attribute the merged list with the current rules, so an update to the
         # matcher reaches events carried over from earlier runs instead of
         # only applying to today's.
         data["market_events"] = refresh_merged_events(
