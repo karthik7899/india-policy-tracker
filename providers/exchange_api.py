@@ -82,6 +82,7 @@ def build_session(extra_headers=None):
     """A session, because the cookies these sites mint must persist across
     requests. Separate from the handshake so tests can inject a fake."""
     session = requests.Session()
+    session.verify = True
     session.headers.update(BROWSER_HEADERS)
     if extra_headers:
         session.headers.update(extra_headers)
