@@ -43,6 +43,4 @@ jobs:
           node-version: "22"
 
       - name: Run frontend tests
-        run: |
-          npm install
-          npm test
+        run: npm test
