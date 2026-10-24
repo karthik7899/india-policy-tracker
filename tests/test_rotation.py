@@ -425,7 +425,7 @@ class TestCandidateProbeConcurrency(unittest.TestCase):
         self.assertEqual(priced, [])
 
 
-def _candidate(ticker, target=130.0, label=None):
+def _candidate(ticker, target=130.0, label=None, analysts=6):
     """A probed clean-energy candidate at 100, with an analysts' target or
     (target=None) none."""
     from analysis.sector_fit import keywords
@@ -437,6 +437,7 @@ def _candidate(ticker, target=130.0, label=None):
         "isin": None,
         "live_price": 100.0,
         "target_price": target,
+        "analyst_count": analysts if target else 0,
         "growth_pct_val": target - 100.0 if target else None,
         "rating": "Buy",
         "rev_growth_raw": 0.4,
@@ -588,6 +589,22 @@ def test_upside_is_compared_only_between_analysts_targets():
     holdings.append(_uncovered("OWN"))
     held, row, _ = _rotate(holdings, _candidate("NEW", 125.0))
     assert "NEW" in held and "OWN" in held and "A" not in held
+
+
+def test_one_analysts_target_is_set_against_nothing():
+    """KUSUMGAR replaced WELSPUNLIV on 24 Oct on one analyst's target. A
+    target needs two analysts behind it to be compared, the candidate's and
+    the holding's alike."""
+    holdings = [_covered(t, u) for t, u in (("A", 10), ("B", 20), ("C", 30), ("D", 40))]
+    lone = dict(_covered("LONE", 3.7), analyst_count=1)
+    held, row, _ = _rotate(holdings + [lone], _candidate("NEW", 150.0, analysts=1))
+    assert "NEW" not in held
+    assert "1 analyst's, under the 2 needed" in row["reason"]
+
+    # Two analysts are enough; the one-analyst holding is not the weakest
+    # compared, so the 10% one goes.
+    held, row, _ = _rotate(holdings + [lone], _candidate("NEW", 125.0, analysts=2))
+    assert "NEW" in held and "LONE" in held and "A" not in held
 
 
 def test_an_uncovered_holding_goes_only_after_its_thesis_stays_broken():

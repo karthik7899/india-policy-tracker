@@ -402,6 +402,15 @@ SECTOR_METADATA = {
         "icon": "💻",
         "label": "Midcap IT",
     },
+    # Added 24 Oct, on the owner's decision, for Godrej Properties: filed
+    # under Data Center Support, where no developer without a data-centre
+    # business fits, and refused by every other sector.
+    "real_estate": {
+        "desc": "Housing and commercial developers riding urban demand, "
+        "RERA and affordable-housing policy.",
+        "icon": "🏙️",
+        "label": "Real Estate",
+    },
     "semiconductors_equipment": {
         "desc": "India Semiconductor Mission (ISM) "
         "2.0, silicon fabs, and OSAT "
@@ -513,6 +522,11 @@ SECTOR_QUERIES = {
         'site:pib.gov.in "IT services" OR "digital ' 'engineering" OR "GCC"',
         "India midcap IT services growth deal wins GenAI",
         '"Persistent Systems" OR "Coforge" OR "Mphasis" OR ' '"LTTS" IT services',
+    ],
+    "real_estate": [
+        'site:pib.gov.in "PMAY" OR "affordable housing" OR ' '"real estate"',
+        "India housing sales real estate demand launches RERA",
+        '"Godrej Properties" OR "DLF" OR "Lodha" OR "Prestige Estates" ' "real estate",
     ],
     "semiconductors_equipment": [
         'site:pib.gov.in "semiconductor PLI" OR ' '"ISM 2.0" OR "OSAT"',

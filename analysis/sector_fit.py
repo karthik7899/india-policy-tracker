@@ -196,6 +196,15 @@ SECTOR_FIT: Dict[str, Dict[str, Any]] = {
             "health information services",
         ],
     },
+    # Developers and their services; not REITs, which are units of rented
+    # property rather than companies building it.
+    "real_estate": {
+        "industries": [
+            "real estate - development",
+            "real estate - diversified",
+            "real estate services",
+        ],
+    },
     "semiconductors_equipment": {
         "industries": [
             "semiconductors",
