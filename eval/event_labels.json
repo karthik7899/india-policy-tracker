@@ -1062,7 +1062,9 @@
    "headline": "Coforge unveils SecureEdge2Cloud AI security on Zscaler Zero Trust Exchange",
    "event_type": null,
    "actors": [],
-   "split": "dev"
+   "split": "dev",
+   "counterparties": [],
+   "reviewed": "2026-10-24"
   },
   {
    "headline": "Container Corp of India Share Price",
@@ -1285,7 +1287,8 @@
    "event_type": null,
    "actors": [],
    "split": "holdout",
-   "note": "results"
+   "note": "results",
+   "reviewed": "2026-10-24"
   },
   {
    "headline": "Maersk’s Unveils First Indian Manufactured Shipping Container",
@@ -1297,7 +1300,8 @@
    "headline": "5 Footwear Stocks India 2026: Strong Future Roadmaps",
    "event_type": null,
    "actors": [],
-   "split": "dev"
+   "split": "dev",
+   "reviewed": "2026-10-24"
   },
   {
    "headline": "BPCL exits Numaligarh Refinery ahead of privatisation",
@@ -1312,13 +1316,15 @@
    "headline": "LBank Unveils Q2 2026 Report, Featuring 25 Million Users and Advances in Prediction Markets and Cultural IP",
    "event_type": null,
    "actors": [],
-   "split": "holdout"
+   "split": "holdout",
+   "reviewed": "2026-10-24"
   },
   {
    "headline": "Trading Members of the Exchange are hereby informed that effective from August 19, 2026, the Equity Shares of Behari Lal Engineering Ltd  (Scrip Code: 544870) are listed and admitted to ....",
    "event_type": null,
    "actors": [],
-   "split": "dev"
+   "split": "dev",
+   "reviewed": "2026-10-24"
   },
   {
    "headline": "Schneider Electric’s solutions to turn problems into competitive advantages",
@@ -1334,37 +1340,43 @@
   },
   {
    "headline": "Indian Railways Approves ₹493 Crore for 38.21 km New Rail Line between Mukutban (Adilabad) and Gadchandur",
-   "event_type": null,
+   "event_type": "capacity_add",
    "actors": [],
-   "split": "dev"
+   "split": "dev",
+   "counterparties": [],
+   "reviewed": "2026-10-24"
   },
   {
    "headline": "Ellenbarrie bags Rs. 481-crore BHEL contract for major Odisha air separation unit",
    "event_type": "order_win",
    "actors": [],
    "split": "dev",
-   "note": "Ellenbarrie won it; the holding named is the customer, not the winner ('BHEL contract')"
+   "note": "Ellenbarrie won it; the holding named is the customer, not the winner ('BHEL contract')",
+   "reviewed": "2026-10-24"
   },
   {
    "headline": "Tiger Logistics wins ₹4 crore BHEL order for import break bulk project",
    "event_type": "order_win",
    "actors": [],
    "split": "dev",
-   "note": "Tiger Logistics won it; the holding named is the customer, not the winner ('BHEL order')"
+   "note": "Tiger Logistics won it; the holding named is the customer, not the winner ('BHEL order')",
+   "reviewed": "2026-10-24"
   },
   {
    "headline": "Cranex Receives Orders Worth Rs. 71.7 mn from BHEL and DEE VEE",
    "event_type": "order_win",
    "actors": [],
    "split": "dev",
-   "note": "Cranex won them; the holding named is the customer, not the winner ('from BHEL')"
+   "note": "Cranex won them; the holding named is the customer, not the winner ('from BHEL')",
+   "reviewed": "2026-10-24"
   },
   {
    "headline": "Bikewo Green Tech wins Rs 66.46 crore order from Reliance Industries for EV tractor operations",
    "event_type": "order_win",
    "actors": [],
    "split": "dev",
-   "note": "Bikewo Green Tech won it; the holding named is the customer, not the winner ('from Reliance Industries')"
+   "note": "Bikewo Green Tech won it; the holding named is the customer, not the winner ('from Reliance Industries')",
+   "reviewed": "2026-10-24"
   },
   {
    "headline": "Relaxo Footwears Q1 FY27 Profit Declines 7% to ₹54.94 Cr",
@@ -1373,7 +1385,8 @@
     "RELAXO"
    ],
    "split": "dev",
-   "note": "a holding's own weaker quarter: read, but graded from its filed numbers, not warned on twice"
+   "note": "a holding's own weaker quarter: read, but graded from its filed numbers, not warned on twice",
+   "reviewed": "2026-10-24"
   },
   {
    "headline": "Thermax Q1 profit plunges 83% as margins collapse despite higher revenue",
@@ -1382,7 +1395,8 @@
     "THERMAX"
    ],
    "split": "dev",
-   "note": "profit falling while revenue rises is still a weaker quarter"
+   "note": "profit falling while revenue rises is still a weaker quarter",
+   "reviewed": "2026-10-24"
   },
   {
    "headline": "NCLT Ahmedabad Dismisses Insolvency Plea Against Suzlon Energy",

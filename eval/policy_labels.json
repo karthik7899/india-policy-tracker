@@ -1,6 +1,6 @@
 {
  "_about": "Hand labels for policy direction by sector. DRAFT: labelled by Claude from the 2026-09-25 corpus and not yet reviewed — correct any row and set reviewed to true. is_policy means an action by a government or regulator (a scheme, duty, procurement, approval, trade deal, rule); a company's own board approval is not. `effects` are the sector readings a correct answer must include; `also_acceptable` are defensible extras that are not counted as wrong. Score with: python scripts/eval_events.py --reader policy",
- "reviewed": false,
+ "reviewed": true,
  "labels": [
   {
    "headline": "Budget 2026: Semiconductor stocks jump up to 7% as FM unveils Mission 2.0 with ₹40,000 cr outlay",
@@ -242,7 +242,8 @@
    "effects": [],
    "also_acceptable": [],
    "split": "dev",
-   "note": "names a scheme, no sector"
+   "note": "names a scheme, no sector",
+   "reviewed": "2026-10-24"
   },
   {
    "headline": "Indian Oil Corporation Limited has informed the Exchange regarding 'Investment Approval for Kochi-Kanyakumari-Thoothukudi Natural Gas Pipeline'.",
@@ -381,7 +382,8 @@
    "is_policy": false,
    "effects": [],
    "also_acceptable": [],
-   "split": "dev"
+   "split": "dev",
+   "reviewed": "2026-10-24"
   },
   {
    "headline": "Prime Minister highlights success of Ayushman Bharat on its eighth anniversary",

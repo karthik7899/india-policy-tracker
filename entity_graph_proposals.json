@@ -2,38 +2,6 @@
   "_how_to_review": "Partner edges proposed from completed tie-up headlines. Nothing here reaches the graph until you set status to 'accepted'; 'rejected' stops the pair being proposed again. You may correct 'counterparty' before accepting (e.g. 'Vivo Mobile' -> 'Vivo') — it is the name the graph will match in future headlines. Leave 'proposed_as' alone: it is how the pipeline recognises the same pair next time.",
   "proposals": [
     {
-      "holding": "POWERINDIA",
-      "counterparty": "Ansaldo Energia",
-      "proposed_as": "Ansaldo Energia",
-      "status": "pending",
-      "first_seen": "2026-10-16",
-      "last_seen": "2026-10-16",
-      "evidence": [
-        {
-          "headline": "Hitachi Energy and Ansaldo Energia launch a strategic partnership to bring integrated power solutions to meet surging electricity demand",
-          "date": "2026-10-16",
-          "link": "https://news.google.com/rss/articles/CBMitwJBVV95cUxNeVBBbnlhUVdQZ2JxdVI0WGFSelVlWHlRYVc3VWp5eTlpWGhZLXdjR0U2bVRsTTNSVms3alFjcHo4UTljSHBrUldJT1d3UjNVOTA2czVQUXBPZEVQdEVoSGU3clZtUXhNazNtSTVVcGlOeWVnQ2NqVUhZRWdMWjg4MVFucEtydk9SVGJHNF9KTzdrcVZZQ1VGa2hLQjlIXzFscWdfeUhZdjV1eVB6TzEzMjd4Tk45OHNRS01DZnBCY1RKamN0TGJUOGJrVFVreVJfYVltTWpxVlotTFQ0ZUFwRUd3bm1yYlNRNl9NdVRoeHJabHRiMjBMaEpCRXBaZUg2enFKd2lSYUIyTkd6VmQxc0lhQWwxZE95Z3psUFlEVUxjUUtRY3VaOG95d3BqVDE4eWMxMEFvYw?oc=5",
-          "source": "TradingView"
-        }
-      ]
-    },
-    {
-      "holding": "SBIN",
-      "counterparty": "Hatsun Agro",
-      "proposed_as": "Hatsun Agro",
-      "status": "pending",
-      "first_seen": "2026-10-21",
-      "last_seen": "2026-10-21",
-      "evidence": [
-        {
-          "headline": "Hatsun Agro launches Go-Dhan in partnership with Odisha Govt and State Bank of India",
-          "date": "2026-10-21",
-          "link": "https://news.google.com/rss/articles/CBMizAFBVV95cUxNQnN6Y2ozeUdQV0w1TWZwZDNTSURFZ2lTWHVsMU5OUjA2cUJJSnhFZUE0b3RrQUZzUDRnM0x4QjdKU1F6SlJQTWlKWE1oV1Jqd212UTVrZHVKVV9ySzAyTkkwR2pEY0kweTFfRE5rSkVmaHJ1MWlXMzJ2MEh5X0ZvTnpyeDdWcjlzeFllWFQ1T2ZTZTdScW1GWmVsZDZmNnhiNi1ocld5MzNfdHZDUkpvNmc3NWFJTzc5RnZlWllkbW1kSEdCanNvZTJoU2Y?oc=5",
-          "source": "AgroSpectrum India"
-        }
-      ]
-    },
-    {
       "holding": "BHEL",
       "counterparty": "Titagarh",
       "proposed_as": "Titagarh",
@@ -444,6 +412,22 @@
       ]
     },
     {
+      "holding": "POWERINDIA",
+      "counterparty": "Ansaldo Energia",
+      "proposed_as": "Ansaldo Energia",
+      "status": "accepted",
+      "first_seen": "2026-10-16",
+      "last_seen": "2026-10-16",
+      "evidence": [
+        {
+          "headline": "Hitachi Energy and Ansaldo Energia launch a strategic partnership to bring integrated power solutions to meet surging electricity demand",
+          "date": "2026-10-16",
+          "link": "https://news.google.com/rss/articles/CBMitwJBVV95cUxNeVBBbnlhUVdQZ2JxdVI0WGFSelVlWHlRYVc3VWp5eTlpWGhZLXdjR0U2bVRsTTNSVms3alFjcHo4UTljSHBrUldJT1d3UjNVOTA2czVQUXBPZEVQdEVoSGU3clZtUXhNazNtSTVVcGlOeWVnQ2NqVUhZRWdMWjg4MVFucEtydk9SVGJHNF9KTzdrcVZZQ1VGa2hLQjlIXzFscWdfeUhZdjV1eVB6TzEzMjd4Tk45OHNRS01DZnBCY1RKamN0TGJUOGJrVFVreVJfYVltTWpxVlotTFQ0ZUFwRUd3bm1yYlNRNl9NdVRoeHJabHRiMjBMaEpCRXBaZUg2enFKd2lSYUIyTkd6VmQxc0lhQWwxZE95Z3psUFlEVUxjUUtRY3VaOG95d3BqVDE4eWMxMEFvYw?oc=5",
+          "source": "TradingView"
+        }
+      ]
+    },
+    {
       "holding": "RELAXO",
       "counterparty": "Clean Max",
       "proposed_as": "Clean Max",
@@ -832,6 +816,22 @@
           "date": "2026-10-20",
           "link": "https://nsearchives.nseindia.com/corporate/MPHASIS_22092026112035_Press_Release-22_September_2026-signed.pdf",
           "source": "NSE"
+        }
+      ]
+    },
+    {
+      "holding": "SBIN",
+      "counterparty": "Hatsun Agro",
+      "proposed_as": "Hatsun Agro",
+      "status": "rejected",
+      "first_seen": "2026-10-21",
+      "last_seen": "2026-10-21",
+      "evidence": [
+        {
+          "headline": "Hatsun Agro launches Go-Dhan in partnership with Odisha Govt and State Bank of India",
+          "date": "2026-10-21",
+          "link": "https://news.google.com/rss/articles/CBMizAFBVV95cUxNQnN6Y2ozeUdQV0w1TWZwZDNTSURFZ2lTWHVsMU5OUjA2cUJJSnhFZUE0b3RrQUZzUDRnM0x4QjdKU1F6SlJQTWlKWE1oV1Jqd212UTVrZHVKVV9ySzAyTkkwR2pEY0kweTFfRE5rSkVmaHJ1MWlXMzJ2MEh5X0ZvTnpyeDdWcjlzeFllWFQ1T2ZTZTdScW1GWmVsZDZmNnhiNi1ocld5MzNfdHZDUkpvNmc3NWFJTzc5RnZlWllkbW1kSEdCanNvZTJoU2Y?oc=5",
+          "source": "AgroSpectrum India"
         }
       ]
     },
