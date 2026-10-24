@@ -186,6 +186,8 @@ MAX_CHECKS_PER_RUN = 40
 # The second reader leaves out the lite models that made the first reading,
 # and models built for other media.
 CHECK_EXCLUDE = ("lite", "tts", "image", "audio", "embedding")
+# An answer with any other verdict is no answer: the check is asked again.
+VERDICTS = ("contradicts", "does_not")
 
 _CHECK_INSTRUCTIONS = """You check flags raised by another reader. For each item below, that reader
 said the HEADLINE contradicts the quoted CLAIM from an investor's THESIS.
@@ -213,7 +215,7 @@ _CHECK_SCHEMA = {
         "type": "OBJECT",
         "properties": {
             "id": {"type": "INTEGER"},
-            "verdict": {"type": "STRING", "enum": ["contradicts", "does_not"]},
+            "verdict": {"type": "STRING", "enum": list(VERDICTS)},
             "because": {"type": "STRING"},
         },
         "required": ["id", "verdict", "because"],
@@ -297,7 +299,7 @@ def check_challenges(
             by_id = {a.get("id"): a for a in answers if isinstance(a, dict)}
             for i, (key, pair, _reading) in enumerate(chunk):
                 raw = by_id.get(i)
-                if raw is None or raw.get("verdict") not in ("contradicts", "does_not"):
+                if raw is None or raw.get("verdict") not in VERDICTS:
                     status["checks_pending"] += 1
                     continue
                 verdict = raw["verdict"]

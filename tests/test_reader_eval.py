@@ -214,6 +214,29 @@ def test_a_doubled_answer_is_recorded_as_the_reader_reads_it(store, tmp_path):
     assert readings[A]["event_type"] == "order_win"
 
 
+def test_a_check_the_reader_would_refuse_is_neither_recorded_nor_served(tmp_path):
+    """check_challenges counts a verdict other than its two as no answer, so
+    keeping one would leave the check pending for good."""
+    store = rr.Recordings(str(tmp_path / "check.json"))
+    prompt = thesis_check._check_prompt([(0, PAIR, {"claim": "Debt-free"})])
+    ((_, key, readable),) = rr.CHECK.items(prompt)
+    calls = []
+
+    def live(p):
+        calls.append(p)
+        return json.dumps([{"id": 0, "verdict": "maybe", "because": ""}])
+
+    stats = {}
+    transport = rr.replaying(rr.CHECK, store, live, stats=stats)
+    assert json.loads(transport(prompt)) == []
+    assert store.entries == {} and stats["refused"] == 1
+
+    # One recorded before the rule held is asked again, not served.
+    store.record(key, rr.CHECK.fingerprint(), readable, {"verdict": "maybe"}, "m", "x")
+    assert json.loads(transport(prompt)) == []
+    assert len(calls) == 2
+
+
 def test_when_the_model_fails_the_run_goes_on_from_the_recordings(store):
     store.record(
         _key(A), rr.EVENTS.fingerprint(), A, {"event_type": "order_win"}, "m", "x"
@@ -509,6 +532,38 @@ def test_a_holdout_row_left_without_an_answer_fails_the_gate():
     dev = {"llm": _card({"r": _row("pending", split="dev")})}
     dev_base = {"llm": _card({"r": _row("found", "x", split="dev")})}
     assert reader_eval.compare(dev_base, dev)["regressions"] == []
+
+
+def test_a_change_to_the_holdout_rows_fails_the_gate():
+    """Dropping a missed row raises recall with no reader improving; adding
+    an easy one would hide a fall."""
+    rows = {"hard": _row("missed", "none"), "easy": _row("found", "x")}
+    base = {"llm": _card(rows, recall=0.5)}
+
+    def regressions(now_rows):
+        return reader_eval.compare(base, {"llm": _card(now_rows, recall=1.0)})[
+            "regressions"
+        ]
+
+    tail = "so its scores are not like for like with the base's"
+    assert regressions({"easy": rows["easy"]}) == [
+        f"llm: the holdout rows changed (1 removed), {tail}"
+    ]
+    assert regressions({**rows, "hard": _row("missed", "none", want="none")}) == [
+        f"llm: the holdout rows changed (1 relabelled), {tail}"
+    ]
+    assert regressions({**rows, "hard": _row("missed", "none", split="dev")}) == [
+        f"llm: the holdout rows changed (1 relabelled), {tail}"
+    ]
+    assert regressions({**rows, "new": _row("found", "x")}) == [
+        f"llm: the holdout rows changed (1 added), {tail}"
+    ]
+    # The dev split is not held fixed.
+    dev = {"d": _row("missed", "none", split="dev")}
+    assert (
+        reader_eval.compare({"llm": _card(dev)}, {"llm": _card({})})["regressions"]
+        == []
+    )
 
 
 def test_a_reader_the_base_has_no_scorecard_for_is_not_compared():

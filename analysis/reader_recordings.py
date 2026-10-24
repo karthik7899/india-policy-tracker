@@ -18,8 +18,9 @@ headline, a challenge to check. Each item's answer is stored on its own, so
 a batch of any make-up can be answered from them.
 
   replaying(codec, store)        answers from the recordings. An item with no
-                                 recording for this prompt is left out, and
-                                 the reader counts it as pending.
+                                 recording for this prompt, or one its reader
+                                 would refuse, is left out, and the reader
+                                 counts it as pending.
   replaying(codec, store, live)  the same, but a batch with such an item goes
                                  to the model, and the answers to those items
                                  are recorded. The rest are still served from
@@ -89,7 +90,12 @@ Item = Tuple[int, str, str]
 
 
 class Codec:
-    """How one reader's prompt is read back into the items it asks about."""
+    """How one reader's prompt is read back into the items it asks about.
+
+    ``accepts`` is the reader's own test of an answer beyond its id. One it
+    refuses is neither recorded nor served, so it is asked again rather than
+    kept as an answer the reader never uses.
+    """
 
     def __init__(
         self,
@@ -98,12 +104,14 @@ class Codec:
         schema: Callable[[], Dict[str, Any]],
         head: Callable[[], str],
         parse: Callable[[str], List[Item]],
+        accepts: Callable[[Dict[str, Any]], bool] = lambda answer: True,
     ):
         self.name = name
         self._template = template
         self._schema = schema
         self._head = head
         self._parse = parse
+        self.accepts = accepts
 
     def fingerprint(self) -> str:
         """The prompt around one placeholder item, and the response schema.
@@ -127,7 +135,6 @@ def item_key(identity: str) -> str:
 
 
 _EVENT_LINE = re.compile(r"(\d+): (.*)\Z", re.DOTALL)
-_HOLDING_LINE = re.compile(r"HOLDING: (.*)\Z", re.DOTALL)
 _TICKER_IN = re.compile(r"\(([^()]+), listed in India\)\Z")
 
 
@@ -258,9 +265,18 @@ def _check_schema() -> Dict[str, Any]:
     return thesis_check._CHECK_SCHEMA
 
 
+def _check_accepts(answer: Dict[str, Any]) -> bool:
+    """check_challenges counts any other verdict as no answer at all."""
+    from analysis import thesis_check
+
+    return answer.get("verdict") in thesis_check.VERDICTS
+
+
 EVENTS = Codec("events", _events_template, _events_schema, _events_head, _parse_events)
 THESIS = Codec("thesis", _thesis_template, _thesis_schema, _thesis_head, _parse_thesis)
-CHECK = Codec("check", _check_template, _check_schema, _check_head, _parse_check)
+CHECK = Codec(
+    "check", _check_template, _check_schema, _check_head, _parse_check, _check_accepts
+)
 CODECS = (EVENTS, THESIS, CHECK)
 
 
@@ -293,12 +309,21 @@ class Recordings:
         except FileNotFoundError:
             return {}
 
-    def answer(self, key: str, fingerprint: str) -> Optional[Dict[str, Any]]:
+    def answer(
+        self,
+        key: str,
+        fingerprint: str,
+        accepts: Callable[[Dict[str, Any]], bool] = lambda answer: True,
+    ) -> Optional[Dict[str, Any]]:
+        """The recorded answer to serve, or None: none recorded for this
+        prompt, ``fresh``, or one the reader would refuse (asked again)."""
         self.asked.add(key)
         entry = self.entries.get(key)
         if not entry or entry.get("prompt") != fingerprint:
             return None
         if self.fresh and key not in self.renewed:
+            return None
+        if not accepts(entry["answer"]):
             return None
         self.served.add(key)
         return entry["answer"]
@@ -401,7 +426,14 @@ def replaying(
 
     today = today or datetime.date.today().isoformat()
     stats = stats if stats is not None else {}
-    for k in ("replayed", "recorded", "missing", "live_calls", "unparseable"):
+    for k in (
+        "replayed",
+        "recorded",
+        "missing",
+        "live_calls",
+        "unparseable",
+        "refused",
+    ):
         stats.setdefault(k, 0)
     stats.setdefault("live_failed", "")
 
@@ -410,7 +442,7 @@ def replaying(
         items = codec.items(prompt)
         answers: Dict[int, Dict[str, Any]] = {}
         for i, key, _ in items:
-            found = store.answer(key, fingerprint)
+            found = store.answer(key, fingerprint, codec.accepts)
             if found is not None:
                 answers[i] = found
         stats["replayed"] += len(answers)
@@ -440,6 +472,9 @@ def replaying(
                     if raw is None:
                         continue
                     answer = {k: v for k, v in raw.items() if k != "id"}
+                    if not codec.accepts(answer):
+                        stats["refused"] += 1
+                        continue
                     store.record(key, fingerprint, readable, answer, model, today)
                     answers[i] = answer
                     stats["recorded"] += 1

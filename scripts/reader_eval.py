@@ -18,9 +18,10 @@ and only where a key was set. This scores them on recorded answers
     row and what the reader made of it, and a change is compared with its
     base row by row: the rows it fixed, the rows it broke, the rows read
     differently.
-  * The holdout split is a gate. A change that lowers a holdout score, or
-    leaves a holdout row unread that was read before, fails unless the PR
-    carries the accept-regression label.
+  * The holdout split is a gate. A change that lowers a holdout score,
+    leaves a holdout row unread that was read before, or adds, removes or
+    relabels holdout rows, fails unless the PR carries the accept-regression
+    label.
   * A prompt change is measured live. Label the PR reader-eval and
     .github/workflows/reader-eval.yml records the new answers, rescores and
     posts the comparison on the PR.
@@ -395,10 +396,28 @@ def _transition(old: Optional[Dict[str, Any]], new: Dict[str, Any]) -> Optional[
     return None
 
 
+def _holdout_moved(rows: Dict[str, list]) -> str:
+    """How the holdout rows themselves changed, or "". A row moved into or
+    out of the split counts as relabelled."""
+    counts = {
+        "added": sum(1 for _, _, new in rows["added"] if new["split"] == "holdout"),
+        "removed": sum(1 for _, old, _ in rows["removed"] if old["split"] == "holdout"),
+        "relabelled": sum(
+            1
+            for _, old, new in rows["relabelled"]
+            if "holdout" in (old["split"], new["split"])
+        ),
+    }
+    return ", ".join(f"{n} {kind}" for kind, n in counts.items() if n)
+
+
 def compare(base: Dict[str, Any], now: Dict[str, Any]) -> Dict[str, Any]:
     """Row-by-row and metric-by-metric differences, and the regressions the
-    gate fails on: a holdout metric that got worse, or a holdout row that was
-    read and now is not."""
+    gate fails on: a holdout metric that got worse, a holdout row that was
+    read and now is not, or a change to the holdout rows themselves. Removing
+    a hard row or relabelling a missed one raises a score with no reader
+    improving, and adding an easy row hides a fall, so the holdout is held
+    fixed unless the change is accepted."""
     out: Dict[str, Any] = {"readers": {}, "regressions": []}
     for name in READERS:
         card, old = now.get(name), base.get(name)
@@ -432,7 +451,16 @@ def compare(base: Dict[str, Any], now: Dict[str, Any]) -> Dict[str, Any]:
                 f"{name}: {len(unread)} holdout row(s) that were read have no "
                 "answer now — record again (label the PR reader-eval)"
             )
-        out["readers"][name] = {"rows": dict(rows), "metrics": metrics}
+        moved = _holdout_moved(rows)
+        if moved:
+            out["regressions"].append(
+                f"{name}: the holdout rows changed ({moved}), so its scores are "
+                "not like for like with the base's"
+            )
+        out["readers"][name] = {
+            "rows": {kind: items for kind, items in rows.items() if items},
+            "metrics": metrics,
+        }
     return out
 
 
