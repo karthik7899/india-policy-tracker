@@ -438,6 +438,31 @@ def _git(*args: str) -> subprocess.CompletedProcess:
     return subprocess.run(["git", *args], cwd=ROOT, capture_output=True, text=True)
 
 
+def rescore(report: Dict[str, list]) -> None:
+    """Rescore the readers when the labels changed.
+
+    A corrected label moves the readers' scores with no new answer from any
+    of them, and the tests check that eval/scorecards/ is what a replay of
+    the recorded answers gives (scripts/reader_eval.py). So the scorecards
+    are rescored into the same commit as the labels. A failure here leaves
+    the decisions standing and says so in the reply.
+    """
+    if not _git("status", "--porcelain", "--", *LABEL_FILES.values()).stdout.strip():
+        return
+    try:
+        from scripts.reader_eval import refresh
+
+        changed = refresh()
+    except Exception as e:  # noqa: BLE001 - the owner's decisions still stand
+        report["skipped"].append(
+            f"reader scorecards were not rescored ({e!r}); "
+            "run python scripts/reader_eval.py --update"
+        )
+        return
+    if changed:
+        report["applied"].append("reader scorecards rescored: " + ", ".join(changed))
+
+
 def commit_and_push(payload: Dict[str, Any], number: int) -> Dict[str, list]:
     """Apply on the newest main and push, re-applying from scratch on a race.
 
@@ -450,6 +475,7 @@ def commit_and_push(payload: Dict[str, Any], number: int) -> Dict[str, list]:
         _git("fetch", "-q", "origin", "main")
         _git("reset", "-q", "--hard", "origin/main")
         report = apply_decisions(payload)
+        rescore(report)
         if not _git("status", "--porcelain").stdout.strip():
             return report
         _git("add", "-A")

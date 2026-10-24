@@ -445,3 +445,36 @@ def test_the_workflow_acts_only_for_the_owner_and_never_shells_the_body():
     assert "author_association == 'OWNER'" in text
     assert "github.event.issue.body }}" not in text
     assert "github.event.issue.title }}" not in text
+
+
+def test_label_edits_are_rescored_into_the_same_commit(monkeypatch):
+    """The tests hold eval/scorecards/ to a replay of the recorded answers, so
+    a corrected label must move the scorecards in the commit that moves it."""
+    import subprocess
+
+    from scripts import reader_eval
+
+    status = {"out": " M eval/event_labels.json\n"}
+    monkeypatch.setattr(
+        da, "_git", lambda *a: subprocess.CompletedProcess(a, 0, status["out"], "")
+    )
+    monkeypatch.setattr(reader_eval, "refresh", lambda: ["llm", "combined"])
+    report = {"applied": [], "skipped": []}
+    da.rescore(report)
+    assert report == {
+        "applied": ["reader scorecards rescored: llm, combined"],
+        "skipped": [],
+    }
+
+    def broken():
+        raise ValueError("recordings unreadable")
+
+    monkeypatch.setattr(reader_eval, "refresh", broken)
+    report = {"applied": [], "skipped": []}
+    da.rescore(report)
+    assert report["applied"] == []
+    assert "python scripts/reader_eval.py --update" in report["skipped"][0]
+
+    status["out"] = ""
+    monkeypatch.setattr(reader_eval, "refresh", lambda: pytest.fail("no label changed"))
+    da.rescore({"applied": [], "skipped": []})

@@ -1,0 +1,134 @@
+name: Reader eval
+
+# Measures a change to the AI readers live. Records the models' answers to
+# every labelled item that has none under today's prompts (eval/recordings/),
+# rescores (eval/scorecards/), commits both to the branch and posts the
+# comparison with the base on the PR. scripts/reader_eval.py explains the
+# harness; CI replays the recordings without a key.
+#
+# Add the reader-eval label to a PR to run it. The label is removed at the
+# end, so adding it again runs it again. Same-repository branches only: the
+# job holds the model key and pushes to the branch, and a fork's PR gets
+# neither. Run by hand (workflow_dispatch) on a branch, or on main to record
+# answers for labels added there.
+
+on:
+  pull_request:
+    types: [labeled]
+  workflow_dispatch:
+    inputs:
+      fresh:
+        description: Ask again for every item, not only those without an answer (after a model change)
+        type: boolean
+        default: false
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+concurrency:
+  group: reader-eval-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  eval:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.label.name == 'reader-eval' &&
+       github.event.pull_request.head.repo.full_name == github.repository)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write # commit the recordings and scorecards
+      issues: write # comment on the PR and remove its label
+      pull-requests: write
+      actions: write # start CI on the commit this pushes
+    env:
+      BRANCH: ${{ github.event.pull_request.head.ref || github.ref_name }}
+      BASE: ${{ github.event.pull_request.base.ref || github.event.repository.default_branch }}
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+    steps:
+      - name: Checkout the branch
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ env.BRANCH }}
+          # All of it, for the merge base the comparison is made against.
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # Exit status 3 is a holdout regression; it is reported on the PR first
+      # and fails the job at the end.
+      - name: Record, rescore and compare
+        id: eval
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL: ${{ vars.GEMINI_MODEL }}
+          GEMINI_FALLBACK_MODELS: ${{ vars.GEMINI_FALLBACK_MODELS }}
+          FRESH: ${{ inputs.fresh && '--fresh' || '' }}
+        run: |
+          base=$(git rev-parse --short "$(git merge-base HEAD "origin/$BASE")")
+          set +e
+          python scripts/reader_eval.py --record $FRESH --update --compare "$base" --summary summary.md
+          code=$?
+          set -e
+          if [ "$code" -eq 3 ]; then
+            echo "regressed=true" >> "$GITHUB_OUTPUT"
+          elif [ "$code" -ne 0 ]; then
+            exit "$code"
+          fi
+          cat summary.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Commit the recordings and scorecards
+        id: commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add eval/recordings eval/scorecards
+          if git diff --cached --quiet; then
+            echo "Nothing new to commit."
+          else
+            git commit -m "Record reader answers and rescore [reader-eval]"
+            git push origin "HEAD:$BRANCH"
+            echo "pushed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Post the comparison on the PR
+        if: env.PR_NUMBER != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api "repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/comments" -F body=@summary.md
+
+      # A push made with this job's token starts no workflow, so the new
+      # commit would carry no CI result.
+      - name: Run CI on the new commit
+        if: steps.commit.outputs.pushed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run ci.yml --ref "$BRANCH"
+
+      - name: Remove the label, so adding it again runs this again
+        if: always() && env.PR_NUMBER != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X DELETE "repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/labels/reader-eval" || true
+
+      - name: Fail on a holdout regression
+        if: steps.eval.outputs.regressed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ -n "$PR_NUMBER" ] && gh api "repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/labels" --jq '.[].name' | grep -qx accept-regression; then
+            echo "Holdout regression accepted (accept-regression label)."
+          else
+            echo "::error::A holdout score fell; the comparison on the PR lists the rows. Add the accept-regression label to accept it."
+            exit 1
+          fi

@@ -82,6 +82,7 @@ STANCES = ("contradicts", "supports", "unrelated")
 # window unread (~320 pairs); later runs read only what is new.
 BATCH_PAIRS = 30
 MAX_NEW_PER_RUN = 300
+BATCH_PAUSE_S = 1.0
 # Newest attributed headlines checked per holding. A holding in the news
 # every day would otherwise take the run's whole budget.
 MAX_PER_HOLDING = 15
@@ -185,6 +186,8 @@ MAX_CHECKS_PER_RUN = 40
 # The second reader leaves out the lite models that made the first reading,
 # and models built for other media.
 CHECK_EXCLUDE = ("lite", "tts", "image", "audio", "embedding")
+# An answer with any other verdict is no answer: the check is asked again.
+VERDICTS = ("contradicts", "does_not")
 
 _CHECK_INSTRUCTIONS = """You check flags raised by another reader. For each item below, that reader
 said the HEADLINE contradicts the quoted CLAIM from an investor's THESIS.
@@ -212,7 +215,7 @@ _CHECK_SCHEMA = {
         "type": "OBJECT",
         "properties": {
             "id": {"type": "INTEGER"},
-            "verdict": {"type": "STRING", "enum": ["contradicts", "does_not"]},
+            "verdict": {"type": "STRING", "enum": list(VERDICTS)},
             "because": {"type": "STRING"},
         },
         "required": ["id", "verdict", "because"],
@@ -267,6 +270,7 @@ def check_challenges(
     transport,
     today: str,
     status: Dict[str, Any],
+    limit: Optional[int] = None,
 ) -> bool:
     """Ask the second reader about each ``(key, pair, reading)`` challenge.
 
@@ -275,12 +279,12 @@ def check_challenges(
     CHECK_VERSION changes. A "contradicts" verdict must quote the headline
     verbatim, like the first reading; one that does not is a refusal. Never
     raises: a challenge the check could not reach stays unconfirmed and is
-    tried again next run.
+    tried again next run. At most ``limit`` (MAX_CHECKS_PER_RUN) are asked.
     """
     from analysis.llm_reader import ReaderUnavailable
 
     changed = False
-    todo = items[:MAX_CHECKS_PER_RUN]
+    todo = items[: MAX_CHECKS_PER_RUN if limit is None else limit]
     status["checks_pending"] = len(items) - len(todo)
     try:
         for start in range(0, len(todo), CHECK_BATCH):
@@ -296,7 +300,7 @@ def check_challenges(
             by_id = {a.get("id"): a for a in answers if isinstance(a, dict)}
             for i, (key, pair, _reading) in enumerate(chunk):
                 raw = by_id.get(i)
-                if raw is None or raw.get("verdict") not in ("contradicts", "does_not"):
+                if raw is None or raw.get("verdict") not in VERDICTS:
                     status["checks_pending"] += 1
                     continue
                 verdict = raw["verdict"]
@@ -481,6 +485,7 @@ def read_pairs(
     max_new: int = MAX_NEW_PER_RUN,
     today: str = "",
     check_transport=None,
+    max_checks: Optional[int] = None,
 ) -> Tuple[Dict[str, Dict[str, Any]], Dict[str, Any]]:
     """Readings keyed by pair_key — cached ones free, new ones fetched.
 
@@ -490,7 +495,8 @@ def read_pairs(
     Every challenge is then read a second time (check_challenges) and served
     through apply_check: confirmed, dropped, or marked unconfirmed until the
     second reading can be made. ``check_transport`` is that reader's; the
-    default chain leaves out the lite models.
+    default chain leaves out the lite models. ``max_checks`` caps the second
+    readings as ``max_new`` caps the first (MAX_CHECKS_PER_RUN by default).
     """
     from analysis.llm_reader import (
         ReaderUnavailable,
@@ -582,7 +588,7 @@ def read_pairs(
                 status["read"] += 1
                 changed = True
             if start + BATCH_PAIRS < len(batch_todo):
-                time.sleep(1.0)
+                time.sleep(BATCH_PAUSE_S)
     except ReaderUnavailable as e:
         status["skipped"] = str(e)
         status["pending"] = len(todo) - status["read"]
@@ -610,7 +616,7 @@ def read_pairs(
                 status["checks_pending"] = len(challenges)
         if check_transport is not None:
             changed |= check_challenges(
-                challenges, entries, check_transport, today, status
+                challenges, entries, check_transport, today, status, max_checks
             )
     readings = {
         key: apply_check(reading, checked(entries.get(key)))
