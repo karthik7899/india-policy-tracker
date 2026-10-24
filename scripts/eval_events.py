@@ -71,6 +71,69 @@ def _same_party(a: str, b: str) -> bool:
     return bool(shorter) and longer[: len(shorter)] == shorter
 
 
+# Each scorer also returns, per split, ``outcomes``: one ``(row, outcome,
+# got)`` per scored row, where ``got`` says in a line what the reader made of
+# it. scripts/reader_eval.py compares them row by row; these outcomes are the
+# ones that count as the row read right.
+RIGHT = ("found", "quiet", "right")
+
+
+def event_text(event_type, actors, counterparties=()) -> str:
+    """One event in a line: "acquisition BPCL", "tie_up DIXON with Foxconn"."""
+    if not event_type:
+        return "none"
+    text = f"{event_type} {'+'.join(sorted(actors)) or '(no holding)'}"
+    if event_type == "tie_up" and counterparties:
+        text += " with " + ", ".join(counterparties)
+    return text
+
+
+def _effects_text(effects) -> str:
+    return " ".join(sorted(f"{e['sector']}:{e['direction']}" for e in effects or []))
+
+
+def policy_text(row: Dict[str, Any]) -> str:
+    """A policy label in a line: "policy fmcg:tailwind (also …)" or "not policy"."""
+    if not row.get("is_policy"):
+        return "not policy"
+    text = ("policy " + _effects_text(row.get("effects"))).strip()
+    also = _effects_text(row.get("also_acceptable"))
+    return text + (f" (also {also})" if also else "")
+
+
+def stance_text(reading: Dict[str, Any]) -> str:
+    """A thesis reading in a line, with what it was refused or confirmed for."""
+    text = reading["stance"]
+    if reading.get("about") is False:
+        text += ", not about"
+    if reading.get("group"):
+        text += ", group"
+    if reading.get("downgraded"):
+        text += f" (refused {reading['downgraded']}: {reading.get('reason', '?')})"
+    if reading["stance"] == "contradicts":
+        text += " (confirmed)" if reading.get("confirmed") else " (unconfirmed)"
+    return text
+
+
+def thesis_text(row: Dict[str, Any]) -> str:
+    """A thesis label in a line: "contradicts or unrelated, not about"."""
+    text = " or ".join([row["stance"], *(row.get("also_acceptable") or [])])
+    return text + (", not about" if row.get("about") is False else "")
+
+
+def label_pairs(labels: List[Dict[str, Any]], holdings: Dict[str, Any]):
+    """The thesis labels as the thesis check's pairs, named as the
+    pipeline names them (from the frozen holdings), so the eval prompt is
+    the one production sends."""
+    names = {
+        s["ticker"]: s["name"]
+        for stocks in holdings.values()
+        for s in stocks
+        if isinstance(s, dict) and s.get("ticker")
+    }
+    return [{**r, "name": names.get(r["ticker"], r["ticker"])} for r in labels]
+
+
 def predict(headline: str, watchlist: Dict[str, Any]) -> Dict[str, Any]:
     """What the rules make of one headline, on its own."""
     from analysis.event_engine import classify_headlines
@@ -128,7 +191,7 @@ def score(
         rows = [r for r in labels if split == "all" or r.get("split") == split]
         positives = found = raised = correct = exact = 0
         partner_total = partner_hit = 0
-        misses, false_alarms, wrong_type = [], [], []
+        misses, false_alarms, wrong_type, outcomes = [], [], [], []
 
         for row in rows:
             pred = predictor(row["headline"], watchlist)
@@ -146,16 +209,25 @@ def score(
                 if match:
                     found += 1
                     exact += got == want
+                    outcome = "found"
                 elif is_raised and want & got:
                     wrong_type.append((row, pred))
+                    outcome = "wrong_type"
                 else:
                     misses.append((row, pred))
+                    outcome = "missed"
+            else:
+                outcome = "false_alarm" if is_raised else "quiet"
             if is_raised:
                 raised += 1
                 if match:
                     correct += 1
                 elif not is_positive or not (want & got):
                     false_alarms.append((row, pred))
+            said = event_text(
+                pred.get("event_type"), got, pred.get("counterparties") or ()
+            )
+            outcomes.append((row, outcome, said))
 
             known = row.get("counterparties") or []
             if want_type == "tie_up" and known:
@@ -177,6 +249,7 @@ def score(
             "misses": misses,
             "wrong_type": wrong_type,
             "false_alarms": false_alarms,
+            "outcomes": outcomes,
         }
     return out
 
@@ -203,7 +276,7 @@ def score_policy(
         ]
         tp = fp = fn = 0
         need = need_hit = given = given_ok = 0
-        misses, false_alarms, wrong_effects = [], [], []
+        misses, false_alarms, wrong_effects, outcomes = [], [], [], []
         for row in rows:
             reading = readings[row["headline"]]
             said = reading.get("policy_measure") not in (None, "none")
@@ -220,9 +293,13 @@ def score_policy(
                 fn += not said
                 if not said:
                     misses.append((row, reading))
+                outcome = "found" if said else "missed"
             elif said:
                 fp += 1
                 false_alarms.append((row, reading))
+                outcome = "false_alarm"
+            else:
+                outcome = "quiet"
             need += len(want)
             need_hit += len(want & got)
             given += len(got)
@@ -230,6 +307,11 @@ def score_policy(
             given_ok += len(good)
             if (want - got) or (got - good):
                 wrong_effects.append((row, reading))
+                if outcome in RIGHT:
+                    outcome = "effects_differ"
+            measure = reading.get("policy_measure") if said else "none"
+            effects = _effects_text(reading.get("sector_effects"))
+            outcomes.append((row, outcome, f"{measure} {effects}".strip()))
 
         def ratio(a, b):
             return round(a / b, 3) if b else None
@@ -244,6 +326,7 @@ def score_policy(
             "misses": misses,
             "false_alarms": false_alarms,
             "wrong_effects": wrong_effects,
+            "outcomes": outcomes,
         }
     return out
 
@@ -337,7 +420,7 @@ def score_thesis(
                 "ns_said",
             )
         }
-        misses, alarms = [], []
+        misses, alarms, outcomes = [], [], []
         for r, reading in rows:
             got = reading["stance"]
             ok = {r["stance"], *(r.get("also_acceptable") or [])}
@@ -361,6 +444,15 @@ def score_thesis(
             if got == "contradicts" and "contradicts" not in ok:
                 alarms.append((r, reading))
                 counts["false_alarms"] += not r.get("synthetic")
+            if got in ok and (said_ns or not want_ns):
+                outcome = "right"
+            elif got == "contradicts" and "contradicts" not in ok:
+                outcome = "false_alarm"
+            elif r["stance"] == "contradicts":
+                outcome = "missed"
+            else:
+                outcome = "wrong"
+            outcomes.append((r, outcome, stance_text(reading)))
 
         def ratio(a, b):
             return round(a / b, 3) if b else None
@@ -379,6 +471,7 @@ def score_thesis(
             "namesake_precision": ratio(counts["ns_hit"], counts["ns_said"]),
             "misses": misses,
             "alarms": alarms,
+            "outcomes": outcomes,
         }
     return out
 
@@ -390,7 +483,7 @@ def _run_thesis(args) -> int:
         body = json.load(f)
     labels = body["labels"]
     _review_note(body, "thesis ")
-    pairs = [{"ticker": r["ticker"], "name": r["ticker"], **r} for r in labels]
+    pairs = label_pairs(labels, load_holdings())
     # Live reads are bounded by the label count: a scoring run can never
     # spend more than one pass over this file.
     readings, status = read_pairs(

@@ -82,6 +82,7 @@ STANCES = ("contradicts", "supports", "unrelated")
 # window unread (~320 pairs); later runs read only what is new.
 BATCH_PAIRS = 30
 MAX_NEW_PER_RUN = 300
+BATCH_PAUSE_S = 1.0
 # Newest attributed headlines checked per holding. A holding in the news
 # every day would otherwise take the run's whole budget.
 MAX_PER_HOLDING = 15
@@ -582,7 +583,7 @@ def read_pairs(
                 status["read"] += 1
                 changed = True
             if start + BATCH_PAIRS < len(batch_todo):
-                time.sleep(1.0)
+                time.sleep(BATCH_PAUSE_S)
     except ReaderUnavailable as e:
         status["skipped"] = str(e)
         status["pending"] = len(todo) - status["read"]
