@@ -2,22 +2,6 @@
   "_how_to_review": "Partner edges proposed from completed tie-up headlines. Nothing here reaches the graph until you set status to 'accepted'; 'rejected' stops the pair being proposed again. You may correct 'counterparty' before accepting (e.g. 'Vivo Mobile' -> 'Vivo') — it is the name the graph will match in future headlines. Leave 'proposed_as' alone: it is how the pipeline recognises the same pair next time.",
   "proposals": [
     {
-      "holding": "CONCOR",
-      "counterparty": "Honda Motorcycles",
-      "proposed_as": "Honda Motorcycles",
-      "status": "pending",
-      "first_seen": "2026-10-24",
-      "last_seen": "2026-10-24",
-      "evidence": [
-        {
-          "headline": "CONCOR and Honda Motorcycles strengthen logistics partnership with first container rake dispatch from MMLP Kathuwas",
-          "date": "2026-10-24",
-          "link": "https://news.google.com/rss/articles/CBMi7AFBVV95cUxNZllyNmZGbG0yLWpXeWp4VTN4dm5BamxfaVJBc0ZqbldWX3p3a0FPLXp4Z1NZYTN4NnprcXV4c2pYVF9TdWpLbi11NmxELVFJMTZlMm5jYk9EOVVReEo3bWE0aHg5aGU1MXNfb2lOYUVRWURwNGtfRk50WThoS0lCQVFCOFJPc0tOcDJYZk1kc0s4dkhNYzJLbHBLT25WZ054ZG5xenlGSTJ3R2hwN2QtWnZSZ1ZMd2FlZVBjMll5NmFIZ1dZb0dMQmJyLTFjOGZSem5kOEg2eEJmbU0yZTZiUDMxb3hCZmdSaFhLbQ?oc=5",
-          "source": "India Shipping News"
-        }
-      ]
-    },
-    {
       "holding": "BHEL",
       "counterparty": "Titagarh",
       "proposed_as": "Titagarh",
@@ -345,6 +329,22 @@
           "headline": "CONCOR and BMCT strengthen strategic partnership to advance Rail-Based Container Logistics",
           "date": "2026-09-23",
           "link": "https://news.google.com/rss/articles/CBMiywFBVV95cUxNUnVSS3hkS1NDMTNhalFWclV5cElaNlEtZ1I3ZVAzZjI2WmpqaU4xVnljNE04OGJVLXhPMTQ5ZW9lUzZiOUVtcEctdHpoLW1ibVpYYUVXWXFxaGxIUFRBb21ZTk1MV25kVWVUUnlkcG9UazJyRU5PcWU2QURoNFNFRnBLOTF1dnBVUVdSeE9IUHJQX0ZLbDJlVGs0SWoxRVhjQXpoMXp1bUNkdnhEVUltaXlKZENUWVlZdjd3VnpUU01fUkJXRnRKMlNySQ?oc=5",
+          "source": "India Shipping News"
+        }
+      ]
+    },
+    {
+      "holding": "CONCOR",
+      "counterparty": "Honda Motorcycles",
+      "proposed_as": "Honda Motorcycles",
+      "status": "accepted",
+      "first_seen": "2026-10-24",
+      "last_seen": "2026-10-24",
+      "evidence": [
+        {
+          "headline": "CONCOR and Honda Motorcycles strengthen logistics partnership with first container rake dispatch from MMLP Kathuwas",
+          "date": "2026-10-24",
+          "link": "https://news.google.com/rss/articles/CBMi7AFBVV95cUxNZllyNmZGbG0yLWpXeWp4VTN4dm5BamxfaVJBc0ZqbldWX3p3a0FPLXp4Z1NZYTN4NnprcXV4c2pYVF9TdWpLbi11NmxELVFJMTZlMm5jYk9EOVVReEo3bWE0aHg5aGU1MXNfb2lOYUVRWURwNGtfRk50WThoS0lCQVFCOFJPc0tOcDJYZk1kc0s4dkhNYzJLbHBLT25WZ054ZG5xenlGSTJ3R2hwN2QtWnZSZ1ZMd2FlZVBjMll5NmFIZ1dZb0dMQmJyLTFjOGZSem5kOEg2eEJmbU0yZTZiUDMxb3hCZmdSaFhLbQ?oc=5",
           "source": "India Shipping News"
         }
       ]
