@@ -314,9 +314,15 @@ def test_divestments_launches_and_changes_at_the_top_are_read():
         ("Elgi Equipments divests its stake in Gentex Air Solutions", "divestment"),
         ("L&T Technology Services divests SWC business", "divestment"),
         ("Arvind sells its stake in garment unit to Tommy Hilfiger", "divestment"),
-        # Context, not the seller: a verb's seller is its subject.
+        # Context, not the seller: a verb's seller is its subject, and so is
+        # a noun's when it names what is sold.
         (
             "Kaynes Technology sells its smart meter business after government "
+            "approval",
+            "divestment",
+        ),
+        (
+            "Tata Motors divestment of its manufacturing business gets government "
             "approval",
             "divestment",
         ),
@@ -340,9 +346,11 @@ def test_divestments_launches_and_changes_at_the_top_are_read():
         "HDFC Mutual Fund sells stake in Chalet Hotels",
         # Shares sold through the market, whoever sells them.
         "SoftBank to offload 1.5% stake in Meesho via block deal",
-        # A sale said as a noun names its seller anywhere.
+        # A sale said as a noun names its seller anywhere when it names
+        # nothing sold, or as whose stake is sold.
         "Stake sale by promoters lifts Kaynes Technology's free float",
         "IDBI Bank divestment: govt invites financial bids",
+        "Divestment of government stake in CONCOR gets cabinet nod",
         "Govt unveils Rs 1.9 lakh cr semiconductor, mobile manufacturing push",
         "Adani unveils Rs 50,000 crore capex plan",
         "Kaynes Technology Says A 'Global Player' Wants Entire PCB Capacity "
@@ -436,6 +444,10 @@ def test_a_change_at_the_top_is_the_company_whose_officer_changed():
 
     for headline, expected in (
         ("Ola Electric appoints former Tata Motors CFO as its CFO", []),
+        # The past tense is the subject's where the role is its own, and
+        # passive otherwise.
+        ("Ola Electric appointed Tata Motors CFO Rajesh as its CFO", []),
+        ("Rajesh Kumar appointed Kaynes Technology CFO", ["KAYNES"]),
         (
             "Kaynes Technology appoints Dixon Technologies' Rajesh Kumar as CFO",
             ["KAYNES"],

@@ -181,9 +181,15 @@ _NOT_A_SELLER = re.compile(
 _SHARES_SOLD_RE = re.compile(
     r"\b(?:ofs|offer\s+for\s+sale|block\s+deals?|bulk\s+deals?)\b"
 )
-# A sale said as a noun can name its seller anywhere in the clause: "stake
-# sale by promoters", "IDBI Bank divestment: govt invites bids".
+# A sale said as a noun is read as its verb is when it names what is sold,
+# with that too, which can say whose stake it is: "Tata Motors divestment of
+# its manufacturing business gets government approval" is Tata Motors' sale,
+# "divestment of government stake in CONCOR" the government's. Naming
+# nothing sold, its seller can be anywhere in the clause, and the company
+# it names can be what is sold: "CONCOR divestment: govt invites bids",
+# "stake sale by promoters".
 _SALE_NOUNS = ("divestment", "divestiture", "stake sale")
+_WHAT_IS_SOLD_RE = re.compile(r"\s+(?:of|in)\s+((?:\S+\s+){0,2}\S+)")
 
 # A launch that is no product's: a government's or an agency's, or of
 # something else: an issue of securities, a scheme, a plan, a probe, a
@@ -236,8 +242,13 @@ def _not_this_type(etype: str, clause_lower: str, at: int, phrase: str) -> bool:
     holder's stake sale, a government's launch, or the launch of something
     that is not a product?"""
     if etype == "divestment":
-        said = clause_lower if phrase in _SALE_NOUNS else _doer(clause_lower, at)
-        return bool(_NOT_A_SELLER.search(said) or _SHARES_SOLD_RE.search(clause_lower))
+        if _SHARES_SOLD_RE.search(clause_lower):
+            return True
+        said = _doer(clause_lower, at)
+        if phrase in _SALE_NOUNS:
+            sold = _WHAT_IS_SOLD_RE.match(clause_lower, at + len(phrase))
+            said = f"{said} {sold.group(1)}" if sold else clause_lower
+        return bool(_NOT_A_SELLER.search(said))
     if etype != "product_launch":
         return False
     launcher = _doer(clause_lower, at)
@@ -845,6 +856,11 @@ def _named_before(clause: str, phrase: Optional[str], ticker: str, name: str) ->
 # CFO"), and never one named only as somebody's former employer ("Former
 # Kaynes CEO named Dixon MD").
 _APPOINTS_RE = re.compile(r"(?:appoints|names|elevates|re-?appoints|ropes\s+in)\b")
+# The past tense is as often passive, "Rajesh Kumar appointed Kaynes CFO", so
+# it is the subject's only where the clause says the role is its own: "Ola
+# Electric appointed Tata Motors CFO Rajesh as its CFO".
+_APPOINTED_RE = re.compile(r"(?:appointed|named|elevated|re-?appointed|roped\s+in)\b")
+_AS_ITS_RE = re.compile(r"\bas\s+its\b", re.IGNORECASE)
 _FORMER_RE = re.compile(
     r"\b(?:former|erstwhile|ex)[\s-]+(?:[\w&.'’-]+\s+){0,3}?(?:"
     + _ROLE
@@ -855,11 +871,11 @@ _FORMER_RE = re.compile(
 
 def _its_management(clause: str, phrase: Optional[str], ticker: str, name: str) -> bool:
     """Is this holding the company whose management changed?"""
-    if (
-        phrase
-        and _APPOINTS_RE.match(phrase)
-        and not _named_before(clause, phrase, ticker, name)
-    ):
+    active = phrase and (
+        _APPOINTS_RE.match(phrase)
+        or (_APPOINTED_RE.match(phrase) and _AS_ITS_RE.search(clause))
+    )
+    if active and not _named_before(clause, phrase, ticker, name):
         return False
     return title_matches_company(_FORMER_RE.sub(" ", clause), ticker, name)
 
