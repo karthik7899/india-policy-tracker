@@ -17,21 +17,15 @@ import os
 
 import pytest
 
+from analysis.event_engine import EVENT_VOCABULARY
 from config import SECTOR_METADATA
 from scripts.eval_events import LABELS_PATH, load_holdings, score
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-EVENT_TYPES = {
-    "tie_up",
-    "acquisition",
-    "order_win",
-    "capacity_add",
-    "supply_disruption",
-    "input_cost_shock",
-    "business_weakness",
-    "partnership_end",
-}
+# The engine's own list: the workflow validates a label against it too
+# (scripts/dashboard_actions.py), so a type it lacks could never be saved.
+EVENT_TYPES = set(EVENT_VOCABULARY)
 
 # Holdout recall was 0.60 before the gap-tolerant patterns and 0.83 after.
 HOLDOUT_RECALL_FLOOR = 0.80
@@ -75,6 +69,17 @@ def test_every_label_is_well_formed(labels, watchlist):
         assert row["event_type"] in EVENT_TYPES | {None}, row
         for ticker in row["actors"]:
             assert ticker in held, f"{ticker} is not a holding: {row}"
+
+
+def test_the_review_view_offers_every_event_type():
+    """A type the Review view lacks cannot be chosen there; one the engine
+    lacks is refused by the workflow."""
+    import re
+
+    with open(os.path.join(ROOT, "src", "views", "review.js"), encoding="utf-8") as f:
+        source = f.read()
+    listed = re.search(r"const EVENT_TYPES = \[(.*?)\];", source, re.S).group(1)
+    assert set(re.findall(r'"(\w+)"', listed)) == EVENT_TYPES
 
 
 def test_the_holdout_split_is_large_enough_to_mean_something(labels):

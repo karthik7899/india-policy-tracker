@@ -144,6 +144,7 @@ export function thesisSection(catalyst, check) {
         "span",
         { class: "evidence-meta" },
         `\u201c${i.because}\u201d \u2192 thesis: \u201c${i.claim}\u201d \u00b7 ${LLM_MARK}` +
+          (i.group ? " \u00b7 its global group's news" : "") +
           (i.confirmed === true
             ? " \u00b7 confirmed by a second reading"
             : i.confirmed === false

@@ -219,6 +219,9 @@ export function activitySection(c, windowDays, { highOnly = false } = {}) {
               {},
               el("span", { class: `tag${a.kind === "adverse" ? " tag-risk" : ""}` }, a.kind),
               catalystTag(a),
+              a.group
+                ? el("span", { class: "tag", title: `News about its global group, read as bearing on it ${LLM_MARK}` }, "group")
+                : null,
               link(a.link, a.text),
               el(
                 "span",

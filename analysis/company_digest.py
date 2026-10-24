@@ -44,6 +44,9 @@ _KIND = {
     "input_cost_shock": "input cost",
     "business_weakness": "weaker business",
     "partnership_end": "partnership ended",
+    "divestment": "divestment",
+    "product_launch": "launch",
+    "management_change": "management change",
 }
 
 
@@ -150,6 +153,7 @@ def build_company_digest(
     today: str = "",
     prices: Dict[str, List[List[Any]]] = None,
     namesakes: Iterable[Tuple[str, str]] = None,
+    group_news: Iterable[Tuple[str, str]] = None,
 ) -> Dict[str, Any]:
     """``{as_of, window_days, companies: [...]}``, most recently active first.
 
@@ -157,6 +161,8 @@ def build_company_digest(
     on any run (thesis_check.namesake_headlines). Without them only today's
     check is used, and a day the check cannot run puts every namesake back:
     on 7 Oct Daryl Dixon's teaser returned to Dixon's news that way.
+    ``group_news`` are pairs read as the holding's global group's news
+    (thesis_check.group_headlines): shown as its news, marked as the group's.
     """
     today = today or datetime.date.today().isoformat()
     cutoff = (
@@ -169,6 +175,14 @@ def build_company_digest(
     read_elsewhere: Dict[str, set] = {}
     for t, h in namesakes or ():
         read_elsewhere.setdefault(str(t).upper(), set()).add(h)
+    read_as_group: Dict[str, set] = {}
+    for t, h in group_news or ():
+        read_as_group.setdefault(str(t).upper(), set()).add(h)
+
+    def matches(text: str, headlines: set) -> bool:
+        # The cache keeps a headline's first 200 characters: by prefix.
+        text = text.lower()
+        return any(text in h or h in text for h in headlines)
 
     companies = []
     for sector, stocks in (watchlist or {}).items():
@@ -180,21 +194,24 @@ def build_company_digest(
             ticker = str(stock["ticker"]).upper()
             name = stock.get("name") or ticker
             activity = _activity((coverage or {}).get(ticker), cutoff)
-            # Headlines the thesis check read as being about a namesake —
-            # a foreign parent, a person — are kept but set apart, never
-            # shown as the company's own news.
+            # Headlines the thesis check read as being about a namesake — a
+            # person, a character, an unrelated firm — are kept but set
+            # apart, never shown as the company's own news.
             elsewhere = {
                 h.strip().lower()
                 for h in (checks.get(ticker) or {}).get("not_about") or []
             } | read_elsewhere.get(ticker, set())
-            namesakes = [
-                a
-                for a in activity
-                if any(
-                    a["text"].lower() in h or h in a["text"].lower() for h in elsewhere
-                )
-            ]
+            namesakes = [a for a in activity if matches(a["text"], elsewhere)]
             activity = [a for a in activity if a not in namesakes]
+            # The global group's news is the company's, marked as the group's.
+            group = {
+                h.strip().lower()
+                for h in (checks.get(ticker) or {}).get("group_news") or []
+            } | read_as_group.get(ticker, set())
+            activity = [
+                {**a, "group": True} if group and matches(a["text"], group) else a
+                for a in activity
+            ]
             policies = _policies(ticker, name, sector, impacts, cutoff)
             thesis = health.get(ticker) or health.get(stock["ticker"]) or {}
             check = checks.get(ticker) or {}

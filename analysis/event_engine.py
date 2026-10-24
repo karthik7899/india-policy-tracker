@@ -34,6 +34,22 @@ EVENT_VOCABULARY: Dict[str, tuple] = {
     # Before tie_up, whose "joint venture" it contains: "Vivo exits joint
     # venture with Dixon" was read as a new tie-up. Shapes in EVENT_PATTERNS.
     "partnership_end": (),
+    # Selling or leaving a business, plant or stake. Filed as an acquisition
+    # until 24 Oct ("the same transaction seen from the seller"), which read
+    # BPCL leaving Numaligarh Refinery as BPCL buying something and a rival's
+    # sale as the rival gaining ground. After partnership_end, so leaving a
+    # venture stays a partnership ending; before tie_up, so selling a stake
+    # in one is not read as forming it. Shapes in EVENT_PATTERNS.
+    "divestment": (
+        "divestment",
+        "divestiture",
+        "stake sale",
+        "sells stake",
+        "sells its stake",
+        "sells entire stake",
+        "offloads stake",
+        "hives off",
+    ),
     "tie_up": (
         "joint venture",
         "strategic partnership",
@@ -141,6 +157,41 @@ EVENT_VOCABULARY: Dict[str, tuple] = {
         "chapter 11",
         "enters administration",
     ),
+    # Last, so a launch that is also a tie-up ("launches ... in partnership
+    # with Zscaler") or a plant ("launches new plant") keeps that type: the
+    # partner and the capacity are what the graph and the signals use.
+    # Shapes in EVENT_PATTERNS.
+    "product_launch": (),
+    # A change at the top: a CEO, MD, CFO, chair or whole-time director
+    # appointed, leaving or replaced. Not an IR agency or an auditor, which
+    # name no role. Shapes in EVENT_PATTERNS.
+    "management_change": (),
+}
+
+# The holder of a stake selling it, not the company selling a business: a
+# fund's or a promoter's stake change is not a corporate event
+# (eval/event_labels.json), and the government selling shares in a holding
+# is a policy matter. And what is launched besides a product: an issue of
+# securities, a scheme, a plan, a probe, a missile.
+_NOT_THIS_TYPE: Dict[str, Any] = {
+    "divestment": re.compile(
+        r"\b(?:promoters?|mutual\s+funds?|fiis?|fpis?|govt|government|ofs|"
+        r"offer\s+for\s+sale|block\s+deals?|bulk\s+deals?|private\s+equity)\b"
+    ),
+    # The second half from the 24 Oct corpus: an employee cricket league, a
+    # students' quiz, a brand film, a new corporate identity, "Suzlon 2.0,
+    # targets 10 GW" and "major investment proposals" were all unveiled.
+    "product_launch": re.compile(
+        r"\b(?:ipo|qip|fpo|nfo|ncds?|bonds?|debentures?|buy-?backs?|rights\s+issue|"
+        r"share\s+sale|offers?|schemes?|polic(?:y|ies)|missions?|campaigns?|"
+        r"plans?(?!\s+to\b)|roadmaps?|strateg(?:y|ies)|reports?|results|earnings|"
+        r"probes?|investigations?|inquir(?:y|ies)|tenders?|funds?|govt|government|"
+        r"ministry|minister|cabinet|regulator|sebi|rbi|isro|drdo|missiles?|"
+        r"satellites?|rockets?|attacks?|offensive|"
+        r"league|tournament|quiz|contest|competition|championship|hackathon|"
+        r"edition|entries|film|identity|logo|targets?|vision|growth\s+map|"
+        r"investments?|proposals?|exhibitions?|summit|conference|festival)\b"
+    ),
 }
 
 # Shapes the literal phrases above cannot express, because headlines put
@@ -169,6 +220,17 @@ _WEAK_VERB = (
     r"dips?|dipped|tumbles?|tumbled|sinks?|sank|weakens?|weakened|"
     r"slows?|slowed|down|lower)"
 )
+# The roles a management change is about. Not "president", which is as
+# often a region's: "Capillary appoints William Swift as Americas president".
+_ROLE = (
+    r"(?:ceo|cfo|coo|cto|md|cmd|chairman|chairperson|chairwoman|"
+    r"managing\s+director|chief\s+(?:executive|financial|operating|technology)"
+    r"(?:\s+officer)?|whole[\s-]?time\s+director|executive\s+director)"
+)
+_LEAVES = (
+    r"(?:resigns?|resigned|quits?|steps?\s+down|stepped\s+down|retires?|retired|"
+    r"parts\s+ways)"
+)
 EVENT_PATTERNS: Dict[str, tuple] = {
     "partnership_end": (
         re.compile(
@@ -180,6 +242,13 @@ EVENT_PATTERNS: Dict[str, tuple] = {
             + _SHORT_GAP
             + _PARTNERSHIP
             + r"\b"
+        ),
+        # Selling out of it: "Vivo sells its stake in the joint venture with
+        # Dixon" ends the venture for Dixon, whatever it is for Vivo.
+        re.compile(
+            r"\b(?:sells?|sold|selling|divests?|divested|offloads?|offloaded)\s+"
+            r"(?:its\s+|entire\s+)?stakes?\s+in\s+(?:the\s+|its\s+)?"
+            r"(?:[\w&'.-]+\s+){0,2}?" + _PARTNERSHIP + r"\b"
         ),
         # Two companies: "Dixon and Vivo part ways". Not "parts ways", which
         # is mostly an executive leaving.
@@ -234,11 +303,24 @@ EVENT_PATTERNS: Dict[str, tuple] = {
         # subject takes the bare verb, which "partners with" never matches.
         re.compile(r"\band\s+[\w.&' -]{1,40}?\s+partner\s+(?:to|for|on|in)\b"),
     ),
-    "acquisition": (
-        re.compile(r"\bstake acquisition\b"),
-        # A divestment is the same transaction seen from the seller.
-        re.compile(r"\b(?:divests?|divested|divestment|stake sale|sells stake)\b"),
+    "divestment": (
+        re.compile(r"\bdivest(?:s|ed|ing)?\b"),
+        # Leaving a business, a plant or a stake. Leaving a venture is
+        # matched first, as partnership_end. Not tuned on "BPCL exits
+        # Numaligarh Refinery", a holdout row, so no refinery here.
+        re.compile(
+            r"\b(?:exits?|exited|exiting)\s+(?:its\s+|the\s+)?(?:[\w&'.%-]+\s+){0,3}?"
+            r"(?:business(?:es)?|plants?|units?|divisions?|stakes?|"
+            r"subsidiar(?:y|ies)|segments?|operations)\b"
+        ),
+        # Not "units": "Maruti sells 1.8 lakh units" is a month's sales.
+        re.compile(
+            r"\b(?:sells?|sold|selling|offloads?|offloaded)\s+"
+            r"(?:its\s+|entire\s+|the\s+|a\s+)?(?:[\w&'.%-]+\s+){0,3}?"
+            r"(?:stakes?|business(?:es)?|divisions?|plants?|subsidiar(?:y|ies)|arm)\b"
+        ),
     ),
+    "acquisition": (re.compile(r"\bstake acquisition\b"),),
     "order_win": (
         re.compile(
             r"\b(?:wins?|won|bags?|bagged|secures?|secured|lands?|landed|"
@@ -261,10 +343,13 @@ EVENT_PATTERNS: Dict[str, tuple] = {
         re.compile(r"\bl[\s-]?1\s+bidder\b"),
     ),
     "capacity_add": (
+        # And launched: "Varun Beverages Launches New Production Facility" is
+        # capacity, which product_launch, checked last, would otherwise take.
+        # Not a lab: "TCS launches lights-out factory lab" builds nothing.
         re.compile(
-            r"\b(?:inaugurat\w*|opens|opened)"
+            r"\b(?:inaugurat\w*|opens|opened|launch(?:es|ed))"
             + _GAP
-            + r"(?:facility|plant|factory|unit)\b"
+            + r"(?:facility|plant|factory|unit)\b(?!\s+labs?\b)"
         ),
         # "Vivo sets up own smartphone plant": the literal "sets up plant"
         # needs the words side by side.
@@ -280,6 +365,25 @@ EVENT_PATTERNS: Dict[str, tuple] = {
             + r"(?:production|operations|output|manufacturing)\b"
         ),
     ),
+    # The verb, not the noun: "ahead of production launch" launches nothing.
+    "product_launch": (
+        re.compile(
+            r"\b(?:launch(?:es|ed)|to\s+launch|unveil(?:s|ed|ing)|to\s+unveil|"
+            r"introduces?|introduced|rolls?\s+out|rolled\s+out)\b"
+        ),
+    ),
+    "management_change": (
+        re.compile(
+            r"\b(?:appoints?|appointed|names?|named|elevates?|elevated|"
+            r"re-?appoints?|re-?appointed|ropes\s+in|roped\s+in)" + _GAP + _ROLE + r"\b"
+        ),
+        # "Dixon Technologies CFO resigns", "MD & CEO Rajesh steps down"
+        re.compile(r"\b" + _ROLE + r"(?:\s+[\w.'-]+){0,3}?\s+" + _LEAVES + r"\b"),
+        re.compile(r"\b" + _LEAVES + r"\s+as\s+(?:[\w'-]+\s+){0,2}?" + _ROLE + r"\b"),
+        # The exchange filing's own words: "Change in the MD & CEO".
+        re.compile(r"\bchange\s+in\s+(?:the\s+)?(?:[\w'-]+\s+){0,2}?" + _ROLE + r"\b"),
+        re.compile(r"\bnew\s+" + _ROLE + r"\b"),
+    ),
 }
 
 
@@ -291,6 +395,8 @@ def match_event_type(clause_lower: str):
     again later (event_clause relies on that).
     """
     for etype, vocabulary in EVENT_VOCABULARY.items():
+        if etype in _NOT_THIS_TYPE and _NOT_THIS_TYPE[etype].search(clause_lower):
+            continue
         hit = next((v for v in vocabulary if v in clause_lower), None)
         if hit:
             return etype, hit
@@ -500,6 +606,11 @@ _EVENT_DIRECTION = {
     "supply_disruption": "risk",
     "input_cost_shock": "risk",
     "business_weakness": "risk",
+    # Never warned on (_NOT_WARNED); kept so no event goes without one. A
+    # sale or a change at the top cuts either way.
+    "divestment": "mixed",
+    "product_launch": "opportunity",
+    "management_change": "mixed",
 }
 
 _RISK_TYPES = ("supply_disruption", "input_cost_shock")
@@ -509,7 +620,20 @@ _RISK_TYPES = ("supply_disruption", "input_cost_shock")
 # read-throughs along a link in the graph (analysis/read_through.py): a
 # partner's news through the partner screen, and a demand anchor's weaker
 # business through _anchor_shift. Read-throughs are never graded.
-_COMPANY_ONLY_TYPES = ("partnership_end", "business_weakness")
+_COMPANY_ONLY_TYPES = (
+    "partnership_end",
+    "business_weakness",
+    "divestment",
+    "product_launch",
+    "management_change",
+)
+# Recorded and shown as the company's news, never a warning on it. A
+# holding's own weaker quarter is graded from its filed numbers (Screener's
+# margin and revenue warnings), and warning on the headline as well would
+# count the same quarter twice. A sale, a launch or a change at the top cuts
+# either way, and a direction read off the type would be wrong as often as
+# right.
+_NOT_WARNED = ("business_weakness", "divestment", "product_launch", "management_change")
 # What an anchor does that changes how much it buys from the sectors its
 # edges reach: builds, orders, loses supply, pays more. Its tie-ups and
 # purchases are not among them: "TCS and Google partner on an AI centre" is
@@ -641,6 +765,24 @@ def _named_as_customer(clause: str, phrase: str, ticker: str, name: str) -> bool
     )
 
 
+# Types whose party is whoever does it, named before the verb. "UL Solutions
+# Introduces Certification Program ..., Awards First Certification to
+# Schneider Electric" is UL's launch, not Schneider's; in "X sells its stake
+# in Y to Z" only X is selling.
+_SUBJECT_ONLY_TYPES = ("divestment", "product_launch")
+
+
+def _named_before(clause: str, phrase: Optional[str], ticker: str, name: str) -> bool:
+    """Is this holding named ahead of the event's verb? True when the verb
+    cannot be found, which keeps the reading the clause alone gives."""
+    lower = clause.lower()
+    start = lower.find(phrase.lower()) if phrase else -1
+    # Slices of the clause stand for slices of its lower-cased copy.
+    if start < 0 or len(lower) != len(clause):
+        return True
+    return title_matches_company(clause[:start], ticker, name)
+
+
 def clause_actors(
     clause: str, event_type: Optional[str], phrase: Optional[str], holdings
 ) -> List[str]:
@@ -648,7 +790,8 @@ def clause_actors(
 
     Named in the clause itself, not merely somewhere in the headline: the
     attribution is relational. An order win's customer is not a party to the
-    win (_named_as_customer).
+    win (_named_as_customer), and a launch or a sale is the doing of whoever
+    is named before the verb (_named_before).
     """
     return [
         ticker
@@ -657,6 +800,10 @@ def clause_actors(
         and not (
             event_type == "order_win"
             and _named_as_customer(clause, phrase, ticker, name)
+        )
+        and not (
+            event_type in _SUBJECT_ONLY_TYPES
+            and not _named_before(clause, phrase, ticker, name)
         )
     ]
 
@@ -1242,12 +1389,9 @@ def market_event_signals(
             qualifier = (
                 f" ({certainty})" if certainty and certainty != "completed" else ""
             )
-            # A holding's own weaker quarter is graded from its filed numbers
-            # (Screener's margin and revenue warnings). The headline stays its
-            # news; warning on it as well would count the same quarter twice.
-            attributed = (
-                [] if etype == "business_weakness" else event.get("actors") or []
-            )
+            # Some events are the company's news but not a warning (see
+            # _NOT_WARNED for why).
+            attributed = [] if etype in _NOT_WARNED else event.get("actors") or []
             for ticker in attributed:
                 alerts.append(
                     {

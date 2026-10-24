@@ -1074,7 +1074,9 @@ def _build_companies_html(digest, caps=_CAPS_NORMAL):
                 if a.get("link")
                 else a["text"]
             )
-            + f" <span style='color:#64748b;font-size:10px;'>[{a.get('kind', 'news')}]</span></li>"
+            + f" <span style='color:#64748b;font-size:10px;'>[{a.get('kind', 'news')}"
+            + (" &middot; group" if a.get("group") else "")
+            + "]</span></li>"
             for a in fresh[:2]
         )
         policies = [p for p in c.get("policies") or [] if p.get("direction")][:1]

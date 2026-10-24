@@ -301,7 +301,7 @@ _MOU_RE = re.compile(r"\bmous?\b|memorandum of understanding", re.IGNORECASE)
 # Event vocabulary that implies a transaction with a readable size. Anything
 # outside this set is left unweighted -- see the module docstring.
 _SIZED_EVENT_TYPES = frozenset(
-    {"order_win", "agreement", "acquisition", "contract", "tie_up"}
+    {"order_win", "agreement", "acquisition", "divestment", "contract", "tie_up"}
 )
 _SIZED_PHRASES = (
     "order",

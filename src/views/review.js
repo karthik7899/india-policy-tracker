@@ -29,13 +29,19 @@ import {
 } from "../core/review.js";
 
 const PAGE = 10;
+// The engine's types (analysis/event_engine.EVENT_VOCABULARY), which the
+// workflow checks a correction against; tests/test_event_eval.py keeps the
+// two lists the same.
 const EVENT_TYPES = [
   "acquisition",
   "business_weakness",
   "capacity_add",
+  "divestment",
   "input_cost_shock",
+  "management_change",
   "order_win",
   "partnership_end",
+  "product_launch",
   "supply_disruption",
   "tie_up",
 ];

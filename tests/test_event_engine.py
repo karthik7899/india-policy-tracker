@@ -307,6 +307,101 @@ def test_business_weakness_and_partnership_end_are_read():
     ]
 
 
+def test_divestments_launches_and_changes_at_the_top_are_read():
+    """Three types added on 24 Oct, for news the labels had no word for: a
+    sale was filed as an acquisition, a launch and a new CEO as nothing."""
+    for headline, etype in (
+        ("Elgi Equipments divests its stake in Gentex Air Solutions", "divestment"),
+        ("L&T Technology Services divests SWC business", "divestment"),
+        ("Arvind sells its stake in garment unit to Tommy Hilfiger", "divestment"),
+        ("ideaForge unveils its latest mapping UAV, the Q6V2 GEO", "product_launch"),
+        ("Tata Motors plans to launch three EVs next year", "product_launch"),
+        ("Dixon Technologies CFO resigns", "management_change"),
+        ("Outcome of the Board Meeting - Change in the MD & CEO", "management_change"),
+        ("CONCOR appoints Shri Ajit Kumar Panda as CMD", "management_change"),
+        ("Optiemus CFO parts ways with company", "management_change"),
+        # Selling out of a venture still ends the partnership.
+        ("Vivo sells its stake in the joint venture with Dixon", "partnership_end"),
+        # A launch with a partner keeps the partner; a plant, the capacity.
+        ("Coforge launches security product in partnership with Zscaler", "tie_up"),
+        ("Kaynes Technology launches new plant in Sanand", "capacity_add"),
+    ):
+        found = first_event_clause(headline)
+        assert found and found[1] == etype, headline
+    for headline in (
+        "Maruti sells 1.8 lakh units in October",  # a month's sales
+        "Promoter sells 2% stake in Syrma",  # a holder's shares, not a business
+        "HDFC Mutual Fund sells stake in Chalet Hotels",
+        "Govt unveils Rs 1.9 lakh cr semiconductor, mobile manufacturing push",
+        "Adani unveils Rs 50,000 crore capex plan",
+        "Kaynes Technology Says A 'Global Player' Wants Entire PCB Capacity "
+        "Ahead Of Production Launch",
+        "Ideaforge Technology appoints new investor relations agency",
+        "Dixon launches QIP to raise Rs 1,000 crore",
+        "DRDO successfully launches Agni missile",
+    ):
+        found = first_event_clause(headline)
+        assert not found or found[1] not in (
+            "divestment",
+            "product_launch",
+            "management_change",
+        ), headline
+
+
+def test_a_launch_or_a_sale_is_whoever_does_it():
+    """UL's certification programme was filed as Schneider's launch because
+    Schneider is named in the headline, as the first to be certified."""
+    from analysis.event_engine import clause_actors
+
+    holdings = [
+        ("SCHNEIDER", "Schneider Electric Infrastructure"),
+        ("DIXON", "Dixon Technologies"),
+        ("ELGIEQUIP", "Elgi Equipments"),
+    ]
+
+    def actors(headline):
+        clause, etype, phrase = first_event_clause(headline)
+        return etype, clause_actors(clause, etype, phrase, holdings)
+
+    assert actors(
+        "UL Solutions Introduces Certification Program for Prefabricated Data "
+        "Center Power Distribution Systems, Awards First Certification to "
+        "Schneider Electric"
+    ) == ("product_launch", [])
+    assert actors("Schneider Electric introduces new grid software") == (
+        "product_launch",
+        ["SCHNEIDER"],
+    )
+    # The seller only: neither the company sold nor the buyer is divesting.
+    assert actors("Vivo sells its stake in Dixon Technologies to Elgi Equipments") == (
+        "divestment",
+        [],
+    )
+
+
+def test_divestments_launches_and_changes_at_the_top_are_news_not_warnings():
+    """Each cuts either way, and a direction read off the type would be
+    wrong as often as right: shown as the company's news, never a warning."""
+    import analysis.event_engine as ee
+
+    events = [
+        {
+            "headline": headline,
+            "event_type": etype,
+            "domains": ["manufacturing_electronics"],
+            "actors": ["DIXON"],
+            "direction": ee._EVENT_DIRECTION[etype],
+            "date": _TODAY,
+        }
+        for headline, etype in (
+            ("Dixon Technologies CFO resigns", "management_change"),
+            ("Dixon unveils its first laptop", "product_launch"),
+            ("Dixon divests its stake in a mobile unit", "divestment"),
+        )
+    ]
+    assert market_event_signals({"market_events": events}, _WATCHLIST) == []
+
+
 def test_company_news_is_not_spread_by_vocabulary_or_anchor(monkeypatch):
     """A holding's weaker quarter is graded from its filed numbers, and one
     company's results are not a sector's: no warning from either."""
@@ -1119,7 +1214,7 @@ from analysis.event_engine import match_event_type  # noqa: E402
         ("bpcl, cse sign mou to advance biofuels", "tie_up"),
         ("ltts and anthropic partner to transform engineering", "tie_up"),
         ("arvind completes 26.60% stake acquisition in torrent urja 21", "acquisition"),
-        ("l&t technology services divests swc business", "acquisition"),
+        ("l&t technology services divests swc business", "divestment"),
         (
             "syrma sgs elemaster opens advanced electronics facility in bengaluru",
             "capacity_add",
