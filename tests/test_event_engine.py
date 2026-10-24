@@ -348,6 +348,35 @@ def test_divestments_launches_and_changes_at_the_top_are_read():
         ), headline
 
 
+def test_a_launch_is_read_off_who_launches_and_what():
+    """Not off the whole clause: who a launch is for, or where it is shown,
+    is no reason to doubt it is a product."""
+
+    def etype(headline):
+        found = first_event_clause(headline)
+        return found and found[1]
+
+    for headline in (
+        "Dixon launches a new laptop, targets enterprise users",
+        "BEL unveils new radar at a defence exhibition",
+        "Dixon launches new laptop for government offices",
+        "After govt nod, Dixon launches new laptop",
+        # From the 24 Oct corpus, which a "Cabinet" after the comma hid.
+        "Siemens Unveils SCALANCE XFM-200 Compact, Flat Managed Switches for "
+        "Cabinet-Critical Installations",
+    ):
+        assert etype(headline) == "product_launch", headline
+    for headline in (
+        # A ministry's, after the companies the market moved on.
+        "HAL, Bharat Dynamics, others power Nifty India Defence up over 1% as "
+        "Ministry unveils ₹3,070 crore business plan",
+        "Tata Power unveils plan to add 10 GW",
+        "Suzlon unveils 'Suzlon 2.0', targets 10 GW annual renewable energy "
+        "sales by FY31",
+    ):
+        assert etype(headline) != "product_launch", headline
+
+
 def test_a_launch_or_a_sale_is_whoever_does_it():
     """UL's certification programme was filed as Schneider's launch because
     Schneider is named in the headline, as the first to be certified."""

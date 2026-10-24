@@ -171,28 +171,69 @@ EVENT_VOCABULARY: Dict[str, tuple] = {
 # The holder of a stake selling it, not the company selling a business: a
 # fund's or a promoter's stake change is not a corporate event
 # (eval/event_labels.json), and the government selling shares in a holding
-# is a policy matter. And what is launched besides a product: an issue of
-# securities, a scheme, a plan, a probe, a missile.
+# is a policy matter.
 _NOT_THIS_TYPE: Dict[str, Any] = {
     "divestment": re.compile(
         r"\b(?:promoters?|mutual\s+funds?|fiis?|fpis?|govt|government|ofs|"
         r"offer\s+for\s+sale|block\s+deals?|bulk\s+deals?|private\s+equity)\b"
     ),
-    # The second half from the 24 Oct corpus: an employee cricket league, a
-    # students' quiz, a brand film, a new corporate identity, "Suzlon 2.0,
-    # targets 10 GW" and "major investment proposals" were all unveiled.
-    "product_launch": re.compile(
-        r"\b(?:ipo|qip|fpo|nfo|ncds?|bonds?|debentures?|buy-?backs?|rights\s+issue|"
-        r"share\s+sale|offers?|schemes?|polic(?:y|ies)|missions?|campaigns?|"
-        r"plans?(?!\s+to\b)|roadmaps?|strateg(?:y|ies)|reports?|results|earnings|"
-        r"probes?|investigations?|inquir(?:y|ies)|tenders?|funds?|govt|government|"
-        r"ministry|minister|cabinet|regulator|sebi|rbi|isro|drdo|missiles?|"
-        r"satellites?|rockets?|attacks?|offensive|"
-        r"league|tournament|quiz|contest|competition|championship|hackathon|"
-        r"edition|entries|film|identity|logo|targets?|vision|growth\s+map|"
-        r"investments?|proposals?|exhibitions?|summit|conference|festival)\b"
-    ),
 }
+
+# A launch that is no product's: a government's or an agency's, or of
+# something else: an issue of securities, a scheme, a plan, a probe, a
+# missile. The second half of what is launched from the 24 Oct corpus: an
+# employee cricket league, a students' quiz, a brand film, a new corporate
+# identity, a growth map and "major investment proposals" were all unveiled.
+_NOT_A_LAUNCHER = re.compile(
+    r"\b(?:govt|government|ministry|minister|cabinet|regulator|sebi|rbi|isro|"
+    r"drdo)\b"
+)
+_NOT_A_PRODUCT = re.compile(
+    r"\b(?:ipo|qip|fpo|nfo|ncds?|bonds?|debentures?|buy-?backs?|rights\s+issue|"
+    r"share\s+sale|offers?|schemes?|polic(?:y|ies)|missions?|campaigns?|"
+    r"plans?|roadmaps?|strateg(?:y|ies)|reports?|results|earnings|"
+    r"probes?|investigations?|inquir(?:y|ies)|tenders?|funds?|missiles?|"
+    r"satellites?|rockets?|attacks?|offensive|"
+    r"league|tournament|quiz|contest|competition|championship|hackathon|"
+    r"edition|entries|film|identity|logo|targets?|vision|growth\s+map|"
+    r"investments?|proposals?|exhibitions?|summit|conference|festival)\b"
+)
+# Each read where it is said: the launcher before the verb, in the launch's
+# own statement, and the thing launched straight after it, up to a
+# preposition or the statement's end. Not the whole clause: "Dixon launches
+# a new laptop, targets enterprise users" and "BEL unveils new radar at a
+# defence exhibition" say who it is for and where, not what it is. Nor the
+# comma in "Rs 50,000 crore".
+_STATEMENT_BREAK = r"(?<!\d),|,(?!\d)|[;:]"
+_LAUNCHER_FROM_RE = re.compile(
+    r"\b(?:as|amid|after|while|despite)\b|" + _STATEMENT_BREAK
+)
+_LAUNCHED_TO_RE = re.compile(
+    r"\s(?:and|for|with|to|in|at|on|under|from|across|into|by|via|as|amid|"
+    r"after|while|despite)\s|" + _STATEMENT_BREAK
+)
+# A company unveiling a new version of itself is a strategy: "Suzlon unveils
+# 'Suzlon 2.0', targets 10 GW annual renewable energy sales by FY31".
+_VERSION_OF_RE = re.compile(r"\W*([a-z][\w&.-]*)\s+\d+\.0\b")
+
+
+def _not_a_launch(clause_lower: str, verb) -> bool:
+    """Is the launch at ``verb`` (a match in the clause) a government's, or
+    of something that is not a product?"""
+    start = max(
+        (m.end() for m in _LAUNCHER_FROM_RE.finditer(clause_lower, 0, verb.start())),
+        default=0,
+    )
+    end = _LAUNCHED_TO_RE.search(clause_lower, verb.end())
+    launcher = clause_lower[start : verb.start()]
+    launched = clause_lower[verb.end() : end.start() if end else len(clause_lower)]
+    itself = _VERSION_OF_RE.match(launched)
+    return bool(
+        _NOT_A_LAUNCHER.search(launcher)
+        or _NOT_A_PRODUCT.search(launched)
+        or (itself and re.search(rf"\b{re.escape(itself.group(1))}\b", launcher))
+    )
+
 
 # Shapes the literal phrases above cannot express, because headlines put
 # words between the verb and its object. "Suzlon bags 306 MW wind turbine
@@ -402,7 +443,7 @@ def match_event_type(clause_lower: str):
             return etype, hit
         for pattern in EVENT_PATTERNS.get(etype, ()):
             m = pattern.search(clause_lower)
-            if m:
+            if m and not (etype == "product_launch" and _not_a_launch(clause_lower, m)):
                 return etype, m.group(0)
     return None, None
 
