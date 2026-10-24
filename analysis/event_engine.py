@@ -168,6 +168,13 @@ EVENT_VOCABULARY: Dict[str, tuple] = {
     "management_change": (),
 }
 
+# Who a company is, not who acts: "Government-owned BPCL divests its stake",
+# "RBI-regulated fintech launches a new product".
+_DESCRIBES = (
+    r"(?![\s-](?:owned|backed|run|regulated|registered|approved|controlled|"
+    r"funded|supported|listed|promoted|managed|led)\b)"
+)
+
 # The holder of a stake selling it, not the company selling a business: a
 # fund's or a promoter's stake change is not a corporate event
 # (eval/event_labels.json), and the government selling shares in a holding
@@ -176,7 +183,7 @@ EVENT_VOCABULARY: Dict[str, tuple] = {
 # via block deal".
 _NOT_A_SELLER = re.compile(
     r"\b(?:promoters?|mutual\s+funds?|fiis?|fpis?|govt|government|"
-    r"private\s+equity)\b"
+    r"private\s+equity)\b" + _DESCRIBES
 )
 _SHARES_SOLD_RE = re.compile(
     r"\b(?:ofs|offer\s+for\s+sale|block\s+deals?|bulk\s+deals?)\b"
@@ -198,7 +205,7 @@ _WHAT_IS_SOLD_RE = re.compile(r"\s+(?:of|in)\s+((?:\S+\s+){0,2}\S+)")
 # identity, a growth map and "major investment proposals" were all unveiled.
 _NOT_A_LAUNCHER = re.compile(
     r"\b(?:govt|government|ministry|minister|cabinet|regulator|sebi|rbi|isro|"
-    r"drdo)\b"
+    r"drdo)\b" + _DESCRIBES
 )
 _NOT_A_PRODUCT = re.compile(
     r"\b(?:ipo|qip|fpo|nfo|ncds?|bonds?|debentures?|buy-?backs?|rights\s+issue|"

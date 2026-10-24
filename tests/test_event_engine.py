@@ -326,6 +326,12 @@ def test_divestments_launches_and_changes_at_the_top_are_read():
             "approval",
             "divestment",
         ),
+        # Who the company is, not who sells or launches.
+        (
+            "Government-owned BPCL divests its stake in Numaligarh Refinery",
+            "divestment",
+        ),
+        ("RBI-regulated fintech launches a new product", "product_launch"),
         ("ideaForge unveils its latest mapping UAV, the Q6V2 GEO", "product_launch"),
         ("Tata Motors plans to launch three EVs next year", "product_launch"),
         ("Dixon Technologies CFO resigns", "management_change"),
