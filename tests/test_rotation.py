@@ -56,6 +56,28 @@ class TestDetectEmergingPlayers(unittest.TestCase):
         result = detect_emerging_players(brief_data, watchlist)
         self.assertEqual(result, {})
 
+    def test_a_capitalised_verb_ends_the_name(self):
+        """A title-cased headline capitalises its verb: "Himanshu Singh Joins
+        Arvind Limited" (24 Oct) names Arvind, which is held."""
+        brief_data = {
+            "textiles": [
+                {"title": "Himanshu Singh Joins Arvind Limited"},
+                {"title": "Rajesh Kumar Joins Acme Technologies As CFO"},
+            ]
+        }
+        watchlist = {"textiles": [{"ticker": "ARVIND", "name": "Arvind"}]}
+        result = detect_emerging_players(brief_data, watchlist)
+        self.assertEqual(result, {"textiles": ["Acme Technologies"]})
+
+    def test_a_word_the_suffix_follows_is_the_names_own(self):
+        """ "Bags" is a verb in "Dixon Bags Order" and part of the name in
+        "Commercial Syn Bags Limited", a listed company."""
+        brief_data = {
+            "textiles": [{"title": "Commercial Syn Bags Limited Wins a Contract"}]
+        }
+        result = detect_emerging_players(brief_data, {})
+        self.assertIn("Commercial Syn Bags Limited", result["textiles"])
+
     def test_emerging_players_sector_skipped(self):
         """Test that the emerging_players sector in brief_data is correctly skipped."""
         brief_data = {"emerging_players": [{"title": "Omega Corp is emerging"}]}

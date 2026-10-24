@@ -81,6 +81,31 @@ def test_missing_yahoo_fields(monkeypatch):
     assert stock["rating"] == "N/A"
 
 
+def test_yahoos_none_is_no_rating(monkeypatch):
+    """Yahoo says "none" where nobody recommends anything; it was stored as
+    a "None" rating, and the stored one is replaced on the next run."""
+    from providers.yahoo import recommendation
+
+    assert recommendation({"recommendationKey": "none"}) == "N/A"
+    assert recommendation({"recommendationKey": "strong_buy"}) == "Strong Buy"
+    assert recommendation({}) == "N/A"
+
+    class MockTicker:
+        def history(self, *args, **kwargs):
+            return type("Hist", (), {"empty": True})()
+
+        @property
+        def info(self):
+            return {"recommendationKey": "none"}
+
+    monkeypatch.setattr(
+        "providers.yahoo.get_cached_ticker", lambda *args, **kwargs: MockTicker()
+    )
+    stock = {"ticker": "TEST", "rating": "None"}
+    update_single_stock(stock, {})
+    assert stock["rating"] == "N/A"
+
+
 # --- 5. Malformed Screener HTML ---
 def test_malformed_screener_html(monkeypatch):
     malformed_html = "<html><body><h1>Broken</h1><section id='quarters'><!-- no table --></section></body></html>"

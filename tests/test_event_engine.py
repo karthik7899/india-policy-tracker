@@ -1689,8 +1689,10 @@ def test_a_cut_headline_is_graded_from_what_is_left_and_never_firmer():
 @pytest.mark.parametrize(
     "headline,grade",
     [
-        # A thought about a deal, to the end of the statement.
+        # A thought about a deal, to the end of the statement, which a
+        # comma inside a number does not end.
         ("Reliance weighs stake sale in retail arm", "reported"),
+        ("Reliance weighs Rs 5,000 crore stake sale in retail arm", "reported"),
         ("Tata Electronics considers bid for chip packaging unit", "reported"),
         # The shortage is stated as fact; only the response is weighed.
         (
@@ -1731,6 +1733,11 @@ def test_a_hedge_covers_the_deal_it_governs_whatever_follows():
     )
     assert (
         classify_certainty("Reliance weighs stake sale as shares rally", "stake sale")
+        == "reported"
+    )
+    # Nor does the comma in a number end what is weighed.
+    assert (
+        headline_certainty("Reliance weighs Rs 5,000 crore stake sale as shares rally")
         == "reported"
     )
     # The shortage after "as" is stated, not weighed.

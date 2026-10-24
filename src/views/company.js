@@ -13,7 +13,7 @@
 import { el, mount } from "../core/dom.js";
 import { resolve, loadCoverage, loadGraph, loadProposals } from "../core/data.js";
 import { href } from "../core/router.js";
-import { panel, convictionToggle } from "./table.js";
+import { panel, convictionToggle, isMissing } from "./table.js";
 import {
   factsList,
   holdingSignals,
@@ -294,7 +294,8 @@ export async function render(container, { payload, route }) {
           stock.price ? `Price ${stock.price}` : "",
           stock.target ? `target ${stock.target}` : "",
           stock.growth_pct ? `upside ${upsideText(stock)}` : "",
-          stock.rating || "",
+          // Not "N/A", or the "None" Yahoo's "none" was stored as.
+          isMissing(stock.rating) ? "" : stock.rating,
         ]
           .filter(Boolean)
           .join(" · "),
