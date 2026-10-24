@@ -65,6 +65,9 @@ API_URL = (
 # spending one run's quota on the backlog.
 BATCH_SIZE = 40
 MAX_NEW_PER_RUN = 600
+# Between batches: gentle on per-minute limits; a daily batch has time to
+# spare. Replayed answers (scripts/reader_eval.py) need none.
+BATCH_PAUSE_S = 1.0
 TIMEOUT_S = 60
 # Server-side failures worth retrying, and how.
 _TRANSIENT = {500, 502, 503, 504}
@@ -670,9 +673,8 @@ def read_headlines(
                 }
                 status["read"] += 1
                 changed = True
-            # Gentle on per-minute limits; a daily batch has time to spare.
             if start + BATCH_SIZE < len(batch_todo):
-                time.sleep(1.0)
+                time.sleep(BATCH_PAUSE_S)
     except ReaderUnavailable as e:
         status["skipped"] = str(e)
         status["pending"] = len(todo) - status["read"]

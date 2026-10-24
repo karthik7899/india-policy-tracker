@@ -10,9 +10,17 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: read # the PR's labels, for the reader comparison below
+      pull-requests: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
+        with:
+          # A PR is checked out as its merge commit; the second commit is the
+          # base it merges into, which the reader comparison below needs.
+          fetch-depth: 2
 
       - name: Set up Python
         uses: actions/setup-python@v6
@@ -33,6 +41,23 @@ jobs:
 
       - name: Run tests
         run: python -m pytest tests/
+
+      # The readers' scores on their recorded answers, row by row against the
+      # base the PR merges into (scripts/reader_eval.py). A holdout score that
+      # falls fails here unless the PR carries the accept-regression label;
+      # the labels are read when the job runs, so adding one and re-running
+      # the job is enough.
+      - name: Compare reader scores with the base
+        if: github.event_name == 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          allow=""
+          if gh api "repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/labels" --jq '.[].name' | grep -qx accept-regression; then
+            allow="--allow-regression"
+          fi
+          python scripts/reader_eval.py --compare HEAD^1 $allow --summary "$GITHUB_STEP_SUMMARY"
 
       # The frontend had two jest files that CI never ran — they sat green by
       # never executing. Node's built-in runner needs no dependency, which
