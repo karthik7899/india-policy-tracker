@@ -64,6 +64,7 @@ SECTOR_INDEX = {
         "Nifty Infrastructure",
         ("^CNXINFRA", "INFRABEES.NS"),
     ),
+    "real_estate": ("Nifty Realty", ("^CNXREALTY",)),
 }
 
 # Summary includes only decisions at least this old.

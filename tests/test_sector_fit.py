@@ -97,9 +97,18 @@ def test_a_candidate_is_moved_to_the_one_sector_it_fits():
 
 
 def test_a_candidate_fitting_nothing_is_refused():
-    sector, reason = place("data_center_support", *GODREJ)
+    pharma = ("Drug Manufacturers - Specialty & Generic", keywords("makes generics"))
+    sector, reason = place("healthcare_hospitals", *pharma)
     assert sector is None
-    assert reason == "Real Estate - Development fits none of our sectors"
+    assert reason == "Drug Manufacturers - Specialty & Generic fits none of our sectors"
+
+
+def test_a_developer_belongs_in_real_estate():
+    """Godrej Properties fitted none of our sectors until Real Estate was
+    added on 24 Oct; Anant Raj stays where its data centres put it."""
+    assert fits("real_estate", *GODREJ) is True
+    assert place("data_center_support", *GODREJ)[0] == "real_estate"
+    assert place("data_center_support", *ANANT_RAJ)[0] == "data_center_support"
 
 
 def test_a_candidate_fitting_several_others_is_refused_rather_than_guessed():
@@ -139,7 +148,7 @@ def test_the_audit_reports_misfits_and_moves_nothing():
     audit = audit_watchlist(watchlist)
     assert audit["checked"] == 2
     assert [m["ticker"] for m in audit["misfits"]] == ["GODREJPROP"]
-    assert audit["misfits"][0]["suggested"] == []
+    assert audit["misfits"][0]["suggested"] == ["real_estate"]
     assert audit["unverified"] == ["NEWCO"]
     assert repr(watchlist) == before
 
@@ -270,3 +279,15 @@ def test_a_client_industry_in_a_summary_does_not_place_a_company():
         keywords("loyalty software for retail and footwear brands"),
     )
     assert fits("sports_athleisure", *capillary) is False
+
+
+def test_every_sector_is_searched_and_placed():
+    """A sector added to SECTOR_METADATA, as Real Estate was on 24 Oct, needs
+    its news searches and its fit rule too, or nothing is collected for it
+    and nothing placed in it."""
+    from config import SECTOR_METADATA, SECTOR_QUERIES
+    from analysis.sector_fit import SECTOR_FIT
+
+    for sector in SECTOR_METADATA:
+        assert SECTOR_QUERIES.get(sector), sector
+        assert sector == "macro_indicators" or sector in SECTOR_FIT, sector

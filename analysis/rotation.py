@@ -296,6 +296,7 @@ def _probe_candidate(name, preresolved, isin_master, watchlisted=()):
         # passed the potential check by construction and outbid every holding
         # below it. 31 of the ledger's first 64 decisions came in that way.
         target_price = consensus_target(info)
+        analysts = int(to_float(info.get("numberOfAnalystOpinions")) or 0)
 
         rev_growth_raw = info.get("revenueGrowth")
         from analysis.sector_fit import keywords
@@ -308,6 +309,7 @@ def _probe_candidate(name, preresolved, isin_master, watchlisted=()):
                 "keywords": keywords(info.get("longBusinessSummary")),
                 "live_price": live_price,
                 "target_price": target_price,
+                "analyst_count": analysts,
                 "growth_pct_val": (
                     (target_price - live_price) / live_price * 100
                     if target_price
@@ -354,22 +356,44 @@ def _broken_runs(stock):
     return int(to_float(stock.get("thesis_broken_runs")) or 0)
 
 
-def _replaceable(holdings, candidate_upside):
+# Upside is compared only between targets at least this many analysts stand
+# behind. KUSUMGAR replaced WELSPUNLIV on 24 Oct at 36.6% against 3.7%, and
+# the 36.6% was one analyst's. A holding with fewer is treated as one no
+# analyst covers: it goes only on a huge upset.
+MIN_ANALYSTS = 2
+
+
+def _covered(stock):
+    """Is this holding's upside a target enough analysts stand behind?"""
+    return (
+        has_analyst_consensus(stock)
+        and (to_float(stock.get("analyst_count")) or 0) >= MIN_ANALYSTS
+    )
+
+
+def _replaceable(holdings, candidate_upside, candidate_analysts=0):
     """``(holding, why)``: the holding a candidate may replace, or None and
-    why not. Upside is compared only between analysts' targets."""
+    why not. Upside is compared only between analysts' targets, each with
+    at least MIN_ANALYSTS behind it."""
     upset = [
-        s
-        for s in holdings
-        if not has_analyst_consensus(s) and _broken_runs(s) >= HUGE_UPSET_RUNS
+        s for s in holdings if not _covered(s) and _broken_runs(s) >= HUGE_UPSET_RUNS
     ]
     if upset:
         worst = max(upset, key=_broken_runs)
         return worst, f"its thesis has been Broken for {_broken_runs(worst)} runs"
     if candidate_upside is None:
         return None, "no analyst target, so no upside to set against a holding's"
-    covered = [s for s in holdings if has_analyst_consensus(s)]
+    if candidate_analysts < MIN_ANALYSTS:
+        return None, (
+            f"its target is {candidate_analysts} analyst's, under the "
+            f"{MIN_ANALYSTS} needed to set it against a holding's"
+        )
+    covered = [s for s in holdings if _covered(s)]
     if not covered:
-        return None, "no holding here has an analyst target to compare with"
+        return None, (
+            f"no holding here has a target {MIN_ANALYSTS} or more analysts "
+            "stand behind to compare with"
+        )
     weakest = min(covered, key=_get_potential)
     potential = _get_potential(weakest)
     if candidate_upside > potential:
@@ -591,6 +615,7 @@ def auto_curate_watchlist(brief_data, watchlist, screened_candidates=None):
                 live_price = probe["live_price"]
                 target_price = probe["target_price"]
                 growth_pct_val = probe["growth_pct_val"]
+                analyst_count = int(to_float(probe.get("analyst_count")) or 0)
                 rating = probe["rating"]
                 rev_growth_raw = probe["rev_growth_raw"]
                 revenue_growth = probe["revenue_growth"]
@@ -702,10 +727,14 @@ def auto_curate_watchlist(brief_data, watchlist, screened_candidates=None):
                     # Only the analysts' target. Without one the holding
                     # takes the pipeline's own estimate later in the run
                     # (dashboard/builder.py), marked as such.
+                    # With the count of analysts behind it, which the next
+                    # rotation reads (_covered) if this run's price refresh
+                    # fails before it is fetched again.
                     **(
                         {
                             "target": f"{target_price:.2f}",
                             "growth_pct": f"{growth_pct_val:.1f}%",
+                            "analyst_count": analyst_count,
                         }
                         if target_price
                         else {}
@@ -752,7 +781,11 @@ def auto_curate_watchlist(brief_data, watchlist, screened_candidates=None):
                         }
                     )
                 else:
-                    weakest_stock, why = _replaceable(current_watchlist, growth_pct_val)
+                    weakest_stock, why = _replaceable(
+                        current_watchlist,
+                        growth_pct_val,
+                        analyst_count,
+                    )
 
                     if weakest_stock is not None:
                         watchlist[sector] = [
