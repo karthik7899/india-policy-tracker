@@ -393,6 +393,9 @@ def test_a_launch_is_read_off_who_launches_and_what():
         "HAL, Bharat Dynamics, others power Nifty India Defence up over 1% as "
         "Ministry unveils ₹3,070 crore business plan",
         "Tata Power unveils plan to add 10 GW",
+        # In the passive, what is launched comes first, and who after "by".
+        "Rs 500 crore fund launched by SBI",
+        "New portal for farmers launched by government",
         "Suzlon unveils 'Suzlon 2.0', targets 10 GW annual renewable energy "
         "sales by FY31",
     ):
@@ -422,6 +425,11 @@ def test_a_launch_or_a_sale_is_whoever_does_it():
     assert actors("Schneider Electric introduces new grid software") == (
         "product_launch",
         ["SCHNEIDER"],
+    )
+    # In the passive, whoever it is "by".
+    assert actors("New laptop launched by Dixon Technologies") == (
+        "product_launch",
+        ["DIXON"],
     )
     # The seller only: neither the company sold nor the buyer is divesting.
     assert actors("Vivo sells its stake in Dixon Technologies to Elgi Equipments") == (

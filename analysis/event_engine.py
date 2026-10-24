@@ -226,6 +226,10 @@ _LAUNCHED_TO_RE = re.compile(
 # A company unveiling a new version of itself is a strategy: "Suzlon unveils
 # 'Suzlon 2.0', targets 10 GW annual renewable energy sales by FY31".
 _VERSION_OF_RE = re.compile(r"\W*([a-z][\w&.-]*)\s+\d+\.0\b")
+# In the passive what is done comes first, and who does it after "by": "New
+# laptop launched by Dixon Technologies", "Rs 500 crore fund launched by SBI".
+_PASSIVE_VERBS = ("launched", "unveiled", "introduced", "rolled out")
+_BY_RE = re.compile(r"\s+(?:(?:in|at)\s+(?:\S+\s+){1,2})?by\s+((?:\S+\s+){0,3}\S+)")
 
 
 def _doer(clause_lower: str, at: int) -> str:
@@ -251,11 +255,15 @@ def _not_this_type(etype: str, clause_lower: str, at: int, phrase: str) -> bool:
         return bool(_NOT_A_SELLER.search(said))
     if etype != "product_launch":
         return False
-    launcher = _doer(clause_lower, at)
-    end = _LAUNCHED_TO_RE.search(clause_lower, at + len(phrase))
-    launched = clause_lower[
-        at + len(phrase) : end.start() if end else len(clause_lower)
-    ]
+    by = phrase in _PASSIVE_VERBS and _BY_RE.match(clause_lower, at + len(phrase))
+    if by:
+        launcher, launched = by.group(1), _doer(clause_lower, at)
+    else:
+        launcher = _doer(clause_lower, at)
+        end = _LAUNCHED_TO_RE.search(clause_lower, at + len(phrase))
+        launched = clause_lower[
+            at + len(phrase) : end.start() if end else len(clause_lower)
+        ]
     itself = _VERSION_OF_RE.match(launched)
     return bool(
         _NOT_A_LAUNCHER.search(launcher)
@@ -418,7 +426,9 @@ EVENT_PATTERNS: Dict[str, tuple] = {
     "capacity_add": (
         # And launched: "Varun Beverages Launches New Production Facility" is
         # capacity, which product_launch, checked last, would otherwise take.
-        # Not a lab: "TCS launches lights-out factory lab" builds nothing.
+        # Not a lab: "TCS launches lights-out factory lab" builds nothing, so
+        # it is TCS's launch, as eval/event_labels.json files TCS's
+        # NVIDIA-powered engineering lab, and not new capacity.
         re.compile(
             r"\b(?:inaugurat\w*|opens|opened|launch(?:es|ed))"
             + _GAP
@@ -844,14 +854,20 @@ _SUBJECT_ONLY_TYPES = ("divestment", "product_launch")
 
 
 def _named_before(clause: str, phrase: Optional[str], ticker: str, name: str) -> bool:
-    """Is this holding named ahead of the event's verb? True when the verb
-    cannot be found, which keeps the reading the clause alone gives."""
+    """Is this holding named as whoever does it: ahead of the event's verb,
+    or after "by" in the passive (_BY_RE)? True when the verb cannot be
+    found, which keeps the reading the clause alone gives."""
     lower = clause.lower()
     start = lower.find(phrase.lower()) if phrase else -1
     # Slices of the clause stand for slices of its lower-cased copy.
     if start < 0 or len(lower) != len(clause):
         return True
-    return title_matches_company(clause[:start], ticker, name)
+    if title_matches_company(clause[:start], ticker, name):
+        return True
+    by = phrase.lower() in _PASSIVE_VERBS and _BY_RE.match(lower, start + len(phrase))
+    return bool(by) and title_matches_company(
+        clause[by.start(1) : by.end(1)], ticker, name
+    )
 
 
 # A change at the top is the company whose officer changed: the one named
