@@ -353,6 +353,27 @@ def test_a_headline_about_somebody_else_cannot_take_a_side(repo):
     assert len(report["skipped"]) == 2
     assert all("not about this company" in s for s in report["skipped"])
     assert _labels(repo, "thesis") == thesis
+    # A row already in that state is not confirmed as it stands: it would
+    # stay in the eval, marked reviewed.
+    path = repo / da.LABEL_FILES["thesis"]
+    body = json.loads(path.read_text())
+    broken = next(
+        r
+        for r in body["labels"]
+        if da.row_id("thesis", r) == da.row_id("thesis", about)
+    )
+    broken.update(stance="supports", about=False)
+    broken.pop("reviewed", None)
+    path.write_text(json.dumps(body))
+    report = da.apply_decisions(
+        {
+            "v": 1,
+            "labels": {"thesis": [{"id": da.row_id("thesis", about), "ok": True}]},
+        },
+        root=str(repo),
+    )
+    assert report["applied"] == [] and "not about this company" in report["skipped"][0]
+    assert json.loads(path.read_text()) == body
     # Said to be about the company after all, it may take a side.
     report = da.apply_decisions(
         {

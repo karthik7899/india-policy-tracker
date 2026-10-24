@@ -340,14 +340,13 @@ def apply_labels(
                 )
                 continue
             row = found[0]
-            if item.get("ok") is True:
-                row["reviewed"] = today
-                confirmed += 1
-                continue
-            fields, error = _label_fields(kind, item, sectors)
+            confirm = item.get("ok") is True
+            fields, error = ({}, "") if confirm else _label_fields(kind, item, sectors)
             if not error and kind == "thesis":
+                # A confirmation too: confirming a row that breaks the rule
+                # would keep it in the eval, now marked reviewed.
                 error = _thesis_conflict({**row, **fields})
-            if error or not fields:
+            if error or not (confirm or fields):
                 report["skipped"].append(
                     f"{kind} label “{row.get('headline', '')[:60]}”: "
                     + (error or "nothing to change")
@@ -355,7 +354,10 @@ def apply_labels(
                 continue
             row.update(fields)
             row["reviewed"] = today
-            corrected += 1
+            if confirm:
+                confirmed += 1
+            else:
+                corrected += 1
         if confirmed or corrected:
             # Synthetic rows are not offered for review (src/core/review.js).
             body["reviewed"] = all(
