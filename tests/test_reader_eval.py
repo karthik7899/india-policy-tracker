@@ -401,6 +401,23 @@ def test_a_recorded_run_replays_to_the_same_scorecards(tmp_path, monkeypatch):
     ] == before
 
 
+def test_every_challenge_is_checked_however_many_there_are(tmp_path, monkeypatch):
+    """The pipeline checks MAX_CHECKS_PER_RUN challenges a run and the rest on
+    later runs. An eval starts from nothing every time, so with that cap it
+    would never reach the rest."""
+    monkeypatch.setattr(reader_eval, "LIVE_SPACING_S", 0)
+    monkeypatch.setattr(thesis_check, "MAX_CHECKS_PER_RUN", 1)
+    calls = {"events": 0, "thesis": 0, "check": 0}
+
+    cards, report = reader_eval.run(
+        record=True, live=_fakes(calls), recordings_dir=str(tmp_path)
+    )
+    got = [r["got"] for r in cards["thesis"]["rows"].values()]
+    checked = sum("not confirmed by a second reading" in g for g in got)
+    assert checked > 1 and report["check"]["recorded"] == checked
+    assert not any("(unconfirmed)" in g for g in got)
+
+
 def test_the_thesis_labels_are_asked_with_the_holding_s_name():
     holdings = {"clean_energy": [{"ticker": "SUZLON", "name": "Suzlon Energy"}]}
     rows = [{"ticker": "SUZLON", "thesis": "x", "headline": "y"}, {"ticker": "ZZ"}]

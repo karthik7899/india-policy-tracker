@@ -201,6 +201,10 @@ def run(
             max_new=len(pairs),
             today=today,
             check_transport=transport(CHECK),
+            # Every challenge, not a run's worth: a scratch cache starts each
+            # run from nothing, so a cap would ask for the same first ones
+            # every time and the rest would never be recorded.
+            max_checks=len(pairs),
         )
     for codec in CODECS:
         s = store[codec.name]
