@@ -92,3 +92,6 @@ say.
 **Learning:** Optimizing sub-string checks against dictionaries-of-lists can yield ~50% speedup by pre-flattening into tuples and hoisting `.lower()` calls out of loops. Replacing O(N) substring scans with O(1) hash maps is functionally breaking when substring matching is semantically required.
 **Action:** Identify loop invariants in hot paths (like case conversions) and pre-compute flattening operations over read-only data structures outside iteration boundaries.
 
+## 2024-10-24 - [Optimization] Regex vs BeautifulSoup for simple HTML tag stripping
+**Learning:** For massive speedups in hot loops (e.g., RSS feed scraping) when the goal is just plain text extraction, `re.sub(r'<[^>]+>', ' ', text)` coupled with `html.unescape()` is up to 50x-100x faster than `BeautifulSoup(text, "lxml").get_text(" ")`. BeautifulSoup's complete DOM parsing introduces unnecessary overhead for simple tag removal.
+**Action:** Use regex and `html.unescape()` for simple HTML tag stripping where full DOM parsing is not required.
