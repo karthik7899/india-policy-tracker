@@ -42,7 +42,10 @@ CACHE_PATH = os.path.join(ROOT, "llm_cache.json")
 # Bump when the prompt or schema changes meaning. Cached readings from another
 # version are ignored and re-read, so an improved prompt reaches old
 # headlines instead of only new ones.
-PROMPT_VERSION = "3"
+# 4: divestment, product_launch and management_change, the types the rules
+#    gained on 24 Oct. Version 3 filed a sale as an acquisition ("BPCL exits
+#    Numaligarh Refinery" read as BPCL buying) and every launch as none.
+PROMPT_VERSION = "4"
 
 # The model is configuration, not code: GEMINI_MODEL (a repository variable in
 # the workflow) overrides this. Gemini 3.8 Flash is the model the key was
@@ -89,11 +92,17 @@ def _backoff(resp, attempt: int) -> float:
 # Unused cache entries are dropped after this long so the file stays small.
 CACHE_RETENTION_DAYS = 120
 
+# The rules' types the reader is asked for. Not partnership_end or
+# business_weakness: those stay the rules' alone, and reconcile() does not
+# count the reader's "none" for one as a disagreement.
 EVENT_TYPES = (
     "tie_up",
     "acquisition",
+    "divestment",
     "order_win",
     "capacity_add",
+    "product_launch",
+    "management_change",
     "supply_disruption",
     "input_cost_shock",
 )
@@ -128,17 +137,30 @@ For each headline return one object with:
 
 event_type — exactly one of:
   tie_up             joint venture, partnership, alliance, MoU, collaboration
-  acquisition        buying or selling a company, business or stake (divestments count)
+  acquisition        a company buying a company, business or stake
+  divestment         a company selling, spinning off or exiting a company,
+                     business, plant or stake it owns. Shareholders selling
+                     the company's own shares are none: promoter, government
+                     or fund sales, block deals, OFS.
   order_win          a company winning an order, contract or bid
   capacity_add       a new plant, facility or capacity opening, commissioning or being built
+  product_launch     a company launching, unveiling or introducing a product,
+                     model, platform or service of its own, or planning to.
+                     Not a government scheme, an IPO or share issue, or a
+                     plan, policy or campaign being launched.
+  management_change  a CEO, MD, CFO, COO, CTO, chairman, whole-time or
+                     executive director appointed, re-appointed, resigning,
+                     retiring or replaced
   supply_disruption  shortages, export bans, plant shutdowns, supply crunches
   input_cost_shock   a sharp rise in the cost of an input or raw material
   none               anything else: results, share-price moves, analyst views,
-                     awards, product launches, fund or promoter stake changes,
-                     policy announcements, board meetings, legal matters
+                     awards, fund or promoter stake changes, policy
+                     announcements, board meeting notices, legal matters
 parties — the companies that are PARTIES to the event, copied EXACTLY as written
-  in the headline. Include both sides of a tie-up or acquisition, the company that
-  won an order (NOT the customer that placed it), the company adding capacity.
+  in the headline. Include both sides of a tie-up or acquisition, the seller in a
+  divestment (and the buyer, if named), the company that won an order (NOT the
+  customer that placed it), the company adding capacity, the company launching
+  the product, and the company whose executive changed (NOT a former employer).
   Never include advisers, law firms, governments, people, or countries.
   Use [] when event_type is none.
 certainty — completed (it happened), announced (agreed or intended, e.g. MoU,

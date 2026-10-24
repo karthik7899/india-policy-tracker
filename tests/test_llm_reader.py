@@ -210,6 +210,64 @@ def test_a_type_the_reader_is_never_asked_for_is_not_disputed():
     assert stats == {"corroborated": 0, "disagreed": 0, "llm_only": 0}
 
 
+def test_the_prompt_defines_every_type_the_reader_may_answer_with():
+    """A type in the schema the instructions never define is a guess; one the
+    rules lack can never corroborate anything."""
+    from analysis.event_engine import EVENT_VOCABULARY
+
+    enum = llm_reader._SCHEMA["items"]["properties"]["event_type"]["enum"]
+    assert enum == list(llm_reader.EVENT_TYPES) + ["none"]
+    for etype in llm_reader.EVENT_TYPES:
+        assert f"\n  {etype} " in llm_reader._INSTRUCTIONS, etype
+        assert etype in EVENT_VOCABULARY, etype
+    assert "divestments count" not in llm_reader._INSTRUCTIONS
+    assert "product launches" not in llm_reader._INSTRUCTIONS
+
+
+BPCL_EXIT = "BPCL exits Numaligarh Refinery ahead of privatisation"
+
+
+def test_a_sale_is_a_divestment_and_both_readers_are_compared_on_it():
+    """Before version 4 the reader had no divestment: it read BPCL leaving
+    Numaligarh as BPCL buying, and the rules' divestment went unchecked."""
+    events = [_rules_event(BPCL_EXIT, "divestment", ["BPCL"])]
+    readings = {BPCL_EXIT: ground(BPCL_EXIT, _answer("divestment", ["BPCL"]))}
+    (event,), stats = reconcile(events, readings, WATCHLIST)
+    assert event["corroborated"] is True and stats["corroborated"] == 1
+
+    events = [_rules_event(BPCL_EXIT, "divestment", ["BPCL"])]
+    readings = {BPCL_EXIT: ground(BPCL_EXIT, _answer("acquisition", ["BPCL"]))}
+    (event,), stats = reconcile(events, readings, WATCHLIST)
+    assert event["llm_reading"] == {"event_type": "acquisition", "actors": ["BPCL"]}
+    assert stats["disagreed"] == 1
+
+
+@pytest.mark.parametrize(
+    "headline, etype, parties, direction",
+    [
+        (BPCL_EXIT, "divestment", ["BPCL"], "mixed"),
+        (
+            "Suzlon unveils its S144 turbine for low-wind sites",
+            "product_launch",
+            ["Suzlon"],
+            "opportunity",
+        ),
+        ("Kaynes Technology CFO resigns", "management_change", ["Kaynes"], "mixed"),
+    ],
+)
+def test_a_new_type_only_the_reader_found_is_added_unverified(
+    headline, etype, parties, direction
+):
+    readings = {headline: ground(headline, _answer(etype, parties))}
+    (event,), stats = reconcile([], readings, WATCHLIST)
+    assert (event["event_type"], event["reader"], event["direction"]) == (
+        etype,
+        "llm",
+        direction,
+    )
+    assert stats["llm_only"] == 1
+
+
 def test_agreement_is_marked_corroborated():
     events = [_rules_event(SUZLON, "order_win", ["SUZLON"])]
     readings = {SUZLON: ground(SUZLON, _answer("order_win", ["Suzlon"]))}
