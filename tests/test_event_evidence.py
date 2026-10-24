@@ -236,6 +236,7 @@ def test_a_change_at_the_top_is_confirmed_only_by_a_filing_naming_the_role():
         "Director/KMP/SMP",
         "Suzlon Energy Limited has informed the Exchange about Appointment of "
         "Non-Executive Director",
+        "Suzlon Energy Limited has informed the Exchange about MD&A for FY26",
     ):
         assert not confirmed(text), text
 

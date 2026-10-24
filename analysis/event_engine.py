@@ -292,10 +292,13 @@ _WEAK_VERB = (
 )
 # The roles a management change is about. Not "president", which is as
 # often a region's: "Capillary appoints William Swift as Americas president".
+# Nor a non-executive director, or the MD of "MD&A", a report's management
+# discussion and analysis.
 _ROLE = (
-    r"(?:ceo|cfo|coo|cto|md|cmd|chairman|chairperson|chairwoman|"
+    r"(?:ceo|cfo|coo|cto|md(?!\s*&\s*a\b)|cmd|chairman|chairperson|chairwoman|"
     r"managing\s+director|chief\s+(?:executive|financial|operating|technology)"
-    r"(?:\s+officer)?|whole[\s-]?time\s+director|executive\s+director)"
+    r"(?:\s+officer)?|whole[\s-]?time\s+director|"
+    r"(?<!non-)(?<!non\s)executive\s+director)"
 )
 _LEAVES = (
     r"(?:resigns?|resigned|quits?|steps?\s+down|stepped\s+down|retires?|retired|"

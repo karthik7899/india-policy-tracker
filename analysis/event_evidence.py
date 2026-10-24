@@ -130,7 +130,7 @@ _FILING_TERMS: Dict[str, tuple] = {
     # The roles themselves. Not "appointment", "resignation" or the
     # exchange's "Director/KMP/SMP", which a statutory auditor's or a company
     # secretary's change files under too; nor "executive director", which
-    # "non-executive director" contains.
+    # "non-executive director" contains, or "md", which "MD&A" does.
     "management_change": (
         "managing director",
         "whole-time director",
@@ -141,7 +141,6 @@ _FILING_TERMS: Dict[str, tuple] = {
         "chief technology officer",
         "ceo",
         "cfo",
-        "md",
         "cmd",
         "chairman",
         "chairperson",

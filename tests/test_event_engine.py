@@ -356,6 +356,9 @@ def test_divestments_launches_and_changes_at_the_top_are_read():
         "Kaynes Technology Says A 'Global Player' Wants Entire PCB Capacity "
         "Ahead Of Production Launch",
         "Ideaforge Technology appoints new investor relations agency",
+        # Not the top: a board seat, and a report's MD&A.
+        "Kaynes Technology appoints Rajesh Kumar as non-executive director",
+        "Dixon Technologies publishes new MD&A for FY26",
         "Dixon launches QIP to raise Rs 1,000 crore",
         "DRDO successfully launches Agni missile",
     ):
