@@ -79,7 +79,8 @@ def detect_emerging_players(brief_data, watchlist):
     # A title-cased headline capitalises its verbs too, and the name ends at
     # one: "Himanshu Singh Joins Arvind Limited" names Arvind, not a company
     # called "Himanshu Singh Joins Arvind". Not prepositions, which a name
-    # can hold ("Bank Of Baroda").
+    # can hold ("Bank Of Baroda"), nor a word the suffix follows, which is
+    # the name's own: "Commercial Syn Bags Limited".
     verb_in_name = re.compile(
         r"\b(?:Joins|Appoints|Names|Hires|Welcomes|Elevates|Promotes|Ropes|"
         r"Quits|Leaves|Resigns|Retires|Exits|Wins|Bags|Secures|Signs|Inks|"
@@ -89,7 +90,9 @@ def detect_emerging_players(brief_data, watchlist):
     )
 
     def after_last_verb(captured, full):
-        verbs = list(verb_in_name.finditer(captured))
+        verbs = [
+            m for m in verb_in_name.finditer(captured) if captured[m.end() :].strip()
+        ]
         if not verbs:
             return captured, full
         cut = verbs[-1].end()
