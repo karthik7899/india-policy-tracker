@@ -110,10 +110,18 @@ def has_analyst_consensus(stock):
     return bool(to_float(stock.get("analyst_count"))) and bool(stock.get("target"))
 
 
+def recommendation(info):
+    """The analysts' recommendation as shown ("Strong Buy"), or "N/A".
+
+    Yahoo says "none" where nobody recommends anything, and title-cased it
+    read as a rating: 17 holdings' pages said "None" on 24 Oct.
+    """
+    key = str((info or {}).get("recommendationKey") or "").strip()
+    return "N/A" if key.lower() in ("", "none") else key.replace("_", " ").title()
+
+
 def _parse_recommendations(data, info):
-    rating = info.get("recommendationKey")
-    if rating:
-        data["rating"] = rating.replace("_", " ").title()
+    data["rating"] = recommendation(info)
     rec_mean = info.get("recommendationMean")
     if rec_mean is not None:
         data["rec_score"] = round(float(rec_mean), 1)

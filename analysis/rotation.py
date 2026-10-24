@@ -5,7 +5,12 @@ from logger import log
 from config import save_watchlist
 from entities import build_entity_master, resolve_entity_by_isin
 from providers.isin_master import load_isin_master, load_registered_names
-from providers.yahoo import consensus_target, get_cached_ticker, has_analyst_consensus
+from providers.yahoo import (
+    consensus_target,
+    get_cached_ticker,
+    has_analyst_consensus,
+    recommendation,
+)
 from utils import thread_local_session, to_float
 from .company_names import tidy_name
 from .parsing import resolve_ticker_from_name
@@ -71,6 +76,24 @@ def detect_emerging_players(brief_data, watchlist):
         r"(?:[Ww]ins|[Bb]ags|[Ss]ecures|[Ll]aunches|[Uu]nveils|[Aa]cquires|"
         r"[Pp]artners|[Cc]ommissions|[Ee]xpands)\b"
     )
+    # A title-cased headline capitalises its verbs too, and the name ends at
+    # one: "Himanshu Singh Joins Arvind Limited" names Arvind, not a company
+    # called "Himanshu Singh Joins Arvind". Not prepositions, which a name
+    # can hold ("Bank Of Baroda").
+    verb_in_name = re.compile(
+        r"\b(?:Joins|Appoints|Names|Hires|Welcomes|Elevates|Promotes|Ropes|"
+        r"Quits|Leaves|Resigns|Retires|Exits|Wins|Bags|Secures|Signs|Inks|"
+        r"Acquires|Buys|Sells|Partners|Launches|Unveils|Says|Gets|Receives|"
+        r"Plans|Eyes|Expands|Commissions|Opens|Invests|Raises|Reports|Posts|"
+        r"Announces|Becomes|Taps|Selects|Picks|Backs|Beats|Replaces)\b"
+    )
+
+    def after_last_verb(captured, full):
+        verbs = list(verb_in_name.finditer(captured))
+        if not verbs:
+            return captured, full
+        cut = verbs[-1].end()
+        return captured[cut:].strip(), full[cut:].strip()
 
     for sector, news_items in brief_data.items():
         if sector == "emerging_players":
@@ -86,6 +109,7 @@ def detect_emerging_players(brief_data, watchlist):
                 (m.group(1), m.group(1)) for m in corp_verb_pattern.finditer(title)
             ]
             for captured, full in candidates:
+                captured, full = after_last_verb(captured, full)
                 captured_lower = captured.lower()
                 tokens = captured_lower.split()
                 if (
@@ -286,9 +310,7 @@ def _probe_candidate(name, preresolved, isin_master, watchlisted=()):
                     if target_price
                     else None
                 ),
-                "rating": info.get("recommendationKey", "N/A")
-                .replace("_", " ")
-                .title(),
+                "rating": recommendation(info),
                 "rev_growth_raw": rev_growth_raw,
                 "revenue_growth": (
                     f"{float(rev_growth_raw) * 100:.1f}%"

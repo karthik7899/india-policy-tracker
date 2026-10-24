@@ -10,7 +10,7 @@ import { num } from "../core/format.js";
 import { catalystPill } from "../core/catalyst.js";
 
 /** Values that mean "we could not read this", as opposed to a real value. */
-function isMissing(value) {
+export function isMissing(value) {
   if (value === null || value === undefined) return true;
   if (typeof value === "number") return !Number.isFinite(value);
   const s = String(value).trim();

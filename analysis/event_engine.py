@@ -225,7 +225,9 @@ _NOT_A_PRODUCT = re.compile(
 # defence exhibition" say who a launch is for and where, not what it is.
 # Nor the comma in "Rs 50,000 crore".
 _STATEMENT_BREAK = r"(?<!\d),|,(?!\d)|[;:]"
-_DOER_FROM_RE = re.compile(r"\b(?:as|amid|after|while|despite)\b|" + _STATEMENT_BREAK)
+_STATEMENT_END_RE = re.compile(
+    r"\b(?:as|amid|after|while|despite)\b|" + _STATEMENT_BREAK
+)
 _LAUNCHED_TO_RE = re.compile(
     r"\s(?:and|for|with|to|in|at|on|under|from|across|into|by|via|as|amid|"
     r"after|while|despite)\s|" + _STATEMENT_BREAK
@@ -243,7 +245,8 @@ def _doer(clause_lower: str, at: int) -> str:
     """The words before ``at`` in their own statement: whoever does what is
     said there."""
     start = max(
-        (m.end() for m in _DOER_FROM_RE.finditer(clause_lower, 0, at)), default=0
+        (m.end() for m in _STATEMENT_END_RE.finditer(clause_lower, 0, at)),
+        default=0,
     )
     return clause_lower[start:at]
 
@@ -745,9 +748,10 @@ def split_clauses(headline: str) -> List[str]:
 # what they govern: from the verb to the end of its statement. "Reliance
 # weighs stake sale as shares rally" weighs the sale; "LS MnM weighs copper
 # concentrate cuts as shortages squeeze smelter profits" states the shortage
-# as fact. Not "weighs on", which is pressure.
+# as fact. Not "weighs on", which is pressure. The statement does not end at
+# the comma in "Reliance weighs Rs 5,000 crore stake sale" (_STATEMENT_END_RE),
+# which read the sale as done.
 _HEDGE_RE = re.compile(r"\b(?:weighs|considers)\b(?!\s+on\b)")
-_STATEMENT_END_RE = re.compile(r"\b(?:as|amid|after|while|despite)\b|[,;:]")
 
 
 def _hedged(lower: str, phrase: Optional[str]) -> bool:

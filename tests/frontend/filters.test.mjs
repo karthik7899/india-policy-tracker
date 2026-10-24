@@ -20,7 +20,7 @@ import {
   ageInDays,
   thesisIndex,
 } from "../../src/core/filters.js";
-import { sortRows, nextDir } from "../../src/views/table.js";
+import { sortRows, nextDir, isMissing } from "../../src/views/table.js";
 
 const HAL = {
   ticker: "HAL",
@@ -233,4 +233,9 @@ test("a date with no time is aged in calendar days, in the reader's calendar", (
     assert.equal(ageInDays("2026-10-14", now), 0);
   });
   assert.equal(ageInDays("2026-02-30", now), null);
+});
+
+test("a rating Yahoo did not give is no rating, as the company page shows it", () => {
+  for (const unread of ["N/A", "None", "", null, undefined]) assert.equal(isMissing(unread), true, String(unread));
+  for (const rating of ["Buy", "Strong Buy", "Hold"]) assert.equal(isMissing(rating), false, rating);
 });
