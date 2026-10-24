@@ -603,8 +603,12 @@ def test_one_analysts_target_is_set_against_nothing():
 
     # Two analysts are enough; the one-analyst holding is not the weakest
     # compared, so the 10% one goes.
-    held, row, _ = _rotate(holdings + [lone], _candidate("NEW", 125.0, analysts=2))
+    held, row, decisions = _rotate(
+        holdings + [lone], _candidate("NEW", 125.0, analysts=2)
+    )
     assert "NEW" in held and "LONE" in held and "A" not in held
+    # And it keeps the count, should this run's price refresh fail.
+    assert decisions[0]["stock"]["analyst_count"] == 2
 
 
 def test_an_uncovered_holding_goes_only_after_its_thesis_stays_broken():

@@ -615,6 +615,7 @@ def auto_curate_watchlist(brief_data, watchlist, screened_candidates=None):
                 live_price = probe["live_price"]
                 target_price = probe["target_price"]
                 growth_pct_val = probe["growth_pct_val"]
+                analyst_count = int(to_float(probe.get("analyst_count")) or 0)
                 rating = probe["rating"]
                 rev_growth_raw = probe["rev_growth_raw"]
                 revenue_growth = probe["revenue_growth"]
@@ -726,10 +727,14 @@ def auto_curate_watchlist(brief_data, watchlist, screened_candidates=None):
                     # Only the analysts' target. Without one the holding
                     # takes the pipeline's own estimate later in the run
                     # (dashboard/builder.py), marked as such.
+                    # With the count of analysts behind it, which the next
+                    # rotation reads (_covered) if this run's price refresh
+                    # fails before it is fetched again.
                     **(
                         {
                             "target": f"{target_price:.2f}",
                             "growth_pct": f"{growth_pct_val:.1f}%",
+                            "analyst_count": analyst_count,
                         }
                         if target_price
                         else {}
@@ -779,7 +784,7 @@ def auto_curate_watchlist(brief_data, watchlist, screened_candidates=None):
                     weakest_stock, why = _replaceable(
                         current_watchlist,
                         growth_pct_val,
-                        int(to_float(probe.get("analyst_count")) or 0),
+                        analyst_count,
                     )
 
                     if weakest_stock is not None:
