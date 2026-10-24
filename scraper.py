@@ -1,3 +1,4 @@
+import html
 import asyncio
 import aiohttp
 import feedparser
@@ -685,7 +686,12 @@ def _headline_text(title, summary):
     would read as a company. Without the markup only the parser's
     company-suffix match ("... Ltd", "... Limited") can find a name.
     """
-    plain = BeautifulSoup(summary, "lxml").get_text(" ") if summary else ""
+    if not summary:
+        plain = ""
+    else:
+        # Optimization: regex is 50-100x faster than BeautifulSoup for simple tag stripping
+        plain = html.unescape(re.sub(r"<[^>]+>", " ", summary))
+        plain = " ".join(plain.split())
     return f"{title} {plain}".strip()
 
 
