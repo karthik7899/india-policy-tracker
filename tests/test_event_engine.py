@@ -314,6 +314,12 @@ def test_divestments_launches_and_changes_at_the_top_are_read():
         ("Elgi Equipments divests its stake in Gentex Air Solutions", "divestment"),
         ("L&T Technology Services divests SWC business", "divestment"),
         ("Arvind sells its stake in garment unit to Tommy Hilfiger", "divestment"),
+        # Context, not the seller: a verb's seller is its subject.
+        (
+            "Kaynes Technology sells its smart meter business after government "
+            "approval",
+            "divestment",
+        ),
         ("ideaForge unveils its latest mapping UAV, the Q6V2 GEO", "product_launch"),
         ("Tata Motors plans to launch three EVs next year", "product_launch"),
         ("Dixon Technologies CFO resigns", "management_change"),
@@ -332,6 +338,11 @@ def test_divestments_launches_and_changes_at_the_top_are_read():
         "Maruti sells 1.8 lakh units in October",  # a month's sales
         "Promoter sells 2% stake in Syrma",  # a holder's shares, not a business
         "HDFC Mutual Fund sells stake in Chalet Hotels",
+        # Shares sold through the market, whoever sells them.
+        "SoftBank to offload 1.5% stake in Meesho via block deal",
+        # A sale said as a noun names its seller anywhere.
+        "Stake sale by promoters lifts Kaynes Technology's free float",
+        "IDBI Bank divestment: govt invites financial bids",
         "Govt unveils Rs 1.9 lakh cr semiconductor, mobile manufacturing push",
         "Adani unveils Rs 50,000 crore capex plan",
         "Kaynes Technology Says A 'Global Player' Wants Entire PCB Capacity "
@@ -406,6 +417,34 @@ def test_a_launch_or_a_sale_is_whoever_does_it():
         "divestment",
         [],
     )
+
+
+def test_a_change_at_the_top_is_the_company_whose_officer_changed():
+    """Not every holding the headline names: "Ola Electric appoints former
+    Tata Motors CFO as its CFO" is no change at Tata Motors."""
+    from analysis.event_engine import clause_actors
+
+    holdings = [
+        ("TATAMOTORS", "Tata Motors"),
+        ("DIXON", "Dixon Technologies"),
+        ("KAYNES", "Kaynes Technology"),
+    ]
+
+    def actors(headline):
+        clause, etype, phrase = first_event_clause(headline)
+        return etype, clause_actors(clause, etype, phrase, holdings)
+
+    for headline, expected in (
+        ("Ola Electric appoints former Tata Motors CFO as its CFO", []),
+        (
+            "Kaynes Technology appoints Dixon Technologies' Rajesh Kumar as CFO",
+            ["KAYNES"],
+        ),
+        ("Former Kaynes Technology CEO named Dixon Technologies MD", ["DIXON"]),
+        ("Rajesh Kumar resigns as Kaynes Technology CFO", ["KAYNES"]),
+        ("Dixon Technologies CFO resigns", ["DIXON"]),
+    ):
+        assert actors(headline) == ("management_change", expected), headline
 
 
 def test_divestments_launches_and_changes_at_the_top_are_news_not_warnings():

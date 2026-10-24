@@ -171,13 +171,19 @@ EVENT_VOCABULARY: Dict[str, tuple] = {
 # The holder of a stake selling it, not the company selling a business: a
 # fund's or a promoter's stake change is not a corporate event
 # (eval/event_labels.json), and the government selling shares in a holding
-# is a policy matter.
-_NOT_THIS_TYPE: Dict[str, Any] = {
-    "divestment": re.compile(
-        r"\b(?:promoters?|mutual\s+funds?|fiis?|fpis?|govt|government|ofs|"
-        r"offer\s+for\s+sale|block\s+deals?|bulk\s+deals?|private\s+equity)\b"
-    ),
-}
+# is a policy matter. Shares sold through the market are a holder's,
+# wherever the clause says so: "SoftBank to offload 1.5% stake in Meesho
+# via block deal".
+_NOT_A_SELLER = re.compile(
+    r"\b(?:promoters?|mutual\s+funds?|fiis?|fpis?|govt|government|"
+    r"private\s+equity)\b"
+)
+_SHARES_SOLD_RE = re.compile(
+    r"\b(?:ofs|offer\s+for\s+sale|block\s+deals?|bulk\s+deals?)\b"
+)
+# A sale said as a noun can name its seller anywhere in the clause: "stake
+# sale by promoters", "IDBI Bank divestment: govt invites bids".
+_SALE_NOUNS = ("divestment", "divestiture", "stake sale")
 
 # A launch that is no product's: a government's or an agency's, or of
 # something else: an issue of securities, a scheme, a plan, a probe, a
@@ -198,16 +204,15 @@ _NOT_A_PRODUCT = re.compile(
     r"edition|entries|film|identity|logo|targets?|vision|growth\s+map|"
     r"investments?|proposals?|exhibitions?|summit|conference|festival)\b"
 )
-# Each read where it is said: the launcher before the verb, in the launch's
-# own statement, and the thing launched straight after it, up to a
-# preposition or the statement's end. Not the whole clause: "Dixon launches
-# a new laptop, targets enterprise users" and "BEL unveils new radar at a
-# defence exhibition" say who it is for and where, not what it is. Nor the
-# comma in "Rs 50,000 crore".
+# Each read where it is said: whoever does it before the verb, in its own
+# statement, and the thing launched straight after it, up to a preposition
+# or the statement's end. Not the whole clause: "Kaynes sells its meter
+# business after government approval" is Kaynes' sale, and "Dixon launches a
+# new laptop, targets enterprise users" and "BEL unveils new radar at a
+# defence exhibition" say who a launch is for and where, not what it is.
+# Nor the comma in "Rs 50,000 crore".
 _STATEMENT_BREAK = r"(?<!\d),|,(?!\d)|[;:]"
-_LAUNCHER_FROM_RE = re.compile(
-    r"\b(?:as|amid|after|while|despite)\b|" + _STATEMENT_BREAK
-)
+_DOER_FROM_RE = re.compile(r"\b(?:as|amid|after|while|despite)\b|" + _STATEMENT_BREAK)
 _LAUNCHED_TO_RE = re.compile(
     r"\s(?:and|for|with|to|in|at|on|under|from|across|into|by|via|as|amid|"
     r"after|while|despite)\s|" + _STATEMENT_BREAK
@@ -217,16 +222,29 @@ _LAUNCHED_TO_RE = re.compile(
 _VERSION_OF_RE = re.compile(r"\W*([a-z][\w&.-]*)\s+\d+\.0\b")
 
 
-def _not_a_launch(clause_lower: str, verb) -> bool:
-    """Is the launch at ``verb`` (a match in the clause) a government's, or
-    of something that is not a product?"""
+def _doer(clause_lower: str, at: int) -> str:
+    """The words before ``at`` in their own statement: whoever does what is
+    said there."""
     start = max(
-        (m.end() for m in _LAUNCHER_FROM_RE.finditer(clause_lower, 0, verb.start())),
-        default=0,
+        (m.end() for m in _DOER_FROM_RE.finditer(clause_lower, 0, at)), default=0
     )
-    end = _LAUNCHED_TO_RE.search(clause_lower, verb.end())
-    launcher = clause_lower[start : verb.start()]
-    launched = clause_lower[verb.end() : end.start() if end else len(clause_lower)]
+    return clause_lower[start:at]
+
+
+def _not_this_type(etype: str, clause_lower: str, at: int, phrase: str) -> bool:
+    """Does ``phrase``, found at ``at``, report something else after all: a
+    holder's stake sale, a government's launch, or the launch of something
+    that is not a product?"""
+    if etype == "divestment":
+        said = clause_lower if phrase in _SALE_NOUNS else _doer(clause_lower, at)
+        return bool(_NOT_A_SELLER.search(said) or _SHARES_SOLD_RE.search(clause_lower))
+    if etype != "product_launch":
+        return False
+    launcher = _doer(clause_lower, at)
+    end = _LAUNCHED_TO_RE.search(clause_lower, at + len(phrase))
+    launched = clause_lower[
+        at + len(phrase) : end.start() if end else len(clause_lower)
+    ]
     itself = _VERSION_OF_RE.match(launched)
     return bool(
         _NOT_A_LAUNCHER.search(launcher)
@@ -436,14 +454,12 @@ def match_event_type(clause_lower: str):
     again later (event_clause relies on that).
     """
     for etype, vocabulary in EVENT_VOCABULARY.items():
-        if etype in _NOT_THIS_TYPE and _NOT_THIS_TYPE[etype].search(clause_lower):
-            continue
         hit = next((v for v in vocabulary if v in clause_lower), None)
-        if hit:
+        if hit and not _not_this_type(etype, clause_lower, clause_lower.find(hit), hit):
             return etype, hit
         for pattern in EVENT_PATTERNS.get(etype, ()):
             m = pattern.search(clause_lower)
-            if m and not (etype == "product_launch" and _not_a_launch(clause_lower, m)):
+            if m and not _not_this_type(etype, clause_lower, m.start(), m.group(0)):
                 return etype, m.group(0)
     return None, None
 
@@ -824,6 +840,30 @@ def _named_before(clause: str, phrase: Optional[str], ticker: str, name: str) ->
     return title_matches_company(clause[:start], ticker, name)
 
 
+# A change at the top is the company whose officer changed: the one named
+# before an active verb ("Ola Electric appoints former Tata Motors CFO as its
+# CFO"), and never one named only as somebody's former employer ("Former
+# Kaynes CEO named Dixon MD").
+_APPOINTS_RE = re.compile(r"(?:appoints|names|elevates|re-?appoints|ropes\s+in)\b")
+_FORMER_RE = re.compile(
+    r"\b(?:former|erstwhile|ex)[\s-]+(?:[\w&.'’-]+\s+){0,3}?(?:"
+    + _ROLE
+    + r"|executives?|officials?|heads?|chiefs?|boss|presidents?|directors?)\b",
+    re.IGNORECASE,
+)
+
+
+def _its_management(clause: str, phrase: Optional[str], ticker: str, name: str) -> bool:
+    """Is this holding the company whose management changed?"""
+    if (
+        phrase
+        and _APPOINTS_RE.match(phrase)
+        and not _named_before(clause, phrase, ticker, name)
+    ):
+        return False
+    return title_matches_company(_FORMER_RE.sub(" ", clause), ticker, name)
+
+
 def clause_actors(
     clause: str, event_type: Optional[str], phrase: Optional[str], holdings
 ) -> List[str]:
@@ -831,8 +871,9 @@ def clause_actors(
 
     Named in the clause itself, not merely somewhere in the headline: the
     attribution is relational. An order win's customer is not a party to the
-    win (_named_as_customer), and a launch or a sale is the doing of whoever
-    is named before the verb (_named_before).
+    win (_named_as_customer), a launch or a sale is the doing of whoever is
+    named before the verb (_named_before), and a change at the top is the
+    company whose officer changed (_its_management).
     """
     return [
         ticker
@@ -845,6 +886,10 @@ def clause_actors(
         and not (
             event_type in _SUBJECT_ONLY_TYPES
             and not _named_before(clause, phrase, ticker, name)
+        )
+        and not (
+            event_type == "management_change"
+            and not _its_management(clause, phrase, ticker, name)
         )
     ]
 
