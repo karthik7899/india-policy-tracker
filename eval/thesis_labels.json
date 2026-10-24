@@ -1,6 +1,6 @@
 {
  "_about": "Hand labels for the thesis check (analysis/thesis_check.py). DRAFT: labelled by Claude, not yet reviewed - correct any row and set reviewed to true. Each row pairs a holding's thesis (its watchlist catalyst at labelling time) with a headline. stance: contradicts = the headline undermines a specific claim in the thesis; supports = concrete progress on one; unrelated = anything else, including price moves, ratings and results that touch no claim. Rows without `synthetic` are real headlines attributed to the holding in the 2026-09-26 corpus. Rows marked synthetic are COUNTERFACTUAL headlines written for this file to test that clear contradictions are caught - they are not news and never enter the pipeline. Score with: python scripts/eval_events.py --reader thesis `about: false` marks a headline about a different company or person that shares the holding's name (a foreign parent, a namesake); rows without it are about the holding.",
- "reviewed": false,
+ "reviewed": true,
  "labels": [
   {
    "ticker": "ADANIGREEN",
@@ -603,8 +603,7 @@
    "stance": "supports",
    "also_acceptable": [],
    "split": "dev",
-   "about": false,
-   "reviewed": "2026-10-19"
+   "reviewed": "2026-10-24"
   },
   {
    "ticker": "SUZLON",
@@ -915,7 +914,6 @@
    "stance": "supports",
    "also_acceptable": [],
    "split": "dev",
-   "about": false,
    "reviewed": "2026-10-24"
   },
   {
@@ -925,7 +923,6 @@
    "stance": "supports",
    "also_acceptable": [],
    "split": "dev",
-   "about": false,
    "reviewed": "2026-10-24"
   },
   {
@@ -935,7 +932,6 @@
    "stance": "supports",
    "also_acceptable": [],
    "split": "holdout",
-   "about": false,
    "reviewed": "2026-10-24"
   },
   {
@@ -964,7 +960,6 @@
    "stance": "supports",
    "also_acceptable": [],
    "split": "dev",
-   "about": false,
    "reviewed": "2026-10-24"
   },
   {
@@ -974,7 +969,6 @@
    "stance": "supports",
    "also_acceptable": [],
    "split": "holdout",
-   "about": false,
    "reviewed": "2026-10-24"
   },
   {

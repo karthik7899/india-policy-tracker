@@ -8,6 +8,8 @@ import {
   rowId,
   emptyDraft,
   pruneDraft,
+  needsReview,
+  thesisFix,
   countDecisions,
   buildPayload,
   issueUrls,
@@ -68,6 +70,46 @@ test("a decision about something no longer waiting is dropped", () => {
   assert.deepEqual(pruned.labels.thesis, {});
   // A file that could not be read keeps its decisions rather than losing them.
   assert.deepEqual(pruned.labels.policy, { bbbbbbbb: { is_policy: false, effects: [] } });
+});
+
+test("a move already applied is not sent again", () => {
+  // MTARTECH, moved on 22 Oct into a sector that does not fit it either, was
+  // flagged there and its old move went out again with the next review.
+  const d = emptyDraft();
+  d.moves.MTARTECH = { to: "manufacturing_electronics" };
+  d.moves.OFSS = { to: "midcap_it" };
+  d.moves.ADANIPOWER = { keep: true };
+  const pruned = pruneDraft(d, {
+    misfits: [
+      { ticker: "MTARTECH", sector: "manufacturing_electronics" },
+      { ticker: "OFSS", sector: "cybersecurity" },
+      { ticker: "ADANIPOWER", sector: "clean_energy" },
+    ],
+  });
+  assert.deepEqual(Object.keys(pruned.moves), ["OFSS", "ADANIPOWER"]);
+});
+
+test("synthetic rows are not offered for review", () => {
+  const madeUp = { ticker: "KAYNES", headline: "Kaynes puts OSAT plant on hold", synthetic: true };
+  const real = { ticker: "DIXON", headline: "Dixon wins order" };
+  assert.equal(needsReview(real), true);
+  assert.equal(needsReview({ ...real, reviewed: "2026-10-24" }), false);
+  assert.equal(needsReview(madeUp), false);
+  // A decision drafted on one before they left the queue is dropped with it.
+  const d = emptyDraft();
+  d.labels.thesis[rowId("thesis", madeUp)] = { ok: true };
+  d.labels.thesis[rowId("thesis", real)] = { ok: true };
+  const pruned = pruneDraft(d, { labels: { thesis: [madeUp, real] } });
+  assert.deepEqual(Object.keys(pruned.labels.thesis), [rowId("thesis", real)]);
+});
+
+test("a headline not about the company takes no side", () => {
+  // The reader calls every such headline unrelated (analysis/thesis_check.py),
+  // so "not about" with "supports" was a label it could never match.
+  assert.deepEqual(thesisFix("supports", false), { stance: "unrelated", about: false });
+  assert.deepEqual(thesisFix("supports", true), { stance: "supports" });
+  // Ticking the box back on is written, since the row said otherwise.
+  assert.deepEqual(thesisFix("supports", true, false), { stance: "supports", about: true });
 });
 
 test("the issue carries the request after the marker", () => {

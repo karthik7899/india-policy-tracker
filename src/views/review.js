@@ -16,6 +16,8 @@ import {
   LABEL_KINDS,
   LABEL_FILES,
   rowId,
+  needsReview,
+  thesisFix,
   loadDraft,
   saveDraft,
   emptyDraft,
@@ -248,16 +250,31 @@ function editor(kind, row, id, labels, update) {
   const list = (v) => String(v || "").split(",").map((s) => s.trim()).filter(Boolean);
   let controls;
   if (kind === "thesis") {
+    // Not about this company leaves one stance (thesisFix), so the choice is
+    // taken away while the box is clear rather than overridden on save.
+    const notAbout = row.about === false;
+    const lock = (off) => {
+      const stance = field("stance");
+      stance.disabled = off;
+      if (off) stance.value = "unrelated";
+    };
     controls = [
       el(
         "select",
-        { id: `${id}-stance`, class: "review-input", "aria-label": "Stance" },
-        STANCES.map((s) => el("option", { value: s, selected: s === row.stance ? "" : null }, s)),
+        { id: `${id}-stance`, class: "review-input", "aria-label": "Stance", disabled: notAbout ? "" : null },
+        STANCES.map((s) =>
+          el("option", { value: s, selected: s === (notAbout ? "unrelated" : row.stance) ? "" : null }, s),
+        ),
       ),
       el(
         "label",
         { class: "review-check" },
-        el("input", { id: `${id}-about`, type: "checkbox", checked: row.about === false ? null : "" }),
+        el("input", {
+          id: `${id}-about`,
+          type: "checkbox",
+          checked: notAbout ? null : "",
+          onchange: (e) => lock(!e.target.checked),
+        }),
         " about this company",
       ),
     ];
@@ -307,9 +324,7 @@ function editor(kind, row, id, labels, update) {
   const save = () => {
     const fix = {};
     if (kind === "thesis") {
-      fix.stance = field("stance").value;
-      // "about" is only written when it says something: absent means true.
-      if (!field("about").checked || row.about === false) fix.about = field("about").checked;
+      Object.assign(fix, thesisFix(field("stance").value, field("about").checked, row.about));
     } else if (kind === "policy") {
       fix.is_policy = field("is").checked;
       // Not a policy has no sector effect, whatever the selects still show.
@@ -350,14 +365,15 @@ function editor(kind, row, id, labels, update) {
 
 function labelsSection(kind, body, draft, update, page, params, labels) {
   const rows = body?.labels || [];
-  const open = rows.filter((r) => !r.reviewed);
+  const real = rows.filter((r) => !r.synthetic);
+  const open = rows.filter(needsReview);
   const decided = Object.keys(draft.labels[kind] || {}).length;
   const pages = Math.max(1, Math.ceil(open.length / PAGE));
   const at = Math.min(page, pages - 1);
   const shown = open.slice(at * PAGE, at * PAGE + PAGE);
   return panel(
     "Eval labels",
-    "The hand labels each reader is scored against were drafted, not reviewed. Confirm a row that is right; fix one that is wrong. Reviewed rows leave the queue.",
+    "The hand labels each reader is scored against were drafted, not reviewed. Confirm a row that is right; fix one that is wrong. Reviewed rows leave the queue. Synthetic rows, headlines made up to test a reader, are not offered: their label is the premise they were written for.",
     el(
       "nav",
       { class: "lens-nav" },
@@ -373,7 +389,9 @@ function labelsSection(kind, body, draft, update, page, params, labels) {
       ? el(
           "p",
           { class: "evidence-meta" },
-          `${rows.length - open.length} of ${rows.length} reviewed · ${decided} decided here, not yet submitted`,
+          `${real.length - open.length} of ${real.length} reviewed` +
+            (rows.length > real.length ? ` · ${rows.length - real.length} synthetic not offered` : "") +
+            ` · ${decided} decided here, not yet submitted`,
         )
       : el("p", { class: "company-empty" }, `${LABEL_FILES[kind]} could not be read.`),
     shown.length
@@ -389,7 +407,7 @@ function labelsSection(kind, body, draft, update, page, params, labels) {
               kind === "thesis"
                 ? el("p", { class: "evidence-meta" }, el("strong", {}, row.ticker), ` — thesis: “${row.thesis}”`)
                 : null,
-              el("p", { class: "review-headline" }, row.headline, row.synthetic ? el("span", { class: "tag" }, "synthetic") : null),
+              el("p", { class: "review-headline" }, row.headline),
               el("p", { class: "evidence-meta" }, `Labelled: ${describeLabel(kind, row)}${row.note ? ` — ${row.note}` : ""}`),
               d && !d.ok ? el("p", { class: "review-change" }, `Will become: ${describeLabel(kind, { ...row, ...d })}`) : null,
               editing.has(id)
@@ -459,7 +477,7 @@ export async function render(container, { payload, route }) {
         "p",
         { class: "view-sub" },
         `Decisions the pipeline leaves to you · ${pending.length} partner proposal(s), ${misfits.length} holding(s) to place, ` +
-          `${LABEL_KINDS.reduce((n, k) => n + (labelSets[k]?.labels || []).filter((r) => !r.reviewed).length, 0)} label(s) unreviewed`,
+          `${LABEL_KINDS.reduce((n, k) => n + (labelSets[k]?.labels || []).filter(needsReview).length, 0)} label(s) unreviewed`,
       ),
     ),
     submitBar(draft, update),

@@ -613,7 +613,6 @@ td .disclose-summary { padding: 2px 0; }
 .review-item:first-child { border-top: 0; }
 .review-head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 14px; }
 .review-headline { margin: 2px 0; font-size: 14px; overflow-wrap: anywhere; }
-.review-headline .tag { margin-left: 6px; }
 .review-change { margin: 4px 0; font-size: 13px; color: var(--series-1); }
 .review-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
 .review-input {
@@ -621,6 +620,7 @@ td .disclose-summary { padding: 2px 0; }
   color: var(--ink); background: var(--plane);
   border: 1px solid var(--border); border-radius: 6px;
 }
+.review-input:disabled { opacity: 0.55; cursor: not-allowed; }
 .review-editor { display: grid; gap: 8px; margin-top: 8px; max-width: 560px; }
 .review-effects { display: grid; gap: 6px; }
 .review-effect { display: flex; gap: 6px; flex-wrap: wrap; }

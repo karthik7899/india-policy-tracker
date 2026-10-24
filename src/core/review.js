@@ -73,23 +73,50 @@ export function saveDraft(draft, storage = globalThis.localStorage) {
 export const proposalKey = (p) => `${String(p.holding).toUpperCase()}|${p.proposed_as}`;
 
 /**
+ * A label row a person still has to check. Synthetic rows are left out: a
+ * headline made up to test a reader carries the label it was written for,
+ * so there is no judgement to confirm, only its premise.
+ */
+export function needsReview(row) {
+  return !row?.reviewed && !row?.synthetic;
+}
+
+/**
+ * A thesis correction as the workflow takes it. A headline about somebody
+ * else cannot bear on the thesis, so "not about this company" always goes
+ * with "unrelated" (analysis/thesis_check.py); "about" is written only when
+ * it says something, absent meaning true.
+ */
+export function thesisFix(stance, about, wasAbout) {
+  const fix = { stance: about ? stance : "unrelated" };
+  if (!about || wasAbout === false) fix.about = about;
+  return fix;
+}
+
+/**
  * Drop decisions about things that no longer need one: a proposal already
- * decided, a holding no longer misfiled, a label already reviewed. That is
- * how a submitted draft empties itself once the workflow has applied it.
+ * decided, a holding no longer misfiled or already in the sector it was to
+ * move to, a label already reviewed. That is how a submitted draft empties
+ * itself once the workflow has applied it.
  */
 export function pruneDraft(draft, { proposals = [], misfits = [], labels = {} } = {}) {
   const pending = new Set(proposals.filter((p) => p.status === "pending").map(proposalKey));
-  const misfiled = new Set(misfits.map((m) => String(m.ticker).toUpperCase()));
+  // A holding moved into a sector that does not fit it either is flagged
+  // again where it now sits, and its applied move used to stay in the draft:
+  // MTARTECH's 22 Oct move went out again with the next review.
+  const sectorOf = new Map(misfits.map((m) => [String(m.ticker).toUpperCase(), m.sector]));
   const out = emptyDraft();
   for (const [k, v] of Object.entries(draft.proposals || {})) if (pending.has(k)) out.proposals[k] = v;
-  for (const [k, v] of Object.entries(draft.moves || {})) if (misfiled.has(k)) out.moves[k] = v;
+  for (const [k, v] of Object.entries(draft.moves || {})) {
+    if (sectorOf.has(k) && !(v?.to && v.to === sectorOf.get(k))) out.moves[k] = v;
+  }
   for (const kind of LABEL_KINDS) {
     const rows = labels[kind];
     if (!rows) {
       out.labels[kind] = { ...(draft.labels?.[kind] || {}) };
       continue;
     }
-    const open = new Set(rows.filter((r) => !r.reviewed).map((r) => rowId(kind, r)));
+    const open = new Set(rows.filter(needsReview).map((r) => rowId(kind, r)));
     for (const [id, v] of Object.entries(draft.labels?.[kind] || {})) if (open.has(id)) out.labels[kind][id] = v;
   }
   return out;

@@ -296,6 +296,19 @@ def _label_fields(
     return fields, ""
 
 
+def _thesis_conflict(row: Dict[str, Any]) -> str:
+    """Why a thesis row cannot stand as corrected, or "".
+
+    A headline about somebody else cannot bear on the thesis, and the reader
+    calls every one "unrelated" (analysis/thesis_check.py). A row that says
+    "not about this company" and still takes a side can never be matched:
+    six Siemens AG and Schneider Electric SE rows carried one and cost the
+    reader support recall it could not earn back."""
+    if row.get("about") is False and row.get("stance") != "unrelated":
+        return f"not about this company, so “unrelated”, not “{row.get('stance')}”"
+    return ""
+
+
 def apply_labels(
     groups: Dict[str, Any], root: str, report: Dict[str, list]
 ) -> List[str]:
@@ -332,6 +345,8 @@ def apply_labels(
                 confirmed += 1
                 continue
             fields, error = _label_fields(kind, item, sectors)
+            if not error and kind == "thesis":
+                error = _thesis_conflict({**row, **fields})
             if error or not fields:
                 report["skipped"].append(
                     f"{kind} label “{row.get('headline', '')[:60]}”: "
@@ -342,7 +357,10 @@ def apply_labels(
             row["reviewed"] = today
             corrected += 1
         if confirmed or corrected:
-            body["reviewed"] = all(r.get("reviewed") for r in rows)
+            # Synthetic rows are not offered for review (src/core/review.js).
+            body["reviewed"] = all(
+                r.get("reviewed") for r in rows if not r.get("synthetic")
+            )
             _write_labels(path, body)
             changed_files.append(LABEL_FILES[kind])
             report["applied"].append(

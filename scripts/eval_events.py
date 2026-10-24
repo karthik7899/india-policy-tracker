@@ -49,8 +49,10 @@ def load_holdings(path: str = HOLDINGS_PATH) -> Dict[str, Any]:
 
 
 def _review_note(body, which=""):
-    """How much of a label set a person has checked (dashboard Review view)."""
-    rows = body.get("labels") or []
+    """How much of a label set a person has checked (dashboard Review view).
+
+    Synthetic rows are not offered for review, so they are not counted."""
+    rows = [r for r in body.get("labels") or [] if not r.get("synthetic")]
     done = sum(1 for r in rows if r.get("reviewed"))
     if body.get("reviewed"):
         return

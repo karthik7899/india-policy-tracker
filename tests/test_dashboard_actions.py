@@ -252,7 +252,7 @@ def test_labels_are_confirmed_and_corrected_by_id(repo):
                     {"id": da.row_id("thesis", thesis[0]), "ok": True},
                     {
                         "id": da.row_id("thesis", thesis[1]),
-                        "stance": "supports",
+                        "stance": "unrelated",
                         "about": False,
                         "note": "  read  it again ",
                     },
@@ -280,7 +280,7 @@ def test_labels_are_confirmed_and_corrected_by_id(repo):
     t = _labels(repo, "thesis")
     assert t[0]["reviewed"] and t[0]["stance"] == thesis[0]["stance"]
     assert (t[1]["stance"], t[1]["about"], t[1]["note"]) == (
-        "supports",
+        "unrelated",
         False,
         "read it again",
     )
@@ -324,8 +324,63 @@ def test_label_corrections_that_do_not_fit_are_skipped(repo):
     assert _labels(repo, "thesis") == thesis
 
 
+def test_a_headline_about_somebody_else_cannot_take_a_side(repo):
+    """The reader calls every such headline "unrelated", so a label saying
+    otherwise could never be matched; six Siemens AG and Schneider Electric
+    SE rows carried one."""
+    thesis = _labels(repo, "thesis")
+    about = next(r for r in thesis if r.get("about") is not False)
+    namesake = next(r for r in thesis if r.get("about") is False)
+    report = da.apply_decisions(
+        {
+            "v": 1,
+            "labels": {
+                "thesis": [
+                    {
+                        "id": da.row_id("thesis", about),
+                        "stance": "supports",
+                        "about": False,
+                    },
+                    # The row already says "not about"; a stance alone is
+                    # judged against it.
+                    {"id": da.row_id("thesis", namesake), "stance": "supports"},
+                ]
+            },
+        },
+        root=str(repo),
+    )
+    assert report["applied"] == []
+    assert len(report["skipped"]) == 2
+    assert all("not about this company" in s for s in report["skipped"])
+    assert _labels(repo, "thesis") == thesis
+    # Said to be about the company after all, it may take a side.
+    report = da.apply_decisions(
+        {
+            "v": 1,
+            "labels": {
+                "thesis": [
+                    {
+                        "id": da.row_id("thesis", namesake),
+                        "stance": "supports",
+                        "about": True,
+                    }
+                ]
+            },
+        },
+        root=str(repo),
+    )
+    assert report["skipped"] == []
+    row = next(
+        r
+        for r in _labels(repo, "thesis")
+        if da.row_id("thesis", r) == da.row_id("thesis", namesake)
+    )
+    assert (row["stance"], row["about"]) == ("supports", True)
+
+
 def test_the_file_counts_as_reviewed_once_every_row_is():
-    """A two-row file, both confirmed, says so at the top."""
+    """A two-row file, both confirmed, says so at the top. A synthetic row is
+    not offered for review, so it does not hold the file back."""
     import tempfile
 
     with tempfile.TemporaryDirectory() as d:
@@ -333,11 +388,12 @@ def test_the_file_counts_as_reviewed_once_every_row_is():
         rows = [
             {"headline": "a", "is_policy": False},
             {"headline": "b", "is_policy": False},
+            {"headline": "made up", "is_policy": True, "synthetic": True},
         ]
         with open(os.path.join(d, da.LABEL_FILES["policy"]), "w") as f:
             json.dump({"reviewed": False, "labels": rows}, f)
         da.apply_labels(
-            {"policy": [{"id": da.row_id("policy", r), "ok": True} for r in rows]},
+            {"policy": [{"id": da.row_id("policy", r), "ok": True} for r in rows[:2]]},
             d,
             {"applied": [], "skipped": []},
         )
