@@ -2,17 +2,17 @@
  "format": 1,
  "metrics": {
   "all": {
-   "effect_precision": 0.812,
-   "effect_recall": 0.5,
+   "effect_precision": 0.889,
+   "effect_recall": 0.65,
    "pending": 0,
    "policy": 31,
-   "precision": 0.857,
-   "recall": 0.968,
+   "precision": 0.906,
+   "recall": 0.935,
    "rows": 76
   },
   "dev": {
-   "effect_precision": 0.909,
-   "effect_recall": 0.615,
+   "effect_precision": 0.923,
+   "effect_recall": 0.769,
    "pending": 0,
    "policy": 21,
    "precision": 0.875,
@@ -20,12 +20,12 @@
    "rows": 52
   },
   "holdout": {
-   "effect_precision": 0.6,
-   "effect_recall": 0.286,
+   "effect_precision": 0.8,
+   "effect_recall": 0.429,
    "pending": 0,
    "policy": 10,
-   "precision": 0.818,
-   "recall": 0.9,
+   "precision": 1.0,
+   "recall": 0.8,
    "rows": 24
   }
  },
@@ -64,7 +64,7 @@
    "want": "not policy"
   },
   "Andhra Pradesh CM Naidu unveils ₹1 lakh crore agribusiness plan": {
-   "got": "other",
+   "got": "incentive_scheme fmcg:tailwind",
    "outcome": "found",
    "split": "dev",
    "want": "policy (also fmcg:tailwind)"
@@ -94,13 +94,13 @@
    "want": "not policy"
   },
   "Budget 2026: Semiconductor stocks jump up to 7% as FM unveils Mission 2.0 with ₹40,000 cr outlay": {
-   "got": "subsidy_or_funding semiconductors_equipment:tailwind",
+   "got": "incentive_scheme semiconductors_equipment:tailwind",
    "outcome": "found",
    "split": "dev",
    "want": "policy semiconductors_equipment:tailwind (also manufacturing_electronics:tailwind)"
   },
   "CONCOR flags off first export container to the UK from ICD Whitefield under India–UK FTA": {
-   "got": "trade_agreement",
+   "got": "trade_agreement logistics_heavy_capital:tailwind",
    "outcome": "found",
    "split": "dev",
    "want": "policy (also logistics_heavy_capital:tailwind textiles_apparel:tailwind)"
@@ -118,8 +118,8 @@
    "want": "not policy"
   },
   "Cybersecurity in government: How to protect public services and strengthen cyber resilience": {
-   "got": "regulation cybersecurity:tailwind",
-   "outcome": "false_alarm",
+   "got": "none",
+   "outcome": "quiet",
    "split": "holdout",
    "want": "not policy"
   },
@@ -136,49 +136,49 @@
    "want": "policy aerospace_defence:tailwind"
   },
   "Delhi Laxmi Yojana: Who can get ₹2,500 every month? Govt unveils final eligibility rules": {
-   "got": "subsidy_or_funding",
+   "got": "other",
    "outcome": "found",
    "split": "holdout",
    "want": "policy (also fmcg:tailwind)"
   },
   "Dixon Tech Up Almost 1% Intraday on Reports of Govt Approval Likely to Vivo Joint Venture": {
-   "got": "approval",
-   "outcome": "effects_differ",
+   "got": "none",
+   "outcome": "missed",
    "split": "holdout",
    "want": "policy manufacturing_electronics:tailwind"
   },
   "Dixon Tech shares surge sharply as government likely to approve Vivo JV": {
-   "got": "approval",
-   "outcome": "effects_differ",
-   "split": "dev",
-   "want": "policy manufacturing_electronics:tailwind"
-  },
-  "Dixon shares rise as Vivo JV wins government approval": {
    "got": "approval manufacturing_electronics:tailwind",
    "outcome": "found",
    "split": "dev",
    "want": "policy manufacturing_electronics:tailwind"
   },
-  "Dixon-Vivo joint venture inches close to securing final govt approval": {
+  "Dixon shares rise as Vivo JV wins government approval": {
    "got": "approval",
    "outcome": "effects_differ",
+   "split": "dev",
+   "want": "policy manufacturing_electronics:tailwind"
+  },
+  "Dixon-Vivo joint venture inches close to securing final govt approval": {
+   "got": "approval manufacturing_electronics:tailwind",
+   "outcome": "found",
    "split": "holdout",
    "want": "policy manufacturing_electronics:tailwind"
   },
   "Glenmark Pharmaceuticals Limited has informed the Exchange regarding a press release dated August 20, 2026, titled \"Glenmark Pharmaceuticals receives U.S. FDA approval for Fluticasone Propionate Nasal Spray, 0.05 mg (50 mcg)/spray\".": {
-   "got": "approval healthcare_hospitals:tailwind",
+   "got": "approval",
    "outcome": "false_alarm",
    "split": "dev",
    "want": "not policy"
   },
   "Gokaldas Exports, KPR Mill, other textile stocks drop up to 5% as US agrees to zero tariff on some...": {
-   "got": "duty_or_tariff textiles_apparel:mixed",
+   "got": "duty_or_tariff textiles_apparel:tailwind",
    "outcome": "effects_differ",
    "split": "holdout",
    "want": "policy textiles_apparel:headwind"
   },
   "Government of India taking steps to encourage domestic manufacturing of semiconductors & promote country's digital transformation and self-reliance": {
-   "got": "incentive_scheme manufacturing_electronics:tailwind semiconductors_equipment:tailwind",
+   "got": "incentive_scheme semiconductors_equipment:tailwind",
    "outcome": "found",
    "split": "dev",
    "want": "policy semiconductors_equipment:tailwind (also manufacturing_electronics:tailwind)"
@@ -226,8 +226,8 @@
    "want": "policy surveillance_security:tailwind (also aerospace_defence:tailwind)"
   },
   "India, UK set to ink inter-government pact for electric propulsion of 4 Landing Platform Docks": {
-   "got": "trade_agreement",
-   "outcome": "effects_differ",
+   "got": "trade_agreement aerospace_defence:tailwind",
+   "outcome": "found",
    "split": "dev",
    "want": "policy aerospace_defence:tailwind"
   },
@@ -244,14 +244,14 @@
    "want": "policy textiles_apparel:tailwind (also sports_athleisure:tailwind)"
   },
   "Indian Oil Corporation Limited has informed the Exchange regarding 'Investment Approval for Kochi-Kanyakumari-Thoothukudi Natural Gas Pipeline'.": {
-   "got": "approval",
-   "outcome": "false_alarm",
+   "got": "none",
+   "outcome": "quiet",
    "split": "holdout",
    "want": "not policy"
   },
   "Indian Railways Approves ₹493 Crore for 38.21 km New Rail Line between Mukutban (Adilabad) and Gadchandur": {
-   "got": "procurement",
-   "outcome": "effects_differ",
+   "got": "subsidy_or_funding logistics_heavy_capital:tailwind",
+   "outcome": "found",
    "split": "dev",
    "want": "policy logistics_heavy_capital:tailwind (also big_cap_industries:tailwind)"
   },
@@ -268,7 +268,7 @@
    "want": "not policy"
   },
   "Investment approval for Kochi-Kanyakumari-Thoothukudi Natural Gas Pipeline.": {
-   "got": "approval",
+   "got": "approval big_cap_industries:tailwind",
    "outcome": "false_alarm",
    "split": "dev",
    "want": "not policy"
@@ -328,13 +328,13 @@
    "want": "not policy"
   },
   "Ministry of Rural Development to Commence DDU-GKY 2.0 Training Batches Across Most States/UTs from October 2026": {
-   "got": "other",
+   "got": "incentive_scheme",
    "outcome": "found",
    "split": "dev",
    "want": "policy"
   },
   "NHAI Signs MoU with SSNNL to Simplify Approval Framework for National Highway and Irrigation Infrastructure Projects in Gujarat": {
-   "got": "other big_cap_industries:tailwind",
+   "got": "approval",
    "outcome": "found",
    "split": "dev",
    "want": "policy (also big_cap_industries:tailwind logistics_heavy_capital:tailwind)"
