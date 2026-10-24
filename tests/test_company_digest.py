@@ -223,6 +223,41 @@ def test_weekly_closes_feed_the_card_price_line():
     assert card["prices"] == year["SUZLON"][-26:]
 
 
+def test_a_global_group_s_news_is_the_company_s_marked_as_the_group_s():
+    """Since the thesis reader's version 7, Siemens AG's news is Siemens
+    Ltd's to read against its thesis: shown, not set aside, and marked."""
+    brief = dict(BRIEF)
+    brief["thesis_check"] = {
+        "holdings": {
+            "SUZLON": {
+                "challenged": [],
+                "group_news": ["Suzlon fined by exchanges for LODR non-compliance"],
+            }
+        }
+    }
+    for kwargs in (
+        {"brief": brief},
+        # From an earlier run's reading, on a day the check did not run.
+        {"brief": BRIEF, "group_news": {("SUZLON", "suzlon fined by exchanges")}},
+    ):
+        s = next(
+            c
+            for c in build_company_digest(
+                WATCHLIST,
+                COVERAGE,
+                kwargs["brief"],
+                today="2026-10-03",
+                group_news=kwargs.get("group_news"),
+            )["companies"]
+            if c["ticker"] == "SUZLON"
+        )
+        assert "namesakes" not in s
+        assert [(a["text"][:12], a.get("group", False)) for a in s["activity"]] == [
+            ("Suzlon bags ", False),
+            ("Suzlon fined", True),
+        ]
+
+
 def test_namesakes_from_earlier_runs_stay_set_apart():
     """7 Oct: the thesis check could not run, today's result had no namesakes,
     and Daryl Dixon's teaser went back into Dixon's news. Readings from earlier

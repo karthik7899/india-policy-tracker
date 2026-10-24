@@ -114,6 +114,13 @@ def _verdicts(headline, peers=None):
         # or the partner going round it.
         ("Corning opens new cover glass facility in Tamil Nadu", {"OPTIEMUS": "mixed"}),
         ("Vivo sets up own smartphone plant in Greater Noida", {"DIXON": "mixed"}),
+        # A sale there too: read as the acquisition it was filed as before
+        # divestments had a type, and against us when a rival buys.
+        ("Vivo sells its smartphone plant in Greater Noida", {"DIXON": "mixed"}),
+        (
+            "Vivo sells its stake in smartphone unit to Kaynes Technology in India",
+            {"DIXON": "risk"},
+        ),
         # Abroad, with no rival named: the partner's news.
         ("Corning partners with Samsung for smartphone cover glass", {}),
         # A partnership in the venture's line in India ending: it may be ours.

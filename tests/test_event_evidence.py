@@ -215,6 +215,58 @@ def test_a_filing_confirms_only_the_same_company_kind_and_time(filing):
     assert "confirmation" not in event
 
 
+def test_a_change_at_the_top_is_confirmed_only_by_a_filing_naming_the_role():
+    def confirmed(text):
+        event = _event(
+            "Suzlon Energy CFO resigns",
+            "A",
+            actors=["SUZLON"],
+            event_type="management_change",
+        )
+        return confirm_with_filings([event], [_filing(text, -1)]) == 1
+
+    assert confirmed(
+        "Suzlon Energy Limited has informed the Exchange about Resignation of "
+        "Chief Financial Officer"
+    )
+    for text in (
+        "Suzlon Energy Limited has informed the Exchange about Appointment of "
+        "Statutory Auditor",
+        "Suzlon Energy Limited has informed the Exchange about Resignation of "
+        "Director/KMP/SMP",
+        "Suzlon Energy Limited has informed the Exchange about Appointment of "
+        "Non-Executive Director",
+        "Suzlon Energy Limited has informed the Exchange about MD&A for FY26",
+    ):
+        assert not confirmed(text), text
+
+
+def test_a_sale_or_a_launch_is_confirmed_by_its_own_kind_of_filing():
+    def confirmed(event_type, text):
+        event = _event("A Suzlon story", "A", actors=["SUZLON"], event_type=event_type)
+        return confirm_with_filings([event], [_filing(text, -1)]) == 1
+
+    assert confirmed(
+        "divestment",
+        "Suzlon Energy Limited has informed the Exchange about Sale or disposal "
+        "of unit(s) or division(s) or subsidiary of the listed entity",
+    )
+    assert confirmed(
+        "divestment",
+        "Suzlon Energy Limited has informed the Exchange about Disinvestment",
+    )
+    assert not confirmed(
+        "divestment",
+        "Suzlon Energy Limited has informed the Exchange about Acquisition of stake",
+    )
+    # The form the press release uses, as TCS's did on 24 Oct.
+    assert confirmed(
+        "product_launch",
+        "Suzlon Energy Limited has informed the Exchange regarding 'Press Release "
+        "- Suzlon launches its S144 wind turbine'.",
+    )
+
+
 def test_old_filings_are_pruned_from_the_record():
     old = (datetime.date.today() - datetime.timedelta(days=40)).isoformat()
     kept = prune_filings([{"date": old}, {"date": TODAY}, {"date": ""}])

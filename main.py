@@ -490,12 +490,16 @@ async def run_pipeline():
         harvest_partner_edges(data["corporate_agreements"], watchlist, graph)
         # Tie-ups with someone we do NOT hold: queued for a person to review,
         # never written straight into the graph. See the function for why.
-        # Headlines earlier thesis checks read as another company's news are
-        # left out; today's are taken back once today's check has run.
-        from analysis.thesis_check import namesake_headlines
+        # Headlines earlier thesis checks read as another company's news, or
+        # as the holding's global group's (Siemens AG's partners are not
+        # Siemens Ltd's), are left out; today's are taken back once today's
+        # check has run.
+        from analysis.thesis_check import group_headlines, namesake_headlines
 
         record_partner_proposals(
-            data["market_events"], graph, namesakes=namesake_headlines()
+            data["market_events"],
+            graph,
+            namesakes=namesake_headlines() | group_headlines(),
         )
 
         # Second-order implications of events that name nobody we hold. Kept
@@ -682,6 +686,7 @@ async def run_pipeline():
     from analysis.entity_graph import drop_namesake_proposals
     from analysis.thesis_check import (
         annotate_health,
+        group_headlines,
         namesake_headlines,
         run_thesis_check,
     )
@@ -691,7 +696,8 @@ async def run_pipeline():
     # Today's readings and every earlier run's: a day the check cannot run
     # must not put namesakes back on the Companies view or in the queue.
     namesakes = namesake_headlines(data["thesis_check"])
-    drop_namesake_proposals(namesakes)
+    group_news = group_headlines(data["thesis_check"])
+    drop_namesake_proposals(namesakes | group_news)
 
     # One card per holding — its recent activity and the policies touching
     # its sector — for the dashboard's Companies view.
@@ -703,6 +709,7 @@ async def run_pipeline():
         data,
         prices=weekly_closes,
         namesakes=namesakes,
+        group_news=group_news,
     )
 
     # What is coming up for each holding, and what the results that came in

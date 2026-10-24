@@ -96,6 +96,55 @@ _FILING_TERMS: Dict[str, tuple] = {
         "inauguration",
         "capex",
     ),
+    # Whole words, so each form is listed. Not "stake" or "sale of", which
+    # an acquisition of a stake and a promoter's sale of shares file under.
+    "divestment": (
+        "divest",
+        "divests",
+        "divested",
+        "divestment",
+        "divestiture",
+        "disinvest",
+        "disinvestment",
+        "slump sale",
+        "transfer of business",
+        "sale or disposal",
+        "disposal of",
+        "sale of stake",
+        "sale of its stake",
+        "sale of business",
+        "sale of subsidiary",
+        "sale of unit",
+        "sale of division",
+    ),
+    "product_launch": (
+        "launch",
+        "launches",
+        "launched",
+        "unveil",
+        "unveils",
+        "unveiled",
+        "introduction of",
+        "new product",
+    ),
+    # The roles themselves. Not "appointment", "resignation" or the
+    # exchange's "Director/KMP/SMP", which a statutory auditor's or a company
+    # secretary's change files under too; nor "executive director", which
+    # "non-executive director" contains, or "md", which "MD&A" does.
+    "management_change": (
+        "managing director",
+        "whole-time director",
+        "whole time director",
+        "chief executive officer",
+        "chief financial officer",
+        "chief operating officer",
+        "chief technology officer",
+        "ceo",
+        "cfo",
+        "cmd",
+        "chairman",
+        "chairperson",
+    ),
     "supply_disruption": (
         "disruption",
         "shutdown",

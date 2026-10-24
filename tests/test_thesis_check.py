@@ -458,8 +458,86 @@ def test_the_prompt_asks_whether_the_headline_is_about_the_company():
     from analysis.thesis_check import _SCHEMA, _prompt
 
     text = _prompt([(0, {"ticker": "X", "name": "X", "thesis": "t", "headline": "h"})])
-    assert "about   — true if the headline is about this listed company" in text
+    assert "about   — false only if the headline is about a different" in text
     assert "about" in _SCHEMA["items"]["required"]
+
+
+def test_the_prompt_reads_a_global_group_s_news_as_about_the_holding():
+    """24 Oct: the owner labelled six Siemens AG and Schneider Electric SE
+    headlines as bearing on the Indian arms' theses. Version 6 told the
+    reader such news was the parent's and never the holding's."""
+    from analysis.thesis_check import _SCHEMA, _prompt
+
+    text = _prompt([(0, {"ticker": "X", "name": "X", "thesis": "t", "headline": "h"})])
+    assert "group   — true if the headline is about the holding's own global" in text
+    assert '"about" true, "group" true' in text
+    assert "about the parent: false" not in text
+    assert "group" in _SCHEMA["items"]["required"]
+    assert thesis_check.PROMPT_VERSION not in ("1", "2", "3", "4", "5", "6")
+
+
+def test_a_global_group_s_news_is_judged_and_marked():
+    thesis = "Diversified capital-goods major, expanding local factory automation."
+    headline = "Siemens AG expands factory automation software for Indian plants"
+    raw = {
+        "stance": "supports",
+        "claim": "expanding local factory automation",
+        "because": "expands factory automation software",
+        "about": True,
+        "group": True,
+    }
+    assert ground(headline, thesis, raw) == {
+        "stance": "supports",
+        "claim": "expanding local factory automation",
+        "because": "expands factory automation software",
+        "group": True,
+    }
+    # A reader holding on to the old rule, "not about" and "group" at once,
+    # is taken at the more specific word.
+    assert ground(headline, thesis, {**raw, "about": False})["stance"] == "supports"
+    # Unrelated group news is still marked, and so is a refused quote.
+    unrelated = ground(headline, thesis, {**raw, "stance": "unrelated"})
+    assert unrelated == {
+        "stance": "unrelated",
+        "claim": "",
+        "because": "",
+        "group": True,
+    }
+    refused = ground(headline, thesis, {**raw, "because": "not in the headline"})
+    assert refused["stance"] == "unrelated" and refused["group"] is True
+    # A namesake is still a namesake.
+    assert ground(headline, thesis, {**raw, "group": False, "about": False}) == {
+        "stance": "unrelated",
+        "claim": "",
+        "because": "",
+        "about": False,
+    }
+
+
+def test_group_news_is_listed_as_the_group_s_never_as_a_namesake(cache):
+    pairs, _ = thesis_pairs(WATCHLIST, COVERAGE)
+    answers = dict(ANSWERS)
+    answers[PRICE] = {
+        "stance": "unrelated",
+        "claim": "",
+        "because": "",
+        "about": True,
+        "group": True,
+    }
+    readings, _ = read_pairs(pairs, fake(answers), cache, today="2026-09-26")
+    row = summarise(pairs, readings)["holdings"]["SUZLON"]
+    assert row["group_news"] == [PRICE]
+    assert "not_about" not in row
+    assert thesis_check.group_headlines(cache_path=cache) == {("SUZLON", PRICE.lower())}
+    assert thesis_check.namesake_headlines(cache_path=cache) == set()
+    # A refused challenge keeps its mark.
+    assert (
+        thesis_check.apply_check(
+            {"stance": "contradicts", "claim": "c", "because": "b", "group": True},
+            {"verdict": "does_not"},
+        )["group"]
+        is True
+    )
 
 
 def test_the_scorer_grades_namesake_detection():

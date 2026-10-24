@@ -65,7 +65,16 @@ CACHE_PATH = os.path.join(ROOT, "thesis_cache.json")
 #    quarterly profit for "scaling dairy/juice products": 7 supports the
 #    labels do not have, precision 0.79. Bumped before any live headline was
 #    read at version 5 (that run timed out), so it costs no extra re-read.
-PROMPT_VERSION = "6"
+# 7: a holding's own global group is about it. Version 5 put Siemens AG's and
+#    Schneider Electric SE's news outside Siemens Ltd's and Schneider Electric
+#    Infrastructure's theses; the owner's review of 24 Oct labelled six such
+#    headlines (Samsung Foundry, ÖBB Railjet, Precision Innovations, FuelCell
+#    Energy, AMD Helios, Cognite) as bearing on them. Group news is now judged
+#    against the thesis like any headline and marked "group", so it is shown
+#    as the group's and the group's partners never become the holding's.
+#    "about" is false only for a namesake: a person, a character, an
+#    unrelated firm that shares the name.
+PROMPT_VERSION = "7"
 
 STANCES = ("contradicts", "supports", "unrelated")
 
@@ -104,19 +113,24 @@ stance — exactly one of:
                targets and tips, stock lists, results that do not touch a
                claim in the thesis, routine filings, and headlines about a
                different company or person with a similar name.
-about   — true if the headline is about this listed company (the one named in
-          HOLDING), false if it is about a different company, person or thing
-          that shares the name: a foreign parent or namesake, a politician, a
-          fictional character. A headline about the company among others is
-          true. A false "about" always goes with "unrelated".
-          Every HOLDING is a company listed in India. Some are the Indian arm
-          of a global group that shares their name — Siemens Ltd (Siemens
-          AG), Schneider Electric Infrastructure (Schneider Electric), Cummins
-          India (Cummins Inc.), Oracle Financial Services (Oracle), Bata
-          India (Bata). The group's own deals, acquisitions, products and
-          operations abroad are about the parent: false. True only when the
-          headline names the Indian company itself or an Indian order, plant,
-          customer or market.
+about   — false only if the headline is about a different company, person or
+          thing that merely shares the name: a politician, a fictional
+          character, an unrelated firm or place. Otherwise true, including a
+          headline about the company among others and one about its own
+          global group (below). A false "about" always goes with "unrelated".
+group   — true if the headline is about the holding's own global group, its
+          parent or a sister company abroad, rather than the company listed in
+          India. Every HOLDING is listed in India, and some are the Indian arm
+          of a global group that shares their name: Siemens Ltd (Siemens AG),
+          Schneider Electric Infrastructure (Schneider Electric), Cummins
+          India (Cummins Inc.), Oracle Financial Services (Oracle), Bata India
+          (Bata). The group's own deals, acquisitions, products and operations
+          abroad are group news: "about" true, "group" true. Group news bears
+          on the holding, so judge its stance like any other headline: it
+          supports or contradicts only when it bears on what a claim names.
+          False when the headline names the Indian company itself or an
+          Indian order, plant, customer or market, and for a holding with no
+          global parent.
 claim   — the words of the THESIS the headline bears on, copied EXACTLY and
           contiguously. "" when unrelated.
 because — the words of the HEADLINE that bear on the claim, copied EXACTLY and
@@ -131,7 +145,7 @@ headline bears on; quote the whole thesis only when it makes a single claim.
 A falling share price is not evidence against a thesis, and a rising one is
 not evidence for it. Judge the stance only from the thesis and the headline;
 do not use outside knowledge. General knowledge of who a company is may be
-used for "about", and for nothing else."""
+used for "about" and "group", and for nothing else."""
 
 _SCHEMA = {
     "type": "ARRAY",
@@ -143,8 +157,9 @@ _SCHEMA = {
             "claim": {"type": "STRING"},
             "because": {"type": "STRING"},
             "about": {"type": "BOOLEAN"},
+            "group": {"type": "BOOLEAN"},
         },
-        "required": ["id", "stance", "claim", "because", "about"],
+        "required": ["id", "stance", "claim", "because", "about", "group"],
     },
 }
 
@@ -242,6 +257,7 @@ def apply_check(
         "because": "",
         "downgraded": "contradicts",
         "reason": "not confirmed by a second reading",
+        **({"group": True} if reading.get("group") else {}),
     }
 
 
@@ -350,13 +366,18 @@ def ground(headline: str, thesis: str, raw: Dict[str, Any]) -> Dict[str, Any]:
     stance = raw.get("stance")
     if stance not in STANCES:
         stance = "unrelated"
+    # The holding's own global group: judged like any headline and marked,
+    # so it is shown as the group's (summarise). A reading that also says
+    # "not about" is taken at the more specific word, the one version 7
+    # added for exactly that news.
+    group = {"group": True} if raw.get("group") is True else {}
     # A headline about somebody else cannot bear on this thesis. Recorded
     # only when the model says so; absent means "about this company".
-    if raw.get("about") is False:
+    if raw.get("about") is False and not group:
         return {"stance": "unrelated", "claim": "", "because": "", "about": False}
     claim = re.sub(r"\s+", " ", str(raw.get("claim") or "")).strip(" .,;:")
     because = re.sub(r"\s+", " ", str(raw.get("because") or "")).strip(" .,;:")
-    out: Dict[str, Any] = {"stance": stance, "claim": "", "because": ""}
+    out: Dict[str, Any] = {"stance": stance, "claim": "", "because": "", **group}
     if stance == "unrelated":
         return out
     if not _norm(claim) or not _norm(because):
@@ -375,6 +396,7 @@ def ground(headline: str, thesis: str, raw: Dict[str, Any]) -> Dict[str, Any]:
         "downgraded": stance,
         # Why, so a refused answer can be told from a wrong one.
         "reason": reason,
+        **group,
     }
 
 
@@ -645,6 +667,8 @@ def summarise(
         if reading.get("about") is False:
             row.setdefault("not_about", []).append(pair["headline"])
             continue
+        if reading.get("group"):
+            row.setdefault("group_news", []).append(pair["headline"])
         if reading["stance"] == "unrelated":
             continue
         item = {
@@ -654,6 +678,7 @@ def summarise(
             "date": pair.get("date") or "",
             **({"link": pair["link"]} if pair.get("link") else {}),
             **({"source": pair["source"]} if pair.get("source") else {}),
+            **({"group": True} if reading.get("group") else {}),
             "reader": "llm",
             **(
                 {"confirmed": bool(reading.get("confirmed"))}
@@ -688,20 +713,16 @@ def annotate_health(health: Dict[str, Any], result: Dict[str, Any]) -> int:
     return n
 
 
-def namesake_headlines(
-    check: Optional[Dict[str, Any]] = None, cache_path: str = CACHE_PATH
+def _headlines_read_as(
+    flagged, row_key: str, check: Optional[Dict[str, Any]], cache_path: str
 ) -> Set[Tuple[str, str]]:
-    """``(TICKER, headline)`` pairs read as being about somebody else.
+    """``(TICKER, headline)`` pairs whose reading ``flagged`` picks out.
 
-    "Siemens and FuelCell Energy Partner on Scalable Fuel Cells" is Siemens
-    AG's news, not Siemens Ltd's, and every rule in the pipeline attributes it
-    to SIEMENS because the name matches. This check is the one place that
-    reads it as a namesake. Collected from this run's result when given, and
-    from every reading still in the cache, so a step that runs before today's
-    check (the partner proposals) still knows what earlier runs found.
-
-    Headlines are lower-cased and single-spaced; the cache keeps the first
-    200 characters of each, so compare by prefix.
+    Collected from this run's result when given, and from every reading still
+    in the cache, so a step that runs before today's check (the partner
+    proposals) still knows what earlier runs found. Headlines are lower-cased
+    and single-spaced; the cache keeps the first 200 characters of each, so
+    compare by prefix.
     """
     from analysis.llm_reader import load_cache
 
@@ -710,13 +731,44 @@ def namesake_headlines(
 
     pairs: Set[Tuple[str, str]] = set()
     for entry in (load_cache(cache_path) or {}).values():
-        if (entry.get("reading") or {}).get("about") is False:
+        if flagged(entry.get("reading") or {}):
             if entry.get("ticker") and entry.get("headline"):
                 pairs.add((str(entry["ticker"]).upper(), key(entry["headline"])))
     for ticker, row in ((check or {}).get("holdings") or {}).items():
-        for headline in (row or {}).get("not_about") or []:
+        for headline in (row or {}).get(row_key) or []:
             pairs.add((str(ticker).upper(), key(headline)))
     return pairs
+
+
+def namesake_headlines(
+    check: Optional[Dict[str, Any]] = None, cache_path: str = CACHE_PATH
+) -> Set[Tuple[str, str]]:
+    """``(TICKER, headline)`` pairs read as being about somebody else.
+
+    "The Walking Dead: Daryl Dixon" is a television series, not Dixon
+    Technologies, and every rule in the pipeline attributes it to DIXON
+    because the name matches. This check is the one place that reads it as a
+    namesake.
+    """
+    return _headlines_read_as(
+        lambda r: r.get("about") is False, "not_about", check, cache_path
+    )
+
+
+def group_headlines(
+    check: Optional[Dict[str, Any]] = None, cache_path: str = CACHE_PATH
+) -> Set[Tuple[str, str]]:
+    """``(TICKER, headline)`` pairs read as the holding's global group's news.
+
+    "Siemens and FuelCell Energy Partner on Scalable Fuel Cells" is Siemens
+    AG's. Since version 7 it may bear on Siemens Ltd's thesis, but the deal
+    is still the group's: the partner proposals leave it out, as they leave
+    out namesakes (Siemens AG's partners are not Siemens Ltd's), and the
+    Companies view marks it as the group's news.
+    """
+    return _headlines_read_as(
+        lambda r: r.get("group") is True, "group_news", check, cache_path
+    )
 
 
 def run_thesis_check(

@@ -766,6 +766,7 @@ _WHAT = {
     "partnership_end": "a partnership ending",
     "tie_up": "a new tie-up",
     "acquisition": "an acquisition",
+    "divestment": "a sale",
     "order_win": "an order",
     "capacity_add": "new capacity",
 }
@@ -796,9 +797,11 @@ def screen_partner_news(event, partner, holding, scope, rivals=()):
         customer in the order): bad.
       * The partner winning work in the venture's line in India: good — that
         work can flow through the venture.
-      * The partner adding capacity, tying up or buying in the venture's line
-        in India: mixed — the venture's own plant, or the partner going round
-        it; the headline rarely says which.
+      * The partner adding capacity, tying up, buying or selling in the
+        venture's line in India: mixed — the venture's own plant, or the
+        partner going round it; the headline rarely says which. A sale was
+        filed as an acquisition until divestments had a type of their own,
+        and is read the same way.
       * The partner ending a partnership in the venture's line in India: bad
         if it is this venture.
       * Anything else is the partner's news, not ours: Kaga winning a
@@ -849,7 +852,7 @@ def screen_partner_news(event, partner, holding, scope, rivals=()):
             f"less in its ventures",
             channel,
         )
-    if etype in ("tie_up", "acquisition", "order_win") and rival:
+    if etype in ("tie_up", "acquisition", "divestment", "order_win") and rival:
         return (
             "risk",
             f"{rival} competes with {holding}",
@@ -884,7 +887,7 @@ def screen_partner_news(event, partner, holding, scope, rivals=()):
             f"{holding}'s",
             "demand_pull",
         )
-    if etype in ("capacity_add", "tie_up", "acquisition"):
+    if etype in ("capacity_add", "tie_up", "acquisition", "divestment"):
         return (
             "mixed",
             "in the venture's line, in India",
