@@ -1,10 +1,11 @@
 name: Reader eval
 
-# Measures a change to the AI readers live. Records the models' answers to
-# every labelled item that has none under today's prompts (eval/recordings/),
-# rescores (eval/scorecards/), commits both to the branch and posts the
-# comparison with the base on the PR. scripts/reader_eval.py explains the
-# harness; CI replays the recordings without a key.
+# Measures a change to the AI readers live. Records the takes of the models'
+# answers each labelled item lacks under today's prompts, three per item
+# (eval/recordings/), rescores on the reading most takes give
+# (eval/scorecards/), commits both to the branch and posts the comparison
+# with the base on the PR. scripts/reader_eval.py explains the harness; CI
+# replays the recordings without a key.
 #
 # Add the reader-eval label to a PR to run it. The label is removed at the
 # end, so adding it again runs it again. Same-repository branches only: the
@@ -18,7 +19,7 @@ on:
   workflow_dispatch:
     inputs:
       fresh:
-        description: Ask again for every item, not only those without an answer (after a model change)
+        description: Record every item's takes again, not only the ones it lacks (after a model change)
         type: boolean
         default: false
 
@@ -36,7 +37,9 @@ jobs:
       (github.event.label.name == 'reader-eval' &&
        github.event.pull_request.head.repo.full_name == github.repository)
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    # Three takes of every item: a fresh recording makes about forty calls,
+    # spaced and, when a model is busy, waited out.
+    timeout-minutes: 45
     permissions:
       contents: write # commit the recordings and scorecards
       issues: write # comment on the PR and remove its label

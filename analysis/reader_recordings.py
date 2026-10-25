@@ -1,31 +1,40 @@
-"""The AI readers' answers to the labelled items, recorded once and replayed.
+"""The AI readers' answers to the labelled items, recorded and replayed.
 
 WHY. The event reader and the thesis check are scored against hand labels
 (eval/), and a score needs the model's answers. The model needs a key, a
 network and quota, none of which CI has, and it does not give the same
-answer twice. So each labelled item's raw answer is recorded exactly as the
-model returned it, under the prompt that asked for it. Replayed through the
-readers' own code (the prompt, JSON parsing, grounding, the cache,
-reconcile), the answers give the same readings every run with no key, and a
-change to any of that code is measured on the same answers. A change to a
-prompt makes its recordings stale, and they are recorded again live
-(scripts/reader_eval.py --record).
+answer twice. So each labelled item's raw answers are recorded exactly as
+the model returned them, under the prompt that asked for them. Replayed
+through the readers' own code (the prompt, JSON parsing, grounding, the
+cache, reconcile), the answers give the same readings every run with no
+key, and a change to any of that code is measured on the same answers. A
+change to a prompt makes its recordings stale, and they are recorded again
+live (scripts/reader_eval.py --record).
+
+Each item is recorded TAKES times, and the reading most of its takes give is
+the one served. One take was one roll of the dice: recorded twice with the
+same prompt and model, 6% of the headlines came back with a different event
+type, and over four recordings the policy reader's holdout effect precision
+ranged from 0.57 to 1.0. A one-take scorecard could not tell a prompt change
+from a re-roll; a reading most takes agree on moves far less often. Takes
+are one reading when they differ only in free text (Codec.free_text), the
+order of a list, case or spacing.
 
 The seam is the transport, the function every reader already calls with a
-prompt and gets JSON text back from (analysis/llm_reader.Transport). A codec
-per prompt reads it back into its items: a headline, a holding's thesis and
-headline, a challenge to check. Each item's answer is stored on its own, so
-a batch of any make-up can be answered from them.
+prompt and gets JSON text back from (analysis/reader_runtime.Transport). A
+codec per prompt reads it back into its items: a headline, a holding's
+thesis and headline, a challenge to check. Each item's takes are stored on
+their own, so a batch of any make-up can be answered from them.
 
-  replaying(codec, store)        answers from the recordings. An item with no
-                                 recording for this prompt, or one its reader
-                                 would refuse, is left out, and the reader
-                                 counts it as pending.
-  replaying(codec, store, live)  the same, but a batch with such an item goes
-                                 to the model, and the answers to those items
-                                 are recorded. The rest are still served from
-                                 the recordings, so recording again never
-                                 changes an answer that was already there.
+  replaying(codec, store)        answers from the recordings: each item's
+                                 majority reading. An item with no take for
+                                 this prompt, or only takes its reader would
+                                 refuse, is left out, and the reader counts
+                                 it as pending.
+  replaying(codec, store, live)  the same, but a batch with an item short of
+                                 its takes goes to the model, and one more
+                                 take of each such item is recorded. An item
+                                 with all its takes is answered from them.
 """
 
 import collections
@@ -41,10 +50,15 @@ from typing import Any, Callable, Dict, List, Optional, Set, Tuple
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RECORDINGS_DIR = os.path.join(ROOT, "eval", "recordings")
 
+# Takes recorded of each item. Three is the fewest with a majority whenever
+# two agree; a recording costs three times the calls of one take.
+TAKES = 3
+
 _ABOUT = (
     "Raw answers from the AI readers to the labelled items in eval/, recorded "
-    "by scripts/reader_eval.py --record and replayed by the tests. Each is "
-    "stored under the fingerprint of the prompt and schema that asked for it; "
+    "by scripts/reader_eval.py --record and replayed by the tests. Each item "
+    "has up to three takes, stored under the fingerprint of the prompt and "
+    "schema that asked for them, and the reading most takes give is served; "
     "a prompt change leaves them stale until they are recorded again."
 )
 
@@ -95,6 +109,10 @@ class Codec:
     ``accepts`` is the reader's own test of an answer beyond its id. One it
     refuses is neither recorded nor served, so it is asked again rather than
     kept as an answer the reader never uses.
+
+    ``free_text`` names the answer's fields written in the model's own words
+    (a gist, a reason), which no score reads and no two takes share: two
+    takes that differ only there are the same reading.
     """
 
     def __init__(
@@ -105,6 +123,7 @@ class Codec:
         head: Callable[[], str],
         parse: Callable[[str], List[Item]],
         accepts: Callable[[Dict[str, Any]], bool] = lambda answer: True,
+        free_text: Tuple[str, ...] = (),
     ):
         self.name = name
         self._template = template
@@ -112,6 +131,12 @@ class Codec:
         self._head = head
         self._parse = parse
         self.accepts = accepts
+        self.free_text = free_text
+
+    def vote(self, answer: Dict[str, Any]) -> str:
+        """The reading an answer gives, as a vote: without its free text, its
+        lists in one order, its words in one case and spacing."""
+        return json.dumps(_reading(answer, self.free_text), sort_keys=True)
 
     def fingerprint(self) -> str:
         """The prompt around one placeholder item, and the response schema.
@@ -132,6 +157,30 @@ class Codec:
 
 def item_key(identity: str) -> str:
     return hashlib.sha1(identity.encode("utf-8")).hexdigest()[:16]
+
+
+def _reading(value: Any, free_text: Tuple[str, ...]) -> Any:
+    if isinstance(value, dict):
+        return {
+            k: _reading(v, free_text) for k, v in value.items() if k not in free_text
+        }
+    if isinstance(value, list):
+        return sorted(
+            (_reading(v, free_text) for v in value),
+            key=lambda v: json.dumps(v, sort_keys=True),
+        )
+    if isinstance(value, str):
+        return " ".join(value.split()).casefold()
+    return value
+
+
+def majority(takes: List[Dict[str, Any]], vote: Callable[[Dict[str, Any]], str]):
+    """The take whose reading most takes give; on a tie, the earliest of
+    them, so a recording replays the same way every time."""
+    votes = [vote(t["answer"]) for t in takes]
+    counts = collections.Counter(votes)
+    top = max(counts.values())
+    return next(t for t, v in zip(takes, votes) if counts[v] == top)
 
 
 _EVENT_LINE = re.compile(r"(\d+): (.*)\Z", re.DOTALL)
@@ -272,10 +321,30 @@ def _check_accepts(answer: Dict[str, Any]) -> bool:
     return answer.get("verdict") in thesis_check.VERDICTS
 
 
-EVENTS = Codec("events", _events_template, _events_schema, _events_head, _parse_events)
-THESIS = Codec("thesis", _thesis_template, _thesis_schema, _thesis_head, _parse_thesis)
+EVENTS = Codec(
+    "events",
+    _events_template,
+    _events_schema,
+    _events_head,
+    _parse_events,
+    free_text=("gist", "because"),
+)
+THESIS = Codec(
+    "thesis",
+    _thesis_template,
+    _thesis_schema,
+    _thesis_head,
+    _parse_thesis,
+    free_text=("claim", "because"),
+)
 CHECK = Codec(
-    "check", _check_template, _check_schema, _check_head, _parse_check, _check_accepts
+    "check",
+    _check_template,
+    _check_schema,
+    _check_head,
+    _parse_check,
+    _check_accepts,
+    free_text=("because",),
 )
 CODECS = (EVENTS, THESIS, CHECK)
 
@@ -286,47 +355,83 @@ CODECS = (EVENTS, THESIS, CHECK)
 
 
 class Recordings:
-    """One codec's recorded answers: ``{key: {input, prompt, answer, model,
-    recorded}}`` in eval/recordings/<codec>.json.
+    """One codec's recorded takes: ``{key: {input, prompt, takes: [{answer,
+    model, recorded}]}}`` in eval/recordings/<codec>.json.
 
-    ``fresh`` ignores what is there, so every item is asked again; an answer
-    recorded in this run is served as usual.
+    ``fresh`` ignores what is there, so every item's takes are recorded
+    again; a take recorded in this run is served as usual. ``takes`` is how
+    many a recording wants of each item (TAKES).
     """
 
-    def __init__(self, path: str, fresh: bool = False):
+    def __init__(self, path: str, fresh: bool = False, takes: int = TAKES):
         self.path = path
         self.fresh = fresh
+        self.wanted = takes
         self.entries: Dict[str, Dict[str, Any]] = self._load()
         self.asked: Set[str] = set()
-        self.served: Set[str] = set()
+        self.served: Dict[str, Dict[str, Any]] = {}
         self.renewed: Set[str] = set()
         self.changed = False
 
     def _load(self) -> Dict[str, Dict[str, Any]]:
         try:
             with open(self.path, encoding="utf-8") as f:
-                return dict(json.load(f).get("items") or {})
+                entries = dict(json.load(f).get("items") or {})
         except FileNotFoundError:
             return {}
+        for entry in entries.values():
+            # Recorded before takes: its one answer is its first take.
+            if "takes" not in entry:
+                entry["takes"] = [
+                    {
+                        k: entry.pop(k)
+                        for k in ("answer", "model", "recorded")
+                        if k in entry
+                    }
+                ]
+        return entries
+
+    def takes(
+        self,
+        key: str,
+        fingerprint: str,
+        accepts: Callable[[Dict[str, Any]], bool] = lambda answer: True,
+    ) -> List[Dict[str, Any]]:
+        """The item's takes that can be served: recorded for this prompt (in
+        this run, if ``fresh``), and ones its reader would accept."""
+        entry = self.entries.get(key)
+        if not entry or entry.get("prompt") != fingerprint:
+            return []
+        if self.fresh and key not in self.renewed:
+            return []
+        return [t for t in entry["takes"] if accepts(t["answer"])]
 
     def answer(
         self,
         key: str,
         fingerprint: str,
         accepts: Callable[[Dict[str, Any]], bool] = lambda answer: True,
+        vote: Callable[[Dict[str, Any]], str] = lambda a: json.dumps(a, sort_keys=True),
     ) -> Optional[Dict[str, Any]]:
-        """The recorded answer to serve, or None: none recorded for this
-        prompt, ``fresh``, or one the reader would refuse (asked again)."""
+        """The answer to serve, the one most takes give, or None: no take for
+        this prompt, ``fresh``, or none the reader would accept (asked
+        again)."""
         self.asked.add(key)
-        entry = self.entries.get(key)
-        if not entry or entry.get("prompt") != fingerprint:
+        takes = self.takes(key, fingerprint, accepts)
+        if not takes:
             return None
-        if self.fresh and key not in self.renewed:
-            return None
-        if not accepts(entry["answer"]):
-            return None
-        self.served.add(key)
-        return entry["answer"]
+        chosen = majority(takes, vote)
+        self.served[key] = chosen
+        return chosen["answer"]
+
+    def wants(
+        self,
+        key: str,
+        fingerprint: str,
+        accepts: Callable[[Dict[str, Any]], bool] = lambda answer: True,
+    ) -> bool:
+        """Short of its takes: a recording asks the model about it again."""
+        return len(self.takes(key, fingerprint, accepts)) < self.wanted
 
     def record(
         self,
@@ -337,19 +442,29 @@ class Recordings:
         model: Optional[str],
         today: str,
     ) -> None:
-        self.entries[key] = {
-            "input": readable,
-            "prompt": fingerprint,
-            "answer": answer,
-            "model": model or "unknown",
-            "recorded": today,
-        }
+        """One more take of the item. Takes for another prompt, or any not
+        recorded in this run when ``fresh``, are replaced, not added to."""
+        take = {"answer": answer, "model": model or "unknown", "recorded": today}
+        entry = self.entries.get(key)
+        if (
+            not entry
+            or entry.get("prompt") != fingerprint
+            or (self.fresh and key not in self.renewed)
+        ):
+            entry = self.entries[key] = {"prompt": fingerprint, "takes": []}
+        entry["input"] = readable
+        entry["takes"].append(take)
         self.renewed.add(key)
-        self.served.add(key)
         self.changed = True
 
+    def start_pass(self) -> None:
+        """Forget what was asked and served: what the next pass through the
+        readers asks is what the scores, the models and pruning go by."""
+        self.asked.clear()
+        self.served.clear()
+
     def stale(self, fingerprint: str) -> int:
-        """Items asked for this run whose recording is for another prompt."""
+        """Items asked for this pass whose takes are for another prompt."""
         return sum(
             1
             for k in self.asked
@@ -357,15 +472,41 @@ class Recordings:
         )
 
     def models(self) -> Dict[str, int]:
-        """Which models gave the answers served this run."""
+        """Which models gave the answers served this pass."""
         counts = collections.Counter(
-            self.entries[k].get("model") or "unknown" for k in self.served
+            t.get("model") or "unknown" for t in self.served.values()
         )
         return dict(sorted(counts.items()))
 
+    def agreement(
+        self,
+        fingerprint: str,
+        accepts: Callable[[Dict[str, Any]], bool],
+        vote: Callable[[Dict[str, Any]], str],
+    ) -> Dict[str, int]:
+        """How the takes of the items asked this pass agree: all of them
+        (unanimous), more than half (majority), no reading in more than half
+        (split, the earliest served), or a single take to go on."""
+        out = dict.fromkeys(("unanimous", "majority", "split", "single"), 0)
+        for key in self.asked:
+            takes = self.takes(key, fingerprint, accepts)
+            if len(takes) == 1:
+                out["single"] += 1
+            elif takes:
+                top = max(
+                    collections.Counter(vote(t["answer"]) for t in takes).values()
+                )
+                if top == len(takes):
+                    out["unanimous"] += 1
+                elif 2 * top > len(takes):
+                    out["majority"] += 1
+                else:
+                    out["split"] += 1
+        return out
+
     def prune(self) -> int:
         """Drop recordings no labelled item asked for (a label removed, a
-        challenge no longer raised). Only after a run that asked for all."""
+        challenge no longer raised). Only after a pass that asked for all."""
         gone = [k for k in self.entries if k not in self.asked]
         for k in gone:
             del self.entries[k]
@@ -416,11 +557,14 @@ def replaying(
 ) -> Callable[[str], str]:
     """A transport answering from ``store``; see the module docstring.
 
-    Answers are looked up exactly as the readers look them up — by the
-    batch's own ids, the last answer for an id winning — so an answer the
-    reader would have dropped is not recorded either. When ``live`` fails,
-    the rest of the run is answered from the recordings alone and the
-    failure is kept in ``stats["live_failed"]``.
+    With ``live``, a batch holding an item short of its takes goes to the
+    model first, and one more take of each such item is recorded. Answers
+    are read exactly as the readers read them, by the batch's own ids, the
+    last answer for an id winning, so an answer the reader would have
+    dropped is not recorded either. Then every item is answered with the
+    reading most of its takes give. When ``live`` fails, the rest of the run
+    is answered from the recordings alone and the failure is kept in
+    ``stats["live_failed"]``.
     """
     from analysis.reader_runtime import ReaderUnavailable
 
@@ -440,14 +584,12 @@ def replaying(
     def call(prompt: str) -> str:
         fingerprint = codec.fingerprint()
         items = codec.items(prompt)
-        answers: Dict[int, Dict[str, Any]] = {}
-        for i, key, _ in items:
-            found = store.answer(key, fingerprint, codec.accepts)
-            if found is not None:
-                answers[i] = found
-        stats["replayed"] += len(answers)
-        missing = [(i, key, readable) for i, key, readable in items if i not in answers]
-        if missing and live is not None and not stats["live_failed"]:
+        short = [
+            (i, key, readable)
+            for i, key, readable in items
+            if store.wants(key, fingerprint, codec.accepts)
+        ]
+        if short and live is not None and not stats["live_failed"]:
             stats["live_calls"] += 1
             if pacer is not None:
                 pacer.wait()
@@ -467,7 +609,7 @@ def replaying(
                     else {}
                 )
                 model = getattr(live, "model", None)
-                for i, key, readable in missing:
+                for i, key, readable in short:
                     raw = by_id.get(i)
                     if raw is None:
                         continue
@@ -476,9 +618,14 @@ def replaying(
                         stats["refused"] += 1
                         continue
                     store.record(key, fingerprint, readable, answer, model, today)
-                    answers[i] = answer
                     stats["recorded"] += 1
-        stats["missing"] += sum(1 for i, _, _ in items if i not in answers)
+        answers: Dict[int, Dict[str, Any]] = {}
+        for i, key, _ in items:
+            found = store.answer(key, fingerprint, codec.accepts, codec.vote)
+            if found is not None:
+                answers[i] = found
+        stats["replayed"] += len(answers)
+        stats["missing"] += len(items) - len(answers)
         return json.dumps(
             [{**answers[i], "id": i} for i, _, _ in items if i in answers],
             ensure_ascii=False,

@@ -2,14 +2,15 @@
 
     python scripts/reader_eval.py                     # replay and print the scores
     python scripts/reader_eval.py --update            # ... and rewrite eval/scorecards/
-    python scripts/reader_eval.py --record --update   # first record what has no answer
+    python scripts/reader_eval.py --record --update   # first record the takes items lack
                                                       # for today's prompts (GEMINI_API_KEY)
     python scripts/reader_eval.py --compare origin/main [--summary out.md]
 
 scripts/eval_events.py scores the AI readers on whatever the caches hold:
 answers from whichever model was up on the day each headline was first read,
 and only where a key was set. This scores them on recorded answers
-(analysis/reader_recordings.py) instead, so:
+(analysis/reader_recordings.py) instead, the reading most of each item's
+three takes give, so:
 
   * CI scores every reader without a key, on the same answers each run. A
     change to grounding, reconcile or the rules is measured on those answers
@@ -35,6 +36,7 @@ import argparse
 import contextlib
 import json
 import os
+import random
 import subprocess
 import sys
 import tempfile
@@ -141,6 +143,23 @@ def live_transports() -> Dict[str, Any]:
     return {name: t for name, (t, _) in chains.items()}
 
 
+def _in_pass_order(items: List[Any], n: int, group=None) -> List[Any]:
+    """The items as pass ``n`` reads them: the labels' own order first, then
+    a shuffle of it, the same for every run, so each take of an item is read
+    among different neighbours, as production reads a headline among
+    different ones each day. ``group`` keeps together the items a prompt
+    writes under one heading: a holding's pairs, under its thesis."""
+    if n == 0:
+        return list(items)
+    rng = random.Random(n)
+    groups: Dict[Any, List[Any]] = {}
+    for i, item in enumerate(items):
+        groups.setdefault(group(item) if group else i, []).append(item)
+    order = list(groups)
+    rng.shuffle(order)
+    return [item for g in order for item in groups[g]]
+
+
 def run(
     record: bool = False,
     fresh: bool = False,
@@ -149,9 +168,16 @@ def run(
     recordings_dir: Optional[str] = None,
 ) -> Tuple[Dict[str, Dict[str, Any]], Dict[str, Dict[str, Any]]]:
     """Every labelled item through the readers, answered from the
-    recordings (and, with ``record``, live where they have no answer), then
-    scored. Returns ``(scorecards, report)``; the report says, per prompt,
-    how many answers were replayed, recorded, stale or missing.
+    recordings, then scored. Returns ``(scorecards, report)``; the report
+    says, per prompt, how many items were answered, how many takes were
+    recorded live, how many items have no answer or one for an older prompt,
+    and how the takes of each item agree.
+
+    With ``record``, passes through the readers first record the takes the
+    recordings lack, one more of each short item a pass and TAKES passes at
+    most: the event and thesis readers' first, then the second reading's,
+    asked about the challenges the thesis reader's majority readings raise.
+    One more pass, from the recordings alone, makes the scores.
 
     The readers run as in production, but on scratch caches: a cached
     reading would bypass the recordings, and the real caches are left
@@ -160,7 +186,7 @@ def run(
     import datetime
 
     from analysis import llm_reader, thesis_check
-    from analysis.reader_recordings import CHECK, CODECS, EVENTS, THESIS
+    from analysis.reader_recordings import CHECK, CODECS, EVENTS, THESIS, TAKES
     from analysis.reader_recordings import RECORDINGS_DIR, Pacer, replaying, stores
     from scripts.eval_events import label_pairs, load_holdings
 
@@ -171,48 +197,73 @@ def run(
     if record and live is None:
         live = live_transports()
     live = live or {}
-    stats: Dict[str, Dict[str, Any]] = {c.name: {} for c in CODECS}
     pacer = Pacer(LIVE_SPACING_S)
-
-    def transport(codec):
-        return replaying(
-            codec,
-            store[codec.name],
-            live.get(codec.name),
-            today,
-            stats[codec.name],
-            pacer,
-        )
-
     headlines = list(
         dict.fromkeys(r["headline"] for r in labels["event"] + labels["policy"])
     )
     pairs = label_pairs(labels["thesis"], holdings)
-    with tempfile.TemporaryDirectory() as tmp, _without_pauses():
-        events, _ = llm_reader.read_headlines(
-            headlines,
-            transport=transport(EVENTS),
-            cache_path=os.path.join(tmp, "llm_cache.json"),
-            max_new=len(headlines),
-            today=today,
-        )
-        theses, _ = thesis_check.read_pairs(
-            pairs,
-            transport=transport(THESIS),
-            cache_path=os.path.join(tmp, "thesis_cache.json"),
-            max_new=len(pairs),
-            today=today,
-            check_transport=transport(CHECK),
-            # Every challenge, not a run's worth: a scratch cache starts each
-            # run from nothing, so a cap would ask for the same first ones
-            # every time and the rest would never be recorded.
-            max_checks=len(pairs),
-        )
+
+    def read(n, stats, asking=()):
+        """Pass ``n``: every item through the readers, with the models of
+        the prompts in ``asking`` recording what is short."""
+
+        def transport(codec):
+            return replaying(
+                codec,
+                store[codec.name],
+                live.get(codec.name) if codec.name in asking else None,
+                today,
+                stats[codec.name],
+                pacer,
+            )
+
+        with tempfile.TemporaryDirectory() as tmp, _without_pauses():
+            events, _ = llm_reader.read_headlines(
+                _in_pass_order(headlines, n),
+                transport=transport(EVENTS),
+                cache_path=os.path.join(tmp, "llm_cache.json"),
+                max_new=len(headlines),
+                today=today,
+            )
+            theses, _ = thesis_check.read_pairs(
+                _in_pass_order(pairs, n, group=lambda p: p["ticker"]),
+                transport=transport(THESIS),
+                cache_path=os.path.join(tmp, "thesis_cache.json"),
+                max_new=len(pairs),
+                today=today,
+                check_transport=transport(CHECK),
+                # Every challenge, not a run's worth: a scratch cache starts
+                # each pass from nothing, so a cap would ask for the same
+                # first ones every time and the rest would never be recorded.
+                max_checks=len(pairs),
+            )
+        return events, theses
+
+    # Kept across the passes: a model that fails ends the recording there.
+    recording: Dict[str, Dict[str, Any]] = {c.name: {} for c in CODECS}
+    if record:
+        for asking in (("events", "thesis"), ("check",)):
+            for n in range(TAKES):
+                before = sum(recording[a].get("live_calls", 0) for a in asking)
+                read(n, recording, asking)
+                if sum(recording[a].get("live_calls", 0) for a in asking) == before:
+                    break
+    for s in store.values():
+        s.start_pass()
+    stats: Dict[str, Dict[str, Any]] = {c.name: {} for c in CODECS}
+    events, theses = read(0, stats)
     for codec in CODECS:
         s = store[codec.name]
-        stats[codec.name]["stale"] = s.stale(codec.fingerprint())
+        report = stats[codec.name]
+        for k in ("recorded", "live_calls", "unparseable", "refused", "live_failed"):
+            if k in recording[codec.name]:
+                report[k] = recording[codec.name][k]
+        report["stale"] = s.stale(codec.fingerprint())
+        report["agreement"] = s.agreement(
+            codec.fingerprint(), codec.accepts, codec.vote
+        )
         if record:
-            stats[codec.name]["pruned"] = s.prune()
+            report["pruned"] = s.prune()
             if s.changed:
                 s.save()
     cards = scorecards(labels, holdings, events, theses, store)
@@ -482,18 +533,24 @@ def _metric_line(name: str, metrics: Dict[str, Any]) -> str:
     )
 
 
+def _answers(s: Dict[str, Any]) -> str:
+    """One prompt's answers this run, in a line."""
+    text = (
+        f"{s.get('replayed', 0)} answered, {s.get('recorded', 0)} take(s) recorded "
+        f"live, {s.get('missing', 0)} without an answer ({s.get('stale', 0)} "
+        "recorded for an older prompt)"
+    )
+    agree = {k: n for k, n in (s.get("agreement") or {}).items() if n}
+    if agree:
+        text += "; takes: " + ", ".join(f"{n} {k}" for k, n in agree.items())
+    if s.get("live_failed"):
+        text += f"; live reader failed: {s['live_failed']}"
+    return text
+
+
 def print_scores(cards: Dict[str, Any], report: Dict[str, Any]) -> None:
     for codec, s in report.items():
-        print(
-            f"{codec:7}{s.get('replayed', 0)} replayed, {s.get('recorded', 0)} "
-            f"recorded, {s.get('missing', 0)} without an answer "
-            f"({s.get('stale', 0)} recorded for an older prompt)"
-            + (
-                f"; live reader failed: {s['live_failed']}"
-                if s.get("live_failed")
-                else ""
-            )
-        )
+        print(f"{codec:7}{_answers(s)}")
     print()
     for name in READERS:
         for split in SPLITS:
@@ -554,16 +611,7 @@ def summary(
     if ref:
         lines += [f"Compared with `{ref}`.", ""]
     for codec, s in report.items():
-        lines.append(
-            f"- **{codec}** answers: {s.get('replayed', 0)} replayed, "
-            f"{s.get('recorded', 0)} recorded live, {s.get('missing', 0)} without "
-            f"an answer ({s.get('stale', 0)} recorded for an older prompt)"
-            + (
-                f"; live reader failed: {s['live_failed']}"
-                if s.get("live_failed")
-                else ""
-            )
-        )
+        lines.append(f"- **{codec}**: {_answers(s)}")
     # Each reader's failures, not only the models still set aside at the end:
     # one that failed and later answered is no longer set aside.
     for reader, r in ((live or {}).get("readers") or {}).items():
@@ -656,11 +704,13 @@ def main(argv: Optional[List[str]] = None) -> int:
     parser.add_argument(
         "--record",
         action="store_true",
-        help="ask the models live for every item with no answer for the "
+        help="ask the models live for the takes each item lacks for the "
         "current prompt (needs GEMINI_API_KEY)",
     )
     parser.add_argument(
-        "--fresh", action="store_true", help="with --record, ask again for every item"
+        "--fresh",
+        action="store_true",
+        help="with --record, record every item's takes again",
     )
     parser.add_argument(
         "--update", action="store_true", help="rewrite eval/scorecards/"
