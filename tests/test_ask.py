@@ -510,7 +510,7 @@ def test_the_answers_log_says_which_models_failed_before_one_answered(
     da.answer_question(7, {"question": "Why?"})
     out = capsys.readouterr().out
     assert "AI readers: ask 1 call(s) in " in out
-    assert "by b ×1; set aside: a (busy)." in out
+    assert "by b ×1, failed: a ×1 (busy) | set aside: a." in out
 
 
 def test_the_news_found_is_listed_under_the_answer_as_itself():

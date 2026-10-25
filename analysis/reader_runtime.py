@@ -418,18 +418,24 @@ def report() -> Dict[str, Any]:
 
 
 def summary() -> str:
-    """The report in a line, for the run log: each reader's calls and the
-    models that answered them, then the models set aside and why."""
+    """The report in a line, for the run log: each reader's calls, the models
+    that answered them and every one that failed them, with why, then the
+    models still set aside. A model that failed and later answered is no
+    longer set aside, and its failure is still told here."""
     run = report()
     parts = []
     for name, r in run["readers"].items():
         if not r["calls"]:
             continue
         served = ", ".join(f"{m} ×{n}" for m, n in r["answered"].items()) or "none"
-        parts.append(f"{name} {r['calls']} call(s) in {r['seconds']}s by {served}")
-    text = "; ".join(parts) or "no reader called a model"
+        part = f"{name} {r['calls']} call(s) in {r['seconds']}s by {served}"
+        if r["failed"]:
+            part += ", failed: " + ", ".join(
+                f"{m} ×{f['count']} ({f['reason'][:120]})"
+                for m, f in r["failed"].items()
+            )
+        parts.append(part)
+    text = " | ".join(parts) or "no reader called a model"
     if run["set_aside"]:
-        text += "; set aside: " + "; ".join(
-            f"{m} ({why[:120]})" for m, why in run["set_aside"].items()
-        )
+        text += " | set aside: " + ", ".join(run["set_aside"])
     return text

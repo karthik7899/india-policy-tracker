@@ -564,14 +564,21 @@ def summary(
                 else ""
             )
         )
+    # Each reader's failures, not only the models still set aside at the end:
+    # one that failed and later answered is no longer set aside.
     for reader, r in ((live or {}).get("readers") or {}).items():
         served = ", ".join(f"{m} ×{n}" for m, n in r["answered"].items()) or "none"
         lines.append(
             f"- live **{reader}**: {r['calls']} call(s) in {r['seconds']}s, "
             f"answered by {served}"
         )
-    for model, why in ((live or {}).get("set_aside") or {}).items():
-        lines.append(f"  - set aside: `{model}` ({why[:160]})")
+        for model, f in r["failed"].items():
+            lines.append(f"  - failed: `{model}` ×{f['count']} ({f['reason'][:160]})")
+    set_aside = (live or {}).get("set_aside") or {}
+    if set_aside:
+        lines.append(
+            "- set aside at the end: " + ", ".join(f"`{m}`" for m in set_aside)
+        )
     lines += ["", "| Reader | Holdout | Dev |", "|---|---|---|"]
     for name in READERS:
         entry = (comparison or {}).get("readers", {}).get(name, {})

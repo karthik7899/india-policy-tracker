@@ -470,8 +470,27 @@ def test_the_report_gives_each_readers_calls_models_and_failures():
 
     text = rt.summary()
     assert text.startswith("events 2 call(s) in ")
-    assert "by b ×2" in text and text.endswith("set aside: a (busy)")
+    assert text.endswith(" by b ×2, failed: a ×1 (busy) | set aside: a")
     assert "check" not in text  # called no model
+
+
+def test_the_log_keeps_a_failure_the_model_later_recovered_from():
+    """Ask plans its search, then answers: a model can fail the first call
+    and answer the second. It is no longer set aside, and its failure must
+    still be in the log."""
+    ask = rt.chained_transport(
+        [
+            ("a", _named("a", [_busy("a busy"), "answer"], [])),
+            ("b", _named("b", ["plan", _busy("b busy")], [])),
+        ],
+        reader="ask",
+    )
+    assert ask("plan") == "plan"
+    assert ask("answer") == "answer"
+    assert rt.RUN.failed == {"b": "b busy"}
+    text = rt.summary()
+    assert "by a ×1, b ×1, failed: a ×1 (a busy), b ×1 (b busy)" in text
+    assert text.endswith(" | set aside: b")
 
 
 def test_a_reader_that_did_not_run_has_no_line():

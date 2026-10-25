@@ -633,16 +633,24 @@ def test_a_recording_says_which_models_answered_and_which_were_set_aside():
                 "seconds": 50.2,
                 "answered": {"gemini-flash-lite-latest": 2},
                 "failed": {"gemini-3.8-flash": {"count": 1, "reason": "busy"}},
-            }
+            },
+            # Failed, then answered: no longer set aside, still a failure.
+            "thesis": {
+                "calls": 2,
+                "seconds": 9.0,
+                "answered": {"gemini-2.5-flash": 1, "gemini-3.8-flash": 1},
+                "failed": {"gemini-2.5-flash": {"count": 1, "reason": "busy"}},
+            },
         },
-        "set_aside": {"gemini-3.8-flash": "Gemini unavailable (503)"},
+        "set_aside": {"gemini-3.8-flash": "busy"},
     }
     text = reader_eval.summary(None, cards, report, live=live)
     assert (
         "- live **events**: 2 call(s) in 50.2s, answered by "
-        "gemini-flash-lite-latest ×2" in text
+        "gemini-flash-lite-latest ×2\n  - failed: `gemini-3.8-flash` ×1 (busy)" in text
     )
-    assert "  - set aside: `gemini-3.8-flash` (Gemini unavailable (503))" in text
+    assert "  - failed: `gemini-2.5-flash` ×1 (busy)" in text
+    assert "- set aside at the end: `gemini-3.8-flash`" in text
     assert "live **" not in reader_eval.summary(None, cards, report)
 
 
