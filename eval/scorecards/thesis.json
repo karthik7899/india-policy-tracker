@@ -13,7 +13,7 @@
    "real_rows": 81,
    "rows": 103,
    "support_precision": 1.0,
-   "support_recall": 0.596
+   "support_recall": 0.579
   },
   "dev": {
    "challenge_precision": 1.0,
@@ -27,7 +27,7 @@
    "real_rows": 45,
    "rows": 63,
    "support_precision": 1.0,
-   "support_recall": 0.567
+   "support_recall": 0.533
   },
   "holdout": {
    "challenge_precision": 1.0,
@@ -209,8 +209,8 @@
    "want": "unrelated"
   },
   "CAMPUS | Campus Activewear unveils its first reimagined store in New Delhi": {
-   "got": "supports",
-   "outcome": "right",
+   "got": "unrelated",
+   "outcome": "wrong",
    "split": "dev",
    "want": "supports or supports"
   },

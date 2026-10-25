@@ -230,10 +230,54 @@ def test_the_reading_most_takes_give_is_served(store):
     # No reading in most takes: the earliest is served.
     other = {"event_type": "none", "parties": [], "gist": ""}
     assert takes(win, tie, other)["event_type"] == "order_win"
-    # Free text, list order, case and spacing do not split a reading; the
-    # earliest take of the majority is the one served.
+    # Takes the reader makes the same of are one reading, worded however
+    # they are; the earliest of the majority is the one served.
     same = {**tie, "parties": ["YANARA", " Suzlon"], "gist": "worded otherwise"}
     assert takes(win, same, tie) == {"id": 0, **same}
+
+
+def test_a_take_votes_with_what_the_reader_makes_of_it(store, tmp_path):
+    """Grounding drops a sector effect whose reason is not the headline's
+    and a stance whose quotes are not verbatim, so a vote on the raw answers
+    would count readings the reader never makes."""
+    headline = "Government approves PLI scheme for electronics manufacturing"
+    fp = rr.EVENTS.fingerprint()
+    policy = {
+        "event_type": "none",
+        "parties": [],
+        "policy_measure": "incentive_scheme",
+        "policy_status": "approved",
+    }
+
+    def effect(because):
+        return [
+            {
+                "sector": "manufacturing_electronics",
+                "direction": "tailwind",
+                "because": because,
+            }
+        ]
+
+    unquoted = {**policy, "sector_effects": effect("cheaper to build phones here")}
+    bare = {**policy, "policy_status": "proposed", "sector_effects": []}
+    quoted = {**policy, "sector_effects": effect("PLI scheme for electronics")}
+    for take in (quoted, unquoted, bare):
+        store.record(_key(headline), fp, headline, take, "m", "x")
+    (served,) = json.loads(rr.replaying(rr.EVENTS, store)(_events(headline)))
+    assert served == {"id": 0, **unquoted}
+    assert store.agreement()["majority"] == 1
+
+    theses = rr.Recordings(str(tmp_path / "thesis.json"))
+    prompt = thesis_check._prompt([(0, PAIR)])
+    ((_, key, readable),) = rr.THESIS.items(prompt)
+    said = {"stance": "contradicts", "about": True, "group": False}
+    verbatim = {**said, "claim": "Debt-free", "because": "Suzlon bags 306 MW"}
+    not_in_thesis = {**said, "claim": "Market leader", "because": "Suzlon bags"}
+    unrelated = {**said, "stance": "unrelated", "claim": "", "because": ""}
+    for take in (verbatim, not_in_thesis, unrelated):
+        theses.record(key, rr.THESIS.fingerprint(), readable, take, "m", "x")
+    (served,) = json.loads(rr.replaying(rr.THESIS, theses)(prompt))
+    assert served == {"id": 0, **not_in_thesis}
 
 
 def test_the_agreement_of_the_takes_is_counted(store):
@@ -248,7 +292,7 @@ def test_the_agreement_of_the_takes_is_counted(store):
         for t in types:
             store.record(_key(headline), fp, headline, {"event_type": t}, "m", "x")
     rr.replaying(rr.EVENTS, store)(_events(*rows))
-    assert store.agreement(fp, rr.EVENTS.accepts, rr.EVENTS.vote) == {
+    assert store.agreement() == {
         "unanimous": 1,
         "majority": 1,
         "split": 1,

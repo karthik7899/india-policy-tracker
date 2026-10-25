@@ -17,8 +17,8 @@ same prompt and model, 6% of the headlines came back with a different event
 type, and over four recordings the policy reader's holdout effect precision
 ranged from 0.57 to 1.0. A one-take scorecard could not tell a prompt change
 from a re-roll; a reading most takes agree on moves far less often. Takes
-are one reading when they differ only in free text (Codec.free_text), the
-order of a list, case or spacing.
+are one reading when the reader makes the same of them, as far as its
+scores read it (Codec.reading).
 
 The seam is the transport, the function every reader already calls with a
 prompt and gets JSON text back from (analysis/reader_runtime.Transport). A
@@ -110,9 +110,8 @@ class Codec:
     refuses is neither recorded nor served, so it is asked again rather than
     kept as an answer the reader never uses.
 
-    ``free_text`` names the answer's fields written in the model's own words
-    (a gist, a reason), which no score reads and no two takes share: two
-    takes that differ only there are the same reading.
+    ``reading`` is what the reader makes of an answer to an item (its
+    identity), as far as its scores read it: the vote a take casts.
     """
 
     def __init__(
@@ -123,7 +122,7 @@ class Codec:
         head: Callable[[], str],
         parse: Callable[[str], List[Item]],
         accepts: Callable[[Dict[str, Any]], bool] = lambda answer: True,
-        free_text: Tuple[str, ...] = (),
+        reading: Callable[[Dict[str, Any], str], Any] = lambda answer, item: answer,
     ):
         self.name = name
         self._template = template
@@ -131,12 +130,11 @@ class Codec:
         self._head = head
         self._parse = parse
         self.accepts = accepts
-        self.free_text = free_text
+        self._reading = reading
 
-    def vote(self, answer: Dict[str, Any]) -> str:
-        """The reading an answer gives, as a vote: without its free text, its
-        lists in one order, its words in one case and spacing."""
-        return json.dumps(_reading(answer, self.free_text), sort_keys=True)
+    def vote(self, answer: Dict[str, Any], identity: str) -> str:
+        """The reading a take of the item gives, as a vote."""
+        return json.dumps(self._reading(answer, identity), sort_keys=True)
 
     def fingerprint(self) -> str:
         """The prompt around one placeholder item, and the response schema.
@@ -146,11 +144,15 @@ class Codec:
 
     def items(self, prompt: str) -> List[Tuple[int, str, str]]:
         """``(id, key, readable)`` for each item in the prompt."""
+        return [(i, key, readable) for i, key, readable, _ in self.parsed(prompt)]
+
+    def parsed(self, prompt: str) -> List[Tuple[int, str, str, str]]:
+        """``(id, key, readable, identity)`` for each item in the prompt."""
         head = self._head()
         if not prompt.startswith(head):
             raise PromptNotUnderstood(f"{self.name}: the prompt's instructions differ")
         return [
-            (i, item_key(identity), readable)
+            (i, item_key(identity), readable, identity)
             for i, identity, readable in self._parse(prompt[len(head) :])
         ]
 
@@ -159,28 +161,16 @@ def item_key(identity: str) -> str:
     return hashlib.sha1(identity.encode("utf-8")).hexdigest()[:16]
 
 
-def _reading(value: Any, free_text: Tuple[str, ...]) -> Any:
-    if isinstance(value, dict):
-        return {
-            k: _reading(v, free_text) for k, v in value.items() if k not in free_text
-        }
-    if isinstance(value, list):
-        return sorted(
-            (_reading(v, free_text) for v in value),
-            key=lambda v: json.dumps(v, sort_keys=True),
-        )
-    if isinstance(value, str):
-        return " ".join(value.split()).casefold()
-    return value
-
-
-def majority(takes: List[Dict[str, Any]], vote: Callable[[Dict[str, Any]], str]):
-    """The take whose reading most takes give; on a tie, the earliest of
-    them, so a recording replays the same way every time."""
+def majority(
+    takes: List[Dict[str, Any]], vote: Callable[[Dict[str, Any]], str]
+) -> Tuple[Dict[str, Any], int]:
+    """``(take, votes)``: the take whose reading most takes give, and how
+    many give it. On a tie, the earliest of them, so a recording replays the
+    same way every time."""
     votes = [vote(t["answer"]) for t in takes]
     counts = collections.Counter(votes)
     top = max(counts.values())
-    return next(t for t, v in zip(takes, votes) if counts[v] == top)
+    return next(t for t, v in zip(takes, votes) if counts[v] == top), top
 
 
 _EVENT_LINE = re.compile(r"(\d+): (.*)\Z", re.DOTALL)
@@ -321,13 +311,51 @@ def _check_accepts(answer: Dict[str, Any]) -> bool:
     return answer.get("verdict") in thesis_check.VERDICTS
 
 
+# What each reader makes of a take, as far as its scores read it. Taken after
+# the reader's own grounding, never from the raw answer: grounding drops a
+# party the headline does not name, a sector effect whose reason does not
+# quote it, and a stance whose quotes are not verbatim, so two takes worded
+# alike can read differently and two worded differently alike. Fields no
+# score reads (a gist, certainty, the policy's stage) are left out: the
+# first recording of three takes found the policy's stage differing in 154
+# of 225 headlines, nearly all of them not policy at all.
+
+
+def _event_reading(answer: Dict[str, Any], headline: str) -> Dict[str, Any]:
+    from analysis import llm_reader
+
+    r = llm_reader.ground(headline, answer)
+    return {
+        "event_type": r["event_type"],
+        "parties": sorted(" ".join(p.split()).casefold() for p in r["parties"]),
+        "policy": r["policy_measure"] != "none",
+        "effects": sorted([e["sector"], e["direction"]] for e in r["sector_effects"]),
+    }
+
+
+def _thesis_reading(answer: Dict[str, Any], identity: str) -> Dict[str, Any]:
+    from analysis import thesis_check
+
+    _, thesis, headline = identity.split("\n", 2)
+    r = thesis_check.ground(headline, thesis[len("THESIS: ") :], answer)
+    return {
+        "stance": r["stance"],
+        "about": r.get("about") is not False,
+        "group": r.get("group") is True,
+    }
+
+
+def _check_reading(answer: Dict[str, Any], identity: str) -> Dict[str, Any]:
+    return {"verdict": answer.get("verdict")}
+
+
 EVENTS = Codec(
     "events",
     _events_template,
     _events_schema,
     _events_head,
     _parse_events,
-    free_text=("gist", "because"),
+    reading=_event_reading,
 )
 THESIS = Codec(
     "thesis",
@@ -335,7 +363,7 @@ THESIS = Codec(
     _thesis_schema,
     _thesis_head,
     _parse_thesis,
-    free_text=("claim", "because"),
+    reading=_thesis_reading,
 )
 CHECK = Codec(
     "check",
@@ -344,7 +372,7 @@ CHECK = Codec(
     _check_head,
     _parse_check,
     _check_accepts,
-    free_text=("because",),
+    reading=_check_reading,
 )
 CODECS = (EVENTS, THESIS, CHECK)
 
@@ -370,6 +398,7 @@ class Recordings:
         self.entries: Dict[str, Dict[str, Any]] = self._load()
         self.asked: Set[str] = set()
         self.served: Dict[str, Dict[str, Any]] = {}
+        self.agreed: Dict[str, str] = {}
         self.renewed: Set[str] = set()
         self.changed = False
 
@@ -420,8 +449,17 @@ class Recordings:
         takes = self.takes(key, fingerprint, accepts)
         if not takes:
             return None
-        chosen = majority(takes, vote)
+        chosen, votes = majority(takes, vote)
         self.served[key] = chosen
+        self.agreed[key] = (
+            "single"
+            if len(takes) == 1
+            else (
+                "unanimous"
+                if votes == len(takes)
+                else "majority" if 2 * votes > len(takes) else "split"
+            )
+        )
         return chosen["answer"]
 
     def wants(
@@ -462,6 +500,7 @@ class Recordings:
         readers asks is what the scores, the models and pruning go by."""
         self.asked.clear()
         self.served.clear()
+        self.agreed.clear()
 
     def stale(self, fingerprint: str) -> int:
         """Items asked for this pass whose takes are for another prompt."""
@@ -478,30 +517,13 @@ class Recordings:
         )
         return dict(sorted(counts.items()))
 
-    def agreement(
-        self,
-        fingerprint: str,
-        accepts: Callable[[Dict[str, Any]], bool],
-        vote: Callable[[Dict[str, Any]], str],
-    ) -> Dict[str, int]:
-        """How the takes of the items asked this pass agree: all of them
+    def agreement(self) -> Dict[str, int]:
+        """How the takes of the items answered this pass agree: all of them
         (unanimous), more than half (majority), no reading in more than half
         (split, the earliest served), or a single take to go on."""
         out = dict.fromkeys(("unanimous", "majority", "split", "single"), 0)
-        for key in self.asked:
-            takes = self.takes(key, fingerprint, accepts)
-            if len(takes) == 1:
-                out["single"] += 1
-            elif takes:
-                top = max(
-                    collections.Counter(vote(t["answer"]) for t in takes).values()
-                )
-                if top == len(takes):
-                    out["unanimous"] += 1
-                elif 2 * top > len(takes):
-                    out["majority"] += 1
-                else:
-                    out["split"] += 1
+        for kind in self.agreed.values():
+            out[kind] += 1
         return out
 
     def prune(self) -> int:
@@ -583,7 +605,8 @@ def replaying(
 
     def call(prompt: str) -> str:
         fingerprint = codec.fingerprint()
-        items = codec.items(prompt)
+        parsed = codec.parsed(prompt)
+        items = [(i, key, readable) for i, key, readable, _ in parsed]
         short = [
             (i, key, readable)
             for i, key, readable in items
@@ -620,8 +643,13 @@ def replaying(
                     store.record(key, fingerprint, readable, answer, model, today)
                     stats["recorded"] += 1
         answers: Dict[int, Dict[str, Any]] = {}
-        for i, key, _ in items:
-            found = store.answer(key, fingerprint, codec.accepts, codec.vote)
+        for i, key, _, identity in parsed:
+            found = store.answer(
+                key,
+                fingerprint,
+                codec.accepts,
+                lambda answer, identity=identity: codec.vote(answer, identity),
+            )
             if found is not None:
                 answers[i] = found
         stats["replayed"] += len(answers)

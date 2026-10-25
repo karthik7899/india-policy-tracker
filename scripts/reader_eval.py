@@ -259,9 +259,7 @@ def run(
             if k in recording[codec.name]:
                 report[k] = recording[codec.name][k]
         report["stale"] = s.stale(codec.fingerprint())
-        report["agreement"] = s.agreement(
-            codec.fingerprint(), codec.accepts, codec.vote
-        )
+        report["agreement"] = s.agreement()
         if record:
             report["pruned"] = s.prune()
             if s.changed:
