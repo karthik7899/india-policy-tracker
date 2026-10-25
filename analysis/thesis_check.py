@@ -466,8 +466,11 @@ def thesis_pairs(
 def _prompt(batch: List[Tuple[int, Dict[str, Any]]]) -> str:
     lines, current = [], None
     for i, pair in batch:
-        if pair["ticker"] != current:
-            current = pair["ticker"]
+        # A new heading for a new holding, or for the same holding's other
+        # thesis (labels written before it changed), so that no headline is
+        # read against a thesis that is not its own.
+        if (pair["ticker"], pair["thesis"]) != current:
+            current = pair["ticker"], pair["thesis"]
             lines.append(
                 f"\nHOLDING: {pair['name']} ({pair['ticker']}, listed in India)"
             )

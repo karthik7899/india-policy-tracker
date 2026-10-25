@@ -226,7 +226,7 @@ def run(
                 today=today,
             )
             theses, _ = thesis_check.read_pairs(
-                _in_pass_order(pairs, n, group=lambda p: p["ticker"]),
+                _in_pass_order(pairs, n, group=lambda p: (p["ticker"], p["thesis"])),
                 transport=transport(THESIS),
                 cache_path=os.path.join(tmp, "thesis_cache.json"),
                 max_new=len(pairs),

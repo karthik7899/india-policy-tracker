@@ -89,6 +89,16 @@ def test_each_codec_reads_back_its_reader_s_own_prompt():
     ]
 
 
+def test_a_holding_s_other_thesis_gets_its_own_heading():
+    """Labels written before a thesis changed hold the old text: each pair
+    is read, and known, by its own thesis, whatever pair comes before it."""
+    old = dict(PAIR, thesis="Market leader.", headline=B)
+    prompt = thesis_check._prompt([(0, PAIR), (1, old)])
+    assert prompt.count("HOLDING: ") == 2
+    alone = rr.THESIS.items(thesis_check._prompt([(0, old)]))[0][1]
+    assert rr.THESIS.items(prompt)[1][1] == alone
+
+
 def test_an_item_is_known_by_everything_the_model_saw_of_it():
     def key(pair):
         return rr.THESIS.items(thesis_check._prompt([(0, pair)]))[0][1]
