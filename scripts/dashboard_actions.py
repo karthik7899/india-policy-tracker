@@ -582,8 +582,13 @@ def format_answer(
 def _log_answer(
     started: float, text: str, footer: str, news: Optional[Dict[str, Any]]
 ) -> None:
-    """What the run did, for its log: the comment says less about the search."""
+    """What the run did, for its log: the comment says less about the search,
+    and names only the model that answered, not the ones that failed first
+    (analysis/reader_runtime.py)."""
+    from analysis import reader_runtime
+
     print(f"Answered in {time.monotonic() - started:.0f}s: {footer or text}")
+    print(f"AI readers: {reader_runtime.summary()}.")
     if not news:
         print("News: no search.")
         return

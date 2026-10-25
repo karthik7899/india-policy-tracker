@@ -374,7 +374,9 @@ def default_transport(
     chain = list(dict.fromkeys(configured[:1] + discovered + configured[1:]))
     chain = [m for m in chain if not any(x in m for x in NOT_FOR_TEXT + exclude)]
     if not chain:
-        return None, "no model left after excluding " + ", ".join(exclude)
+        return None, "no model left after excluding " + ", ".join(
+            exclude + NOT_FOR_TEXT
+        )
     transport = chained_transport(
         [(m, gemini_transport(key, m, schema, text)) for m in chain], reader
     )

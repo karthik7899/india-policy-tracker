@@ -75,13 +75,13 @@ export function channelRows(briefing) {
   });
 }
 
-// [report key, label] for the readers in the run's report
-// (analysis/reader_runtime.py), in the order a run calls them.
+// [report key, label] for the daily run's readers, in the order it calls
+// them (analysis/reader_runtime.py). Ask answers in a workflow of its own
+// (scripts/dashboard_actions.py), and its report is in that workflow's log.
 const READERS = [
   ["events", "Event reader"],
   ["thesis", "Thesis check"],
   ["check", "Second reading"],
-  ["ask", "Ask"],
 ];
 
 /**
@@ -214,10 +214,11 @@ export async function render(container, { payload, route }) {
     ),
     panel(
       "AI readers",
-      "Which model answered each reader this run, and which failed and why. " +
-        "A model that fails in its own right (busy, retired, out of quota) is " +
-        "set aside: every later reader in the run tries it last, so a busy " +
-        "model costs the run its wait once rather than once per reader.",
+      "Which model answered each reader in the daily run, and which failed and " +
+        "why. A model that fails in its own right (busy, retired, out of quota) " +
+        "is set aside: every later reader in the run tries it last, so a busy " +
+        "model costs the run its wait once rather than once per reader. Ask " +
+        "answers in its own workflow, whose log gives the same account.",
       dataTable(
         readerRows(b),
         [

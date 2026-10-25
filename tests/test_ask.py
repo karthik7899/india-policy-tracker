@@ -487,6 +487,32 @@ def test_a_question_is_answered_on_the_issue_and_closed(monkeypatch):
     assert "about None" in comment
 
 
+def test_the_answers_log_says_which_models_failed_before_one_answered(
+    monkeypatch, capsys
+):
+    """The comment names the model that answered; Ask runs in a workflow of
+    its own, so its log is where the models that failed first are told."""
+    import dashboard_actions as da
+    from analysis import reader_runtime
+
+    monkeypatch.setattr(da, "_api", lambda method, path, **kw: None)
+
+    def busy(prompt):
+        raise ReaderUnavailable("busy", model_specific=True)
+
+    def answered(q, focus=None, **kw):
+        chain = reader_runtime.chained_transport(
+            [("a", busy), ("b", lambda p: "fine")], reader="ask"
+        )
+        return chain(q), "foot.", None
+
+    monkeypatch.setattr(ask, "answer", answered)
+    da.answer_question(7, {"question": "Why?"})
+    out = capsys.readouterr().out
+    assert "AI readers: ask 1 call(s) in " in out
+    assert "by b ×1; set aside: a (busy)." in out
+
+
 def test_the_news_found_is_listed_under_the_answer_as_itself():
     import dashboard_actions as da
 
