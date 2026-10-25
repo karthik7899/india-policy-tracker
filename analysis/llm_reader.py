@@ -532,6 +532,18 @@ def save_cache(
 # ---------------------------------------------------------------------------
 
 
+def _launched_in_partnership(lower: str) -> bool:
+    """A launch the rules read as a tie-up: "Coforge launches ... product in
+    partnership with Zscaler". The rules read a partnership before a launch
+    (EVENT_VOCABULARY order) and reconcile() corroborates only the same type.
+    The prompt says so too, but every recording of version 4 read both
+    labelled headlines of this shape as launches, so the rules' own reading
+    decides between the two."""
+    from analysis.event_engine import match_event_type
+
+    return match_event_type(lower)[0] == "tie_up"
+
+
 def ground(headline: str, raw: Dict[str, Any]) -> Dict[str, Any]:
     """Keep only what the headline itself supports.
 
@@ -544,6 +556,8 @@ def ground(headline: str, raw: Dict[str, Any]) -> Dict[str, Any]:
     etype = raw.get("event_type")
     if etype not in EVENT_TYPES:
         etype = "none"
+    if etype == "product_launch" and _launched_in_partnership(lower):
+        etype = "tie_up"
     parties = []
     for p in raw.get("parties") or []:
         p = str(p or "").strip()

@@ -4,10 +4,10 @@
   "all": {
    "actors_exact": 1.0,
    "labelled_events": 83,
-   "partners": 0.868,
+   "partners": 0.921,
    "pending": 0,
-   "precision": 0.922,
-   "recall": 0.855,
+   "precision": 0.948,
+   "recall": 0.88,
    "rows": 157
   },
   "dev": {
@@ -22,10 +22,10 @@
   "holdout": {
    "actors_exact": 1.0,
    "labelled_events": 30,
-   "partners": 0.789,
+   "partners": 0.895,
    "pending": 0,
-   "precision": 0.828,
-   "recall": 0.8,
+   "precision": 0.897,
+   "recall": 0.867,
    "rows": 55
   }
  },
@@ -250,8 +250,8 @@
    "want": "order_win COFORGE"
   },
   "Coforge launches AI-Powered zero trust security product in partnership with Zscaler": {
-   "got": "product_launch COFORGE",
-   "outcome": "wrong_type",
+   "got": "tie_up COFORGE with Zscaler",
+   "outcome": "found",
    "split": "holdout",
    "want": "tie_up COFORGE with Zscaler"
   },
@@ -316,8 +316,8 @@
    "want": "none"
   },
   "Gigabyte unveils its first Made-in-India gaming laptop, Gaming A16, in partnership with Dixon Technologies": {
-   "got": "product_launch DIXON",
-   "outcome": "wrong_type",
+   "got": "tie_up DIXON with Gigabyte",
+   "outcome": "found",
    "split": "holdout",
    "want": "tie_up DIXON with Gigabyte"
   },
