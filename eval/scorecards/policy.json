@@ -2,35 +2,37 @@
  "format": 1,
  "metrics": {
   "all": {
-   "effect_precision": null,
-   "effect_recall": null,
-   "pending": 76,
-   "policy": 0,
-   "precision": null,
-   "recall": null,
-   "rows": 0
+   "effect_precision": 0.85,
+   "effect_recall": 0.65,
+   "pending": 0,
+   "policy": 31,
+   "precision": 0.824,
+   "recall": 0.903,
+   "rows": 76
   },
   "dev": {
-   "effect_precision": null,
-   "effect_recall": null,
-   "pending": 52,
-   "policy": 0,
-   "precision": null,
-   "recall": null,
-   "rows": 0
+   "effect_precision": 1.0,
+   "effect_recall": 0.769,
+   "pending": 0,
+   "policy": 21,
+   "precision": 0.833,
+   "recall": 0.952,
+   "rows": 52
   },
   "holdout": {
-   "effect_precision": null,
-   "effect_recall": null,
-   "pending": 24,
-   "policy": 0,
-   "precision": null,
-   "recall": null,
-   "rows": 0
+   "effect_precision": 0.571,
+   "effect_recall": 0.429,
+   "pending": 0,
+   "policy": 10,
+   "precision": 0.8,
+   "recall": 0.8,
+   "rows": 24
   }
  },
  "models": {
-  "events": {}
+  "events": {
+   "gemini-flash-lite-latest": 225
+  }
  },
  "prompt": {
   "events": "b8609e790bd1"
@@ -38,458 +40,458 @@
  "reader": "policy",
  "rows": {
   "\"It is all about 'neeyat'\": Arvind Kejriwal lauds Punjab govt school library": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "not policy"
   },
   "AI Watch: AMD unveils Helios, Google develops new AI chip, UK names AI minister": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "holdout",
    "want": "not policy"
   },
   "AP Government and Suzlon break ground for 1,325 MW wind projects in Ananthapuramu; unlock 10,500 crores investment and create 1,600 green jobs": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "missed",
    "split": "holdout",
    "want": "policy clean_energy:tailwind"
   },
   "Allotment of Equity Shares pursuant to ESOP scheme of ideaForge Technology Limited": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "not policy"
   },
   "Andhra Pradesh CM Naidu unveils ₹1 lakh crore agribusiness plan": {
-   "got": "",
-   "outcome": "pending",
+   "got": "incentive_scheme",
+   "outcome": "found",
    "split": "dev",
    "want": "policy (also fmcg:tailwind)"
   },
   "Astra Microwave Products Limited has informed the Exchange regarding the Trading Window closure pursuant to SEBI (Prohibition of Insider Trading) Regulations, 2015": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "not policy"
   },
   "BEL approves JV with French company Safran for HAMMER Weapon System": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "not policy"
   },
   "BEL, HAL, Bharat Dynamics: Defence stocks rally as DAC clears ₹52,000 crore defence acquisition proposals": {
-   "got": "",
-   "outcome": "pending",
+   "got": "approval aerospace_defence:tailwind",
+   "outcome": "found",
    "split": "holdout",
    "want": "policy aerospace_defence:tailwind (also surveillance_security:tailwind)"
   },
   "Bata India BATAINDIA Central Government Approval New MD CEO": {
-   "got": "",
-   "outcome": "pending",
+   "got": "approval",
+   "outcome": "false_alarm",
    "split": "dev",
    "want": "not policy"
   },
   "Budget 2026: Semiconductor stocks jump up to 7% as FM unveils Mission 2.0 with ₹40,000 cr outlay": {
-   "got": "",
-   "outcome": "pending",
+   "got": "incentive_scheme manufacturing_electronics:tailwind semiconductors_equipment:tailwind",
+   "outcome": "found",
    "split": "dev",
    "want": "policy semiconductors_equipment:tailwind (also manufacturing_electronics:tailwind)"
   },
   "CONCOR flags off first export container to the UK from ICD Whitefield under India–UK FTA": {
-   "got": "",
-   "outcome": "pending",
+   "got": "trade_agreement logistics_heavy_capital:tailwind",
+   "outcome": "found",
    "split": "dev",
    "want": "policy (also logistics_heavy_capital:tailwind textiles_apparel:tailwind)"
   },
   "Cabinet approves Rs 1.27 lakh crore for Semicon India 2.0 to boost domestic chip ecosystem": {
-   "got": "",
-   "outcome": "pending",
+   "got": "subsidy_or_funding semiconductors_equipment:tailwind",
+   "outcome": "found",
    "split": "dev",
    "want": "policy semiconductors_equipment:tailwind (also manufacturing_electronics:tailwind)"
   },
   "Clean Max approves sale of stakes in two subsidiaries to Relaxo and VVDN": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "not policy"
   },
   "Cybersecurity in government: How to protect public services and strengthen cyber resilience": {
-   "got": "",
-   "outcome": "pending",
+   "got": "regulation cybersecurity:tailwind",
+   "outcome": "false_alarm",
    "split": "holdout",
    "want": "not policy"
   },
   "Declare all Dharwad taluks drought-hit, Arvind Bellad urges govt": {
-   "got": "",
-   "outcome": "pending",
+   "got": "other",
+   "outcome": "false_alarm",
    "split": "dev",
    "want": "not policy"
   },
   "Defence Ministry signs 1950 crore contract with Bharat Electronics Limited": {
-   "got": "",
-   "outcome": "pending",
+   "got": "procurement aerospace_defence:tailwind",
+   "outcome": "found",
    "split": "holdout",
    "want": "policy aerospace_defence:tailwind"
   },
   "Delhi Laxmi Yojana: Who can get ₹2,500 every month? Govt unveils final eligibility rules": {
-   "got": "",
-   "outcome": "pending",
+   "got": "subsidy_or_funding",
+   "outcome": "found",
    "split": "holdout",
    "want": "policy (also fmcg:tailwind)"
   },
   "Dixon Tech Up Almost 1% Intraday on Reports of Govt Approval Likely to Vivo Joint Venture": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "missed",
    "split": "holdout",
    "want": "policy manufacturing_electronics:tailwind"
   },
   "Dixon Tech shares surge sharply as government likely to approve Vivo JV": {
-   "got": "",
-   "outcome": "pending",
+   "got": "approval manufacturing_electronics:tailwind",
+   "outcome": "found",
    "split": "dev",
    "want": "policy manufacturing_electronics:tailwind"
   },
   "Dixon shares rise as Vivo JV wins government approval": {
-   "got": "",
-   "outcome": "pending",
+   "got": "approval manufacturing_electronics:tailwind",
+   "outcome": "found",
    "split": "dev",
    "want": "policy manufacturing_electronics:tailwind"
   },
   "Dixon-Vivo joint venture inches close to securing final govt approval": {
-   "got": "",
-   "outcome": "pending",
+   "got": "approval manufacturing_electronics:tailwind",
+   "outcome": "found",
    "split": "holdout",
    "want": "policy manufacturing_electronics:tailwind"
   },
   "Glenmark Pharmaceuticals Limited has informed the Exchange regarding a press release dated August 20, 2026, titled \"Glenmark Pharmaceuticals receives U.S. FDA approval for Fluticasone Propionate Nasal Spray, 0.05 mg (50 mcg)/spray\".": {
-   "got": "",
-   "outcome": "pending",
+   "got": "approval",
+   "outcome": "false_alarm",
    "split": "dev",
    "want": "not policy"
   },
   "Gokaldas Exports, KPR Mill, other textile stocks drop up to 5% as US agrees to zero tariff on some...": {
-   "got": "",
-   "outcome": "pending",
+   "got": "trade_agreement textiles_apparel:tailwind",
+   "outcome": "effects_differ",
    "split": "holdout",
    "want": "policy textiles_apparel:headwind"
   },
   "Government of India taking steps to encourage domestic manufacturing of semiconductors & promote country's digital transformation and self-reliance": {
-   "got": "",
-   "outcome": "pending",
+   "got": "incentive_scheme semiconductors_equipment:tailwind",
+   "outcome": "found",
    "split": "dev",
    "want": "policy semiconductors_equipment:tailwind (also manufacturing_electronics:tailwind)"
   },
   "Govt panel to clear Rs1.25 lakh crore outlay for Semiconductor Mission 2.0": {
-   "got": "",
-   "outcome": "pending",
+   "got": "subsidy_or_funding semiconductors_equipment:tailwind",
+   "outcome": "found",
    "split": "dev",
    "want": "policy semiconductors_equipment:tailwind (also manufacturing_electronics:tailwind)"
   },
   "HAL hands over 2 LCA FOC Twin Seater Trainers & 3 HTT 40 Basic Trainers to IAF and 4 Dhruv NG helicopters to PHL in the presence of Raksha Mantri & Civil Aviation Minister": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "holdout",
    "want": "not policy"
   },
   "Himachal CM Sukhu Reviews 422 MW Kishau Project MoU": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "not policy"
   },
   "ICICI Bank Limited has informed the Exchange about Disclosure under Regulation 30 of SEBI (Listing Obligations and Disclosure Requirements) Regulations, 2015": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "not policy"
   },
   "INDO-MIM Limited has informed the Exchange regarding the Trading Window closure pursuant to SEBI (Prohibition of Insider Trading) Regulations, 2015": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "holdout",
    "want": "not policy"
   },
   "IRB InvIT Approves ₹2,744 Crore Road Asset Acquisition; Shares Trade Higher": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "not policy"
   },
   "Ideaforge Technology secures in-principle approval from Technology Development Board": {
-   "got": "",
-   "outcome": "pending",
+   "got": "approval",
+   "outcome": "effects_differ",
    "split": "dev",
    "want": "policy surveillance_security:tailwind (also aerospace_defence:tailwind)"
   },
   "India, UK set to ink inter-government pact for electric propulsion of 4 Landing Platform Docks": {
-   "got": "",
-   "outcome": "pending",
+   "got": "trade_agreement aerospace_defence:tailwind",
+   "outcome": "found",
    "split": "dev",
    "want": "policy aerospace_defence:tailwind"
   },
   "India-New Zealand FTA to Enter into Force from 20 October 2026": {
-   "got": "",
-   "outcome": "pending",
+   "got": "trade_agreement",
+   "outcome": "found",
    "split": "holdout",
    "want": "policy (also fmcg:tailwind textiles_apparel:tailwind)"
   },
   "India-UK FTA: Welspun Living, Gokaldas Exports, other apparel stocks rise up to 12%": {
-   "got": "",
-   "outcome": "pending",
+   "got": "trade_agreement textiles_apparel:tailwind",
+   "outcome": "found",
    "split": "dev",
    "want": "policy textiles_apparel:tailwind (also sports_athleisure:tailwind)"
   },
   "Indian Oil Corporation Limited has informed the Exchange regarding 'Investment Approval for Kochi-Kanyakumari-Thoothukudi Natural Gas Pipeline'.": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "holdout",
    "want": "not policy"
   },
   "Indian Railways Approves ₹493 Crore for 38.21 km New Rail Line between Mukutban (Adilabad) and Gadchandur": {
-   "got": "",
-   "outcome": "pending",
+   "got": "approval big_cap_industries:tailwind",
+   "outcome": "effects_differ",
    "split": "dev",
    "want": "policy logistics_heavy_capital:tailwind (also big_cap_industries:tailwind)"
   },
   "India–UK Comprehensive Economic and Trade Agreement (CETA) Comes into Force; Export Consignment Flagged Off at Bengaluru": {
-   "got": "",
-   "outcome": "pending",
+   "got": "trade_agreement",
+   "outcome": "effects_differ",
    "split": "dev",
    "want": "policy textiles_apparel:tailwind (also logistics_heavy_capital:tailwind sports_athleisure:tailwind)"
   },
   "Intimation under Regulation 30 of the SEBI (Listing Obligations and Disclosure Requirements) Regulations, 2015 - Newspaper Advertisement": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "holdout",
    "want": "not policy"
   },
   "Investment approval for Kochi-Kanyakumari-Thoothukudi Natural Gas Pipeline.": {
-   "got": "",
-   "outcome": "pending",
+   "got": "approval",
+   "outcome": "false_alarm",
    "split": "dev",
    "want": "not policy"
   },
   "JSW Steel Limited has informed the Exchange about Intimation under Regulation 30 of the Securities Exchange Board of India (Listing Obligations and Disclosure Requirements) Regulations, 2015 ( SEBI Listing Regulations )": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "holdout",
    "want": "not policy"
   },
   "Jana Small Finance Bank Limited has informed the Exchange regarding Trading Plan pursuant to SEBI (Prohibition of Insider Trading) Regulations, 2015": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "not policy"
   },
   "Jeena Sikho Lifecare Limited has informed the Exchange about Intimation of Analyst / Investor meet under Regulation 30 of the SEBI (Listing Obligations and Disclosure Requirements) Regulations, 2015 scheduled to be held on 03rd September,…": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "not policy"
   },
   "Jharkhand Unveils Higher Education Roadmap with AI Courses, Technical Education Clusters": {
-   "got": "",
-   "outcome": "pending",
+   "got": "other",
+   "outcome": "found",
    "split": "dev",
    "want": "policy"
   },
   "Kejriwal, Punjab CM Mann meet Sri Sri Ravi Shankar in Bengaluru": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "holdout",
    "want": "not policy"
   },
   "Kerala unveils AI-led governance overhaul to streamline administration, speed up public services": {
-   "got": "",
-   "outcome": "pending",
+   "got": "other",
+   "outcome": "found",
    "split": "dev",
    "want": "policy"
   },
   "LMW Limited has informed the Exchange about the intimation of   Change of Name of Wholly Owned Subsidiary Company under Regulation 30 of the SEBI (Listing Obligations and Disclosure Requirements) Regulations, 2015 .": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "not policy"
   },
   "MMTC Limited has informed the Exchange regarding 'MMTC Limited has informed the Exchange regarding the receipt of 458 requests for Re-Lodgment of Transfer requests of Physical Shares as per SEBI Circular No. HO/38/13/11 (2) 2026-MIRSD-POD/…": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "not policy"
   },
   "Max Healthcare Institute Limited has informed the Exchange regarding allotment of Equity Shares under Max Healthcare Institute Limited - Employee Stock Option Scheme 2022.": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "not policy"
   },
   "Ministry of Rural Development to Commence DDU-GKY 2.0 Training Batches Across Most States/UTs from October 2026": {
-   "got": "",
-   "outcome": "pending",
+   "got": "incentive_scheme",
+   "outcome": "found",
    "split": "dev",
    "want": "policy"
   },
   "NHAI Signs MoU with SSNNL to Simplify Approval Framework for National Highway and Irrigation Infrastructure Projects in Gujarat": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "missed",
    "split": "dev",
    "want": "policy (also big_cap_industries:tailwind logistics_heavy_capital:tailwind)"
   },
   "NTPC Green Energy Limited has informed the Exchange regarding the Trading Window closure pursuant to SEBI (Prohibition of Insider Trading) Regulations, 2015": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "holdout",
    "want": "not policy"
   },
   "Paras Defence, BEL, HAL gain up to 5% after DAC clears Rs 52,000 crore defence buys": {
-   "got": "",
-   "outcome": "pending",
+   "got": "procurement aerospace_defence:tailwind",
+   "outcome": "found",
    "split": "dev",
    "want": "policy aerospace_defence:tailwind (also surveillance_security:tailwind)"
   },
   "Prime Minister Shri Narendra Modi inaugurates International Conference on “The Future of Environment and Climate Dynamics”": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "holdout",
    "want": "not policy"
   },
   "Prime Minister highlights success of Ayushman Bharat on its eighth anniversary": {
-   "got": "",
-   "outcome": "pending",
+   "got": "subsidy_or_funding healthcare_hospitals:tailwind",
+   "outcome": "false_alarm",
    "split": "holdout",
    "want": "not policy"
   },
   "Production Linked Incentive (PLI) Scheme:": {
-   "got": "",
-   "outcome": "pending",
+   "got": "incentive_scheme",
+   "outcome": "found",
    "split": "dev",
    "want": "policy"
   },
   "Pursuant to Regulation 30 of SEBI (Listing Obligations and Disclosure Requirements) Regulations, 2015, please find enclosed transcript of Analyst/ Investor Meet held on September 3, 2026.": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "not policy"
   },
   "Pursuant to Regulation 30 of the SEBI Listing Regulations, please refer to the disclosure document regarding change in management.": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "not policy"
   },
   "Pursuant to Regulation 30 we wish to inform you that Board of Directors of The Indian Hotels Company Limited at its meeting held on August 24, 2026 approved the scheme of arrangement between ....": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "not policy"
   },
   "Ravindra Energy Limited has informed the Exchange regarding 'submission of disclosure received under Regulation 31(1) of SEBI (SAST) Regulation 2011 for creation of encumbrance on shares by Promoters '.": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "not policy"
   },
   "Reliance share price jumps 7% after this acquisition update, India-US trade deal optimism — Time to buy?": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "holdout",
    "want": "not policy"
   },
   "SPEL Semiconductor Limited Files SEBI SAST Compliance Declaration for FY26": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "holdout",
    "want": "not policy"
   },
   "Sebi Exempts Mehta Family Trust From Saurashtra Cement Open Offer": {
-   "got": "",
-   "outcome": "pending",
+   "got": "regulation",
+   "outcome": "found",
    "split": "holdout",
    "want": "policy"
   },
   "Siemens Files Q5FY26 Results Notification, Board Approves Financial Statements": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "holdout",
    "want": "not policy"
   },
   "Siemens Unveils SCALANCE XFM-200 Compact, Flat Managed Switches for Cabinet-Critical Installations": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "not policy"
   },
   "Tata Consultancy Services Limited has informed the Exchange regarding 'Press Release - TCS wins Rs 122 crore bid to build AI-enabled digital governance platform for Odisha Government'.": {
-   "got": "",
-   "outcome": "pending",
+   "got": "procurement",
+   "outcome": "found",
    "split": "dev",
    "want": "policy (also cybersecurity:tailwind midcap_it:tailwind)"
   },
   "The Exchange has received the disclosure under Regulation 29(2) of SEBI (Substantial Acquisition of Shares & Takeovers) Regulations, 2011 for K Shalini & PACs": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "not policy"
   },
   "The Exchange has received the disclosure under Regulation 29(2) of SEBI (Substantial Acquisition of Shares & Takeovers) Regulations, 2011 for Mirae Asset Mutual Fund": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "not policy"
   },
   "The Exchange has received the disclosure under Regulation 29(2) of SEBI (Substantial Acquisition of Shares & Takeovers) Regulations, 2011 for N P Agrawal": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "not policy"
   },
   "The Exchange has received the disclosure under Regulation 29(2) of SEBI (Substantial Acquisition of Shares & Takeovers) Regulations, 2011 for Resilient Asset Management B.V. & PACs": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "not policy"
   },
   "The Exchange has sought clarification from BF Utilities Limited for the quarter ended 30-Jun-2026 with respect to Regulation 33 of the SEBI (Listing Obligations and Disclosure Requirements) Regulations, 2015. On basis of above the Company…": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "not policy"
   },
   "Titagarh Rail Systems Board Approves BHEL Joint Venture for Vande Bharat Maintenance": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "not policy"
   },
   "Union Bank of India has informed the Exchange regarding 'Disclosure under SEBI LODR Regulation 2015'.": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "not policy"
   },
   "Union Minister Shripad Yesso Naik virtually addresses India Energy Transition Summit 2026 | Akashvani News": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "not policy"
   },
   "We wish to inform you that pursuant to Regulation 30 of the SEBI (Listing Obligations and Disclosure Requirements) Regulations, 2015, representatives of the Company shall participate in the meeting of group of investors as per schedule giv…": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "not policy"
   },
   "Zen Tech, HAL & other defence stocks rally up to 6% on DAC's Rs 52,000-crore approval. Motilal picks 3 shares to buy": {
-   "got": "",
-   "outcome": "pending",
+   "got": "approval aerospace_defence:tailwind",
+   "outcome": "found",
    "split": "dev",
    "want": "policy aerospace_defence:tailwind (also surveillance_security:tailwind)"
   },
   "ideaForge gets Rs 151 crore Govt funding to develop ‘Yeti’ drone for high-altitude military logistics": {
-   "got": "",
-   "outcome": "pending",
+   "got": "subsidy_or_funding aerospace_defence:tailwind",
+   "outcome": "effects_differ",
    "split": "holdout",
    "want": "policy surveillance_security:tailwind (also aerospace_defence:tailwind)"
   }

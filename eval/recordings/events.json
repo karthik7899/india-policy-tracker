@@ -4,7 +4,7 @@
   "02642f589abcc9fa": {
    "answer": {
     "amount_text": "",
-    "certainty": "announced",
+    "certainty": "completed",
     "event_type": "tie_up",
     "gist": "Aareal Bank and TCS forge strategic partnership",
     "material": true,
@@ -18,7 +18,7 @@
    },
    "input": "Aareal Bank and TCS forge strategic partnership to accelerate digital transformation",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "02dd1ed6f6a64e4a": {
@@ -35,7 +35,7 @@
    },
    "input": "Ravindra Energy Limited has informed the Exchange regarding 'submission of disclosure received under Regulation 31(1) of SEBI (SAST) Regulation 2011 for creation of encumbrance on shares by Promoters '.",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "032d1c0836a7446a": {
@@ -49,12 +49,12 @@
      "Arvind"
     ],
     "policy_measure": "none",
-    "policy_status": "in_force",
+    "policy_status": "proposed",
     "sector_effects": []
    },
    "input": "Arvind unit acquires UK subsidiary for £1000",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "038d8b52b2ad8b5b": {
@@ -77,7 +77,7 @@
    },
    "input": "Cabinet approves Rs 1.27 lakh crore for Semicon India 2.0 to boost domestic chip ecosystem",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "03c605352fef0284": {
@@ -94,30 +94,35 @@
    },
    "input": "Siemens Files Q5FY26 Results Notification, Board Approves Financial Statements",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "04ba06c28687b9c1": {
    "answer": {
     "amount_text": "₹40,000 cr",
-    "certainty": "completed",
+    "certainty": "announced",
     "event_type": "none",
-    "gist": "Semiconductor stocks jump up to 7% as FM unveils Mission 2.0",
+    "gist": "Semiconductor stocks jump up to 7% as FM unveils Mission 2.0 with ₹40,000 cr outlay",
     "material": true,
     "parties": [],
     "policy_measure": "incentive_scheme",
-    "policy_status": "approved",
+    "policy_status": "proposed",
     "sector_effects": [
      {
-      "because": "Semiconductor stocks jump up to 7% as FM unveils Mission 2.0",
+      "because": "Mission 2.0 with ₹40,000 cr outlay",
       "direction": "tailwind",
       "sector": "semiconductors_equipment"
+     },
+     {
+      "because": "Mission 2.0 with ₹40,000 cr outlay",
+      "direction": "tailwind",
+      "sector": "manufacturing_electronics"
      }
     ]
    },
    "input": "Budget 2026: Semiconductor stocks jump up to 7% as FM unveils Mission 2.0 with ₹40,000 cr outlay",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "0509e5a1f4a2ab85": {
@@ -132,12 +137,12 @@
      "Cognite"
     ],
     "policy_measure": "none",
-    "policy_status": "in_force",
+    "policy_status": "proposed",
     "sector_effects": []
    },
    "input": "Schneider Electric Announces Intention To Acquire Cognite",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "06da770c6ec03a07": {
@@ -145,7 +150,7 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "none",
-    "gist": "",
+    "gist": "Progressing Towards Universal Health Coverage",
     "material": false,
     "parties": [],
     "policy_measure": "none",
@@ -154,7 +159,7 @@
    },
    "input": "Progressing Towards Universal Health Coverage",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "08db86c71981dd96": {
@@ -174,7 +179,7 @@
    },
    "input": "Syrma SGS Technology Opens Advanced Electronics Facility in Bengaluru with Elemaster",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "0a283dce142157b7": {
@@ -188,12 +193,12 @@
      "Dixon"
     ],
     "policy_measure": "none",
-    "policy_status": "in_force",
+    "policy_status": "proposed",
     "sector_effects": []
    },
    "input": "Dixon eyes product portfolio expansion, scouts new facility",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "0c6fe3d8476ddc9d": {
@@ -210,7 +215,7 @@
    },
    "input": "Union Bank of India has informed the Exchange regarding 'Disclosure under SEBI LODR Regulation 2015'.",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "0dfef55eb224d193": {
@@ -218,19 +223,19 @@
     "amount_text": "₹5,900 Crore",
     "certainty": "completed",
     "event_type": "tie_up",
-    "gist": "RITES Signs MOU with CONCOR for Logistics Projects Expanding ₹5,900 Crore Order Book",
+    "gist": "RITES Signs MOU with CONCOR for Logistics Projects",
     "material": true,
     "parties": [
      "RITES",
      "CONCOR"
     ],
     "policy_measure": "none",
-    "policy_status": "in_force",
+    "policy_status": "proposed",
     "sector_effects": []
    },
    "input": "RITES Signs MOU with CONCOR for Logistics Projects Expanding ₹5,900 Crore Order Book",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "11598d76e344f76b": {
@@ -247,7 +252,7 @@
    },
    "input": "Outcome of the Board Meeting - Change in the MD & CEO",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "1254d139fe46c94d": {
@@ -255,7 +260,7 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "none",
-    "gist": "",
+    "gist": "RIR Power Electronics debuts on NSE, expands investor reach",
     "material": false,
     "parties": [],
     "policy_measure": "none",
@@ -264,7 +269,7 @@
    },
    "input": "RIR Power Electronics debuts on NSE, expands investor reach",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "1260481baebd8e15": {
@@ -272,7 +277,7 @@
     "amount_text": "",
     "certainty": "reported",
     "event_type": "tie_up",
-    "gist": "Kaynes Technology Close To Finalising Deal",
+    "gist": "Kaynes Technology Close To Finalising Deal With 'One Of World's Largest EV Makers'",
     "material": true,
     "parties": [
      "Kaynes Technology"
@@ -283,7 +288,7 @@
    },
    "input": "Kaynes Technology Close To Finalising Deal With 'One Of World's Largest EV Makers'",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "129ab46a49ab5c52": {
@@ -303,7 +308,7 @@
    },
    "input": "Rites Signs MoU With Concor For Logistics Infrastructure Consultancy",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "153f40c801c91a94": {
@@ -311,7 +316,7 @@
     "amount_text": "$300 Billion",
     "certainty": "announced",
     "event_type": "tie_up",
-    "gist": "US President Trump Announces $300 Billion Partnership with Reliance",
+    "gist": "Announces $300 Billion Partnership with Reliance to Build First Major US Refinery",
     "material": true,
     "parties": [
      "Reliance"
@@ -322,7 +327,7 @@
    },
    "input": "US President Trump Announces $300 Billion Partnership with Reliance to Build First Major US Refinery in 50 Years",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "15e6882587f6a51f": {
@@ -337,12 +342,12 @@
      "Elemaster Group"
     ],
     "policy_measure": "none",
-    "policy_status": "in_force",
+    "policy_status": "proposed",
     "sector_effects": []
    },
    "input": "Syrma SGS Announces New Facility With Elemaster Group in Bengaluru",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "165d79a03790d0bf": {
@@ -357,12 +362,12 @@
      "Elemaster"
     ],
     "policy_measure": "none",
-    "policy_status": "in_force",
+    "policy_status": "proposed",
     "sector_effects": []
    },
    "input": "Syrma SGS and Elemaster inaugurate joint venture facility in Bengaluru",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "19b2d059e9ecba7c": {
@@ -379,7 +384,7 @@
    },
    "input": "MMTC Limited has informed the Exchange regarding 'MMTC Limited has informed the Exchange regarding the receipt of 458 requests for Re-Lodgment of Transfer requests of Physical Shares as per SEBI Circular No. HO/38/13/11 (2) 2026-MIRSD-POD/…",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "1aed38180e8d5b8f": {
@@ -390,13 +395,19 @@
     "gist": "",
     "material": false,
     "parties": [],
-    "policy_measure": "none",
+    "policy_measure": "subsidy_or_funding",
     "policy_status": "in_force",
-    "sector_effects": []
+    "sector_effects": [
+     {
+      "because": "Ayushman Bharat",
+      "direction": "tailwind",
+      "sector": "healthcare_hospitals"
+     }
+    ]
    },
    "input": "Prime Minister highlights success of Ayushman Bharat on its eighth anniversary",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "1b6534fda12619a6": {
@@ -413,7 +424,7 @@
    },
    "input": "Ideaforge Technology secures in-principle approval from Technology Development Board",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "1ed62cc399aad9e3": {
@@ -428,12 +439,12 @@
      "CONCOR"
     ],
     "policy_measure": "none",
-    "policy_status": "in_force",
+    "policy_status": "proposed",
     "sector_effects": []
    },
    "input": "RITES Signs MoU with CONCOR For Project Management Consultancy Services",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "1f87162f889462ac": {
@@ -452,13 +463,13 @@
    },
    "input": "CG Semi Commences Commercial Production at Its G1 OSAT Facility in Sanand, Gujarat",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "2192409dabf5410f": {
    "answer": {
     "amount_text": "",
-    "certainty": "completed",
+    "certainty": "announced",
     "event_type": "product_launch",
     "gist": "AMD unveils Helios, Google develops new AI chip",
     "material": true,
@@ -472,7 +483,7 @@
    },
    "input": "AI Watch: AMD unveils Helios, Google develops new AI chip, UK names AI minister",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "22ec681eceffdd21": {
@@ -487,12 +498,12 @@
      "trubridge"
     ],
     "policy_measure": "none",
-    "policy_status": "in_force",
+    "policy_status": "proposed",
     "sector_effects": []
    },
    "input": "iks healthcare set to acquire trubridge for 600 million",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "2367ee6a6d6794c6": {
@@ -500,7 +511,7 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "none",
-    "gist": "",
+    "gist": "ICICI Bank Limited has informed the Exchange about Disclosure",
     "material": false,
     "parties": [],
     "policy_measure": "none",
@@ -509,7 +520,7 @@
    },
    "input": "ICICI Bank Limited has informed the Exchange about Disclosure under Regulation 30 of the SEBI (Listing Obligations and Disclosure Requirements) Regulations, 2015",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "2447b142ce79ae2c": {
@@ -529,7 +540,7 @@
    },
    "input": "Sabre : launches strategic collaboration with trusted engineering partner Coforge to accelerate pace of product innovation and delivery",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "2516a08ef616db93": {
@@ -546,7 +557,7 @@
    },
    "input": "The Exchange has received the disclosure under Regulation 29(2) of SEBI (Substantial Acquisition of Shares & Takeovers) Regulations, 2011 for Resilient Asset Management B.V. & PACs",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "25c8dd0f09b94173": {
@@ -565,7 +576,7 @@
    },
    "input": "PESB recommends STPI chief Arvind Kumar for BSNL board role",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "2690914fa08bf577": {
@@ -582,7 +593,7 @@
    },
    "input": "JSW Steel Limited has informed the Exchange about Intimation under Regulation 30 of the Securities Exchange Board of India (Listing Obligations and Disclosure Requirements) Regulations, 2015 ( SEBI Listing Regulations )",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "26b68a409ccd166f": {
@@ -590,16 +601,16 @@
     "amount_text": "",
     "certainty": "announced",
     "event_type": "none",
-    "gist": "Initial Public Offer of Jio Platforms Limited",
+    "gist": "Observation Letter on the Draft Red Herring Prospectus",
     "material": true,
     "parties": [],
-    "policy_measure": "approval",
-    "policy_status": "proposed",
+    "policy_measure": "none",
+    "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "Observation Letter on the Draft Red Herring Prospectus for the proposed Initial Public Offer of Jio Platforms Limited",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "26e7b63c46e70535": {
@@ -607,7 +618,7 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "none",
-    "gist": "",
+    "gist": "Outcome of Investor Call",
     "material": false,
     "parties": [],
     "policy_measure": "none",
@@ -616,7 +627,7 @@
    },
    "input": "Kirloskar Oil Engines Limited has informed the Exchange about Outcome of Investor Call - Please note that the 1X1 Meeting scheduled with ICICI Pru Mutual Fund on 28th August 2026 at 10.30 AM, as intimated vide our letter dated 25th August…",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "27130ce8472e349c": {
@@ -627,24 +638,24 @@
     "gist": "Govt unveils Rs 1.9 lakh cr semiconductor, mobile manufacturing push",
     "material": true,
     "parties": [],
-    "policy_measure": "subsidy_or_funding",
-    "policy_status": "in_force",
+    "policy_measure": "incentive_scheme",
+    "policy_status": "approved",
     "sector_effects": [
      {
-      "because": "mobile manufacturing push",
-      "direction": "tailwind",
-      "sector": "manufacturing_electronics"
-     },
-     {
-      "because": "semiconductor",
+      "because": "semiconductor, mobile manufacturing push",
       "direction": "tailwind",
       "sector": "semiconductors_equipment"
+     },
+     {
+      "because": "semiconductor, mobile manufacturing push",
+      "direction": "tailwind",
+      "sector": "manufacturing_electronics"
      }
     ]
    },
    "input": "Govt unveils Rs 1.9 lakh cr semiconductor, mobile manufacturing push",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "2741e975bdeceaa4": {
@@ -656,12 +667,12 @@
     "material": false,
     "parties": [],
     "policy_measure": "none",
-    "policy_status": "proposed",
+    "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "BJP MP Swati Maliwal alleges Arvind Kejriwal ran corruption shop in Delhi and Punjab",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "28642d434e20c79b": {
@@ -680,7 +691,7 @@
    },
    "input": "NCLT Ahmedabad Dismisses Insolvency Plea Against Suzlon Energy",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "2b195a2c0d2f9309": {
@@ -691,19 +702,19 @@
     "gist": "Gokaldas Exports, KPR Mill, other textile stocks drop up to 5% as US agrees to zero tariff",
     "material": false,
     "parties": [],
-    "policy_measure": "duty_or_tariff",
+    "policy_measure": "trade_agreement",
     "policy_status": "approved",
     "sector_effects": [
      {
-      "because": "textile stocks drop up to 5% as US agrees to zero tariff",
-      "direction": "headwind",
+      "because": "US agrees to zero tariff on some...",
+      "direction": "tailwind",
       "sector": "textiles_apparel"
      }
     ]
    },
    "input": "Gokaldas Exports, KPR Mill, other textile stocks drop up to 5% as US agrees to zero tariff on some...",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "2b3faa29f86689ce": {
@@ -720,7 +731,7 @@
     "policy_status": "approved",
     "sector_effects": [
      {
-      "because": "Govt funding to develop ‘Yeti’ drone for high-altitude military logistics",
+      "because": "develop ‘Yeti’ drone for high-altitude military logistics",
       "direction": "tailwind",
       "sector": "aerospace_defence"
      }
@@ -728,24 +739,24 @@
    },
    "input": "ideaForge gets Rs 151 crore Govt funding to develop ‘Yeti’ drone for high-altitude military logistics",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "2bd5f1e2bd6a0a05": {
    "answer": {
     "amount_text": "",
-    "certainty": "completed",
+    "certainty": "announced",
     "event_type": "none",
-    "gist": "",
+    "gist": "Ideaforge Technology appoints new investor relations agency",
     "material": false,
     "parties": [],
     "policy_measure": "none",
-    "policy_status": "proposed",
+    "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "Ideaforge Technology appoints new investor relations agency",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "305436d34d7e7d0a": {
@@ -753,16 +764,16 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "none",
-    "gist": "",
+    "gist": "Stocks to watch",
     "material": false,
     "parties": [],
     "policy_measure": "none",
-    "policy_status": "proposed",
+    "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "Stocks to watch: Cochin Shipyard, Premier Energies, ideaForge Tech among shares in focus today; check list here",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "31bbe4f6ef337818": {
@@ -770,34 +781,34 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "product_launch",
-    "gist": "Gigabyte unveils its first Made-in-India gaming laptop, Gaming A16",
+    "gist": "Gigabyte unveils its first Made-in-India gaming laptop",
     "material": true,
     "parties": [
      "Gigabyte",
      "Dixon Technologies"
     ],
     "policy_measure": "none",
-    "policy_status": "in_force",
+    "policy_status": "proposed",
     "sector_effects": []
    },
    "input": "Gigabyte unveils its first Made-in-India gaming laptop, Gaming A16, in partnership with Dixon Technologies",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "32ad876cb4908829": {
    "answer": {
     "amount_text": "₹52,000 crore",
-    "certainty": "completed",
+    "certainty": "announced",
     "event_type": "none",
     "gist": "Defence stocks rally as DAC clears ₹52,000 crore defence acquisition proposals",
     "material": true,
     "parties": [],
-    "policy_measure": "procurement",
+    "policy_measure": "approval",
     "policy_status": "approved",
     "sector_effects": [
      {
-      "because": "Defence stocks rally as DAC clears ₹52,000 crore defence acquisition proposals",
+      "because": "DAC clears ₹52,000 crore defence acquisition proposals",
       "direction": "tailwind",
       "sector": "aerospace_defence"
      }
@@ -805,7 +816,7 @@
    },
    "input": "BEL, HAL, Bharat Dynamics: Defence stocks rally as DAC clears ₹52,000 crore defence acquisition proposals",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "3357509b3176c6e1": {
@@ -822,7 +833,7 @@
    },
    "input": "Kaynes Technology Says A 'Global Player' Wants Entire PCB Capacity Ahead Of Production Launch",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "34c86d449674fd37": {
@@ -832,16 +843,14 @@
     "event_type": "none",
     "gist": "Sebi Exempts Mehta Family Trust From Saurashtra Cement Open Offer",
     "material": true,
-    "parties": [
-     "Saurashtra Cement"
-    ],
-    "policy_measure": "approval",
+    "parties": [],
+    "policy_measure": "regulation",
     "policy_status": "approved",
     "sector_effects": []
    },
    "input": "Sebi Exempts Mehta Family Trust From Saurashtra Cement Open Offer",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "36f47662ef1659bb": {
@@ -858,7 +867,7 @@
    },
    "input": "Prime Minister Shri Narendra Modi inaugurates International Conference on “The Future of Environment and Climate Dynamics”",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "37b60a90215bcff0": {
@@ -873,12 +882,12 @@
      "Zscaler"
     ],
     "policy_measure": "none",
-    "policy_status": "in_force",
+    "policy_status": "proposed",
     "sector_effects": []
    },
    "input": "Coforge launches AI-Powered zero trust security product in partnership with Zscaler",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "383a9268322fea8e": {
@@ -886,7 +895,7 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "none",
-    "gist": "",
+    "gist": "Bhel Trichy is constantly modernising",
     "material": false,
     "parties": [],
     "policy_measure": "none",
@@ -895,7 +904,7 @@
    },
    "input": "‘Bhel Trichy is constantly modernising’",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "383d1e672d3d7d0d": {
@@ -914,7 +923,7 @@
    },
    "input": "CG Semi starts commercial production at Sanand OSAT plant in India",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "3a71a426bb63b77d": {
@@ -929,18 +938,18 @@
      "APEDA"
     ],
     "policy_measure": "none",
-    "policy_status": "in_force",
+    "policy_status": "proposed",
     "sector_effects": []
    },
    "input": "CONCOR signs MoU with APEDA to strengthen export cold chain and logistics ecosystem",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "3c28b2dfb3f449ea": {
    "answer": {
     "amount_text": "$5 Million",
-    "certainty": "completed",
+    "certainty": "announced",
     "event_type": "tie_up",
     "gist": "Navitas Invests $5 Million in Magnachip",
     "material": true,
@@ -949,12 +958,12 @@
      "Magnachip"
     ],
     "policy_measure": "none",
-    "policy_status": "proposed",
+    "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "Navitas Invests $5 Million in Magnachip to Expand SiC Power Semiconductor Partnership",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "3e7401e666a8b2d7": {
@@ -974,7 +983,7 @@
    },
    "input": "Syrma SGS and Elemaster inaugurate electronics facility in Bengaluru",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "40d825a2ef75d63f": {
@@ -982,7 +991,7 @@
     "amount_text": "10,500 crores",
     "certainty": "completed",
     "event_type": "capacity_add",
-    "gist": "AP Government and Suzlon break ground for 1,325 MW wind projects",
+    "gist": "AP Government and Suzlon break ground for 1,325 MW wind projects in Ananthapuramu",
     "material": true,
     "parties": [
      "Suzlon"
@@ -993,7 +1002,7 @@
    },
    "input": "AP Government and Suzlon break ground for 1,325 MW wind projects in Ananthapuramu; unlock 10,500 crores investment and create 1,600 green jobs",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "4125d1c906f8702a": {
@@ -1005,12 +1014,12 @@
     "material": false,
     "parties": [],
     "policy_measure": "none",
-    "policy_status": "proposed",
+    "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "Dixon Technologies (India) Limited has informed the Exchange about Outcome of Analyst/ Institutional Investors Meet",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "4228acb1779f5dfb": {
@@ -1027,7 +1036,7 @@
    },
    "input": "Syrma SGS JV renamed Syrma SGS Elemaster Private Limited",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "43b20098a303d976": {
@@ -1041,23 +1050,24 @@
      "Coforge"
     ],
     "policy_measure": "none",
-    "policy_status": "proposed",
+    "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "Coforge unveils SecureEdge2Cloud AI security on Zscaler Zero Trust Exchange",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "44d44fa4237a0a59": {
    "answer": {
     "amount_text": "",
     "certainty": "completed",
-    "event_type": "product_launch",
-    "gist": "Apple unveils US device leasing programme",
+    "event_type": "tie_up",
+    "gist": "Apple unveils US device leasing programme in partnership with Klarna",
     "material": true,
     "parties": [
-     "Apple"
+     "Apple",
+     "Klarna"
     ],
     "policy_measure": "none",
     "policy_status": "in_force",
@@ -1065,7 +1075,7 @@
    },
    "input": "Apple unveils US device leasing programme in partnership with Klarna",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "44d6280661be20f6": {
@@ -1073,22 +1083,22 @@
     "amount_text": "₹493 Crore",
     "certainty": "completed",
     "event_type": "none",
-    "gist": "Indian Railways Approves ₹493 Crore for New Rail Line",
+    "gist": "Indian Railways Approves ₹493 Crore for 38.21 km New Rail Line",
     "material": true,
     "parties": [],
-    "policy_measure": "procurement",
+    "policy_measure": "approval",
     "policy_status": "approved",
     "sector_effects": [
      {
       "because": "New Rail Line",
       "direction": "tailwind",
-      "sector": "logistics_heavy_capital"
+      "sector": "big_cap_industries"
      }
     ]
    },
    "input": "Indian Railways Approves ₹493 Crore for 38.21 km New Rail Line between Mukutban (Adilabad) and Gadchandur",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "45f1ecf72ec9dd7e": {
@@ -1108,13 +1118,13 @@
    },
    "input": "Arvind acquires stake in two Torrent Urja entities for renewable power",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "460fa464ebc27f44": {
    "answer": {
     "amount_text": "",
-    "certainty": "announced",
+    "certainty": "completed",
     "event_type": "tie_up",
     "gist": "Amadeus Partners TCS",
     "material": true,
@@ -1128,7 +1138,7 @@
    },
    "input": "Amadeus Partners TCS",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "468d5804b893544b": {
@@ -1136,19 +1146,19 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "tie_up",
-    "gist": "Syrma SGS Tech Forms Joint Venture With Kaga Electronics India To Produce PCBs",
+    "gist": "Syrma SGS Tech Forms Joint Venture With Kaga Electronics India",
     "material": true,
     "parties": [
      "Syrma SGS Tech",
      "Kaga Electronics India"
     ],
     "policy_measure": "none",
-    "policy_status": "in_force",
+    "policy_status": "proposed",
     "sector_effects": []
    },
    "input": "Syrma SGS Tech Forms Joint Venture With Kaga Electronics India To Produce PCBs",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "46febea6ff117e12": {
@@ -1165,7 +1175,7 @@
    },
    "input": "Kejriwal, Punjab CM Mann meet Sri Sri Ravi Shankar in Bengaluru",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "4724b64ce05f0433": {
@@ -1182,7 +1192,7 @@
    },
    "input": "LMW Limited has informed the Exchange about the intimation of   Change of Name of Wholly Owned Subsidiary Company under Regulation 30 of the SEBI (Listing Obligations and Disclosure Requirements) Regulations, 2015 .",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "47a99251a886e91a": {
@@ -1199,7 +1209,7 @@
    },
    "input": "Jana Small Finance Bank Limited has informed the Exchange regarding Trading Plan pursuant to SEBI (Prohibition of Insider Trading) Regulations, 2015",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "48d3b6a9653fce9a": {
@@ -1220,7 +1230,7 @@
    },
    "input": "Clean Max approves sale of stakes in two subsidiaries to Relaxo and VVDN",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "49a44424285f4aa5": {
@@ -1237,7 +1247,7 @@
    },
    "input": "Pursuant to Regulation 30 of SEBI (Listing Obligations and Disclosure Requirements) Regulations, 2015, please find enclosed transcript of Analyst/ Investor Meet held on September 3, 2026.",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "4a33c767e549654c": {
@@ -1256,26 +1266,26 @@
    },
    "input": "IRB InvIT Approves ₹2,744 Crore Road Asset Acquisition; Shares Trade Higher",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "4a703bff08ef5326": {
    "answer": {
-    "amount_text": "60 MW",
+    "amount_text": "",
     "certainty": "announced",
     "event_type": "tie_up",
-    "gist": "TCC Concept signs MOU for 60 MW data centre",
+    "gist": "TCC Concept signs MOU for 60 MW data centre campus",
     "material": true,
     "parties": [
      "TCC Concept"
     ],
     "policy_measure": "none",
-    "policy_status": "proposed",
+    "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "TCC Concept signs MOU for 60 MW data centre campus in Pune",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "4a86eb8954a3ccca": {
@@ -1283,18 +1293,18 @@
     "amount_text": "Rs 1,119 crore",
     "certainty": "announced",
     "event_type": "acquisition",
-    "gist": "Varun Beverages to acquire 100% in South African beverage maker for Rs 1,119 crore",
+    "gist": "Varun Beverages to acquire 100% in South African beverage maker",
     "material": true,
     "parties": [
      "Varun Beverages"
     ],
     "policy_measure": "none",
-    "policy_status": "in_force",
+    "policy_status": "proposed",
     "sector_effects": []
    },
    "input": "Varun Beverages to acquire 100% in South African beverage maker for Rs 1,119 crore",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "4a9d237294158c83": {
@@ -1309,7 +1319,7 @@
     "policy_status": "proposed",
     "sector_effects": [
      {
-      "because": "Rs1.25 lakh crore outlay for Semiconductor Mission 2.0",
+      "because": "outlay for Semiconductor Mission 2.0",
       "direction": "tailwind",
       "sector": "semiconductors_equipment"
      }
@@ -1317,7 +1327,7 @@
    },
    "input": "Govt panel to clear Rs1.25 lakh crore outlay for Semiconductor Mission 2.0",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "4aa0492a9e839c71": {
@@ -1328,21 +1338,20 @@
     "gist": "Suzlon Energy wins 400 MW EPC order",
     "material": true,
     "parties": [
-     "Suzlon Energy",
-     "Tata Power"
+     "Suzlon Energy"
     ],
     "policy_measure": "none",
-    "policy_status": "proposed",
+    "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "Suzlon Energy wins 400 MW EPC order from Tata Power",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "4c341fd820491c78": {
    "answer": {
-    "amount_text": "",
+    "amount_text": "9.11%",
     "certainty": "completed",
     "event_type": "none",
     "gist": "HDFC Mutual Fund increases stake in Chalet Hotels to 9.11%",
@@ -1354,12 +1363,12 @@
    },
    "input": "HDFC Mutual Fund increases stake in Chalet Hotels to 9.11%",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "4cf10bdb25840887": {
    "answer": {
-    "amount_text": "",
+    "amount_text": "26.60%",
     "certainty": "completed",
     "event_type": "acquisition",
     "gist": "Arvind completes 26.60% stake acquisition in Torrent Urja 21",
@@ -1374,12 +1383,12 @@
    },
    "input": "Arvind completes 26.60% stake acquisition in Torrent Urja 21",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "4f551f7eb58d6283": {
    "answer": {
-    "amount_text": "",
+    "amount_text": "306 MW",
     "certainty": "completed",
     "event_type": "order_win",
     "gist": "Suzlon bags 306 MW wind turbine orders",
@@ -1393,7 +1402,7 @@
    },
    "input": "Suzlon bags 306 MW wind turbine orders from Yanara in Rajasthan",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "51c9f415e6421166": {
@@ -1401,19 +1410,19 @@
     "amount_text": "",
     "certainty": "announced",
     "event_type": "tie_up",
-    "gist": "BHEL, Titagarh to form joint venture for 35-year maintenance",
+    "gist": "BHEL, Titagarh to form joint venture",
     "material": true,
     "parties": [
      "BHEL",
      "Titagarh"
     ],
     "policy_measure": "none",
-    "policy_status": "in_force",
+    "policy_status": "proposed",
     "sector_effects": []
    },
    "input": "Vande Bharat Sleeper trains: BHEL, Titagarh to form joint venture for 35-year maintenance",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "5802d0888d4138f4": {
@@ -1428,12 +1437,12 @@
      "BEL"
     ],
     "policy_measure": "none",
-    "policy_status": "proposed",
+    "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "Ananth Technologies and BEL sign MoU for defence and aerospace systems",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "585d05db7eaddd19": {
@@ -1444,8 +1453,7 @@
     "gist": "Inaugurates state-of-the-art high-reliability electronics manufacturing facility",
     "material": true,
     "parties": [
-     "Syrma SGS",
-     "Elemaster"
+     "Syrma SGS Elemaster"
     ],
     "policy_measure": "none",
     "policy_status": "in_force",
@@ -1453,7 +1461,7 @@
    },
    "input": "Syrma SGS Elemaster Inaugurates state-of-the-art high-reliability electronics manufacturing facility in Bengaluru",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "58f1b9a464666d6b": {
@@ -1461,7 +1469,7 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "product_launch",
-    "gist": "UL Solutions Introduces Certification Program",
+    "gist": "UL Solutions Introduces Certification Program for Prefabricated Data Center Power Distribution Systems",
     "material": true,
     "parties": [
      "UL Solutions"
@@ -1472,7 +1480,7 @@
    },
    "input": "UL Solutions Introduces Certification Program for Prefabricated Data Center Power Distribution Systems, Awards First Certification to Schneider Electric",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "5aac4019a3fba32b": {
@@ -1480,24 +1488,24 @@
     "amount_text": "Rs 122 crore",
     "certainty": "completed",
     "event_type": "order_win",
-    "gist": "TCS wins Rs 122 crore bid to build AI-enabled digital governance platform",
+    "gist": "TCS wins Rs 122 crore bid to build AI-enabled digital governance platform for Odisha Government",
     "material": true,
     "parties": [
      "Tata Consultancy Services Limited"
     ],
     "policy_measure": "procurement",
-    "policy_status": "in_force",
+    "policy_status": "approved",
     "sector_effects": []
    },
    "input": "Tata Consultancy Services Limited has informed the Exchange regarding 'Press Release - TCS wins Rs 122 crore bid to build AI-enabled digital governance platform for Odisha Government'.",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "5c5dedba1ebcef3d": {
    "answer": {
     "amount_text": "",
-    "certainty": "completed",
+    "certainty": "announced",
     "event_type": "none",
     "gist": "",
     "material": false,
@@ -1508,7 +1516,7 @@
    },
    "input": "We wish to inform you that pursuant to Regulation 30 of the SEBI (Listing Obligations and Disclosure Requirements) Regulations, 2015, representatives of the Company shall participate in the meeting of group of investors as per schedule giv…",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "5dabeb722ce9ea8f": {
@@ -1516,16 +1524,16 @@
     "amount_text": "₹2,500",
     "certainty": "announced",
     "event_type": "none",
-    "gist": "Delhi Laxmi Yojana: Govt unveils final eligibility rules",
+    "gist": "Delhi Laxmi Yojana: Who can get ₹2,500 every month? Govt unveils final eligibility rules",
     "material": true,
     "parties": [],
     "policy_measure": "subsidy_or_funding",
-    "policy_status": "proposed",
+    "policy_status": "approved",
     "sector_effects": []
    },
    "input": "Delhi Laxmi Yojana: Who can get ₹2,500 every month? Govt unveils final eligibility rules",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "60eea79015a159db": {
@@ -1545,15 +1553,15 @@
    },
    "input": "NHAI Signs MoU with SSNNL to Simplify Approval Framework for National Highway and Irrigation Infrastructure Projects in Gujarat",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "63698ab93f6461cb": {
    "answer": {
     "amount_text": "",
-    "certainty": "completed",
+    "certainty": "announced",
     "event_type": "none",
-    "gist": "Investment approval for Kochi-Kanyakumari-Thoothukudi Natural Gas Pipeline.",
+    "gist": "Investment approval for Kochi-Kanyakumari-Thoothukudi Natural Gas Pipeline",
     "material": true,
     "parties": [],
     "policy_measure": "approval",
@@ -1562,7 +1570,7 @@
    },
    "input": "Investment approval for Kochi-Kanyakumari-Thoothukudi Natural Gas Pipeline.",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "6377a6dc526a057d": {
@@ -1570,7 +1578,7 @@
     "amount_text": "₹2,160 Crore",
     "certainty": "completed",
     "event_type": "none",
-    "gist": "Q1 Revenue Reaches ₹2,160 Crore",
+    "gist": "CONCOR Q1 Revenue Reaches ₹2,160 Crore",
     "material": true,
     "parties": [
      "CONCOR"
@@ -1581,7 +1589,7 @@
    },
    "input": "CONCOR Q1 Revenue Reaches ₹2,160 Crore as Net Profit Holds at ₹267 Crore",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "63b26a17202ddb09": {
@@ -1598,7 +1606,7 @@
    },
    "input": "Astra Microwave Products Limited has informed the Exchange regarding the Trading Window closure pursuant to SEBI (Prohibition of Insider Trading) Regulations, 2015",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "63f714b5d85d6c28": {
@@ -1615,7 +1623,7 @@
    },
    "input": "The Exchange has received the disclosure under Regulation 29(2) of SEBI (Substantial Acquisition of Shares & Takeovers) Regulations, 2011 for N P Agrawal",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "64a6849e0ff0f59e": {
@@ -1623,33 +1631,35 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "none",
-    "gist": "",
+    "gist": "Schneider Electric’s solutions to turn problems into competitive advantages",
     "material": false,
-    "parties": [],
+    "parties": [
+     "Schneider Electric"
+    ],
     "policy_measure": "none",
     "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "Schneider Electric’s solutions to turn problems into competitive advantages",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "66bdb68587926750": {
    "answer": {
     "amount_text": "₹1 lakh crore",
-    "certainty": "completed",
+    "certainty": "announced",
     "event_type": "none",
     "gist": "Andhra Pradesh CM Naidu unveils ₹1 lakh crore agribusiness plan",
     "material": true,
     "parties": [],
-    "policy_measure": "subsidy_or_funding",
+    "policy_measure": "incentive_scheme",
     "policy_status": "proposed",
     "sector_effects": []
    },
    "input": "Andhra Pradesh CM Naidu unveils ₹1 lakh crore agribusiness plan",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "66ec46e37b9f58e1": {
@@ -1657,7 +1667,7 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "capacity_add",
-    "gist": "starts commercial production of carbonated drinks at Gorakhpur facility",
+    "gist": "Varun Beverages starts commercial production at Gorakhpur facility",
     "material": true,
     "parties": [
      "Varun Beverages"
@@ -1668,7 +1678,7 @@
    },
    "input": "Varun Beverages starts commercial production of carbonated drinks at Gorakhpur facility",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "6920cffefc486c39": {
@@ -1676,7 +1686,7 @@
     "amount_text": "",
     "certainty": "announced",
     "event_type": "tie_up",
-    "gist": "BEL approves JV with French company Safran",
+    "gist": "BEL approves JV with French company Safran for HAMMER Weapon System",
     "material": true,
     "parties": [
      "BEL",
@@ -1688,7 +1698,7 @@
    },
    "input": "BEL approves JV with French company Safran for HAMMER Weapon System",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "6a3ce5c2a7bb7b1a": {
@@ -1705,7 +1715,7 @@
    },
    "input": "Union Minister Shripad Yesso Naik virtually addresses India Energy Transition Summit 2026 | Akashvani News",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "6aebc16f288a6b29": {
@@ -1720,22 +1730,25 @@
      "Gentex Air Solutions LLC"
     ],
     "policy_measure": "none",
-    "policy_status": "proposed",
+    "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "Elgi Equipments (NSE:ELGIEQUIP): Why Did It Divest Its Stake in Gentex Air Solutions LLC?",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "6b7e28d41822b02b": {
    "answer": {
     "amount_text": "",
     "certainty": "completed",
-    "event_type": "none",
-    "gist": "Government clears Dixon (India)-Vivo (China) joint venture for manufacturing smartphones",
+    "event_type": "tie_up",
+    "gist": "Government clears Dixon (India)-Vivo (China) joint venture",
     "material": true,
-    "parties": [],
+    "parties": [
+     "Dixon",
+     "Vivo"
+    ],
     "policy_measure": "approval",
     "policy_status": "approved",
     "sector_effects": [
@@ -1748,7 +1761,7 @@
    },
    "input": "Government clears Dixon (India)-Vivo (China) joint venture for manufacturing smartphones",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "6ba860a1fd954ba3": {
@@ -1756,16 +1769,16 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "none",
-    "gist": "",
+    "gist": "Mphasis awarded EcoVadis Silver Medal",
     "material": false,
     "parties": [],
     "policy_measure": "none",
-    "policy_status": "proposed",
+    "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "Mphasis awarded EcoVadis Silver Medal with 75 score in FY26",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "7058cf870bfd9d48": {
@@ -1773,7 +1786,7 @@
     "amount_text": "Rs 66.46 crore",
     "certainty": "completed",
     "event_type": "order_win",
-    "gist": "Bikewo Green Tech wins Rs 66.46 crore order from Reliance Industries",
+    "gist": "Bikewo Green Tech wins Rs 66.46 crore order from Reliance Industries for EV tractor operations",
     "material": true,
     "parties": [
      "Bikewo Green Tech"
@@ -1784,17 +1797,20 @@
    },
    "input": "Bikewo Green Tech wins Rs 66.46 crore order from Reliance Industries for EV tractor operations",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "70e504390bea23af": {
    "answer": {
     "amount_text": "",
     "certainty": "reported",
-    "event_type": "none",
+    "event_type": "tie_up",
     "gist": "Dixon-Vivo joint venture inches close to securing final govt approval",
-    "material": false,
-    "parties": [],
+    "material": true,
+    "parties": [
+     "Dixon",
+     "Vivo"
+    ],
     "policy_measure": "approval",
     "policy_status": "proposed",
     "sector_effects": [
@@ -1807,7 +1823,7 @@
    },
    "input": "Dixon-Vivo joint venture inches close to securing final govt approval",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "721da8318440ef87": {
@@ -1815,16 +1831,16 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "none",
-    "gist": "SAM Advises Vivo Mobile India On Strategic Joint Venture With Dixon Technologies",
+    "gist": "",
     "material": false,
     "parties": [],
     "policy_measure": "none",
-    "policy_status": "in_force",
+    "policy_status": "proposed",
     "sector_effects": []
    },
    "input": "SAM Advises Vivo Mobile India On Strategic Joint Venture With Dixon Technologies",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "7265902024eeb8c4": {
@@ -1835,16 +1851,15 @@
     "gist": "Suzlon wins its maiden 200 MW wind energy order",
     "material": true,
     "parties": [
-     "Suzlon",
-     "Ayana Renewable Power"
+     "Suzlon"
     ],
     "policy_measure": "none",
-    "policy_status": "proposed",
+    "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "Suzlon wins its maiden 200 MW wind energy order from Ayana Renewable Power",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "73da339bc38192ce": {
@@ -1852,19 +1867,19 @@
     "amount_text": "",
     "certainty": "announced",
     "event_type": "tie_up",
-    "gist": "LTTS and Anthropic Partner",
+    "gist": "LTTS and Anthropic Partner to Transform Engineering",
     "material": true,
     "parties": [
      "LTTS",
      "Anthropic"
     ],
     "policy_measure": "none",
-    "policy_status": "proposed",
+    "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "LTTS and Anthropic Partner to Transform Engineering",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "77d0a2870627407e": {
@@ -1872,16 +1887,16 @@
     "amount_text": "",
     "certainty": "announced",
     "event_type": "none",
-    "gist": "",
+    "gist": "Anant Raj Limited Schedules Board Meeting",
     "material": false,
     "parties": [],
     "policy_measure": "none",
-    "policy_status": "proposed",
+    "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "Anant Raj Limited Schedules Board Meeting on May 11, 2026 for Q4FY26 Results and Final Dividend",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "79da8640ab3276b4": {
@@ -1898,7 +1913,7 @@
    },
    "input": "Pursuant to Regulation 30 of the SEBI Listing Regulations, please refer to the disclosure document regarding change in management.",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "7a3093b9a2203df7": {
@@ -1906,7 +1921,7 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "none",
-    "gist": "",
+    "gist": "Coforge Wins \"AI Native Enterprise\" Award",
     "material": false,
     "parties": [],
     "policy_measure": "none",
@@ -1915,7 +1930,7 @@
    },
    "input": "Coforge Wins \"AI Native Enterprise\" Award at TOI AI Quotient Awards\"",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "7a86bfe522a90b65": {
@@ -1929,12 +1944,12 @@
      "VBL"
     ],
     "policy_measure": "none",
-    "policy_status": "proposed",
+    "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "VBL: Q2 CY2026 delivered double-digit revenue and profit growth, expanded partnerships, and a new Kenya acquisition",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "7ba52f4c3f82c1ec": {
@@ -1949,12 +1964,12 @@
      "ABB"
     ],
     "policy_measure": "none",
-    "policy_status": "in_force",
+    "policy_status": "proposed",
     "sector_effects": []
    },
    "input": "TCS expands strategic partnership with ABB to build ai-driven global network backbone",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "7d3376fd4d779ffd": {
@@ -1962,7 +1977,7 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "none",
-    "gist": "",
+    "gist": "Board comments on fine levied by the Exchange",
     "material": false,
     "parties": [],
     "policy_measure": "none",
@@ -1971,7 +1986,7 @@
    },
    "input": "Optiemus Infracom Limited has informed the Exchange regarding 'Board comments on fine levied by the Exchange'.",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "7db2e824034e836b": {
@@ -1979,16 +1994,18 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "none",
-    "gist": "",
+    "gist": "Syrma SGS shareholders approve all AGM resolutions",
     "material": false,
-    "parties": [],
+    "parties": [
+     "Syrma SGS"
+    ],
     "policy_measure": "none",
     "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "Syrma SGS shareholders approve all AGM resolutions despite dissent on Doshi",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "7f067b3a7207215a": {
@@ -2003,20 +2020,20 @@
      "CSE"
     ],
     "policy_measure": "none",
-    "policy_status": "proposed",
+    "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "BPCL, CSE sign MoU to advance biofuels and circular economy projects",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "7f486978b46b5a26": {
    "answer": {
-    "amount_text": "",
+    "amount_text": "250 MW",
     "certainty": "completed",
     "event_type": "order_win",
-    "gist": "Suzlon Energy Secures 250 MW Wind Order From Torrent Green Energy",
+    "gist": "Suzlon Energy Secures 250 MW Wind Order",
     "material": true,
     "parties": [
      "Suzlon Energy"
@@ -2027,7 +2044,7 @@
    },
    "input": "Suzlon Energy Secures 250 MW Wind Order From Torrent Green Energy",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "7f72faef9ccb5c0c": {
@@ -2035,16 +2052,18 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "none",
-    "gist": "",
+    "gist": "Credit Rating",
     "material": true,
-    "parties": [],
+    "parties": [
+     "Adani Power Limited"
+    ],
     "policy_measure": "none",
     "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "Adani Power Limited has informed the Exchange about Credit Rating",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "80ea726652edb5e0": {
@@ -2052,16 +2071,16 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "none",
-    "gist": "",
+    "gist": "94% of ITC’s businesses now linked to agri-crops",
     "material": false,
     "parties": [],
     "policy_measure": "none",
-    "policy_status": "proposed",
+    "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "94% of ITC’s businesses now linked to agri-crops or plantations – Chairman Sanjiv Puri says at ITC AGM",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "81b3b3c188aa5da8": {
@@ -2069,24 +2088,24 @@
     "amount_text": "",
     "certainty": "announced",
     "event_type": "none",
-    "gist": "",
+    "gist": "Happiest Minds shares fall 12% after ITC merger plan",
     "material": true,
     "parties": [],
     "policy_measure": "none",
-    "policy_status": "proposed",
+    "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "Happiest Minds shares fall 12% after ITC merger plan",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "834ebb24b624a3f2": {
    "answer": {
-    "amount_text": "",
+    "amount_text": "7702182",
     "certainty": "completed",
     "event_type": "none",
-    "gist": "",
+    "gist": "allotment of 7702182 fully convertible warrants securities",
     "material": false,
     "parties": [],
     "policy_measure": "none",
@@ -2095,7 +2114,7 @@
    },
    "input": "Krishna Institute of Medical Sciences Limited has informed the Exchange regarding allotment of 7702182 fully convertible warrants securities pursuant to Preferential Issue",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "83d0f0c1e16dced6": {
@@ -2114,7 +2133,7 @@
    },
    "input": "HAL hands over 2 LCA FOC Twin Seater Trainers & 3 HTT 40 Basic Trainers to IAF and 4 Dhruv NG helicopters to PHL in the presence of Raksha Mantri & Civil Aviation Minister",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "85b3493a66026318": {
@@ -2128,12 +2147,12 @@
      "ideaForge"
     ],
     "policy_measure": "none",
-    "policy_status": "proposed",
+    "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "ideaForge secures ₹151 Cr TDB loan for autonomous aerial vehicle project",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "869e208923b43de0": {
@@ -2141,7 +2160,7 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "none",
-    "gist": "",
+    "gist": "PGIL shares zoom over 12% to hit record high",
     "material": false,
     "parties": [],
     "policy_measure": "none",
@@ -2150,7 +2169,7 @@
    },
    "input": "PGIL shares zoom over 12% to hit record high; here's why",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "86d8270f99867e62": {
@@ -2158,16 +2177,16 @@
     "amount_text": "",
     "certainty": "announced",
     "event_type": "none",
-    "gist": "Ministry of Rural Development to Commence DDU-GKY 2.0 Training Batches",
+    "gist": "Ministry of Rural Development to Commence DDU-GKY 2.0",
     "material": true,
     "parties": [],
     "policy_measure": "incentive_scheme",
-    "policy_status": "approved",
+    "policy_status": "proposed",
     "sector_effects": []
    },
    "input": "Ministry of Rural Development to Commence DDU-GKY 2.0 Training Batches Across Most States/UTs from October 2026",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "877d557614246fa5": {
@@ -2182,12 +2201,12 @@
      "Kaga Electronics"
     ],
     "policy_measure": "none",
-    "policy_status": "in_force",
+    "policy_status": "proposed",
     "sector_effects": []
    },
    "input": "Syrma SGS Forms PCB Joint Venture With Kaga Electronics",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "8941e8087594cd92": {
@@ -2195,19 +2214,19 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "tie_up",
-    "gist": "Kaynes Technology signs MoU with China’s Bosgame to launch computing products",
+    "gist": "Kaynes Technology signs MoU with China’s Bosgame",
     "material": true,
     "parties": [
      "Kaynes Technology",
      "Bosgame"
     ],
     "policy_measure": "none",
-    "policy_status": "in_force",
+    "policy_status": "proposed",
     "sector_effects": []
    },
    "input": "Kaynes Technology signs MoU with China’s Bosgame to launch computing products in India; stock rises 2%",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "8b61f41894ecd30a": {
@@ -2224,7 +2243,7 @@
    },
    "input": "\"It is all about 'neeyat'\": Arvind Kejriwal lauds Punjab govt school library",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "8bd4029ad3d58987": {
@@ -2232,18 +2251,19 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "capacity_add",
-    "gist": "inauguration of facility by Syrma Johri MedTech Limited",
+    "gist": "Update on inauguration of facility",
     "material": true,
     "parties": [
+     "Syrma SGS Technology Limited",
      "Syrma Johri MedTech Limited"
     ],
     "policy_measure": "none",
-    "policy_status": "proposed",
+    "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "Syrma Sgs Technology Limited has informed the Exchange regarding a press release dated September 22, 2026, titled \"Update on inauguration of facility by Syrma Johri MedTech Limited, a subsidiary of Syrma SGS Technology Limited ( Syrma SGS/…",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "8c16d8f2ec11d3af": {
@@ -2258,29 +2278,29 @@
      "APEDA"
     ],
     "policy_measure": "none",
-    "policy_status": "in_force",
+    "policy_status": "proposed",
     "sector_effects": []
    },
    "input": "CONCOR Signs MoU With APEDA to Strengthen Export Cold Chain",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "8cad8276d6ed0c6d": {
    "answer": {
     "amount_text": "",
-    "certainty": "completed",
+    "certainty": "announced",
     "event_type": "none",
-    "gist": "",
+    "gist": "Jharkhand Unveils Higher Education Roadmap",
     "material": false,
     "parties": [],
-    "policy_measure": "incentive_scheme",
-    "policy_status": "approved",
+    "policy_measure": "other",
+    "policy_status": "proposed",
     "sector_effects": []
    },
    "input": "Jharkhand Unveils Higher Education Roadmap with AI Courses, Technical Education Clusters",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "8d139f70d8089ab6": {
@@ -2297,7 +2317,7 @@
    },
    "input": "SPEL Semiconductor Limited Files SEBI SAST Compliance Declaration for FY26",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "8ebbe6f6b2c8299e": {
@@ -2305,7 +2325,7 @@
     "amount_text": "",
     "certainty": "announced",
     "event_type": "none",
-    "gist": "",
+    "gist": "Top stocks in focus tomorrow: Investors must watch NBCC, BHEL, Bharat Forge shares",
     "material": false,
     "parties": [],
     "policy_measure": "none",
@@ -2314,7 +2334,7 @@
    },
    "input": "Top stocks in focus tomorrow: Investors must watch NBCC, BHEL, Bharat Forge shares on Wed, 16 Sept | Triggers",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "8fb1852acb30d00a": {
@@ -2322,7 +2342,7 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "product_launch",
-    "gist": "Siemens unveils technologies to accelerate the industrial AI revolution",
+    "gist": "Siemens unveils technologies to accelerate the industrial AI revolution at CES 2026",
     "material": true,
     "parties": [
      "Siemens"
@@ -2333,7 +2353,7 @@
    },
    "input": "Siemens unveils technologies to accelerate the industrial AI revolution at CES 2026",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "90803083a5394ae7": {
@@ -2341,7 +2361,7 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "none",
-    "gist": "",
+    "gist": "Significant movement in price has been observed in INDO-MIM Limited",
     "material": false,
     "parties": [],
     "policy_measure": "none",
@@ -2350,7 +2370,7 @@
    },
    "input": "Significant movement in price has been observed in INDO-MIM Limited. The Exchange, in order to ensure that investors have latest relevant information about the company and to inform the market place so that the interest of the investors is…",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "9085ee1b26e9b686": {
@@ -2365,12 +2385,12 @@
      "Kaga Electronics"
     ],
     "policy_measure": "none",
-    "policy_status": "in_force",
+    "policy_status": "proposed",
     "sector_effects": []
    },
    "input": "Syrma SGS, Kaga Electronics Form ₹250 Million EMS Joint Venture",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "9118466b911188b9": {
@@ -2378,14 +2398,14 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "none",
-    "gist": "Welspun Living, Gokaldas Exports, other apparel stocks rise up to 12%",
-    "material": false,
+    "gist": "India-UK FTA: Welspun Living, Gokaldas Exports, other apparel stocks rise up to 12%",
+    "material": true,
     "parties": [],
     "policy_measure": "trade_agreement",
     "policy_status": "in_force",
     "sector_effects": [
      {
-      "because": "apparel stocks rise up to 12%",
+      "because": "India-UK FTA",
       "direction": "tailwind",
       "sector": "textiles_apparel"
      }
@@ -2393,7 +2413,7 @@
    },
    "input": "India-UK FTA: Welspun Living, Gokaldas Exports, other apparel stocks rise up to 12%",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "9146bad40f0f9165": {
@@ -2410,7 +2430,7 @@
    },
    "input": "NTPC Green Energy Limited has informed the Exchange regarding the Trading Window closure pursuant to SEBI (Prohibition of Insider Trading) Regulations, 2015",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "91ab02d25aebf860": {
@@ -2427,7 +2447,7 @@
    },
    "input": "The Exchange has received the disclosure under Regulation 29(2) of SEBI (Substantial Acquisition of Shares & Takeovers) Regulations, 2011 for Mirae Asset Mutual Fund",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "9228ef8f3154e5c4": {
@@ -2447,13 +2467,13 @@
    },
    "input": "Schneider Electric’s Planned Acquisition of Cognite Reinforces the Data Foundation for Industrial AI",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "92610d9d36ceb047": {
    "answer": {
     "amount_text": "",
-    "certainty": "completed",
+    "certainty": "announced",
     "event_type": "management_change",
     "gist": "Bata India Central Government Approval New MD CEO",
     "material": true,
@@ -2466,7 +2486,7 @@
    },
    "input": "Bata India BATAINDIA Central Government Approval New MD CEO",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "92c757a8dc999508": {
@@ -2485,7 +2505,7 @@
    },
    "input": "ideaForge secures first US order for school surveillance drones",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "93cb85c52bc6d2d4": {
@@ -2499,12 +2519,12 @@
      "ITC Hotels"
     ],
     "policy_measure": "none",
-    "policy_status": "proposed",
+    "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "ITC Hotels signs two Fortune Hotels in Uttar Pradesh and Andhra Pradesh",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "94800741098faf43": {
@@ -2512,7 +2532,7 @@
     "amount_text": "",
     "certainty": "announced",
     "event_type": "none",
-    "gist": "",
+    "gist": "Notice of Annual General Meeting",
     "material": false,
     "parties": [],
     "policy_measure": "none",
@@ -2521,7 +2541,7 @@
    },
    "input": "Satia Industries Limited has informed the Exchange regarding Notice of Annual General Meeting to be held on September 30, 2026",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "94ddfcee5cfb5e73": {
@@ -2529,7 +2549,7 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "none",
-    "gist": "",
+    "gist": "Schneider Electric Infrastructure Limited has informed the Exchange about Investor Presentation",
     "material": false,
     "parties": [],
     "policy_measure": "none",
@@ -2538,7 +2558,7 @@
    },
    "input": "Schneider Electric Infrastructure Limited has informed the Exchange about Investor Presentation",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "96192e73d56c52aa": {
@@ -2557,7 +2577,7 @@
    },
    "input": "Coforge Wins $230M AI Transformation Contract With European Client",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "96cccc12a9a799f9": {
@@ -2572,12 +2592,12 @@
      "Everest International"
     ],
     "policy_measure": "none",
-    "policy_status": "proposed",
+    "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "Varun Beverages Ltd forms JV with Everest International to make refrigerators",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "97101117960c23ac": {
@@ -2594,7 +2614,7 @@
    },
    "input": "India–UK Comprehensive Economic and Trade Agreement (CETA) Comes into Force; Export Consignment Flagged Off at Bengaluru",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "9ab3381e90bf505f": {
@@ -2611,7 +2631,7 @@
    },
    "input": "INDO-MIM Limited has informed the Exchange regarding the Trading Window closure pursuant to SEBI (Prohibition of Insider Trading) Regulations, 2015",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "9b1403c629280884": {
@@ -2621,16 +2641,14 @@
     "event_type": "none",
     "gist": "",
     "material": false,
-    "parties": [
-     "ideaForge Technology Limited"
-    ],
+    "parties": [],
     "policy_measure": "none",
     "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "Allotment of Equity Shares pursuant to ESOP scheme of ideaForge Technology Limited",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "9c51d0a4fb3afb19": {
@@ -2638,7 +2656,7 @@
     "amount_text": "$45 million",
     "certainty": "announced",
     "event_type": "none",
-    "gist": "",
+    "gist": "About $45 million in revenue is expected as American Industrial Technologies pursues a public listing",
     "material": true,
     "parties": [],
     "policy_measure": "none",
@@ -2647,7 +2665,7 @@
    },
    "input": "About $45 million in revenue is expected as American Industrial Technologies pursues a public listing",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "9da4f4d894b1d240": {
@@ -2655,7 +2673,7 @@
     "amount_text": "Rs. 71.7 mn",
     "certainty": "completed",
     "event_type": "order_win",
-    "gist": "Cranex Receives Orders Worth Rs. 71.7 mn",
+    "gist": "Cranex Receives Orders Worth Rs. 71.7 mn from BHEL and DEE VEE",
     "material": true,
     "parties": [
      "Cranex"
@@ -2666,7 +2684,7 @@
    },
    "input": "Cranex Receives Orders Worth Rs. 71.7 mn from BHEL and DEE VEE",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "9fae7ce326380252": {
@@ -2686,7 +2704,7 @@
    },
    "input": "AI boost! Tata Group announces partnership with OpenAI; TCS stock rises around 2%",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "a2b67decb9521c60": {
@@ -2699,11 +2717,17 @@
     "parties": [],
     "policy_measure": "trade_agreement",
     "policy_status": "proposed",
-    "sector_effects": []
+    "sector_effects": [
+     {
+      "because": "inter-government pact for electric propulsion of 4 Landing Platform Docks",
+      "direction": "tailwind",
+      "sector": "aerospace_defence"
+     }
+    ]
    },
    "input": "India, UK set to ink inter-government pact for electric propulsion of 4 Landing Platform Docks",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "a47277bc4799b86b": {
@@ -2718,12 +2742,12 @@
      "Theory and Practice Business Intelligence Inc."
     ],
     "policy_measure": "none",
-    "policy_status": "in_force",
+    "policy_status": "proposed",
     "sector_effects": []
    },
    "input": "Mphasis acquires Theory and Practice Business Intelligence Inc., strengthening its 'Decisioning Intelligence' capabilities",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "a53a329985634bc1": {
@@ -2731,7 +2755,7 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "none",
-    "gist": "",
+    "gist": "5 Footwear Stocks India 2026: Strong Future Roadmaps",
     "material": false,
     "parties": [],
     "policy_measure": "none",
@@ -2740,7 +2764,7 @@
    },
    "input": "5 Footwear Stocks India 2026: Strong Future Roadmaps",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "a53f65346a3d26df": {
@@ -2748,7 +2772,7 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "none",
-    "gist": "",
+    "gist": "Reliance share price jumps 7% after this acquisition update",
     "material": false,
     "parties": [],
     "policy_measure": "none",
@@ -2757,7 +2781,7 @@
    },
    "input": "Reliance share price jumps 7% after this acquisition update, India-US trade deal optimism — Time to buy?",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "a616f86413c90ff1": {
@@ -2771,12 +2795,12 @@
      "Siemens"
     ],
     "policy_measure": "none",
-    "policy_status": "in_force",
+    "policy_status": "proposed",
     "sector_effects": []
    },
    "input": "Siemens to acquire RTL design automation software company",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "a71556196a3b10ee": {
@@ -2784,19 +2808,18 @@
     "amount_text": "",
     "certainty": "announced",
     "event_type": "tie_up",
-    "gist": "firm announces partnership with Carlsberg for beer business in Africa",
+    "gist": "announces partnership with Carlsberg for beer business in Africa",
     "material": true,
     "parties": [
-     "Varun Beverages",
      "Carlsberg"
     ],
     "policy_measure": "none",
-    "policy_status": "in_force",
+    "policy_status": "proposed",
     "sector_effects": []
    },
    "input": "Varun Beverages rises 8.5% as firm announces partnership with Carlsberg for beer business in Africa, Q3...",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "a7830e2ad7693659": {
@@ -2813,7 +2836,7 @@
     "policy_status": "in_force",
     "sector_effects": [
      {
-      "because": "Defence Ministry signs 1950 crore contract with Bharat Electronics Limited",
+      "because": "Defence Ministry signs 1950 crore contract",
       "direction": "tailwind",
       "sector": "aerospace_defence"
      }
@@ -2821,7 +2844,7 @@
    },
    "input": "Defence Ministry signs 1950 crore contract with Bharat Electronics Limited",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "a7bd8ae5f3b2073e": {
@@ -2829,7 +2852,7 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "none",
-    "gist": "",
+    "gist": "Saraf and Partners acts on Fortis",
     "material": false,
     "parties": [],
     "policy_measure": "none",
@@ -2838,7 +2861,7 @@
    },
    "input": "Saraf and Partners acts on Fortis",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "a8a107c43c4113f8": {
@@ -2846,16 +2869,16 @@
     "amount_text": "",
     "certainty": "reported",
     "event_type": "none",
-    "gist": "Dixon Tech Up Almost 1% Intraday on Reports of Govt Approval Likely to Vivo Joint Venture",
+    "gist": "Dixon Tech Up Almost 1% Intraday",
     "material": false,
     "parties": [],
     "policy_measure": "none",
-    "policy_status": "in_force",
+    "policy_status": "proposed",
     "sector_effects": []
    },
    "input": "Dixon Tech Up Almost 1% Intraday on Reports of Govt Approval Likely to Vivo Joint Venture",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "a9e5183a218efe71": {
@@ -2869,29 +2892,29 @@
      "BEL"
     ],
     "policy_measure": "none",
-    "policy_status": "proposed",
+    "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "BEL bags additional orders worth Rs 1,081 crore",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "aa0a183f1ebf07da": {
    "answer": {
-    "amount_text": "Rs 68.6 Cr",
+    "amount_text": "",
     "certainty": "completed",
     "event_type": "none",
-    "gist": "",
+    "gist": "ideaForge Reports Rs 68.6 Cr Q1 FY27 Revenue",
     "material": true,
     "parties": [],
     "policy_measure": "none",
-    "policy_status": "proposed",
+    "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "ideaForge Reports Rs 68.6 Cr Q1 FY27 Revenue with Positive EBITDA; Targets Execution of FY27 Opening Order Book by Q3",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "aaba635c92c75cd3": {
@@ -2911,7 +2934,7 @@
    },
    "input": "LTTS and SiMa.ai Forge Strategic Alliance to Advance Physical AI Innovation for Mobility, MedTech & Smart Cities",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "aba17537ea56e4ec": {
@@ -2928,7 +2951,7 @@
    },
    "input": "Intimation under Regulation 30 of the SEBI (Listing Obligations and Disclosure Requirements) Regulations, 2015 - Newspaper Advertisement",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "ad0b42c4134dd23f": {
@@ -2945,7 +2968,7 @@
    },
    "input": "The Exchange has sought clarification from BF Utilities Limited for the quarter ended 30-Jun-2026 with respect to Regulation 33 of the SEBI (Listing Obligations and Disclosure Requirements) Regulations, 2015. On basis of above the Company…",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "b01c75697208e3cc": {
@@ -2953,7 +2976,7 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "none",
-    "gist": "",
+    "gist": "Himachal CM Sukhu Reviews 422 MW Kishau Project MoU",
     "material": false,
     "parties": [],
     "policy_measure": "none",
@@ -2962,7 +2985,7 @@
    },
    "input": "Himachal CM Sukhu Reviews 422 MW Kishau Project MoU",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "b05017baf28baed7": {
@@ -2970,7 +2993,7 @@
     "amount_text": "₹54.94 Cr",
     "certainty": "completed",
     "event_type": "none",
-    "gist": "Profit Declines 7% to ₹54.94 Cr",
+    "gist": "Relaxo Footwears Q1 FY27 Profit Declines 7% to ₹54.94 Cr",
     "material": true,
     "parties": [
      "Relaxo Footwears"
@@ -2981,15 +3004,15 @@
    },
    "input": "Relaxo Footwears Q1 FY27 Profit Declines 7% to ₹54.94 Cr",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "b13f8af1249a5cab": {
    "answer": {
     "amount_text": "",
-    "certainty": "completed",
+    "certainty": "announced",
     "event_type": "none",
-    "gist": "Production Linked Incentive (PLI) Scheme",
+    "gist": "",
     "material": false,
     "parties": [],
     "policy_measure": "incentive_scheme",
@@ -2998,7 +3021,7 @@
    },
    "input": "Production Linked Incentive (PLI) Scheme:",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "b270417c2a9c8c4f": {
@@ -3006,19 +3029,19 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "acquisition",
-    "gist": "TCS Acquires Coastal Cloud, a Leading US Salesforce Consulting Firm",
+    "gist": "TCS Acquires Coastal Cloud",
     "material": true,
     "parties": [
      "TCS",
      "Coastal Cloud"
     ],
     "policy_measure": "none",
-    "policy_status": "in_force",
+    "policy_status": "proposed",
     "sector_effects": []
    },
    "input": "TCS Acquires Coastal Cloud, a Leading US Salesforce Consulting Firm",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "b2ab45ce35716b6d": {
@@ -3026,16 +3049,16 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "none",
-    "gist": "",
+    "gist": "CONCOR awarded Authorized Economic Operator (AEO) Certificate",
     "material": false,
     "parties": [],
     "policy_measure": "none",
-    "policy_status": "proposed",
+    "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "CONCOR awarded Authorized Economic Operator (AEO) Certificate by Indian Customs",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "b2d800d159c980d9": {
@@ -3052,7 +3075,7 @@
    },
    "input": "Max Healthcare Institute Limited has informed the Exchange regarding allotment of Equity Shares under Max Healthcare Institute Limited - Employee Stock Option Scheme 2022.",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "b3ac669c43eb1969": {
@@ -3060,7 +3083,7 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "none",
-    "gist": "",
+    "gist": "BEL shares jump 2% amid weak market",
     "material": false,
     "parties": [],
     "policy_measure": "none",
@@ -3069,7 +3092,7 @@
    },
    "input": "BEL shares jump 2% amid weak market; latest buzz you need to know",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "b48861601f176003": {
@@ -3084,12 +3107,12 @@
      "TCS"
     ],
     "policy_measure": "none",
-    "policy_status": "in_force",
+    "policy_status": "proposed",
     "sector_effects": []
    },
    "input": "Tata Consultancy Services Limited has informed the Exchange regarding 'Press Release - DGCX partners with TCS to advance and upgrade derivatives market infrastructure'.",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "b6304ecdf22820c9": {
@@ -3097,16 +3120,16 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "none",
-    "gist": "",
-    "material": true,
+    "gist": "Chalet Hotels Q1 FY27 Investor Presentation",
+    "material": false,
     "parties": [],
     "policy_measure": "none",
-    "policy_status": "proposed",
+    "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "Chalet Hotels Q1 FY27 Investor Presentation Highlights Robust Performance",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "b6a5fde78689bbe3": {
@@ -3121,12 +3144,12 @@
      "BPCL"
     ],
     "policy_measure": "none",
-    "policy_status": "in_force",
+    "policy_status": "proposed",
     "sector_effects": []
    },
    "input": "CSE signs MoU with BPCL",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "b6fc380dda2c2d6b": {
@@ -3145,43 +3168,49 @@
    },
    "input": "BHEL Shares In Focus After Rs 2,500 Crore Order Win — Check Target Price",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "b9b90ca521363cda": {
    "answer": {
     "amount_text": "",
-    "certainty": "completed",
-    "event_type": "none",
+    "certainty": "announced",
+    "event_type": "capacity_add",
     "gist": "Investment Approval for Kochi-Kanyakumari-Thoothukudi Natural Gas Pipeline",
     "material": true,
     "parties": [
      "Indian Oil Corporation Limited"
     ],
-    "policy_measure": "approval",
-    "policy_status": "approved",
+    "policy_measure": "none",
+    "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "Indian Oil Corporation Limited has informed the Exchange regarding 'Investment Approval for Kochi-Kanyakumari-Thoothukudi Natural Gas Pipeline'.",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "ba48c0a59ceebb64": {
    "answer": {
     "amount_text": "",
-    "certainty": "completed",
+    "certainty": "announced",
     "event_type": "none",
-    "gist": "",
+    "gist": "Cybersecurity in government: How to protect public services and strengthen cyber resilience",
     "material": false,
     "parties": [],
-    "policy_measure": "none",
-    "policy_status": "in_force",
-    "sector_effects": []
+    "policy_measure": "regulation",
+    "policy_status": "proposed",
+    "sector_effects": [
+     {
+      "because": "protect public services and strengthen cyber resilience",
+      "direction": "tailwind",
+      "sector": "cybersecurity"
+     }
+    ]
    },
    "input": "Cybersecurity in government: How to protect public services and strengthen cyber resilience",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "bccde0119b0fcde4": {
@@ -3189,19 +3218,19 @@
     "amount_text": "",
     "certainty": "announced",
     "event_type": "tie_up",
-    "gist": "Titagarh Rail Systems Board Approves BHEL Joint Venture",
+    "gist": "Approves BHEL Joint Venture for Vande Bharat Maintenance",
     "material": true,
     "parties": [
      "Titagarh Rail Systems",
      "BHEL"
     ],
     "policy_measure": "none",
-    "policy_status": "in_force",
+    "policy_status": "proposed",
     "sector_effects": []
    },
    "input": "Titagarh Rail Systems Board Approves BHEL Joint Venture for Vande Bharat Maintenance",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "be366e5ac43409c2": {
@@ -3209,7 +3238,7 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "none",
-    "gist": "",
+    "gist": "TVS Motor, Dixon Tech in, Reliance, M&M out",
     "material": false,
     "parties": [],
     "policy_measure": "none",
@@ -3218,7 +3247,7 @@
    },
    "input": "TVS Motor, Dixon Tech in, Reliance, M&M out: Which stocks made it into Macquarie's new India portfolio?",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "bf8530a62d596613": {
@@ -3226,16 +3255,16 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "none",
-    "gist": "",
+    "gist": "Container Corp of India Share Price",
     "material": false,
     "parties": [],
     "policy_measure": "none",
-    "policy_status": "proposed",
+    "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "Container Corp of India Share Price",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "c4ad04dc594d9478": {
@@ -3243,18 +3272,18 @@
     "amount_text": "68.22 MW",
     "certainty": "completed",
     "event_type": "capacity_add",
-    "gist": "NTPC Green Energy Commissions 68.22 MW Dahod Solar Capacity",
+    "gist": "Commissions 68.22 MW Dahod Solar Capacity",
     "material": true,
     "parties": [
      "NTPC Green Energy"
     ],
     "policy_measure": "none",
-    "policy_status": "in_force",
+    "policy_status": "proposed",
     "sector_effects": []
    },
    "input": "NTPC Green Energy (NSE:NTPCGREEN) Commissions 68.22 MW Dahod Solar Capacity",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "c6124df79f8770c3": {
@@ -3262,7 +3291,7 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "none",
-    "gist": "Reports Earnings Results",
+    "gist": "Reports Earnings Results for the First Quarter",
     "material": true,
     "parties": [],
     "policy_measure": "none",
@@ -3271,7 +3300,7 @@
    },
    "input": "IdeaForge Technology Limited Reports Earnings Results for the First Quarter Ended June 30, 2026",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "c6643f8ef846ce11": {
@@ -3279,33 +3308,33 @@
     "amount_text": "400MW",
     "certainty": "completed",
     "event_type": "order_win",
-    "gist": "Suzlon crosses 1 GW partnership with Tata Power following a DevCo led new 400MW EPC order",
+    "gist": "Suzlon crosses 1 GW partnership with Tata Power",
     "material": true,
     "parties": [
      "Suzlon"
     ],
     "policy_measure": "none",
-    "policy_status": "in_force",
+    "policy_status": "proposed",
     "sector_effects": []
    },
    "input": "Suzlon crosses 1 GW partnership with Tata Power following a DevCo led new 400MW EPC order",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "c74a126e35479935": {
    "answer": {
     "amount_text": "Rs 52,000-crore",
-    "certainty": "completed",
+    "certainty": "announced",
     "event_type": "none",
-    "gist": "",
+    "gist": "Zen Tech, HAL & other defence stocks rally up to 6% on DAC's Rs 52,000-crore approval",
     "material": true,
     "parties": [],
-    "policy_measure": "procurement",
+    "policy_measure": "approval",
     "policy_status": "approved",
     "sector_effects": [
      {
-      "because": "defence stocks rally up to 6% on DAC's Rs 52,000-crore approval",
+      "because": "DAC's Rs 52,000-crore approval",
       "direction": "tailwind",
       "sector": "aerospace_defence"
      }
@@ -3313,13 +3342,13 @@
    },
    "input": "Zen Tech, HAL & other defence stocks rally up to 6% on DAC's Rs 52,000-crore approval. Motilal picks 3 shares to buy",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "c7c0d7345695d9ef": {
    "answer": {
     "amount_text": "",
-    "certainty": "completed",
+    "certainty": "announced",
     "event_type": "none",
     "gist": "",
     "material": false,
@@ -3330,7 +3359,7 @@
    },
    "input": "Jeena Sikho Lifecare Limited has informed the Exchange about Intimation of Analyst / Investor meet under Regulation 30 of the SEBI (Listing Obligations and Disclosure Requirements) Regulations, 2015 scheduled to be held on 03rd September,…",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "c7f475b8641ff844": {
@@ -3338,7 +3367,7 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "none",
-    "gist": "The Indian Hotels Company Limited approved the scheme of arrangement",
+    "gist": "Board of Directors of The Indian Hotels Company Limited... approved the scheme of arrangement",
     "material": true,
     "parties": [],
     "policy_measure": "none",
@@ -3347,7 +3376,7 @@
    },
    "input": "Pursuant to Regulation 30 we wish to inform you that Board of Directors of The Indian Hotels Company Limited at its meeting held on August 24, 2026 approved the scheme of arrangement between ....",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "c8f58f1168932ddb": {
@@ -3355,7 +3384,7 @@
     "amount_text": "₹4 crore",
     "certainty": "completed",
     "event_type": "order_win",
-    "gist": "Tiger Logistics wins ₹4 crore BHEL order",
+    "gist": "Tiger Logistics wins ₹4 crore BHEL order for import break bulk project",
     "material": true,
     "parties": [
      "Tiger Logistics"
@@ -3366,7 +3395,7 @@
    },
    "input": "Tiger Logistics wins ₹4 crore BHEL order for import break bulk project",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "c9bbcf742279a889": {
@@ -3385,7 +3414,7 @@
    },
    "input": "Siemens Unveils SCALANCE XFM-200 Compact, Flat Managed Switches for Cabinet-Critical Installations",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "c9de7089ca44ca8f": {
@@ -3393,16 +3422,18 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "none",
-    "gist": "",
+    "gist": "LBank Unveils Q2 2026 Report",
     "material": false,
-    "parties": [],
+    "parties": [
+     "LBank"
+    ],
     "policy_measure": "none",
     "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "LBank Unveils Q2 2026 Report, Featuring 25 Million Users and Advances in Prediction Markets and Cultural IP",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "cbe6975f5a605760": {
@@ -3410,7 +3441,7 @@
     "amount_text": "",
     "certainty": "announced",
     "event_type": "none",
-    "gist": "",
+    "gist": "Notice of Annual General Meeting",
     "material": false,
     "parties": [],
     "policy_measure": "none",
@@ -3419,15 +3450,15 @@
    },
    "input": "Relaxo Footwears Limited has informed the Exchange regarding Notice of Annual General Meeting to be held on September 24, 2026",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "ce362cdc765de0a3": {
    "answer": {
     "amount_text": "",
-    "certainty": "announced",
+    "certainty": "completed",
     "event_type": "divestment",
-    "gist": "BPCL exits Numaligarh Refinery",
+    "gist": "BPCL exits Numaligarh Refinery ahead of privatisation",
     "material": true,
     "parties": [
      "BPCL"
@@ -3438,7 +3469,7 @@
    },
    "input": "BPCL exits Numaligarh Refinery ahead of privatisation",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "ced9ccbf4c7631dc": {
@@ -3461,7 +3492,7 @@
    },
    "input": "Government of India taking steps to encourage domestic manufacturing of semiconductors & promote country's digital transformation and self-reliance",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "d152486550cf994d": {
@@ -3475,12 +3506,12 @@
      "TCS"
     ],
     "policy_measure": "none",
-    "policy_status": "proposed",
+    "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "TCS Launches NVIDIA-Powered Autonomous Engineering Lab in Bengaluru to Drive Industrial AI Prototyping",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "d3a5e24926ed5cd6": {
@@ -3488,7 +3519,7 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "none",
-    "gist": "",
+    "gist": "Stocks To Watch, Jan 16",
     "material": false,
     "parties": [],
     "policy_measure": "none",
@@ -3497,7 +3528,7 @@
    },
    "input": "Stocks To Watch, Jan 16: Tech Mahindra, RIL, Infosys, Wipro, Sobha, Polycab India, Tata Tech, LTTS, L&T Finance, oil-linked stocks",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "d636f98e26661510": {
@@ -3509,32 +3540,32 @@
     "material": false,
     "parties": [],
     "policy_measure": "none",
-    "policy_status": "proposed",
+    "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "ICICI Bank Limited has informed the Exchange regarding Allotment of 38512  Shares.",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "d6375d5ba4d4b727": {
    "answer": {
     "amount_text": "",
-    "certainty": "announced",
+    "certainty": "completed",
     "event_type": "tie_up",
-    "gist": "LTTS partners with Anthropic to embed Claude AI in engineering",
+    "gist": "LTTS partners with Anthropic",
     "material": true,
     "parties": [
      "LTTS",
      "Anthropic"
     ],
     "policy_measure": "none",
-    "policy_status": "in_force",
+    "policy_status": "proposed",
     "sector_effects": []
    },
    "input": "LTTS partners with Anthropic to embed Claude AI in engineering",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "d6e6b7d26d1065f2": {
@@ -3542,7 +3573,7 @@
     "amount_text": "Rs. 481-crore",
     "certainty": "completed",
     "event_type": "order_win",
-    "gist": "Ellenbarrie bags Rs. 481-crore BHEL contract",
+    "gist": "Ellenbarrie bags Rs. 481-crore BHEL contract for major Odisha air separation unit",
     "material": true,
     "parties": [
      "Ellenbarrie"
@@ -3553,7 +3584,7 @@
    },
    "input": "Ellenbarrie bags Rs. 481-crore BHEL contract for major Odisha air separation unit",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "d726005f8b76c36c": {
@@ -3565,12 +3596,12 @@
     "material": true,
     "parties": [],
     "policy_measure": "none",
-    "policy_status": "proposed",
+    "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "Godrej Properties GODREJPROP: Gurugram Dispute Settled",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "d87c128ba69601c6": {
@@ -3578,7 +3609,7 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "none",
-    "gist": "Q1 profit plunges 83%",
+    "gist": "Thermax Q1 profit plunges 83%",
     "material": true,
     "parties": [
      "Thermax"
@@ -3589,7 +3620,7 @@
    },
    "input": "Thermax Q1 profit plunges 83% as margins collapse despite higher revenue",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "d8ac80ab00e46775": {
@@ -3604,12 +3635,12 @@
      "BOSGAME"
     ],
     "policy_measure": "none",
-    "policy_status": "proposed",
+    "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "Kaynes and BOSGAME partner to bring computing brand to India",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "de8cf3704a86f3a7": {
@@ -3620,16 +3651,21 @@
     "gist": "government likely to approve Vivo JV",
     "material": true,
     "parties": [
-     "Dixon Tech",
      "Vivo"
     ],
     "policy_measure": "approval",
     "policy_status": "proposed",
-    "sector_effects": []
+    "sector_effects": [
+     {
+      "because": "Dixon Tech shares surge sharply as government likely to approve Vivo JV",
+      "direction": "tailwind",
+      "sector": "manufacturing_electronics"
+     }
+    ]
    },
    "input": "Dixon Tech shares surge sharply as government likely to approve Vivo JV",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "df2ea221527b9269": {
@@ -3637,7 +3673,7 @@
     "amount_text": "",
     "certainty": "announced",
     "event_type": "none",
-    "gist": "",
+    "gist": "Kalpataru JV to appeal after Delhi HC partly sets aside arbitral award against NHAI",
     "material": true,
     "parties": [],
     "policy_measure": "none",
@@ -3646,7 +3682,7 @@
    },
    "input": "Kalpataru JV to appeal after Delhi HC partly sets aside arbitral award against NHAI",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "e193744e988aad9f": {
@@ -3654,19 +3690,19 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "tie_up",
-    "gist": "BHEL Partners With Hystar To Advance PEM Electrolyzers Technology",
+    "gist": "BHEL Partners With Hystar",
     "material": true,
     "parties": [
      "BHEL",
      "Hystar"
     ],
     "policy_measure": "none",
-    "policy_status": "in_force",
+    "policy_status": "proposed",
     "sector_effects": []
    },
    "input": "BHEL Partners With Hystar To Advance PEM Electrolyzers Technology For Green Hydrogen",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "e1eb4f219783a0b8": {
@@ -3681,12 +3717,12 @@
      "DMP"
     ],
     "policy_measure": "none",
-    "policy_status": "in_force",
+    "policy_status": "proposed",
     "sector_effects": []
    },
    "input": "ideaForge inks MoU with Japan's DMP to Expand Global Footprint in Next-Gen AI Drones",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "e2ea670f88903797": {
@@ -3706,7 +3742,7 @@
    },
    "input": "TCS Partners With DGCE To Advance Derivatives Market Infrastructure; Shares Up 3.3%",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "e430f5135e0bc0a8": {
@@ -3723,7 +3759,7 @@
    },
    "input": "The Exchange has received the disclosure under Regulation 29(2) of SEBI (Substantial Acquisition of Shares & Takeovers) Regulations, 2011 for K Shalini & PACs",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "e476701ef3792f90": {
@@ -3738,12 +3774,12 @@
      "CONCOR"
     ],
     "policy_measure": "none",
-    "policy_status": "proposed",
+    "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "RITES, CONCOR sign MoU for project management consultancy services",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "e9f7835a70a5f0b4": {
@@ -3751,7 +3787,7 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "none",
-    "gist": "",
+    "gist": "Equity Shares of Behari Lal Engineering Ltd are listed",
     "material": false,
     "parties": [],
     "policy_measure": "none",
@@ -3760,7 +3796,7 @@
    },
    "input": "Trading Members of the Exchange are hereby informed that effective from August 19, 2026, the Equity Shares of Behari Lal Engineering Ltd  (Scrip Code: 544870) are listed and admitted to ....",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "ea111fda1db27330": {
@@ -3779,7 +3815,7 @@
    },
    "input": "Syrma SGS Elemaster Opens Advanced Electronics Facility in Bengaluru",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "eb5543b991dbbbb9": {
@@ -3787,16 +3823,16 @@
     "amount_text": "",
     "certainty": "announced",
     "event_type": "none",
-    "gist": "",
+    "gist": "Declare all Dharwad taluks drought-hit",
     "material": false,
     "parties": [],
-    "policy_measure": "none",
+    "policy_measure": "other",
     "policy_status": "proposed",
     "sector_effects": []
    },
    "input": "Declare all Dharwad taluks drought-hit, Arvind Bellad urges govt",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "eb798498fe2e0973": {
@@ -3804,16 +3840,16 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "none",
-    "gist": "",
+    "gist": "Stock market fall: 170 stocks that hit 52-week low",
     "material": false,
     "parties": [],
     "policy_measure": "none",
-    "policy_status": "proposed",
+    "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "Stock market fall: Dixon Technologies, ITC, Godrej Properties among 170 stocks that hit 52-week low on NSE",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "edb2422a97a06c49": {
@@ -3821,7 +3857,7 @@
     "amount_text": "Rs 305 Crore",
     "certainty": "completed",
     "event_type": "acquisition",
-    "gist": "Rs 305 Crore Kenya Acquisition",
+    "gist": "Beverages Major Share Price Falls 4% Despite Rs 305 Crore Kenya Acquisition",
     "material": true,
     "parties": [],
     "policy_measure": "none",
@@ -3830,7 +3866,7 @@
    },
    "input": "Beverages Major Share Price Falls 4% Despite Rs 305 Crore Kenya Acquisition; Check Details",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "edbc5aed2ad725f8": {
@@ -3849,29 +3885,29 @@
    },
    "input": "Mumbai-based ideaForge Technology has unveiled its latest mapping UAV, the Q6V2 GEO, at its first-ever customer event, PRAGYA 2025. Designed for geospatial intelligence, the lightweight drone can map terrains ranging from glaciers to dense urban corrid",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "ee225dc8eb302355": {
    "answer": {
     "amount_text": "",
-    "certainty": "completed",
+    "certainty": "announced",
     "event_type": "none",
-    "gist": "",
+    "gist": "Kerala unveils AI-led governance overhaul",
     "material": false,
     "parties": [],
-    "policy_measure": "regulation",
-    "policy_status": "approved",
+    "policy_measure": "other",
+    "policy_status": "proposed",
     "sector_effects": []
    },
    "input": "Kerala unveils AI-led governance overhaul to streamline administration, speed up public services",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "ee77a0e80ba7d1b9": {
    "answer": {
-    "amount_text": "83.25%",
+    "amount_text": "",
     "certainty": "announced",
     "event_type": "acquisition",
     "gist": "Persistent Systems Secures 83.25% Nagarro Ownership",
@@ -3881,12 +3917,12 @@
      "Nagarro"
     ],
     "policy_measure": "none",
-    "policy_status": "proposed",
+    "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "Persistent Systems Secures 83.25% Nagarro Ownership, Extends Acceptance to October 6",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "eeed30998eed58c1": {
@@ -3896,17 +3932,20 @@
     "event_type": "none",
     "gist": "Dixon shares rise as Vivo JV wins government approval",
     "material": true,
-    "parties": [
-     "Dixon",
-     "Vivo"
-    ],
+    "parties": [],
     "policy_measure": "approval",
     "policy_status": "approved",
-    "sector_effects": []
+    "sector_effects": [
+     {
+      "because": "Vivo JV wins government approval",
+      "direction": "tailwind",
+      "sector": "manufacturing_electronics"
+     }
+    ]
    },
    "input": "Dixon shares rise as Vivo JV wins government approval",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "f0b41d7e12e1a6c0": {
@@ -3914,16 +3953,24 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "none",
-    "gist": "CONCOR flags off first export container",
+    "gist": "CONCOR flags off first export container to the UK",
     "material": true,
-    "parties": [],
+    "parties": [
+     "CONCOR"
+    ],
     "policy_measure": "trade_agreement",
     "policy_status": "in_force",
-    "sector_effects": []
+    "sector_effects": [
+     {
+      "because": "first export container to the UK from ICD Whitefield under India–UK FTA",
+      "direction": "tailwind",
+      "sector": "logistics_heavy_capital"
+     }
+    ]
    },
    "input": "CONCOR flags off first export container to the UK from ICD Whitefield under India–UK FTA",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "f0f07bfa6d16e434": {
@@ -3935,15 +3982,15 @@
     "material": true,
     "parties": [
      "Varun Beverages",
-     "Devyani Food Industries Kenya"
+     "Devyani Food Industries Kenya Business"
     ],
     "policy_measure": "none",
-    "policy_status": "in_force",
+    "policy_status": "proposed",
     "sector_effects": []
    },
    "input": "Varun Beverages Acquires Devyani Food Industries Kenya Business For $32 Million",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "f12206578dd885fd": {
@@ -3958,38 +4005,36 @@
      "Chandenvalle Infra Park Limited"
     ],
     "policy_measure": "none",
-    "policy_status": "in_force",
+    "policy_status": "proposed",
     "sector_effects": []
    },
    "input": "Adaniconnex Private Limited completed the acquisition of Chandenvalle Infra Park Limited from Adani Power Limited for INR 5.4 billion.",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "f155c9ab4f2caedf": {
    "answer": {
     "amount_text": "",
     "certainty": "completed",
-    "event_type": "product_launch",
+    "event_type": "none",
     "gist": "Glenmark Pharmaceuticals receives U.S. FDA approval for Fluticasone Propionate Nasal Spray",
     "material": true,
-    "parties": [
-     "Glenmark Pharmaceuticals Limited"
-    ],
+    "parties": [],
     "policy_measure": "approval",
     "policy_status": "approved",
     "sector_effects": []
    },
    "input": "Glenmark Pharmaceuticals Limited has informed the Exchange regarding a press release dated August 20, 2026, titled \"Glenmark Pharmaceuticals receives U.S. FDA approval for Fluticasone Propionate Nasal Spray, 0.05 mg (50 mcg)/spray\".",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "f16068c6a6b35b2f": {
    "answer": {
     "amount_text": "",
     "certainty": "completed",
-    "event_type": "product_launch",
+    "event_type": "capacity_add",
     "gist": "Maersk’s Unveils First Indian Manufactured Shipping Container",
     "material": true,
     "parties": [
@@ -4001,7 +4046,7 @@
    },
    "input": "Maersk’s Unveils First Indian Manufactured Shipping Container",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "f1af96c228d6f7da": {
@@ -4018,7 +4063,7 @@
    },
    "input": "Fortis Healthcare Limited has informed the Exchange Regarding Order Passed By The Hon Ble Delhi High Court In Relation To Certain Applications Filed By Daiichi Sankyo Company, Limited Inter Alia The Company. Detailed Disclosure Is Attached.",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "f3d0a643d885ce78": {
@@ -4032,12 +4077,12 @@
      "ideaForge"
     ],
     "policy_measure": "none",
-    "policy_status": "in_force",
+    "policy_status": "proposed",
     "sector_effects": []
    },
    "input": "ideaForge lands first US purchase order",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "f50d6095e62ad4b9": {
@@ -4056,7 +4101,7 @@
     "policy_status": "approved",
     "sector_effects": [
      {
-      "because": "Rs 52,000 crore defence buys",
+      "because": "DAC clears Rs 52,000 crore defence buys",
       "direction": "tailwind",
       "sector": "aerospace_defence"
      }
@@ -4064,7 +4109,7 @@
    },
    "input": "Paras Defence, BEL, HAL gain up to 5% after DAC clears Rs 52,000 crore defence buys",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "f6474d460e65d730": {
@@ -4076,12 +4121,12 @@
     "material": true,
     "parties": [],
     "policy_measure": "trade_agreement",
-    "policy_status": "proposed",
+    "policy_status": "approved",
     "sector_effects": []
    },
    "input": "India-New Zealand FTA to Enter into Force from 20 October 2026",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "f92d0bd4573837ef": {
@@ -4095,12 +4140,12 @@
      "Syrma SGS"
     ],
     "policy_measure": "none",
-    "policy_status": "in_force",
+    "policy_status": "proposed",
     "sector_effects": []
    },
    "input": "Syrma SGS inaugurates a new facility in Jodhpur",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "fa8d3b4c8f7df471": {
@@ -4112,12 +4157,12 @@
     "material": false,
     "parties": [],
     "policy_measure": "none",
-    "policy_status": "proposed",
+    "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "ICICI Bank Limited has informed the Exchange regarding Allotment of 437638  Shares.",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "fc66d6b01b6417ab": {
@@ -4125,7 +4170,7 @@
     "amount_text": "",
     "certainty": "announced",
     "event_type": "none",
-    "gist": "",
+    "gist": "CONCOR to Hold Analyst and Investor Meeting",
     "material": false,
     "parties": [],
     "policy_measure": "none",
@@ -4134,7 +4179,7 @@
    },
    "input": "CONCOR to Hold Analyst and Investor Meeting on September 2 at 10 AM",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "fc71273b60b54fc7": {
@@ -4142,39 +4187,36 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "tie_up",
-    "gist": "SAS Partners with TCS, AI-driven Cyber Resilience Takes Flight",
+    "gist": "SAS Partners with TCS",
     "material": true,
     "parties": [
      "SAS",
      "TCS"
     ],
     "policy_measure": "none",
-    "policy_status": "in_force",
+    "policy_status": "proposed",
     "sector_effects": []
    },
    "input": "SAS Partners with TCS, AI-driven Cyber Resilience Takes Flight",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "fd7b04cb8ffa6a11": {
    "answer": {
     "amount_text": "",
     "certainty": "completed",
-    "event_type": "tie_up",
-    "gist": "Mphasis and Copa Airlines Host Global Quantum Computing Challenge",
+    "event_type": "none",
+    "gist": "",
     "material": false,
-    "parties": [
-     "Mphasis",
-     "Copa Airlines"
-    ],
+    "parties": [],
     "policy_measure": "none",
-    "policy_status": "proposed",
+    "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "MphasiS Limited has informed the Exchange regarding a press release dated September 22, 2026, titled \"Mphasis and Copa Airlines Host Global Quantum Computing Challenge toAccelerate Innovation in Airline Operations\".",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "febb1d2ce72cac15": {
@@ -4186,12 +4228,12 @@
     "material": false,
     "parties": [],
     "policy_measure": "none",
-    "policy_status": "proposed",
+    "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "ICICI Bank Limited has informed the Exchange about Disclosure under Regulation 30 of SEBI (Listing Obligations and Disclosure Requirements) Regulations, 2015",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   },
   "febbc64380474ecf": {
@@ -4199,16 +4241,16 @@
     "amount_text": "",
     "certainty": "completed",
     "event_type": "none",
-    "gist": "",
+    "gist": "shares change hands via block deals",
     "material": false,
     "parties": [],
     "policy_measure": "none",
-    "policy_status": "proposed",
+    "policy_status": "in_force",
     "sector_effects": []
    },
    "input": "RIL, Asian Paints, HDFC Bank, TCS, among other shares change hands via block deals on June 24",
    "model": "gemini-flash-lite-latest",
-   "prompt": "72a852debfa3",
+   "prompt": "b8609e790bd1",
    "recorded": "2026-10-25"
   }
  }

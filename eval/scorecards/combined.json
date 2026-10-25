@@ -2,35 +2,37 @@
  "format": 1,
  "metrics": {
   "all": {
-   "actors_exact": null,
-   "labelled_events": 0,
-   "partners": null,
-   "pending": 157,
-   "precision": null,
-   "recall": null,
-   "rows": 0
+   "actors_exact": 1.0,
+   "labelled_events": 83,
+   "partners": 0.974,
+   "pending": 0,
+   "precision": 0.952,
+   "recall": 0.952,
+   "rows": 157
   },
   "dev": {
-   "actors_exact": null,
-   "labelled_events": 0,
-   "partners": null,
-   "pending": 102,
-   "precision": null,
-   "recall": null,
-   "rows": 0
+   "actors_exact": 1.0,
+   "labelled_events": 53,
+   "partners": 1.0,
+   "pending": 0,
+   "precision": 0.962,
+   "recall": 0.962,
+   "rows": 102
   },
   "holdout": {
-   "actors_exact": null,
-   "labelled_events": 0,
-   "partners": null,
-   "pending": 55,
-   "precision": null,
-   "recall": null,
-   "rows": 0
+   "actors_exact": 1.0,
+   "labelled_events": 30,
+   "partners": 0.947,
+   "pending": 0,
+   "precision": 0.933,
+   "recall": 0.933,
+   "rows": 55
   }
  },
  "models": {
-  "events": {}
+  "events": {
+   "gemini-flash-lite-latest": 225
+  }
  },
  "prompt": {
   "events": "b8609e790bd1"
@@ -38,944 +40,944 @@
  "reader": "combined",
  "rows": {
   "5 Footwear Stocks India 2026: Strong Future Roadmaps": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "none"
   },
   "94% of ITC’s businesses now linked to agri-crops or plantations – Chairman Sanjiv Puri says at ITC AGM": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "none"
   },
   "AI boost! Tata Group announces partnership with OpenAI; TCS stock rises around 2%": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "tie_up (no holding)"
   },
   "Aareal Bank and TCS forge strategic partnership to accelerate digital transformation": {
-   "got": "",
-   "outcome": "pending",
+   "got": "tie_up TCS with Aareal Bank",
+   "outcome": "found",
    "split": "holdout",
    "want": "tie_up TCS with Aareal Bank"
   },
   "About $45 million in revenue is expected as American Industrial Technologies pursues a public listing": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "none"
   },
   "Adani Power Limited has informed the Exchange about Credit Rating": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "none"
   },
   "Adaniconnex Private Limited completed the acquisition of Chandenvalle Infra Park Limited from Adani Power Limited for INR 5.4 billion.": {
-   "got": "",
-   "outcome": "pending",
+   "got": "acquisition ADANIPOWER",
+   "outcome": "found",
    "split": "dev",
    "want": "acquisition ADANIPOWER"
   },
   "Amadeus Partners TCS": {
-   "got": "",
-   "outcome": "pending",
+   "got": "tie_up TCS with Amadeus",
+   "outcome": "found",
    "split": "dev",
    "want": "tie_up TCS with Amadeus"
   },
   "Anant Raj Limited Schedules Board Meeting on May 11, 2026 for Q4FY26 Results and Final Dividend": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "holdout",
    "want": "none"
   },
   "Ananth Technologies and BEL sign MoU for defence and aerospace systems": {
-   "got": "",
-   "outcome": "pending",
+   "got": "tie_up BEL with Ananth Technologies",
+   "outcome": "found",
    "split": "dev",
    "want": "tie_up BEL with Ananth Technologies"
   },
   "Apple unveils US device leasing programme in partnership with Klarna": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "tie_up (no holding)"
   },
   "Arvind acquires stake in two Torrent Urja entities for renewable power": {
-   "got": "",
-   "outcome": "pending",
+   "got": "acquisition ARVIND",
+   "outcome": "found",
    "split": "holdout",
    "want": "acquisition ARVIND"
   },
   "Arvind completes 26.60% stake acquisition in Torrent Urja 21": {
-   "got": "",
-   "outcome": "pending",
+   "got": "acquisition ARVIND",
+   "outcome": "found",
    "split": "holdout",
    "want": "acquisition ARVIND"
   },
   "Arvind unit acquires UK subsidiary for £1000": {
-   "got": "",
-   "outcome": "pending",
+   "got": "acquisition ARVIND",
+   "outcome": "found",
    "split": "holdout",
    "want": "acquisition ARVIND"
   },
   "BEL approves JV with French company Safran for HAMMER Weapon System": {
-   "got": "",
-   "outcome": "pending",
+   "got": "tie_up BEL with Safran",
+   "outcome": "found",
    "split": "dev",
    "want": "tie_up BEL with Safran"
   },
   "BEL bags additional orders worth Rs 1,081 crore": {
-   "got": "",
-   "outcome": "pending",
+   "got": "order_win BEL",
+   "outcome": "found",
    "split": "holdout",
    "want": "order_win BEL"
   },
   "BEL shares jump 2% amid weak market; latest buzz you need to know": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "holdout",
    "want": "none"
   },
   "BHEL Partners With Hystar To Advance PEM Electrolyzers Technology For Green Hydrogen": {
-   "got": "",
-   "outcome": "pending",
+   "got": "tie_up BHEL with Hystar",
+   "outcome": "found",
    "split": "holdout",
    "want": "tie_up BHEL with Hystar"
   },
   "BHEL Shares In Focus After Rs 2,500 Crore Order Win — Check Target Price": {
-   "got": "",
-   "outcome": "pending",
+   "got": "order_win BHEL",
+   "outcome": "found",
    "split": "dev",
    "want": "order_win BHEL"
   },
   "BJP MP Swati Maliwal alleges Arvind Kejriwal ran corruption shop in Delhi and Punjab": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "none"
   },
   "BPCL exits Numaligarh Refinery ahead of privatisation": {
-   "got": "",
-   "outcome": "pending",
+   "got": "divestment BPCL",
+   "outcome": "found",
    "split": "holdout",
    "want": "divestment BPCL"
   },
   "BPCL, CSE sign MoU to advance biofuels and circular economy projects": {
-   "got": "",
-   "outcome": "pending",
+   "got": "tie_up BPCL with CSE",
+   "outcome": "found",
    "split": "dev",
    "want": "tie_up BPCL with CSE"
   },
   "Beverages Major Share Price Falls 4% Despite Rs 305 Crore Kenya Acquisition; Check Details": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "acquisition (no holding)"
   },
   "Bikewo Green Tech wins Rs 66.46 crore order from Reliance Industries for EV tractor operations": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "order_win (no holding)"
   },
   "CG Semi Commences Commercial Production at Its G1 OSAT Facility in Sanand, Gujarat": {
-   "got": "",
-   "outcome": "pending",
+   "got": "capacity_add (no holding)",
+   "outcome": "quiet",
    "split": "dev",
    "want": "capacity_add (no holding)"
   },
   "CG Semi starts commercial production at Sanand OSAT plant in India": {
-   "got": "",
-   "outcome": "pending",
+   "got": "capacity_add (no holding)",
+   "outcome": "quiet",
    "split": "dev",
    "want": "capacity_add (no holding)"
   },
   "CONCOR Q1 Revenue Reaches ₹2,160 Crore as Net Profit Holds at ₹267 Crore": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "holdout",
    "want": "none"
   },
   "CONCOR Signs MoU With APEDA to Strengthen Export Cold Chain": {
-   "got": "",
-   "outcome": "pending",
+   "got": "tie_up CONCOR with APEDA",
+   "outcome": "found",
    "split": "dev",
    "want": "tie_up CONCOR with APEDA"
   },
   "CONCOR awarded Authorized Economic Operator (AEO) Certificate by Indian Customs": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "holdout",
    "want": "none"
   },
   "CONCOR signs MoU with APEDA to strengthen export cold chain and logistics ecosystem": {
-   "got": "",
-   "outcome": "pending",
+   "got": "tie_up CONCOR with APEDA",
+   "outcome": "found",
    "split": "dev",
    "want": "tie_up CONCOR with APEDA"
   },
   "CONCOR to Hold Analyst and Investor Meeting on September 2 at 10 AM": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "holdout",
    "want": "none"
   },
   "CSE signs MoU with BPCL": {
-   "got": "",
-   "outcome": "pending",
+   "got": "tie_up BPCL with CSE",
+   "outcome": "found",
    "split": "holdout",
    "want": "tie_up BPCL with CSE"
   },
   "Chalet Hotels Q1 FY27 Investor Presentation Highlights Robust Performance": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "none"
   },
   "Coforge Wins \"AI Native Enterprise\" Award at TOI AI Quotient Awards\"": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "none"
   },
   "Coforge Wins $230M AI Transformation Contract With European Client": {
-   "got": "",
-   "outcome": "pending",
+   "got": "order_win COFORGE",
+   "outcome": "found",
    "split": "dev",
    "want": "order_win COFORGE"
   },
   "Coforge launches AI-Powered zero trust security product in partnership with Zscaler": {
-   "got": "",
-   "outcome": "pending",
+   "got": "tie_up COFORGE with Zscaler",
+   "outcome": "found",
    "split": "holdout",
    "want": "tie_up COFORGE with Zscaler"
   },
   "Coforge unveils SecureEdge2Cloud AI security on Zscaler Zero Trust Exchange": {
-   "got": "",
-   "outcome": "pending",
+   "got": "product_launch COFORGE",
+   "outcome": "found",
    "split": "dev",
    "want": "product_launch COFORGE"
   },
   "Container Corp of India Share Price": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "none"
   },
   "Cranex Receives Orders Worth Rs. 71.7 mn from BHEL and DEE VEE": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "order_win (no holding)"
   },
   "Dixon Tech Up Almost 1% Intraday on Reports of Govt Approval Likely to Vivo Joint Venture": {
-   "got": "",
-   "outcome": "pending",
+   "got": "tie_up DIXON",
+   "outcome": "found",
    "split": "holdout",
    "want": "tie_up DIXON with Vivo"
   },
   "Dixon Technologies (India) Limited has informed the Exchange about Outcome of Analyst/ Institutional Investors Meet": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "holdout",
    "want": "none"
   },
   "Dixon eyes product portfolio expansion, scouts new facility": {
-   "got": "",
-   "outcome": "pending",
+   "got": "capacity_add DIXON",
+   "outcome": "found",
    "split": "dev",
    "want": "capacity_add DIXON"
   },
   "Dixon-Vivo joint venture inches close to securing final govt approval": {
-   "got": "",
-   "outcome": "pending",
+   "got": "tie_up DIXON with Vivo",
+   "outcome": "found",
    "split": "holdout",
    "want": "tie_up DIXON with Vivo"
   },
   "Elgi Equipments (NSE:ELGIEQUIP): Why Did It Divest Its Stake in Gentex Air Solutions LLC?": {
-   "got": "",
-   "outcome": "pending",
+   "got": "divestment ELGIEQUIP",
+   "outcome": "found",
    "split": "dev",
    "want": "divestment ELGIEQUIP"
   },
   "Ellenbarrie bags Rs. 481-crore BHEL contract for major Odisha air separation unit": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "order_win (no holding)"
   },
   "Fortis Healthcare Limited has informed the Exchange Regarding Order Passed By The Hon Ble Delhi High Court In Relation To Certain Applications Filed By Daiichi Sankyo Company, Limited Inter Alia The Company. Detailed Disclosure Is Attached.": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "holdout",
    "want": "none"
   },
   "Gigabyte unveils its first Made-in-India gaming laptop, Gaming A16, in partnership with Dixon Technologies": {
-   "got": "",
-   "outcome": "pending",
+   "got": "tie_up DIXON with Gigabyte",
+   "outcome": "found",
    "split": "holdout",
    "want": "tie_up DIXON with Gigabyte"
   },
   "Godrej Properties GODREJPROP: Gurugram Dispute Settled": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "holdout",
    "want": "none"
   },
   "Government clears Dixon (India)-Vivo (China) joint venture for manufacturing smartphones": {
-   "got": "",
-   "outcome": "pending",
+   "got": "tie_up DIXON with Vivo",
+   "outcome": "found",
    "split": "dev",
    "want": "tie_up DIXON with Vivo"
   },
   "Govt unveils Rs 1.9 lakh cr semiconductor, mobile manufacturing push": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "holdout",
    "want": "none"
   },
   "HDFC Mutual Fund increases stake in Chalet Hotels to 9.11%": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "none"
   },
   "Happiest Minds shares fall 12% after ITC merger plan": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "missed",
    "split": "holdout",
    "want": "acquisition ITC"
   },
   "ICICI Bank Limited has informed the Exchange about Disclosure under Regulation 30 of SEBI (Listing Obligations and Disclosure Requirements) Regulations, 2015": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "none"
   },
   "ICICI Bank Limited has informed the Exchange about Disclosure under Regulation 30 of the SEBI (Listing Obligations and Disclosure Requirements) Regulations, 2015": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "holdout",
    "want": "none"
   },
   "ICICI Bank Limited has informed the Exchange regarding Allotment of 38512  Shares.": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "holdout",
    "want": "none"
   },
   "ICICI Bank Limited has informed the Exchange regarding Allotment of 437638  Shares.": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "none"
   },
   "ITC Hotels signs two Fortune Hotels in Uttar Pradesh and Andhra Pradesh": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "missed",
    "split": "dev",
    "want": "capacity_add ITC"
   },
   "IdeaForge Technology Limited Reports Earnings Results for the First Quarter Ended June 30, 2026": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "none"
   },
   "Ideaforge Technology appoints new investor relations agency": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "none"
   },
   "Indian Railways Approves ₹493 Crore for 38.21 km New Rail Line between Mukutban (Adilabad) and Gadchandur": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "capacity_add (no holding)"
   },
   "Kalpataru JV to appeal after Delhi HC partly sets aside arbitral award against NHAI": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "holdout",
    "want": "none"
   },
   "Kaynes Technology Close To Finalising Deal With 'One Of World's Largest EV Makers'": {
-   "got": "",
-   "outcome": "pending",
+   "got": "tie_up KAYNES",
+   "outcome": "wrong_type",
    "split": "holdout",
    "want": "order_win KAYNES"
   },
   "Kaynes Technology Says A 'Global Player' Wants Entire PCB Capacity Ahead Of Production Launch": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "none"
   },
   "Kaynes Technology signs MoU with China’s Bosgame to launch computing products in India; stock rises 2%": {
-   "got": "",
-   "outcome": "pending",
+   "got": "tie_up KAYNES with Bosgame",
+   "outcome": "found",
    "split": "dev",
    "want": "tie_up KAYNES with Bosgame"
   },
   "Kaynes and BOSGAME partner to bring computing brand to India": {
-   "got": "",
-   "outcome": "pending",
+   "got": "tie_up KAYNES with BOSGAME",
+   "outcome": "found",
    "split": "holdout",
    "want": "tie_up KAYNES with BOSGAME"
   },
   "Kirloskar Oil Engines Limited has informed the Exchange about Outcome of Investor Call - Please note that the 1X1 Meeting scheduled with ICICI Pru Mutual Fund on 28th August 2026 at 10.30 AM, as intimated vide our letter dated 25th August…": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "holdout",
    "want": "none"
   },
   "Krishna Institute of Medical Sciences Limited has informed the Exchange regarding allotment of 7702182 fully convertible warrants securities pursuant to Preferential Issue": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "none"
   },
   "LBank Unveils Q2 2026 Report, Featuring 25 Million Users and Advances in Prediction Markets and Cultural IP": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "holdout",
    "want": "none"
   },
   "LTTS and Anthropic Partner to Transform Engineering": {
-   "got": "",
-   "outcome": "pending",
+   "got": "tie_up LTTS with Anthropic",
+   "outcome": "found",
    "split": "dev",
    "want": "tie_up LTTS with Anthropic"
   },
   "LTTS and SiMa.ai Forge Strategic Alliance to Advance Physical AI Innovation for Mobility, MedTech & Smart Cities": {
-   "got": "",
-   "outcome": "pending",
+   "got": "tie_up LTTS with SiMa.ai",
+   "outcome": "found",
    "split": "holdout",
    "want": "tie_up LTTS with SiMa.ai"
   },
   "LTTS partners with Anthropic to embed Claude AI in engineering": {
-   "got": "",
-   "outcome": "pending",
+   "got": "tie_up LTTS with Anthropic",
+   "outcome": "found",
    "split": "holdout",
    "want": "tie_up LTTS with Anthropic"
   },
   "Maersk’s Unveils First Indian Manufactured Shipping Container": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "product_launch (no holding)"
   },
   "MphasiS Limited has informed the Exchange regarding a press release dated September 22, 2026, titled \"Mphasis and Copa Airlines Host Global Quantum Computing Challenge toAccelerate Innovation in Airline Operations\".": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "none"
   },
   "Mphasis acquires Theory and Practice Business Intelligence Inc., strengthening its 'Decisioning Intelligence' capabilities": {
-   "got": "",
-   "outcome": "pending",
+   "got": "acquisition MPHASIS",
+   "outcome": "found",
    "split": "dev",
    "want": "acquisition MPHASIS"
   },
   "Mphasis awarded EcoVadis Silver Medal with 75 score in FY26": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "none"
   },
   "Mumbai-based ideaForge Technology has unveiled its latest mapping UAV, the Q6V2 GEO, at its first-ever customer event, PRAGYA 2025. Designed for geospatial intelligence, the lightweight drone can map terrains ranging from glaciers to dense urban corrid": {
-   "got": "",
-   "outcome": "pending",
+   "got": "product_launch IDEAFORGE",
+   "outcome": "found",
    "split": "dev",
    "want": "product_launch IDEAFORGE"
   },
   "NCLT Ahmedabad Dismisses Insolvency Plea Against Suzlon Energy": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "none"
   },
   "NTPC Green Energy (NSE:NTPCGREEN) Commissions 68.22 MW Dahod Solar Capacity": {
-   "got": "",
-   "outcome": "pending",
+   "got": "capacity_add NTPCGREEN",
+   "outcome": "found",
    "split": "dev",
    "want": "capacity_add NTPCGREEN"
   },
   "Navitas Invests $5 Million in Magnachip to Expand SiC Power Semiconductor Partnership": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "holdout",
    "want": "acquisition (no holding)"
   },
   "Observation Letter on the Draft Red Herring Prospectus for the proposed Initial Public Offer of Jio Platforms Limited": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "holdout",
    "want": "none"
   },
   "Optiemus Infracom Limited has informed the Exchange regarding 'Board comments on fine levied by the Exchange'.": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "none"
   },
   "Outcome of the Board Meeting - Change in the MD & CEO": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "management_change (no holding)"
   },
   "PESB recommends STPI chief Arvind Kumar for BSNL board role": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "holdout",
    "want": "none"
   },
   "PGIL shares zoom over 12% to hit record high; here's why": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "none"
   },
   "Persistent Systems Secures 83.25% Nagarro Ownership, Extends Acceptance to October 6": {
-   "got": "",
-   "outcome": "pending",
+   "got": "acquisition PERSISTENT",
+   "outcome": "found",
    "split": "holdout",
    "want": "acquisition PERSISTENT"
   },
   "Progressing Towards Universal Health Coverage": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "none"
   },
   "RIL, Asian Paints, HDFC Bank, TCS, among other shares change hands via block deals on June 24": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "holdout",
    "want": "none"
   },
   "RIR Power Electronics debuts on NSE, expands investor reach": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "holdout",
    "want": "none"
   },
   "RITES Signs MOU with CONCOR for Logistics Projects Expanding ₹5,900 Crore Order Book": {
-   "got": "",
-   "outcome": "pending",
+   "got": "tie_up CONCOR with RITES",
+   "outcome": "found",
    "split": "dev",
    "want": "tie_up CONCOR with RITES"
   },
   "RITES Signs MoU with CONCOR For Project Management Consultancy Services": {
-   "got": "",
-   "outcome": "pending",
+   "got": "tie_up CONCOR with RITES",
+   "outcome": "found",
    "split": "holdout",
    "want": "tie_up CONCOR with RITES"
   },
   "RITES, CONCOR sign MoU for project management consultancy services": {
-   "got": "",
-   "outcome": "pending",
+   "got": "tie_up CONCOR with RITES",
+   "outcome": "found",
    "split": "holdout",
    "want": "tie_up CONCOR with RITES"
   },
   "Relaxo Footwears Limited has informed the Exchange regarding Notice of Annual General Meeting to be held on September 24, 2026": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "holdout",
    "want": "none"
   },
   "Relaxo Footwears Q1 FY27 Profit Declines 7% to ₹54.94 Cr": {
-   "got": "",
-   "outcome": "pending",
+   "got": "business_weakness RELAXO",
+   "outcome": "found",
    "split": "dev",
    "want": "business_weakness RELAXO"
   },
   "Reliance share price jumps 7% after this acquisition update, India-US trade deal optimism — Time to buy?": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "holdout",
    "want": "none"
   },
   "Rites Signs MoU With Concor For Logistics Infrastructure Consultancy": {
-   "got": "",
-   "outcome": "pending",
+   "got": "tie_up CONCOR with Rites",
+   "outcome": "found",
    "split": "holdout",
    "want": "tie_up CONCOR with RITES"
   },
   "SAM Advises Vivo Mobile India On Strategic Joint Venture With Dixon Technologies": {
-   "got": "",
-   "outcome": "pending",
+   "got": "tie_up DIXON with Vivo Mobile",
+   "outcome": "found",
    "split": "dev",
    "want": "tie_up DIXON with Vivo"
   },
   "SAS Partners with TCS, AI-driven Cyber Resilience Takes Flight": {
-   "got": "",
-   "outcome": "pending",
+   "got": "tie_up TCS with SAS",
+   "outcome": "found",
    "split": "holdout",
    "want": "tie_up TCS with SAS"
   },
   "Sabre : launches strategic collaboration with trusted engineering partner Coforge to accelerate pace of product innovation and delivery": {
-   "got": "",
-   "outcome": "pending",
+   "got": "tie_up COFORGE with Sabre",
+   "outcome": "found",
    "split": "dev",
    "want": "tie_up COFORGE with Sabre"
   },
   "Saraf and Partners acts on Fortis": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "holdout",
    "want": "none"
   },
   "Satia Industries Limited has informed the Exchange regarding Notice of Annual General Meeting to be held on September 30, 2026": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "none"
   },
   "Schneider Electric Announces Intention To Acquire Cognite": {
-   "got": "",
-   "outcome": "pending",
+   "got": "acquisition SCHNEIDER",
+   "outcome": "found",
    "split": "dev",
    "want": "acquisition SCHNEIDER"
   },
   "Schneider Electric Infrastructure Limited has informed the Exchange about Investor Presentation": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "none"
   },
   "Schneider Electric’s Planned Acquisition of Cognite Reinforces the Data Foundation for Industrial AI": {
-   "got": "",
-   "outcome": "pending",
+   "got": "acquisition SCHNEIDER",
+   "outcome": "found",
    "split": "dev",
    "want": "acquisition SCHNEIDER"
   },
   "Schneider Electric’s solutions to turn problems into competitive advantages": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "none"
   },
   "Siemens to acquire RTL design automation software company": {
-   "got": "",
-   "outcome": "pending",
+   "got": "acquisition SIEMENS",
+   "outcome": "found",
    "split": "dev",
    "want": "acquisition SIEMENS"
   },
   "Siemens unveils technologies to accelerate the industrial AI revolution at CES 2026": {
-   "got": "",
-   "outcome": "pending",
+   "got": "product_launch SIEMENS",
+   "outcome": "found",
    "split": "dev",
    "want": "product_launch SIEMENS"
   },
   "Significant movement in price has been observed in INDO-MIM Limited. The Exchange, in order to ensure that investors have latest relevant information about the company and to inform the market place so that the interest of the investors is…": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "none"
   },
   "Stock market fall: Dixon Technologies, ITC, Godrej Properties among 170 stocks that hit 52-week low on NSE": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "none"
   },
   "Stocks To Watch, Jan 16: Tech Mahindra, RIL, Infosys, Wipro, Sobha, Polycab India, Tata Tech, LTTS, L&T Finance, oil-linked stocks": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "holdout",
    "want": "none"
   },
   "Stocks to watch: Cochin Shipyard, Premier Energies, ideaForge Tech among shares in focus today; check list here": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "none"
   },
   "Suzlon Energy Secures 250 MW Wind Order From Torrent Green Energy": {
-   "got": "",
-   "outcome": "pending",
+   "got": "order_win SUZLON",
+   "outcome": "found",
    "split": "dev",
    "want": "order_win SUZLON"
   },
   "Suzlon Energy wins 400 MW EPC order from Tata Power": {
-   "got": "",
-   "outcome": "pending",
+   "got": "order_win SUZLON",
+   "outcome": "found",
    "split": "dev",
    "want": "order_win SUZLON"
   },
   "Suzlon bags 306 MW wind turbine orders from Yanara in Rajasthan": {
-   "got": "",
-   "outcome": "pending",
+   "got": "order_win SUZLON",
+   "outcome": "found",
    "split": "holdout",
    "want": "order_win SUZLON"
   },
   "Suzlon crosses 1 GW partnership with Tata Power following a DevCo led new 400MW EPC order": {
-   "got": "",
-   "outcome": "pending",
+   "got": "tie_up SUZLON with Tata Power",
+   "outcome": "wrong_type",
    "split": "dev",
    "want": "order_win SUZLON"
   },
   "Suzlon wins its maiden 200 MW wind energy order from Ayana Renewable Power": {
-   "got": "",
-   "outcome": "pending",
+   "got": "order_win SUZLON",
+   "outcome": "found",
    "split": "dev",
    "want": "order_win SUZLON"
   },
   "Syrma SGS Announces New Facility With Elemaster Group in Bengaluru": {
-   "got": "",
-   "outcome": "pending",
+   "got": "capacity_add SYRMA",
+   "outcome": "found",
    "split": "dev",
    "want": "capacity_add SYRMA"
   },
   "Syrma SGS Elemaster Inaugurates state-of-the-art high-reliability electronics manufacturing facility in Bengaluru": {
-   "got": "",
-   "outcome": "pending",
+   "got": "capacity_add SYRMA",
+   "outcome": "found",
    "split": "dev",
    "want": "capacity_add SYRMA"
   },
   "Syrma SGS Elemaster Opens Advanced Electronics Facility in Bengaluru": {
-   "got": "",
-   "outcome": "pending",
+   "got": "capacity_add SYRMA",
+   "outcome": "found",
    "split": "dev",
    "want": "capacity_add SYRMA"
   },
   "Syrma SGS Forms PCB Joint Venture With Kaga Electronics": {
-   "got": "",
-   "outcome": "pending",
+   "got": "tie_up SYRMA with Kaga Electronics",
+   "outcome": "found",
    "split": "holdout",
    "want": "tie_up SYRMA with Kaga Electronics"
   },
   "Syrma SGS JV renamed Syrma SGS Elemaster Private Limited": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "none"
   },
   "Syrma SGS Tech Forms Joint Venture With Kaga Electronics India To Produce PCBs": {
-   "got": "",
-   "outcome": "pending",
+   "got": "tie_up SYRMA with Kaga Electronics",
+   "outcome": "found",
    "split": "holdout",
    "want": "tie_up SYRMA with Kaga Electronics"
   },
   "Syrma SGS Technology Opens Advanced Electronics Facility in Bengaluru with Elemaster": {
-   "got": "",
-   "outcome": "pending",
+   "got": "capacity_add SYRMA",
+   "outcome": "found",
    "split": "dev",
    "want": "capacity_add SYRMA"
   },
   "Syrma SGS and Elemaster inaugurate electronics facility in Bengaluru": {
-   "got": "",
-   "outcome": "pending",
+   "got": "capacity_add SYRMA",
+   "outcome": "found",
    "split": "dev",
    "want": "capacity_add SYRMA"
   },
   "Syrma SGS and Elemaster inaugurate joint venture facility in Bengaluru": {
-   "got": "",
-   "outcome": "pending",
+   "got": "tie_up SYRMA with Elemaster",
+   "outcome": "found",
    "split": "holdout",
    "want": "tie_up SYRMA with Elemaster"
   },
   "Syrma SGS inaugurates a new facility in Jodhpur": {
-   "got": "",
-   "outcome": "pending",
+   "got": "capacity_add SYRMA",
+   "outcome": "found",
    "split": "dev",
    "want": "capacity_add SYRMA"
   },
   "Syrma SGS shareholders approve all AGM resolutions despite dissent on Doshi": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "none"
   },
   "Syrma SGS, Kaga Electronics Form ₹250 Million EMS Joint Venture": {
-   "got": "",
-   "outcome": "pending",
+   "got": "tie_up SYRMA with Kaga Electronics",
+   "outcome": "found",
    "split": "dev",
    "want": "tie_up SYRMA with Kaga Electronics"
   },
   "Syrma Sgs Technology Limited has informed the Exchange regarding a press release dated September 22, 2026, titled \"Update on inauguration of facility by Syrma Johri MedTech Limited, a subsidiary of Syrma SGS Technology Limited ( Syrma SGS/…": {
-   "got": "",
-   "outcome": "pending",
+   "got": "capacity_add SYRMA",
+   "outcome": "found",
    "split": "dev",
    "want": "capacity_add SYRMA"
   },
   "TCC Concept signs MOU for 60 MW data centre campus in Pune": {
-   "got": "",
-   "outcome": "pending",
+   "got": "tie_up (no holding)",
+   "outcome": "quiet",
    "split": "holdout",
    "want": "tie_up (no holding)"
   },
   "TCS Acquires Coastal Cloud, a Leading US Salesforce Consulting Firm": {
-   "got": "",
-   "outcome": "pending",
+   "got": "acquisition TCS",
+   "outcome": "found",
    "split": "dev",
    "want": "acquisition TCS"
   },
   "TCS Launches NVIDIA-Powered Autonomous Engineering Lab in Bengaluru to Drive Industrial AI Prototyping": {
-   "got": "",
-   "outcome": "pending",
+   "got": "product_launch TCS",
+   "outcome": "found",
    "split": "dev",
    "want": "product_launch TCS"
   },
   "TCS Partners With DGCE To Advance Derivatives Market Infrastructure; Shares Up 3.3%": {
-   "got": "",
-   "outcome": "pending",
+   "got": "tie_up TCS with DGCE",
+   "outcome": "found",
    "split": "dev",
    "want": "tie_up TCS with DGCE"
   },
   "TCS expands strategic partnership with ABB to build ai-driven global network backbone": {
-   "got": "",
-   "outcome": "pending",
+   "got": "tie_up TCS with ABB",
+   "outcome": "found",
    "split": "dev",
    "want": "tie_up TCS with ABB"
   },
   "TVS Motor, Dixon Tech in, Reliance, M&M out: Which stocks made it into Macquarie's new India portfolio?": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "none"
   },
   "Tata Consultancy Services Limited has informed the Exchange regarding 'Press Release - DGCX partners with TCS to advance and upgrade derivatives market infrastructure'.": {
-   "got": "",
-   "outcome": "pending",
+   "got": "tie_up TCS with DGCX",
+   "outcome": "found",
    "split": "dev",
    "want": "tie_up TCS with DGCX"
   },
   "Thermax Q1 profit plunges 83% as margins collapse despite higher revenue": {
-   "got": "",
-   "outcome": "pending",
+   "got": "business_weakness THERMAX",
+   "outcome": "found",
    "split": "dev",
    "want": "business_weakness THERMAX"
   },
   "Tiger Logistics wins ₹4 crore BHEL order for import break bulk project": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "order_win (no holding)"
   },
   "Titagarh Rail Systems Board Approves BHEL Joint Venture for Vande Bharat Maintenance": {
-   "got": "",
-   "outcome": "pending",
+   "got": "tie_up BHEL with Titagarh Rail Systems",
+   "outcome": "found",
    "split": "dev",
    "want": "tie_up BHEL with Titagarh"
   },
   "Top stocks in focus tomorrow: Investors must watch NBCC, BHEL, Bharat Forge shares on Wed, 16 Sept | Triggers": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "none"
   },
   "Trading Members of the Exchange are hereby informed that effective from August 19, 2026, the Equity Shares of Behari Lal Engineering Ltd  (Scrip Code: 544870) are listed and admitted to ....": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "none"
   },
   "UL Solutions Introduces Certification Program for Prefabricated Data Center Power Distribution Systems, Awards First Certification to Schneider Electric": {
-   "got": "",
-   "outcome": "pending",
+   "got": "product_launch (no holding)",
+   "outcome": "quiet",
    "split": "dev",
    "want": "product_launch (no holding)"
   },
   "US President Trump Announces $300 Billion Partnership with Reliance to Build First Major US Refinery in 50 Years": {
-   "got": "",
-   "outcome": "pending",
+   "got": "tie_up RELIANCE",
+   "outcome": "found",
    "split": "holdout",
    "want": "tie_up RELIANCE"
   },
   "VBL: Q2 CY2026 delivered double-digit revenue and profit growth, expanded partnerships, and a new Kenya acquisition": {
-   "got": "",
-   "outcome": "pending",
+   "got": "acquisition VBL",
+   "outcome": "false_alarm",
    "split": "holdout",
    "want": "none"
   },
   "Vande Bharat Sleeper trains: BHEL, Titagarh to form joint venture for 35-year maintenance": {
-   "got": "",
-   "outcome": "pending",
+   "got": "tie_up BHEL with Titagarh",
+   "outcome": "found",
    "split": "holdout",
    "want": "tie_up BHEL with Titagarh"
   },
   "Varun Beverages Acquires Devyani Food Industries Kenya Business For $32 Million": {
-   "got": "",
-   "outcome": "pending",
+   "got": "acquisition VBL",
+   "outcome": "found",
    "split": "dev",
    "want": "acquisition VBL"
   },
   "Varun Beverages Ltd forms JV with Everest International to make refrigerators": {
-   "got": "",
-   "outcome": "pending",
+   "got": "tie_up VBL with Everest International",
+   "outcome": "found",
    "split": "holdout",
    "want": "tie_up VBL with Everest International"
   },
   "Varun Beverages rises 8.5% as firm announces partnership with Carlsberg for beer business in Africa, Q3...": {
-   "got": "",
-   "outcome": "pending",
+   "got": "tie_up VBL with Carlsberg",
+   "outcome": "found",
    "split": "dev",
    "want": "tie_up VBL with Carlsberg"
   },
   "Varun Beverages starts commercial production of carbonated drinks at Gorakhpur facility": {
-   "got": "",
-   "outcome": "pending",
+   "got": "capacity_add VBL",
+   "outcome": "found",
    "split": "dev",
    "want": "capacity_add VBL"
   },
   "Varun Beverages to acquire 100% in South African beverage maker for Rs 1,119 crore": {
-   "got": "",
-   "outcome": "pending",
+   "got": "acquisition VBL",
+   "outcome": "found",
    "split": "dev",
    "want": "acquisition VBL"
   },
   "Zen Tech, HAL & other defence stocks rally up to 6% on DAC's Rs 52,000-crore approval. Motilal picks 3 shares to buy": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "none"
   },
   "ideaForge Reports Rs 68.6 Cr Q1 FY27 Revenue with Positive EBITDA; Targets Execution of FY27 Opening Order Book by Q3": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "none"
   },
   "ideaForge inks MoU with Japan's DMP to Expand Global Footprint in Next-Gen AI Drones": {
-   "got": "",
-   "outcome": "pending",
+   "got": "tie_up IDEAFORGE with DMP",
+   "outcome": "found",
    "split": "dev",
    "want": "tie_up IDEAFORGE with DMP"
   },
   "ideaForge lands first US purchase order": {
-   "got": "",
-   "outcome": "pending",
+   "got": "order_win IDEAFORGE",
+   "outcome": "found",
    "split": "dev",
    "want": "order_win IDEAFORGE"
   },
   "ideaForge secures first US order for school surveillance drones": {
-   "got": "",
-   "outcome": "pending",
+   "got": "order_win IDEAFORGE",
+   "outcome": "found",
    "split": "dev",
    "want": "order_win IDEAFORGE"
   },
   "ideaForge secures ₹151 Cr TDB loan for autonomous aerial vehicle project": {
-   "got": "",
-   "outcome": "pending",
+   "got": "order_win IDEAFORGE",
+   "outcome": "false_alarm",
    "split": "dev",
    "want": "none"
   },
   "iks healthcare set to acquire trubridge for 600 million": {
-   "got": "",
-   "outcome": "pending",
+   "got": "acquisition IKS",
+   "outcome": "found",
    "split": "holdout",
    "want": "acquisition IKS"
   },
   "‘Bhel Trichy is constantly modernising’": {
-   "got": "",
-   "outcome": "pending",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "none"
   }
