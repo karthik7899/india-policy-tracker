@@ -241,19 +241,21 @@ def test_the_prompt_defines_every_type_the_reader_may_answer_with():
 def test_a_launch_made_in_partnership_is_read_as_a_tie_up():
     """The rules read the partnership first and reconcile() corroborates only
     the same type; the model read this shape as a launch however the prompt
-    put it. A launch on someone's platform is still a launch."""
+    put it. A launch on someone's platform is still a launch, and so is one
+    whose partnership is a separate statement: the rules read the first
+    clause that holds an event."""
     partnered = "Coforge launches AI-Powered zero trust security product in partnership with Zscaler"
     reading = ground(partnered, _answer("product_launch", ["Coforge", "Zscaler"]))
     assert (reading["event_type"], reading["parties"]) == (
         "tie_up",
         ["Coforge", "Zscaler"],
     )
-    alone = (
-        "Coforge unveils SecureEdge2Cloud AI security on Zscaler Zero Trust Exchange"
-    )
-    assert ground(alone, _answer("product_launch", ["Coforge"]))["event_type"] == (
-        "product_launch"
-    )
+    for launch in (
+        "Coforge unveils SecureEdge2Cloud AI security on Zscaler Zero Trust Exchange",
+        "Coforge launches SecureEdge AI platform; partners with Zscaler",
+    ):
+        reading = ground(launch, _answer("product_launch", ["Coforge"]))
+        assert reading["event_type"] == "product_launch", launch
 
 
 BPCL_EXIT = "BPCL exits Numaligarh Refinery ahead of privatisation"
