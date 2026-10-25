@@ -148,9 +148,12 @@ event_type — exactly one of:
                      model, platform or service of its own, or planning to.
                      Not a government scheme, an IPO or share issue, or a
                      plan, policy or campaign being launched.
-  management_change  a CEO, MD, CFO, COO, CTO, chairman, whole-time or
-                     executive director appointed, re-appointed, resigning,
-                     retiring or replaced
+  management_change  a person appointed to, re-appointed to, resigning from,
+                     retiring from or replaced in one of these posts: CEO,
+                     MD, CFO, COO, CTO, chairman, whole-time or executive
+                     director. Other appointments are none: auditors,
+                     agencies, advisers, company secretaries, other staff,
+                     independent directors and government officials.
   supply_disruption  shortages, export bans, plant shutdowns, supply crunches
   input_cost_shock   a sharp rise in the cost of an input or raw material
   none               anything else: results, share-price moves, analyst views,

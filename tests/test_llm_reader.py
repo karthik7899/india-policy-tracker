@@ -222,6 +222,14 @@ def test_the_prompt_defines_every_type_the_reader_may_answer_with():
         assert etype in EVENT_VOCABULARY, etype
     assert "divestments count" not in llm_reader._INSTRUCTIONS
     assert "product launches" not in llm_reader._INSTRUCTIONS
+    # The posts the rules count (event_engine._ROLE), and no others: one
+    # recording read "ideaForge appoints new investor relations agency" as a
+    # change at the top, and filings appoint auditors and company secretaries
+    # every week.
+    change = llm_reader._INSTRUCTIONS.split("management_change", 1)[1]
+    change = change.split("supply_disruption", 1)[0]
+    for excluded in ("auditors", "agencies", "company secretaries"):
+        assert excluded in change, excluded
 
 
 BPCL_EXIT = "BPCL exits Numaligarh Refinery ahead of privatisation"
