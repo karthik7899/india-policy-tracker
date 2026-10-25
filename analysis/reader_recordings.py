@@ -111,7 +111,10 @@ class Codec:
     kept as an answer the reader never uses.
 
     ``reading`` is what the reader makes of an answer to an item (its
-    identity), as far as its scores read it: the vote a take casts.
+    identity), as far as its scores read it: the vote a take casts. It is a
+    tuple, coarsest first: the takes most agree on at the first level, then
+    among those the most at the next, so a finer difference never outvotes
+    the takes that agree on what the scores count.
     """
 
     def __init__(
@@ -122,7 +125,9 @@ class Codec:
         head: Callable[[], str],
         parse: Callable[[str], List[Item]],
         accepts: Callable[[Dict[str, Any]], bool] = lambda answer: True,
-        reading: Callable[[Dict[str, Any], str], Any] = lambda answer, item: answer,
+        reading: Callable[[Dict[str, Any], str], Tuple[Any, ...]] = (
+            lambda answer, item: (answer,)
+        ),
     ):
         self.name = name
         self._template = template
@@ -132,9 +137,12 @@ class Codec:
         self.accepts = accepts
         self._reading = reading
 
-    def vote(self, answer: Dict[str, Any], identity: str) -> str:
-        """The reading a take of the item gives, as a vote."""
-        return json.dumps(self._reading(answer, identity), sort_keys=True)
+    def vote(self, answer: Dict[str, Any], identity: str) -> Tuple[str, ...]:
+        """The reading a take of the item gives, as a vote, level by level."""
+        return tuple(
+            json.dumps(level, sort_keys=True)
+            for level in self._reading(answer, identity)
+        )
 
     def fingerprint(self) -> str:
         """The prompt around one placeholder item, and the response schema.
@@ -162,15 +170,20 @@ def item_key(identity: str) -> str:
 
 
 def majority(
-    takes: List[Dict[str, Any]], vote: Callable[[Dict[str, Any]], str]
+    takes: List[Dict[str, Any]], vote: Callable[[Dict[str, Any]], Tuple[str, ...]]
 ) -> Tuple[Dict[str, Any], int]:
-    """``(take, votes)``: the take whose reading most takes give, and how
-    many give it. On a tie, the earliest of them, so a recording replays the
-    same way every time."""
-    votes = [vote(t["answer"]) for t in takes]
-    counts = collections.Counter(votes)
-    top = max(counts.values())
-    return next(t for t, v in zip(takes, votes) if counts[v] == top), top
+    """``(take, votes)``: the take whose reading most takes give, level by
+    level (Codec.reading), and how many give its first level. On a tie, the
+    earliest of them, so a recording replays the same way every time."""
+    group = [(t, vote(t["answer"])) for t in takes]
+    first = 0
+    for level in range(len(group[0][1])):
+        counts = collections.Counter(v[level] for _, v in group)
+        top = max(counts.values())
+        first = first or top
+        winner = next(v[level] for _, v in group if counts[v[level]] == top)
+        group = [(t, v) for t, v in group if v[level] == winner]
+    return group[0][0], first
 
 
 _EVENT_LINE = re.compile(r"(\d+): (.*)\Z", re.DOTALL)
@@ -314,39 +327,50 @@ def _check_accepts(answer: Dict[str, Any]) -> bool:
 # What each reader makes of a take, as far as its scores read it. Taken after
 # the reader's own grounding, never from the raw answer: grounding drops a
 # party the headline does not name, a sector effect whose reason does not
-# quote it, and a stance whose quotes are not verbatim, so two takes worded
-# alike can read differently and two worded differently alike. Fields no
-# score reads (a gist, certainty, the policy's stage) are left out: the
-# first recording of three takes found the policy's stage differing in 154
-# of 225 headlines, nearly all of them not policy at all.
+# quote it, and a stance or a check whose quotes are not verbatim, so two
+# takes worded alike can read differently and two worded differently alike.
+# Fields no score reads (a gist, certainty, the policy's stage) are left out:
+# the first recording of three takes found the policy's stage differing in
+# 154 of 225 headlines, nearly all of them not policy at all.
 
 
-def _event_reading(answer: Dict[str, Any], headline: str) -> Dict[str, Any]:
+def _event_reading(
+    answer: Dict[str, Any], headline: str
+) -> Tuple[Dict[str, Any], Dict[str, Any]]:
     from analysis import llm_reader
 
     r = llm_reader.ground(headline, answer)
-    return {
+    counted = {
         "event_type": r["event_type"],
         "parties": sorted(" ".join(p.split()).casefold() for p in r["parties"]),
         "policy": r["policy_measure"] != "none",
         "effects": sorted([e["sector"], e["direction"]] for e in r["sector_effects"]),
     }
+    # The kind of measure is shown on the policy scorecard, not counted: it
+    # decides among takes that agree on the rest.
+    return counted, {"measure": r["policy_measure"]}
 
 
-def _thesis_reading(answer: Dict[str, Any], identity: str) -> Dict[str, Any]:
+def _thesis_reading(answer: Dict[str, Any], identity: str) -> Tuple[Dict[str, Any]]:
     from analysis import thesis_check
 
     _, thesis, headline = identity.split("\n", 2)
     r = thesis_check.ground(headline, thesis[len("THESIS: ") :], answer)
-    return {
-        "stance": r["stance"],
-        "about": r.get("about") is not False,
-        "group": r.get("group") is True,
-    }
+    return (
+        {
+            "stance": r["stance"],
+            "about": r.get("about") is not False,
+            "group": r.get("group") is True,
+        },
+    )
 
 
-def _check_reading(answer: Dict[str, Any], identity: str) -> Dict[str, Any]:
-    return {"verdict": answer.get("verdict")}
+def _check_reading(answer: Dict[str, Any], identity: str) -> Tuple[Dict[str, Any]]:
+    from analysis import thesis_check
+
+    fields = dict(line.split(": ", 1) for line in identity.split("\n"))
+    verdict, _ = thesis_check.check_verdict(answer, fields["HEADLINE"])
+    return ({"verdict": verdict},)
 
 
 EVENTS = Codec(
@@ -440,7 +464,9 @@ class Recordings:
         key: str,
         fingerprint: str,
         accepts: Callable[[Dict[str, Any]], bool] = lambda answer: True,
-        vote: Callable[[Dict[str, Any]], str] = lambda a: json.dumps(a, sort_keys=True),
+        vote: Callable[[Dict[str, Any]], Tuple[str, ...]] = lambda a: (
+            json.dumps(a, sort_keys=True),
+        ),
     ) -> Optional[Dict[str, Any]]:
         """The answer to serve, the one most takes give, or None: no take for
         this prompt, ``fresh``, or none the reader would accept (asked

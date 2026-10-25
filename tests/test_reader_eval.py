@@ -280,6 +280,56 @@ def test_a_take_votes_with_what_the_reader_makes_of_it(store, tmp_path):
     assert served == {"id": 0, **not_in_thesis}
 
 
+def test_the_kind_of_measure_decides_only_among_takes_that_agree_on_the_rest(store):
+    """The policy scorecard shows the measure but counts only that there is
+    one and what it moves: the measure most takes give is served, and a
+    disagreement over it never outvotes the takes that agree on the rest."""
+    headline = "DAC clears defence acquisition proposals worth Rs 52,000 crore"
+    fp = rr.EVENTS.fingerprint()
+    effects = [
+        {
+            "sector": "aerospace_defence",
+            "direction": "tailwind",
+            "because": "defence acquisition proposals",
+        }
+    ]
+
+    def policy(measure):
+        return {
+            "event_type": "none",
+            "parties": [],
+            "policy_measure": measure,
+            "sector_effects": effects if measure != "none" else [],
+        }
+
+    def served(*measures):
+        store.entries.clear()
+        for m in measures:
+            store.record(_key(headline), fp, headline, policy(m), "m", "x")
+        (answer,) = json.loads(rr.replaying(rr.EVENTS, store)(_events(headline)))
+        return answer["policy_measure"]
+
+    assert served("approval", "procurement", "procurement") == "procurement"
+    # Two takes find a policy and the same effect, whatever they call it.
+    assert served("none", "incentive_scheme", "procurement") == "incentive_scheme"
+    assert store.agreement()["majority"] == 1
+
+
+def test_a_check_votes_with_the_verdict_its_quote_allows(tmp_path):
+    """A "contradicts" that does not quote the headline is a refusal to the
+    second reader (thesis_check.check_verdict), so it votes as one."""
+    store = rr.Recordings(str(tmp_path / "check.json"))
+    prompt = thesis_check._check_prompt([(0, PAIR, {"claim": "Debt-free"})])
+    ((_, key, readable),) = rr.CHECK.items(prompt)
+    unquoted = {"verdict": "contradicts", "because": "Suzlon is in debt"}
+    quoted = {"verdict": "contradicts", "because": "Suzlon bags 306 MW"}
+    for take in (unquoted, quoted, {**quoted}):
+        store.record(key, rr.CHECK.fingerprint(), readable, take, "m", "x")
+    (served,) = json.loads(rr.replaying(rr.CHECK, store)(prompt))
+    assert served == {"id": 0, **quoted}
+    assert store.agreement()["majority"] == 1
+
+
 def test_the_agreement_of_the_takes_is_counted(store):
     fp = rr.EVENTS.fingerprint()
     rows = {
