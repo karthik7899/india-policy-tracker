@@ -6,8 +6,8 @@
    "labelled_events": 83,
    "partners": 0.974,
    "pending": 0,
-   "precision": 0.897,
-   "recall": 0.94,
+   "precision": 0.952,
+   "recall": 0.952,
    "rows": 157
   },
   "dev": {
@@ -15,7 +15,7 @@
    "labelled_events": 53,
    "partners": 1.0,
    "pending": 0,
-   "precision": 0.911,
+   "precision": 0.962,
    "recall": 0.962,
    "rows": 102
   },
@@ -24,8 +24,8 @@
    "labelled_events": 30,
    "partners": 0.947,
    "pending": 0,
-   "precision": 0.871,
-   "recall": 0.9,
+   "precision": 0.933,
+   "recall": 0.933,
    "rows": 55
   }
  },
@@ -35,7 +35,7 @@
   }
  },
  "prompt": {
-  "events": "792e498dfabd"
+  "events": "b8609e790bd1"
  },
  "reader": "combined",
  "rows": {
@@ -160,8 +160,8 @@
    "want": "none"
   },
   "BPCL exits Numaligarh Refinery ahead of privatisation": {
-   "got": "acquisition BPCL",
-   "outcome": "wrong_type",
+   "got": "divestment BPCL",
+   "outcome": "found",
    "split": "holdout",
    "want": "divestment BPCL"
   },
@@ -340,8 +340,8 @@
    "want": "none"
   },
   "HDFC Mutual Fund increases stake in Chalet Hotels to 9.11%": {
-   "got": "acquisition CHALET",
-   "outcome": "false_alarm",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "none"
   },
@@ -412,8 +412,8 @@
    "want": "order_win KAYNES"
   },
   "Kaynes Technology Says A 'Global Player' Wants Entire PCB Capacity Ahead Of Production Launch": {
-   "got": "capacity_add KAYNES",
-   "outcome": "false_alarm",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "none"
   },
@@ -472,8 +472,8 @@
    "want": "product_launch (no holding)"
   },
   "MphasiS Limited has informed the Exchange regarding a press release dated September 22, 2026, titled \"Mphasis and Copa Airlines Host Global Quantum Computing Challenge toAccelerate Innovation in Airline Operations\".": {
-   "got": "tie_up MPHASIS with Copa Airlines",
-   "outcome": "false_alarm",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "none"
   },
@@ -598,8 +598,8 @@
    "want": "business_weakness RELAXO"
   },
   "Reliance share price jumps 7% after this acquisition update, India-US trade deal optimism — Time to buy?": {
-   "got": "acquisition RELIANCE",
-   "outcome": "false_alarm",
+   "got": "none",
+   "outcome": "quiet",
    "split": "holdout",
    "want": "none"
   },

@@ -2,12 +2,12 @@
  "format": 1,
  "metrics": {
   "all": {
-   "effect_precision": 1.0,
-   "effect_recall": 0.6,
+   "effect_precision": 0.85,
+   "effect_recall": 0.65,
    "pending": 0,
    "policy": 31,
-   "precision": 0.852,
-   "recall": 0.742,
+   "precision": 0.824,
+   "recall": 0.903,
    "rows": 76
   },
   "dev": {
@@ -15,17 +15,17 @@
    "effect_recall": 0.769,
    "pending": 0,
    "policy": 21,
-   "precision": 0.895,
-   "recall": 0.81,
+   "precision": 0.833,
+   "recall": 0.952,
    "rows": 52
   },
   "holdout": {
-   "effect_precision": 1.0,
-   "effect_recall": 0.286,
+   "effect_precision": 0.571,
+   "effect_recall": 0.429,
    "pending": 0,
    "policy": 10,
-   "precision": 0.75,
-   "recall": 0.6,
+   "precision": 0.8,
+   "recall": 0.8,
    "rows": 24
   }
  },
@@ -35,7 +35,7 @@
   }
  },
  "prompt": {
-  "events": "792e498dfabd"
+  "events": "b8609e790bd1"
  },
  "reader": "policy",
  "rows": {
@@ -64,8 +64,8 @@
    "want": "not policy"
   },
   "Andhra Pradesh CM Naidu unveils ₹1 lakh crore agribusiness plan": {
-   "got": "none",
-   "outcome": "missed",
+   "got": "incentive_scheme",
+   "outcome": "found",
    "split": "dev",
    "want": "policy (also fmcg:tailwind)"
   },
@@ -94,13 +94,13 @@
    "want": "not policy"
   },
   "Budget 2026: Semiconductor stocks jump up to 7% as FM unveils Mission 2.0 with ₹40,000 cr outlay": {
-   "got": "subsidy_or_funding manufacturing_electronics:tailwind semiconductors_equipment:tailwind",
+   "got": "incentive_scheme manufacturing_electronics:tailwind semiconductors_equipment:tailwind",
    "outcome": "found",
    "split": "dev",
    "want": "policy semiconductors_equipment:tailwind (also manufacturing_electronics:tailwind)"
   },
   "CONCOR flags off first export container to the UK from ICD Whitefield under India–UK FTA": {
-   "got": "trade_agreement",
+   "got": "trade_agreement logistics_heavy_capital:tailwind",
    "outcome": "found",
    "split": "dev",
    "want": "policy (also logistics_heavy_capital:tailwind textiles_apparel:tailwind)"
@@ -118,20 +118,20 @@
    "want": "not policy"
   },
   "Cybersecurity in government: How to protect public services and strengthen cyber resilience": {
-   "got": "regulation",
+   "got": "regulation cybersecurity:tailwind",
    "outcome": "false_alarm",
    "split": "holdout",
    "want": "not policy"
   },
   "Declare all Dharwad taluks drought-hit, Arvind Bellad urges govt": {
-   "got": "none",
-   "outcome": "quiet",
+   "got": "other",
+   "outcome": "false_alarm",
    "split": "dev",
    "want": "not policy"
   },
   "Defence Ministry signs 1950 crore contract with Bharat Electronics Limited": {
-   "got": "none",
-   "outcome": "missed",
+   "got": "procurement aerospace_defence:tailwind",
+   "outcome": "found",
    "split": "holdout",
    "want": "policy aerospace_defence:tailwind"
   },
@@ -160,20 +160,20 @@
    "want": "policy manufacturing_electronics:tailwind"
   },
   "Dixon-Vivo joint venture inches close to securing final govt approval": {
-   "got": "none",
-   "outcome": "missed",
+   "got": "approval manufacturing_electronics:tailwind",
+   "outcome": "found",
    "split": "holdout",
    "want": "policy manufacturing_electronics:tailwind"
   },
   "Glenmark Pharmaceuticals Limited has informed the Exchange regarding a press release dated August 20, 2026, titled \"Glenmark Pharmaceuticals receives U.S. FDA approval for Fluticasone Propionate Nasal Spray, 0.05 mg (50 mcg)/spray\".": {
-   "got": "none",
-   "outcome": "quiet",
+   "got": "approval",
+   "outcome": "false_alarm",
    "split": "dev",
    "want": "not policy"
   },
   "Gokaldas Exports, KPR Mill, other textile stocks drop up to 5% as US agrees to zero tariff on some...": {
-   "got": "trade_agreement textiles_apparel:headwind",
-   "outcome": "found",
+   "got": "trade_agreement textiles_apparel:tailwind",
+   "outcome": "effects_differ",
    "split": "holdout",
    "want": "policy textiles_apparel:headwind"
   },
@@ -226,8 +226,8 @@
    "want": "policy surveillance_security:tailwind (also aerospace_defence:tailwind)"
   },
   "India, UK set to ink inter-government pact for electric propulsion of 4 Landing Platform Docks": {
-   "got": "trade_agreement",
-   "outcome": "effects_differ",
+   "got": "trade_agreement aerospace_defence:tailwind",
+   "outcome": "found",
    "split": "dev",
    "want": "policy aerospace_defence:tailwind"
   },
@@ -250,8 +250,8 @@
    "want": "not policy"
   },
   "Indian Railways Approves ₹493 Crore for 38.21 km New Rail Line between Mukutban (Adilabad) and Gadchandur": {
-   "got": "procurement big_cap_industries:tailwind logistics_heavy_capital:tailwind",
-   "outcome": "found",
+   "got": "approval big_cap_industries:tailwind",
+   "outcome": "effects_differ",
    "split": "dev",
    "want": "policy logistics_heavy_capital:tailwind (also big_cap_industries:tailwind)"
   },
@@ -292,8 +292,8 @@
    "want": "not policy"
   },
   "Jharkhand Unveils Higher Education Roadmap with AI Courses, Technical Education Clusters": {
-   "got": "none",
-   "outcome": "missed",
+   "got": "other",
+   "outcome": "found",
    "split": "dev",
    "want": "policy"
   },
@@ -304,7 +304,7 @@
    "want": "not policy"
   },
   "Kerala unveils AI-led governance overhaul to streamline administration, speed up public services": {
-   "got": "regulation",
+   "got": "other",
    "outcome": "found",
    "split": "dev",
    "want": "policy"
@@ -358,8 +358,8 @@
    "want": "not policy"
   },
   "Prime Minister highlights success of Ayushman Bharat on its eighth anniversary": {
-   "got": "none",
-   "outcome": "quiet",
+   "got": "subsidy_or_funding healthcare_hospitals:tailwind",
+   "outcome": "false_alarm",
    "split": "holdout",
    "want": "not policy"
   },
@@ -394,8 +394,8 @@
    "want": "not policy"
   },
   "Reliance share price jumps 7% after this acquisition update, India-US trade deal optimism — Time to buy?": {
-   "got": "trade_agreement",
-   "outcome": "false_alarm",
+   "got": "none",
+   "outcome": "quiet",
    "split": "holdout",
    "want": "not policy"
   },
@@ -406,7 +406,7 @@
    "want": "not policy"
   },
   "Sebi Exempts Mehta Family Trust From Saurashtra Cement Open Offer": {
-   "got": "approval",
+   "got": "regulation",
    "outcome": "found",
    "split": "holdout",
    "want": "policy"
@@ -424,8 +424,8 @@
    "want": "not policy"
   },
   "Tata Consultancy Services Limited has informed the Exchange regarding 'Press Release - TCS wins Rs 122 crore bid to build AI-enabled digital governance platform for Odisha Government'.": {
-   "got": "none",
-   "outcome": "missed",
+   "got": "procurement",
+   "outcome": "found",
    "split": "dev",
    "want": "policy (also cybersecurity:tailwind midcap_it:tailwind)"
   },

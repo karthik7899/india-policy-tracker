@@ -4,28 +4,28 @@
   "all": {
    "actors_exact": 1.0,
    "labelled_events": 83,
-   "partners": 0.868,
+   "partners": 0.921,
    "pending": 0,
-   "precision": 0.844,
-   "recall": 0.783,
+   "precision": 0.948,
+   "recall": 0.88,
    "rows": 157
   },
   "dev": {
    "actors_exact": 1.0,
    "labelled_events": 53,
-   "partners": 0.895,
+   "partners": 0.947,
    "pending": 0,
-   "precision": 0.854,
-   "recall": 0.774,
+   "precision": 0.979,
+   "recall": 0.887,
    "rows": 102
   },
   "holdout": {
    "actors_exact": 1.0,
    "labelled_events": 30,
-   "partners": 0.842,
+   "partners": 0.895,
    "pending": 0,
-   "precision": 0.828,
-   "recall": 0.8,
+   "precision": 0.897,
+   "recall": 0.867,
    "rows": 55
   }
  },
@@ -35,7 +35,7 @@
   }
  },
  "prompt": {
-  "events": "792e498dfabd"
+  "events": "b8609e790bd1"
  },
  "reader": "llm",
  "rows": {
@@ -160,8 +160,8 @@
    "want": "none"
   },
   "BPCL exits Numaligarh Refinery ahead of privatisation": {
-   "got": "acquisition BPCL",
-   "outcome": "wrong_type",
+   "got": "divestment BPCL",
+   "outcome": "found",
    "split": "holdout",
    "want": "divestment BPCL"
   },
@@ -256,8 +256,8 @@
    "want": "tie_up COFORGE with Zscaler"
   },
   "Coforge unveils SecureEdge2Cloud AI security on Zscaler Zero Trust Exchange": {
-   "got": "none",
-   "outcome": "missed",
+   "got": "product_launch COFORGE",
+   "outcome": "found",
    "split": "dev",
    "want": "product_launch COFORGE"
   },
@@ -292,14 +292,14 @@
    "want": "capacity_add DIXON"
   },
   "Dixon-Vivo joint venture inches close to securing final govt approval": {
-   "got": "none",
-   "outcome": "missed",
+   "got": "tie_up DIXON with Vivo",
+   "outcome": "found",
    "split": "holdout",
    "want": "tie_up DIXON with Vivo"
   },
   "Elgi Equipments (NSE:ELGIEQUIP): Why Did It Divest Its Stake in Gentex Air Solutions LLC?": {
-   "got": "acquisition ELGIEQUIP",
-   "outcome": "wrong_type",
+   "got": "divestment ELGIEQUIP",
+   "outcome": "found",
    "split": "dev",
    "want": "divestment ELGIEQUIP"
   },
@@ -328,8 +328,8 @@
    "want": "none"
   },
   "Government clears Dixon (India)-Vivo (China) joint venture for manufacturing smartphones": {
-   "got": "none",
-   "outcome": "missed",
+   "got": "tie_up DIXON with Vivo",
+   "outcome": "found",
    "split": "dev",
    "want": "tie_up DIXON with Vivo"
   },
@@ -340,8 +340,8 @@
    "want": "none"
   },
   "HDFC Mutual Fund increases stake in Chalet Hotels to 9.11%": {
-   "got": "acquisition CHALET",
-   "outcome": "false_alarm",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "none"
   },
@@ -412,8 +412,8 @@
    "want": "order_win KAYNES"
   },
   "Kaynes Technology Says A 'Global Player' Wants Entire PCB Capacity Ahead Of Production Launch": {
-   "got": "capacity_add KAYNES",
-   "outcome": "false_alarm",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "none"
   },
@@ -472,8 +472,8 @@
    "want": "product_launch (no holding)"
   },
   "MphasiS Limited has informed the Exchange regarding a press release dated September 22, 2026, titled \"Mphasis and Copa Airlines Host Global Quantum Computing Challenge toAccelerate Innovation in Airline Operations\".": {
-   "got": "tie_up MPHASIS with Copa Airlines",
-   "outcome": "false_alarm",
+   "got": "none",
+   "outcome": "quiet",
    "split": "dev",
    "want": "none"
   },
@@ -490,8 +490,8 @@
    "want": "none"
   },
   "Mumbai-based ideaForge Technology has unveiled its latest mapping UAV, the Q6V2 GEO, at its first-ever customer event, PRAGYA 2025. Designed for geospatial intelligence, the lightweight drone can map terrains ranging from glaciers to dense urban corrid": {
-   "got": "none",
-   "outcome": "missed",
+   "got": "product_launch IDEAFORGE",
+   "outcome": "found",
    "split": "dev",
    "want": "product_launch IDEAFORGE"
   },
@@ -526,13 +526,13 @@
    "want": "none"
   },
   "Outcome of the Board Meeting - Change in the MD & CEO": {
-   "got": "none",
+   "got": "management_change (no holding)",
    "outcome": "quiet",
    "split": "dev",
    "want": "management_change (no holding)"
   },
   "PESB recommends STPI chief Arvind Kumar for BSNL board role": {
-   "got": "none",
+   "got": "management_change (no holding)",
    "outcome": "quiet",
    "split": "holdout",
    "want": "none"
@@ -598,8 +598,8 @@
    "want": "business_weakness RELAXO"
   },
   "Reliance share price jumps 7% after this acquisition update, India-US trade deal optimism — Time to buy?": {
-   "got": "acquisition RELIANCE",
-   "outcome": "false_alarm",
+   "got": "none",
+   "outcome": "quiet",
    "split": "holdout",
    "want": "none"
   },
@@ -670,8 +670,8 @@
    "want": "acquisition SIEMENS"
   },
   "Siemens unveils technologies to accelerate the industrial AI revolution at CES 2026": {
-   "got": "none",
-   "outcome": "missed",
+   "got": "product_launch SIEMENS",
+   "outcome": "found",
    "split": "dev",
    "want": "product_launch SIEMENS"
   },
@@ -802,8 +802,8 @@
    "want": "tie_up SYRMA with Kaga Electronics"
   },
   "Syrma Sgs Technology Limited has informed the Exchange regarding a press release dated September 22, 2026, titled \"Update on inauguration of facility by Syrma Johri MedTech Limited, a subsidiary of Syrma SGS Technology Limited ( Syrma SGS/…": {
-   "got": "capacity_add (no holding)",
-   "outcome": "missed",
+   "got": "capacity_add SYRMA",
+   "outcome": "found",
    "split": "dev",
    "want": "capacity_add SYRMA"
   },
@@ -820,8 +820,8 @@
    "want": "acquisition TCS"
   },
   "TCS Launches NVIDIA-Powered Autonomous Engineering Lab in Bengaluru to Drive Industrial AI Prototyping": {
-   "got": "capacity_add TCS",
-   "outcome": "wrong_type",
+   "got": "product_launch TCS",
+   "outcome": "found",
    "split": "dev",
    "want": "product_launch TCS"
   },
@@ -880,8 +880,8 @@
    "want": "none"
   },
   "UL Solutions Introduces Certification Program for Prefabricated Data Center Power Distribution Systems, Awards First Certification to Schneider Electric": {
-   "got": "order_win SCHNEIDER",
-   "outcome": "false_alarm",
+   "got": "product_launch (no holding)",
+   "outcome": "quiet",
    "split": "dev",
    "want": "product_launch (no holding)"
   },
@@ -916,8 +916,8 @@
    "want": "tie_up VBL with Everest International"
   },
   "Varun Beverages rises 8.5% as firm announces partnership with Carlsberg for beer business in Africa, Q3...": {
-   "got": "tie_up VBL with Carlsberg",
-   "outcome": "found",
+   "got": "tie_up (no holding) with Carlsberg",
+   "outcome": "missed",
    "split": "dev",
    "want": "tie_up VBL with Carlsberg"
   },
