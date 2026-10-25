@@ -3,17 +3,17 @@
  "metrics": {
   "all": {
    "challenge_precision": 1.0,
-   "challenge_recall": 0.63,
+   "challenge_recall": 0.593,
    "contradictions": 27,
-   "downgraded": 0,
+   "downgraded": 2,
    "false_alarms": 0,
    "namesake_precision": 0.714,
    "namesake_recall": 1.0,
    "pending": 0,
    "real_rows": 81,
    "rows": 103,
-   "support_precision": 0.971,
-   "support_recall": 0.579
+   "support_precision": 1.0,
+   "support_recall": 0.491
   },
   "dev": {
    "challenge_precision": 1.0,
@@ -27,26 +27,26 @@
    "real_rows": 45,
    "rows": 63,
    "support_precision": 1.0,
-   "support_recall": 0.6
+   "support_recall": 0.467
   },
   "holdout": {
    "challenge_precision": 1.0,
-   "challenge_recall": 0.5,
+   "challenge_recall": 0.333,
    "contradictions": 6,
-   "downgraded": 0,
+   "downgraded": 2,
    "false_alarms": 0,
    "namesake_precision": 1.0,
    "namesake_recall": 1.0,
    "pending": 0,
    "real_rows": 36,
    "rows": 40,
-   "support_precision": 0.938,
-   "support_recall": 0.556
+   "support_precision": 1.0,
+   "support_recall": 0.519
   }
  },
  "models": {
   "check": {
-   "gemini-3.5-flash": 17
+   "gemini-3-flash-preview": 17
   },
   "thesis": {
    "gemini-flash-lite-latest": 103
@@ -209,8 +209,8 @@
    "want": "unrelated"
   },
   "CAMPUS | Campus Activewear unveils its first reimagined store in New Delhi": {
-   "got": "supports",
-   "outcome": "right",
+   "got": "unrelated",
+   "outcome": "wrong",
    "split": "dev",
    "want": "supports or supports"
   },
@@ -269,8 +269,8 @@
    "want": "supports or unrelated"
   },
   "CONCOR | Government scraps ₹10,000 crore container manufacturing scheme": {
-   "got": "contradicts (confirmed)",
-   "outcome": "right",
+   "got": "unrelated (refused contradicts: not confirmed by a second reading)",
+   "outcome": "missed",
    "split": "holdout",
    "want": "contradicts"
   },
@@ -509,8 +509,8 @@
    "want": "supports or unrelated"
   },
   "RELIANCE | US President Trump Announces $300 Billion Partnership with Reliance to Build First Major US Refinery in 50 Years": {
-   "got": "supports",
-   "outcome": "right",
+   "got": "unrelated",
+   "outcome": "wrong",
    "split": "dev",
    "want": "supports"
   },
@@ -575,8 +575,8 @@
    "want": "supports"
   },
   "SIEMENS | Siemens unveils ÖBB Railjet M at InnoTrans": {
-   "got": "supports, group",
-   "outcome": "right",
+   "got": "unrelated, group",
+   "outcome": "wrong",
    "split": "dev",
    "want": "supports"
   },
@@ -605,7 +605,7 @@
    "want": "supports"
   },
   "SUZLON | Suzlon begins FY27 strong with 23% YoY revenue growth and highest-ever Q1 deliveries": {
-   "got": "supports",
+   "got": "unrelated",
    "outcome": "right",
    "split": "dev",
    "want": "supports or unrelated"
@@ -641,13 +641,13 @@
    "want": "contradicts"
   },
   "TCS | TCS launches next-gen system-on-chip design services for automotive and semiconductor companies": {
-   "got": "supports",
-   "outcome": "right",
+   "got": "unrelated",
+   "outcome": "wrong",
    "split": "holdout",
    "want": "supports"
   },
   "THERMAX | THERMAX: Revenue up 7% but profit down 85% on project overrun; order book and restructuring boost outlook": {
-   "got": "supports",
+   "got": "unrelated (refused supports: claim not in the thesis)",
    "outcome": "missed",
    "split": "holdout",
    "want": "contradicts"
