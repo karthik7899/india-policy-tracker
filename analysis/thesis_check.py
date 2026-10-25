@@ -265,6 +265,19 @@ def apply_check(
     }
 
 
+def check_verdict(raw: Dict[str, Any], headline: str) -> Tuple[str, str]:
+    """``(verdict, quote)`` of a second reading. A "contradicts" must quote
+    the headline verbatim, like the first reading; one that does not is a
+    refusal, "does_not"."""
+    verdict = raw.get("verdict")
+    because = re.sub(r"\s+", " ", str(raw.get("because") or "")).strip(" .,;:")
+    if verdict == "contradicts" and (
+        not _norm(because) or _norm(because) not in _norm(headline)
+    ):
+        verdict = "does_not"
+    return verdict, because if verdict == "contradicts" else ""
+
+
 def check_challenges(
     items: List[Tuple[str, Dict[str, Any], Dict[str, Any]]],
     entries: Dict[str, Any],
@@ -304,18 +317,11 @@ def check_challenges(
                 if raw is None or raw.get("verdict") not in VERDICTS:
                     status["checks_pending"] += 1
                     continue
-                verdict = raw["verdict"]
-                because = re.sub(r"\s+", " ", str(raw.get("because") or "")).strip(
-                    " .,;:"
-                )
-                if verdict == "contradicts" and (
-                    not _norm(because) or _norm(because) not in _norm(pair["headline"])
-                ):
-                    verdict = "does_not"
+                verdict, because = check_verdict(raw, pair["headline"])
                 entries[key]["check"] = {
                     "v": CHECK_VERSION,
                     "verdict": verdict,
-                    "because": because if verdict == "contradicts" else "",
+                    "because": because,
                     "date": today,
                     **(
                         {"model": transport.model}
@@ -466,8 +472,11 @@ def thesis_pairs(
 def _prompt(batch: List[Tuple[int, Dict[str, Any]]]) -> str:
     lines, current = [], None
     for i, pair in batch:
-        if pair["ticker"] != current:
-            current = pair["ticker"]
+        # A new heading for a new holding, or for the same holding's other
+        # thesis (labels written before it changed), so that no headline is
+        # read against a thesis that is not its own.
+        if (pair["ticker"], pair["thesis"]) != current:
+            current = pair["ticker"], pair["thesis"]
             lines.append(
                 f"\nHOLDING: {pair['name']} ({pair['ticker']}, listed in India)"
             )

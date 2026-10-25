@@ -3,9 +3,9 @@
  "metrics": {
   "all": {
    "challenge_precision": 1.0,
-   "challenge_recall": 0.593,
+   "challenge_recall": 0.63,
    "contradictions": 27,
-   "downgraded": 2,
+   "downgraded": 1,
    "false_alarms": 0,
    "namesake_precision": 0.714,
    "namesake_recall": 1.0,
@@ -13,7 +13,7 @@
    "real_rows": 81,
    "rows": 103,
    "support_precision": 1.0,
-   "support_recall": 0.491
+   "support_recall": 0.579
   },
   "dev": {
    "challenge_precision": 1.0,
@@ -27,13 +27,13 @@
    "real_rows": 45,
    "rows": 63,
    "support_precision": 1.0,
-   "support_recall": 0.467
+   "support_recall": 0.533
   },
   "holdout": {
    "challenge_precision": 1.0,
-   "challenge_recall": 0.333,
+   "challenge_recall": 0.5,
    "contradictions": 6,
-   "downgraded": 2,
+   "downgraded": 1,
    "false_alarms": 0,
    "namesake_precision": 1.0,
    "namesake_recall": 1.0,
@@ -41,7 +41,7 @@
    "real_rows": 36,
    "rows": 40,
    "support_precision": 1.0,
-   "support_recall": 0.519
+   "support_recall": 0.63
   }
  },
  "models": {
@@ -269,8 +269,8 @@
    "want": "supports or unrelated"
   },
   "CONCOR | Government scraps ₹10,000 crore container manufacturing scheme": {
-   "got": "unrelated (refused contradicts: not confirmed by a second reading)",
-   "outcome": "missed",
+   "got": "contradicts (confirmed)",
+   "outcome": "right",
    "split": "holdout",
    "want": "contradicts"
   },
@@ -521,8 +521,8 @@
    "want": "supports"
   },
   "SCHNEIDER | Schneider Electric Announces Intention To Acquire Cognite": {
-   "got": "unrelated, group",
-   "outcome": "wrong",
+   "got": "supports, group",
+   "outcome": "right",
    "split": "holdout",
    "want": "supports"
   },
@@ -551,8 +551,8 @@
    "want": "unrelated"
   },
   "SIEMENS | Siemens and FuelCell Energy Partner on Scalable Fuel Cells": {
-   "got": "unrelated, group",
-   "outcome": "wrong",
+   "got": "supports, group",
+   "outcome": "right",
    "split": "holdout",
    "want": "supports"
   },
@@ -569,14 +569,14 @@
    "want": "supports"
   },
   "SIEMENS | Siemens to acquire Precision Innovations to expand AI-powered system-on-a-chip design exploration and optimization": {
-   "got": "unrelated, group",
-   "outcome": "wrong",
+   "got": "supports, group",
+   "outcome": "right",
    "split": "dev",
    "want": "supports"
   },
   "SIEMENS | Siemens unveils ÖBB Railjet M at InnoTrans": {
-   "got": "unrelated, group",
-   "outcome": "wrong",
+   "got": "supports, group",
+   "outcome": "right",
    "split": "dev",
    "want": "supports"
   },
@@ -641,8 +641,8 @@
    "want": "contradicts"
   },
   "TCS | TCS launches next-gen system-on-chip design services for automotive and semiconductor companies": {
-   "got": "unrelated",
-   "outcome": "wrong",
+   "got": "supports",
+   "outcome": "right",
    "split": "holdout",
    "want": "supports"
   },

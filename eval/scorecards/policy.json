@@ -2,17 +2,17 @@
  "format": 1,
  "metrics": {
   "all": {
-   "effect_precision": 0.85,
-   "effect_recall": 0.65,
+   "effect_precision": 0.929,
+   "effect_recall": 0.6,
    "pending": 0,
    "policy": 31,
-   "precision": 0.824,
+   "precision": 0.875,
    "recall": 0.903,
    "rows": 76
   },
   "dev": {
    "effect_precision": 1.0,
-   "effect_recall": 0.769,
+   "effect_recall": 0.692,
    "pending": 0,
    "policy": 21,
    "precision": 0.833,
@@ -20,11 +20,11 @@
    "rows": 52
   },
   "holdout": {
-   "effect_precision": 0.571,
+   "effect_precision": 0.75,
    "effect_recall": 0.429,
    "pending": 0,
    "policy": 10,
-   "precision": 0.8,
+   "precision": 1.0,
    "recall": 0.8,
    "rows": 24
   }
@@ -82,7 +82,7 @@
    "want": "not policy"
   },
   "BEL, HAL, Bharat Dynamics: Defence stocks rally as DAC clears ₹52,000 crore defence acquisition proposals": {
-   "got": "approval aerospace_defence:tailwind",
+   "got": "procurement aerospace_defence:tailwind",
    "outcome": "found",
    "split": "holdout",
    "want": "policy aerospace_defence:tailwind (also surveillance_security:tailwind)"
@@ -94,13 +94,13 @@
    "want": "not policy"
   },
   "Budget 2026: Semiconductor stocks jump up to 7% as FM unveils Mission 2.0 with ₹40,000 cr outlay": {
-   "got": "incentive_scheme manufacturing_electronics:tailwind semiconductors_equipment:tailwind",
+   "got": "subsidy_or_funding semiconductors_equipment:tailwind",
    "outcome": "found",
    "split": "dev",
    "want": "policy semiconductors_equipment:tailwind (also manufacturing_electronics:tailwind)"
   },
   "CONCOR flags off first export container to the UK from ICD Whitefield under India–UK FTA": {
-   "got": "trade_agreement logistics_heavy_capital:tailwind",
+   "got": "trade_agreement",
    "outcome": "found",
    "split": "dev",
    "want": "policy (also logistics_heavy_capital:tailwind textiles_apparel:tailwind)"
@@ -118,8 +118,8 @@
    "want": "not policy"
   },
   "Cybersecurity in government: How to protect public services and strengthen cyber resilience": {
-   "got": "regulation cybersecurity:tailwind",
-   "outcome": "false_alarm",
+   "got": "none",
+   "outcome": "quiet",
    "split": "holdout",
    "want": "not policy"
   },
@@ -154,8 +154,8 @@
    "want": "policy manufacturing_electronics:tailwind"
   },
   "Dixon shares rise as Vivo JV wins government approval": {
-   "got": "approval manufacturing_electronics:tailwind",
-   "outcome": "found",
+   "got": "approval",
+   "outcome": "effects_differ",
    "split": "dev",
    "want": "policy manufacturing_electronics:tailwind"
   },
@@ -358,8 +358,8 @@
    "want": "not policy"
   },
   "Prime Minister highlights success of Ayushman Bharat on its eighth anniversary": {
-   "got": "subsidy_or_funding healthcare_hospitals:tailwind",
-   "outcome": "false_alarm",
+   "got": "none",
+   "outcome": "quiet",
    "split": "holdout",
    "want": "not policy"
   },
@@ -406,7 +406,7 @@
    "want": "not policy"
   },
   "Sebi Exempts Mehta Family Trust From Saurashtra Cement Open Offer": {
-   "got": "regulation",
+   "got": "approval",
    "outcome": "found",
    "split": "holdout",
    "want": "policy"
@@ -490,7 +490,7 @@
    "want": "policy aerospace_defence:tailwind (also surveillance_security:tailwind)"
   },
   "ideaForge gets Rs 151 crore Govt funding to develop ‘Yeti’ drone for high-altitude military logistics": {
-   "got": "subsidy_or_funding aerospace_defence:tailwind",
+   "got": "subsidy_or_funding",
    "outcome": "effects_differ",
    "split": "holdout",
    "want": "policy surveillance_security:tailwind (also aerospace_defence:tailwind)"

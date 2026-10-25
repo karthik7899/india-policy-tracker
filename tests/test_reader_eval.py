@@ -6,6 +6,7 @@ test, which replays the committed recordings and holds the committed
 scorecards to them.
 """
 
+import collections
 import copy
 import json
 import os
@@ -88,6 +89,16 @@ def test_each_codec_reads_back_its_reader_s_own_prompt():
     ]
 
 
+def test_a_holding_s_other_thesis_gets_its_own_heading():
+    """Labels written before a thesis changed hold the old text: each pair
+    is read, and known, by its own thesis, whatever pair comes before it."""
+    old = dict(PAIR, thesis="Market leader.", headline=B)
+    prompt = thesis_check._prompt([(0, PAIR), (1, old)])
+    assert prompt.count("HOLDING: ") == 2
+    alone = rr.THESIS.items(thesis_check._prompt([(0, old)]))[0][1]
+    assert rr.THESIS.items(prompt)[1][1] == alone
+
+
 def test_an_item_is_known_by_everything_the_model_saw_of_it():
     def key(pair):
         return rr.THESIS.items(thesis_check._prompt([(0, pair)]))[0][1]
@@ -153,9 +164,11 @@ def test_a_recording_made_for_another_prompt_is_not_served(store):
     assert store.stale(rr.EVENTS.fingerprint()) == 1
 
 
-def test_recording_asks_only_for_what_has_no_answer_and_keeps_what_was_there(store):
+def test_recording_asks_only_for_what_is_short_of_its_takes(tmp_path):
+    store = rr.Recordings(str(tmp_path / "events.json"), takes=2)
     fp = rr.EVENTS.fingerprint()
-    store.record(_key(A), fp, A, {"event_type": "order_win"}, "old-model", "2026-10-01")
+    for _ in range(2):
+        store.record(_key(A), fp, A, {"event_type": "order_win"}, "old", "2026-10-01")
     calls = []
     live = _model(lambda text: {"event_type": "none"}, calls, "new-model")
     stats = {}
@@ -165,20 +178,206 @@ def test_recording_asks_only_for_what_has_no_answer_and_keeps_what_was_there(sto
     assert calls == []
     out = json.loads(transport(_events(A, B)))
     assert len(calls) == 1
-    # A keeps its recorded answer even though the model now says otherwise.
+    # A has its takes and keeps them, though the model now says otherwise.
     assert out == [
         {"id": 0, "event_type": "order_win"},
         {"id": 1, "event_type": "none"},
     ]
-    assert store.entries[_key(A)]["model"] == "old-model"
+    assert len(store.entries[_key(A)]["takes"]) == 2
     assert store.entries[_key(B)] == {
         "input": B,
         "prompt": fp,
-        "answer": {"event_type": "none"},
-        "model": "new-model",
-        "recorded": "2026-10-24",
+        "takes": [
+            {
+                "answer": {"event_type": "none"},
+                "model": "new-model",
+                "recorded": "2026-10-24",
+            }
+        ],
     }
     assert stats["recorded"] == 1
+
+
+def test_each_call_adds_a_take_until_the_item_has_its_takes(store):
+    answers = iter(["order_win", "tie_up", "order_win", "none"])
+    calls = []
+    live = _model(lambda text: {"event_type": next(answers)}, calls)
+    transport = rr.replaying(rr.EVENTS, store, live)
+    served = [json.loads(transport(_events(A)))[0]["event_type"] for _ in range(4)]
+    # One take, then a tie (the earliest wins), then two of three agree.
+    assert served == ["order_win", "order_win", "order_win", "order_win"]
+    assert len(calls) == rr.TAKES
+    takes = store.entries[_key(A)]["takes"]
+    assert [t["answer"]["event_type"] for t in takes] == [
+        "order_win",
+        "tie_up",
+        "order_win",
+    ]
+
+
+def test_the_reading_most_takes_give_is_served(store):
+    fp = rr.EVENTS.fingerprint()
+
+    def takes(*answers):
+        store.entries.clear()
+        for a in answers:
+            store.record(_key(A), fp, A, a, "m", "x")
+        return json.loads(rr.replaying(rr.EVENTS, store)(_events(A)))[0]
+
+    win = {"event_type": "order_win", "parties": ["Suzlon"], "gist": "Suzlon bags"}
+    tie = {"event_type": "tie_up", "parties": ["Suzlon", "Yanara"], "gist": ""}
+    assert takes(win, tie, tie)["event_type"] == "tie_up"
+    # No reading in most takes: the earliest is served.
+    other = {"event_type": "none", "parties": [], "gist": ""}
+    assert takes(win, tie, other)["event_type"] == "order_win"
+    # Takes the reader makes the same of are one reading, worded however
+    # they are; the earliest of the majority is the one served.
+    same = {**tie, "parties": ["YANARA", " Suzlon"], "gist": "worded otherwise"}
+    assert takes(win, same, tie) == {"id": 0, **same}
+
+
+def test_a_take_votes_with_what_the_reader_makes_of_it(store, tmp_path):
+    """Grounding drops a sector effect whose reason is not the headline's
+    and a stance whose quotes are not verbatim, so a vote on the raw answers
+    would count readings the reader never makes."""
+    headline = "Government approves PLI scheme for electronics manufacturing"
+    fp = rr.EVENTS.fingerprint()
+    policy = {
+        "event_type": "none",
+        "parties": [],
+        "policy_measure": "incentive_scheme",
+        "policy_status": "approved",
+    }
+
+    def effect(because):
+        return [
+            {
+                "sector": "manufacturing_electronics",
+                "direction": "tailwind",
+                "because": because,
+            }
+        ]
+
+    unquoted = {**policy, "sector_effects": effect("cheaper to build phones here")}
+    bare = {**policy, "policy_status": "proposed", "sector_effects": []}
+    quoted = {**policy, "sector_effects": effect("PLI scheme for electronics")}
+    for take in (quoted, unquoted, bare):
+        store.record(_key(headline), fp, headline, take, "m", "x")
+    (served,) = json.loads(rr.replaying(rr.EVENTS, store)(_events(headline)))
+    assert served == {"id": 0, **unquoted}
+    assert store.agreement()["majority"] == 1
+
+    theses = rr.Recordings(str(tmp_path / "thesis.json"))
+    prompt = thesis_check._prompt([(0, PAIR)])
+    ((_, key, readable),) = rr.THESIS.items(prompt)
+    said = {"stance": "contradicts", "about": True, "group": False}
+    verbatim = {**said, "claim": "Debt-free", "because": "Suzlon bags 306 MW"}
+    not_in_thesis = {**said, "claim": "Market leader", "because": "Suzlon bags"}
+    unrelated = {**said, "stance": "unrelated", "claim": "", "because": ""}
+    for take in (verbatim, not_in_thesis, unrelated):
+        theses.record(key, rr.THESIS.fingerprint(), readable, take, "m", "x")
+    (served,) = json.loads(rr.replaying(rr.THESIS, theses)(prompt))
+    assert served == {"id": 0, **not_in_thesis}
+
+
+def test_the_kind_of_measure_decides_only_among_takes_that_agree_on_the_rest(store):
+    """The policy scorecard shows the measure but counts only that there is
+    one and what it moves: the measure most takes give is served, and a
+    disagreement over it never outvotes the takes that agree on the rest."""
+    headline = "DAC clears defence acquisition proposals worth Rs 52,000 crore"
+    fp = rr.EVENTS.fingerprint()
+    effects = [
+        {
+            "sector": "aerospace_defence",
+            "direction": "tailwind",
+            "because": "defence acquisition proposals",
+        }
+    ]
+
+    def policy(measure):
+        return {
+            "event_type": "none",
+            "parties": [],
+            "policy_measure": measure,
+            "sector_effects": effects if measure != "none" else [],
+        }
+
+    def served(*measures):
+        store.entries.clear()
+        for m in measures:
+            store.record(_key(headline), fp, headline, policy(m), "m", "x")
+        (answer,) = json.loads(rr.replaying(rr.EVENTS, store)(_events(headline)))
+        return answer["policy_measure"]
+
+    assert served("approval", "procurement", "procurement") == "procurement"
+    # Two takes find a policy and the same effect, whatever they call it.
+    assert served("none", "incentive_scheme", "procurement") == "incentive_scheme"
+    assert store.agreement()["majority"] == 1
+
+
+def test_a_check_votes_with_the_verdict_its_quote_allows(tmp_path):
+    """A "contradicts" that does not quote the headline is a refusal to the
+    second reader (thesis_check.check_verdict), so it votes as one."""
+    store = rr.Recordings(str(tmp_path / "check.json"))
+    prompt = thesis_check._check_prompt([(0, PAIR, {"claim": "Debt-free"})])
+    ((_, key, readable),) = rr.CHECK.items(prompt)
+    unquoted = {"verdict": "contradicts", "because": "Suzlon is in debt"}
+    quoted = {"verdict": "contradicts", "because": "Suzlon bags 306 MW"}
+    for take in (unquoted, quoted, {**quoted}):
+        store.record(key, rr.CHECK.fingerprint(), readable, take, "m", "x")
+    (served,) = json.loads(rr.replaying(rr.CHECK, store)(prompt))
+    assert served == {"id": 0, **quoted}
+    assert store.agreement()["majority"] == 1
+
+
+def test_the_agreement_of_the_takes_is_counted(store):
+    fp = rr.EVENTS.fingerprint()
+    rows = {
+        A: ["order_win"] * 3,
+        B: ["acquisition", "acquisition", "none"],
+        C: ["divestment", "acquisition", "none"],
+        "Suzlon gets order": ["order_win"],
+    }
+    for headline, types in rows.items():
+        for t in types:
+            store.record(_key(headline), fp, headline, {"event_type": t}, "m", "x")
+    rr.replaying(rr.EVENTS, store)(_events(*rows))
+    assert store.agreement() == {
+        "unanimous": 1,
+        "majority": 1,
+        "split": 1,
+        "single": 1,
+    }
+
+
+def test_a_recording_from_before_takes_is_its_first_take(tmp_path):
+    path = tmp_path / "events.json"
+    answer = {"event_type": "order_win"}
+    path.write_text(
+        json.dumps(
+            {
+                "items": {
+                    _key(A): {
+                        "input": A,
+                        "prompt": rr.EVENTS.fingerprint(),
+                        "answer": answer,
+                        "model": "m",
+                        "recorded": "2026-10-24",
+                    }
+                }
+            }
+        )
+    )
+    store = rr.Recordings(str(path))
+    assert json.loads(rr.replaying(rr.EVENTS, store)(_events(A))) == [
+        {"id": 0, **answer}
+    ]
+    store.save()
+    (entry,) = json.loads(path.read_text())["items"].values()
+    assert entry["takes"] == [
+        {"answer": answer, "model": "m", "recorded": "2026-10-24"}
+    ]
+    assert "answer" not in entry
 
 
 @pytest.mark.parametrize(
@@ -208,7 +407,7 @@ def test_a_doubled_answer_is_recorded_as_the_reader_reads_it(store, tmp_path):
         )
 
     rr.replaying(rr.EVENTS, store, live)(_events(A))
-    assert store.entries[_key(A)]["answer"]["event_type"] == "order_win"
+    assert store.entries[_key(A)]["takes"][0]["answer"]["event_type"] == "order_win"
     readings, _ = read_headlines(
         [A], transport=live, cache_path=str(tmp_path / "cache.json")
     )
@@ -264,7 +463,10 @@ def test_live_calls_are_spaced_and_recorded_batches_wait_for_nothing(
     waits = []
     monkeypatch.setattr(rr.time, "monotonic", lambda: clock["now"])
     monkeypatch.setattr(rr.time, "sleep", waits.append)
-    store.record(_key(A), rr.EVENTS.fingerprint(), A, {"event_type": "none"}, "m", "x")
+    for _ in range(rr.TAKES):
+        store.record(
+            _key(A), rr.EVENTS.fingerprint(), A, {"event_type": "none"}, "m", "x"
+        )
     transport = rr.replaying(
         rr.EVENTS, store, _model(lambda t: {"event_type": "none"}), pacer=rr.Pacer(5)
     )
@@ -276,12 +478,13 @@ def test_live_calls_are_spaced_and_recorded_batches_wait_for_nothing(
     assert waits == [3]
 
 
-def test_fresh_asks_again_for_every_item(tmp_path):
+def test_fresh_records_every_item_s_takes_again(tmp_path):
     path = str(tmp_path / "events.json")
     old = rr.Recordings(path)
-    old.record(
-        _key(A), rr.EVENTS.fingerprint(), A, {"event_type": "order_win"}, "m", "x"
-    )
+    for _ in range(rr.TAKES):
+        old.record(
+            _key(A), rr.EVENTS.fingerprint(), A, {"event_type": "order_win"}, "m", "x"
+        )
     old.save()
 
     store = rr.Recordings(path, fresh=True)
@@ -289,10 +492,12 @@ def test_fresh_asks_again_for_every_item(tmp_path):
     transport = rr.replaying(
         rr.EVENTS, store, _model(lambda t: {"event_type": "none"}, calls)
     )
-    assert json.loads(transport(_events(A))) == [{"id": 0, "event_type": "none"}]
-    # Asked once: what this run recorded is served like any recording.
-    assert json.loads(transport(_events(A))) == [{"id": 0, "event_type": "none"}]
-    assert len(calls) == 1
+    for _ in range(rr.TAKES + 1):
+        assert json.loads(transport(_events(A))) == [{"id": 0, "event_type": "none"}]
+    # Its takes, then no more: what this run recorded is served like any.
+    assert len(calls) == rr.TAKES
+    takes = store.entries[_key(A)]["takes"]
+    assert [t["answer"] for t in takes] == [{"event_type": "none"}] * rr.TAKES
 
 
 def test_recordings_no_label_asks_for_are_dropped(tmp_path):
@@ -385,6 +590,13 @@ def test_a_recorded_run_replays_to_the_same_scorecards(tmp_path, monkeypatch):
     assert all(calls.values()), calls
     assert all(s["recorded"] for s in report.values()), report
     assert all(s["recorded"] == s["missing"] == 0 for s in again.values()), again
+    # Every item has its takes, and the same model said the same each time.
+    for name, s in again.items():
+        assert s["agreement"]["unanimous"] == s["replayed"] > 0, (name, s)
+    for codec in rr.CODECS:
+        with open(tmp_path / f"{codec.name}.json", encoding="utf-8") as f:
+            entries = json.load(f)["items"].values()
+        assert {len(e["takes"]) for e in entries} == {rr.TAKES}
     labels = reader_eval._labels()
     assert len(cards["llm"]["rows"]) == len(labels["event"])
     assert len(cards["policy"]["rows"]) == len(labels["policy"])
@@ -415,8 +627,57 @@ def test_every_challenge_is_checked_however_many_there_are(tmp_path, monkeypatch
     )
     got = [r["got"] for r in cards["thesis"]["rows"].values()]
     checked = sum("not confirmed by a second reading" in g for g in got)
-    assert checked > 1 and report["check"]["recorded"] == checked
+    assert checked > 1 and report["check"]["recorded"] == checked * rr.TAKES
     assert not any("(unconfirmed)" in g for g in got)
+
+
+def test_the_second_reading_is_recorded_on_the_challenges_most_takes_raise(
+    tmp_path, monkeypatch
+):
+    """The check is asked about the thesis reader's claim, so its takes are
+    recorded once the thesis readings have theirs, on the challenges the
+    readings most takes give raise, and the scores find each one."""
+    monkeypatch.setattr(reader_eval, "LIVE_SPACING_S", 0)
+    calls = {"events": 0, "thesis": 0, "check": 0}
+    fakes = _fakes(calls)
+    first = fakes["thesis"]
+    takes = collections.Counter()
+
+    def thesis(prompt):
+        # An item's first take finds nothing; its next two find the challenge.
+        answers = json.loads(first(prompt))
+        keys = {i: key for i, key, _ in rr.THESIS.items(prompt)}
+        for a in answers:
+            takes[keys[a["id"]]] += 1
+            if takes[keys[a["id"]]] == 1:
+                a.update(stance="unrelated", claim="", because="")
+        return json.dumps(answers)
+
+    cards, report = reader_eval.run(
+        record=True, live={**fakes, "thesis": thesis}, recordings_dir=str(tmp_path)
+    )
+    _, again = reader_eval.run(recordings_dir=str(tmp_path))
+    assert again["check"]["missing"] == 0
+    assert again["check"]["replayed"] == report["check"]["recorded"] / rr.TAKES > 0
+    assert again["thesis"]["agreement"]["majority"] == again["check"]["replayed"]
+    got = [r["got"] for r in cards["thesis"]["rows"].values()]
+    assert sum("not confirmed by a second reading" in g for g in got) == (
+        again["check"]["replayed"]
+    )
+
+
+def test_each_pass_reads_the_items_in_its_own_order():
+    items = [("A", 1), ("A", 2), ("B", 3), ("C", 4), ("C", 5), ("D", 6)]
+    assert reader_eval._in_pass_order(items, 0) == items
+    again = reader_eval._in_pass_order(items, 1)
+    assert again == reader_eval._in_pass_order(items, 1)  # the same every run
+    assert sorted(again) == items and again != items
+    # A holding's pairs stay together, in their order, under its one thesis.
+    grouped = reader_eval._in_pass_order(items, 2, group=lambda item: item[0])
+    assert sorted(grouped) == items
+    runs = [k for i, (k, _) in enumerate(grouped) if i == 0 or grouped[i - 1][0] != k]
+    assert sorted(runs) == ["A", "B", "C", "D"]
+    assert [n for k, n in grouped if k == "C"] == [4, 5]
 
 
 def test_the_thesis_labels_are_asked_with_the_holding_s_name():
@@ -625,7 +886,15 @@ def test_a_long_comparison_is_cut_to_fit_a_comment_and_keeps_its_verdict():
 
 def test_a_recording_says_which_models_answered_and_which_were_set_aside():
     cards = _all_cards()
-    report = {"events": {"recorded": 2}, "thesis": {}, "check": {}}
+    report = {
+        "events": {
+            "replayed": 3,
+            "recorded": 2,
+            "agreement": {"unanimous": 2, "majority": 1, "split": 0, "single": 0},
+        },
+        "thesis": {},
+        "check": {},
+    }
     live = {
         "readers": {
             "events": {
@@ -645,6 +914,10 @@ def test_a_recording_says_which_models_answered_and_which_were_set_aside():
         "set_aside": {"gemini-3.8-flash": "busy"},
     }
     text = reader_eval.summary(None, cards, report, live=live)
+    assert (
+        "- **events**: 3 answered, 2 take(s) recorded live, 0 without an answer "
+        "(0 recorded for an older prompt); takes: 2 unanimous, 1 majority\n" in text
+    )
     assert (
         "- live **events**: 2 call(s) in 50.2s, answered by "
         "gemini-flash-lite-latest ×2\n  - failed: `gemini-3.8-flash` ×1 (busy)" in text
