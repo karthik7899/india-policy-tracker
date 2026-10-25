@@ -147,7 +147,8 @@ event_type — exactly one of:
   product_launch     a company launching, unveiling or introducing a product,
                      model, platform or service of its own, or planning to.
                      Not a government scheme, an IPO or share issue, or a
-                     plan, policy or campaign being launched.
+                     plan, policy or campaign being launched. A launch made
+                     in partnership with another named company is a tie_up.
   management_change  a person appointed to, re-appointed to, resigning from,
                      retiring from or replaced in one of these posts: CEO,
                      MD, CFO, COO, CTO, chairman, whole-time or executive

@@ -230,6 +230,12 @@ def test_the_prompt_defines_every_type_the_reader_may_answer_with():
     change = change.split("supply_disruption", 1)[0]
     for excluded in ("auditors", "agencies", "company secretaries"):
         assert excluded in change, excluded
+    # The rules read a partnership before a launch (EVENT_VOCABULARY order),
+    # and reconcile() corroborates only the same type: a launch "in
+    # partnership with" a holding read as a launch is a disagreement.
+    launch = llm_reader._INSTRUCTIONS.split("product_launch", 1)[1]
+    launch = launch.split("management_change", 1)[0]
+    assert "in partnership with another named company is a tie_up" in launch
 
 
 BPCL_EXIT = "BPCL exits Numaligarh Refinery ahead of privatisation"
