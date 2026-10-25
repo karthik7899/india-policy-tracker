@@ -2,7 +2,7 @@
  "format": 1,
  "metrics": {
   "all": {
-   "effect_precision": 0.85,
+   "effect_precision": 0.842,
    "effect_recall": 0.65,
    "pending": 0,
    "policy": 31,
@@ -82,7 +82,7 @@
    "want": "not policy"
   },
   "BEL, HAL, Bharat Dynamics: Defence stocks rally as DAC clears ₹52,000 crore defence acquisition proposals": {
-   "got": "approval aerospace_defence:tailwind",
+   "got": "procurement aerospace_defence:tailwind",
    "outcome": "found",
    "split": "holdout",
    "want": "policy aerospace_defence:tailwind (also surveillance_security:tailwind)"
@@ -94,7 +94,7 @@
    "want": "not policy"
   },
   "Budget 2026: Semiconductor stocks jump up to 7% as FM unveils Mission 2.0 with ₹40,000 cr outlay": {
-   "got": "incentive_scheme manufacturing_electronics:tailwind semiconductors_equipment:tailwind",
+   "got": "subsidy_or_funding semiconductors_equipment:tailwind",
    "outcome": "found",
    "split": "dev",
    "want": "policy semiconductors_equipment:tailwind (also manufacturing_electronics:tailwind)"

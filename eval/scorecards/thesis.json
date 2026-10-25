@@ -13,7 +13,7 @@
    "real_rows": 81,
    "rows": 103,
    "support_precision": 1.0,
-   "support_recall": 0.491
+   "support_recall": 0.596
   },
   "dev": {
    "challenge_precision": 1.0,
@@ -27,7 +27,7 @@
    "real_rows": 45,
    "rows": 63,
    "support_precision": 1.0,
-   "support_recall": 0.467
+   "support_recall": 0.567
   },
   "holdout": {
    "challenge_precision": 1.0,
@@ -41,7 +41,7 @@
    "real_rows": 36,
    "rows": 40,
    "support_precision": 1.0,
-   "support_recall": 0.519
+   "support_recall": 0.63
   }
  },
  "models": {
@@ -209,8 +209,8 @@
    "want": "unrelated"
   },
   "CAMPUS | Campus Activewear unveils its first reimagined store in New Delhi": {
-   "got": "unrelated",
-   "outcome": "wrong",
+   "got": "supports",
+   "outcome": "right",
    "split": "dev",
    "want": "supports or supports"
   },
@@ -521,8 +521,8 @@
    "want": "supports"
   },
   "SCHNEIDER | Schneider Electric Announces Intention To Acquire Cognite": {
-   "got": "unrelated, group",
-   "outcome": "wrong",
+   "got": "supports, group",
+   "outcome": "right",
    "split": "holdout",
    "want": "supports"
   },
@@ -551,8 +551,8 @@
    "want": "unrelated"
   },
   "SIEMENS | Siemens and FuelCell Energy Partner on Scalable Fuel Cells": {
-   "got": "unrelated, group",
-   "outcome": "wrong",
+   "got": "supports, group",
+   "outcome": "right",
    "split": "holdout",
    "want": "supports"
   },
@@ -569,14 +569,14 @@
    "want": "supports"
   },
   "SIEMENS | Siemens to acquire Precision Innovations to expand AI-powered system-on-a-chip design exploration and optimization": {
-   "got": "unrelated, group",
-   "outcome": "wrong",
+   "got": "supports, group",
+   "outcome": "right",
    "split": "dev",
    "want": "supports"
   },
   "SIEMENS | Siemens unveils ÖBB Railjet M at InnoTrans": {
-   "got": "unrelated, group",
-   "outcome": "wrong",
+   "got": "supports, group",
+   "outcome": "right",
    "split": "dev",
    "want": "supports"
   },
@@ -641,8 +641,8 @@
    "want": "contradicts"
   },
   "TCS | TCS launches next-gen system-on-chip design services for automotive and semiconductor companies": {
-   "got": "unrelated",
-   "outcome": "wrong",
+   "got": "supports",
+   "outcome": "right",
    "split": "holdout",
    "want": "supports"
   },

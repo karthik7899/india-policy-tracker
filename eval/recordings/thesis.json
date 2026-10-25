@@ -1,1344 +1,4022 @@
 {
- "_about": "Raw answers from the AI readers to the labelled items in eval/, recorded by scripts/reader_eval.py --record and replayed by the tests. Each is stored under the fingerprint of the prompt and schema that asked for it; a prompt change leaves them stale until they are recorded again.",
+ "_about": "Raw answers from the AI readers to the labelled items in eval/, recorded by scripts/reader_eval.py --record and replayed by the tests. Each item has up to three takes, stored under the fingerprint of the prompt and schema that asked for them, and the reading most takes give is served; a prompt change leaves them stale until they are recorded again.",
  "items": {
   "0188d18ecc42bdb4": {
-   "answer": {
-    "about": true,
-    "because": "Ananth Technologies and BEL sign MoU for defence and aerospace systems",
-    "claim": "securing major naval and surveillance command radar orders",
-    "group": false,
-    "stance": "supports"
-   },
    "input": "BEL | Ananth Technologies and BEL sign MoU for defence and aerospace systems",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "Ananth Technologies and BEL sign MoU for defence and aerospace systems",
+      "claim": "securing major naval and surveillance command radar orders",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "sign MoU for defence and aerospace systems",
+      "claim": "securing major naval and surveillance command radar orders",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Ananth Technologies and BEL sign MoU for defence and aerospace systems",
+      "claim": "Defence electronics leader",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "031a1f4f8a4283c5": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "BEL | Motilal Oswal bullish on defence sector; BEL top pick for 20% upside",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "037549c9297c1aa3": {
-   "answer": {
-    "about": true,
-    "because": "cuts Khavda renewable park target to 15 GW",
-    "claim": "Developing the world's largest renewable energy park in Khavda, Gujarat (30 GW capacity target)",
-    "group": false,
-    "stance": "contradicts"
-   },
    "input": "ADANIGREEN | Adani Green cuts Khavda renewable park target to 15 GW",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "cuts Khavda renewable park target to 15 GW",
+      "claim": "Developing the world's largest renewable energy park in Khavda, Gujarat (30 GW capacity target)",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "cuts Khavda renewable park target to 15 GW",
+      "claim": "(30 GW capacity target)",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Adani Green cuts Khavda renewable park target to 15 GW",
+      "claim": "Developing the world's largest renewable energy park in Khavda, Gujarat (30 GW capacity target).",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "03dcc26a12b28d88": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": true,
-    "stance": "unrelated"
-   },
    "input": "SIEMENS | Siemens unveils ÖBB Railjet M at InnoTrans",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": true,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Siemens unveils ÖBB Railjet M at InnoTrans",
+      "claim": "Diversified capital-goods major",
+      "group": true,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Siemens unveils ÖBB Railjet M at InnoTrans",
+      "claim": "expanding local factory automation and grid equipment manufacturing",
+      "group": true,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "067c7b68d432d9ec": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "TCS | As AI slows IT growth, JP Morgan expects TCS and Infosys to outperform Wipro, HCL Tech",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "07260314e2c20baa": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "BHEL | BHEL shares hit all-time high post strong Q1 show; will profitability concerns weigh on outlook?",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "08d7e3141e528c52": {
-   "answer": {
-    "about": true,
-    "because": "AI Transformation Contract",
-    "claim": "large deal wins in BFSI and travel verticals, expanding margins via GenAI offerings",
-    "group": false,
-    "stance": "supports"
-   },
    "input": "COFORGE | Coforge Wins $230M AI Transformation Contract With European Client",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "AI Transformation Contract",
+      "claim": "large deal wins in BFSI and travel verticals, expanding margins via GenAI offerings",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "AI Transformation Contract",
+      "claim": "large deal wins in BFSI and travel verticals",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Coforge Wins $230M AI Transformation Contract",
+      "claim": "large deal wins in BFSI and travel verticals",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "090269936f4cad88": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "ARVIND | Arvind unveils AD Denim campaign with actor Raghav Juyal",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "09bb2376c530646a": {
-   "answer": {
-    "about": true,
-    "because": "signs O&M agreement for 300-bed hospital",
-    "claim": "Hospital and diagnostics network",
-    "group": false,
-    "stance": "supports"
-   },
    "input": "FORTIS | Fortis signs O&M agreement for 300-bed hospital, enters Odisha market",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "signs O&M agreement for 300-bed hospital",
+      "claim": "Hospital and diagnostics network",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "signs O&M agreement for 300-bed hospital, enters Odisha market",
+      "claim": "Hospital and diagnostics network",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Fortis signs O&M agreement for 300-bed hospital",
+      "claim": "Hospital and diagnostics network",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "09c8c29eb6e611f1": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "ITC | PDUNASS Inaugurates Joint EPFO–ITC-ILO Training Programme on “Actuarial Practices in Social Security: Strengthening Actuarial Governance at EPFO India”",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": false,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "0ebcb4ed0f46e58b": {
-   "answer": {
-    "about": true,
-    "because": "makes its biggest acquisition ever",
-    "claim": "High-growth digital engineering and enterprise AI services provider",
-    "group": false,
-    "stance": "supports"
-   },
    "input": "PERSISTENT | Persistent Systems makes its biggest acquisition ever",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "makes its biggest acquisition ever",
+      "claim": "High-growth digital engineering and enterprise AI services provider",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "makes its biggest acquisition ever",
+      "claim": "High-growth digital engineering and enterprise AI services provider",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "makes its biggest acquisition ever",
+      "claim": "High-growth digital engineering and enterprise AI services provider",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "14d15cfbf76c2968": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "ARVIND | CARE Ratings upgrades LT ratings of Arvind to 'AA' with 'stable' outlook",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "17b2c37ced9550d7": {
-   "answer": {
-    "about": true,
-    "because": "Defence Ministry bars Zen Technologies from counter-drone tenders",
-    "claim": "winning repeat Ministry of Defence counter-drone orders",
-    "group": false,
-    "stance": "contradicts"
-   },
    "input": "ZENTEC | Defence Ministry bars Zen Technologies from counter-drone tenders",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "Defence Ministry bars Zen Technologies from counter-drone tenders",
+      "claim": "winning repeat Ministry of Defence counter-drone orders",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Defence Ministry bars Zen Technologies from counter-drone tenders",
+      "claim": "winning repeat Ministry of Defence counter-drone orders",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Defence Ministry bars Zen Technologies from counter-drone tenders",
+      "claim": "winning repeat Ministry of Defence counter-drone orders",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "1ac68061cbd3f1e8": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": true,
-    "stance": "unrelated"
-   },
    "input": "SIEMENS | Siemens to acquire Precision Innovations to expand AI-powered system-on-a-chip design exploration and optimization",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": true,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Siemens to acquire Precision Innovations",
+      "claim": "Diversified capital-goods major",
+      "group": true,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Siemens to acquire Precision Innovations",
+      "claim": "expanding local factory automation and grid equipment manufacturing",
+      "group": true,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "1d0f9014250217ee": {
-   "answer": {
-    "about": true,
-    "because": "Anant Raj drops data center plans, to sell NCR commercial properties",
-    "claim": "transitioning commercial properties into major data center hubs in NCR",
-    "group": false,
-    "stance": "contradicts"
-   },
    "input": "ANANTRAJ | Anant Raj drops data center plans, to sell NCR commercial properties",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "Anant Raj drops data center plans, to sell NCR commercial properties",
+      "claim": "transitioning commercial properties into major data center hubs in NCR",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "drops data center plans, to sell NCR commercial properties",
+      "claim": "transitioning commercial properties into major data center hubs in NCR",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "drops data center plans, to sell NCR commercial properties",
+      "claim": "transitioning commercial properties into major data center hubs in NCR",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "1da5afffc0f0b327": {
-   "answer": {
-    "about": true,
-    "because": "400 MW wind EPC order",
-    "claim": "dominating wind turbine supply with a record order book",
-    "group": false,
-    "stance": "supports"
-   },
    "input": "SUZLON | Suzlon bags 400 MW wind EPC order from Tata Power Renewable",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "400 MW wind EPC order",
+      "claim": "dominating wind turbine supply with a record order book",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "bags 400 MW wind EPC order from Tata Power Renewable",
+      "claim": "dominating wind turbine supply with a record order book",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Suzlon bags 400 MW wind EPC order from Tata Power Renewable",
+      "claim": "dominating wind turbine supply with a record order book.",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "27a2e19a4ab61716": {
-   "answer": {
-    "about": true,
-    "because": "CP Plus loses CCTV market lead",
-    "claim": "CCTV market leader (35%+ share)",
-    "group": false,
-    "stance": "contradicts"
-   },
    "input": "CPPLUS | CP Plus loses CCTV market lead as share falls to 18%",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "CP Plus loses CCTV market lead",
+      "claim": "CCTV market leader (35%+ share)",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "CP Plus loses CCTV market lead as share falls to 18%",
+      "claim": "CCTV market leader (35%+ share)",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "CP Plus loses CCTV market lead as share falls to 18%",
+      "claim": "CCTV market leader (35%+ share)",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "284e956fa904102c": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "INDHOTEL | INDHOTEL: Revenue and profit rose year-over-year, driven by hotel segment growth and a key acquisition",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "28c1b5cebfc7b8b6": {
-   "answer": {
-    "about": true,
-    "because": "puts semiconductor OSAT plant on hold indefinitely",
-    "claim": "setting up a state-of-the-art semiconductor OSAT plant",
-    "group": false,
-    "stance": "contradicts"
-   },
    "input": "KAYNES | Kaynes Technology puts semiconductor OSAT plant on hold indefinitely",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "puts semiconductor OSAT plant on hold indefinitely",
+      "claim": "setting up a state-of-the-art semiconductor OSAT plant",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "puts semiconductor OSAT plant on hold indefinitely",
+      "claim": "setting up a state-of-the-art semiconductor OSAT plant",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "puts semiconductor OSAT plant on hold indefinitely",
+      "claim": "setting up a state-of-the-art semiconductor OSAT plant",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "28cce65ec63fb4f6": {
-   "answer": {
-    "about": true,
-    "because": "Planned Acquisition of Cognite Reinforces the Data Foundation for Industrial AI",
-    "claim": "Critical supplier of electrical distribution, smart grids, and high-efficiency cooling for data centers.",
-    "group": true,
-    "stance": "supports"
-   },
    "input": "SCHNEIDER | Schneider Electric’s Planned Acquisition of Cognite Reinforces the Data Foundation for Industrial AI",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "Planned Acquisition of Cognite Reinforces the Data Foundation for Industrial AI",
+      "claim": "Critical supplier of electrical distribution, smart grids, and high-efficiency cooling for data centers.",
+      "group": true,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Planned Acquisition of Cognite Reinforces the Data Foundation for Industrial AI",
+      "claim": "Critical supplier of electrical distribution, smart grids, and high-efficiency cooling for data centers",
+      "group": true,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Planned Acquisition of Cognite Reinforces the Data Foundation for Industrial AI",
+      "claim": "Critical supplier of electrical distribution, smart grids, and high-efficiency cooling for data centers",
+      "group": true,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "29b31caa277dcf8f": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "SIEMENS | Siemens Limited has informed the Exchange about change in Management",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "29bc299b9e1f3057": {
-   "answer": {
-    "about": true,
-    "because": "Finance Ministry withdraws customs duty exemption on aircraft parts imported by HAL",
-    "claim": "benefiting from custom duty exemptions",
-    "group": false,
-    "stance": "contradicts"
-   },
    "input": "HAL | Finance Ministry withdraws customs duty exemption on aircraft parts imported by HAL",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "Finance Ministry withdraws customs duty exemption on aircraft parts imported by HAL",
+      "claim": "benefiting from custom duty exemptions",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Finance Ministry withdraws customs duty exemption",
+      "claim": "benefiting from custom duty exemptions",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Finance Ministry withdraws customs duty exemption on aircraft parts imported by HAL",
+      "claim": "benefiting from custom duty exemptions.",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "2a639417efab9cb6": {
-   "answer": {
-    "about": true,
-    "because": "Government ends smartphone PLI payouts; Dixon's incentive claims rejected",
-    "claim": "heavily subsidized under manufacturing PLI",
-    "group": false,
-    "stance": "contradicts"
-   },
    "input": "DIXON | Government ends smartphone PLI payouts; Dixon's incentive claims rejected",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "Government ends smartphone PLI payouts; Dixon's incentive claims rejected",
+      "claim": "heavily subsidized under manufacturing PLI",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Government ends smartphone PLI payouts; Dixon's incentive claims rejected",
+      "claim": "heavily subsidized under manufacturing PLI",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Government ends smartphone PLI payouts; Dixon's incentive claims rejected",
+      "claim": "heavily subsidized under manufacturing PLI",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "2ae303958b4157db": {
-   "answer": {
-    "about": true,
-    "because": "Government clears Dixon (India)-Vivo (China) joint venture for manufacturing smartphones",
-    "claim": "heavily subsidized under manufacturing PLI",
-    "group": false,
-    "stance": "supports"
-   },
    "input": "DIXON | Government clears Dixon (India)-Vivo (China) joint venture for manufacturing smartphones",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "Government clears Dixon (India)-Vivo (China) joint venture for manufacturing smartphones",
+      "claim": "heavily subsidized under manufacturing PLI",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "joint venture for manufacturing smartphones",
+      "claim": "heavily subsidized under manufacturing PLI",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Government clears Dixon (India)-Vivo (China) joint venture for manufacturing smartphones",
+      "claim": "Leader in electronic assembly (mobile, laptop, LED TV)",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "2b38f02357c801f2": {
-   "answer": {
-    "about": true,
-    "because": "completion of acquisition of land parcel in Bandra (East), Mumbai",
-    "claim": "expanding into tier-2 cities as UDAN air connectivity widens the travel base.",
-    "group": false,
-    "stance": "supports"
-   },
    "input": "LEMONTREE | Lemon Tree Hotels Limited has informed the Exchange about completion of acquisition of land parcel in Bandra (East), Mumbai by Fleur Hotels Limited, a material subsidiary of the Company",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "completion of acquisition of land parcel in Bandra (East), Mumbai",
+      "claim": "expanding into tier-2 cities as UDAN air connectivity widens the travel base.",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "completion of acquisition of land parcel",
+      "claim": "expanding into tier-2 cities as UDAN air connectivity widens the travel base",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "2ef732ae7cecc79e": {
-   "answer": {
-    "about": true,
-    "because": "Indian Army cancels ideaForge drone contract",
-    "claim": "primary supplier for Indian Army and police borders",
-    "group": false,
-    "stance": "contradicts"
-   },
    "input": "IDEAFORGE | Indian Army cancels ideaForge drone contract, shifts orders to rival supplier",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "Indian Army cancels ideaForge drone contract",
+      "claim": "primary supplier for Indian Army and police borders",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Indian Army cancels ideaForge drone contract, shifts orders to rival supplier",
+      "claim": "primary supplier for Indian Army and police borders",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Indian Army cancels ideaForge drone contract",
+      "claim": "Pioneer in tactical and mapping drone systems, primary supplier for Indian Army and police borders",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "30312616c8b89feb": {
-   "answer": {
-    "about": true,
-    "because": "major US acquisition drive strong Q1 FY27 growth",
-    "claim": "investing in technical textiles under recent government schemes",
-    "group": false,
-    "stance": "supports"
-   },
    "input": "ARVIND | ARVIND: Record revenue, margin expansion, and major US acquisition drive strong Q1 FY27 growth",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "major US acquisition drive strong Q1 FY27 growth",
+      "claim": "investing in technical textiles under recent government schemes",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "ARVIND: Record revenue, margin expansion, and major US acquisition drive strong Q1 FY27 growth",
+      "claim": "Leading denim manufacturer",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "3174a0252c70a8f9": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "CHALET | HDFC Mutual Fund increases stake in Chalet Hotels to 9.11%",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "31a74c3ec278358e": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "DIXON | Dixon Tech gains after JM Financial upgrades stock, raises target price by 27%",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "32af65b22f54bb1c": {
-   "answer": {
-    "about": true,
-    "because": "planning potential $1 bn OSAT investment",
-    "claim": "setting up a state-of-the-art semiconductor OSAT plant.",
-    "group": false,
-    "stance": "supports"
-   },
    "input": "KAYNES | Kaynes planning potential $1 bn OSAT investment under ISM 2.0: Report",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "planning potential $1 bn OSAT investment",
+      "claim": "setting up a state-of-the-art semiconductor OSAT plant.",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Kaynes planning potential $1 bn OSAT investment under ISM 2.0",
+      "claim": "setting up a state-of-the-art semiconductor OSAT plant",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "planning potential $1 bn OSAT investment",
+      "claim": "setting up a state-of-the-art semiconductor OSAT plant",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "3411509c79cb5cb7": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "IDEAFORGE | Supply chain disruptions push ideaForge into losses in Q1FY27",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "34509ea9817b54ff": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "HAL | HAL shares tumble 8% as markets sell off on weak global cues",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "39dc9bd4ebed10d0": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "MPHASIS | Mphasis Posts Q1 EBIT Of 6.48B Rupees With Margin Slipping To 14.78% QoQ",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "3a3edb8f1c666d4d": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "VBL | Varun Beverages posts 15.5% surge in Q1 net, denies bidding stake in Bira 91",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "41cb2f70b59ec1dd": {
-   "answer": {
-    "about": false,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "HAL | ABN AMRO gains momentum in Germany following the integration of Hauck Aufhäuser Lampe (HAL)",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": false,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": false,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": false,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "561f116f5e3f26ca": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "TCS | TCS Q1 Preview: Wage Hikes Seen Weighing On Margin, Growth Stays Muted",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "576e4f2d3357bb11": {
-   "answer": {
-    "about": false,
-    "because": "",
-    "claim": "",
-    "group": true,
-    "stance": "unrelated"
-   },
    "input": "SIEMENS | Siemens and Samsung Foundry strengthen collaboration to advance silicon design enablement",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": false,
+      "because": "",
+      "claim": "",
+      "group": true,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": true,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Siemens and Samsung Foundry strengthen collaboration to advance silicon design enablement",
+      "claim": "expanding local factory automation and grid equipment manufacturing",
+      "group": true,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "5b83e06672831ad7": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "DIXON | Explained: Why Jefferies prefers Kaynes Tech shares over Dixon Tech; urges caution on Syrma SGS",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "5ba1a743b2a8dd9b": {
-   "answer": {
-    "about": true,
-    "because": "unveils mapping drone",
-    "claim": "Pioneer in tactical and mapping drone systems",
-    "group": false,
-    "stance": "supports"
-   },
    "input": "IDEAFORGE | IdeaForge Technology unveils mapping drone",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "unveils mapping drone",
+      "claim": "Pioneer in tactical and mapping drone systems",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "unveils mapping drone",
+      "claim": "Pioneer in tactical and mapping drone systems",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "unveils mapping drone",
+      "claim": "Pioneer in tactical and mapping drone systems, primary supplier for Indian Army and police borders",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "5f0ceda71e2fb453": {
-   "answer": {
-    "about": true,
-    "because": "94% of ITC’s businesses now linked to agri-crops or plantations",
-    "claim": "direct rural boost play",
-    "group": false,
-    "stance": "supports"
-   },
    "input": "ITC | 94% of ITC’s businesses now linked to agri-crops or plantations – Chairman Sanjiv Puri says at ITC AGM",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "94% of ITC’s businesses now linked to agri-crops or plantations",
+      "claim": "direct rural boost play",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "94% of ITC’s businesses now linked to agri-crops or plantations",
+      "claim": "direct rural boost play",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "5f951b19c534212f": {
-   "answer": {
-    "about": true,
-    "because": "Manufacture PEM Electrolysers in India",
-    "claim": "expanding local container manufacturing and green energy grids",
-    "group": false,
-    "stance": "supports"
-   },
    "input": "BHEL | Hystar and BHEL Partner to Manufacture PEM Electrolysers in India",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "Manufacture PEM Electrolysers in India",
+      "claim": "expanding local container manufacturing and green energy grids",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Manufacture PEM Electrolysers in India",
+      "claim": "expanding local container manufacturing and green energy grids",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Hystar and BHEL Partner to Manufacture PEM Electrolysers in India",
+      "claim": "expanding local container manufacturing and green energy grids.",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "61e1c49009d12dd1": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "DIXON | Dixon Technologies CFO resigns",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "623aeabfdba7a1e8": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "ADANIGREEN | Buy, Sell Or Hold: Adani Green Energy, Suzlon Energy, Waaree Energies, KPI Green Energy, Websol Energy System — Analyst Forecast",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "68d251beb964cd81": {
-   "answer": {
-    "about": true,
-    "because": "hands over 2 LCA FOC Twin Seater Trainers",
-    "claim": "expanding local fighter jet assembly",
-    "group": false,
-    "stance": "supports"
-   },
    "input": "HAL | HAL hands over 2 LCA FOC Twin Seater Trainers & 3 HTT 40 Basic Trainers to IAF and 4 Dhruv NG helicopters to PHL in the presence of Raksha Mantri & Civil Aviation Minister",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "hands over 2 LCA FOC Twin Seater Trainers",
+      "claim": "expanding local fighter jet assembly",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "hands over 2 LCA FOC Twin Seater Trainers & 3 HTT 40 Basic Trainers to IAF and 4 Dhruv NG helicopters",
+      "claim": "expanding local fighter jet assembly",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "HAL hands over 2 LCA FOC Twin Seater Trainers & 3 HTT 40 Basic Trainers to IAF and 4 Dhruv NG helicopters to PHL",
+      "claim": "expanding local fighter jet assembly",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "69ee9c6dec1c257d": {
-   "answer": {
-    "about": true,
-    "because": "raises ₹2,500 crore term loan, ending its debt-free status",
-    "claim": "completely debt-free",
-    "group": false,
-    "stance": "contradicts"
-   },
    "input": "SUZLON | Suzlon Energy raises ₹2,500 crore term loan, ending its debt-free status",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "raises ₹2,500 crore term loan, ending its debt-free status",
+      "claim": "completely debt-free",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "raises ₹2,500 crore term loan, ending its debt-free status",
+      "claim": "completely debt-free",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Suzlon Energy raises ₹2,500 crore term loan, ending its debt-free status",
+      "claim": "completely debt-free",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "70880c01e9aabebe": {
-   "answer": {
-    "about": true,
-    "because": "Acquires Devyani Food Industries Kenya Business",
-    "claim": "expanding into newer territories",
-    "group": false,
-    "stance": "supports"
-   },
    "input": "VBL | Varun Beverages Acquires Devyani Food Industries Kenya Business For $32 Million",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "Acquires Devyani Food Industries Kenya Business",
+      "claim": "expanding into newer territories",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Acquires Devyani Food Industries Kenya Business For $32 Million",
+      "claim": "expanding into newer territories",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Varun Beverages Acquires Devyani Food Industries Kenya Business For $32 Million",
+      "claim": "expanding into newer territories and scaling dairy/juice products.",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "70c361a933df04b1": {
-   "answer": {
-    "about": true,
-    "because": "secured a landmark engagement valued over $ 75 million",
-    "claim": "Engineering R&D services leader",
-    "group": false,
-    "stance": "supports"
-   },
    "input": "LTTS | L&T Technology Services Limited has secured a landmark engagement valued over $ 75 million from a leading global technology enterprise.",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "secured a landmark engagement valued over $ 75 million",
+      "claim": "Engineering R&D services leader",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "secured a landmark engagement valued over $ 75 million",
+      "claim": "Engineering R&D services leader, scaling embedded software and semiconductor design-services wins",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "secured a landmark engagement valued over $ 75 million",
+      "claim": "Engineering R&D services leader, scaling embedded software and semiconductor design-services wins",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "7294d01a57190081": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": true,
-    "stance": "unrelated"
-   },
    "input": "SCHNEIDER | Schneider Electric Announces Intention To Acquire Cognite",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": true,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Schneider Electric Announces Intention To Acquire Cognite",
+      "claim": "Critical supplier of electrical distribution, smart grids, and high-efficiency cooling for data centers.",
+      "group": true,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Schneider Electric Announces Intention To Acquire Cognite",
+      "claim": "Critical supplier of electrical distribution, smart grids, and high-efficiency cooling for data centers",
+      "group": true,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "777558c4486ad342": {
-   "answer": {
-    "about": false,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "SCHNEIDER | Precision Optics Enabling Lunar Navigation: Schneider-Kreuznach’s Role in NASA’s Artemis Missions",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": false,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": false,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": false,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "79f8fd480d7e5d0a": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "CAMPUS | Campus Activewear unveils its first reimagined store in New Delhi",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "unveils its first reimagined store in New Delhi",
+      "claim": "Dominant direct-to-consumer sports footwear brand in tier-2/3 cities",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "unveils its first reimagined store",
+      "claim": "scaling retail stores",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "7cb9116e42f656c2": {
-   "answer": {
-    "about": true,
-    "because": "starts double-stack operations",
-    "claim": "Dominant railway container carrier",
-    "group": false,
-    "stance": "supports"
-   },
    "input": "CONCOR | CONCOR starts double-stack operations on WDFC",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "starts double-stack operations",
+      "claim": "Dominant railway container carrier",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "starts double-stack operations on WDFC",
+      "claim": "Dominant railway container carrier",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "starts double-stack operations on WDFC",
+      "claim": "Dominant railway container carrier",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "7f5a19e5b4312a70": {
-   "answer": {
-    "about": true,
-    "because": "order book shrinks 30% as Tata Power cancels 400 MW wind order",
-    "claim": "dominating wind turbine supply with a record order book",
-    "group": false,
-    "stance": "contradicts"
-   },
    "input": "SUZLON | Suzlon order book shrinks 30% as Tata Power cancels 400 MW wind order",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "order book shrinks 30% as Tata Power cancels 400 MW wind order",
+      "claim": "dominating wind turbine supply with a record order book",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "order book shrinks 30% as Tata Power cancels 400 MW wind order",
+      "claim": "dominating wind turbine supply with a record order book",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Suzlon order book shrinks 30% as Tata Power cancels 400 MW wind order",
+      "claim": "record order book.",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "860183a15c6ebef6": {
-   "answer": {
-    "about": false,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "CAMPUS | TCS' HyperVault Secures 264 Acres For Massive 1GW AI Data Center Campus In Hyderabad",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": false,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": false,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": false,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "8823f431a9f2cda3": {
-   "answer": {
-    "about": true,
-    "because": "order book and restructuring boost outlook",
-    "claim": "order book and restructuring boost outlook",
-    "group": false,
-    "stance": "supports"
-   },
    "input": "THERMAX | THERMAX: Revenue up 7% but profit down 85% on project overrun; order book and restructuring boost outlook",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "order book and restructuring boost outlook",
+      "claim": "order book and restructuring boost outlook",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "order book and restructuring boost outlook",
+      "claim": "scaling green hydrogen and boiler manufacturing capacity",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "88dd9461d7d2142a": {
-   "answer": {
-    "about": true,
-    "because": "Government scraps ₹10,000 crore container manufacturing scheme",
-    "claim": "major beneficiary of the ₹10,000 crore container manufacturing scheme",
-    "group": false,
-    "stance": "contradicts"
-   },
    "input": "CONCOR | Government scraps ₹10,000 crore container manufacturing scheme",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "Government scraps ₹10,000 crore container manufacturing scheme",
+      "claim": "major beneficiary of the ₹10,000 crore container manufacturing scheme",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Government scraps ₹10,000 crore container manufacturing scheme",
+      "claim": "major beneficiary of the ₹10,000 crore container manufacturing scheme",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Government scraps ₹10,000 crore container manufacturing scheme",
+      "claim": "major beneficiary of the ₹10,000 crore container manufacturing scheme",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "8a1ec42c88286bcb": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "SCHNEIDER | Schneider Electric Infrastructure Limited has informed the Exchange about Investor Presentation",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "8b04466d47e7b12a": {
-   "answer": {
-    "about": true,
-    "because": "bags ₹1,200 crore order from Indian Railways for locomotive propulsion systems",
-    "claim": "expanding local factory automation and grid equipment manufacturing",
-    "group": false,
-    "stance": "supports"
-   },
    "input": "SIEMENS | Siemens bags ₹1,200 crore order from Indian Railways for locomotive propulsion systems",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "bags ₹1,200 crore order from Indian Railways for locomotive propulsion systems",
+      "claim": "expanding local factory automation and grid equipment manufacturing",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "bags ₹1,200 crore order from Indian Railways",
+      "claim": "expanding local factory automation and grid equipment manufacturing",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "bags ₹1,200 crore order from Indian Railways",
+      "claim": "expanding local factory automation and grid equipment manufacturing",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "8b06207fe800d47b": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "HDFCBANK | Bank Q2 Results FY27: HDFC Bank, Axis Bank, ICICI Bank Announce Results Dates",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "8f361d355f3ca1ac": {
-   "answer": {
-    "about": true,
-    "because": "bags additional orders worth Rs 1,081 crore",
-    "claim": "securing major naval and surveillance command radar orders",
-    "group": false,
-    "stance": "supports"
-   },
    "input": "BEL | BEL bags additional orders worth Rs 1,081 crore",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "bags additional orders worth Rs 1,081 crore",
+      "claim": "securing major naval and surveillance command radar orders",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "orders worth Rs 1,081 crore",
+      "claim": "securing major naval and surveillance command radar orders",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "BEL bags additional orders worth Rs 1,081 crore",
+      "claim": "securing major naval and surveillance command radar orders",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "9050c4b95d560099": {
-   "answer": {
-    "about": false,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "ARVIND | Nizamabad MP Arvind inaugurates ₹9-crore Jankampet goods shed",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": false,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": false,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": false,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "920d1937e6f9cac7": {
-   "answer": {
-    "about": true,
-    "because": "Unveils Comprehensive Clean Energy Strategy",
-    "claim": "commissioning green energy gigafactories.",
-    "group": false,
-    "stance": "supports"
-   },
    "input": "RELIANCE | Reliance Unveils Comprehensive Clean Energy Strategy Amid India’s Energy 'Supercycle'",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "Unveils Comprehensive Clean Energy Strategy",
+      "claim": "commissioning green energy gigafactories.",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Unveils Comprehensive Clean Energy Strategy",
+      "claim": "commissioning green energy gigafactories",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Clean Energy Strategy",
+      "claim": "commissioning green energy gigafactories",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "968a832471dfaf29": {
-   "answer": {
-    "about": false,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "FORTIS | Fortis unveils garden-centred Rosemont apartment development in New Farm",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": false,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": false,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": false,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "99f28028a197aea9": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "MPHASIS | TCS, Mphasis, Infosys, Persistent Systems shares fall, Nifty IT worst sectoral performer; here's why",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "9a8b640de2668ff2": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "ELGIEQUIP | Elgi Equipments (NSE:ELGIEQUIP): Why Did It Divest Its Stake in Gentex Air Solutions LLC?",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "9aa7deda464db2c7": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "ARVIND | Arvind Ltd’s Q1 profit stays flat despite 25% revenue growth",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "9db40d9c6b60dd6f": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "FORTIS | Buy Fortis Healthcare; target of Rs 1120: Prabhudas Lilladher",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "9e3dd19cb36a3ad6": {
-   "answer": {
-    "about": false,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "DIXON | The teaser for ‘The Walking Dead: Daryl Dixon’ final season is out and it unveils a new key character",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": false,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": false,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": false,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "a99f504a49f88e7c": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "KAYNES | Accumulate Kaynes Technology India; target of Rs 4390: Prabhudas Lilladher",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "abe54b4e9568bce2": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": true,
-    "stance": "unrelated"
-   },
    "input": "SIEMENS | Siemens and FuelCell Energy Partner on Scalable Fuel Cells",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": true,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Siemens and FuelCell Energy Partner on Scalable Fuel Cells",
+      "claim": "Diversified capital-goods major",
+      "group": true,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Siemens and FuelCell Energy Partner on Scalable Fuel Cells",
+      "claim": "expanding local factory automation and grid equipment manufacturing",
+      "group": true,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "abe99350f9cfefc8": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "SUZLON | Suzlon Share Price Slumps Over 12% In One Month. Here Are Three Key Reasons Why",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "ad853b5ffbeff93b": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "ARVIND | Arvind acquires stake in two Torrent Urja entities for renewable power",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "adeeb3f7603742e4": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "SUZLON | Suzlon stock falls for fifth straight session; brokerage cuts target price",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "b15caa85be5bd41d": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "KAYNES | Kaynes Technology targets lower metering receivables, better cash flow by FY27-end",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "b1bc25217ebe1b9e": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "BEL | BEL Q2 profit dips 4% on higher employee costs",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "b55144542038ed58": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "COFORGE | Coforge named Exceptional Performer in Whitelane 2026 study",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "bc30ba9e9bc5c076": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "IDEAFORGE | ideaForge Technology Promoter Vipul Joshi Pledges 3,70,370 Equity Shares Under SEBI Regulation 31",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "bd7c24d97efde81b": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "TCS | TCS launches next-gen system-on-chip design services for automotive and semiconductor companies",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "launches next-gen system-on-chip design services for automotive and semiconductor companies",
+      "claim": "Expanding sovereign cloud and secure cyber command centers globally for enterprise clients",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "TCS launches next-gen system-on-chip design services",
+      "claim": "Expanding sovereign cloud and secure cyber command centers globally for enterprise clients",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "bddb472ccbb9c386": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "BEL | Buy, Sell Or Hold: HAL, Bharat Electronics, Bharat Dynamics, Mazagon Dock, Data Patterns",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "bf90f9665ce3d464": {
-   "answer": {
-    "about": true,
-    "because": "and AMD release first Helios platform reference design to accelerate AI Factory deployment",
-    "claim": "Critical supplier of electrical distribution, smart grids, and high-efficiency cooling for data centers.",
-    "group": true,
-    "stance": "supports"
-   },
    "input": "SCHNEIDER | Schneider Electric and AMD release first Helios platform reference design to accelerate AI Factory deployment",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "and AMD release first Helios platform reference design to accelerate AI Factory deployment",
+      "claim": "Critical supplier of electrical distribution, smart grids, and high-efficiency cooling for data centers.",
+      "group": true,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Schneider Electric and AMD release first Helios platform reference design to accelerate AI Factory deployment",
+      "claim": "Critical supplier of electrical distribution, smart grids, and high-efficiency cooling for data centers.",
+      "group": true,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Schneider Electric and AMD release first Helios platform reference design to accelerate AI Factory deployment",
+      "claim": "Critical supplier of electrical distribution, smart grids, and high-efficiency cooling for data centers",
+      "group": true,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "c06e18f914e67c19": {
-   "answer": {
-    "about": true,
-    "because": "Government shelves plan for second HAL fighter jet assembly line",
-    "claim": "expanding local fighter jet assembly",
-    "group": false,
-    "stance": "contradicts"
-   },
    "input": "HAL | Government shelves plan for second HAL fighter jet assembly line",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "Government shelves plan for second HAL fighter jet assembly line",
+      "claim": "expanding local fighter jet assembly",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Government shelves plan for second HAL fighter jet assembly line",
+      "claim": "expanding local fighter jet assembly",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Government shelves plan for second HAL fighter jet assembly line",
+      "claim": "expanding local fighter jet assembly",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "c22d7a705b19e2d0": {
-   "answer": {
-    "about": true,
-    "because": "Navy awards command radar contract to Tata Advanced Systems after BEL loses bid",
-    "claim": "securing major naval and surveillance command radar orders",
-    "group": false,
-    "stance": "contradicts"
-   },
    "input": "BEL | Navy awards command radar contract to Tata Advanced Systems after BEL loses bid",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "Navy awards command radar contract to Tata Advanced Systems after BEL loses bid",
+      "claim": "securing major naval and surveillance command radar orders",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Navy awards command radar contract to Tata Advanced Systems after BEL loses bid",
+      "claim": "securing major naval and surveillance command radar orders",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Navy awards command radar contract to Tata Advanced Systems after BEL loses bid",
+      "claim": "securing major naval and surveillance command radar orders",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "c3b6aa21b1fb83fa": {
-   "answer": {
-    "about": true,
-    "because": "AI-driven Cyber Resilience Takes Flight",
-    "claim": "Expanding sovereign cloud and secure cyber command centers globally for enterprise clients",
-    "group": false,
-    "stance": "supports"
-   },
    "input": "TCS | SAS Partners with TCS, AI-driven Cyber Resilience Takes Flight",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "AI-driven Cyber Resilience Takes Flight",
+      "claim": "Expanding sovereign cloud and secure cyber command centers globally for enterprise clients",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "AI-driven Cyber Resilience Takes Flight",
+      "claim": "expanding sovereign cloud and secure cyber command centers globally for enterprise clients",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "AI-driven Cyber Resilience Takes Flight",
+      "claim": "secure cyber command centers",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "c56756d510c78bc9": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "CONCOR | CONCOR Q1 Revenue Reaches ₹2,160 Crore as Net Profit Holds at ₹267 Crore",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "ca7ef18c42d54e20": {
-   "answer": {
-    "about": true,
-    "because": "Defence orders",
-    "claim": "critical supplier of radars and satellite payloads",
-    "group": false,
-    "stance": "supports"
-   },
    "input": "ASTRAMICRO | Astra Microwave: Defence orders set the stage for growth",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "Defence orders",
+      "claim": "critical supplier of radars and satellite payloads",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Defence orders",
+      "claim": "High-end microwave sub-systems maker, critical supplier of radars and satellite payloads",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "caf70daa083c1120": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "RELIANCE | US President Trump Announces $300 Billion Partnership with Reliance to Build First Major US Refinery in 50 Years",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": false,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "cb4930d204006487": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "BHEL | BHEL fined ₹11 lakh by exchanges for LODR non-compliance",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "d537cf1357bf7696": {
-   "answer": {
-    "about": true,
-    "because": "unveils its first Made-in-India gaming laptop, Gaming A16, in partnership with Dixon Technologies",
-    "claim": "Leader in electronic assembly (mobile, laptop, LED TV)",
-    "group": false,
-    "stance": "supports"
-   },
    "input": "DIXON | Gigabyte unveils its first Made-in-India gaming laptop, Gaming A16, in partnership with Dixon Technologies",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "unveils its first Made-in-India gaming laptop, Gaming A16, in partnership with Dixon Technologies",
+      "claim": "Leader in electronic assembly (mobile, laptop, LED TV)",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "unveils its first Made-in-India gaming laptop, Gaming A16, in partnership with Dixon Technologies",
+      "claim": "Leader in electronic assembly (mobile, laptop, LED TV)",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Gigabyte unveils its first Made-in-India gaming laptop, Gaming A16, in partnership with Dixon Technologies",
+      "claim": "Leader in electronic assembly (mobile, laptop, LED TV)",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "d5eef9f9f3bcc880": {
-   "answer": {
-    "about": true,
-    "because": "Fortis Healthcare exits Ayushman Bharat scheme",
-    "claim": "benefiting from insurance penetration and Ayushman Bharat volumes",
-    "group": false,
-    "stance": "contradicts"
-   },
    "input": "FORTIS | Fortis Healthcare exits Ayushman Bharat scheme over unpaid claims",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "Fortis Healthcare exits Ayushman Bharat scheme",
+      "claim": "benefiting from insurance penetration and Ayushman Bharat volumes",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Fortis Healthcare exits Ayushman Bharat scheme over unpaid claims",
+      "claim": "benefiting from insurance penetration and Ayushman Bharat volumes",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Fortis Healthcare exits Ayushman Bharat scheme",
+      "claim": "Ayushman Bharat volumes",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "dd2aa9f88ebecae6": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "COFORGE | Coforge shares rise on $5 billion revenue target by FY30; analysts shift focus to execution plans",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "dd8a8bce653e493b": {
-   "answer": {
-    "about": true,
-    "because": "Defence Ministry signs 1950 crore contract with Bharat Electronics Limited",
-    "claim": "securing major naval and surveillance command radar orders",
-    "group": false,
-    "stance": "supports"
-   },
    "input": "BEL | Defence Ministry signs 1950 crore contract with Bharat Electronics Limited",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "Defence Ministry signs 1950 crore contract with Bharat Electronics Limited",
+      "claim": "securing major naval and surveillance command radar orders",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "1950 crore contract",
+      "claim": "securing major naval and surveillance command radar orders",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Defence Ministry signs 1950 crore contract with Bharat Electronics Limited",
+      "claim": "securing major naval and surveillance command radar orders",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "de9cef31c05cca91": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "CONCOR | CONCOR appoints Shri Ajit Kumar Panda as CMD effective Aug 1, 2026",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "e1f52b5a992b3717": {
-   "answer": {
-    "about": true,
-    "because": "Welspun Living dropped from textile PLI",
-    "claim": "Major beneficiary of textile PLI",
-    "group": false,
-    "stance": "contradicts"
-   },
    "input": "WELSPUNLIV | Welspun Living dropped from textile PLI after missing investment targets",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "Welspun Living dropped from textile PLI",
+      "claim": "Major beneficiary of textile PLI",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Welspun Living dropped from textile PLI after missing investment targets",
+      "claim": "Major beneficiary of textile PLI",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "dropped from textile PLI",
+      "claim": "Major beneficiary of textile PLI",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "e599047825f14189": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "FORTIS | Fortis Healthcare: IHH Plans To Raise Stake From 31% To 51%",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "e64a229979e3e54a": {
-   "answer": {
-    "about": false,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "BHEL | Man’s body found stuffed in sack in bushes: 4–5-day-old corpse found near BHEL gate no. 8; severe injury ma...",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": false,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": false,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": false,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "e7a7ce940d251fa8": {
-   "answer": {
-    "about": true,
-    "because": "data centre bet",
-    "claim": "transitioning commercial properties into major data center hubs in NCR",
-    "group": false,
-    "stance": "supports"
-   },
    "input": "ANANTRAJ | Anant Raj plans ₹25,000 crore data centre bet without fresh funding",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "data centre bet",
+      "claim": "transitioning commercial properties into major data center hubs in NCR",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "data centre",
+      "claim": "transitioning commercial properties into major data center hubs in NCR",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "plans ₹25,000 crore data centre bet",
+      "claim": "transitioning commercial properties into major data center hubs in NCR",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "ed53de4bb3c419f5": {
-   "answer": {
-    "about": true,
-    "because": "Coforge margins contract for third straight quarter",
-    "claim": "expanding margins via GenAI offerings",
-    "group": false,
-    "stance": "contradicts"
-   },
    "input": "COFORGE | Coforge margins contract for third straight quarter as GenAI deals squeeze pricing",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "Coforge margins contract for third straight quarter",
+      "claim": "expanding margins via GenAI offerings",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Coforge margins contract for third straight quarter as GenAI deals squeeze pricing",
+      "claim": "expanding margins via GenAI offerings",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Coforge margins contract for third straight quarter as GenAI deals squeeze pricing",
+      "claim": "expanding margins via GenAI offerings",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "f1f4fe5f8a3c4b11": {
-   "answer": {
-    "about": true,
-    "because": "retail asset quality worsens",
-    "claim": "sector-leading asset quality",
-    "group": false,
-    "stance": "contradicts"
-   },
    "input": "ICICIBANK | ICICI Bank's gross NPAs jump to five-year high as retail asset quality worsens",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "retail asset quality worsens",
+      "claim": "sector-leading asset quality",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "gross NPAs jump to five-year high as retail asset quality worsens",
+      "claim": "sector-leading asset quality",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "gross NPAs jump to five-year high as retail asset quality worsens",
+      "claim": "sector-leading asset quality",
+      "group": false,
+      "stance": "contradicts"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "f1f92c0366f9f588": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "ADANIGREEN | Adani Green Energy Limited Just Missed EPS By 8.7%: Here's What Analysts Think Will Happen Next",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "f43e63fe375934f0": {
-   "answer": {
-    "about": true,
-    "because": "Power Grid Transformer Contract",
-    "claim": "expanding local container manufacturing and green energy grids",
-    "group": false,
-    "stance": "supports"
-   },
    "input": "BHEL | BHEL Wins Rs 5,145.6 mn Power Grid Transformer Contract",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "Power Grid Transformer Contract",
+      "claim": "expanding local container manufacturing and green energy grids",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Power Grid Transformer Contract",
+      "claim": "expanding local container manufacturing and green energy grids",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "BHEL Wins Rs 5,145.6 mn Power Grid Transformer Contract",
+      "claim": "State-owned heavy power equipment giant",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "f7555283d3601487": {
-   "answer": {
-    "about": true,
-    "because": "gets Rs 151 crore Govt funding to develop ‘Yeti’ drone for high-altitude military logistics",
-    "claim": "Pioneer in tactical and mapping drone systems, primary supplier for Indian Army and police borders.",
-    "group": false,
-    "stance": "supports"
-   },
    "input": "IDEAFORGE | ideaForge gets Rs 151 crore Govt funding to develop ‘Yeti’ drone for high-altitude military logistics",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "gets Rs 151 crore Govt funding to develop ‘Yeti’ drone for high-altitude military logistics",
+      "claim": "Pioneer in tactical and mapping drone systems, primary supplier for Indian Army and police borders.",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "gets Rs 151 crore Govt funding to develop ‘Yeti’ drone for high-altitude military logistics",
+      "claim": "Pioneer in tactical and mapping drone systems",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "Govt funding to develop ‘Yeti’ drone for high-altitude military logistics",
+      "claim": "Pioneer in tactical and mapping drone systems, primary supplier for Indian Army and police borders",
+      "group": false,
+      "stance": "supports"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "f9c44c8b1badeb41": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "SUZLON | Suzlon begins FY27 strong with 23% YoY revenue growth and highest-ever Q1 deliveries",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "fb23491c1cb3cf00": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "ADSL | Allied Digital Services (NSE: ADSL): Bull Case, Bear Case Explained",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   },
   "fbbb8fa0933db83f": {
-   "answer": {
-    "about": true,
-    "because": "",
-    "claim": "",
-    "group": false,
-    "stance": "unrelated"
-   },
    "input": "SUZLON | NCLT Ahmedabad Dismisses Insolvency Plea Against Suzlon Energy",
-   "model": "gemini-flash-lite-latest",
    "prompt": "3036cda6967d",
-   "recorded": "2026-10-24"
+   "takes": [
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-24"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    },
+    {
+     "answer": {
+      "about": true,
+      "because": "",
+      "claim": "",
+      "group": false,
+      "stance": "unrelated"
+     },
+     "model": "gemini-flash-lite-latest",
+     "recorded": "2026-10-25"
+    }
+   ]
   }
  }
 }
