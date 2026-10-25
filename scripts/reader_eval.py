@@ -121,14 +121,16 @@ def _without_pauses():
 
 def live_transports() -> Dict[str, Any]:
     """Each reader's own model chain, as production builds it."""
-    from analysis import thesis_check
-    from analysis.llm_reader import default_transport
+    from analysis import llm_reader, thesis_check
+    from analysis.reader_runtime import default_transport
 
     chains = {
-        "events": default_transport(),
-        "thesis": default_transport(thesis_check._SCHEMA),
+        "events": default_transport(llm_reader._SCHEMA, reader="events"),
+        "thesis": default_transport(thesis_check._SCHEMA, reader="thesis"),
         "check": default_transport(
-            thesis_check._CHECK_SCHEMA, exclude=thesis_check.CHECK_EXCLUDE
+            thesis_check._CHECK_SCHEMA,
+            exclude=thesis_check.CHECK_EXCLUDE,
+            reader="check",
         ),
     }
     refused = [f"{k}: {detail}" for k, (t, detail) in chains.items() if t is None]
@@ -543,8 +545,11 @@ def summary(
     report: Dict[str, Any],
     ref: str = "",
     allowed: bool = False,
+    live: Optional[Dict[str, Any]] = None,
 ) -> str:
-    """The comparison as Markdown, for the PR comment and the job summary."""
+    """The comparison as Markdown, for the PR comment and the job summary.
+    ``live`` is the runtime's report of a recording (reader_runtime.report):
+    which models answered, and which were set aside and why."""
     lines = ["## Reader eval", ""]
     if ref:
         lines += [f"Compared with `{ref}`.", ""]
@@ -559,6 +564,14 @@ def summary(
                 else ""
             )
         )
+    for reader, r in ((live or {}).get("readers") or {}).items():
+        served = ", ".join(f"{m} ×{n}" for m, n in r["answered"].items()) or "none"
+        lines.append(
+            f"- live **{reader}**: {r['calls']} call(s) in {r['seconds']}s, "
+            f"answered by {served}"
+        )
+    for model, why in ((live or {}).get("set_aside") or {}).items():
+        lines.append(f"  - set aside: `{model}` ({why[:160]})")
     lines += ["", "| Reader | Holdout | Dev |", "|---|---|---|"]
     for name in READERS:
         entry = (comparison or {}).get("readers", {}).get(name, {})
@@ -693,8 +706,15 @@ def main(argv: Optional[List[str]] = None) -> int:
         if comparison["regressions"] and not args.allow_regression:
             status = REGRESSED
     if args.compare or args.summary:
+        from analysis import reader_runtime
+
         text = summary(
-            comparison, cards, report, args.compare or "", args.allow_regression
+            comparison,
+            cards,
+            report,
+            args.compare or "",
+            args.allow_regression,
+            reader_runtime.report() if args.record else None,
         )
         print(text)
         if args.summary:

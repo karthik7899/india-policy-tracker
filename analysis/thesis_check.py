@@ -183,9 +183,10 @@ _SCHEMA = {
 CHECK_VERSION = "1"
 CHECK_BATCH = 10
 MAX_CHECKS_PER_RUN = 40
-# The second reader leaves out the lite models that made the first reading,
-# and models built for other media.
-CHECK_EXCLUDE = ("lite", "tts", "image", "audio", "embedding")
+# The second reader leaves out the lite models that made the first reading.
+# Models built for other media are in no reader's chain
+# (reader_runtime.NOT_FOR_TEXT).
+CHECK_EXCLUDE = ("lite",)
 # An answer with any other verdict is no answer: the check is asked again.
 VERDICTS = ("contradicts", "does_not")
 
@@ -281,7 +282,7 @@ def check_challenges(
     raises: a challenge the check could not reach stays unconfirmed and is
     tried again next run. At most ``limit`` (MAX_CHECKS_PER_RUN) are asked.
     """
-    from analysis.llm_reader import ReaderUnavailable
+    from analysis.reader_runtime import ReaderUnavailable
 
     changed = False
     todo = items[: MAX_CHECKS_PER_RUN if limit is None else limit]
@@ -498,12 +499,8 @@ def read_pairs(
     default chain leaves out the lite models. ``max_checks`` caps the second
     readings as ``max_new`` caps the first (MAX_CHECKS_PER_RUN by default).
     """
-    from analysis.llm_reader import (
-        ReaderUnavailable,
-        default_transport,
-        load_cache,
-        save_cache,
-    )
+    from analysis.llm_reader import load_cache, save_cache
+    from analysis.reader_runtime import ReaderUnavailable, default_transport
 
     today = today or datetime.date.today().isoformat()
     status = {
@@ -542,7 +539,7 @@ def read_pairs(
     # passes its own transport (a test, cache-only scoring) gets no API call.
     real = transport is None
     if transport is None:
-        transport, detail = default_transport(_SCHEMA)
+        transport, detail = default_transport(_SCHEMA, reader="thesis")
         if transport is None:
             status["skipped"] = detail
             status["pending"] = len(todo)
@@ -607,7 +604,7 @@ def read_pairs(
         if check_transport is None:
             if real:
                 check_transport, detail = default_transport(
-                    _CHECK_SCHEMA, exclude=CHECK_EXCLUDE
+                    _CHECK_SCHEMA, exclude=CHECK_EXCLUDE, reader="check"
                 )
             else:
                 detail = "no second reader given"

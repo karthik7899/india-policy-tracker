@@ -15,7 +15,8 @@ import pytest
 
 from analysis import llm_reader, thesis_check
 from analysis import reader_recordings as rr
-from analysis.llm_reader import ReaderUnavailable, read_headlines
+from analysis.llm_reader import read_headlines
+from analysis.reader_runtime import ReaderUnavailable
 from scripts import reader_eval
 from scripts.eval_events import LABELS_PATH, label_pairs, load_holdings, score
 
@@ -620,6 +621,29 @@ def test_a_long_comparison_is_cut_to_fit_a_comment_and_keeps_its_verdict():
     assert text.rstrip().endswith("and re-run the check.")
     head = text[: text.index("cut to fit")]
     assert head.count("<details>") - head.count("</details>") == 1  # closed after
+
+
+def test_a_recording_says_which_models_answered_and_which_were_set_aside():
+    cards = _all_cards()
+    report = {"events": {"recorded": 2}, "thesis": {}, "check": {}}
+    live = {
+        "readers": {
+            "events": {
+                "calls": 2,
+                "seconds": 50.2,
+                "answered": {"gemini-flash-lite-latest": 2},
+                "failed": {"gemini-3.8-flash": {"count": 1, "reason": "busy"}},
+            }
+        },
+        "set_aside": {"gemini-3.8-flash": "Gemini unavailable (503)"},
+    }
+    text = reader_eval.summary(None, cards, report, live=live)
+    assert (
+        "- live **events**: 2 call(s) in 50.2s, answered by "
+        "gemini-flash-lite-latest ×2" in text
+    )
+    assert "  - set aside: `gemini-3.8-flash` (Gemini unavailable (503))" in text
+    assert "live **" not in reader_eval.summary(None, cards, report)
 
 
 def test_the_command_exits_3_on_a_holdout_regression_unless_allowed(

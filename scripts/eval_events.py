@@ -620,7 +620,7 @@ def main() -> int:
 
 
 def _no_calls(prompt: str) -> str:
-    from analysis.llm_reader import ReaderUnavailable
+    from analysis.reader_runtime import ReaderUnavailable
 
     raise ReaderUnavailable("cache-only scoring")
 

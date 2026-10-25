@@ -75,6 +75,58 @@ export function channelRows(briefing) {
   });
 }
 
+// [report key, label] for the readers in the run's report
+// (analysis/reader_runtime.py), in the order a run calls them.
+const READERS = [
+  ["events", "Event reader"],
+  ["thesis", "Thesis check"],
+  ["check", "Second reading"],
+  ["ask", "Ask"],
+];
+
+/**
+ * One row per AI reader that reported this run: its calls and time, the
+ * models that answered it, what it read, and every model that failed it, with
+ * why. A busy or retired model used to fail each reader in turn and show
+ * nowhere but the log.
+ */
+export function readerRows(briefing) {
+  const readers = briefing?.ai_readers?.readers || {};
+  const labels = Object.fromEntries(READERS);
+  const names = [
+    ...READERS.map(([key]) => key).filter((key) => key in readers),
+    ...Object.keys(readers).filter((key) => !(key in labels)),
+  ];
+  return names.map((name) => {
+    const r = readers[name] || {};
+    const answered = Object.entries(r.answered || {}).map(([m, n]) => `${m} ×${n}`);
+    const failed = Object.entries(r.failed || {}).map(
+      ([m, f]) => `${m} ×${f?.count ?? 1}: ${f?.reason || "no reason given"}`,
+    );
+    const counts = Object.entries(r.counts || {})
+      .map(([k, n]) => `${n} ${k}`)
+      .join(" · ");
+    const skipped = r.skipped ? `skipped: ${r.skipped}` : "";
+    return {
+      label: labels[name] || name,
+      calls: r.calls ?? 0,
+      seconds: r.seconds ?? 0,
+      answered: answered.join(", ") || (r.calls ? "none" : "—"),
+      result: [counts, skipped].filter(Boolean).join(" — ") || "—",
+      failed: failed.join("; ") || "none",
+      _failed: failed.length,
+    };
+  });
+}
+
+/** The models a failure set aside for the rest of the run, and why. */
+export function setAsideRows(briefing) {
+  return Object.entries(briefing?.ai_readers?.set_aside || {}).map(([model, why]) => ({
+    model,
+    why: String(why || ""),
+  }));
+}
+
 /**
  * Tone for a count.
  *
@@ -108,6 +160,7 @@ export async function render(container, { payload, route }) {
     { field: "Delivery percentage", got: withDelivery, of: holdings.length },
     { field: "News coverage", got: covered, of: holdings.length },
   ];
+  const setAside = setAsideRows(b);
 
   mount(
     container,
@@ -158,6 +211,36 @@ export async function render(container, { payload, route }) {
         ],
         { view: "system", route, empty: "No briefing loaded." },
       ),
+    ),
+    panel(
+      "AI readers",
+      "Which model answered each reader this run, and which failed and why. " +
+        "A model that fails in its own right (busy, retired, out of quota) is " +
+        "set aside: every later reader in the run tries it last, so a busy " +
+        "model costs the run its wait once rather than once per reader.",
+      dataTable(
+        readerRows(b),
+        [
+          { key: "label", label: "Reader" },
+          { key: "calls", label: "Calls", numeric: true },
+          { key: "seconds", label: "Seconds", numeric: true },
+          { key: "answered", label: "Answered by" },
+          { key: "result", label: "Read" },
+          {
+            key: "failed",
+            label: "Failed",
+            render: (r) => el("span", { class: r._failed ? "cell-bad" : "" }, r.failed),
+          },
+        ],
+        { empty: "No AI reader report in this run." },
+      ),
+      setAside.length
+        ? el(
+            "ul",
+            { class: "plain-list" },
+            setAside.map((r) => el("li", {}, `Set aside: ${r.model} — ${r.why}`)),
+          )
+        : null,
     ),
     panel(
       "Payload",

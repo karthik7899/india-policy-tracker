@@ -5,7 +5,7 @@ import json
 import pytest
 
 from analysis import thesis_check
-from analysis.llm_reader import ReaderUnavailable
+from analysis.reader_runtime import ReaderUnavailable
 from analysis.thesis_check import (
     annotate_health,
     ground,
@@ -710,7 +710,7 @@ def test_a_supplied_reader_never_brings_a_real_second_reader(cache, monkeypatch)
     def no_api(*a, **k):
         raise AssertionError("the real second reader was built")
 
-    monkeypatch.setattr("analysis.llm_reader.default_transport", no_api)
+    monkeypatch.setattr("analysis.reader_runtime.default_transport", no_api)
     readings, status = read_pairs(
         _loan_pair(), fake(ANSWERS), cache, today="2026-10-09"
     )

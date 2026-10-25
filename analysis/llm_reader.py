@@ -31,8 +31,9 @@ import json
 import os
 import re
 import time
-from typing import Any, Callable, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
+from analysis.reader_runtime import ReaderUnavailable, Transport, default_transport
 from logger import log
 from utils import atomic_write_json
 
@@ -47,22 +48,6 @@ CACHE_PATH = os.path.join(ROOT, "llm_cache.json")
 #    Numaligarh Refinery" read as BPCL buying) and every launch as none.
 PROMPT_VERSION = "4"
 
-# The model is configuration, not code: GEMINI_MODEL (a repository variable in
-# the workflow) overrides this. Gemini 3.8 Flash is the model the key was
-# issued for; the API ID below was written without access to Google's model
-# list, so if it is wrong the API answers 404 and the log says to set
-# GEMINI_MODEL.
-DEFAULT_MODEL = "gemini-3.8-flash"
-
-# Tried in order when the default is busy, retired or out of quota; override
-# with GEMINI_FALLBACK_MODELS (comma-separated). Older, widely available
-# models, named without access to Google's current list — one that has been
-# retired answers 404 and the chain simply moves past it.
-FALLBACK_MODELS = ("gemini-2.5-flash", "gemini-2.0-flash")
-API_URL = (
-    "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
-)
-
 # Headlines per request, and new headlines read per run. The first run finds
 # the whole corpus unread and works through it over a few days rather than
 # spending one run's quota on the backlog.
@@ -71,23 +56,6 @@ MAX_NEW_PER_RUN = 600
 # Between batches: gentle on per-minute limits; a daily batch has time to
 # spare. Replayed answers (scripts/reader_eval.py) need none.
 BATCH_PAUSE_S = 1.0
-TIMEOUT_S = 60
-# Server-side failures worth retrying, and how.
-_TRANSIENT = {500, 502, 503, 504}
-RETRY_ATTEMPTS = 3
-RETRY_BASE_S = 15
-RETRY_CAP_S = 60
-
-
-def _backoff(resp, attempt: int) -> float:
-    """Seconds before the next attempt: Retry-After if given, else doubling."""
-    try:
-        after = float((resp.headers or {}).get("Retry-After", ""))
-    except (AttributeError, TypeError, ValueError):
-        after = None
-    wait = after if after is not None else RETRY_BASE_S * 2 ** (attempt - 1)
-    return max(0.0, min(wait, RETRY_CAP_S))
-
 
 # Unused cache entries are dropped after this long so the file stays small.
 CACHE_RETENTION_DAYS = 120
@@ -244,256 +212,6 @@ _SCHEMA = {
         ],
     },
 }
-
-
-class ReaderUnavailable(Exception):
-    """The API cannot be used this run. The message says why, for the log.
-
-    ``model_specific`` marks failures another model might not share — this
-    one busy, retired, or out of its own quota — so the fallback chain moves
-    on. A refused key or a dead network would fail every model the same way,
-    and trying the rest would only spend the run's time.
-    """
-
-    def __init__(self, message: str, model_specific: bool = False):
-        super().__init__(message)
-        self.model_specific = model_specific
-
-
-# A transport takes the prompt text and returns the model's JSON text. Tests
-# pass a fake; production uses gemini_transport().
-Transport = Callable[[str], str]
-
-
-def gemini_transport(
-    api_key: str,
-    model: str,
-    schema: Optional[Dict[str, Any]] = None,
-    text: bool = False,
-) -> Transport:
-    """One model's transport. ``schema`` is the response schema — the event
-    reader's by default; the thesis check (analysis/thesis_check.py) passes
-    its own. ``text`` asks for prose instead of JSON, for answering a
-    question (scripts/dashboard_actions.py)."""
-    import requests
-
-    url = API_URL.format(model=model)
-
-    def call(prompt: str) -> str:
-        config: Dict[str, Any] = {"temperature": 0}
-        if not text:
-            config["responseMimeType"] = "application/json"
-            config["responseSchema"] = schema or _SCHEMA
-        body = {
-            "contents": [{"role": "user", "parts": [{"text": prompt}]}],
-            "generationConfig": config,
-        }
-        # 5xx is Google's side and usually brief: the first live run met
-        # "503 This model is currently experiencing high demand" on its first
-        # batch and, with no retry, skipped the whole day. A few spaced
-        # attempts, honouring Retry-After, then give up until the next run.
-        slow = False
-        for attempt in range(1, RETRY_ATTEMPTS + 1):
-            try:
-                resp = requests.post(
-                    url,
-                    headers={
-                        "x-goog-api-key": api_key,
-                        "Content-Type": "application/json",
-                    },
-                    json=body,
-                    timeout=TIMEOUT_S,
-                )
-            except requests.RequestException as e:
-                resp, error = None, f"request failed: {e!r}"
-                # A read timeout means the connection was made and this model
-                # did not answer in time: busy, like a 503, so another may
-                # answer. On 7 Oct gemini-3.8-flash timed out three times and,
-                # read as "no network", ended the thesis check with nothing
-                # read while gemini-flash-lite-latest was serving the same run.
-                slow = isinstance(e, requests.exceptions.ReadTimeout)
-            else:
-                error = None
-                if resp.status_code not in _TRANSIENT:
-                    break
-                error = f"Gemini unavailable ({resp.status_code})"
-            if attempt < RETRY_ATTEMPTS:
-                time.sleep(_backoff(resp, attempt))
-        else:
-            raise ReaderUnavailable(
-                f"{error} after {RETRY_ATTEMPTS} attempts; resuming next run",
-                model_specific=resp is not None or slow,
-            )
-        if resp.status_code == 404:
-            raise ReaderUnavailable(
-                f"model {model!r} not found (404) — set GEMINI_MODEL to a current model",
-                model_specific=True,
-            )
-        if resp.status_code in (401, 403):
-            raise ReaderUnavailable(f"key refused ({resp.status_code})")
-        if resp.status_code == 429:
-            # Gemini quotas are per model, so another may still have room.
-            raise ReaderUnavailable(
-                "quota or rate limit reached (429); resuming next run",
-                model_specific=True,
-            )
-        if resp.status_code != 200:
-            raise ReaderUnavailable(
-                f"HTTP {resp.status_code}: {resp.text[:200]}", model_specific=True
-            )
-        try:
-            return resp.json()["candidates"][0]["content"]["parts"][0]["text"]
-        except (KeyError, IndexError, ValueError) as e:
-            # A blocked or empty candidate. Not worth failing the batch over.
-            raise ReaderUnavailable(
-                f"unexpected response shape: {e!r}", model_specific=True
-            )
-
-    return call
-
-
-def model_chain() -> List[str]:
-    """Models to try, in order: the configured one, then the fallbacks.
-
-    GEMINI_MODEL replaces the first; GEMINI_FALLBACK_MODELS (comma-separated)
-    replaces the rest. Duplicates are dropped so a model set in both is not
-    tried twice.
-    """
-    first = os.environ.get("GEMINI_MODEL", "").strip() or DEFAULT_MODEL
-    raw = os.environ.get("GEMINI_FALLBACK_MODELS", "").strip()
-    rest = [m.strip() for m in raw.split(",")] if raw else list(FALLBACK_MODELS)
-    return list(dict.fromkeys(m for m in [first, *rest] if m))
-
-
-# The model that last answered in this process. The event reader runs first
-# and finds out which model is up; the thesis check, minutes later, starts
-# there instead of queueing again behind the ones that just failed.
-_LAST_SERVED: Dict[str, Optional[str]] = {"model": None}
-
-
-def chained_transport(transports: List[Tuple[str, Transport]]) -> Transport:
-    """Try each model in turn; keep the first that answers for the whole run.
-
-    Three runs in a row, gemini-3.8-flash answered every attempt with "503
-    high demand" across six hours, and the reader read nothing. A model that
-    fails in its own right (busy, retired, over its quota) hands over to the
-    next; a failure every model would share (a refused key, no network) ends
-    the pass at once. Once a model answers, later batches go straight to it,
-    so a run does not re-queue behind a busy model forty times.
-
-    The model that served is exposed as ``call.model`` for the log line.
-    """
-    state = {"index": 0}
-
-    def call(prompt: str) -> str:
-        failures = []
-        while state["index"] < len(transports):
-            name, transport = transports[state["index"]]
-            try:
-                text = transport(prompt)
-                call.model = _LAST_SERVED["model"] = name
-                return text
-            except ReaderUnavailable as e:
-                failures.append(f"{name}: {e}")
-                if not e.model_specific:
-                    raise ReaderUnavailable("; ".join(failures))
-                state["index"] += 1
-        raise ReaderUnavailable("every model failed — " + "; ".join(failures))
-
-    call.model = None
-    return call
-
-
-MODELS_URL = "https://generativelanguage.googleapis.com/v1beta/models"
-
-
-def _version_key(name: str):
-    """Sort key putting the newest model first: gemini-3.8 before gemini-2.5.
-
-    Numbers are compared as numbers, so 3.10 sorts after 3.8. Stable ("-001")
-    and unsuffixed names come before previews and experiments of the same
-    version, which change without notice.
-    """
-    nums = [
-        int(n) for n in re.findall(r"\d+", name.split("-", 2)[1] if "-" in name else "")
-    ]
-    unstable = any(t in name for t in ("preview", "exp", "latest"))
-    return ([-n for n in nums], unstable, name)
-
-
-def discover_models(api_key: str) -> List[str]:
-    """Flash models this key can call, newest first; [] if the list is unavailable.
-
-    The fallback names used to be fixed in code, chosen without access to
-    Google's catalogue, and both turned out retired: the first run with the
-    chain got 404 for gemini-2.5-flash and gemini-2.0-flash. Asking the API
-    which models the key can use replaces the guess with the answer.
-
-    Flash models only: the reader classifies short headlines, and the larger
-    models cost more for no gain on that task. Only models that support
-    generateContent, since that is the method the reader calls.
-    """
-    import requests
-
-    try:
-        resp = requests.get(
-            MODELS_URL,
-            headers={"x-goog-api-key": api_key},
-            params={"pageSize": 200},
-            timeout=TIMEOUT_S,
-        )
-        if resp.status_code != 200:
-            log.info(f"LLM reader: model list unavailable ({resp.status_code}).")
-            return []
-        found = []
-        for m in resp.json().get("models") or []:
-            name = str(m.get("name") or "").removeprefix("models/")
-            methods = m.get("supportedGenerationMethods") or []
-            if "flash" in name and "generateContent" in methods:
-                found.append(name)
-        found.sort(key=_version_key)
-        log.info(
-            "LLM reader: key can use "
-            + (", ".join(found) if found else "no flash models")
-            + "."
-        )
-        return found
-    except Exception as e:  # noqa: BLE001 - discovery is a convenience
-        log.info(f"LLM reader: model list unavailable ({e!r}).")
-        return []
-
-
-def default_transport(
-    schema: Optional[Dict[str, Any]] = None,
-    text: bool = False,
-    exclude: Tuple[str, ...] = (),
-) -> Tuple[Optional[Transport], str]:
-    """The model chain for one reader. ``exclude`` drops any model whose name
-    contains one of the strings: the thesis check's second reading leaves
-    out the lite models that made the first."""
-    key = os.environ.get("GEMINI_API_KEY", "").strip()
-    if not key:
-        return None, "GEMINI_API_KEY not set"
-    configured = model_chain()
-    # Configured models first (the default, then any named fallbacks), then
-    # whatever the key can actually use. Asked for only when fallbacks were
-    # not named explicitly: an explicit list is the user's decision.
-    discovered = (
-        []
-        if os.environ.get("GEMINI_FALLBACK_MODELS", "").strip()
-        else discover_models(key)
-    )
-    chain = list(dict.fromkeys(configured[:1] + discovered + configured[1:]))
-    chain = [m for m in chain if not any(x in m for x in exclude)]
-    if not chain:
-        return None, "no model left after excluding " + ", ".join(exclude)
-    served = _LAST_SERVED["model"]
-    if served in chain:
-        chain = [served] + [m for m in chain if m != served]
-    transport = chained_transport(
-        [(m, gemini_transport(key, m, schema, text)) for m in chain]
-    )
-    return transport, " → ".join(chain)
 
 
 # ---------------------------------------------------------------------------
@@ -675,7 +393,7 @@ def read_headlines(
             todo.append(h)
 
     if transport is None:
-        transport, detail = default_transport()
+        transport, detail = default_transport(_SCHEMA, reader="events")
         if transport is None:
             status["skipped"] = detail
             status["pending"] = len(todo)

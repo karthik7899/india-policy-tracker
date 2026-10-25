@@ -573,7 +573,7 @@ def search_plan(
     could not plan one. A model that cannot plan one is unlikely to answer
     either, and the answer says so.
     """
-    from analysis.llm_reader import ReaderUnavailable
+    from analysis.reader_runtime import ReaderUnavailable
 
     parts = [_SEARCH_INSTRUCTIONS]
     if holdings:
@@ -761,7 +761,7 @@ def answer(
     for the answer (``queries``, ``items``, ``left_out``, and ``error`` if it
     failed), None when none was.
     """
-    from analysis.llm_reader import ReaderUnavailable, default_transport
+    from analysis.reader_runtime import ReaderUnavailable, default_transport
 
     question = " ".join(str(question or "").split())[:MAX_QUESTION]
     if not question:
@@ -771,7 +771,7 @@ def answer(
     asked_before = " ".join(text for role, text in history if role == "question")
     context = build_context(question, src, focus, also=asked_before)
     if transport is None:
-        transport, chain = default_transport(text=True)
+        transport, chain = default_transport(text=True, reader="ask")
         if transport is None:
             return f"Could not answer: {chain}.", "", None
     holdings = [
