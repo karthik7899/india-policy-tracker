@@ -22,6 +22,7 @@ from emails.mailer import build_briefing_email, send_email
 from analysis import revisions as revisions_mod
 from analysis import last_good
 from analysis import postmortem
+from analysis import reader_runtime
 from analysis.thesis import compute_thesis_health
 from analysis.variant_perception import compute_variant_perception
 from analysis.curve_stage import classify_sector_curve_stage
@@ -392,6 +393,11 @@ async def run_pipeline():
         from analysis.llm_reader import read_headlines, reconcile
 
         readings, llm_status = read_headlines(collect_headlines(data, watchlist))
+        reader_runtime.note(
+            "events",
+            {k: llm_status[k] for k in ("read", "cached", "pending")},
+            llm_status["skipped"],
+        )
         # The email reads gists from the cache file this just rewrote.
         from analysis.llm_reader import reset_cached_readings
 
@@ -693,6 +699,25 @@ async def run_pipeline():
 
     data["thesis_check"] = run_thesis_check(watchlist, coverage)
     annotate_health(data["thesis_health"], data["thesis_check"])
+    # Every AI reader has run: what each asked of which model, and what failed
+    # (analysis/reader_runtime.py), for the log and the System view.
+    thesis_status = data["thesis_check"].get("status") or {}
+    reader_runtime.note(
+        "thesis",
+        {k: thesis_status.get(k) for k in ("read", "cached", "pending")},
+        thesis_status.get("skipped") or "",
+    )
+    reader_runtime.note(
+        "check",
+        {
+            "confirmed": thesis_status.get("confirmed"),
+            "refused": thesis_status.get("refused"),
+            "pending": thesis_status.get("checks_pending"),
+        },
+        thesis_status.get("checks_skipped") or "",
+    )
+    data["ai_readers"] = reader_runtime.report()
+    log.info(f"AI readers: {reader_runtime.summary()}.")
     # Today's readings and every earlier run's: a day the check cannot run
     # must not put namesakes back on the Companies view or in the queue.
     namesakes = namesake_headlines(data["thesis_check"])

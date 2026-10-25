@@ -422,7 +422,7 @@ def replaying(
     the rest of the run is answered from the recordings alone and the
     failure is kept in ``stats["live_failed"]``.
     """
-    from analysis.llm_reader import ReaderUnavailable
+    from analysis.reader_runtime import ReaderUnavailable
 
     today = today or datetime.date.today().isoformat()
     stats = stats if stats is not None else {}

@@ -10,14 +10,9 @@ import json
 
 import pytest
 
-from analysis import llm_reader
-from analysis.llm_reader import (
-    PROMPT_VERSION,
-    ReaderUnavailable,
-    ground,
-    read_headlines,
-    reconcile,
-)
+from analysis import llm_reader, reader_runtime
+from analysis.llm_reader import PROMPT_VERSION, ground, read_headlines, reconcile
+from analysis.reader_runtime import ReaderUnavailable
 
 TODAY = datetime.date.today().isoformat()
 
@@ -415,57 +410,8 @@ def test_refresh_keeps_the_llms_parties_rather_than_rematching_the_headline():
 
 
 # ---------------------------------------------------------------------------
-# the Gemini transport
+# the cache, and the model that served
 # ---------------------------------------------------------------------------
-
-
-class _Resp:
-    def __init__(self, status, body=None, text=""):
-        self.status_code = status
-        self._body = body
-        self.text = text
-        self.headers = {}
-
-    def json(self):
-        return self._body
-
-
-def test_the_request_is_deterministic_and_schema_bound(monkeypatch):
-    import requests
-
-    seen = {}
-
-    def post(url, headers=None, json=None, timeout=None):
-        seen.update(url=url, headers=headers, body=json)
-        return _Resp(200, {"candidates": [{"content": {"parts": [{"text": "[]"}]}}]})
-
-    monkeypatch.setattr(requests, "post", post)
-    assert llm_reader.gemini_transport("k", "some-model")("prompt") == "[]"
-    assert "some-model:generateContent" in seen["url"]
-    assert seen["headers"]["x-goog-api-key"] == "k"
-    config = seen["body"]["generationConfig"]
-    assert config["temperature"] == 0
-    assert config["responseMimeType"] == "application/json"
-    assert config["responseSchema"]["type"] == "ARRAY"
-
-
-@pytest.mark.parametrize(
-    "status, phrase",
-    [
-        (404, "set GEMINI_MODEL"),
-        (403, "key refused"),
-        (429, "rate limit"),
-        (500, r"unavailable \(500\) after 3 attempts"),
-        (418, "HTTP 418"),
-    ],
-)
-def test_each_api_failure_explains_itself(monkeypatch, status, phrase):
-    import requests
-
-    monkeypatch.setattr(llm_reader.time, "sleep", lambda s: None)
-    monkeypatch.setattr(requests, "post", lambda *a, **k: _Resp(status, text="err"))
-    with pytest.raises(ReaderUnavailable, match=phrase):
-        llm_reader.gemini_transport("k", "m")("prompt")
 
 
 def test_the_committed_cache_is_well_formed():
@@ -474,6 +420,19 @@ def test_the_committed_cache_is_well_formed():
     assert isinstance(body.get("entries"), dict)
     for entry in body["entries"].values():
         assert entry["reading"]["event_type"] in llm_reader.EVENT_TYPES + ("none",)
+
+
+def test_the_serving_model_is_recorded_with_each_reading(cache):
+    def busy(prompt):
+        raise ReaderUnavailable("busy", model_specific=True)
+
+    answer = json.dumps([{"id": 0, **_answer("order_win", ["Suzlon"])}])
+    chain = reader_runtime.chained_transport([("a", busy), ("b", lambda p: answer)])
+    _, status = read_headlines([SUZLON], transport=chain, cache_path=cache)
+    assert status["model"] == "b"
+    with open(cache) as f:
+        (entry,) = json.load(f)["entries"].values()
+    assert entry["model"] == "b"
 
 
 # ---------------------------------------------------------------------------
@@ -507,293 +466,6 @@ def test_the_scorer_grades_the_llm_and_the_combination():
     assert llm["recall"] == 0.5  # caught Nagarro, has no reading for Suzlon
     both = score(labels, WATCHLIST, combined_predictor(readings, WATCHLIST))["holdout"]
     assert both["recall"] == 1.0  # rules catch Suzlon, the LLM catches Nagarro
-
-
-def test_a_busy_model_is_retried_before_the_run_gives_up(monkeypatch):
-    """The first live run lost its whole day to one 503."""
-    import requests
-
-    waits = []
-    monkeypatch.setattr(llm_reader.time, "sleep", waits.append)
-    replies = [
-        _Resp(503, text="high demand"),
-        _Resp(200, {"candidates": [{"content": {"parts": [{"text": "[]"}]}}]}),
-    ]
-    monkeypatch.setattr(requests, "post", lambda *a, **k: replies.pop(0))
-    assert llm_reader.gemini_transport("k", "m")("prompt") == "[]"
-    assert waits == [llm_reader.RETRY_BASE_S]
-
-
-def test_a_model_that_stays_busy_ends_the_pass_cleanly(monkeypatch):
-    import requests
-
-    monkeypatch.setattr(llm_reader.time, "sleep", lambda s: None)
-    calls = []
-
-    def post(*a, **k):
-        calls.append(1)
-        return _Resp(503, text="high demand")
-
-    monkeypatch.setattr(requests, "post", post)
-    with pytest.raises(ReaderUnavailable, match="after 3 attempts; resuming next run"):
-        llm_reader.gemini_transport("k", "m")("prompt")
-    assert len(calls) == llm_reader.RETRY_ATTEMPTS
-
-
-# ---------------------------------------------------------------------------
-# model fallback
-# ---------------------------------------------------------------------------
-
-
-def _named(name, outcomes, calls):
-    """A transport whose successive calls raise or return from ``outcomes``."""
-
-    def call(prompt):
-        calls.append(name)
-        outcome = outcomes.pop(0) if outcomes else "[]"
-        if isinstance(outcome, Exception):
-            raise outcome
-        return outcome
-
-    return call
-
-
-def test_a_busy_model_hands_over_to_the_next_and_the_next_one_stays():
-    calls = []
-    busy = ReaderUnavailable(
-        "Gemini unavailable (503) after 3 attempts", model_specific=True
-    )
-    chain = llm_reader.chained_transport(
-        [
-            ("gemini-3.8-flash", _named("gemini-3.8-flash", [busy], calls)),
-            ("gemini-2.5-flash", _named("gemini-2.5-flash", ["[]", "[]"], calls)),
-        ]
-    )
-    assert chain("batch 1") == "[]"
-    assert chain("batch 2") == "[]"
-    assert chain.model == "gemini-2.5-flash"
-    # The busy model is not queued behind again for the second batch.
-    assert calls == ["gemini-3.8-flash", "gemini-2.5-flash", "gemini-2.5-flash"]
-
-
-def test_a_retired_model_is_skipped_like_a_busy_one():
-    calls = []
-    gone = ReaderUnavailable("model 'x' not found (404)", model_specific=True)
-    chain = llm_reader.chained_transport(
-        [("x", _named("x", [gone], calls)), ("y", _named("y", ["[]"], calls))]
-    )
-    assert chain("p") == "[]" and chain.model == "y"
-
-
-def test_a_refused_key_stops_at_once_rather_than_trying_every_model():
-    calls = []
-    refused = ReaderUnavailable("key refused (403)")
-    chain = llm_reader.chained_transport(
-        [("a", _named("a", [refused], calls)), ("b", _named("b", ["[]"], calls))]
-    )
-    with pytest.raises(ReaderUnavailable, match="key refused"):
-        chain("p")
-    assert calls == ["a"]
-
-
-def test_when_every_model_fails_the_log_names_each_one():
-    busy = ReaderUnavailable("busy", model_specific=True)
-    chain = llm_reader.chained_transport(
-        [("a", _named("a", [busy], [])), ("b", _named("b", [busy], []))]
-    )
-    with pytest.raises(
-        ReaderUnavailable, match=r"every model failed — a: busy; b: busy"
-    ):
-        chain("p")
-
-
-def test_the_chain_is_configurable_and_never_repeats_a_model(monkeypatch):
-    monkeypatch.setenv("GEMINI_MODEL", "gemini-2.5-flash")
-    monkeypatch.delenv("GEMINI_FALLBACK_MODELS", raising=False)
-    assert llm_reader.model_chain() == ["gemini-2.5-flash", "gemini-2.0-flash"]
-    monkeypatch.delenv("GEMINI_MODEL")
-    monkeypatch.setenv("GEMINI_FALLBACK_MODELS", "m1, m2")
-    assert llm_reader.model_chain() == [llm_reader.DEFAULT_MODEL, "m1", "m2"]
-
-
-def test_the_serving_model_is_recorded_with_each_reading(cache):
-    busy = ReaderUnavailable("busy", model_specific=True)
-    answer = json.dumps([{"id": 0, **_answer("order_win", ["Suzlon"])}])
-    chain = llm_reader.chained_transport(
-        [("a", _named("a", [busy], [])), ("b", _named("b", [answer], []))]
-    )
-    _, status = read_headlines([SUZLON], transport=chain, cache_path=cache)
-    assert status["model"] == "b"
-    with open(cache) as f:
-        (entry,) = json.load(f)["entries"].values()
-    assert entry["model"] == "b"
-
-
-# ---------------------------------------------------------------------------
-# asking the API which models the key can use
-# ---------------------------------------------------------------------------
-
-
-def _catalogue(names, status=200):
-    return _Resp(
-        status,
-        {
-            "models": [
-                {"name": f"models/{n}", "supportedGenerationMethods": methods}
-                for n, methods in names
-            ]
-        },
-    )
-
-
-def test_discovery_lists_usable_flash_models_newest_first(monkeypatch):
-    """The fixed fallbacks were both retired (404); the key's own list is not."""
-    import requests
-
-    listing = _catalogue(
-        [
-            ("gemini-2.5-flash", ["generateContent"]),
-            ("gemini-3.8-flash-lite", ["generateContent"]),
-            ("gemini-3.8-pro", ["generateContent"]),  # not flash
-            ("text-embedding-004", ["embedContent"]),  # cannot generate
-            ("gemini-3.10-flash-preview", ["generateContent"]),
-            ("gemini-3.10-flash", ["generateContent"]),
-        ]
-    )
-    monkeypatch.setattr(requests, "get", lambda *a, **k: listing)
-    assert llm_reader.discover_models("k") == [
-        "gemini-3.10-flash",
-        "gemini-3.10-flash-preview",
-        "gemini-3.8-flash-lite",
-        "gemini-2.5-flash",
-    ]
-
-
-def test_an_unavailable_list_is_empty_not_an_error(monkeypatch):
-    import requests
-
-    monkeypatch.setattr(requests, "get", lambda *a, **k: _Resp(403, text="no"))
-    assert llm_reader.discover_models("k") == []
-
-
-def test_the_chain_puts_discovered_models_after_the_configured_default(monkeypatch):
-    monkeypatch.setenv("GEMINI_API_KEY", "k")
-    monkeypatch.delenv("GEMINI_MODEL", raising=False)
-    monkeypatch.delenv("GEMINI_FALLBACK_MODELS", raising=False)
-    monkeypatch.setattr(
-        llm_reader,
-        "discover_models",
-        lambda key: ["gemini-3.8-flash", "gemini-3.8-flash-lite"],
-    )
-    _, chain = llm_reader.default_transport()
-    assert chain.split(" → ") == [
-        "gemini-3.8-flash",
-        "gemini-3.8-flash-lite",
-        *llm_reader.FALLBACK_MODELS,
-    ]
-
-
-def test_an_explicit_fallback_list_is_not_second_guessed(monkeypatch):
-    monkeypatch.setenv("GEMINI_API_KEY", "k")
-    monkeypatch.setenv("GEMINI_FALLBACK_MODELS", "mine")
-    monkeypatch.setattr(
-        llm_reader, "discover_models", lambda key: pytest.fail("should not be asked")
-    )
-    _, chain = llm_reader.default_transport()
-    assert chain.endswith("mine")
-
-
-@pytest.fixture(autouse=True)
-def _no_served_model_carried_between_tests():
-    llm_reader._LAST_SERVED["model"] = None
-    yield
-    llm_reader._LAST_SERVED["model"] = None
-
-
-def _raising(exc):
-    def post(*a, **k):
-        raise exc
-
-    return post
-
-
-def test_a_model_that_times_out_hands_over_to_the_next(monkeypatch):
-    """7 Oct: gemini-3.8-flash timed out three times and, read as "no
-    network", ended the thesis check with nothing read, while the next model
-    in the chain was serving the same run."""
-    import requests
-
-    monkeypatch.setattr(llm_reader.time, "sleep", lambda s: None)
-    monkeypatch.setattr(
-        requests, "post", _raising(requests.exceptions.ReadTimeout("read timed out"))
-    )
-    with pytest.raises(ReaderUnavailable) as raised:
-        llm_reader.gemini_transport("k", "m")("prompt")
-    assert raised.value.model_specific
-
-
-def test_no_network_still_stops_the_whole_chain(monkeypatch):
-    """A refused connection fails every model alike; trying each spends the run."""
-    import requests
-
-    monkeypatch.setattr(llm_reader.time, "sleep", lambda s: None)
-    monkeypatch.setattr(
-        requests, "post", _raising(requests.exceptions.ConnectionError("refused"))
-    )
-    with pytest.raises(ReaderUnavailable) as raised:
-        llm_reader.gemini_transport("k", "m")("prompt")
-    assert not raised.value.model_specific
-
-
-def test_a_later_reader_starts_with_the_model_that_answered(monkeypatch):
-    """The event reader finds out which model is up; the thesis check, minutes
-    later in the same run, starts there."""
-    monkeypatch.setenv("GEMINI_API_KEY", "k")
-    monkeypatch.delenv("GEMINI_MODEL", raising=False)
-    monkeypatch.delenv("GEMINI_FALLBACK_MODELS", raising=False)
-    monkeypatch.setattr(
-        llm_reader,
-        "discover_models",
-        lambda key: ["gemini-3.8-flash", "gemini-flash-lite-latest"],
-    )
-    busy = ReaderUnavailable("busy", model_specific=True)
-    first = llm_reader.chained_transport(
-        [
-            ("gemini-3.8-flash", _named("gemini-3.8-flash", [busy], [])),
-            ("gemini-flash-lite-latest", _named("lite", ["[]"], [])),
-        ]
-    )
-    assert first("event batch") == "[]"
-
-    _, chain = llm_reader.default_transport()
-    assert chain.split(" → ")[:2] == ["gemini-flash-lite-latest", "gemini-3.8-flash"]
-
-
-def test_a_chain_can_leave_out_the_lite_models(monkeypatch):
-    """The thesis check's second reading must not be made by the kind of model
-    that made the first."""
-    monkeypatch.setenv("GEMINI_API_KEY", "k")
-    monkeypatch.delenv("GEMINI_MODEL", raising=False)
-    monkeypatch.delenv("GEMINI_FALLBACK_MODELS", raising=False)
-    monkeypatch.setattr(
-        llm_reader,
-        "discover_models",
-        lambda key: [
-            "gemini-3.8-flash",
-            "gemini-flash-lite-latest",
-            "gemini-3.8-flash-tts",
-        ],
-    )
-    llm_reader._LAST_SERVED["model"] = "gemini-flash-lite-latest"
-    _, chain = llm_reader.default_transport(exclude=("lite", "tts"))
-    assert chain.split(" → ")[0] == "gemini-3.8-flash"
-    assert "lite" not in chain and "tts" not in chain
-
-    monkeypatch.setattr(llm_reader, "FALLBACK_MODELS", ())
-    monkeypatch.setattr(llm_reader, "discover_models", lambda key: [])
-    monkeypatch.setenv("GEMINI_MODEL", "gemini-flash-lite-latest")
-    transport, detail = llm_reader.default_transport(exclude=("lite",))
-    assert transport is None and "no model left" in detail
 
 
 def test_an_llm_only_event_is_dated_by_its_headline_when_the_feed_is_not():
