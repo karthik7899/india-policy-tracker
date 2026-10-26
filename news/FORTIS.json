@@ -19,9 +19,10 @@
       "headline": "Fortis Healthcare Launches #ConsultFirst Campaign",
       "source_url": "https://news.google.com/rss/articles/CBMi2AFBVV95cUxNOVdWcHVxQTR5ckMwYk9GM2V6V2V5Y0tIQnFTd3BLREpteVdpRng2a19CbjFGbmVtMEJvSXdRMnRKX1M2eTNPYlZvNkxLLUc3VlU1cFJrQ2dXbUpkYzhEUlduTFdlY3Z0RzBQXzY0MHJVeXZwX0wtNjBVZS1nYlE0QnlUX1lrRzZOT1Q1UlZLWS11X3BTSG8tNjNRSFVjcDJzY1ZScFNFSW9nR3dKdVp5ejZ6UXd3U0V1MUtGd05FM0ZZeHNBdGhrUjhOMi1hRmNHb3l2WmNfWV8?oc=5",
       "source_label": "Passionate In Marketing",
-      "event_type": "",
+      "event_type": "product_launch",
       "source_kind": "Agreement",
       "event_tags": [
+        "product_launch",
         "Agreement"
       ],
       "confidence": "M",
@@ -60,10 +61,9 @@
       "headline": "IHH plans to raise Fortis stake to 51%, expand capacity to 10,000 beds by 2031",
       "source_url": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxQRmx4Ylk2bmliZFkwSTFCcF91YlhCS2NuczRBdWdseWMyU05mN21oNEtFbzJnS2NINjhiQktGaHc2eTl4c3F5U2RzMDFGVTFVaVcyTXMtM1pfcEwtMzVXMlVMVlpmbnVQeGliYW5wTkgxS3BFY0xlOHc0UkVEa2lOOTJPUUdzRkY1c0prTlVSYUQ3bkRpTmt1dHdjQlNLZmZfRVFYLWZBZDB1R2xQZExaZHB2Q0pKbHdXelZIX3FjRS1zcDRtTm1XTHg2MDZuQllLSDJOOUVVR2JzX1hiUFUydG130gHiAUFVX3lxTFBGbHhiWTZuaWJkWTBJMUJwX3ViWEJLY25zNEF1Z2x5YzJTTmY3bWg0S0VvMmdLY0g2OGJCS0ZodzZ5OXhzcXlTZHMwMUZVMVVpVzJNcy0zWl9wTC0zNVcyVUxWWmZudVB4aWJhbnBOSDFLcEVjTGU4dzRSRURraU45Mk9RR3NGRjVzSmtOVVJhRDduRGlOa3V0d2NCU0tmZl9FUVgtZkFkMHVHbFBkTFpkcHZDSkpsd1d6VkhfcWNFLXNwNG1ObVdMeDYwNm5CWUtIMk45RVVHYnNfWGJQVTJ0bXc?oc=5",
       "source_label": "ETHealthworld.com",
-      "event_type": "acquisition",
+      "event_type": "",
       "source_kind": "Agreement",
       "event_tags": [
-        "acquisition",
         "Agreement"
       ],
       "confidence": "M",
@@ -243,9 +243,10 @@
       "headline": "The Dial as Light Source: Fortis Unveils the Novonaut N-42 Halo",
       "source_url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxQa3ROeWd0eDA5U25xYlJYT2hIQzZHaXJwTEhYSUtpNWc0TkRPOUJlQXNmVVROQmg5Zk1TVkVNSWY5SUtCTmZITHhJbTdobVVpYzFfWUpmTmk3dE91aGt6d3FWaUtZZDFZRzkwVGdtc2c5b3JRdXZCeGdUbktETm1MekJyWnFLZEd5WHkzT1pFY193RDctOWc?oc=5",
       "source_label": "WatchTime",
-      "event_type": "",
+      "event_type": "product_launch",
       "source_kind": "Launch",
       "event_tags": [
+        "product_launch",
         "Launch"
       ],
       "confidence": "M",
@@ -381,7 +382,37 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (313 days old)"
+      "exclusion_reason": "aged >120d (315 days old)"
+    },
+    {
+      "date": "2026-10-13",
+      "headline": "The Dial as Light Source: Fortis Unveils the Novonaut N-42 Halo",
+      "source_url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxQa3ROeWd0eDA5U25xYlJYT2hIQzZHaXJwTEhYSUtpNWc0TkRPOUJlQXNmVVROQmg5Zk1TVkVNSWY5SUtCTmZITHhJbTdobVVpYzFfWUpmTmk3dE91aGt6d3FWaUtZZDFZRzkwVGdtc2c5b3JRdXZCeGdUbktETm1MekJyWnFLZEd5WHkzT1pFY193RDctOWc?oc=5",
+      "source_label": "WatchTime",
+      "event_type": "product_launch",
+      "source_kind": "Event",
+      "event_tags": [
+        "product_launch",
+        "Event"
+      ],
+      "confidence": "H",
+      "status": "merged",
+      "exclusion_reason": "merged: duplicate phrasing of “The Dial as Light Source: Fortis Unveils the Novonaut N-42 H”"
+    },
+    {
+      "date": "2026-10-12",
+      "headline": "Fortis Healthcare Launches #ConsultFirst Campaign",
+      "source_url": "https://news.google.com/rss/articles/CBMi2AFBVV95cUxNOVdWcHVxQTR5ckMwYk9GM2V6V2V5Y0tIQnFTd3BLREpteVdpRng2a19CbjFGbmVtMEJvSXdRMnRKX1M2eTNPYlZvNkxLLUc3VlU1cFJrQ2dXbUpkYzhEUlduTFdlY3Z0RzBQXzY0MHJVeXZwX0wtNjBVZS1nYlE0QnlUX1lrRzZOT1Q1UlZLWS11X3BTSG8tNjNRSFVjcDJzY1ZScFNFSW9nR3dKdVp5ejZ6UXd3U0V1MUtGd05FM0ZZeHNBdGhrUjhOMi1hRmNHb3l2WmNfWV8?oc=5",
+      "source_label": "Passionate In Marketing",
+      "event_type": "product_launch",
+      "source_kind": "Event",
+      "event_tags": [
+        "product_launch",
+        "Event"
+      ],
+      "confidence": "L",
+      "status": "merged",
+      "exclusion_reason": "merged: duplicate phrasing of “Fortis Healthcare Launches #ConsultFirst Campaign”"
     },
     {
       "date": "2026-10-04",
@@ -412,35 +443,6 @@
       "confidence": "H",
       "status": "merged",
       "exclusion_reason": "merged: duplicate phrasing of “IHH to cooperate with Fortis audit, stands by its 31% stake ”"
-    },
-    {
-      "date": "2026-09-30",
-      "headline": "IHH plans to raise Fortis stake to 51%, expand capacity to 10,000 beds by 2031",
-      "source_url": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxQRmx4Ylk2bmliZFkwSTFCcF91YlhCS2NuczRBdWdseWMyU05mN21oNEtFbzJnS2NINjhiQktGaHc2eTl4c3F5U2RzMDFGVTFVaVcyTXMtM1pfcEwtMzVXMlVMVlpmbnVQeGliYW5wTkgxS3BFY0xlOHc0UkVEa2lOOTJPUUdzRkY1c0prTlVSYUQ3bkRpTmt1dHdjQlNLZmZfRVFYLWZBZDB1R2xQZExaZHB2Q0pKbHdXelZIX3FjRS1zcDRtTm1XTHg2MDZuQllLSDJOOUVVR2JzX1hiUFUydG130gHiAUFVX3lxTFBGbHhiWTZuaWJkWTBJMUJwX3ViWEJLY25zNEF1Z2x5YzJTTmY3bWg0S0VvMmdLY0g2OGJCS0ZodzZ5OXhzcXlTZHMwMUZVMVVpVzJNcy0zWl9wTC0zNVcyVUxWWmZudVB4aWJhbnBOSDFLcEVjTGU4dzRSRURraU45Mk9RR3NGRjVzSmtOVVJhRDduRGlOa3V0d2NCU0tmZl9FUVgtZkFkMHVHbFBkTFpkcHZDSkpsd1d6VkhfcWNFLXNwNG1ObVdMeDYwNm5CWUtIMk45RVVHYnNfWGJQVTJ0bXc?oc=5",
-      "source_label": "ETHealthworld.com",
-      "event_type": "acquisition",
-      "source_kind": "Event",
-      "event_tags": [
-        "acquisition",
-        "Event"
-      ],
-      "confidence": "L",
-      "status": "merged",
-      "exclusion_reason": "merged: duplicate phrasing of “IHH plans to raise Fortis stake to 51%, expand capacity to 1”"
-    },
-    {
-      "date": "2026-09-29",
-      "headline": "IHH to Boost Fortis Stake to 51%, Expand Beds to 10,000 by 2031",
-      "source_url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxNVl9oNWdfSVE2NUdFSFBuNUJJaXNEeDFZdEI0dnlzR01Tbmt6ZVlVRUswWU1PeWJ0dF9xY1Y4ZkdzXzRBVUFQcmFweVpBVWY2UGZQV1JkUWc0Z3N0QnJUUjZPRHYzbHUzM24zWGdGTnNmb1J4VDVvZ0ZRdzk5LWZEdk1PZm9mMHRmSWJZXzBnTUMzLXJLdDM4VGdSVGFvd3ZzMnFKN3NIRWFkWEo0ZGdsNzVOd9IBuAFBVV95cUxPc2F6NmdjQmRYUGs1eFhPM21TMWFDMlhhVEVaWU9wVElROHhfX21fQ3lQaUZndFJKZC1aZ1FiYklyRUp2Z2hac3lqM2FqT2Utak5hcDVGNzFXU3dIQUF6WjRDdFd1UjI3Zl8tUlBEUnRJQjMyeWFMWGFrOS1ZWDNnbHFPZlN3UWYzbTFfVUpCNkpPZ2tPSmR1b0IwUVVIcDNwNDZKTHBDM1N2UjRHZEZaNTJNaVNlNkRf?oc=5",
-      "source_label": "Rediff MoneyWiz",
-      "event_type": "acquisition",
-      "source_kind": "Event",
-      "event_tags": [
-        "acquisition",
-        "Event"
-      ],
-      "confidence": "L",
-      "status": "counted"
     }
   ]
 }

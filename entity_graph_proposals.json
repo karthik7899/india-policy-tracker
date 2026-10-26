@@ -2,6 +2,38 @@
   "_how_to_review": "Partner edges proposed from completed tie-up headlines. Nothing here reaches the graph until you set status to 'accepted'; 'rejected' stops the pair being proposed again. You may correct 'counterparty' before accepting (e.g. 'Vivo Mobile' -> 'Vivo') — it is the name the graph will match in future headlines. Leave 'proposed_as' alone: it is how the pipeline recognises the same pair next time.",
   "proposals": [
     {
+      "holding": "IDEAFORGE",
+      "counterparty": "TDB",
+      "proposed_as": "TDB",
+      "status": "pending",
+      "first_seen": "2026-10-14",
+      "last_seen": "2026-10-14",
+      "evidence": [
+        {
+          "headline": "TDB signs Rs 151 crore funding agreement with ideaForge Technology for heavy-lift logistics drone YETI",
+          "date": "2026-10-14",
+          "link": "https://news.google.com/rss/articles/CBMixwFBVV95cUxObWVFUHQ4S18wYV9rM2ppbzh5eno3UEJXeDdUaS1zdDNZQUxmX2ZQVDBmcEZrRkc0Y3U5Qk1mVXUyWGZURTc4bWE1YnlvbFZLWkw1LTNPOUpLMmdRbjVuT09KQkE2TTNWWk9neGlzU2VldWxheWFaN3RSZ0dMaXhJcTJOOGRsVTZITmszZzlyd01ZcWV3aHZ0eFVhdmtGSWpBMjI0MGdGNVVGU1hBaWxZQTd0MkI4eXpVaVczUjF4dVZMM3dYNmZZ?oc=5",
+          "source": "DD News"
+        }
+      ]
+    },
+    {
+      "holding": "SUZLON",
+      "counterparty": "Exel Composites",
+      "proposed_as": "Exel Composites",
+      "status": "pending",
+      "first_seen": "2026-09-30",
+      "last_seen": "2026-09-30",
+      "evidence": [
+        {
+          "headline": "Suzlon, Exel Composites Sign Multiyear €100M Deal for Carbon Fiber Planks Supply",
+          "date": "2026-09-30",
+          "link": "https://news.google.com/rss/articles/CBMitgFBVV95cUxQZEJoNnRIbk00TnZ5S2pieGR4eDRhaS1MekdtdW90U2VXSHJkeFRWWEtyRVVmb1hQaTFxU28zTkpoazhrVnRXLS16TUpDNWN5YVd3azg3Y3FaaVU0MHdHcEF4Z00zXzRZS25RcEVjbklGYU9oUU1MdDRmbXFodHJlaXhYOTRBRVpCRTlONDhMUUYyLUVoU2RGYndTQW04ckhkN1FySkJFOFhYV29uTlBHeTN0TlBCZw?oc=5",
+          "source": "CompositesWorld"
+        }
+      ]
+    },
+    {
       "holding": "BHEL",
       "counterparty": "Titagarh",
       "proposed_as": "Titagarh",

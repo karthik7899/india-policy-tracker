@@ -2,6 +2,33 @@
   "ticker": "STLTECH",
   "items": [
     {
+      "date": "Fri, 23 Oct 2026 07:00:00 GMT",
+      "headline": "Sterlite Technologies Share Price",
+      "source_url": "https://news.google.com/rss/articles/CBMickFVX3lxTFB5cC12NHhpNWJLcDBKUk84WEpmaG80cTlwczdFWDFwQnpNVUFjZU5Qa2lTckIwNlYycU1GVDdnM1BEQ1FyeTlfcGlrOTlKTHlCWmNMN3ptWURpYWNGb0x2T3lkamxVaWdULWFabzhvdlRXUQ?oc=5",
+      "source_label": "Upstox",
+      "event_type": "",
+      "source_kind": "Agreement",
+      "event_tags": [
+        "Agreement"
+      ],
+      "confidence": "M",
+      "status": "counted"
+    },
+    {
+      "date": "Sat, 24 Oct 2026 18:18:56 GMT",
+      "headline": "Sterlite Technologies reports INR25.29B revenue and multiyear supply deals",
+      "source_url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxPUVk2LWNTeTFBODhaOS1tVXlDOW9nS1FZeTBrZmlQVDB4NnJWemQ4d3U0d082RlNncV9ibXNUd0ROa0s1cUdNenczRE9FTGZVMUYxNi1YWXIydHVHSDZicFltam9lUEl4NHpDZV9IMkRfbndVRjJ2VzFnQk1sbFdLdHN6Vjl3ZmhSdXdZ?oc=5",
+      "source_label": "Mugglehead Investment Magazine",
+      "event_type": "order_win",
+      "source_kind": "Agreement",
+      "event_tags": [
+        "order_win",
+        "Agreement"
+      ],
+      "confidence": "M",
+      "status": "counted"
+    },
+    {
       "date": "Sat, 11 Dec 2021 08:00:00 GMT",
       "headline": "STL unveils its 5G-from-India offering at IMC 2021",
       "source_url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxPMEhEbHlPdHItNWcyM2QyODhsaDduUUg1SlZEeV9IdDdsd29GZDU1MV9KcllUV014TGhpREVkc0M5bGxGX2hUTENidFNIOWx4dTNTNW5McFdreEh5Y0xXZFYyVm54QWVTMFdYMEx4cUJrMGpzR3FBbDh1U1N5SWJzOU5vS0d4dExHMVE4aF9ia1hZYjJrd25LT3ByR1FVQXB2YjUxSFZzZTR5bUFqZHhz?oc=5",
@@ -13,7 +40,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (1778 days old)"
+      "exclusion_reason": "aged >120d (1780 days old)"
     },
     {
       "date": "Mon, 03 Oct 2022 07:00:00 GMT",
@@ -27,7 +54,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (1482 days old)"
+      "exclusion_reason": "aged >120d (1484 days old)"
     },
     {
       "date": "23 Oct 2026",
@@ -53,7 +80,8 @@
         "Filing"
       ],
       "confidence": "M",
-      "status": "counted"
+      "status": "merged",
+      "exclusion_reason": "merged: duplicate phrasing of “Sterlite Technologies Share Price”"
     },
     {
       "date": "01 Oct 2026",
@@ -94,7 +122,22 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (155 days old)"
+      "exclusion_reason": "aged >120d (157 days old)"
+    },
+    {
+      "date": "2026-10-24",
+      "headline": "Sterlite Technologies reports INR25.29B revenue and multiyear supply deals",
+      "source_url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxPUVk2LWNTeTFBODhaOS1tVXlDOW9nS1FZeTBrZmlQVDB4NnJWemQ4d3U0d082RlNncV9ibXNUd0ROa0s1cUdNenczRE9FTGZVMUYxNi1YWXIydHVHSDZicFltam9lUEl4NHpDZV9IMkRfbndVRjJ2VzFnQk1sbFdLdHN6Vjl3ZmhSdXdZ?oc=5",
+      "source_label": "Mugglehead Investment Magazine",
+      "event_type": "order_win",
+      "source_kind": "Event",
+      "event_tags": [
+        "order_win",
+        "Event"
+      ],
+      "confidence": "L",
+      "status": "merged",
+      "exclusion_reason": "merged: duplicate phrasing of “Sterlite Technologies reports INR25.29B revenue and multiyea”"
     },
     {
       "date": "2026-10-01",
