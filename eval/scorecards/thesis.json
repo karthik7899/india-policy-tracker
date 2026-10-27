@@ -3,7 +3,7 @@
  "metrics": {
   "all": {
    "challenge_precision": 1.0,
-   "challenge_recall": 0.63,
+   "challenge_recall": 0.963,
    "contradictions": 27,
    "downgraded": 1,
    "false_alarms": 0,
@@ -12,14 +12,14 @@
    "pending": 0,
    "real_rows": 81,
    "rows": 103,
-   "support_precision": 1.0,
-   "support_recall": 0.579
+   "support_precision": 0.98,
+   "support_recall": 0.877
   },
   "dev": {
    "challenge_precision": 1.0,
-   "challenge_recall": 0.667,
+   "challenge_recall": 1.0,
    "contradictions": 21,
-   "downgraded": 0,
+   "downgraded": 1,
    "false_alarms": 0,
    "namesake_precision": 0.6,
    "namesake_recall": 1.0,
@@ -27,40 +27,40 @@
    "real_rows": 45,
    "rows": 63,
    "support_precision": 1.0,
-   "support_recall": 0.533
+   "support_recall": 0.867
   },
   "holdout": {
    "challenge_precision": 1.0,
-   "challenge_recall": 0.5,
+   "challenge_recall": 0.833,
    "contradictions": 6,
-   "downgraded": 1,
+   "downgraded": 0,
    "false_alarms": 0,
    "namesake_precision": 1.0,
    "namesake_recall": 1.0,
    "pending": 0,
    "real_rows": 36,
    "rows": 40,
-   "support_precision": 1.0,
-   "support_recall": 0.63
+   "support_precision": 0.96,
+   "support_recall": 0.889
   }
  },
  "models": {
   "check": {
-   "gemini-3-flash-preview": 17
+   "gemini-3.6-flash": 27
   },
   "thesis": {
    "gemini-flash-lite-latest": 103
   }
  },
  "prompt": {
-  "check": "9454c4316c0f",
-  "thesis": "3036cda6967d"
+  "check": "a6a5ff7fd8c2",
+  "thesis": "9711ba3ade2b"
  },
  "reader": "thesis",
  "rows": {
   "ADANIGREEN | Adani Green Energy Limited Just Missed EPS By 8.7%: Here's What Analysts Think Will Happen Next": {
-   "got": "unrelated",
-   "outcome": "missed",
+   "got": "contradicts (confirmed)",
+   "outcome": "right",
    "split": "dev",
    "want": "contradicts"
   },
@@ -101,7 +101,7 @@
    "want": "supports or supports"
   },
   "ARVIND | Arvind Ltd’s Q1 profit stays flat despite 25% revenue growth": {
-   "got": "unrelated",
+   "got": "unrelated (refused contradicts: not confirmed by a second reading)",
    "outcome": "wrong",
    "split": "dev",
    "want": "supports"
@@ -113,14 +113,14 @@
    "want": "unrelated"
   },
   "ARVIND | Arvind unveils AD Denim campaign with actor Raghav Juyal": {
-   "got": "unrelated",
-   "outcome": "wrong",
+   "got": "supports",
+   "outcome": "right",
    "split": "dev",
    "want": "supports or supports"
   },
   "ARVIND | CARE Ratings upgrades LT ratings of Arvind to 'AA' with 'stable' outlook": {
-   "got": "unrelated",
-   "outcome": "wrong",
+   "got": "supports",
+   "outcome": "right",
    "split": "dev",
    "want": "supports"
   },
@@ -143,8 +143,8 @@
    "want": "supports or supports"
   },
   "BEL | BEL Q2 profit dips 4% on higher employee costs": {
-   "got": "unrelated",
-   "outcome": "missed",
+   "got": "contradicts (confirmed)",
+   "outcome": "right",
    "split": "holdout",
    "want": "contradicts"
   },
@@ -167,8 +167,8 @@
    "want": "supports or unrelated"
   },
   "BEL | Motilal Oswal bullish on defence sector; BEL top pick for 20% upside": {
-   "got": "unrelated",
-   "outcome": "wrong",
+   "got": "supports",
+   "outcome": "right",
    "split": "dev",
    "want": "supports"
   },
@@ -185,14 +185,14 @@
    "want": "supports or unrelated"
   },
   "BHEL | BHEL fined ₹11 lakh by exchanges for LODR non-compliance": {
-   "got": "unrelated",
-   "outcome": "missed",
+   "got": "contradicts (confirmed)",
+   "outcome": "right",
    "split": "dev",
    "want": "contradicts"
   },
   "BHEL | BHEL shares hit all-time high post strong Q1 show; will profitability concerns weigh on outlook?": {
-   "got": "unrelated",
-   "outcome": "wrong",
+   "got": "supports",
+   "outcome": "right",
    "split": "dev",
    "want": "supports"
   },
@@ -209,8 +209,8 @@
    "want": "unrelated"
   },
   "CAMPUS | Campus Activewear unveils its first reimagined store in New Delhi": {
-   "got": "unrelated",
-   "outcome": "wrong",
+   "got": "supports",
+   "outcome": "right",
    "split": "dev",
    "want": "supports or supports"
   },
@@ -239,20 +239,20 @@
    "want": "contradicts"
   },
   "COFORGE | Coforge named Exceptional Performer in Whitelane 2026 study": {
-   "got": "unrelated",
-   "outcome": "wrong",
+   "got": "supports",
+   "outcome": "right",
    "split": "holdout",
    "want": "supports"
   },
   "COFORGE | Coforge shares rise on $5 billion revenue target by FY30; analysts shift focus to execution plans": {
-   "got": "unrelated",
-   "outcome": "wrong",
+   "got": "supports",
+   "outcome": "right",
    "split": "holdout",
    "want": "supports or supports"
   },
   "CONCOR | CONCOR Q1 Revenue Reaches ₹2,160 Crore as Net Profit Holds at ₹267 Crore": {
-   "got": "unrelated",
-   "outcome": "wrong",
+   "got": "supports",
+   "outcome": "right",
    "split": "holdout",
    "want": "supports"
   },
@@ -281,14 +281,14 @@
    "want": "contradicts"
   },
   "DIXON | Dixon Tech gains after JM Financial upgrades stock, raises target price by 27%": {
-   "got": "unrelated",
-   "outcome": "right",
+   "got": "supports",
+   "outcome": "wrong",
    "split": "holdout",
    "want": "unrelated"
   },
   "DIXON | Dixon Technologies CFO resigns": {
-   "got": "unrelated",
-   "outcome": "missed",
+   "got": "contradicts (confirmed)",
+   "outcome": "right",
    "split": "dev",
    "want": "contradicts"
   },
@@ -329,8 +329,8 @@
    "want": "supports"
   },
   "FORTIS | Buy Fortis Healthcare; target of Rs 1120: Prabhudas Lilladher": {
-   "got": "unrelated",
-   "outcome": "wrong",
+   "got": "supports",
+   "outcome": "right",
    "split": "dev",
    "want": "supports"
   },
@@ -413,14 +413,14 @@
    "want": "contradicts"
   },
   "IDEAFORGE | Supply chain disruptions push ideaForge into losses in Q1FY27": {
-   "got": "unrelated",
-   "outcome": "missed",
+   "got": "contradicts (confirmed)",
+   "outcome": "right",
    "split": "dev",
    "want": "contradicts"
   },
   "IDEAFORGE | ideaForge Technology Promoter Vipul Joshi Pledges 3,70,370 Equity Shares Under SEBI Regulation 31": {
-   "got": "unrelated",
-   "outcome": "missed",
+   "got": "contradicts (confirmed)",
+   "outcome": "right",
    "split": "dev",
    "want": "contradicts"
   },
@@ -431,8 +431,8 @@
    "want": "supports or unrelated"
   },
   "INDHOTEL | INDHOTEL: Revenue and profit rose year-over-year, driven by hotel segment growth and a key acquisition": {
-   "got": "unrelated",
-   "outcome": "wrong",
+   "got": "supports",
+   "outcome": "right",
    "split": "holdout",
    "want": "supports or supports"
   },
@@ -449,8 +449,8 @@
    "want": "unrelated"
   },
   "KAYNES | Accumulate Kaynes Technology India; target of Rs 4390: Prabhudas Lilladher": {
-   "got": "unrelated",
-   "outcome": "wrong",
+   "got": "supports",
+   "outcome": "right",
    "split": "holdout",
    "want": "supports"
   },
@@ -461,8 +461,8 @@
    "want": "contradicts"
   },
   "KAYNES | Kaynes Technology targets lower metering receivables, better cash flow by FY27-end": {
-   "got": "unrelated",
-   "outcome": "wrong",
+   "got": "supports",
+   "outcome": "right",
    "split": "holdout",
    "want": "supports"
   },
@@ -485,8 +485,8 @@
    "want": "supports or supports"
   },
   "MPHASIS | Mphasis Posts Q1 EBIT Of 6.48B Rupees With Margin Slipping To 14.78% QoQ": {
-   "got": "unrelated",
-   "outcome": "missed",
+   "got": "contradicts (confirmed)",
+   "outcome": "right",
    "split": "dev",
    "want": "contradicts"
   },
@@ -509,8 +509,8 @@
    "want": "supports or unrelated"
   },
   "RELIANCE | US President Trump Announces $300 Billion Partnership with Reliance to Build First Major US Refinery in 50 Years": {
-   "got": "unrelated",
-   "outcome": "wrong",
+   "got": "supports",
+   "outcome": "right",
    "split": "dev",
    "want": "supports"
   },
@@ -557,8 +557,8 @@
    "want": "supports"
   },
   "SIEMENS | Siemens and Samsung Foundry strengthen collaboration to advance silicon design enablement": {
-   "got": "unrelated, group",
-   "outcome": "wrong",
+   "got": "supports, group",
+   "outcome": "right",
    "split": "dev",
    "want": "supports"
   },
@@ -605,7 +605,7 @@
    "want": "supports"
   },
   "SUZLON | Suzlon begins FY27 strong with 23% YoY revenue growth and highest-ever Q1 deliveries": {
-   "got": "unrelated",
+   "got": "supports",
    "outcome": "right",
    "split": "dev",
    "want": "supports or unrelated"
@@ -623,8 +623,8 @@
    "want": "unrelated"
   },
   "TCS | As AI slows IT growth, JP Morgan expects TCS and Infosys to outperform Wipro, HCL Tech": {
-   "got": "unrelated",
-   "outcome": "wrong",
+   "got": "supports",
+   "outcome": "right",
    "split": "dev",
    "want": "supports"
   },
@@ -635,8 +635,8 @@
    "want": "supports or unrelated"
   },
   "TCS | TCS Q1 Preview: Wage Hikes Seen Weighing On Margin, Growth Stays Muted": {
-   "got": "unrelated",
-   "outcome": "missed",
+   "got": "contradicts (confirmed)",
+   "outcome": "right",
    "split": "dev",
    "want": "contradicts"
   },
@@ -647,8 +647,8 @@
    "want": "supports"
   },
   "THERMAX | THERMAX: Revenue up 7% but profit down 85% on project overrun; order book and restructuring boost outlook": {
-   "got": "unrelated (refused supports: claim not in the thesis)",
-   "outcome": "missed",
+   "got": "contradicts (confirmed)",
+   "outcome": "right",
    "split": "holdout",
    "want": "contradicts"
   },
@@ -659,8 +659,8 @@
    "want": "supports"
   },
   "VBL | Varun Beverages posts 15.5% surge in Q1 net, denies bidding stake in Bira 91": {
-   "got": "unrelated",
-   "outcome": "wrong",
+   "got": "supports",
+   "outcome": "right",
    "split": "holdout",
    "want": "supports"
   },
