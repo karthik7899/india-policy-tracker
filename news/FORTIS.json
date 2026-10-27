@@ -33,10 +33,9 @@
       "headline": "IHH plans to raise Fortis stake to 51 pc, expand capacity to 10,000 beds",
       "source_url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxNdXI4VXFfdE9iei02YTZIdXd2UEJRREFuaGVBUWlnbEl0cXV0RW9JWm1EWDR3Z2h6S2o1dWtrVVI2UkZoaFRyUmJUVjJKcFFKZnpKYkFZSmZwWkQtbXNXNUJxZ2xYZGxHTUNXOFZGb0l6a1ZPTWRadHlWY3pHOHpJRVd3V0RWZWwxNzVqd1lFRFV5NS1BWkV1b3R1NEdRaC1zRWh5N0hFcDFpVjNWcnh3OV9hNE9GQzRzMmdORzJ0MW4?oc=5",
       "source_label": "Prop News Time",
-      "event_type": "acquisition",
+      "event_type": "",
       "source_kind": "Agreement",
       "event_tags": [
-        "acquisition",
         "Agreement"
       ],
       "confidence": "M",
@@ -47,10 +46,9 @@
       "headline": "IHH to cooperate with Fortis audit, stands by its 31% stake purchase",
       "source_url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxQT2NkTUJLMzR1c2NkNXlTOTRQM21DLW9iMXRnVlVib1NJeGVwdEJYWWFIY1EyQ3NHNDdQaDhSd1NzWDlhdEx1X2UyRk1uUEpZRXhKNW4zNmVZbFFwNFl1emJoOExOV05VWk4ySFg2VVZHNW9yVk9lTzVWcXo1RExIMFdEVkRzQ2ZlekVKaGtvbGRvUHV0UlA0WGdWWG9vWWh3Y1ppYlRpNjhUUQ?oc=5",
       "source_label": "Healthcare Asia Magazine",
-      "event_type": "acquisition",
+      "event_type": "",
       "source_kind": "Agreement",
       "event_tags": [
-        "acquisition",
         "Agreement"
       ],
       "confidence": "M",
@@ -382,7 +380,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (315 days old)"
+      "exclusion_reason": "aged >120d (316 days old)"
     },
     {
       "date": "2026-10-13",
@@ -413,36 +411,6 @@
       "confidence": "L",
       "status": "merged",
       "exclusion_reason": "merged: duplicate phrasing of “Fortis Healthcare Launches #ConsultFirst Campaign”"
-    },
-    {
-      "date": "2026-10-04",
-      "headline": "IHH plans to raise Fortis stake to 51 pc, expand capacity to 10,000 beds",
-      "source_url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxNdXI4VXFfdE9iei02YTZIdXd2UEJRREFuaGVBUWlnbEl0cXV0RW9JWm1EWDR3Z2h6S2o1dWtrVVI2UkZoaFRyUmJUVjJKcFFKZnpKYkFZSmZwWkQtbXNXNUJxZ2xYZGxHTUNXOFZGb0l6a1ZPTWRadHlWY3pHOHpJRVd3V0RWZWwxNzVqd1lFRFV5NS1BWkV1b3R1NEdRaC1zRWh5N0hFcDFpVjNWcnh3OV9hNE9GQzRzMmdORzJ0MW4?oc=5",
-      "source_label": "Prop News Time",
-      "event_type": "acquisition",
-      "source_kind": "Event",
-      "event_tags": [
-        "acquisition",
-        "Event"
-      ],
-      "confidence": "L",
-      "status": "merged",
-      "exclusion_reason": "merged: duplicate phrasing of “IHH plans to raise Fortis stake to 51 pc, expand capacity to”"
-    },
-    {
-      "date": "2026-10-02",
-      "headline": "IHH to cooperate with Fortis audit, stands by its 31% stake purchase",
-      "source_url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxQT2NkTUJLMzR1c2NkNXlTOTRQM21DLW9iMXRnVlVib1NJeGVwdEJYWWFIY1EyQ3NHNDdQaDhSd1NzWDlhdEx1X2UyRk1uUEpZRXhKNW4zNmVZbFFwNFl1emJoOExOV05VWk4ySFg2VVZHNW9yVk9lTzVWcXo1RExIMFdEVkRzQ2ZlekVKaGtvbGRvUHV0UlA0WGdWWG9vWWh3Y1ppYlRpNjhUUQ?oc=5",
-      "source_label": "Healthcare Asia Magazine",
-      "event_type": "acquisition",
-      "source_kind": "Event",
-      "event_tags": [
-        "acquisition",
-        "Event"
-      ],
-      "confidence": "H",
-      "status": "merged",
-      "exclusion_reason": "merged: duplicate phrasing of “IHH to cooperate with Fortis audit, stands by its 31% stake ”"
     }
   ]
 }
