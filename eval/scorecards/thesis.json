@@ -12,8 +12,8 @@
    "pending": 0,
    "real_rows": 81,
    "rows": 103,
-   "support_precision": 0.98,
-   "support_recall": 0.877
+   "support_precision": 1.0,
+   "support_recall": 0.879
   },
   "dev": {
    "challenge_precision": 1.0,
@@ -40,8 +40,8 @@
    "pending": 0,
    "real_rows": 36,
    "rows": 40,
-   "support_precision": 0.96,
-   "support_recall": 0.889
+   "support_precision": 1.0,
+   "support_recall": 0.893
   }
  },
  "models": {
@@ -282,9 +282,9 @@
   },
   "DIXON | Dixon Tech gains after JM Financial upgrades stock, raises target price by 27%": {
    "got": "supports",
-   "outcome": "wrong",
+   "outcome": "right",
    "split": "holdout",
-   "want": "unrelated"
+   "want": "supports"
   },
   "DIXON | Dixon Technologies CFO resigns": {
    "got": "contradicts (confirmed)",
