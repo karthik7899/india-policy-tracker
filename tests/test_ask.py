@@ -270,8 +270,11 @@ def test_the_model_plans_the_search_and_the_answer_cites_what_it_found():
         in prompt
     )
     assert "[2] 2026-08-11 · Business Standard" in prompt
-    # The other company's order book is not passed off as CP PLUS's.
-    assert "Wabag" not in prompt and news["left_out"] == 1
+    # The other company's order book is not passed off as CP PLUS's. Only
+    # the news section is searched: the briefing extract above it is the
+    # day's committed data, and on 27 Oct it carried a Wabag order of its own.
+    found = prompt[prompt.index("\n\nNEWS (") : prompt.index("\n\nQUESTION:")]
+    assert "Wabag" not in found and news["left_out"] == 1
     assert "drawing on CPPLUS, and of 2 headline(s) from Google News" in footer
 
 

@@ -74,7 +74,15 @@ CACHE_PATH = os.path.join(ROOT, "thesis_cache.json")
 #    as the group's and the group's partners never become the holding's.
 #    "about" is false only for a namesake: a person, a character, an
 #    unrelated firm that shares the name.
-PROMPT_VERSION = "7"
+# 8: news of the company's own business or standing bears on its thesis.
+#    The owner's review of 19 and 24 Oct labelled results, a credit rating,
+#    brokerage calls, an exchange penalty, a promoter pledge and an
+#    executive's exit as supporting or contradicting the thesis, where
+#    version 2 had made them unrelated unless the thesis named the measure.
+#    All 20 dev rows version 7 read wrongly were answered "unrelated".
+#    Share-price moves, stock lists, a brokerage preferring a rival and
+#    routine appointments stay unrelated, as the review kept them.
+PROMPT_VERSION = "8"
 
 STANCES = ("contradicts", "supports", "unrelated")
 
@@ -96,24 +104,40 @@ Each HOLDING below has a THESIS: why the investor owns it. Under it are
 numbered headlines that mention the company. For each numbered headline return:
 
 stance — exactly one of:
-  contradicts  the headline reports a development that, if true, undermines a
-               specific claim in the THESIS: an order, programme, approval,
-               plant or plan the thesis relies on is lost, cancelled, delayed
-               or cut; a competitor wins what the thesis expects the company
-               to win; a policy or subsidy the thesis counts on is withdrawn,
-               cut or reversed; the thing the thesis states (debt-free, market
-               leader, asset quality, margins expanding, order book) is
-               reported to be no longer true.
-  supports     the headline reports concrete progress on the very thing a
-               specific claim in the THESIS names: the same product,
-               programme, plant, market or measure. Progress in another of
-               the company's businesses, results that do not mention the
-               claim's subject, and a deal whose link to the claim the
-               headline does not state are unrelated.
-  unrelated    anything else, including: share-price moves, analyst ratings,
-               targets and tips, stock lists, results that do not touch a
-               claim in the thesis, routine filings, and headlines about a
-               different company or person with a similar name.
+  contradicts  the headline reports a development that, if true, weakens the
+               case for owning the company:
+               - a specific claim in the THESIS no longer holds: an order,
+                 programme, approval, plant or plan the thesis relies on is
+                 lost, cancelled, delayed or cut; a competitor wins what the
+                 thesis expects the company to win; a policy or subsidy the
+                 thesis counts on is withdrawn, cut or reversed; the thing
+                 the thesis states (debt-free, market leader, asset quality,
+                 margins expanding, order book) is reported to be no longer
+                 true;
+               - or the company's own business or standing got worse: a
+                 loss, a fall in profit or margins, results that missed
+                 estimates or a preview expecting them to weaken, a
+                 credit-rating downgrade, a penalty from a regulator or an
+                 exchange, a promoter pledging shares, a senior executive
+                 resigning.
+  supports     the headline reports a development that, if true, strengthens
+               the case:
+               - concrete progress on the very thing a specific claim in the
+                 THESIS names: the same product, programme, plant, market or
+                 measure;
+               - or the company's own business or standing improved: revenue
+                 or profit growth, a credit-rating upgrade, a brokerage
+                 recommending the stock (a buy, a top pick, an expected
+                 outperformance), a court or regulator ruling in its favour,
+                 a new store, campaign or product of the business the thesis
+                 describes, or a major deal or partnership of its own.
+  unrelated    anything else, including: share-price moves, and a brokerage's
+               target change reported with one; lists of stocks and
+               explainers that make no call on this company; a brokerage
+               preferring a rival; routine appointments and filings; a small
+               investment outside the business the thesis describes; and
+               headlines about a different company or person with a similar
+               name.
 about   — false only if the headline is about a different company, person or
           thing that merely shares the name: a politician, a fictional
           character, an unrelated firm or place. Otherwise true, including a
@@ -133,20 +157,18 @@ group   — true if the headline is about the holding's own global group, its
           Indian order, plant, customer or market, and for a holding with no
           global parent.
 claim   — the words of the THESIS the headline bears on, copied EXACTLY and
-          contiguously. "" when unrelated.
+          contiguously: for news of the company's own business or standing,
+          the words that say what the business is. "" when unrelated.
 because — the words of the HEADLINE that bear on the claim, copied EXACTLY and
           contiguously. "" when unrelated.
 
-Results, margins, profits and losses contradict a thesis ONLY when the thesis
-itself names that measure ("expanding margins", "debt-free", "asset quality").
-A quarterly loss or a margin dip says nothing about a thesis that is about
-market position, orders or policy. The claim is the specific phrase the
-headline bears on; quote the whole thesis only when it makes a single claim.
-
 A falling share price is not evidence against a thesis, and a rising one is
-not evidence for it. Judge the stance only from the thesis and the headline;
-do not use outside knowledge. General knowledge of who a company is may be
-used for "about" and "group", and for nothing else."""
+not evidence for it: judge what the headline says happened to the business,
+not how the stock moved. The claim is the specific phrase the headline bears
+on; quote the whole thesis only when it makes a single claim. Judge the
+stance only from the thesis and the headline; do not use outside knowledge.
+General knowledge of who a company is may be used for "about" and "group",
+and for nothing else."""
 
 _SCHEMA = {
     "type": "ARRAY",
@@ -180,7 +202,11 @@ _SCHEMA = {
 # Challenges are rare (one live on 9 Oct), so this costs a few calls a run.
 #
 # Bump CHECK_VERSION when the question changes; earlier verdicts are re-asked.
-CHECK_VERSION = "1"
+# 2: a challenge from the company's own results, rating, penalties or
+#    management (thesis prompt version 8) is a real one. Version 1 confirmed
+#    results only against a claim that named the measure, and would have
+#    dropped every such challenge the owner's review labelled.
+CHECK_VERSION = "2"
 CHECK_BATCH = 10
 MAX_CHECKS_PER_RUN = 40
 # The second reader leaves out the lite models that made the first reading.
@@ -194,17 +220,24 @@ _CHECK_INSTRUCTIONS = """You check flags raised by another reader. For each item
 said the HEADLINE contradicts the quoted CLAIM from an investor's THESIS.
 Confirm only real contradictions.
 
-verdict — "contradicts" only if the headline reports that something the
-          claim depends on has got worse: an order, programme, approval,
-          plant or plan lost, cancelled, delayed or cut; a competitor winning
-          what the claim expects the company to win; a policy or subsidy the
-          claim counts on withdrawn, cut or reversed; or what the claim states
-          (debt-free, market leader, margins expanding, order book) reported
-          to be no longer true. Otherwise "does_not".
+verdict — "contradicts" only if the headline reports that the case for
+          owning the company got weaker:
+          - something the claim depends on got worse: an order, programme,
+            approval, plant or plan lost, cancelled, delayed or cut; a
+            competitor winning what the claim expects the company to win; a
+            policy or subsidy the claim counts on withdrawn, cut or
+            reversed; or what the claim states (debt-free, market leader,
+            margins expanding, order book) reported to be no longer true;
+          - or the company's own business or standing got worse: a loss, a
+            fall in profit or margins, results that missed estimates or a
+            preview expecting them to weaken, a credit-rating downgrade, a
+            penalty from a regulator or an exchange, a promoter pledging
+            shares, a senior executive resigning.
+          Otherwise "does_not".
           Good news never contradicts: record results, growth, expansion,
-          margin gains, a new order, a deal or an acquisition. Results or
-          margins contradict only when the claim names that measure and the
-          headline says it got worse. A share-price move is not evidence.
+          margin gains, a new order, a deal or an acquisition. A share-price
+          move is not evidence, nor is a brokerage's target change reported
+          with one.
 because — the words of the HEADLINE that show the contradiction, copied
           exactly and contiguously; "" when the verdict is "does_not".
 
