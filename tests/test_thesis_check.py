@@ -419,13 +419,45 @@ def test_a_refusal_says_which_quote_failed():
     assert r["reason"] == "no quote given"
 
 
-def test_the_prompt_limits_results_to_theses_that_name_them():
+def test_the_company_s_own_business_and_standing_bear_on_its_thesis():
+    """The owner's review labelled results, ratings, brokerage calls, a
+    penalty, a promoter pledge and an executive's exit as bearing on the
+    thesis; version 2 had made them unrelated unless the thesis named the
+    measure. Price moves still never count."""
     from analysis.thesis_check import _prompt
 
-    text = _prompt([(0, {"ticker": "X", "name": "X", "thesis": "t", "headline": "h"})])
-    assert "ONLY when the thesis" in text
+    text = " ".join(
+        _prompt(
+            [(0, {"ticker": "X", "name": "X", "thesis": "t", "headline": "h"})]
+        ).split()
+    )
+    assert "ONLY when the thesis" not in text
+    assert "the company's own business or standing got worse" in text
+    assert "the company's own business or standing improved" in text
+    assert "a brokerage recommending the stock" in text
+    assert "unrelated anything else, including: share-price moves" in text
+    assert "not how the stock moved" in text
     assert "only when it makes a single claim" in text
-    assert thesis_check.PROMPT_VERSION not in ("1", "2")
+    assert thesis_check.PROMPT_VERSION not in tuple("1234567")
+    assert thesis_check.CHECK_VERSION != "1"
+
+
+def test_both_readings_count_the_same_bad_news_against_a_thesis():
+    """A challenge the first reading raises from bad news of the company's
+    own business must be one the second can confirm, or it is dropped."""
+    from analysis.thesis_check import _check_prompt, _prompt
+
+    worse = (
+        "the company's own business or standing got worse: a loss, a fall in "
+        "profit or margins, results that missed estimates or a preview "
+        "expecting them to weaken, a credit-rating downgrade, a penalty from "
+        "a regulator or an exchange, a promoter pledging shares, a senior "
+        "executive resigning"
+    )
+    pair = {"ticker": "X", "name": "X", "thesis": "t", "headline": "h"}
+    first = " ".join(_prompt([(0, pair)]).split())
+    second = " ".join(_check_prompt([(0, pair, {"claim": "t"})]).split())
+    assert worse in first and worse in second
 
 
 def test_a_headline_about_a_namesake_is_unrelated_and_marked():
