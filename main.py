@@ -271,6 +271,11 @@ async def run_pipeline():
             watched=entrant_watch.search_names(watched_entrants),
         )
         state_policy_task = fetch_state_policy_async(session)
+        # Publishers' own markets feeds: each article's direct link and its
+        # summary, which Google News does not give.
+        from providers.publisher_feeds import fetch_publisher_news_async
+
+        publisher_task = fetch_publisher_news_async(session, watchlist)
         # Results dates, ex-dates and AGMs ahead, from NSE's own calendars.
         # Rotation has already run, so this is today's watchlist.
         from providers.nse_calendar import fetch_calendar
@@ -295,6 +300,7 @@ async def run_pipeline():
             _isin_added,
             global_market_news,
             state_policy,
+            publisher_news,
             nse_calendar,
         ) = await asyncio.gather(
             pli_task,
@@ -305,6 +311,7 @@ async def run_pipeline():
             isin_refresh_task,
             global_events_task,
             state_policy_task,
+            publisher_task,
             calendar_task,
         )
 
@@ -348,6 +355,13 @@ async def run_pipeline():
         data["state_policy"] = prune_state_policy(
             store.deduplicate_and_merge("state_policy", state_policy, ["title"])
         )
+        # One item per article, newest first: a publisher that rewrites a
+        # headline has not written a second story.
+        from providers.publisher_feeds import KEPT
+
+        data["publisher_news"] = store.deduplicate_and_merge(
+            "publisher_news", publisher_news, ["link"]
+        )[:KEPT]
 
         # Market-event engine: classify WHAT happened across every collected
         # headline, keep a rolling window via the committed history, and let

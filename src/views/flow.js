@@ -27,6 +27,7 @@ const STREAMS = [
   ["institutional", "Institutional", "institutional_activity"],
   ["events", "Market events", "market_events"],
   ["global", "Global", "global_market_news"],
+  ["markets", "Markets news", "publisher_news"],
   ["policy", "Policy", "policy_impacts"],
   ["partnerships", "Gov't partnerships", "policy_partnerships"],
 ];

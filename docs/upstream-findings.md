@@ -17,6 +17,39 @@ named.
 
 ---
 
+## Three publishers serve their markets feeds and articles; Business Standard refuses
+
+**Measured 2026-10-28**, run 40626161573 (`probe_upstream.py --source
+publisher-news`).
+
+**Economic Times** (`/markets/rssfeeds/1977021501.cms`), **Livemint**
+(`/rss/markets`) and **Moneycontrol** (`/rss/buzzingstocks.xml`) answer with
+their feeds: 50, 35 and 15 items, every one linking to the article itself
+rather than to a Google page, and all but one with a summary. robots.txt
+allows the feed and the article the probe sampled from each, and the article
+pages answer with their text: 2,928, 5,300 and 4,953 characters of
+paragraphs. `providers/publisher_feeds.py` reads the three feeds.
+
+A summary is often the reason behind a brokerage's call: "The sharp tariff
+cut, which poses a threat to GSPL's financial performance, prompted
+brokerages such as Kotak, Nuvama, Emkay Global and ICICI Securities to
+downgrade the stock". Where it is not, the article is: Livemint's summary of
+a Jefferies note says only that two targets were cut, and the article opens
+with the five shares the bank tagged "buy" after their Q2 results.
+
+**Moneycontrol** writes `day#39;s` for "day's", in titles and summaries
+alike: a character reference that has lost its ampersand. Its article text
+opens with advertising ("Discover the secret world of unlisted shares …")
+before the story.
+
+**Business Standard** refuses robots.txt and the feed alike (403, "Access
+Denied"), and is not asked.
+
+The feeds hold their latest items only, so a run reads what is in them at
+that moment, not the day's whole list.
+
+---
+
 ## Google News never links to PIB; PIB's own list of a month's releases does
 
 **Measured 2026-10-19**, runs 39235376433, 39259347814, 39264070803 and

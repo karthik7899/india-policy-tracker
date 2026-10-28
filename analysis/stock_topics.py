@@ -30,6 +30,7 @@ _GLOBAL_SOURCES = (
     ("Filing", "corporate_filings", "filing"),
     ("Global", "global_market_news", "title"),
     ("State policy", "state_policy", "title"),
+    ("Markets news", "publisher_news", "title"),
 )
 
 # Enough to show the current picture without turning the card into a feed.

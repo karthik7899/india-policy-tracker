@@ -50,7 +50,7 @@ SPLIT_PER_TICKER = ("stock_topics",)
 #
 # The rest is everything the landing view (Overview) does not read: the
 # thesis check (the company page and holding drawer), sector blocks (the
-# drawer), the Flow view's eight feeds, the Run health view's peer and share
+# drawer), the Flow view's nine feeds, the Run health view's peer and share
 # tables, and the state-policy feed, which no view reads. Run health counts a
 # split key from its manifest's ``count``. MEASURED on the 14 Oct run, the
 # page's first download (dashboard_data.json as written) fell from 1,004 KB,
@@ -73,6 +73,7 @@ SPLIT_WHOLE = (
     "institutional_activity",
     "corporate_filings",
     "global_market_news",
+    "publisher_news",
     "peer_competitors",
     "candidate_screen",
     "market_share",
