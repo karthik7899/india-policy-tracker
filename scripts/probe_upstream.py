@@ -733,12 +733,14 @@ def probe_publisher_news():
         try:
             r = requests.get(f"https://{host}/robots.txt", headers=headers, timeout=20)
             # As urllib.robotparser reads it: refused means keep out, missing
-            # means no rules. Unread (below) means keep out too.
+            # (another 4xx) means no rules, and a server error leaves the
+            # rules unread, which keeps out as well (can_fetch is False until
+            # rules are read).
             if r.status_code in (401, 403):
                 robots.disallow_all = True
-            elif r.status_code >= 400:
+            elif 400 <= r.status_code < 500:
                 robots.allow_all = True
-            else:
+            elif r.status_code < 400:
                 robots.parse(r.text.splitlines())
             print(f"  robots.txt  : HTTP {r.status_code}")
         except requests.RequestException as e:
