@@ -434,12 +434,29 @@ def test_the_company_s_own_business_and_standing_bear_on_its_thesis():
     assert "ONLY when the thesis" not in text
     assert "the company's own business or standing got worse" in text
     assert "the company's own business or standing improved" in text
-    assert "a brokerage recommending the stock" in text
-    assert "unrelated anything else, including: share-price moves" in text
+    assert "unrelated anything else, including: share-price moves on their own" in text
     assert "not how the stock moved" in text
     assert "only when it makes a single claim" in text
     assert thesis_check.PROMPT_VERSION not in tuple("1234567")
     assert thesis_check.CHECK_VERSION != "1"
+
+
+def test_a_brokerage_s_call_counts_whichever_way_it_goes():
+    """The owner, on PR #275: a downgrade contradicts and an upgrade
+    supports, even when the headline leads with the share price it moved.
+    Version 8 called a target change reported with a price move unrelated."""
+    from analysis.thesis_check import _check_prompt, _prompt
+
+    pair = {"ticker": "X", "name": "X", "thesis": "t", "headline": "h"}
+    first = " ".join(_prompt([(0, pair)]).split())
+    second = " ".join(_check_prompt([(0, pair, {"claim": "t"})]).split())
+    assert "a brokerage upgrading the stock, raising its target" in first
+    assert "a brokerage downgrading the stock, cutting its target" in first
+    assert "target change reported with" not in first + second
+    assert "even when the headline leads with the share price it moved" in first
+    assert "a brokerage's downgrade is, even when reported with the fall" in second
+    assert thesis_check.PROMPT_VERSION not in tuple("12345678")
+    assert thesis_check.CHECK_VERSION not in ("1", "2")
 
 
 def test_both_readings_count_the_same_bad_news_against_a_thesis():
@@ -450,9 +467,10 @@ def test_both_readings_count_the_same_bad_news_against_a_thesis():
     worse = (
         "the company's own business or standing got worse: a loss, a fall in "
         "profit or margins, results that missed estimates or a preview "
-        "expecting them to weaken, a credit-rating downgrade, a penalty from "
-        "a regulator or an exchange, a promoter pledging shares, a senior "
-        "executive resigning"
+        "expecting them to weaken, a credit-rating downgrade, a brokerage "
+        "downgrading the stock, cutting its target or saying sell, a penalty "
+        "from a regulator or an exchange, a promoter pledging shares, a "
+        "senior executive resigning"
     )
     pair = {"ticker": "X", "name": "X", "thesis": "t", "headline": "h"}
     first = " ".join(_prompt([(0, pair)]).split())

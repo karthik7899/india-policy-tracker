@@ -82,7 +82,12 @@ CACHE_PATH = os.path.join(ROOT, "thesis_cache.json")
 #    All 20 dev rows version 7 read wrongly were answered "unrelated".
 #    Share-price moves, stock lists, a brokerage preferring a rival and
 #    routine appointments stay unrelated, as the review kept them.
-PROMPT_VERSION = "8"
+# 9: a brokerage's call bears on the thesis whichever way it goes. The owner,
+#    on PR #275: a downgrade contradicts and an upgrade supports, even when
+#    the headline leads with the share price it moved ("Dixon Tech gains
+#    after JM Financial upgrades stock"). Version 8 called a target change
+#    reported with a price move unrelated.
+PROMPT_VERSION = "9"
 
 STANCES = ("contradicts", "supports", "unrelated")
 
@@ -117,9 +122,10 @@ stance — exactly one of:
                - or the company's own business or standing got worse: a
                  loss, a fall in profit or margins, results that missed
                  estimates or a preview expecting them to weaken, a
-                 credit-rating downgrade, a penalty from a regulator or an
-                 exchange, a promoter pledging shares, a senior executive
-                 resigning.
+                 credit-rating downgrade, a brokerage downgrading the stock,
+                 cutting its target or saying sell, a penalty from a
+                 regulator or an exchange, a promoter pledging shares, a
+                 senior executive resigning.
   supports     the headline reports a development that, if true, strengthens
                the case:
                - concrete progress on the very thing a specific claim in the
@@ -127,14 +133,14 @@ stance — exactly one of:
                  measure;
                - or the company's own business or standing improved: revenue
                  or profit growth, a credit-rating upgrade, a brokerage
-                 recommending the stock (a buy, a top pick, an expected
-                 outperformance), a court or regulator ruling in its favour,
+                 upgrading the stock, raising its target or recommending it
+                 (a buy, a top pick, an expected outperformance), a court or
+                 regulator ruling in its favour,
                  a new store, campaign or product of the business the thesis
                  describes, or a major deal or partnership of its own.
-  unrelated    anything else, including: share-price moves, and a brokerage's
-               target change reported with one; lists of stocks and
-               explainers that make no call on this company; a brokerage
-               preferring a rival; routine appointments and filings; a small
+  unrelated    anything else, including: share-price moves on their own;
+               lists of stocks and explainers that make no call on this
+               company; a brokerage preferring a rival; routine appointments and filings; a small
                investment outside the business the thesis describes; and
                headlines about a different company or person with a similar
                name.
@@ -164,7 +170,8 @@ because — the words of the HEADLINE that bear on the claim, copied EXACTLY and
 
 A falling share price is not evidence against a thesis, and a rising one is
 not evidence for it: judge what the headline says happened to the business,
-not how the stock moved. The claim is the specific phrase the headline bears
+not how the stock moved. A brokerage's call is such news, whichever way it
+goes, even when the headline leads with the share price it moved. The claim is the specific phrase the headline bears
 on; quote the whole thesis only when it makes a single claim. Judge the
 stance only from the thesis and the headline; do not use outside knowledge.
 General knowledge of who a company is may be used for "about" and "group",
@@ -206,7 +213,9 @@ _SCHEMA = {
 #    management (thesis prompt version 8) is a real one. Version 1 confirmed
 #    results only against a claim that named the measure, and would have
 #    dropped every such challenge the owner's review labelled.
-CHECK_VERSION = "2"
+# 3: a brokerage's downgrade, target cut or sell call is one too (thesis
+#    prompt version 9), even when reported with the share-price fall it caused.
+CHECK_VERSION = "3"
 CHECK_BATCH = 10
 MAX_CHECKS_PER_RUN = 40
 # The second reader leaves out the lite models that made the first reading.
@@ -231,13 +240,15 @@ verdict — "contradicts" only if the headline reports that the case for
           - or the company's own business or standing got worse: a loss, a
             fall in profit or margins, results that missed estimates or a
             preview expecting them to weaken, a credit-rating downgrade, a
-            penalty from a regulator or an exchange, a promoter pledging
-            shares, a senior executive resigning.
+            brokerage downgrading the stock, cutting its target or saying
+            sell, a penalty from a regulator or an exchange, a promoter
+            pledging shares, a senior executive resigning.
           Otherwise "does_not".
           Good news never contradicts: record results, growth, expansion,
-          margin gains, a new order, a deal or an acquisition. A share-price
-          move is not evidence, nor is a brokerage's target change reported
-          with one.
+          margin gains, a new order, a deal, an acquisition or a brokerage's
+          upgrade. A share-price move on its own is not evidence; a
+          brokerage's downgrade is, even when reported with the fall it
+          caused.
 because — the words of the HEADLINE that show the contradiction, copied
           exactly and contiguously; "" when the verdict is "does_not".
 
