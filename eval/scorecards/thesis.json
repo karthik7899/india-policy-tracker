@@ -3,31 +3,31 @@
  "metrics": {
   "all": {
    "challenge_precision": 1.0,
-   "challenge_recall": 0.963,
-   "contradictions": 27,
+   "challenge_recall": 0.964,
+   "contradictions": 28,
    "downgraded": 1,
    "false_alarms": 0,
-   "namesake_precision": 0.714,
+   "namesake_precision": 0.625,
    "namesake_recall": 1.0,
    "pending": 0,
    "real_rows": 81,
    "rows": 103,
-   "support_precision": 1.0,
-   "support_recall": 0.879
+   "support_precision": 0.98,
+   "support_recall": 0.862
   },
   "dev": {
    "challenge_precision": 1.0,
    "challenge_recall": 1.0,
-   "contradictions": 21,
+   "contradictions": 22,
    "downgraded": 1,
    "false_alarms": 0,
-   "namesake_precision": 0.6,
+   "namesake_precision": 0.5,
    "namesake_recall": 1.0,
    "pending": 0,
    "real_rows": 45,
    "rows": 63,
-   "support_precision": 1.0,
-   "support_recall": 0.867
+   "support_precision": 0.962,
+   "support_recall": 0.833
   },
   "holdout": {
    "challenge_precision": 1.0,
@@ -46,15 +46,15 @@
  },
  "models": {
   "check": {
-   "gemini-3.6-flash": 27
+   "gemini-3.6-flash": 28
   },
   "thesis": {
    "gemini-flash-lite-latest": 103
   }
  },
  "prompt": {
-  "check": "a6a5ff7fd8c2",
-  "thesis": "9711ba3ade2b"
+  "check": "52c2766b5c2e",
+  "thesis": "1a4e71bfd451"
  },
  "reader": "thesis",
  "rows": {
@@ -107,8 +107,8 @@
    "want": "supports"
   },
   "ARVIND | Arvind acquires stake in two Torrent Urja entities for renewable power": {
-   "got": "unrelated",
-   "outcome": "right",
+   "got": "supports",
+   "outcome": "wrong",
    "split": "dev",
    "want": "unrelated"
   },
@@ -509,8 +509,8 @@
    "want": "supports or unrelated"
   },
   "RELIANCE | US President Trump Announces $300 Billion Partnership with Reliance to Build First Major US Refinery in 50 Years": {
-   "got": "supports",
-   "outcome": "right",
+   "got": "unrelated, not about",
+   "outcome": "wrong",
    "split": "dev",
    "want": "supports"
   },
@@ -557,8 +557,8 @@
    "want": "supports"
   },
   "SIEMENS | Siemens and Samsung Foundry strengthen collaboration to advance silicon design enablement": {
-   "got": "supports, group",
-   "outcome": "right",
+   "got": "unrelated, group",
+   "outcome": "wrong",
    "split": "dev",
    "want": "supports"
   },
@@ -581,8 +581,8 @@
    "want": "supports"
   },
   "SUZLON | NCLT Ahmedabad Dismisses Insolvency Plea Against Suzlon Energy": {
-   "got": "unrelated",
-   "outcome": "wrong",
+   "got": "supports",
+   "outcome": "right",
    "split": "dev",
    "want": "supports or supports"
   },
@@ -617,10 +617,10 @@
    "want": "contradicts"
   },
   "SUZLON | Suzlon stock falls for fifth straight session; brokerage cuts target price": {
-   "got": "unrelated",
+   "got": "contradicts (confirmed)",
    "outcome": "right",
    "split": "dev",
-   "want": "unrelated"
+   "want": "contradicts"
   },
   "TCS | As AI slows IT growth, JP Morgan expects TCS and Infosys to outperform Wipro, HCL Tech": {
    "got": "supports",
