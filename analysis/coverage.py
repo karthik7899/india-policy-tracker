@@ -42,6 +42,9 @@ _GLOBAL_SOURCES = (
     ("Filing", "corporate_filings", "filing"),
     ("Global", "global_market_news", "title"),
     ("State policy", "state_policy", "title"),
+    # Last, so a story another feed also carried keeps the attribution it had
+    # before this feed was read.
+    ("Markets news", "publisher_news", "title"),
 )
 
 _CONFIDENCE_BY_KIND = {
@@ -53,6 +56,7 @@ _CONFIDENCE_BY_KIND = {
     "Sector news": "M",
     "Global": "L",
     "State policy": "M",
+    "Markets news": "M",
 }
 
 
@@ -104,6 +108,9 @@ def _item(kind: str, text: str, raw: Dict[str, Any]) -> Dict[str, Any]:
         "event_tags": [t for t in [event_type, kind] if t],
         "confidence": _CONFIDENCE_BY_KIND.get(kind, "M"),
         "status": "counted",
+        # A publisher's own feed (providers/publisher_feeds.py) gives the
+        # article's address and its opening; Google News gives neither.
+        **{k: raw[k] for k in ("article_url", "summary") if raw.get(k)},
     }
 
 
@@ -146,6 +153,12 @@ def build_coverage(
                 if item["event_type"] and not kept["event_type"]:
                     kept["event_type"] = item["event_type"]
                     kept["event_tags"] = [item["event_type"], *kept["event_tags"]]
+                # So do the article's address and summary, which only a
+                # publisher's own feed carries: that feed is read last, so a
+                # Google News copy of the same story is the one counted.
+                for field in ("article_url", "summary"):
+                    if item.get(field) and not kept.get(field):
+                        kept[field] = item[field]
                 item["status"] = "merged"
                 item["exclusion_reason"] = (
                     f"merged: duplicate phrasing of “{kept['headline'][:60]}”"

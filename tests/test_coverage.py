@@ -92,6 +92,51 @@ class TestAuditTrail:
         assert counted[0]["event_tags"] == ["order_win", "Sector news"]
         assert cov.counts_for(items) == 1
 
+    def test_the_publishers_link_and_summary_reach_the_counted_copy(self):
+        """A publisher's own feed is read last, so a Google News copy of the
+        same story is the one counted; the article's own address and its
+        summary go with it, for a reader that wants the story behind the
+        headline."""
+        headline = "Suzlon wins 300 MW order"
+        data = {
+            "clean_energy": [_news(headline, link="https://news.google.test/x")],
+            "publisher_news": [
+                {
+                    **_news(headline, link="https://pub.test/a", source="Livemint"),
+                    "article_url": "https://pub.test/a",
+                    "summary": "The order is from NTPC, for its Khavda park.",
+                }
+            ],
+        }
+        items = cov.build_coverage(data, _watchlist())["SUZLON"]
+        (counted,) = [i for i in items if i["status"] == "counted"]
+        assert counted["source_kind"] == "Sector news"
+        assert counted["source_url"] == "https://news.google.test/x"
+        assert counted["article_url"] == "https://pub.test/a"
+        assert counted["summary"] == "The order is from NTPC, for its Khavda park."
+        assert cov.counts_for(items) == 1
+
+    def test_a_story_only_a_publisher_carried_counts_as_markets_news(self):
+        data = {
+            "publisher_news": [
+                {
+                    **_news("Suzlon rallies as brokerage upgrades the stock"),
+                    "article_url": "https://example.com/a",
+                    "summary": "The brokerage expects more turbine orders.",
+                }
+            ]
+        }
+        (item,) = cov.build_coverage(data, _watchlist())["SUZLON"]
+        assert item["status"] == "counted"
+        assert item["source_kind"] == "Markets news"
+        assert item["article_url"] == "https://example.com/a"
+        assert item["summary"] == "The brokerage expects more turbine orders."
+
+    def test_an_item_from_another_feed_carries_no_empty_article_fields(self):
+        data = {"clean_energy": [_news("Suzlon wins 300 MW order")]}
+        (item,) = cov.build_coverage(data, _watchlist())["SUZLON"]
+        assert "article_url" not in item and "summary" not in item
+
     def test_an_out_of_window_item_is_excluded_with_its_age(self):
         data = {"clean_energy": [_news("Suzlon wins order", days_ago=200)]}
         items = cov.build_coverage(data, _watchlist())["SUZLON"]

@@ -406,16 +406,13 @@ export function newsSections(stock, payload, coverage, sectorBlocks = []) {
               // It goes in the meta line as provenance, where it is true.
               const type = classifiedType(c);
               const via = sourceKind(c);
+              // The publisher's own address where its feed carried the story
+              // (providers/publisher_feeds.py), else the feed's link.
+              const url = c.article_url || c.source_url;
               return el(
                 "li",
                 {},
-                c.source_url
-                  ? el(
-                      "a",
-                      { href: c.source_url, target: "_blank", rel: "noopener noreferrer" },
-                      headline,
-                    )
-                  : headline,
+                url ? el("a", { href: url, target: "_blank", rel: "noopener noreferrer" }, headline) : headline,
                 type
                   ? el(
                       "span",
