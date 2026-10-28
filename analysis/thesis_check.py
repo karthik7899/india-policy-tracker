@@ -490,6 +490,10 @@ def thesis_pairs(
             ]
             items.sort(key=lambda i: article_date(i.get("date")) or "", reverse=True)
             for item in items[:MAX_PER_HOLDING]:
+                # The article's own address where a publisher's feed carried
+                # the story, and its summary: the brokerage reasons reader
+                # (analysis/brokerage_reasons.py) reads them.
+                link = item.get("article_url") or item.get("source_url")
                 pairs.append(
                     {
                         "ticker": ticker,
@@ -498,16 +502,17 @@ def thesis_pairs(
                         "thesis": thesis,
                         "headline": item["headline"],
                         "date": article_date(item.get("date")) or "",
-                        **(
-                            {"link": item["source_url"]}
-                            if item.get("source_url")
-                            else {}
-                        ),
+                        **({"link": link} if link else {}),
                         **(
                             {"source": item["source_label"]}
                             if item.get("source_label")
                             else {}
                         ),
+                        **{
+                            k: item[k]
+                            for k in ("summary", "article_url")
+                            if item.get(k)
+                        },
                     }
                 )
     return pairs, sorted(set(no_thesis))
@@ -532,6 +537,61 @@ def _prompt(batch: List[Tuple[int, Dict[str, Any]]]) -> str:
     )
 
 
+def _fetch_article(url: str) -> Tuple[str, str, List[str]]:
+    from providers.publisher_feeds import fetch_article
+
+    return fetch_article(url)
+
+
+def _no_article(url: str) -> Tuple[str, str, List[str]]:
+    """A caller with its own readers (a test, cache-only scoring) asks no
+    publisher for anything."""
+    return "waiting", "no article reader given", []
+
+
+def _reasons_due(
+    readings: Dict[str, Dict[str, Any]],
+    entries: Dict[str, Any],
+    pair_of: Dict[str, Dict[str, Any]],
+) -> Tuple[List[Tuple[str, Dict[str, Any]]], int]:
+    """``(due, kept)``: the supports and challenges that may be a brokerage's
+    call and are still to be read for its reasons, and how many have been."""
+    from analysis import brokerage_reasons as reasons
+
+    due, kept = [], 0
+    for key, reading in readings.items():
+        pair = pair_of.get(key)
+        if pair is None or key not in entries or not reasons.wanted(pair, reading):
+            continue
+        if reasons.record_of(entries[key]) is None:
+            due.append((key, pair))
+        else:
+            kept += 1
+    return due, kept
+
+
+def _with_calls(
+    readings: Dict[str, Dict[str, Any]],
+    entries: Dict[str, Any],
+    pair_of: Dict[str, Dict[str, Any]],
+) -> Dict[str, Dict[str, Any]]:
+    """Readings as served: a support or challenge that is a brokerage's call
+    carries the brokerage's reasons as ``call``. A copy, so the cache's own
+    reading is never written to."""
+    from analysis import brokerage_reasons as reasons
+
+    out = {}
+    for key, reading in readings.items():
+        pair = pair_of.get(key)
+        call = (
+            reasons.served(entries.get(key))
+            if pair is not None and reasons.wanted(pair, reading)
+            else None
+        )
+        out[key] = {**reading, "call": call} if call else reading
+    return out
+
+
 def read_pairs(
     pairs: List[Dict[str, Any]],
     transport=None,
@@ -540,6 +600,9 @@ def read_pairs(
     today: str = "",
     check_transport=None,
     max_checks: Optional[int] = None,
+    reasons_transport=None,
+    fetch_article=None,
+    max_reasons: Optional[int] = None,
 ) -> Tuple[Dict[str, Dict[str, Any]], Dict[str, Any]]:
     """Readings keyed by pair_key — cached ones free, new ones fetched.
 
@@ -551,6 +614,12 @@ def read_pairs(
     second reading can be made. ``check_transport`` is that reader's; the
     default chain leaves out the lite models. ``max_checks`` caps the second
     readings as ``max_new`` caps the first (MAX_CHECKS_PER_RUN by default).
+
+    A support or challenge that is a brokerage's call is read once more for
+    the brokerage's reasons (analysis/brokerage_reasons.py), served as the
+    reading's ``call``. ``reasons_transport`` is that reader's,
+    ``fetch_article`` how it asks for an article (by default
+    providers.publisher_feeds.fetch_article), and ``max_reasons`` caps it.
     """
     from analysis.llm_reader import load_cache, save_cache
     from analysis.reader_runtime import ReaderUnavailable, default_transport
@@ -565,6 +634,12 @@ def read_pairs(
         "refused": 0,
         "checks_pending": 0,
         "checks_skipped": "",
+        "reasons_read": 0,
+        "reasons_cached": 0,
+        "reasons_pending": 0,
+        "reasons_skipped": "",
+        "articles": 0,
+        "articles_refused": 0,
     }
     readings: Dict[str, Dict[str, Any]] = {}
     entries = load_cache(cache_path)
@@ -598,12 +673,16 @@ def read_pairs(
             status["pending"] = len(todo)
             # Cached readings still go out through their stored checks: a
             # challenge the second reader dropped must not return on a day
-            # without a key.
+            # without a key. So do the brokerages' reasons already read.
             served = {
                 key: apply_check(reading, checked(entries.get(key)))
                 for key, reading in readings.items()
             }
-            return served, status
+            due, status["reasons_cached"] = _reasons_due(served, entries, pair_of)
+            if due:
+                status["reasons_skipped"] = detail
+                status["reasons_pending"] = len(due)
+            return _with_calls(served, entries, pair_of), status
 
     changed = False
     batch_todo = todo[:max_new]
@@ -673,6 +752,35 @@ def read_pairs(
         for key, reading in readings.items()
     }
 
+    # The brokerage's reasons for each call read as support or challenge.
+    from analysis import brokerage_reasons as reasons
+
+    calls, status["reasons_cached"] = _reasons_due(readings, entries, pair_of)
+    if calls:
+        if reasons_transport is None:
+            if real:
+                reasons_transport, detail = default_transport(
+                    reasons._SCHEMA, reader="reasons"
+                )
+            else:
+                detail = "no reasons reader given"
+            if reasons_transport is None:
+                status["reasons_skipped"] = detail
+                status["reasons_pending"] = len(calls)
+        if reasons_transport is not None:
+            if fetch_article is None:
+                fetch_article = _fetch_article if real else _no_article
+            changed |= reasons.read_reasons(
+                calls,
+                entries,
+                reasons_transport,
+                today,
+                status,
+                fetch_article,
+                max_reasons,
+            )
+    readings = _with_calls(readings, entries, pair_of)
+
     cutoff = (
         datetime.date.fromisoformat(today)
         - datetime.timedelta(days=CACHE_RETENTION_DAYS)
@@ -735,6 +843,8 @@ def summarise(
             **({"link": pair["link"]} if pair.get("link") else {}),
             **({"source": pair["source"]} if pair.get("source") else {}),
             **({"group": True} if reading.get("group") else {}),
+            # The brokerage's reasons, where the headline is its call.
+            **({"call": reading["call"]} if reading.get("call") else {}),
             "reader": "llm",
             **(
                 {"confirmed": bool(reading.get("confirmed"))}
@@ -847,7 +957,12 @@ def run_thesis_check(
             f"Second reading of challenges: {status['confirmed']} confirmed, "
             f"{status['refused']} dropped, {status['checks_pending']} waiting"
             + (f" ({status['checks_skipped']})" if status["checks_skipped"] else "")
-            + "."
+            + ". Brokerages' reasons: "
+            f"{status['reasons_read']} call(s) read, {status['reasons_cached']} "
+            f"cached, {status['reasons_pending']} waiting"
+            + (f" ({status['reasons_skipped']})" if status["reasons_skipped"] else "")
+            + f"; {status['articles']} article(s) read, "
+            f"{status['articles_refused']} refused or failed."
         )
         return result
     except Exception as e:  # noqa: BLE001 - an enrichment must never break a run

@@ -27,6 +27,7 @@ from typing import Any, Dict, List, Optional, Tuple
 from urllib.parse import urlparse
 
 import feedparser
+from bs4 import BeautifulSoup
 
 from analysis.parsing import title_matches_company
 from logger import log
@@ -199,3 +200,100 @@ async def fetch_publisher_news_async(
         f"{len(FEEDS)} feed(s)."
     )
     return items
+
+
+# ---------------------------------------------------------------------------
+# an article, for the reasons behind a brokerage's call
+# ---------------------------------------------------------------------------
+
+# The paragraphs kept from an article: from the first that names the company,
+# which is where a story gives a brokerage's reasons.
+ARTICLE_CHARS = 3000
+# Shorter ones are captions, bylines and share buttons.
+PARAGRAPH_CHARS = 40
+# Each publisher's robots.txt, read once a run: (rules, read at all).
+_ROBOTS: Dict[str, Tuple[urllib.robotparser.RobotFileParser, bool]] = {}
+
+
+def article_paragraphs(page: str) -> List[str]:
+    """An article page's paragraphs: the story's, without the page's
+    navigation, scripts and footer, or its captions."""
+    soup = BeautifulSoup(page, "lxml")
+    for tag in soup(["script", "style", "noscript", "nav", "aside", "footer", "form"]):
+        tag.decompose()
+    paragraphs = [" ".join(p.get_text(" ").split()) for p in soup.find_all("p")]
+    return [p for p in paragraphs if len(p) >= PARAGRAPH_CHARS]
+
+
+def excerpt(paragraphs: List[str], ticker: str = "", name: str = "") -> str:
+    """The paragraphs from the first that names the company, where one does,
+    to ARTICLE_CHARS. Moneycontrol's pages open with advertising (probe,
+    28 Oct), and a note on five stocks may reach this one only far down."""
+    if name:
+        first = next(
+            (
+                i
+                for i, p in enumerate(paragraphs)
+                if title_matches_company(p, ticker, name)
+            ),
+            0,
+        )
+        paragraphs = paragraphs[first:]
+    return " ".join(paragraphs)[:ARTICLE_CHARS]
+
+
+def _robots_for(host: str, get) -> Tuple[urllib.robotparser.RobotFileParser, bool]:
+    if host not in _ROBOTS:
+        try:
+            response = get(
+                f"https://{host}/robots.txt",
+                headers={"User-Agent": USER_AGENT},
+                timeout=TIMEOUT_S,
+            )
+            _ROBOTS[host] = (
+                robots_rules(response.status_code, response.text),
+                response.status_code < 500,
+            )
+        except Exception:  # noqa: BLE001 - unread rules keep every article out
+            _ROBOTS[host] = (urllib.robotparser.RobotFileParser(), False)
+    return _ROBOTS[host]
+
+
+def fetch_article(url: str, get=None) -> Tuple[str, str, List[str]]:
+    """``(outcome, detail, paragraphs)`` for one article, asked for once, of
+    the three publishers' own hosts only, and only where robots.txt allows
+    it.
+
+    "ok" carries the article's paragraphs (article_paragraphs), for excerpt
+    to cut each holding's part from: a note on several stocks is asked for
+    once. "refused" is a publisher's no: robots.txt keeps the article out, it
+    answered 4xx, or the page holds no story; "failed" is a request that got
+    no page. "waiting" means the article was not asked for, because
+    robots.txt could not be read today. Never raises.
+    """
+    if get is None:
+        import requests
+
+        get = requests.get
+    parts = urlparse(str(url or ""))
+    hosts = {urlparse(feed).netloc for feed in FEEDS.values()}
+    if parts.scheme != "https" or parts.netloc not in hosts:
+        return "refused", "not a publisher's address", []
+    rules, read = _robots_for(parts.netloc, get)
+    if not read:
+        return "waiting", "robots.txt unread", []
+    if not rules.can_fetch(USER_AGENT, url):
+        return "refused", "robots.txt", []
+    try:
+        response = get(url, headers={"User-Agent": USER_AGENT}, timeout=TIMEOUT_S)
+    except Exception as e:  # noqa: BLE001 - the one request got no page
+        return "failed", type(e).__name__, []
+    if response.status_code != 200:
+        outcome = "failed" if response.status_code >= 500 else "refused"
+        return outcome, f"HTTP {response.status_code}", []
+    if "html" not in str(response.headers.get("Content-Type", "")).lower():
+        return "refused", "not a page", []
+    paragraphs = article_paragraphs(response.text)
+    if not paragraphs:
+        return "refused", "no story on the page", []
+    return "ok", "", paragraphs

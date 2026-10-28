@@ -82,6 +82,7 @@ const READERS = [
   ["events", "Event reader"],
   ["thesis", "Thesis check"],
   ["check", "Second reading"],
+  ["reasons", "Brokerage reasons"],
 ];
 
 /**

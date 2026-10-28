@@ -730,6 +730,16 @@ async def run_pipeline():
         },
         thesis_status.get("checks_skipped") or "",
     )
+    reader_runtime.note(
+        "reasons",
+        {
+            "read": thesis_status.get("reasons_read"),
+            "cached": thesis_status.get("reasons_cached"),
+            "pending": thesis_status.get("reasons_pending"),
+            "articles": thesis_status.get("articles"),
+        },
+        thesis_status.get("reasons_skipped") or "",
+    )
     data["ai_readers"] = reader_runtime.report()
     log.info(f"AI readers: {reader_runtime.summary()}.")
     # Today's readings and every earlier run's: a day the check cannot run
