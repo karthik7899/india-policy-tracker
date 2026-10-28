@@ -152,6 +152,25 @@ def test_possessive_and_alias_handling():
     )
 
 
+def test_a_plural_possessive_names_the_company():
+    """A name ending in s takes a bare apostrophe: "Varun Beverages' arm to
+    acquire Devyani Food Industries Kenya business" was never attributed to
+    Varun Beverages, and an article's paragraph saying "Amber Enterprises'
+    target was cut" was not found as its part of a note."""
+    assert title_matches_company(
+        "Varun Beverages' arm to acquire Devyani Food Industries Kenya business",
+        "VBL",
+        "Varun Beverages",
+    )
+    assert title_matches_company(
+        "Amber Enterprises' target was cut too", "AMBER", "Amber Enterprises"
+    )
+    # The curly apostrophe already read as one.
+    assert title_matches_company(
+        "Amber Enterprises’ target was cut too", "AMBER", "Amber Enterprises"
+    )
+
+
 def test_empty_and_garbage_inputs():
     assert title_matches_company("", "ARVIND", "Arvind Ltd") is False
     assert title_matches_company(None, "ARVIND", "Arvind Ltd") is False

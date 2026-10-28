@@ -164,7 +164,9 @@ def _abbreviates(word, own_name_tokens):
 
 
 def _clean_token(token):
-    return token.lower().rstrip(".").removesuffix("'s")
+    # A possessive is the name it ends: "Suzlon's", and a plural's bare
+    # apostrophe, "Varun Beverages'", which was never matched to the company.
+    return token.lower().rstrip(".").removesuffix("'s").rstrip("'")
 
 
 @functools.lru_cache(maxsize=1024)
