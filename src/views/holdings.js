@@ -16,7 +16,7 @@
 // describing seventy holdings while the table describes nine.
 
 import { el, mount } from "../core/dom.js";
-import { num, crore, pct, bandIndex, BANDS, shortDate, sizeLabel, LLM_MARK } from "../core/format.js";
+import { num, crore, pct, bandIndex, BANDS, shortDate, sizeLabel, callLine, LLM_MARK } from "../core/format.js";
 import { loadCoverage, resolve } from "../core/data.js";
 import { href } from "../core/router.js";
 import * as filters from "../core/filters.js";
@@ -151,6 +151,8 @@ export function thesisSection(catalyst, check) {
               ? " \u00b7 second reading pending"
               : ""),
       ),
+      // Where the headline is a brokerage's call: why the brokerage made it.
+      i.call ? el("span", { class: "evidence-meta" }, callLine(i.call)) : null,
     );
   const challenged = check?.challenged || [];
   const supported = check?.supported || [];

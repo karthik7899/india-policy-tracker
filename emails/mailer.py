@@ -1029,6 +1029,20 @@ _COMPANY_RECENT_DAYS = 3
 _THESIS_DOT = {"Broken": "#f87171", "Weakening": "#fb923c", "Intact": "#34d399"}
 
 
+def _call_html(call):
+    """A brokerage's call and the reasons its story gives, each quoted, and
+    the words of the thesis they bear on (analysis/brokerage_reasons.py).
+    ``call`` arrives escaped with the rest of brief_data."""
+    reasons = call.get("reasons") or []
+    because = (
+        " &mdash; " + "; ".join(f"&ldquo;{r}&rdquo;" for r in reasons)
+        if reasons
+        else " &mdash; the story gives no reason"
+    )
+    claim = f" &rarr; thesis &ldquo;{call['claim']}&rdquo;" if call.get("claim") else ""
+    return f"{call.get('brokerage') or 'A brokerage'}: {call['call']}{because}{claim}"
+
+
 def _build_companies_html(digest, caps=_CAPS_NORMAL):
     """Your holdings, one card each: what happened and which policy touches it.
 
@@ -1098,6 +1112,17 @@ def _build_companies_html(digest, caps=_CAPS_NORMAL):
             if c.get("challenges")
             else ""
         )
+        # A brokerage's call read as support or challenge, and why it made it.
+        calls = "".join(
+            "<div style='font-size:11px;margin-top:4px;color:"
+            + (
+                "#f87171;'>&#9660; "
+                if k.get("stance") == "challenges"
+                else "#34d399;'>&#9650; "
+            )
+            + f"{_call_html(k)}</div>"
+            for k in (c.get("calls") or [])[:2]
+        )
         blocks += f"""
             <div style="border-top: 1px solid #1f2937; padding: 10px 0;">
                 <div><span class="stock-ticker">{c['ticker']}</span>
@@ -1107,6 +1132,7 @@ def _build_companies_html(digest, caps=_CAPS_NORMAL):
                 <ul style="font-size:12px;line-height:1.5;padding-left:18px;margin:6px 0 0 0;color:#cbd5e1;">{news}</ul>
                 {f'<ul style="font-size:12px;line-height:1.5;padding-left:18px;margin:4px 0 0 0;color:#94a3b8;list-style:none;">{policy}</ul>' if policy else ''}
                 {challenge}
+                {calls}
             </div>
             """
     more = len(cards) - len(shown)
@@ -1437,11 +1463,16 @@ def _build_thesis_check_html(check, caps=_CAPS_NORMAL):
         pending = (
             " &middot; second reading pending" if c.get("confirmed") is False else ""
         )
+        why = (
+            f"<br><span style='font-size:11px;color:#94a3b8;'>{_call_html(c['call'])}</span>"
+            if c.get("call")
+            else ""
+        )
         items += (
             f"<li style='margin-bottom:8px;'><span class='stock-ticker'>{r['ticker']}</span> "
             f"{head}{more}<br><span style='font-size:11px;color:#94a3b8;'>"
             f"&ldquo;{c['because']}&rdquo; against the thesis &ldquo;{c['claim']}&rdquo;"
-            f"{pending}</span></li>"
+            f"{pending}</span>{why}</li>"
         )
     body = (
         f"<ul style='font-size:12px;line-height:1.5;padding-left:18px;color:#cbd5e1;'>{items}</ul>"

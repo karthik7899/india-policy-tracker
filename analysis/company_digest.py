@@ -16,6 +16,9 @@ This regroups what is already computed, by company:
              measure it is (central or a state) — and first, any policy
              headline that names the company itself
   thesis     its thesis-health grade and any thesis-check challenge
+  calls      brokerages' calls read as supporting or challenging the thesis,
+             with the reasons the story gives for each
+             (analysis/brokerage_reasons.py)
 
 Nothing new is fetched or judged here. The digest is written as a sidecar
 (dashboard/sidecars.py) and loaded only when the Companies view opens.
@@ -30,6 +33,7 @@ from analysis.event_evidence import article_date
 WINDOW_DAYS = 30
 MAX_ACTIVITY = 6
 MAX_POLICIES = 4
+MAX_CALLS = 3
 _TEXT_LIMIT = 180
 # Weeks of closes on a card's price line; the run keeps a year of them for the
 # portfolio's risk figures.
@@ -99,7 +103,12 @@ def _activity(items, cutoff: str) -> List[Dict[str, Any]]:
                 "kind": row_kind,
                 "text": shown[:_TEXT_LIMIT],
                 **({"certainty": certainty} if certainty else {}),
-                **({"link": item["source_url"]} if item.get("source_url") else {}),
+                # The article's own address where a publisher's feed gave it.
+                **(
+                    {"link": item.get("article_url") or item["source_url"]}
+                    if item.get("article_url") or item.get("source_url")
+                    else {}
+                ),
                 **(
                     {"source": item["source_label"]} if item.get("source_label") else {}
                 ),
@@ -107,6 +116,28 @@ def _activity(items, cutoff: str) -> List[Dict[str, Any]]:
         )
     rows.sort(key=lambda r: r["date"], reverse=True)
     return rows
+
+
+def _calls(check: Dict[str, Any], cutoff: str) -> List[Dict[str, Any]]:
+    """The holding's brokerage calls in the window: each one a support or a
+    challenge the thesis check read, with the reasons the story gives."""
+    rows = []
+    for key, stance in (("challenged", "challenges"), ("supported", "supports")):
+        for item in check.get(key) or []:
+            call = item.get("call")
+            if not call or str(item.get("date") or "") < cutoff:
+                continue
+            rows.append(
+                {
+                    "date": item.get("date") or "",
+                    "stance": stance,
+                    "headline": str(item.get("headline") or "")[:_TEXT_LIMIT],
+                    **({"link": item["link"]} if item.get("link") else {}),
+                    **call,
+                }
+            )
+    rows.sort(key=lambda r: r["date"], reverse=True)
+    return rows[:MAX_CALLS]
 
 
 def _policies(
@@ -215,6 +246,7 @@ def build_company_digest(
             policies = _policies(ticker, name, sector, impacts, cutoff)
             thesis = health.get(ticker) or health.get(stock["ticker"]) or {}
             check = checks.get(ticker) or {}
+            calls = _calls(check, cutoff)
             sector_balance = balance.get(sector) or {}
             companies.append(
                 {
@@ -227,6 +259,7 @@ def build_company_digest(
                         {"headline": c["headline"][:_TEXT_LIMIT], "claim": c["claim"]}
                         for c in (check.get("challenged") or [])[:2]
                     ],
+                    **({"calls": calls} if calls else {}),
                     "activity_count": len(activity),
                     "last_activity": activity[0]["date"] if activity else None,
                     "activity": activity[:MAX_ACTIVITY],

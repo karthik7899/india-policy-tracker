@@ -12,7 +12,7 @@
 // visitor downloads does not grow.
 
 import { el, mount, disclosure } from "../core/dom.js";
-import { shortDate, thesisStatus, LLM_MARK } from "../core/format.js";
+import { shortDate, thesisStatus, callLine, LLM_MARK } from "../core/format.js";
 import { href } from "../core/router.js";
 import { resolve } from "../core/data.js";
 import * as filters from "../core/filters.js";
@@ -254,6 +254,35 @@ export function activitySection(c, windowDays, { highOnly = false } = {}) {
 }
 
 /**
+ * Brokerages' calls on the holding that the thesis check read as supporting
+ * or challenging its thesis, each with the reasons its story gives
+ * (analysis/brokerage_reasons.py). Nothing when there is none.
+ */
+export function callsSection(c) {
+  if (!c.calls?.length) return null;
+  return el(
+    "section",
+    {},
+    el("h4", {}, "Brokerage calls"),
+    el(
+      "ul",
+      { class: "evidence" },
+      c.calls.map((k) =>
+        el(
+          "li",
+          {},
+          el("span", { class: `tag tag-${k.stance === "challenges" ? "risk" : "opp"}` }, k.stance),
+          " ",
+          link(k.link, k.headline),
+          el("span", { class: "evidence-meta" }, callLine(k)),
+          el("span", { class: "evidence-meta" }, shortDate(k.date)),
+        ),
+      ),
+    ),
+  );
+}
+
+/**
  * The policies touching the holding or its sector, with their direction and
  * how binding each is. ``highOnly`` keeps the hard ones.
  */
@@ -320,6 +349,7 @@ function card(c, labels, windowDays, dates = {}) {
       { class: "company-more", open: compactCards() ? null : "" },
       el("summary", { class: "company-more-summary" }, cardSummary(c)),
       priceLine(c),
+      callsSection(c),
       el(
         "div",
         { class: "company-cols" },

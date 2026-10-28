@@ -80,6 +80,24 @@ export function strengthLabel(row) {
   return strength === "soft" ? "not yet binding" : "reported, not confirmed";
 }
 
+/**
+ * A brokerage's call, the reasons its story gives for it, each quoted, and the
+ * words of the thesis they bear on (analysis/brokerage_reasons.py): "JM
+ * Financial: upgrades stock \u2014 \u201cstrong order inflows\u201d \u2192 thesis:
+ * \u201crecord order book\u201d \u00b7 from the article". Shown beside the support
+ * or challenge it explains; "" for no call.
+ */
+export function callLine(call) {
+  if (!call?.call) return "";
+  const reasons = (call.reasons || []).map((r) => `\u201c${r}\u201d`).join("; ");
+  return [
+    `${call.brokerage || "A brokerage"}: ${call.call}`,
+    reasons ? ` \u2014 ${reasons}` : " \u2014 the story gives no reason",
+    call.claim ? ` \u2192 thesis: \u201c${call.claim}\u201d` : "",
+    ` \u00b7 from the ${call.source === "article" ? "article" : "summary"} \u00b7 ${LLM_MARK}`,
+  ].join("");
+}
+
 /** A signed percentage, always with its sign — the sign is the information. */
 export function pct(value, decimals = 1) {
   const n = num(value);

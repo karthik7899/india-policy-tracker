@@ -218,3 +218,127 @@ def test_publisher_news_is_attributed_like_the_other_feeds():
     assert [(t["kind"], t["link"]) for t in topics["DIXON"]] == [
         ("Markets news", "https://pub.test/b")
     ]
+
+
+# ---------------------------------------------------------------------------
+# an article, for the reasons behind a brokerage's call
+# ---------------------------------------------------------------------------
+
+PAGE = """<html><body><nav><p>Markets Home Stocks Mutual Funds Commodities Currencies</p></nav>
+<p>Discover the secret world of unlisted shares and invest before they list.</p>
+<p>Shares of Dixon Technologies fell 4% on Tuesday after Jefferies cut its rating.</p>
+<p>The brokerage said mobile export margins are under pressure from new entrants.</p>
+<p>Short caption.</p>
+<script>var tracking = "Dixon Technologies analytics script text here";</script>
+<footer><p>Copyright notice and the links at the foot of every page.</p></footer>
+</body></html>"""
+ARTICLE = "https://www.moneycontrol.com/news/dixon-jefferies.html"
+
+
+class Response:
+    def __init__(self, status, text="", kind="text/html; charset=UTF-8"):
+        self.status_code, self.text, self.headers = status, text, {"Content-Type": kind}
+
+
+def _get(pages, asked):
+    """requests.get answering from ``pages`` by URL: a Response, or an
+    exception to raise. Records what was asked, with its user agent."""
+
+    def get(url, headers=None, timeout=None):
+        asked.append((url, (headers or {}).get("User-Agent")))
+        answer = pages[url]
+        if isinstance(answer, Exception):
+            raise answer
+        return answer
+
+    return get
+
+
+@pytest.fixture(autouse=True)
+def _robots_read_afresh(monkeypatch):
+    monkeypatch.setattr(pf, "_ROBOTS", {})
+
+
+def test_an_article_s_story_is_its_paragraphs_from_where_it_names_the_company():
+    paragraphs = pf.article_paragraphs(PAGE)
+    # No navigation, script, footer or caption.
+    assert paragraphs == [
+        "Discover the secret world of unlisted shares and invest before they list.",
+        "Shares of Dixon Technologies fell 4% on Tuesday after Jefferies cut its "
+        "rating.",
+        "The brokerage said mobile export margins are under pressure from new "
+        "entrants.",
+    ]
+    assert pf.excerpt(paragraphs, "DIXON", "Dixon Technologies") == (
+        "Shares of Dixon Technologies fell 4% on Tuesday after Jefferies cut "
+        "its rating. The brokerage said mobile export margins are under "
+        "pressure from new entrants."
+    )
+    # A note on several stocks: each holding's own part, from the one page.
+    assert pf.excerpt(paragraphs, "JEF", "Jefferies").startswith("Shares of Dixon")
+    assert pf.excerpt(paragraphs, "BRK", "The brokerage").startswith("The brokerage")
+    # Without a name to look for, from the first paragraph of the story.
+    assert pf.excerpt(paragraphs).startswith("Discover the secret world")
+    long = ["Dixon Technologies is a contract manufacturer. " * 200]
+    assert len(pf.excerpt(long, "DIXON", "Dixon Technologies")) == pf.ARTICLE_CHARS
+
+
+def test_an_article_is_asked_for_once_where_robots_txt_allows_it():
+    asked = []
+    get = _get(
+        {
+            MC_ROBOTS: Response(200, "User-agent: *\nDisallow: /private/\n"),
+            ARTICLE: Response(200, PAGE),
+            "https://www.moneycontrol.com/private/x.html": Response(200, PAGE),
+        },
+        asked,
+    )
+    outcome, detail, paragraphs = pf.fetch_article(ARTICLE, get)
+    assert (outcome, detail) == ("ok", "")
+    assert paragraphs == pf.article_paragraphs(PAGE)
+    refused = pf.fetch_article("https://www.moneycontrol.com/private/x.html", get)
+    assert refused == ("refused", "robots.txt", [])
+    # robots.txt read once for the host; the refused article never asked for.
+    assert [url for url, _ in asked] == [MC_ROBOTS, ARTICLE]
+    assert {agent for _, agent in asked} == {pf.USER_AGENT}
+
+
+def test_only_the_three_publishers_are_asked_for_an_article():
+    asked = []
+    for url in (
+        "https://news.google.com/rss/articles/CBMi",
+        "http://www.moneycontrol.com/news/dixon.html",
+        "https://www.business-standard.com/markets/dixon.html",
+    ):
+        assert pf.fetch_article(url, get=_get({}, asked)) == (
+            "refused",
+            "not a publisher's address",
+            [],
+        )
+    assert asked == []
+
+
+@pytest.mark.parametrize(
+    "answer, outcome",
+    [
+        (Response(404), ("refused", "HTTP 404", [])),
+        (Response(403), ("refused", "HTTP 403", [])),
+        (Response(503), ("failed", "HTTP 503", [])),
+        (ConnectionError("reset"), ("failed", "ConnectionError", [])),
+        (Response(200, "{}", "application/json"), ("refused", "not a page", [])),
+        (Response(200, "<p>Too short.</p>"), ("refused", "no story on the page", [])),
+    ],
+)
+def test_what_an_article_request_can_answer(answer, outcome):
+    get = _get({MC_ROBOTS: Response(404), ARTICLE: answer}, [])
+    assert pf.fetch_article(ARTICLE, get) == outcome
+
+
+@pytest.mark.parametrize(
+    "robots", [Response(503), TransientNetworkError("HTTP 503"), RuntimeError("x")]
+)
+def test_an_article_waits_while_robots_txt_cannot_be_read(robots):
+    asked = []
+    get = _get({MC_ROBOTS: robots, ARTICLE: Response(200, PAGE)}, asked)
+    assert pf.fetch_article(ARTICLE, get=get) == ("waiting", "robots.txt unread", [])
+    assert [url for url, _ in asked] == [MC_ROBOTS]

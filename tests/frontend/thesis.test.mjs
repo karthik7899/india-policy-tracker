@@ -78,3 +78,33 @@ test("the track summary names repeat picks and missing sector indices", () => {
     "22 of 27 (26 stocks) beat the Nifty 50 \u00b7 median +12.4 pts \u00b7 sector index unavailable for 14",
   );
 });
+
+// A brokerage's call beside the support or challenge it explains
+// (analysis/brokerage_reasons.py), in the drawer and on the Companies cards.
+import { callLine, LLM_MARK } from "../../src/core/format.js";
+
+test("a call says who made it, why, and the thesis words the reasons bear on", () => {
+  const line = callLine({
+    call: "downgrades the stock to hold",
+    brokerage: "Jefferies",
+    reasons: ["mobile export margins are under pressure", "the display fab will take longer to pay back"],
+    claim: "riding mobile exports",
+    source: "article",
+  });
+  assert.equal(
+    line,
+    "Jefferies: downgrades the stock to hold — “mobile export margins are under pressure”; " +
+      "“the display fab will take longer to pay back” → thesis: “riding mobile exports”" +
+      ` · from the article · ${LLM_MARK}`,
+  );
+});
+
+test("a call the story gives no reason for says so, and an unnamed brokerage is not invented", () => {
+  const line = callLine({ call: "raises target price", reasons: [], source: "summary" });
+  assert.equal(line, `A brokerage: raises target price — the story gives no reason · from the summary · ${LLM_MARK}`);
+});
+
+test("no call, no line", () => {
+  assert.equal(callLine(undefined), "");
+  assert.equal(callLine({ call: "" }), "");
+});
