@@ -26,6 +26,7 @@ import argparse
 import asyncio
 import json
 import os
+import re
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -678,6 +679,139 @@ async def probe_pib_pli():
     return bool(index.read)
 
 
+# Publishers' own markets feeds. Every news item the pipeline collects comes
+# through Google News search, whose links lead to the article only through
+# the URL decoding this project does not do; a publisher's own feed links to
+# its article directly and often carries the opening paragraph.
+PUBLISHER_FEEDS = {
+    "Economic Times": "https://economictimes.indiatimes.com/markets/rssfeeds/1977021501.cms",
+    "Livemint": "https://www.livemint.com/rss/markets",
+    "Business Standard": "https://www.business-standard.com/rss/markets-106.rss",
+    "Moneycontrol": "https://www.moneycontrol.com/rss/buzzingstocks.xml",
+}
+# Said plainly: who is asking and where to find them.
+PROBE_AGENT = (
+    "india-policy-tracker-probe/1.0 "
+    "(+https://github.com/karthik7899/india-policy-tracker)"
+)
+_BROKERAGE_CALL = re.compile(
+    r"upgrad|downgrad|target|\bbuy\b|\bsell\b|outperform|brokerage|top pick",
+    re.IGNORECASE,
+)
+
+
+def probe_publisher_news():
+    """Can the pipeline read why a brokerage made a call, not only that it did?
+
+    The thesis check counts a brokerage's upgrade for a thesis and a
+    downgrade against it, but a headline seldom says why, and the reason is
+    what tells an owner whether the call touches the thesis. For each
+    publisher this asks three things, one request each, with a plain client
+    that says who it is and takes no for an answer:
+
+      * robots.txt: may an automated reader fetch its feed and articles;
+        nothing it disallows, or that could not be checked, is asked for;
+      * its markets feed: how many items, how many carry a summary, and
+        whether their links lead to the article itself;
+      * one article from that feed (a brokerage call if there is one): what
+        the page returns and how much of it is readable paragraph text.
+
+    A refusal is reported as a refusal and not retried.
+    """
+    import urllib.robotparser
+    from urllib.parse import urlparse
+
+    import feedparser
+    import requests
+    from bs4 import BeautifulSoup
+
+    headers = {"User-Agent": PROBE_AGENT}
+    readable = []
+    for name, feed_url in PUBLISHER_FEEDS.items():
+        print(f"\n{'=' * 72}\nPUBLISHER: {name}\n{'=' * 72}")
+        host = urlparse(feed_url).netloc
+        robots = urllib.robotparser.RobotFileParser()
+        try:
+            r = requests.get(f"https://{host}/robots.txt", headers=headers, timeout=20)
+            # As urllib.robotparser reads it: refused means keep out, missing
+            # (another 4xx) means no rules, and a server error leaves the
+            # rules unread, which keeps out as well (can_fetch is False until
+            # rules are read).
+            if r.status_code in (401, 403):
+                robots.disallow_all = True
+            elif 400 <= r.status_code < 500:
+                robots.allow_all = True
+            elif r.status_code < 400:
+                robots.parse(r.text.splitlines())
+            print(f"  robots.txt  : HTTP {r.status_code}")
+        except requests.RequestException as e:
+            print(f"  robots.txt  : request failed: {e!r}"[:200])
+        # The feed is asked for only where the rules allow it, as the article is.
+        if not robots.can_fetch(PROBE_AGENT, feed_url):
+            print(
+                "  feed        : not fetched, robots.txt does not allow it "
+                "or could not be read"
+            )
+            continue
+        try:
+            r = requests.get(feed_url, headers=headers, timeout=20)
+        except requests.RequestException as e:
+            print(f"  feed        : request failed: {e!r}"[:200])
+            continue
+        print(
+            f"  feed        : HTTP {r.status_code} {r.headers.get('Content-Type', '')}"
+        )
+        if r.status_code != 200:
+            print(f"  body        : {' '.join(r.text.split())[:200]}")
+            continue
+        _save(f"feed_{host}.xml", r.text)
+        entries = feedparser.parse(r.content).entries
+        summaries = [
+            " ".join(BeautifulSoup(e.get("summary", ""), "lxml").get_text(" ").split())
+            for e in entries
+        ]
+        direct = [e for e in entries if host.split(".", 1)[-1] in e.get("link", "")]
+        print(
+            f"  items       : {len(entries)}, {sum(1 for t in summaries if len(t) > 40)} "
+            f"with a summary, {len(direct)} linking to the article itself"
+        )
+        if not direct:
+            continue
+        pick = next(
+            (e for e in direct if _BROKERAGE_CALL.search(e.get("title", ""))),
+            direct[0],
+        )
+        i = entries.index(pick)
+        print(f"  article     : {pick.get('title', '')[:110]}")
+        print(f"  summary     : {summaries[i][:300] or '(none)'}")
+        link = pick.get("link", "")
+        allowed = robots.can_fetch(PROBE_AGENT, link)
+        print(f"  robots allow: {allowed}")
+        if not allowed:
+            continue
+        try:
+            r = requests.get(link, headers=headers, timeout=20)
+        except requests.RequestException as e:
+            print(f"  page        : request failed: {e!r}"[:200])
+            continue
+        _save(f"article_{host}.html", r.text)
+        page = BeautifulSoup(r.text, "lxml")
+        text = " ".join(
+            t
+            for t in (p.get_text(" ", strip=True) for p in page.find_all("p"))
+            if len(t) > 60
+        )
+        print(
+            f"  page        : HTTP {r.status_code} {r.headers.get('Content-Type', '')}, "
+            f"{len(text)} characters of paragraph text"
+        )
+        print(f"  text        : {text[:400] or '(none)'}")
+        if r.status_code == 200 and len(text) > 500:
+            readable.append(name)
+    print(f"\n  ARTICLES READABLE FROM: {', '.join(readable) or 'none'}")
+    return bool(readable)
+
+
 SOURCES = {
     "pib-pli": ("async-noarg", probe_pib_pli),
     "screener-peers": ("async", probe_screener_peers),
@@ -687,6 +821,7 @@ SOURCES = {
     "nse-delivery": ("async-noarg", probe_nse_delivery),
     "nse-announcements": ("sync", probe_nse_announcements),
     "nse-calendar": ("sync", probe_nse_calendar),
+    "publisher-news": ("sync", probe_publisher_news),
 }
 
 

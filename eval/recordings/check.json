@@ -1,39 +1,23 @@
 {
  "_about": "Raw answers from the AI readers to the labelled items in eval/, recorded by scripts/reader_eval.py --record and replayed by the tests. Each item has up to three takes, stored under the fingerprint of the prompt and schema that asked for them, and the reading most takes give is served; a prompt change leaves them stale until they are recorded again.",
  "items": {
-  "0ffbaecad48a30d6": {
-   "input": "ICICIBANK | ICICI Bank's gross NPAs jump to five-year high as retail asset quality worsens | claim: Retail-led credit growth with sector-leading asset quality and digital lending scale",
-   "prompt": "a6a5ff7fd8c2",
+  "1f24dcac8ddd01f0": {
+   "input": "BEL | BEL Q2 profit dips 4% on higher employee costs | claim: Defence electronics leader, securing major naval and surveillance command radar orders",
+   "prompt": "52c2766b5c2e",
    "takes": [
     {
      "answer": {
-      "because": "ICICI Bank's gross NPAs jump to five-year high as retail asset quality worsens",
+      "because": "BEL Q2 profit dips 4%",
       "verdict": "contradicts"
      },
      "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
-    },
-    {
-     "answer": {
-      "because": "retail asset quality worsens",
-      "verdict": "contradicts"
-     },
-     "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
-    },
-    {
-     "answer": {
-      "because": "ICICI Bank's gross NPAs jump to five-year high as retail asset quality worsens",
-      "verdict": "contradicts"
-     },
-     "model": "gemini-3.5-flash",
-     "recorded": "2026-10-27"
+     "recorded": "2026-10-28"
     }
    ]
   },
   "28d095f221604040": {
    "input": "CONCOR | Government scraps ₹10,000 crore container manufacturing scheme | claim: major beneficiary of the ₹10,000 crore container manufacturing scheme",
-   "prompt": "a6a5ff7fd8c2",
+   "prompt": "52c2766b5c2e",
    "takes": [
     {
      "answer": {
@@ -41,15 +25,7 @@
       "verdict": "contradicts"
      },
      "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
-    },
-    {
-     "answer": {
-      "because": "Government scraps ₹10,000 crore container manufacturing scheme",
-      "verdict": "contradicts"
-     },
-     "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
+     "recorded": "2026-10-28"
     },
     {
      "answer": {
@@ -57,13 +33,13 @@
       "verdict": "contradicts"
      },
      "model": "gemini-3.5-flash",
-     "recorded": "2026-10-27"
+     "recorded": "2026-10-28"
     }
    ]
   },
   "29124b91e94dd7e6": {
    "input": "HAL | Finance Ministry withdraws customs duty exemption on aircraft parts imported by HAL | claim: benefiting from custom duty exemptions",
-   "prompt": "a6a5ff7fd8c2",
+   "prompt": "52c2766b5c2e",
    "takes": [
     {
      "answer": {
@@ -71,29 +47,13 @@
       "verdict": "contradicts"
      },
      "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
-    },
-    {
-     "answer": {
-      "because": "Finance Ministry withdraws customs duty exemption on aircraft parts imported by HAL",
-      "verdict": "contradicts"
-     },
-     "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
-    },
-    {
-     "answer": {
-      "because": "Finance Ministry withdraws customs duty exemption on aircraft parts imported by HAL",
-      "verdict": "contradicts"
-     },
-     "model": "gemini-3.5-flash",
-     "recorded": "2026-10-27"
+     "recorded": "2026-10-28"
     }
    ]
   },
   "300cd676fc9077a4": {
    "input": "SUZLON | Suzlon Energy raises ₹2,500 crore term loan, ending its debt-free status | claim: completely debt-free",
-   "prompt": "a6a5ff7fd8c2",
+   "prompt": "52c2766b5c2e",
    "takes": [
     {
      "answer": {
@@ -101,29 +61,13 @@
       "verdict": "contradicts"
      },
      "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
-    },
-    {
-     "answer": {
-      "because": "ending its debt-free status",
-      "verdict": "contradicts"
-     },
-     "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
-    },
-    {
-     "answer": {
-      "because": "ending its debt-free status",
-      "verdict": "contradicts"
-     },
-     "model": "gemini-3.5-flash",
-     "recorded": "2026-10-27"
+     "recorded": "2026-10-28"
     }
    ]
   },
   "354cd8e926b6cf71": {
    "input": "ADANIGREEN | Adani Green Energy Limited Just Missed EPS By 8.7%: Here's What Analysts Think Will Happen Next | claim: Developing the world's largest renewable energy park in Khavda, Gujarat (30 GW capacity target)",
-   "prompt": "a6a5ff7fd8c2",
+   "prompt": "52c2766b5c2e",
    "takes": [
     {
      "answer": {
@@ -131,29 +75,13 @@
       "verdict": "contradicts"
      },
      "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
-    },
-    {
-     "answer": {
-      "because": "Just Missed EPS By 8.7%",
-      "verdict": "contradicts"
-     },
-     "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
-    },
-    {
-     "answer": {
-      "because": "Missed EPS By 8.7%",
-      "verdict": "contradicts"
-     },
-     "model": "gemini-3.5-flash",
-     "recorded": "2026-10-27"
+     "recorded": "2026-10-28"
     }
    ]
   },
   "36eac4a1506623a4": {
    "input": "ARVIND | Arvind Ltd’s Q1 profit stays flat despite 25% revenue growth | claim: Leading denim manufacturer, investing in technical textiles under recent government schemes",
-   "prompt": "a6a5ff7fd8c2",
+   "prompt": "52c2766b5c2e",
    "takes": [
     {
      "answer": {
@@ -161,29 +89,13 @@
       "verdict": "does_not"
      },
      "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
-    },
-    {
-     "answer": {
-      "because": "",
-      "verdict": "does_not"
-     },
-     "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
-    },
-    {
-     "answer": {
-      "because": "",
-      "verdict": "does_not"
-     },
-     "model": "gemini-3.5-flash",
-     "recorded": "2026-10-27"
+     "recorded": "2026-10-28"
     }
    ]
   },
   "424e1df4c7ea27a6": {
    "input": "BHEL | BHEL fined ₹11 lakh by exchanges for LODR non-compliance | claim: State-owned heavy power equipment giant, expanding local container manufacturing and green energy grids",
-   "prompt": "a6a5ff7fd8c2",
+   "prompt": "52c2766b5c2e",
    "takes": [
     {
      "answer": {
@@ -191,29 +103,13 @@
       "verdict": "contradicts"
      },
      "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
-    },
-    {
-     "answer": {
-      "because": "BHEL fined ₹11 lakh by exchanges for LODR non-compliance",
-      "verdict": "contradicts"
-     },
-     "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
-    },
-    {
-     "answer": {
-      "because": "BHEL fined ₹11 lakh by exchanges for LODR non-compliance",
-      "verdict": "contradicts"
-     },
-     "model": "gemini-3.5-flash",
-     "recorded": "2026-10-27"
+     "recorded": "2026-10-28"
     }
    ]
   },
   "46faff61c27a1393": {
    "input": "COFORGE | Coforge margins contract for third straight quarter as GenAI deals squeeze pricing | claim: expanding margins via GenAI offerings",
-   "prompt": "a6a5ff7fd8c2",
+   "prompt": "52c2766b5c2e",
    "takes": [
     {
      "answer": {
@@ -221,29 +117,13 @@
       "verdict": "contradicts"
      },
      "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
-    },
-    {
-     "answer": {
-      "because": "Coforge margins contract",
-      "verdict": "contradicts"
-     },
-     "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
-    },
-    {
-     "answer": {
-      "because": "Coforge margins contract for third straight quarter as GenAI deals squeeze pricing",
-      "verdict": "contradicts"
-     },
-     "model": "gemini-3.5-flash",
-     "recorded": "2026-10-27"
+     "recorded": "2026-10-28"
     }
    ]
   },
   "58b167ed439a623f": {
    "input": "DIXON | Government ends smartphone PLI payouts; Dixon's incentive claims rejected | claim: heavily subsidized under manufacturing PLI",
-   "prompt": "a6a5ff7fd8c2",
+   "prompt": "52c2766b5c2e",
    "takes": [
     {
      "answer": {
@@ -251,15 +131,7 @@
       "verdict": "contradicts"
      },
      "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
-    },
-    {
-     "answer": {
-      "because": "Government ends smartphone PLI payouts; Dixon's incentive claims rejected",
-      "verdict": "contradicts"
-     },
-     "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
+     "recorded": "2026-10-28"
     },
     {
      "answer": {
@@ -267,13 +139,13 @@
       "verdict": "contradicts"
      },
      "model": "gemini-3.5-flash",
-     "recorded": "2026-10-27"
+     "recorded": "2026-10-28"
     }
    ]
   },
   "5b0c9f5f30346d87": {
    "input": "ZENTEC | Defence Ministry bars Zen Technologies from counter-drone tenders | claim: winning repeat Ministry of Defence counter-drone orders",
-   "prompt": "a6a5ff7fd8c2",
+   "prompt": "52c2766b5c2e",
    "takes": [
     {
      "answer": {
@@ -281,15 +153,7 @@
       "verdict": "contradicts"
      },
      "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
-    },
-    {
-     "answer": {
-      "because": "Defence Ministry bars Zen Technologies from counter-drone tenders",
-      "verdict": "contradicts"
-     },
-     "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
+     "recorded": "2026-10-28"
     },
     {
      "answer": {
@@ -297,13 +161,13 @@
       "verdict": "contradicts"
      },
      "model": "gemini-3.5-flash",
-     "recorded": "2026-10-27"
+     "recorded": "2026-10-28"
     }
    ]
   },
   "5b32ac8691ec3a65": {
    "input": "FORTIS | Fortis Healthcare exits Ayushman Bharat scheme over unpaid claims | claim: benefiting from insurance penetration and Ayushman Bharat volumes",
-   "prompt": "a6a5ff7fd8c2",
+   "prompt": "52c2766b5c2e",
    "takes": [
     {
      "answer": {
@@ -311,29 +175,13 @@
       "verdict": "contradicts"
      },
      "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
-    },
-    {
-     "answer": {
-      "because": "Fortis Healthcare exits Ayushman Bharat scheme",
-      "verdict": "contradicts"
-     },
-     "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
-    },
-    {
-     "answer": {
-      "because": "Fortis Healthcare exits Ayushman Bharat scheme over unpaid claims",
-      "verdict": "contradicts"
-     },
-     "model": "gemini-3.5-flash",
-     "recorded": "2026-10-27"
+     "recorded": "2026-10-28"
     }
    ]
   },
   "5d7ade56575c583b": {
    "input": "IDEAFORGE | ideaForge Technology Promoter Vipul Joshi Pledges 3,70,370 Equity Shares Under SEBI Regulation 31 | claim: Pioneer in tactical and mapping drone systems, primary supplier for Indian Army and police borders",
-   "prompt": "a6a5ff7fd8c2",
+   "prompt": "52c2766b5c2e",
    "takes": [
     {
      "answer": {
@@ -341,29 +189,27 @@
       "verdict": "contradicts"
      },
      "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
-    },
+     "recorded": "2026-10-28"
+    }
+   ]
+  },
+  "64913bb3e5ba06cf": {
+   "input": "ICICIBANK | ICICI Bank's gross NPAs jump to five-year high as retail asset quality worsens | claim: sector-leading asset quality",
+   "prompt": "52c2766b5c2e",
+   "takes": [
     {
      "answer": {
-      "because": "ideaForge Technology Promoter Vipul Joshi Pledges 3,70,370 Equity Shares Under SEBI Regulation 31",
+      "because": "ICICI Bank's gross NPAs jump to five-year high as retail asset quality worsens",
       "verdict": "contradicts"
      },
      "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
-    },
-    {
-     "answer": {
-      "because": "Promoter Vipul Joshi Pledges 3,70,370 Equity Shares",
-      "verdict": "contradicts"
-     },
-     "model": "gemini-3.5-flash",
-     "recorded": "2026-10-27"
+     "recorded": "2026-10-28"
     }
    ]
   },
   "68b2a14a787cf525": {
    "input": "IDEAFORGE | Indian Army cancels ideaForge drone contract, shifts orders to rival supplier | claim: primary supplier for Indian Army and police borders",
-   "prompt": "a6a5ff7fd8c2",
+   "prompt": "52c2766b5c2e",
    "takes": [
     {
      "answer": {
@@ -371,29 +217,13 @@
       "verdict": "contradicts"
      },
      "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
-    },
-    {
-     "answer": {
-      "because": "Indian Army cancels ideaForge drone contract, shifts orders to rival supplier",
-      "verdict": "contradicts"
-     },
-     "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
-    },
-    {
-     "answer": {
-      "because": "Indian Army cancels ideaForge drone contract, shifts orders to rival supplier",
-      "verdict": "contradicts"
-     },
-     "model": "gemini-3.5-flash",
-     "recorded": "2026-10-27"
+     "recorded": "2026-10-28"
     }
    ]
   },
   "6dc8a4084585ed8a": {
    "input": "CPPLUS | CP Plus loses CCTV market lead as share falls to 18% | claim: CCTV market leader (35%+ share)",
-   "prompt": "a6a5ff7fd8c2",
+   "prompt": "52c2766b5c2e",
    "takes": [
     {
      "answer": {
@@ -401,29 +231,13 @@
       "verdict": "contradicts"
      },
      "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
-    },
-    {
-     "answer": {
-      "because": "loses CCTV market lead",
-      "verdict": "contradicts"
-     },
-     "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
-    },
-    {
-     "answer": {
-      "because": "CP Plus loses CCTV market lead as share falls to 18%",
-      "verdict": "contradicts"
-     },
-     "model": "gemini-3.5-flash",
-     "recorded": "2026-10-27"
+     "recorded": "2026-10-28"
     }
    ]
   },
   "7178322dd0f73d0f": {
    "input": "DIXON | Dixon Technologies CFO resigns | claim: Leader in electronic assembly (mobile, laptop, LED TV), heavily subsidized under manufacturing PLI",
-   "prompt": "a6a5ff7fd8c2",
+   "prompt": "52c2766b5c2e",
    "takes": [
     {
      "answer": {
@@ -431,15 +245,7 @@
       "verdict": "contradicts"
      },
      "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
-    },
-    {
-     "answer": {
-      "because": "Dixon Technologies CFO resigns",
-      "verdict": "contradicts"
-     },
-     "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
+     "recorded": "2026-10-28"
     },
     {
      "answer": {
@@ -447,13 +253,13 @@
       "verdict": "contradicts"
      },
      "model": "gemini-3.5-flash",
-     "recorded": "2026-10-27"
+     "recorded": "2026-10-28"
     }
    ]
   },
   "7ce839e7be32becc": {
    "input": "SUZLON | Suzlon order book shrinks 30% as Tata Power cancels 400 MW wind order | claim: dominating wind turbine supply with a record order book",
-   "prompt": "a6a5ff7fd8c2",
+   "prompt": "52c2766b5c2e",
    "takes": [
     {
      "answer": {
@@ -461,29 +267,13 @@
       "verdict": "contradicts"
      },
      "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
-    },
-    {
-     "answer": {
-      "because": "Suzlon order book shrinks 30% as Tata Power cancels 400 MW wind order",
-      "verdict": "contradicts"
-     },
-     "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
-    },
-    {
-     "answer": {
-      "because": "Suzlon order book shrinks 30% as Tata Power cancels 400 MW wind order",
-      "verdict": "contradicts"
-     },
-     "model": "gemini-3.5-flash",
-     "recorded": "2026-10-27"
+     "recorded": "2026-10-28"
     }
    ]
   },
   "84bb1207bfe1c85d": {
    "input": "WELSPUNLIV | Welspun Living dropped from textile PLI after missing investment targets | claim: Major beneficiary of textile PLI",
-   "prompt": "a6a5ff7fd8c2",
+   "prompt": "52c2766b5c2e",
    "takes": [
     {
      "answer": {
@@ -491,15 +281,7 @@
       "verdict": "contradicts"
      },
      "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
-    },
-    {
-     "answer": {
-      "because": "Welspun Living dropped from textile PLI after missing investment targets",
-      "verdict": "contradicts"
-     },
-     "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
+     "recorded": "2026-10-28"
     },
     {
      "answer": {
@@ -507,13 +289,13 @@
       "verdict": "contradicts"
      },
      "model": "gemini-3.5-flash",
-     "recorded": "2026-10-27"
+     "recorded": "2026-10-28"
     }
    ]
   },
   "89e008b3e5209551": {
    "input": "THERMAX | THERMAX: Revenue up 7% but profit down 85% on project overrun; order book and restructuring boost outlook | claim: Industrial energy & environment engineering leader, scaling green hydrogen and boiler manufacturing capacity",
-   "prompt": "a6a5ff7fd8c2",
+   "prompt": "52c2766b5c2e",
    "takes": [
     {
      "answer": {
@@ -521,15 +303,7 @@
       "verdict": "contradicts"
      },
      "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
-    },
-    {
-     "answer": {
-      "because": "profit down 85%",
-      "verdict": "contradicts"
-     },
-     "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
+     "recorded": "2026-10-28"
     },
     {
      "answer": {
@@ -537,43 +311,13 @@
       "verdict": "contradicts"
      },
      "model": "gemini-3.5-flash",
-     "recorded": "2026-10-27"
-    }
-   ]
-  },
-  "921178fb474c37f7": {
-   "input": "BEL | BEL Q2 profit dips 4% on higher employee costs | claim: Defence electronics leader",
-   "prompt": "a6a5ff7fd8c2",
-   "takes": [
-    {
-     "answer": {
-      "because": "BEL Q2 profit dips 4% on higher employee costs",
-      "verdict": "contradicts"
-     },
-     "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
-    },
-    {
-     "answer": {
-      "because": "profit dips 4%",
-      "verdict": "contradicts"
-     },
-     "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
-    },
-    {
-     "answer": {
-      "because": "BEL Q2 profit dips 4%",
-      "verdict": "contradicts"
-     },
-     "model": "gemini-3.5-flash",
-     "recorded": "2026-10-27"
+     "recorded": "2026-10-28"
     }
    ]
   },
   "9ceefd038c4973cc": {
    "input": "MPHASIS | Mphasis Posts Q1 EBIT Of 6.48B Rupees With Margin Slipping To 14.78% QoQ | claim: Direct-core BFS-focused IT services player, key beneficiary of enterprise cloud and cost-takeout deals",
-   "prompt": "a6a5ff7fd8c2",
+   "prompt": "52c2766b5c2e",
    "takes": [
     {
      "answer": {
@@ -581,15 +325,7 @@
       "verdict": "contradicts"
      },
      "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
-    },
-    {
-     "answer": {
-      "because": "Margin Slipping To 14.78% QoQ",
-      "verdict": "contradicts"
-     },
-     "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
+     "recorded": "2026-10-28"
     },
     {
      "answer": {
@@ -597,13 +333,13 @@
       "verdict": "contradicts"
      },
      "model": "gemini-3.5-flash",
-     "recorded": "2026-10-27"
+     "recorded": "2026-10-28"
     }
    ]
   },
   "a327b6849c2ded78": {
    "input": "BEL | Navy awards command radar contract to Tata Advanced Systems after BEL loses bid | claim: securing major naval and surveillance command radar orders",
-   "prompt": "a6a5ff7fd8c2",
+   "prompt": "52c2766b5c2e",
    "takes": [
     {
      "answer": {
@@ -611,15 +347,7 @@
       "verdict": "contradicts"
      },
      "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
-    },
-    {
-     "answer": {
-      "because": "Navy awards command radar contract to Tata Advanced Systems after BEL loses bid",
-      "verdict": "contradicts"
-     },
-     "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
+     "recorded": "2026-10-28"
     },
     {
      "answer": {
@@ -627,73 +355,41 @@
       "verdict": "contradicts"
      },
      "model": "gemini-3.5-flash",
-     "recorded": "2026-10-27"
+     "recorded": "2026-10-28"
     }
    ]
   },
   "ba9a8402f03f4810": {
    "input": "IDEAFORGE | Supply chain disruptions push ideaForge into losses in Q1FY27 | claim: Pioneer in tactical and mapping drone systems, primary supplier for Indian Army and police borders",
-   "prompt": "a6a5ff7fd8c2",
+   "prompt": "52c2766b5c2e",
    "takes": [
-    {
-     "answer": {
-      "because": "push ideaForge into losses",
-      "verdict": "contradicts"
-     },
-     "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
-    },
-    {
-     "answer": {
-      "because": "Supply chain disruptions push ideaForge into losses in Q1FY27",
-      "verdict": "contradicts"
-     },
-     "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
-    },
     {
      "answer": {
       "because": "push ideaForge into losses in Q1FY27",
       "verdict": "contradicts"
      },
-     "model": "gemini-3.5-flash",
-     "recorded": "2026-10-27"
+     "model": "gemini-3.6-flash",
+     "recorded": "2026-10-28"
     }
    ]
   },
   "c6ff58d1a232f4d2": {
    "input": "TCS | TCS Q1 Preview: Wage Hikes Seen Weighing On Margin, Growth Stays Muted | claim: Expanding sovereign cloud and secure cyber command centers globally for enterprise clients",
-   "prompt": "a6a5ff7fd8c2",
+   "prompt": "52c2766b5c2e",
    "takes": [
-    {
-     "answer": {
-      "because": "Q1 Preview: Wage Hikes Seen Weighing On Margin",
-      "verdict": "contradicts"
-     },
-     "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
-    },
     {
      "answer": {
       "because": "Wage Hikes Seen Weighing On Margin",
       "verdict": "contradicts"
      },
      "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
-    },
-    {
-     "answer": {
-      "because": "TCS Q1 Preview: Wage Hikes Seen Weighing On Margin, Growth Stays Muted",
-      "verdict": "contradicts"
-     },
-     "model": "gemini-3.5-flash",
-     "recorded": "2026-10-27"
+     "recorded": "2026-10-28"
     }
    ]
   },
   "e850b33ecb6f9914": {
    "input": "ADANIGREEN | Adani Green cuts Khavda renewable park target to 15 GW | claim: Developing the world's largest renewable energy park in Khavda, Gujarat (30 GW capacity target)",
-   "prompt": "a6a5ff7fd8c2",
+   "prompt": "52c2766b5c2e",
    "takes": [
     {
      "answer": {
@@ -701,29 +397,27 @@
       "verdict": "contradicts"
      },
      "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
-    },
+     "recorded": "2026-10-28"
+    }
+   ]
+  },
+  "ebc6bcdb53c4bc9b": {
+   "input": "SUZLON | Suzlon stock falls for fifth straight session; brokerage cuts target price | claim: Turnaround story, completely debt-free, dominating wind turbine supply with a record order book",
+   "prompt": "52c2766b5c2e",
+   "takes": [
     {
      "answer": {
-      "because": "cuts Khavda renewable park target to 15 GW",
+      "because": "brokerage cuts target price",
       "verdict": "contradicts"
      },
      "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
-    },
-    {
-     "answer": {
-      "because": "Adani Green cuts Khavda renewable park target to 15 GW",
-      "verdict": "contradicts"
-     },
-     "model": "gemini-3.5-flash",
-     "recorded": "2026-10-27"
+     "recorded": "2026-10-28"
     }
    ]
   },
   "ed7cc47d5f5698fa": {
    "input": "ANANTRAJ | Anant Raj drops data center plans, to sell NCR commercial properties | claim: Real-estate developer transitioning commercial properties into major data center hubs in NCR",
-   "prompt": "a6a5ff7fd8c2",
+   "prompt": "52c2766b5c2e",
    "takes": [
     {
      "answer": {
@@ -731,29 +425,21 @@
       "verdict": "contradicts"
      },
      "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
+     "recorded": "2026-10-28"
     },
     {
      "answer": {
-      "because": "Anant Raj drops data center plans",
-      "verdict": "contradicts"
-     },
-     "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
-    },
-    {
-     "answer": {
-      "because": "Anant Raj drops data center plans",
+      "because": "Anant Raj drops data center plans, to sell NCR commercial properties",
       "verdict": "contradicts"
      },
      "model": "gemini-3.5-flash",
-     "recorded": "2026-10-27"
+     "recorded": "2026-10-28"
     }
    ]
   },
   "f01dfaa578e33055": {
    "input": "HAL | Government shelves plan for second HAL fighter jet assembly line | claim: expanding local fighter jet assembly",
-   "prompt": "a6a5ff7fd8c2",
+   "prompt": "52c2766b5c2e",
    "takes": [
     {
      "answer": {
@@ -761,29 +447,13 @@
       "verdict": "contradicts"
      },
      "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
-    },
-    {
-     "answer": {
-      "because": "Government shelves plan for second HAL fighter jet assembly line",
-      "verdict": "contradicts"
-     },
-     "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
-    },
-    {
-     "answer": {
-      "because": "Government shelves plan for second HAL fighter jet assembly line",
-      "verdict": "contradicts"
-     },
-     "model": "gemini-3.5-flash",
-     "recorded": "2026-10-27"
+     "recorded": "2026-10-28"
     }
    ]
   },
   "f6e3c38fa58b1d5d": {
    "input": "KAYNES | Kaynes Technology puts semiconductor OSAT plant on hold indefinitely | claim: setting up a state-of-the-art semiconductor OSAT plant",
-   "prompt": "a6a5ff7fd8c2",
+   "prompt": "52c2766b5c2e",
    "takes": [
     {
      "answer": {
@@ -791,15 +461,7 @@
       "verdict": "contradicts"
      },
      "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
-    },
-    {
-     "answer": {
-      "because": "Kaynes Technology puts semiconductor OSAT plant on hold indefinitely",
-      "verdict": "contradicts"
-     },
-     "model": "gemini-3.6-flash",
-     "recorded": "2026-10-27"
+     "recorded": "2026-10-28"
     },
     {
      "answer": {
@@ -807,7 +469,7 @@
       "verdict": "contradicts"
      },
      "model": "gemini-3.5-flash",
-     "recorded": "2026-10-27"
+     "recorded": "2026-10-28"
     }
    ]
   }
