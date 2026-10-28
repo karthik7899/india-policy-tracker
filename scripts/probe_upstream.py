@@ -709,7 +709,8 @@ def probe_publisher_news():
     publisher this asks three things, one request each, with a plain client
     that says who it is and takes no for an answer:
 
-      * robots.txt: may an automated reader fetch its articles at all;
+      * robots.txt: may an automated reader fetch its feed and articles;
+        nothing it disallows, or that could not be checked, is asked for;
       * its markets feed: how many items, how many carry a summary, and
         whether their links lead to the article itself;
       * one article from that feed (a brokerage call if there is one): what
@@ -745,6 +746,13 @@ def probe_publisher_news():
             print(f"  robots.txt  : HTTP {r.status_code}")
         except requests.RequestException as e:
             print(f"  robots.txt  : request failed: {e!r}"[:200])
+        # The feed is asked for only where the rules allow it, as the article is.
+        if not robots.can_fetch(PROBE_AGENT, feed_url):
+            print(
+                "  feed        : not fetched, robots.txt does not allow it "
+                "or could not be read"
+            )
+            continue
         try:
             r = requests.get(feed_url, headers=headers, timeout=20)
         except requests.RequestException as e:
