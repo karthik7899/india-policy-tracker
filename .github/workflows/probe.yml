@@ -31,6 +31,7 @@ on:
           - nse-delivery
           - nse-announcements
           - nse-calendar
+          - publisher-news
       symbol:
         description: Ticker for the per-company probes (screener-accounts takes several, comma-separated)
         type: string
