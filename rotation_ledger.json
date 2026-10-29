@@ -509,9 +509,9 @@
     "name": "Birla Cable",
     "price_at_decision": 392.35,
     "target_at_decision": null,
-    "scored": false,
-    "outcome": null,
-    "realized_return_pct": null,
+    "scored": true,
+    "outcome": "No Analyst Target (unscored)",
+    "realized_return_pct": -16.9,
     "target_made_up": 490.44
   },
   {
@@ -522,9 +522,9 @@
     "name": "Optiemus Infra.",
     "price_at_decision": 566.25,
     "target_at_decision": null,
-    "scored": false,
-    "outcome": null,
-    "realized_return_pct": null,
+    "scored": true,
+    "outcome": "No Analyst Target (unscored)",
+    "realized_return_pct": 41.0,
     "target_made_up": 707.81
   },
   {
@@ -535,9 +535,9 @@
     "name": "Birla Cable",
     "price_at_decision": 392.35,
     "target_at_decision": null,
-    "scored": false,
-    "outcome": null,
-    "realized_return_pct": null,
+    "scored": true,
+    "outcome": "No Analyst Target (unscored)",
+    "realized_return_pct": -16.9,
     "target_made_up": 490.44
   },
   {
@@ -548,9 +548,9 @@
     "name": "Inventurus Knowl",
     "price_at_decision": 1740.6,
     "target_at_decision": 1977.22,
-    "scored": false,
-    "outcome": null,
-    "realized_return_pct": null
+    "scored": true,
+    "outcome": "Underperforming",
+    "realized_return_pct": -1.4
   },
   {
     "date": "2026-09-15",
@@ -974,6 +974,42 @@
     "name": "Premier Energies",
     "price_at_decision": 845.75,
     "target_at_decision": 1136.0,
+    "scored": false,
+    "outcome": null,
+    "realized_return_pct": null
+  },
+  {
+    "date": "2026-10-29",
+    "action": "added",
+    "sector": "fmcg",
+    "ticker": "VINCOFE",
+    "name": "Vintage Coffee",
+    "price_at_decision": 153.15,
+    "target_at_decision": null,
+    "scored": false,
+    "outcome": null,
+    "realized_return_pct": null
+  },
+  {
+    "date": "2026-10-29",
+    "action": "rotated_in",
+    "sector": "aerospace_defence",
+    "ticker": "GRSE",
+    "name": "Garden Reach Shipbuilders & Engineers",
+    "price_at_decision": 1907.8,
+    "target_at_decision": 2987.5,
+    "scored": false,
+    "outcome": null,
+    "realized_return_pct": null
+  },
+  {
+    "date": "2026-10-29",
+    "action": "rotated_in",
+    "sector": "manufacturing_electronics",
+    "ticker": "PGEL",
+    "name": "PG Electroplast",
+    "price_at_decision": 538.7,
+    "target_at_decision": 680.0,
     "scored": false,
     "outcome": null,
     "realized_return_pct": null

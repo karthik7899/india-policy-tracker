@@ -19,10 +19,9 @@
       "headline": "Persistent to squeeze out existing Nagarro shareholders en route to become seventh-largest",
       "source_url": "https://news.google.com/rss/articles/CBMi3AFBVV95cUxOMlNpVFlQcS1TNWRDc2FMQjUxNWU2MHJwcnd5Zi1tQW1fZ3cwek10Nlk0RjhpXzVYdDE5cGt2TnRLX2ctTUppR19uMGF4QXpuQkpmQjI2MVdPa1k0ajQ5U1l3d1hibWphWUtmN1BnZ2VaS3o1NFZnSDNTOGp4WWhKWVZiU3cyaFI3V2t5ZGxHZU90RDc4SjE5UmpwRkxfSkx2blQ4RDMzSFRVWTdDNDJ1SEEwR1B1SUZ3LW9yR196V0xFdVdSODNOZHdmUkVTOFFfODh5amVUejNqVEZJ0gHiAUFVX3lxTE54dDRmVTdaWmJyM3NNY2E1LVh3M3haNmp3NHhFSGsyS2ptMHpUTUduRDFEX3NmcklaVDR5bWFVajMyMVNzTzJ2VTZQRUdXS3ktWGFVNmltVWNOVzRVVGR2dTg3X0JfVlkzSHNGX3gxZ01URU9LcVlDTV9za0JVZFVmal9ta09weDBUeG5jcHF4ZHljT3lFcktJOFZVanoxbWttd0JtcHUyUUxZVlRFaEVjTTNkQmFDaDI1Uk1HS3pBbmJFam4xamotdjBILU1xN1JOLTRMMTdSODhSblhtaDJEYnc?oc=5",
       "source_label": "Livemint",
-      "event_type": "acquisition",
+      "event_type": "",
       "source_kind": "Agreement",
       "event_tags": [
-        "acquisition",
         "Agreement"
       ],
       "confidence": "M",
@@ -92,7 +91,8 @@
         "Launch"
       ],
       "confidence": "M",
-      "status": "counted"
+      "status": "excluded",
+      "exclusion_reason": "aged >120d (121 days old)"
     },
     {
       "date": "Sat, 01 Aug 2026 07:00:00 GMT",
@@ -132,7 +132,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (121 days old)"
+      "exclusion_reason": "aged >120d (122 days old)"
     },
     {
       "date": "16 Oct 2026",
@@ -263,7 +263,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (121 days old)"
+      "exclusion_reason": "aged >120d (122 days old)"
     },
     {
       "date": "Fri, 26 Jun 2026 07:00:00 GMT",
@@ -277,7 +277,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (124 days old)"
+      "exclusion_reason": "aged >120d (125 days old)"
     },
     {
       "date": "Mon, 29 Jun 2026 07:00:00 GMT",
@@ -291,7 +291,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (121 days old)"
+      "exclusion_reason": "aged >120d (122 days old)"
     },
     {
       "date": "2026-10-13",
@@ -335,21 +335,6 @@
       ],
       "confidence": "H",
       "status": "counted"
-    },
-    {
-      "date": "2026-10-10",
-      "headline": "Persistent to squeeze out existing Nagarro shareholders en route to become seventh-largest",
-      "source_url": "https://news.google.com/rss/articles/CBMi3AFBVV95cUxOMlNpVFlQcS1TNWRDc2FMQjUxNWU2MHJwcnd5Zi1tQW1fZ3cwek10Nlk0RjhpXzVYdDE5cGt2TnRLX2ctTUppR19uMGF4QXpuQkpmQjI2MVdPa1k0ajQ5U1l3d1hibWphWUtmN1BnZ2VaS3o1NFZnSDNTOGp4WWhKWVZiU3cyaFI3V2t5ZGxHZU90RDc4SjE5UmpwRkxfSkx2blQ4RDMzSFRVWTdDNDJ1SEEwR1B1SUZ3LW9yR196V0xFdVdSODNOZHdmUkVTOFFfODh5amVUejNqVEZJ0gHiAUFVX3lxTE54dDRmVTdaWmJyM3NNY2E1LVh3M3haNmp3NHhFSGsyS2ptMHpUTUduRDFEX3NmcklaVDR5bWFVajMyMVNzTzJ2VTZQRUdXS3ktWGFVNmltVWNOVzRVVGR2dTg3X0JfVlkzSHNGX3gxZ01URU9LcVlDTV9za0JVZFVmal9ta09weDBUeG5jcHF4ZHljT3lFcktJOFZVanoxbWttd0JtcHUyUUxZVlRFaEVjTTNkQmFDaDI1Uk1HS3pBbmJFam4xamotdjBILU1xN1JOLTRMMTdSODhSblhtaDJEYnc?oc=5",
-      "source_label": "Livemint",
-      "event_type": "acquisition",
-      "source_kind": "Event",
-      "event_tags": [
-        "acquisition",
-        "Event"
-      ],
-      "confidence": "L",
-      "status": "merged",
-      "exclusion_reason": "merged: duplicate phrasing of “Persistent to squeeze out existing Nagarro shareholders en r”"
     }
   ]
 }

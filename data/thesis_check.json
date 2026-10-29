@@ -1,35 +1,6 @@
 {
   "value": {
     "holdings": {
-      "HAL": {
-        "ticker": "HAL",
-        "name": "Hindustan Aeronautics",
-        "sector": "aerospace_defence",
-        "thesis": "State aerospace major, expanding local fighter jet assembly and benefiting from custom duty exemptions.",
-        "challenged": [],
-        "supported": [
-          {
-            "headline": "HAL, Bharat Dynamics, others power Nifty India Defence up over 1% as Ministry unveils ₹3,070 crore business plan",
-            "claim": "expanding local fighter jet assembly",
-            "because": "Ministry unveils ₹3,070 crore business plan",
-            "date": "2026-08-18",
-            "link": "https://news.google.com/rss/articles/CBMipgJBVV95cUxPMG9tVXkxbGFpOWNWYndHU09vQlFCZl9DakxTZllxSEdHU0xZX3FNYUJjcHQ4YXVlYkZRS3I4b2IxNEN1M3B3OVNod0dTSEU3WjA1S0hFY2RsN3V5Q0kzRUxPbXZwWERLUnVjZlZVcDFPdjlDekN1VDJGbUUwWlpVT0dTRHlFZHdVLW9XWlJLMkdZdE9kTzNUMEZiZHRZb1NGNXF1dTRsQVVneHYwU2J5d1V1NDNzYmItUWp4N2c4bWVhY3ptU1ZFaGF2NnpvQWZ0TVJXVl9NN1VDb252c0N1VDRZUUEwS1NsRnFZN093bTR2QS1ZMDNTY2hvQjkwM3h1QnRyTmxjb0JldmlsMlFNQjNyTXhVNnFjdDhzaF9WeHh6bnNjeXc?oc=5",
-            "source": "Upstox",
-            "reader": "llm"
-          },
-          {
-            "headline": "BEL, HAL, Bharat Dynamics: Defence stocks rally as DAC clears ₹52,000 crore defence acquisition proposals",
-            "claim": "expanding local fighter jet assembly",
-            "because": "DAC clears ₹52,000 crore defence acquisition proposals",
-            "date": "2026-07-05",
-            "link": "https://news.google.com/rss/articles/CBMi9gFBVV95cUxNSVFuUDZucUtMZWk2YV94dFU3T3R0aW9MTVh0TGM1aUtwSWRjUktld3NDazJKSXJUTlJHSkdydWR2bUdZeUs1dEN0czE5RlZoV1VhcHZ2M000MFhuQVlNWUdxdjRyZHJmaGlLVjdKY3d1TFNJMEVIRTNSdW9UMExNUjFybnBHVTlIWW5WZ2lRMGdJWENCMHJPY2FxdGl1RHlEcW9FTGI0dFNDVkt4c2ZIQ1dJczlJZnJfa2tWMVI3TTBQaC1yQUZlcTBmTnVOSkZ2MC1nWVJETjdGTGdQaWVsR0I2Zmx0alNJVHdHUzEwOTFET1g1bFE?oc=5",
-            "source": "Upstox",
-            "reader": "llm"
-          }
-        ],
-        "read": 4,
-        "unread": 0
-      },
       "BEL": {
         "ticker": "BEL",
         "name": "Bharat Electronics",
@@ -112,7 +83,7 @@
             "reader": "llm"
           }
         ],
-        "read": 1,
+        "read": 2,
         "unread": 0
       },
       "BDL": {
@@ -210,8 +181,11 @@
             "reader": "llm"
           }
         ],
-        "read": 7,
-        "unread": 0
+        "read": 9,
+        "unread": 0,
+        "not_about": [
+          "“Higher Tariffs, Continued Reliance on Chinese Components”: Europe’s Automotive Supply-Chain Dilemma as Escalating Trade Tensions Threaten Domestic Production"
+        ]
       },
       "KPIL": {
         "ticker": "KPIL",
@@ -239,7 +213,7 @@
             "reader": "llm"
           }
         ],
-        "read": 7,
+        "read": 8,
         "unread": 0
       },
       "IOC": {
@@ -386,6 +360,15 @@
         "challenged": [],
         "supported": [
           {
+            "headline": "Best Adani stock to buy after Q2 results 2026? Adani Power vs Adani Ports vs Adani Enterprises — Experts' views, targets",
+            "claim": "Large private thermal power producer, adding capacity through acquisitions such as the GVK Energy bid and selling under long-term power purchase agreements",
+            "because": "Best Adani stock to buy after Q2 results 2026?",
+            "date": "2026-10-29",
+            "link": "https://www.livemint.com/market/stock-market-news/best-adani-stock-to-buy-after-q2-results-2026-adani-power-vs-adani-ports-vs-adani-enterprises-experts-views-targets-11793248073122.html",
+            "source": "Livemint",
+            "reader": "llm"
+          },
+          {
             "headline": "Adani Power Limited has informed the Exchange about Letter of Award",
             "claim": "selling under long-term power purchase agreements",
             "because": "Letter of Award",
@@ -449,7 +432,7 @@
             "reader": "llm"
           }
         ],
-        "read": 14,
+        "read": 15,
         "unread": 0,
         "group_news": [
           "Adani Enterprises, Adani Power, Adani Ports: Adani Group stocks gain after Adani Airport’s ₹9,825 crore fundraise"
@@ -569,9 +552,18 @@
             "link": "https://news.google.com/rss/articles/CBMi2gFBVV95cUxPd0FRVzZMSXNQMTRGZXRBampPc3BqYzYxUWdqdXhuWE02VEtQMC1iNk5tMHc1UXdId040Uzh6SjdVamo1ZWxFRE5ZSHdlS2tCLUpGUC1wazFIZHZJckk4bHltWWtrdUpQeUl6UHdKOGoxQi15RHVQZHVqcTB6Uzh3STZYdjBuTTBKQ05kUV8zQzJSRmNKRVo0Q2IwcUJJeG0takd2YjZBSl80WTVHQzJ1OU83WFpqZER6OWdETEVCRll4eUFDUHAtZGZ5ZFIzTHNXU05KLTBURW9CUQ?oc=5",
             "source": "suzlon.com",
             "reader": "llm"
+          },
+          {
+            "headline": "Suzlon Energy Secures 201.6 MW Wind Project Order From Waaree Group in Andhra Pradesh",
+            "claim": "dominating wind turbine supply with a record order book",
+            "because": "Secures 201.6 MW Wind Project Order From Waaree Group in Andhra Pradesh",
+            "date": "2026-07-23",
+            "link": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxNUWRTblNnMlpMTVkzeEMxY2lvNW1tU0todlFuM3FqSndwQ3dyVTlNQ05IdnFZNEhua1U4RFhXV1c3YU5ZYjRiajk1YTY0anNETmZDTVVKdzY3cE5TbTVKSzZtTUV4ZklibjJhclRNWU9fV2JSTXFsWUlXamVDd2pTejkyZndCSXJLSWlpSlBEb05MVndMbTBFenpNazMzQlgzZHpHZ2NHWHZlelVtTTAydU5CZ2J5MUlueW1pX0NzVDZVUQ?oc=5",
+            "source": "Sahi",
+            "reader": "llm"
           }
         ],
-        "read": 15,
+        "read": 14,
         "unread": 0
       },
       "UTLSOLAR": {
@@ -732,6 +724,15 @@
         "challenged": [],
         "supported": [
           {
+            "headline": "Anant Raj inks Haryana data center MOU as quarterly revenue hits US$ 69.46 million",
+            "claim": "Real-estate developer transitioning commercial properties into major data center hubs in NCR",
+            "because": "inks Haryana data center MOU as quarterly revenue hits US$ 69.46 million",
+            "date": "2026-10-29",
+            "link": "https://news.google.com/rss/articles/CBMinwFBVV95cUxNVGlud0ZsaTNsOEdGVFNzbnBPWjBacU14QWstYWNPaFlUUlc4eFdfWHBweXpuOTY0NXljQ0VhQUV0VzlqYzlsQ2xtUzNBRWdqMGZDd3l0eE4xcnYtdnJpcU9CVnhrX2N1bEJhR0VzUFdyQXIydV9NcFZVR1dnRWhLblY3enFsdGVrMF9mdXlOWFJBaUZ4Ull1UmNnOGJKanM?oc=5",
+            "source": "W.Media",
+            "reader": "llm"
+          },
+          {
             "headline": "Anant Raj (NSE:ANANTRAJ): What Does Its MoU With Haryana Govt and Orange Business Mean?",
             "claim": "Real-estate developer transitioning commercial properties into major data center hubs in NCR",
             "because": "What Does Its MoU With Haryana Govt and Orange Business Mean?",
@@ -759,7 +760,7 @@
             "reader": "llm"
           }
         ],
-        "read": 4,
+        "read": 5,
         "unread": 0
       },
       "DIACABS": {
@@ -853,6 +854,15 @@
         "challenged": [],
         "supported": [
           {
+            "headline": "Logistri sells project properties to Hitachi Energy for SEK 1,382 million",
+            "claim": "Grid technology leader in HVDC, transformers and grid automation, converting a record order backlog into revenue as margins rise from single digits to about 16%",
+            "because": "sells project properties to Hitachi Energy",
+            "date": "2026-10-29",
+            "link": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxObmNhTnlRUkh0Yk1Xbkk5NWJVNTR3ZlhXRTJuTmg2SVdsNkkyR3IxXzdvLTZOWFU1MnRSVXpScm9hQmZWUklja0h5bENLYl9Na0VzbTZHRjZEWm5mLXp2OVZZZ3NHdHh6alJLV2JNTElHRExSWTZZSGZPOXVZTWF1RnlxZG5ucGpMSVVDamZZMjcySmVLMEx2NGNlRkg0NklfandFeXVpdDc3d2ExUjVlbkN3ZFFjUk9rcVVlQjZNUDJZQ0NWdExSVEJlMHhKYlFjckZ1ZGpn?oc=5",
+            "source": "TradingView",
+            "reader": "llm"
+          },
+          {
             "headline": "Hitachi Energy and Ansaldo Energia launch a strategic partnership to bring integrated power solutions to meet surging electricity demand",
             "claim": "Grid technology leader in HVDC, transformers and grid automation, converting a record order backlog into revenue as margins rise from single digits to about 16%",
             "because": "Hitachi Energy and Ansaldo Energia launch a strategic partnership to bring integrated power solutions",
@@ -873,7 +883,7 @@
             "reader": "llm"
           }
         ],
-        "read": 2,
+        "read": 3,
         "unread": 0,
         "group_news": [
           "Hitachi Energy and Ansaldo Energia launch a strategic partnership to bring integrated power solutions to meet surging electricity demand",
@@ -999,7 +1009,7 @@
             "reader": "llm"
           }
         ],
-        "read": 4,
+        "read": 5,
         "unread": 0,
         "not_about": [
           "Next phase of GST reforms to focus on simplifying compliance, refunds, ITC: FM Sitharaman"
@@ -1196,6 +1206,24 @@
         "challenged": [],
         "supported": [
           {
+            "headline": "Lemon Tree Hotels (NSE:LEMONTREE) Signs Licence Agreement for 76-Room Lemon Tree Hotel in Sirhind, Punjab",
+            "claim": "Mid-market chain expanding into tier-2 cities as UDAN air connectivity widens the travel base",
+            "because": "Signs Licence Agreement for 76-Room Lemon Tree Hotel in Sirhind, Punjab",
+            "date": "2026-10-28",
+            "link": "https://news.google.com/rss/articles/CBMi2gFBVV95cUxQM3dDSHVrc09sYWMwN2xhMmJjTmUyaVNtTGZKNWZhWEk2N250RVh6VWJ2Y0h2a2ItZVJGZjVrQlEwUnFTeWUtd09SOW9sY0xlYXhJNEpaMTktY3pFYWVCVlBialVXbmV6b1pWR082eU9RYk1NMTNwaHQxWFc2cUc0ODFUMlV5Q1BRc0JBMDFlaEYxT09GM2ZQNlVNbV9xamdyclRJd2w4bzQxOUJ4ZGhkZTBlZkczVjlTcUxiUktyek9zcThpMEF5UEhXTVRIc01vQ1l1dmQtSEtGdw?oc=5",
+            "source": "Kalkine India",
+            "reader": "llm"
+          },
+          {
+            "headline": "Lemon Tree Hotels LEMONTREE: Keys Lite Bhilwara Signing",
+            "claim": "Mid-market chain expanding into tier-2 cities as UDAN air connectivity widens the travel base",
+            "because": "Keys Lite Bhilwara Signing",
+            "date": "2026-10-23",
+            "link": "https://news.google.com/rss/articles/CBMiugFBVV95cUxOLTFLQ1FiU1dON054ald0ZjM0RmNaMnhRYjVHTUxxQ241b2w5OEp2blFDQUhFUXIwZjFpeUhyZ0dNcnRoWTVRYTNRTmg5eDZRT0g4YTlOUEZXa21IeFRxbUhtWEpfT2dVMEpER2kzVnM3UXE5TnVVeXZ5N2FnUkhwaTRoOEw5VGdfRFZ6RS1MblZkcV9ZSkFOa21sdzYxcW1mR1RCSFZNYUM0RWdJeWdaRVA5UWFMOWhvUFE?oc=5",
+            "source": "Kalkine India",
+            "reader": "llm"
+          },
+          {
             "headline": "Lemon Tree Hotels signs Keys Select property in Bareilly",
             "claim": "Mid-market chain expanding into tier-2 cities",
             "because": "signs Keys Select property in Bareilly",
@@ -1232,7 +1260,7 @@
             "reader": "llm"
           }
         ],
-        "read": 4,
+        "read": 6,
         "unread": 0
       },
       "THERMAX": {
@@ -1303,6 +1331,15 @@
         "thesis": "Dominant railway container carrier, major beneficiary of the ₹10,000 crore container manufacturing scheme.",
         "challenged": [],
         "supported": [
+          {
+            "headline": "Container Corporation Of India Limited has informed the Exchange about Awarding of order(s)/contract(s)",
+            "claim": "Dominant railway container carrier, major beneficiary of the ₹10,000 crore container manufacturing scheme",
+            "because": "Awarding of order(s)/contract(s)",
+            "date": "2026-10-29",
+            "link": "https://nsearchives.nseindia.com/corporate/CONCOR_29102026133111_CONCOR_SE_291026_BLSS.pdf",
+            "source": "NSE",
+            "reader": "llm"
+          },
           {
             "headline": "CONCOR Honda Rail Dispatch Opens New Logistics Link from Kathuwas",
             "claim": "Dominant railway container carrier",
@@ -1418,15 +1455,6 @@
             "date": "2026-07-24",
             "link": "https://news.google.com/rss/articles/CBMirgFBVV95cUxOdkpzSXhYOWpXUFNxbjYwVFFWS1NUNDNuYXJSTHpibTU4RXJza3pwOE5FTUdiT1FaLXpiMDMxSEs1d1NUM2RJWjNPMFFia1puZ3hOLUt2UThFMkkzazVfVm5scWthYW14XzhVSXo4SnZWcUVCZ0pFU2RocDJWOVQ1SEZEdXNWQ3ZmUzlRajZ6c0c0Q2dNb3VJVFV6VEtDWmNlMVVHRXlqOXZnN0JNeUE?oc=5",
             "source": "Sahi",
-            "reader": "llm"
-          },
-          {
-            "headline": "CONCOR signs MoU with IIT Roorkee to develop AI-driven smart logistics decision support system",
-            "claim": "Dominant railway container carrier",
-            "because": "signs MoU with IIT Roorkee to develop AI-driven smart logistics decision support system",
-            "date": "2026-07-23",
-            "link": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxPSW9NWlBhejl0SlkwUVNILWtFN0dsdVlhRWcxS2hhRWRKUU5zcnVvSlVIS0l6MnRrRHZ3VklGV1pjNXE2RklBNEV4bVFMaWFka3piSnpyZ3VsN2M3MV9xTVJvbXVUZXZjVTlDcGVvdmd4T2xmeUtPRjJTdEpLQTZjVHl1TmNGVktsc05KVTcwSGpqNHRZdVI3bkxWU3dTZVR3V0Q1MUdkVnRuWUlCMGVEbWpNTG5ROXZKd1pqVlB4LWtUeEJiZHNLU2ZJX3pnUW5r?oc=5",
-            "source": "India Shipping News",
             "reader": "llm"
           }
         ],
@@ -1676,6 +1704,24 @@
         "challenged": [],
         "supported": [
           {
+            "headline": "CG Power and Industrial Solutions Limited has informed the Exchange regarding a press release dated October 29, 2026, titled \"Axiro Semiconductor Invests in ThinSiC to Strengthen Position in Next-Generation Silicon Carbide Power Semiconduc…",
+            "claim": "Partnering on a $1B semiconductor fab, strong order pipeline in railways and power grid equipment",
+            "because": "Axiro Semiconductor Invests in ThinSiC to Strengthen Position in Next-Generation Silicon Carbide Power Semiconduc",
+            "date": "2026-10-29",
+            "link": "https://nsearchives.nseindia.com/corporate/CGPOWER_29102026122240_SE_Disclosure-Press_Release-Axiro-Investment_in_ThinSic.pdf",
+            "source": "NSE",
+            "reader": "llm"
+          },
+          {
+            "headline": "CG Power and Industrial Solutions Limited has informed the Exchange regarding a press release dated October 29, 2026, titled \"Axiro Semiconductor Invests in ThinSiC to Strengthen P",
+            "claim": "Partnering on a $1B semiconductor fab, strong order pipeline in railways and power grid equipment",
+            "because": "Axiro Semiconductor Invests in ThinSiC to Strengthen P",
+            "date": "2026-10-29",
+            "link": "https://nsearchives.nseindia.com/corporate/CGPOWER_29102026122240_SE_Disclosure-Press_Release-Axiro-Investment_in_ThinSic.pdf",
+            "source": "NSE",
+            "reader": "llm"
+          },
+          {
             "headline": "CG Power Boosts India Semiconductor Push As Advanced Packaging Emerges As Growth Engine",
             "claim": "Partnering on a $1B semiconductor fab",
             "because": "CG Power Boosts India Semiconductor Push As Advanced Packaging Emerges As Growth Engine",
@@ -1703,7 +1749,7 @@
             "reader": "llm"
           }
         ],
-        "read": 4,
+        "read": 6,
         "unread": 0
       },
       "SYRMA": {
@@ -1889,6 +1935,24 @@
         "challenged": [],
         "supported": [
           {
+            "headline": "Coforge Limited has informed the Exchange regarding a press release dated October 29, 2026, titled \" Coforge Introduces Autonomous Software Factory for the Era of Agentic Software Development. \".",
+            "claim": "expanding margins via GenAI offerings",
+            "because": "Coforge Introduces Autonomous Software Factory for the Era of Agentic Software Development",
+            "date": "2026-10-29",
+            "link": "https://nsearchives.nseindia.com/corporate/COFORGE_29102026101428_IntimationofPressReleasellOctober292026.pdf",
+            "source": "NSE",
+            "reader": "llm"
+          },
+          {
+            "headline": "Coforge Limited has informed the Exchange regarding a press release dated October 29, 2026, titled \" Coforge Introduces Autonomous Software Factory for the Era of Agentic Software ",
+            "claim": "expanding margins via GenAI offerings",
+            "because": "Coforge Introduces Autonomous Software Factory for the Era of Agentic Software",
+            "date": "2026-10-29",
+            "link": "https://nsearchives.nseindia.com/corporate/COFORGE_29102026101428_IntimationofPressReleasellOctober292026.pdf",
+            "source": "NSE",
+            "reader": "llm"
+          },
+          {
             "headline": "Coforge Limited has informed the Exchange regarding a press release dated October 26, 2026, titled \"Coforge Named a Leader in Everest Group Quality Engineering (QE) Services for AI Applications and Systems PEAK Matrix® Assessment 2026\".",
             "claim": "expanding margins via GenAI offerings",
             "because": "Coforge Named a Leader in Everest Group Quality Engineering (QE) Services for AI Applications and Systems PEAK Matrix® Assessment 2026",
@@ -1940,15 +2004,6 @@
             "date": "2026-09-13",
             "link": "https://www.bseindia.com/xml-data/corpfiling/AttachLive/1ad8f41f-993a-4966-a2f3-89a3342e1445.pdf",
             "source": "BSE",
-            "reader": "llm"
-          },
-          {
-            "headline": "Coforge Share Price: Unveils New AI Adoption Framework",
-            "claim": "expanding margins via GenAI offerings",
-            "because": "Unveils New AI Adoption Framework",
-            "date": "2026-08-31",
-            "link": "https://news.google.com/rss/articles/CBMihAFBVV95cUxNZHo5ZGd6UnVEUnkwdFhRVFkwalQwYjJPRmF4dFBKYkU3aFc5aGprQUZnamhnSXRxMjhVTjl6SnN6a3BCWFJORWJSejhrNE9vUmxNTUVaRFZ6M1RiekRSVkZBdEVDRWc0SWRXdk5XbDQzNVBSWGZGYy05RDE2NEwwd1h6V1Y?oc=5",
-            "source": "Univest",
             "reader": "llm"
           }
         ],
@@ -2021,15 +2076,6 @@
         "challenged": [],
         "supported": [
           {
-            "headline": "L&T Technology Services and Nokia Forge Engineering Collaboration",
-            "claim": "Engineering R&D services leader, scaling embedded software and semiconductor design-services wins",
-            "because": "L&T Technology Services and Nokia Forge Engineering Collaboration",
-            "date": "2026-10-26",
-            "link": "https://news.google.com/rss/articles/CBMifEFVX3lxTE5nNkoyaWxlNmhVSGw1eTNlVjRHVm1YcUthWFJwRW5qX3dEZVhqWWJJcnpQMkJ4SzAwb2tLZGNvUi1ydU5RWkNqbmpYY3VRZ3EzdTNLWGJ0Z3hVOGZIVVdzQ2pfZ2lTb0NUOGpuUkwzY3lPUW93c2tWeUhHMVI?oc=5",
-            "source": "LTTS",
-            "reader": "llm"
-          },
-          {
             "headline": "L&T Technology Services Limited has informed the Exchange regarding a press release dated October 26, 2026, titled \"L&T Technology Services and Nokia Forge Engineering Collaboration\".",
             "claim": "Engineering R&D services leader, scaling embedded software and semiconductor design-services wins",
             "because": "L&T Technology Services and Nokia Forge Engineering Collaboration",
@@ -2045,6 +2091,15 @@
             "date": "2026-10-26",
             "link": "https://nsearchives.nseindia.com/corporate/LTTS_26102026090847_25102026LTTSPRessreleasesd.pdf",
             "source": "NSE",
+            "reader": "llm"
+          },
+          {
+            "headline": "L&T Technology Services and Nokia Forge Engineering Collaboration",
+            "claim": "Engineering R&D services leader, scaling embedded software and semiconductor design-services wins",
+            "because": "L&T Technology Services and Nokia Forge Engineering Collaboration",
+            "date": "2026-10-26",
+            "link": "https://news.google.com/rss/articles/CBMifEFVX3lxTE5nNkoyaWxlNmhVSGw1eTNlVjRHVm1YcUthWFJwRW5qX3dEZVhqWWJJcnpQMkJ4SzAwb2tLZGNvUi1ydU5RWkNqbmpYY3VRZ3EzdTNLWGJ0Z3hVOGZIVVdzQ2pfZ2lTb0NUOGpuUkwzY3lPUW93c2tWeUhHMVI?oc=5",
+            "source": "LTTS",
             "reader": "llm"
           },
           {
@@ -2064,10 +2119,64 @@
             "link": "https://news.google.com/rss/articles/CBMihwFBVV95cUxOUldoS0ZjdVlMZTU4S0ZBX3VXOFlEUkYwcG5FWU14QkpMZHNQMDJxY1hTZ3FRZ1dwMDhHcDRHcGlxcG9MSzNuUENXTU9nWkd6aE9Xb0NNLVhzS056bVRFZ1Vub2xKeC1IZHBJVDBTYThZVjVuWGRMUnRsdEZ5eXNKM3BQZG90VVE?oc=5",
             "source": "https://www.fintechbiznews.com/",
             "reader": "llm"
+          },
+          {
+            "headline": "LTTS Opens AI-Native Manufacturing Lab in India, Plans US Expansion",
+            "claim": "Engineering R&D services leader, scaling embedded software and semiconductor design-services wins",
+            "because": "Opens AI-Native Manufacturing Lab in India, Plans US Expansion",
+            "date": "2026-10-13",
+            "link": "https://news.google.com/rss/articles/CBMiowFBVV95cUxNQzUzdWNZMExVTmRiQTNmcFpPeGM0UTd0R2NLSE5rNkxfWmNGeDBSRlFfWl85RFZLaXI2anpkejdjblJQcWRUVV9wNWFEVk5UZ1VjZFk1SDlSVzA3RWlwOWRLRFgzVVd2RUhHWHRsY1UyVkQyWWI5X01Pb0MwNUw0dXBsTmlKbDFqVkhKZlpVY1oxN3o2V0Z4YU1HRTR3RlRpcXI4?oc=5",
+            "source": "Konsulteer",
+            "reader": "llm"
+          },
+          {
+            "headline": "L&T Technology Services Unveils NVIDIA-Powered AI Lab for Smart Manufacturing",
+            "claim": "Engineering R&D services leader, scaling embedded software and semiconductor design-services wins",
+            "because": "Unveils NVIDIA-Powered AI Lab for Smart Manufacturing",
+            "date": "2026-10-13",
+            "link": "https://news.google.com/rss/articles/CBMipAFBVV95cUxPQWRvVzcxNFFfSGR4LW0zTDN5NFpLZ0NRY2NkMm1iVW9fdl9VY3BuZERUcjRwVlUyVmMzYTQ3VkZJcno3ZTA5YmlMcDhDcE0tWHJjektBWWxLc3lCOTRMZWk3QVFrU3lGaldZT3lEYlhialFNSjRlRjVCd3R1dUJPRjFTQTZYUXhGelRSU040b2dXNE93dkR0MENFcEVXcnZMRGFRMw?oc=5",
+            "source": "Chemical Industry Digest",
+            "reader": "llm"
+          },
+          {
+            "headline": "L&T Technology Services Launches EI Lab for Manufacturing and Operations, Featuring NVIDIA Accelerated AI-Native Factory",
+            "claim": "Engineering R&D services leader, scaling embedded software and semiconductor design-services wins",
+            "because": "Launches EI Lab for Manufacturing and Operations, Featuring NVIDIA Accelerated AI-Native Factory",
+            "date": "2026-10-12",
+            "link": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE9MYktEQlQ5eC1jZVg1WDdUa3lqMnRSYkJoYzJsSjhQbEdkeVpiU0JGZUx0LTFmTUZ0Ty1HUEl4UDhIX1JMTGZ4N1c3a1VzQmtza19BcHVCTHB1aDhwMEZN?oc=5",
+            "source": "LTTS",
+            "reader": "llm"
+          },
+          {
+            "headline": "LTTS launches AI-Native Factory lab with NVIDIA technologies",
+            "claim": "Engineering R&D services leader, scaling embedded software and semiconductor design-services wins",
+            "because": "launches AI-Native Factory lab with NVIDIA technologies",
+            "date": "2026-10-12",
+            "link": "https://news.google.com/rss/articles/CBMiogFBVV95cUxOT1l5Y2FZeDc4akVqcmFSMHJjNFh4ZmJnQXBYdTVMSW1Vb2w5NWY2Ymc1eF9qMHBfaTE2VHh1M3BKYnpkdUljcG1QbkRCN3lQOGFlVW54OEY3S3V0ZHJscDl3TTg3NVowVHlOVWJ3ZUktWUptbmhoX0pEOFg3Z25EUTFOYm9XdXBjRzBnRmNXb2N6NzlvRG5EdW55eDVfNmc4Nmc?oc=5",
+            "source": "Manufacturing Today India",
+            "reader": "llm"
+          },
+          {
+            "headline": "LTTS opens AI manufacturing lab in Bengaluru, plans U.S. facility upgrade by fiscal year-end",
+            "claim": "Engineering R&D services leader, scaling embedded software and semiconductor design-services wins",
+            "because": "opens AI manufacturing lab in Bengaluru, plans U.S. facility upgrade by fiscal year-end",
+            "date": "2026-10-12",
+            "link": "https://news.google.com/rss/articles/CBMimwFBVV95cUxNSHhKLTc0emdnWHVzRU1IOHZ4enhCOU52Z3lRV0JnVUoyRWp1TFoyMUF5eFVjdXUwSFpIVndhTVpCOGhnVWtwWEt5YjRqQkRjS09qOTk0a2c2MGhUbXhyLWxMOTRhaGhFNFZUWEdtYVI2VE1ZaFU1ZEEwSGw5Mk1OcE5HUllSR2pmdzZ4MF95elRMeVNaVlBpTVBEc9IBmwFBVV95cUxNSHhKLTc0emdnWHVzRU1IOHZ4enhCOU52Z3lRV0JnVUoyRWp1TFoyMUF5eFVjdXUwSFpIVndhTVpCOGhnVWtwWEt5YjRqQkRjS09qOTk0a2c2MGhUbXhyLWxMOTRhaGhFNFZUWEdtYVI2VE1ZaFU1ZEEwSGw5Mk1OcE5HUllSR2pmdzZ4MF95elRMeVNaVlBpTVBEcw?oc=5",
+            "source": "DQ",
+            "reader": "llm"
+          },
+          {
+            "headline": "L&T Technology Services Launches AI-Native Manufacturing Lab in Bengaluru",
+            "claim": "Engineering R&D services leader, scaling embedded software and semiconductor design-services wins",
+            "because": "Launches AI-Native Manufacturing Lab in Bengaluru",
+            "date": "2026-10-12",
+            "link": "https://news.google.com/rss/articles/CBMirgFBVV95cUxQSXVuMzNja1RmSnp2Y2U4c0dMNkhBYW9OOTBWR3phdjB3Q3NfdTcyX2pCejF6ODFWdXJ6VzkxclBFSGxydEdUek9PdXpXaGdQMW9CdE52cTZISzBNT0I5YXZQNDJzQ0FLbE8tQUVON1pyQzBTWjZ3WXNVQkJXZmhpdF9LeVlrT2kxTUhTdVpfeUl3ZGdIOGxRa3lJaF8zTHVxVW9ZTWM3dzhvNEVtWlE?oc=5",
+            "source": "The CSR Universe",
+            "reader": "llm"
           }
         ],
-        "read": 7,
-        "unread": 8
+        "read": 15,
+        "unread": 0
       },
       "IKS": {
         "ticker": "IKS",
@@ -2075,9 +2184,31 @@
         "sector": "midcap_it",
         "thesis": "Healthcare technology and services provider to US physician groups, growing revenue around 20% a year with high returns on capital.",
         "challenged": [],
-        "supported": [],
-        "read": 0,
-        "unread": 4
+        "supported": [
+          {
+            "headline": "ICICI Securities sees recovery in ER&D stocks in Q2; Tata Tech, Netweb, IKS, Cyient among top picks",
+            "claim": "growing revenue around 20% a year with high returns on capital",
+            "because": "ICICI Securities sees recovery in ER&D stocks in Q2; Tata Tech, Netweb, IKS, Cyient among top picks",
+            "date": "2026-09-30",
+            "link": "https://news.google.com/rss/articles/CBMihgJBVV95cUxPRkpSMjlpLUF2SER4cVcxbEN5MC1nZXU3UTByelVrT044c2JhZ2VKMFhWRWxuamtZZ29yNTI5Z3FPTWVVaHpNMEtiZWlrQmxJUm90Wm1nSkdBNlhVaWJuTlJXQzA0OHd4OWpIbEFKZDgzelZMeDFSa3FUMjdIOC1QQUM4THBTdmFmRVgtandvbXdNcXJKNjR5MjBRc1EwODhqQ1ZMbGRTdk4wemU5OWRYY0ZZWl9XN1JGdDJfZWU2SThSOU1Ba2U2OWdHX3Z0X1pHeGg4Vk1WaG8wVi00aldUcUtNcHZiOFg5dFRGNVRoRzNQeE56alMzR0RRVm9MSGYwMUpvaEln0gGGAkFVX3lxTE9GSlIyOWktQXZIRHhxVzFsQ3kwLWdldTdRMHJ6VWtPTjhzYmFnZUowWFZFbG5qa1lnb3I1MjlncU9NZVVoek0wS2JlaWtCbElSb3RabWdKR0E2WFVpYm5OUldDMDQ4d3g5akhsQUpkODN6Vkx4MVJrcVQyN0g4LVBBQzhMcFN2YWZFWC1qd29td01xcko2NHkyMFFzUTA4OGpDVkxsZFN2TjB6ZTk5ZFhjRllaX1c3UkZ0Ml9lZTZJOFI5TUFrZTY5Z0dfdnRfWkd4aDhWTVZobzBWLTRqV1RxS01wdmI4WDl0VEY1VGhHM1B4TnpqUzNHRFFWb0xIZjAxSm9oSWc?oc=5",
+            "source": "Business Today",
+            "reader": "llm"
+          },
+          {
+            "headline": "Inventurus Knowledge Solutions Ltd (NSE:IKS) (Q1 2027) Earnings Call Highlights: Strong Revenue ...",
+            "claim": "growing revenue around 20% a year with high returns on capital",
+            "because": "Strong Revenue",
+            "date": "2026-08-06",
+            "link": "https://news.google.com/rss/articles/CBMikAFBVV95cUxPWlM4S2pGeUYzQ2RGM09NeXl3WlU2eHYxTTJMZmFob1czZWZ6Qi15S1ZIVGRicUpNQjdZbUFLaExlaHNMQTNBU2xaNHFObnVaOWdPVDZxMml4STFRZHJSX3FuS1oyV2hiZS1wYXZpNlgtZVFTdVQ3djU5ekMydVd3S2tPQy1jQjBxWE92bDR3TFo?oc=5",
+            "source": "Yahoo Finance Singapore",
+            "reader": "llm"
+          }
+        ],
+        "read": 4,
+        "unread": 0,
+        "not_about": [
+          "Grønn Vekst Retains Garden Waste Handling Contract with Follo Ren Iks"
+        ]
       },
       "OFSS": {
         "ticker": "OFSS",
@@ -2086,8 +2217,8 @@
         "thesis": "Oracle's banking-software arm, debt-free with high returns on capital, growing licence and services revenue from banks' core-banking upgrades.",
         "challenged": [],
         "supported": [],
-        "read": 0,
-        "unread": 1
+        "read": 1,
+        "unread": 0
       },
       "CAPILLARY": {
         "ticker": "CAPILLARY",
@@ -2096,8 +2227,8 @@
         "thesis": "Software-as-a-service provider of customer-loyalty and engagement platforms to retailers and brands, growing revenue fast toward sustained profitability.",
         "challenged": [],
         "supported": [],
-        "read": 0,
-        "unread": 2
+        "read": 4,
+        "unread": 0
       },
       "ADSL": {
         "ticker": "ADSL",
@@ -2106,8 +2237,8 @@
         "thesis": "System integrator winning smart/safe city surveillance projects, managing master command centers.",
         "challenged": [],
         "supported": [],
-        "read": 0,
-        "unread": 3
+        "read": 3,
+        "unread": 0
       },
       "ASMTEC": {
         "ticker": "ASMTEC",
@@ -2116,8 +2247,8 @@
         "thesis": "Engineering design services for semiconductor equipment makers under India Semiconductor Mission (ISM) 2.0.",
         "challenged": [],
         "supported": [],
-        "read": 0,
-        "unread": 1
+        "read": 1,
+        "unread": 0
       },
       "AVALON": {
         "ticker": "AVALON",
@@ -2126,8 +2257,8 @@
         "thesis": "Electronics manufacturing services maker for US and Indian industrial, mobility and clean-energy customers, growing sales over 40% a year at margins near 12%.",
         "challenged": [],
         "supported": [],
-        "read": 0,
-        "unread": 2
+        "read": 2,
+        "unread": 0
       },
       "METROBRAND": {
         "ticker": "METROBRAND",
@@ -2136,8 +2267,8 @@
         "thesis": "Exclusive retail rights for Fila and Foot Locker in India, expanding athleisure footprint rapidly.",
         "challenged": [],
         "supported": [],
-        "read": 0,
-        "unread": 2
+        "read": 1,
+        "unread": 0
       },
       "CAMPUS": {
         "ticker": "CAMPUS",
@@ -2145,9 +2276,22 @@
         "sector": "sports_athleisure",
         "thesis": "Dominant direct-to-consumer sports footwear brand in tier-2/3 cities, major beneficiary of fitness trends.",
         "challenged": [],
-        "supported": [],
-        "read": 0,
-        "unread": 3
+        "supported": [
+          {
+            "headline": "Campus Activewear Challenges Workplace Norms with Vicky Kaushal in Latest ‘Move Your Way’ Campaign",
+            "claim": "Dominant direct-to-consumer sports footwear brand in tier-2/3 cities, major beneficiary of fitness trends",
+            "because": "Challenges Workplace Norms with Vicky Kaushal in Latest ‘Move Your Way’ Campaign",
+            "date": "2026-10-22",
+            "link": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxOYmhUblVrWkhNaGM4dl8ybXByeHJLRXE3cFh5S21ON2V4S2ZNZS1BYVBaTGxBRzNXTnNLbGd1UkwxMEd4U3p6RFYwbnFhOVhPbUlEOXpXOWwyTlhhV1lwWFMwZDY4c1FPVkRtS3hOWU1xaXdBZlFDWjJYQXc4WmE2N2MxQTBlY1ZwUWl1eEZ5cmtwTVVYbjhja0pINEh4TGI0c1BOV3BRcHoxQ2tmdi15Y3lDZlFpdFVuYUQ0TkR0UnNEekVrZ21EVk9wdFU3VUxp?oc=5",
+            "source": "Passionate In Marketing",
+            "reader": "llm"
+          }
+        ],
+        "read": 3,
+        "unread": 0,
+        "not_about": [
+          "TCS' HyperVault Secures 264 Acres For Massive 1GW AI Data Center Campus In Hyderabad"
+        ]
       },
       "RELAXO": {
         "ticker": "RELAXO",
@@ -2155,9 +2299,28 @@
         "sector": "sports_athleisure",
         "thesis": "Mass-market footwear leader with a wide distribution network, profit recovering as volume demand returns.",
         "challenged": [],
-        "supported": [],
-        "read": 0,
-        "unread": 14
+        "supported": [
+          {
+            "headline": "Relaxo Footwears Q1FY27 net profit up 12% to ₹549 crore",
+            "claim": "profit recovering as volume demand returns",
+            "because": "net profit up 12% to ₹549 crore",
+            "date": "2026-08-13",
+            "link": "https://news.google.com/rss/articles/CBMitgFBVV95cUxQSlhKRTU2UU9ET1JSelVfNmF3OWpSV2FmS1FYaWIzOFF0c0tJQXZITjhsMktFOWpET1lMdVY4WU15RjVfYXZjemN2bWFJMGk3YnM4U2c4Znd0LVBwMDV0eVV3cWlDbjBBdHZ0aU44N0V0UXNKdjhCbkFVU3BpRDg0WFpfSFNBdmREcjRQT1otN0hlbktnNVRnYTFWb3RzRVZaVXlUcnBPNG14S0tobmp0T3ZVRlY3QQ?oc=5",
+            "source": "scanx.trade",
+            "reader": "llm"
+          },
+          {
+            "headline": "Relaxo and EaseMyTrip Revive ‘BUY & FLY’ Campaign, Offering Travel Rewards on Footwear Purchases",
+            "claim": "Mass-market footwear leader with a wide distribution network",
+            "because": "Revive ‘BUY & FLY’ Campaign, Offering Travel Rewards on Footwear Purchases",
+            "date": "2026-07-29",
+            "link": "https://news.google.com/rss/articles/CBMivgFBVV95cUxQRndkUHNrcnYybVA1Q1VHcS1nQm1zM2JWNTVfbms3LTVrY0VPeVgtSG1sNFYwbmZlNXVMdzB2blptb2N1MlVxckJHdGc5OXRPRWVQS0pNdk1CanVKaGtzTG1FeWpJbmd2cy1NRDUyajNMbkU2WGN6SU5sQllRTXVmNk42aG8yek1WbG1GaGphSUxkVDlEczJHUEV5ZWhsWE91ZF8wSFM2NkdCTlA5eTVwS2JHeVdhZ2dIU1BjVkNn?oc=5",
+            "source": "travelworldonline.in",
+            "reader": "llm"
+          }
+        ],
+        "read": 14,
+        "unread": 0
       },
       "BATAINDIA": {
         "ticker": "BATAINDIA",
@@ -2165,9 +2328,28 @@
         "sector": "sports_athleisure",
         "thesis": "India's largest footwear retailer, relying on festive demand and premiumisation to restore sales growth under a new MD and CEO.",
         "challenged": [],
-        "supported": [],
-        "read": 0,
-        "unread": 4
+        "supported": [
+          {
+            "headline": "Bata India Limited (NSE: BATAINDIA) in Focus on Festive Footwear Demand",
+            "claim": "relying on festive demand",
+            "because": "in Focus on Festive Footwear Demand",
+            "date": "2026-10-01",
+            "link": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQNTF5Q1FXLW1aa3RQa3BwRnQtNjBaWnRzRjFRaFpENVc2MkEwQjJ1dVZqajVmQ1poSlhPc1o4Y29QRW10WGF6ODlXQWxnZjVPUVcwZVgxZ0ZvbFgtWWhYY3VCOTZTT011R3JUX0lGYnB1em1YZWtQbmpkRGtVVlBpOWRjQzRNR0Ztc3FSSmpOQjFCQzBfV3dCSW5BeHZFUEZNUk1Bb25EMjJNMFBRc2lTT0tVMVNHTjVNWmtWNU9PaW1iU0d0?oc=5",
+            "source": "Kalkine India",
+            "reader": "llm"
+          },
+          {
+            "headline": "Bata India BATAINDIA Central Government Approval New MD CEO",
+            "claim": "under a new MD and CEO",
+            "because": "Central Government Approval New MD CEO",
+            "date": "2026-09-17",
+            "link": "https://news.google.com/rss/articles/CBMiygFBVV95cUxQS0h5V2RoRExIX1dLWEpYQTlldTFiQ3E5YjFEOTlkOUVmUHlWTDhrSy1fMzZJM2RCRGR1cEhoMEExXzU1cklDQllvM3lXaE9GXzYtVEZsZ2VESmlKUW5iU0c5S1VQNWl2eDhaYmlacURFbTlSaUFDR3RVcEFBWEdXVERsMEQzRElIQ3FIZnJMSnVQYnBqRWhMbmhzNUhMSGZrbmQ5MVI2YmVmTWZiRDQzQXdtdTNFVUVPaTlaclI0VTNKZ1hsek1xU3Rn?oc=5",
+            "source": "Kalkine India",
+            "reader": "llm"
+          }
+        ],
+        "read": 4,
+        "unread": 0
       },
       "CPPLUS": {
         "ticker": "CPPLUS",
@@ -2175,19 +2357,131 @@
         "sector": "surveillance_security",
         "thesis": "CCTV market leader (35%+ share) newly listed, scaling domestic camera manufacturing under PLI.",
         "challenged": [],
-        "supported": [],
-        "read": 0,
-        "unread": 7
+        "supported": [
+          {
+            "headline": "Ranveer Singh Joins CP PLUS as Brand Ambassador to Make Advanced Security Made-in-Bharat",
+            "claim": "scaling domestic camera manufacturing under PLI",
+            "because": "Make Advanced Security Made-in-Bharat",
+            "date": "2026-10-27",
+            "link": "https://news.google.com/rss/articles/CBMikwFBVV95cUxNSkxDemFJZWJ4UDZMcnctLVg1RnVrU195V2plRlBrTG9fTlloWWVEU08yVGVlbF9zX21UdlNvdWpCdEhXa19OSmNtVnhra1pJWE93bTRoM1d0Mi12UzRHSFZaUnM0RUFvZ2N1TnlqNkZQUzFUWlpZRFNwMFBvc2ljS0NsRjJOdVZiQlJ6ZXlaN2ZoYWPSAZMBQVVfeXFMTUpMQ3phSWVieFA2THJ3LS1YNUZ1a1NfeVdqZUZQa0xvX05ZaFllRFNPMlRlZWxfc19tVHZTb3VqQnRIV2tfTkpjbVZ4a2taSVhPd200aDNXdDItdlM0R0hWWlJzNEVBb2djdU55ajZGUFMxVFpaWURTcDBQb3NpY0tDbEYyTnVWYkJSemV5WjdmaGFj?oc=5",
+            "source": "Local Samosa",
+            "reader": "llm"
+          },
+          {
+            "headline": "CP PLUS appoints Ranveer Singh as Brand Ambassador to strengthen smart security positioning",
+            "claim": "CCTV market leader (35%+ share)",
+            "because": "strengthen smart security positioning",
+            "date": "2026-10-27",
+            "link": "https://news.google.com/rss/articles/CBMivAFBVV95cUxOSWQtanM2UG1QWkYwVkpyN2dGLTN0ZHdVYjc5ZE56dXlzdm8xblZYWHBDNHE1bVdreTcwLUtLUWRpbkdzTjNRa3EzaG0yU2gwMGZmZm81dmtQNERXS25jdzRvZVRBRHVpTkVxWWVnMm1VTUdsOG1MalY1OVRWWFBaSkh0WDRkMkpVODJhX2tmSTc1em5FLXRTOGhESmZMc2NEVktJVkpHblBCYkJHa0F3VGQwRG5fcjcxcDI5Yw?oc=5",
+            "source": "MediaNews4U",
+            "reader": "llm"
+          },
+          {
+            "headline": "Aditya Infotech (CPPLUS) Q1 25/26 earnings summary",
+            "claim": "CCTV market leader (35%+ share) newly listed, scaling domestic camera manufacturing under PLI",
+            "because": "Q1 25/26 earnings summary",
+            "date": "2026-07-08",
+            "link": "https://news.google.com/rss/articles/CBMif0FVX3lxTE1ISjNwMWxwbms2cDd6RS1FUUNlQ2hsWEl3OWlZTVdYRXQtNHZUUU9Ka3g4enBlWlJFNDlCQTUweDZHejNKLXVnYk1OWllmR0Y2SVZobTlDX2cyRTU0TjM4blBZNHlHd0dyVmpFaS1vMjZjOXh5NmxHZlVKQWRPNlk?oc=5",
+            "source": "Quartr",
+            "reader": "llm"
+          }
+        ],
+        "read": 7,
+        "unread": 0
       },
       "IDEAFORGE": {
         "ticker": "IDEAFORGE",
         "name": "IdeaForge Technology",
         "sector": "surveillance_security",
         "thesis": "Pioneer in tactical and mapping drone systems, primary supplier for Indian Army and police borders.",
-        "challenged": [],
-        "supported": [],
-        "read": 0,
-        "unread": 15
+        "challenged": [
+          {
+            "headline": "ideaForge Technology Promoter Vipul Joshi Pledges 3,70,370 Equity Shares Under SEBI Regulation 31",
+            "claim": "Pioneer in tactical and mapping drone systems, primary supplier for Indian Army and police borders",
+            "because": "Promoter Vipul Joshi Pledges 3,70,370 Equity Shares",
+            "date": "2026-08-30",
+            "link": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxOUHN5RDBMeFdzRkhiUUxMaV8wLUxhVWlNcjZscVUzWjdrRW9jcGZGbmVnZm1ORVdueHYybnpyXzBlNlJsRWpHdlJYOENFdWVfbzNaQWNHUGd6U2NpdFpyczRCLVJjQjRyajlSakU3dnVJdng0a1BpMDhzV3IxLTlrSWdqVjN4TEZqNkI5dUpWOWxiZDc2NzdLdTJ6ZndMMjBqRVdXT1hTMFRoaG02MHk3S0lPQ0M4ZDNyV0xJUzQ2bEk2bHMwNTJ1NHFEU3g4SlRIVUM3QkNNXzEzcjJoc3NCcHRhQl9zemFWUFE?oc=5",
+            "source": "scanx.trade",
+            "reader": "llm",
+            "confirmed": true
+          }
+        ],
+        "supported": [
+          {
+            "headline": "TDB signs Rs 151 crore funding agreement with ideaForge Technology for heavy-lift logistics drone YETI",
+            "claim": "Pioneer in tactical and mapping drone systems, primary supplier for Indian Army and police borders",
+            "because": "signs Rs 151 crore funding agreement with ideaForge Technology for heavy-lift logistics drone YETI",
+            "date": "2026-10-14",
+            "link": "https://news.google.com/rss/articles/CBMixwFBVV95cUxObWVFUHQ4S18wYV9rM2ppbzh5eno3UEJXeDdUaS1zdDNZQUxmX2ZQVDBmcEZrRkc0Y3U5Qk1mVXUyWGZURTc4bWE1YnlvbFZLWkw1LTNPOUpLMmdRbjVuT09KQkE2TTNWWk9neGlzU2VldWxheWFaN3RSZ0dMaXhJcTJOOGRsVTZITmszZzlyd01ZcWV3aHZ0eFVhdmtGSWpBMjI0MGdGNVVGU1hBaWxZQTd0MkI4eXpVaVczUjF4dVZMM3dYNmZZ?oc=5",
+            "source": "DD News",
+            "reader": "llm"
+          },
+          {
+            "headline": "ideaForge secures ₹151 crore TDB funding for heavy-lift autonomous drone YETI",
+            "claim": "Pioneer in tactical and mapping drone systems, primary supplier for Indian Army and police borders",
+            "because": "secures ₹151 crore TDB funding for heavy-lift autonomous drone YETI",
+            "date": "2026-10-14",
+            "link": "https://news.google.com/rss/articles/CBMi8gFBVV95cUxOTkpUV2NNUVhoeXAwZWRNRW4wMkRpeVBzMGFpUDdRRTBwakdCU0NvTndpUURELWpWWHoyc3EtYk1UN0VHWTNwLWMzd2hqb3djNnNwZzRxX0gxNG1PNFJSSDkzLXVxaUlKWUR4SDY2VHRXZTZCWFdsMkZVTUlWZHAzUkdrdS1UZFdLdlRLYlUwbENDRWFZWGpOVkhHV2JPXzFSRGNGaVpmVHl4S0RKakYzeDcyNDhiN3lzNGN4VFBNMDEtckhGVkp5X1pacjFIWVRjenJmSEI0c3lXaE40YW8tS1BwRjhsZXlsY0pMLWNMQ0xBQdIB9wFBVV95cUxOaFlzdTMwYndtRGJaUE9YWUw5X09EYl9ndUs3N015LWNtdG5DUFZBQVpBc0V4bmVodmtaZ19jRkFaVGRBdnA5ZmtYSDBPeVdBRHVwVG5mSHp1ZnAxS2JaaG5vXzlrSFBKNzdCQ0FZU1BFLVd0NWVfdEZoYkxBUS1BZ3M4TXhzYzlnRDUtRG9HOXZqZGZLeXBybV90NEs2T1p4LUFyVzVBVHNhUUdqZjZTMTZfUlhLbzc1RWNCLVFTMjNLRTd2T19FN3VGQjhtaFpOSk5DQjFJX09vOXEtRFdGOG9WNWJ3R3NzMnc3QU5xUXhpY2V0TGdz?oc=5",
+            "source": "ET Manufacturing",
+            "reader": "llm"
+          },
+          {
+            "headline": "ideaForge Technology YETI Drone Project and TDB Loan Agreement",
+            "claim": "Pioneer in tactical and mapping drone systems, primary supplier for Indian Army and police borders",
+            "because": "YETI Drone Project and TDB Loan Agreement",
+            "date": "2026-10-12",
+            "link": "https://news.google.com/rss/articles/CBMizwFBVV95cUxOdHpyOV8yeEdIaXJYLW9nSzNyUnlSYmpTSVltN2R4cER5bjdWTjVwUU1JQ2dWMDFIOHRxWVI5OWVIRzRpTHoyUU1TMEtzSnExUEVwOWdHQzItSlJDbzlFa1lVUjlyakZ3cm95Nmd2U0x5b25tdHJXdXBhQUd5c2RhT2t6YWFKc3FrUUFtVnVhQ0hnUENDOWQxWW95N01Ob1FyQzB5SHlqVnFSMFFrWjNtUWFJcVhVT1U1bmE0blRUVGRfTjFEcE1LQmppeVVRWEE?oc=5",
+            "source": "Kalkine India",
+            "reader": "llm"
+          },
+          {
+            "headline": "ideaForge signs ₹151 crore loan agreement with Technology Development Board for YETI project",
+            "claim": "Pioneer in tactical and mapping drone systems, primary supplier for Indian Army and police borders",
+            "because": "signs ₹151 crore loan agreement with Technology Development Board for YETI project",
+            "date": "2026-10-09",
+            "link": "https://news.google.com/rss/articles/CBMixgFBVV95cUxOX3BIaFMyeVNkNmdOMXEtOGV1SUI4VlFQUDY3VEZrZnZoSnpJenloSmQ0YzdOVmN2ZUM5emlIa2FUaUd2dGV3QW9aQWk1VWxmY2tTdEZXRWF0MnA0VVNWQ2Z6Q3dkaEo3ZlRxektDOGVNM1pZLU9mNnduZUhQVHp0aEhYTkJ3MTBvZGJra3RWeWgtYnNvYUtHYlU2QnhncU5IOFdGZjNsY0FUblBxUGVuSlRNVGcyTi1xRFhuaU5PNXNmQ0dKNGc?oc=5",
+            "source": "IndiaIPO",
+            "reader": "llm"
+          },
+          {
+            "headline": "Ideaforge Technology Enters Loan Agreement With Technology Development Board For 1.51 Billion Rupees",
+            "claim": "Pioneer in tactical and mapping drone systems, primary supplier for Indian Army and police borders",
+            "because": "Enters Loan Agreement With Technology Development Board For 1.51 Billion Rupees",
+            "date": "2026-10-09",
+            "link": "https://news.google.com/rss/articles/CBMi_wFBVV95cUxPZy1SUkdsY182Si1GeFlwX3MzdklReVZ6TVVaVlpqbjgtMlRnVGhuY1pPWXp0VVg1c3d0dGZnNmNtOHBtajBHZkJ2bmV1X3oxWk1IVFZGcy0wWm9XZ2c2eFRTQkNVLXJ6OUNMaDlXdWdTSjFHenBDX0pnTlpjNTFtUHRsZjF6bjdacGpGcGxxNEkwd0gwVFVSUmtjdVl3YklQMXBQMHM1VlFQQ0tISGVDaUxKVW9lckhwQmpvMjVGRXdHX3Q4XzR0Z25ZbkhrUmtaMjRDVmNDazZTRVF3Mk92c2ZkbFRYelR6MXdBaWliQ1JsR1RRNWtteUV6WGJsbmM?oc=5",
+            "source": "TradingView",
+            "reader": "llm"
+          },
+          {
+            "headline": "ideaForge unveils ZOLT UCAV, ZOLT Hybrid. What do these drones bring to the battlefield?",
+            "claim": "Pioneer in tactical and mapping drone systems, primary supplier for Indian Army and police borders",
+            "because": "unveils ZOLT UCAV, ZOLT Hybrid. What do these drones bring to the battlefield?",
+            "date": "2026-10-07",
+            "link": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxNVC1jUDVsY2hmREhkYXRPSDNoLV90ZWYxUnRKQm83LTRSeW96cU1UcVhBaFpiMlNyNkp1VFBrMkktVFpFNHUydzc1VGVQX2dlSFFCNkhSNl9RN3ZZblQxempfVDQ0d0xYYkVsZEFfUTYtZDhHYVlTcTZOVmk4V0JqRjRVTm9PZ21PTDc1cUtmWHBsWm1PbWxmeXYxc25oMlFKd3Z6RlRhUkZsZVRjSEZxTWdFc3Y2TnBLUXE5LWkxZUlBSVBQMWtWMjJzRTFOT0J1MHhZ0gHYAUFVX3lxTE9VYXJ0QWNZNnB5RDU1UnVLT2YzLUstYXdNcHRRQ0hqaGNjbktVRVJIdGxyX2YweVBKSnVuRTdRbW5ESlpGRmZQTGZPa0ZfU3BYby00VGxfWEpvUk4yb0tiSjd6SUhWUFBpbmxIX3NyWTA2WnhYTmdfU3gyRTZ2THJQTnRSa2NtLUtoR0pEeDZrUTlJTUlIMzB5cjlHaVNVMnl2Y0x3N3lVZjdsYUZPX1JHaXVpLU9aclZ1T2JhVVRXdEZuUGpvY2MxVElOalJ1ZWh4UXl0QlZtRQ?oc=5",
+            "source": "The Week",
+            "reader": "llm"
+          },
+          {
+            "headline": "ideaForge secures ₹151 Cr TDB loan for autonomous aerial vehicle project",
+            "claim": "Pioneer in tactical and mapping drone systems, primary supplier for Indian Army and police borders",
+            "because": "secures ₹151 Cr TDB loan for autonomous aerial vehicle project",
+            "date": "2026-09-20",
+            "link": "https://news.google.com/rss/articles/CBMixwFBVV95cUxOTnl3TkhVNUNtNzhvekZCV2I2cFl6dFFSRXRieWYwT1Q4UUJxcnduNkpnVWZPQlBRalZUcEREdjMwcVR1SVh5RXh4TFJ0dlhrZk12Rk15cnRxb3E0amNnaW1Pcm02dFY3dFVxVFJtSnYwV1lzeDZpX2piVG1CT21yX1RoOHBuRUprcS1vbU9Ja2VpeTM0UDFSZ2EzX2NTVTdlTFZEZk9UZXl4ZExrcUtZVkxPXy1XSGZBMnNLbkRTbEJhdjFqdmln?oc=5",
+            "source": "scanx.trade",
+            "reader": "llm"
+          },
+          {
+            "headline": "IdeaForge Technology unveils mapping drone",
+            "claim": "Pioneer in tactical and mapping drone systems, primary supplier for Indian Army and police borders",
+            "because": "unveils mapping drone",
+            "date": "2026-08-28",
+            "link": "https://news.google.com/rss/articles/CBMilgFBVV95cUxNYU0taXpDR0szSFBXSTJkVHdFNnRKbTN5Qm1FcllGSml0OVAtc0o5WHJtWmxDc0JPOEMybFlHVnAtcGVVbzNnWmJjcGR6Y1RPTXhvcFI3NUFRbDBFQlNXa19HRHBkSFZMT0dKZUNGdmx3b0VlcnNQVElVZW5iVHU0VkZKOEVOUXpINzdJLW5FTUM4VVowbkHSAZsBQVVfeXFMUGttU2NjS0F4TWdxME9GdGNqUE9iYjB6TExkMFVpa18zbGI0a3BPYi14SGpNRnpRMmlDVGlVUHNVSmktdEVlc29LLUMzUUpmbjlRS1Q1Q3JMOUU2Y2dyRVBzQlVqbGlJaUhvZUw1bFdVLUdScnFvT1lHem5ZcXBqVkdwT1RUekJGUElaSm1lTXdwdzhNTngwMFFyTms?oc=5",
+            "source": "News18",
+            "reader": "llm"
+          }
+        ],
+        "read": 15,
+        "unread": 0
       },
       "ZENTEC": {
         "ticker": "ZENTEC",
@@ -2195,19 +2489,59 @@
         "sector": "surveillance_security",
         "thesis": "Anti-drone systems and combat training simulators, winning repeat Ministry of Defence counter-drone orders.",
         "challenged": [],
-        "supported": [],
-        "read": 0,
-        "unread": 3
+        "supported": [
+          {
+            "headline": "Zen Technologies Cogknit Acquisition and Defence AI Systems Explained",
+            "claim": "Anti-drone systems and combat training simulators, winning repeat Ministry of Defence counter-drone orders",
+            "because": "Cogknit Acquisition and Defence AI Systems Explained",
+            "date": "2026-10-19",
+            "link": "https://news.google.com/rss/articles/CBMi1wFBVV95cUxNYjhRMTVUNXJnSlhid2JRU0haWEZBTnhvenJDOG1leUxNLThYZUpkQmlFOE5qb2w0UlF3SzlYOUludnBKVE1veW13OHVvLTVxWHdubzlXTlRKbGJGeEp2eWtGX3V0QzRuek8yREFlSXJBVS0yYmdKLU1lSXE3MTNyRVV1aFlnVDFJYXVfS24wcFVWSERoX0t0V0Z4d1hOUHlpWVhDVWY1V2EtU3ctSVg3alRJS2FGSl9IeExZYnNoUkxRUE5kTzEwNlYwbVdEVUhsNGhsWVFqcw?oc=5",
+            "source": "Kalkine India",
+            "reader": "llm"
+          }
+        ],
+        "read": 3,
+        "unread": 0
       },
       "OPTIEMUS": {
         "ticker": "OPTIEMUS",
         "name": "Optiemus Infracom",
         "sector": "surveillance_security",
         "thesis": "Noida contract manufacturer of mobile phones, wearables and telecom equipment, expanding into screen-protector and cover-glass finishing and a manufacturing JV with Nothing.",
-        "challenged": [],
-        "supported": [],
-        "read": 0,
-        "unread": 3
+        "challenged": [
+          {
+            "headline": "Optiemus Infracom Limited has informed the Exchange regarding 'Board comments on fine levied by the Exchange'.",
+            "claim": "Noida contract manufacturer of mobile phones, wearables and telecom equipment, expanding into screen-protector and cover-glass finishing and a manufacturing JV with Nothing",
+            "because": "Board comments on fine levied by the Exchange",
+            "date": "2026-08-27",
+            "link": "https://nsearchives.nseindia.com/corporate/OPTIEMUS_27082026175618_OILBoardCommentsonNSENotice27082026.pdf",
+            "source": "NSE",
+            "reader": "llm",
+            "confirmed": true
+          }
+        ],
+        "supported": [
+          {
+            "headline": "Optiemus Infracom (NSE: OPTIEMUS) Screen Protector Expansion and Electronics Manufacturing Update",
+            "claim": "expanding into screen-protector and cover-glass finishing",
+            "because": "Screen Protector Expansion and Electronics Manufacturing Update",
+            "date": "2026-09-23",
+            "link": "https://news.google.com/rss/articles/CBMi2wFBVV95cUxNRTVrYVpnYzRuOWR1RWpMZlUtVE42eXlqRWlBUHR0aGpfT21STFkyNTJqZEJaazNpbVZXb3R3REQ3TGFKZlBVOTlXZElOenZOdVdIWmlIZjY2cGRVWkJNQUhUeF85dTRDMGlfd215V1JGSVFjNXRHVXdXcWdZYjFTZFhWd0JZbmVqaXEwZW9FbjIyQlEwcGs5QnNFVnJ5NWpNTjZMS3V5R3RIa1M5aW5LLVNXMGN1eVZRdklKMkx0NGRtaXppemxIVGdaVEpqc19Ub0hZYmRrOXVUUUE?oc=5",
+            "source": "Kalkine India",
+            "reader": "llm"
+          },
+          {
+            "headline": "Optiemus Infracom board approves JV with London-based Nothing Electronics",
+            "claim": "manufacturing JV with Nothing",
+            "because": "board approves JV with London-based Nothing Electronics",
+            "date": "2026-09-22",
+            "link": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxQc1BKM1RQeWRpTUxIcENsQ1hseUU1X182ZGJiQllEMGQ4ZjBjX3NLVzA3b1pYel9xVEtDVzhTaXpqSkFNMy1DOVhvT1JPSzZUcDZHV1hPREpQNGRMUV8taU1hSTZFbG00MUxoLWFud1ptdk8xVVFBb2luc2tfR05Fc1E0MExfR2N5YXVGUTdCSW04M1NnOUhDYWNYTUpxUUstOXNvTnF4UXdXLS1rcENMVVhmWmc1MThIa2V4RU11RmxpN2ZQVE1SdUxLNXgxOW0ycVhqZURuRHJKQ3RoLXFqaGFhb1NsUFQxTy1z0gHwAUFVX3lxTFBSU3FiZGc0Q3VFalZSWm52M2NRdHQ2YXNIbnB1YV9ONEZ6bl9IOUZaWHpFR2h4Qm5tNVNXQXlMY1ZHNTM5eEVTNms3eGVUNTNJbzlOMF93STg3MHRqMWpwaDNtR1RuWF9hLW1Qc3hLN0ZEbVFDbjdhdDhFczE3Vnhtc2VJOTZtdExlcDExcjZ5UFlZTWxPTWVRUU9VSHlMTXJ2cVdyU3N2YkNvUlZKX001U201UFJkQnVDM2dVN3lITFlUd096dGNjc2NVZ3F3Wm9WaVlTYmk1ZmlPdTR4VkdvRkFHZmNDMTltOUZnZnF1RQ?oc=5",
+            "source": "Business Standard",
+            "reader": "llm"
+          }
+        ],
+        "read": 3,
+        "unread": 0
       },
       "ARVIND": {
         "ticker": "ARVIND",
@@ -2215,9 +2549,100 @@
         "sector": "textiles_apparel",
         "thesis": "Leading denim manufacturer, investing in technical textiles under recent government schemes.",
         "challenged": [],
-        "supported": [],
-        "read": 0,
-        "unread": 15
+        "supported": [
+          {
+            "headline": "Arvind Limited has informed the Exchange regarding a press release dated October 28, 2026, titled \"PRESS RELEASE on Quarterly Results \".",
+            "claim": "Leading denim manufacturer, investing in technical textiles under recent government schemes",
+            "because": "PRESS RELEASE on Quarterly Results",
+            "date": "2026-10-28",
+            "link": "https://nsearchives.nseindia.com/corporate/ARVIND1_28102026123708_Arvind.pdf",
+            "source": "NSE",
+            "reader": "llm"
+          },
+          {
+            "headline": "Arvind Limited has submitted to the Exchange, the financial results for the period ended September 30, 2026.",
+            "claim": "Leading denim manufacturer, investing in technical textiles under recent government schemes",
+            "because": "financial results for the period ended September 30, 2026",
+            "date": "2026-10-28",
+            "link": "https://nsearchives.nseindia.com/corporate/ARVIND1_28102026122558_Arvind.pdf",
+            "source": "NSE",
+            "reader": "llm"
+          },
+          {
+            "headline": "PM Modi inaugurates ₹150-crore Arvind Limited textile plant in Varanasi | India News",
+            "claim": "investing in technical textiles under recent government schemes",
+            "because": "PM Modi inaugurates ₹150-crore Arvind Limited textile plant in Varanasi",
+            "date": "2026-10-25",
+            "link": "https://news.google.com/rss/articles/CBMizgFBVV95cUxQanUweVUtS0N0cjRzQlJnTEVwazQyY3pHUDB4eUlfdzFEeGhlWGZhYWREb2x6RlJJSHVPT21ZTzM1b2c3RXFQUDk5MWpKcEhab0ZLaVZkbWpQc0NXYVRlMlhUSXVKYmJXYlVDdXJkOTlBd1VjM3FpWnhjdXdPQm1CRFA0Q0IxUXFmaEE1MEtxZEltTHlncEk4V3JBVEZHUHpjVDRNdU5fbFJiTXpHcWQtbWVPREN6YWh4RHEyRjlEamFYSndZa0RYenBQTVEzUdIB0wFBVV95cUxQSHRxVDdadlBhNEFMd0JHMm9fMFg2UEVxbXZCQ05zTFpFYklwMHpDYXZ5STVDbmwycTVSV2JMV2JGUWdfekdwRnEwdk1qRC1DWXdQX1YxR1VPbVZiQ3FqSGFXTjJ0bXhSMFdUS0kzc3hRcFBQbGppN2hBYVRyVGFsY2JmcHhZYkNDbUgzOVpQNmI2cnFVZFNDY1o0eEVpYXBTR3ctWENGb1FON3BGVndkWTdMWlFuTTR4bVZWSWU0VjA1VG1jb0l1TDNzV1BaTUxVdlhF?oc=5",
+            "source": "Hindustan Times",
+            "reader": "llm"
+          },
+          {
+            "headline": "| Arvind's ₹100 Cr Varanasi plant: Can it deliver beyond jobs?",
+            "claim": "investing in technical textiles under recent government schemes",
+            "because": "₹100 Cr Varanasi plant: Can it deliver beyond jobs?",
+            "date": "2026-10-23",
+            "link": "https://news.google.com/rss/articles/CBMi5wFBVV95cUxNeVFSQnBLTVVRb216QjNwLWxvSzVsOW9rQTJmVU9HeGtEX3J5RFJlNkVTX1RaR1BNTElrMENLczVGMXRxTWFOS3FsOFZuVmJWOVkwNHpYV3ZaSF92Tmp0S04xRXdySE1pckl5OFNsWUEzdkJsME85X1VpQ185Z1Z2LXFlZEpMTXhRSFhWY1RFLVlIZ2RURURjUDd0UFkxRmpsZndSYmI3V0VKYTRxOHRHV1lhejB4N2Q3VFphQzltVGExbmQ2NTdkVjd3dUtSTDJMUjFKcXRPczVQTXFlc0hIMXlheW1ETjQ?oc=5",
+            "source": "Fibre2Fashion",
+            "reader": "llm"
+          },
+          {
+            "headline": "Arvind: Building the Next Generation of Textile and Advanced Materials Businesses",
+            "claim": "investing in technical textiles",
+            "because": "Building the Next Generation of Textile and Advanced Materials Businesses",
+            "date": "2026-09-29",
+            "link": "https://news.google.com/rss/articles/CBMiugFBVV95cUxNZnRKR0xwVzlpcTdlYmpvUUM4NW1LWXFMRGtycUlTSGVKMkVPX0lDdHFXVTlaLTdLOUFwT1d5QXN2MUw0X3RDZjlQY25Ta2RNWnJxeVFmSTFVYmNmRmlia3NONnVxOTR4b1Mtb1U2SE1YMnVPeXFkUzZKT2hMYVIybDN6ZXhaRnlDVnF2bnZBUXRwU0Q5cUlZTWFLdWVRaU11ZnFXZXlfMTRWaGE4N01sTUxHaDJ0VVVCR2c?oc=5",
+            "source": "The Textile Magazine",
+            "reader": "llm"
+          },
+          {
+            "headline": "ARVIND LIMITED IS SET TO TAKE CENTRE STAGE WITH ASHISH N SONI AT LAKMĒ FASHION WEEK IN PARTNERSHIP WITH FASHION DESIGN COUNCIL OF INDIA",
+            "claim": "Leading denim manufacturer",
+            "because": "ARVIND LIMITED IS SET TO TAKE CENTRE STAGE WITH ASHISH N SONI AT LAKMĒ FASHION WEEK IN PARTNERSHIP WITH FASHION DESIGN COUNCIL OF INDIA",
+            "date": "2026-09-26",
+            "link": "https://news.google.com/rss/articles/CBMijAJBVV95cUxNVWFYeUZIQktSeG02ZDVIcW1ybE54dWNRckJVSTB0RmJGc2lvb3JoN1FYTm1TMWQtODBoNGZVREhCWXI2VUV5RU1URTFycjZoRVlqV3d4RVFkRGsxQmFGd2NldGJhQzlwMnRfNS04X3ExVElheHg3TVlLTjlWeFhwUlZOcFJnLVpKZWd2MHF2TFVYZ003X1ZoMzUtWWhYaHdudTlGNDI4M1puMFU1T2lOSVpYV0FPcGx4cmFtQVZNVFBQUG5DT2V4Y3RWVmNzRXE2NFN2by1xcy1Hd3UzeS1HTWxjanNBNEZnZ0d3NDZycDdHX2ctSDJqVTZTZEVycFBOWG9COXVldGx4R0s4?oc=5",
+            "source": "Press Trust of India",
+            "reader": "llm"
+          },
+          {
+            "headline": "Arvind Limited and Ashish N Soni to showcase collaboration in Delhi this October",
+            "claim": "Leading denim manufacturer",
+            "because": "Arvind Limited and Ashish N Soni to showcase collaboration in Delhi this October",
+            "date": "2026-09-25",
+            "link": "https://news.google.com/rss/articles/CBMixwFBVV95cUxPUVIxZGp0ZFU2WjNfbjJNb2M2OWNyaVVKa2tjS1I0cDNhaTFfSmRnTFZRbmdvaGsxTHQ5RU8tR2NBY1NyVFhxcWZjMjgya19sWVhfbm5aY3Ffa3JHa181QkFKVzhKN1FsWjZadWhzN2pERkpMcnNjUkJZcTBNVTdsMzFjSHFKb3FSLXAtaGMzMFFHN1BoMmpaMEZMbW94X2RmWHVPTF9hek5QYjRSazFVVFFTMTF5ZlpMdng1NzBNdTJzSFE5ak04?oc=5",
+            "source": "FashionNetwork India",
+            "reader": "llm"
+          },
+          {
+            "headline": "CARE Ratings upgrades LT ratings of Arvind to 'AA' with 'stable' outlook",
+            "claim": "Leading denim manufacturer, investing in technical textiles under recent government schemes",
+            "because": "CARE Ratings upgrades LT ratings of Arvind to 'AA' with 'stable' outlook",
+            "date": "2026-08-26",
+            "link": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxOMjRwZFl0U0ZLNzFrRnZvLVoxYXk0TU1XWnRXcVUzMXlwbThQcDMwTXFOcHZZWi1YdnB0dkZnMU56NHFNZWd6UnY4RkJKOW1oSHpnQ3V1ZlFaS2NYQXA1SkkxSTlZaVZQR1FESmdqdGJ4R3RfazBsUjFVemZZbWJqal8xSHR5ajZESmFUcjdYci1VQXI5NTVQbTZSX3FCcXFKNnBlTVdka29qNUZOYTVkSnJsWUk4Q2pYRDVmU1h2Q1ZmRjJJNkxMODl5M3owZnRNU2o0N3ZwUEVlV1F5TUtQRjAxUVBQWEF6UkHSAeoBQVVfeXFMTjI0cGRZdFNGSzcxa0Z2by1aMWF5NE1NV1p0V3FVMzF5cG04UHAzME1xTnB2WVotWHZwdHZGZzFOejRxTWVnelJ2OEZCSjltaEh6Z0N1dWZRWktjWEFwNUpJMUk5WWlWUEdRREpnanRieEd0X2swbFIxVXpmWW1iampfMUh0eWo2REphVHI3WHItVUFyOTU1UG02Ul9xQnFxSjZwZU1XZGtvajVGTmE1ZEpybFlJOENqWEQ1ZlNYdkNWZkYySTZMTDg5eTN6MGZ0TVNqNDd2cFBFZVdReU1LUEYwMVFQUFhBelJB?oc=5",
+            "source": "Business Standard",
+            "reader": "llm"
+          },
+          {
+            "headline": "Arvind acquires stake in two Torrent Urja entities for renewable power",
+            "claim": "Leading denim manufacturer, investing in technical textiles under recent government schemes",
+            "because": "acquires stake in two Torrent Urja entities for renewable power",
+            "date": "2026-08-25",
+            "link": "https://news.google.com/rss/articles/CBMipgFBVV95cUxOTVAzejQtc0k0WXYxMWJiUmhMcmJVRlA1dWVFaGNBbHp0MlhQaGN0UWsxaWd2U2JYN045aU45Q3MyZ0JKS0k3R3lfNktnWFlTTkc4NFRiSDl1STNCdWd0cDg4Z1ZKOUJsRWRrVW10SDFpTGNvMEU0MEpPdW9CYlNpWnBISVlGMm9haXhxWWN1cUFucUVlOGUzeGpLUUxnbnI1ZkFrSVVR?oc=5",
+            "source": "scanx.trade",
+            "reader": "llm"
+          },
+          {
+            "headline": "Arvind unveils AD Denim campaign with actor Raghav Juyal",
+            "claim": "Leading denim manufacturer, investing in technical textiles under recent government schemes",
+            "because": "unveils AD Denim campaign",
+            "date": "2026-08-25",
+            "link": "https://news.google.com/rss/articles/CBMifkFVX3lxTE8yNXhCdWxnMnIwM25ibTY0WGVmOTlxRUphYkNlN0Q0aE16UmhlNjRuLURNQnd3aGUta3pPNmRqNzNLQTlHY1JTZmVGUUZCcEpYcXhiX1BHY2thckpCdEg3R1JfclBHUWZNTUlTUDFBbXRSUGFwN3c2TF85VGVKUQ?oc=5",
+            "source": "Indian Broadcasting World",
+            "reader": "llm"
+          }
+        ],
+        "read": 15,
+        "unread": 0
       },
       "PGIL": {
         "ticker": "PGIL",
@@ -2225,9 +2650,73 @@
         "sector": "textiles_apparel",
         "thesis": "Multi-country apparel exporter with plants in India, Bangladesh, Vietnam and Indonesia, winning share as global brands diversify sourcing.",
         "challenged": [],
-        "supported": [],
-        "read": 0,
-        "unread": 8
+        "supported": [
+          {
+            "headline": "Buy Pearl Global Industries Ltd For Target 1,500 by Prabhudas Liladhar Capital Ltd",
+            "claim": "Multi-country apparel exporter with plants in India, Bangladesh, Vietnam and Indonesia, winning share as global brands diversify sourcing",
+            "because": "Buy Pearl Global Industries Ltd For Target 1,500 by Prabhudas Liladhar Capital Ltd",
+            "date": "2026-09-27",
+            "link": "https://news.google.com/rss/articles/CBMiywFBVV95cUxPMmhROXJyOHI2bThnSGpRanF4YUo1bFo5TmVIR3RrTGdmbXdvM3QyMEFkQlpfelBoRDVkbDhfeXdUVHluVnlVTC0zQlJobVdpM3laWkJraUhoYlotcGFqRDZTMXh1QzdicnlvalZ4aHpSc0gxRFdrYmowOWowbXg3OWlIVjZUNXhJSGhOODd3NHdEUThnV01aMzVEamhLdkd2VnZyUGF6TGZ1c1dHS0ZUbklLbTVMc0pVQ20zNWVwQXg2T3FvNEtIeTBoTQ?oc=5",
+            "source": "Investment Guru India",
+            "reader": "llm"
+          },
+          {
+            "headline": "Pearl Global expands Bangladesh footprint; adds 7 million pieces of garment capacity",
+            "claim": "Multi-country apparel exporter with plants in India, Bangladesh, Vietnam and Indonesia, winning share as global brands diversify sourcing",
+            "because": "Pearl Global expands Bangladesh footprint; adds 7 million pieces of garment capacity",
+            "date": "2026-09-22",
+            "link": "https://news.google.com/rss/articles/CBMi1wFBVV95cUxOV1dOUXJYTGpya0lleEgxT0R1MXc4T1lWOGd5RTlnSy1lazA4RlVZX3hqdXQzd3prOThYc3pGR1dZZV9JU2dfNzVfZGNOV2s3QUwwNDREMUFGc2JfTS1vaHMwMmRrS1hPMk9xMjI1LUV0VHdvcURiTThtTk1KeEQwMzhnVGJEOG1wUmFrVEJHWGFodFVVeXQ4TVByUWYwdFFtVGFJVE0xWmwyYWU5NzM1a2RUODBneHU5LVNjMDlwVVN3aUlyMDZNYVNndXF1MkpRVEh5VHdPUQ?oc=5",
+            "source": "tradingview.com",
+            "reader": "llm"
+          },
+          {
+            "headline": "Pearl Global Industries (NSE: PGIL) Expands Bangladesh Apparel Capacity",
+            "claim": "Multi-country apparel exporter with plants in India, Bangladesh, Vietnam and Indonesia, winning share as global brands diversify sourcing",
+            "because": "Expands Bangladesh Apparel Capacity",
+            "date": "2026-09-22",
+            "link": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxPdjlpbnhSOENaeU5YMnlUeHhLX0Q3bWljYXRyZVNpY2VnYXlXRE9NLTVRQ0hBYzdkVXNySHA2UVlNQkN0OFN4dFJvR1ZDV251SnRFSUxnVFVoVURJQVRPYXp4d2xjTEs0U1VFQjhLMHNWZ2duZnJBRDFXZmZUelJJMkQwWGFaZm82VklESG83TjBTV1pDbzB4RW9xTDhSRmRLYm5DMy1KSUdlcVlzdnM3bUdMV0x0WWluUllzVXlCZWx6MWdqQnRjejZZamx2eTFDdUJxMzdQbVNSREVvZnd6QVRR?oc=5",
+            "source": "Kalkine India",
+            "reader": "llm"
+          },
+          {
+            "headline": "Pearl Global commissions new garment manufacturing unit in Bangladesh",
+            "claim": "Multi-country apparel exporter with plants in India, Bangladesh, Vietnam and Indonesia, winning share as global brands diversify sourcing",
+            "because": "Pearl Global commissions new garment manufacturing unit in Bangladesh",
+            "date": "2026-09-22",
+            "link": "https://news.google.com/rss/articles/CBMi8wFBVV95cUxNc2lHam84Zkp2WnZGX0J0U1dKZVRET0J1M1lPM2hJVDBZMlhkcm4xd1RtR0wwNVBZZXlvT0Z5U0xwUExkdm9FZ3djbGU3Ym9MX25RdEQyVWhucGk4WDI0YXAwRGZMYjdhQTBwdUhPOHBlRnB5ajJrd0t4azhON0ZZcl9SblRmM1BlR3B6X3psOWt2TWhBSU45UEhpVUdKZTVnNk40RUpNN2xoVUFKaHY2RHVVVXV0aURpQ2c4ejlTenVHclhTZHFiT1NZekpuX1RmWlFYVjMxZXN5ejBXTHpmX3dmSF9hZnJmVlhGTGl3UWVobGs?oc=5",
+            "source": "Fibre2Fashion",
+            "reader": "llm"
+          },
+          {
+            "headline": "Pearl Global Reports Record Quarterly Revenue and EBITDA",
+            "claim": "Multi-country apparel exporter with plants in India, Bangladesh, Vietnam and Indonesia, winning share as global brands diversify sourcing",
+            "because": "Pearl Global Reports Record Quarterly Revenue and EBITDA",
+            "date": "2026-08-06",
+            "link": "https://news.google.com/rss/articles/CBMi9AFBVV95cUxPak1iakNBamlySUFZM1VfcGdrWl80YXJpa1ZtSkIwYjRRZUFUZTZKcHhuNU9RamNfWXZnaFY5Z0UtVEIwNXFEbkVCZkRkTE9GUzRSZ2VTdHJZVUNVbHJjczNhcHV6WC01RFE0akRhV3ItWWhnZXJMeU03VVh5ZWl4MmlDTzM1bnBIcUZfSHZvMGFvYTVOcG5RMG9fRXFaZGQ3ajQ5S2dqeGV1ZkdpU3JiOTBjQkI1SGlTRkZUVnpXUUdTLVZHaTdXNUk2bjhQUUZ2dDkxS0l6X1R5S2ZiMklvVF9wUDN6LUF1cjZsb1hoT3pza0hs?oc=5",
+            "source": "Passionate In Marketing",
+            "reader": "llm"
+          },
+          {
+            "headline": "Makers of Gap and Zara, Pearl Global posts record quarterly revenue and margin",
+            "claim": "Multi-country apparel exporter with plants in India, Bangladesh, Vietnam and Indonesia, winning share as global brands diversify sourcing",
+            "because": "Pearl Global posts record quarterly revenue and margin",
+            "date": "2026-08-06",
+            "link": "https://news.google.com/rss/articles/CBMisAFBVV95cUxOTjVhc09TYUkyRUJHNzdLVGNuRjFURVJ4SEhjTmx1SjNzTVkxQXd0WWdIcnVrQ3d4Nmx5VUszX0RPRlJJSUh5NEN0M2tGbzhQbzNUQldtajlQQlE5czNHWHZPRUI5OFBkNlZFWHlyYmstNjFqN1FSNlVFdE8zZTdYZ2NYU0VTcHpla3FyVGhFbUVBT1I0YWdjUzRBT2NjNmhEYzFOZXVsd0RxUmZmUk1OWQ?oc=5",
+            "source": "indiantelevision.com",
+            "reader": "llm"
+          },
+          {
+            "headline": "Pearl Global Industries Stock And 2 Indian Export Picks After The India UK Trade Deal",
+            "claim": "Multi-country apparel exporter with plants in India, Bangladesh, Vietnam and Indonesia, winning share as global brands diversify sourcing",
+            "because": "Pearl Global Industries Stock And 2 Indian Export Picks After The India UK Trade Deal",
+            "date": "2026-07-12",
+            "link": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxPX09DVkhwSGlDMFZ2TGYyTllGTGJsVXdIQXhNaFNSWVJydU5aWGlHT3paN0JuNldfTGV5UU93TVdtSTVkZ3J1a3hmZ2dScUdWU2t3MW9Bd0tPcnU2QjZGWERkUG5ZVVJkNDdvaU9EbTRPaWQzN09hVWl5ZUxHN3lTWEtEdmpzTk8xNU1qeERXdzNzcDdlc0xBZ0JWdmpuRDBFNm1PeTEyakZhSjc3QTVGZEt0VklzZkVJc3R3TW9wSzd2OGNhRXZab0czUE1rS0UwMmw3Mjdmb1JaU3FNY3g2TnhjSWQ3cWJzaWVF0gHwAUFVX3lxTE9Cc2d4R05acmlfSTU2TWFxWHJqM2NEbW9zbk1JRjZVeDRGOFRTdExDLUVYeXQzbEJ1TFhtU0lQQlFlR2c0MmhST21YMVl6Sk1DaFk5WGdTTE1uVFBFNkhLcHNkMURTXy1NbF95cGhFbXBOYW1Ya0NtYlBaa2hzOHJDV0NnTW5feGpRaVZlS1pKRFVFTFRaOUZVd1JkZm9Ed1RVeEs2ekROVnpKcFk0Mm9VQ05aazR0djlrSDlHWjNDemZaS2FGOXExOEhUOEdNOEJWZmZiNlhEVE5TQWtXZXpfM04zOW55b0Y5eGpzWEpjbA?oc=5",
+            "source": "simplywall.st",
+            "reader": "llm"
+          }
+        ],
+        "read": 8,
+        "unread": 0
       },
       "GODREJPROP": {
         "ticker": "GODREJPROP",
@@ -2235,9 +2724,46 @@
         "sector": "real_estate",
         "thesis": "Large residential developer adding projects such as the ₹6,000 crore Marine Lines launch in Mumbai, with pre-sales momentum in Mumbai and NCR.",
         "challenged": [],
-        "supported": [],
-        "read": 0,
-        "unread": 6
+        "supported": [
+          {
+            "headline": "Godrej Properties unveils the Pune edition of The Elevated Living Edit",
+            "claim": "Large residential developer adding projects such as the ₹6,000 crore Marine Lines launch in Mumbai, with pre-sales momentum in Mumbai and NCR",
+            "because": "Godrej Properties unveils the Pune edition of The Elevated Living Edit",
+            "date": "2026-10-26",
+            "link": "https://news.google.com/rss/articles/CBMipAFBVV95cUxOYzktSEdYeVNkUkp4NnBYZTByLXZfeG1vOG1SdGxLaFFKdWMzVVhHRkc2cnpMRUw2LUliejBvUGZKZVVZZnpIcUh1Z3ZnRmhMV2Z0ZlMweWpXLUdObG83UjI2emN6eXNlNy1lVVZTQjBhV3c3MHhZLU5yUjAxRFgtYTN0MklhX3BGWW1FTkdKMjY5OGRITkxpT0dwN3R2azg0bU96VQ?oc=5",
+            "source": "Pune Prahar",
+            "reader": "llm"
+          },
+          {
+            "headline": "Godrej Properties (NSE:GODREJPROP) Adds ₹6,000 Crore Mumbai Luxury Housing Project",
+            "claim": "adding projects such as the ₹6,000 crore Marine Lines launch in Mumbai",
+            "because": "Adds ₹6,000 Crore Mumbai Luxury Housing Project",
+            "date": "2026-09-29",
+            "link": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxNQ0Jkc19XVHlTVU8wNVNpdnZCamxaUEg1Ykg5UDRINFRmYXJ0T1lnU0RXTEJka2ljcUY4YVNiNUxjcndZdHlSS3FBcG42R0E3TUJuYXpubmw1cGhVVGp2M2pzLXNLZ0hJaXp0ZVlvTnMzUFlfT0gwaGZIVlZLeG1yNnc0MWRDakNUekZnZFM5T2E0UTFobXhKYWMwRUV5QTBWYkFCWlVsNUJsTDhTb0cyNXRTaWZHQXRMdVZzZGRQR3VEcm1pSExnU3hhektfSEQ5ZGdFc0U2NjhoLVNKNEtZ?oc=5",
+            "source": "Kalkine India",
+            "reader": "llm"
+          },
+          {
+            "headline": "Godrej Properties (NSE:GODREJPROP): What Does the New INR 6,000 Crore Marine Lines Project Mean?",
+            "claim": "adding projects such as the ₹6,000 crore Marine Lines launch in Mumbai",
+            "because": "What Does the New INR 6,000 Crore Marine Lines Project Mean?",
+            "date": "2026-09-28",
+            "link": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxQMFljaGRzc1hEbE9FQzZBejVkV1R2RDVYSjNUN0dMQnF1S1NNZjQ0U2owdE95dGN4ckxWcGVoajRMbHNPbE14TXB1NXFjUFB5Y0xBdTNtUzFUUjJRRzRUQm13MVlBRXctNXdjQjdGMmlQV0hoenZOUlZmQWI5aGg2MmFoa2pSWEk4WGR6TGlYSDJSRGtlWW5EVjkwUzBiS2ltWGxWYUg4LWZxSkw1SUtRTFh4TVJLTVBleG5zS1NtUGQxUV9Fb3VleWpoQ2JmcnZ0QXRObQ?oc=5",
+            "source": "Kalkine India",
+            "reader": "llm"
+          },
+          {
+            "headline": "Godrej Properties GODREJPROP: Gurugram Dispute Settled",
+            "claim": "Large residential developer adding projects such as the ₹6,000 crore Marine Lines launch in Mumbai, with pre-sales momentum in Mumbai and NCR",
+            "because": "Gurugram Dispute Settled",
+            "date": "2026-09-10",
+            "link": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxQeklTUmpYc3Vna2gtWkEtMlh3emVaaWRRVnJKRWRNZ3l5bThmNm9JUEZxY2duZ2VZUWM2Y194REw5bDlXZXlJaVR1OWR4X1QzWWhQUEZVZDJsVHRYeDNiZDhmWnAtMWpUX2ZZSWtPY1ZDeWpyN3RoOFhBbVZGTTB5c1o3cU5LOWVDNjktcS01Nm1PUE5WeWlYd1ZoaVJDNjBpb2J4cXdGUmg5blFxV2pjeDZiQUwtVDlzMjZWYkdBdkY3NFE?oc=5",
+            "source": "Kalkine India",
+            "reader": "llm"
+          }
+        ],
+        "read": 6,
+        "unread": 0
       }
     },
     "no_thesis": [
@@ -2245,23 +2771,26 @@
       "BHEL",
       "EMMVEE",
       "FEDERALBNK",
+      "GRSE",
       "ITCHOTELS",
       "LODHA",
+      "PGEL",
       "PREMIERENE",
+      "VINCOFE",
       "VRLLOG",
       "WABAG"
     ],
-    "challenged": 2,
+    "challenged": 4,
     "status": {
-      "cached": 0,
-      "read": 300,
-      "pending": 101,
+      "cached": 297,
+      "read": 112,
+      "pending": 0,
       "skipped": "",
-      "confirmed": 2,
-      "refused": 5,
+      "confirmed": 1,
+      "refused": 6,
       "checks_pending": 0,
       "checks_skipped": "",
-      "reasons_read": 0,
+      "reasons_read": 1,
       "reasons_cached": 0,
       "reasons_pending": 0,
       "reasons_skipped": "",
