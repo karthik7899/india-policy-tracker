@@ -560,9 +560,9 @@
     "name": "Optiemus Infra.",
     "price_at_decision": 592.35,
     "target_at_decision": null,
-    "scored": false,
-    "outcome": null,
-    "realized_return_pct": null,
+    "scored": true,
+    "outcome": "No Analyst Target (unscored)",
+    "realized_return_pct": 33.7,
     "target_made_up": 740.44
   },
   {
@@ -1010,6 +1010,42 @@
     "name": "PG Electroplast",
     "price_at_decision": 538.7,
     "target_at_decision": 680.0,
+    "scored": false,
+    "outcome": null,
+    "realized_return_pct": null
+  },
+  {
+    "date": "2026-10-30",
+    "action": "added",
+    "sector": "banking_financials",
+    "ticker": "AXISBANK",
+    "name": "Axis Bank",
+    "price_at_decision": 1213.4,
+    "target_at_decision": 1590.0,
+    "scored": false,
+    "outcome": null,
+    "realized_return_pct": null
+  },
+  {
+    "date": "2026-10-30",
+    "action": "rotated_in",
+    "sector": "big_cap_industries",
+    "ticker": "LT",
+    "name": "Larsen & Toubro",
+    "price_at_decision": 3852.1,
+    "target_at_decision": 4540.0,
+    "scored": false,
+    "outcome": null,
+    "realized_return_pct": null
+  },
+  {
+    "date": "2026-10-30",
+    "action": "rotated_in",
+    "sector": "clean_energy",
+    "ticker": "GVT&D",
+    "name": "GE Vernova T&D",
+    "price_at_decision": 4013.6,
+    "target_at_decision": 5244.0,
     "scored": false,
     "outcome": null,
     "realized_return_pct": null

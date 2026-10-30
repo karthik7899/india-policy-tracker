@@ -2,6 +2,19 @@
   "ticker": "FORTIS",
   "items": [
     {
+      "date": "28 Oct 2026",
+      "headline": "FORTIS Share Price Today",
+      "source_url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE9UYjdzRXB4X2ltSDMzNVdsU09VaU9BODVFSlFSRmw4bTktc1g4VVlVTEpBYndCRW9QdGRfX3k1Z0tYRFhfUUpWeXlJLUxYaVdqb1REeWZiNnEzakVjOXc?oc=5",
+      "source_label": "scanx.trade",
+      "event_type": "",
+      "source_kind": "Sector news",
+      "event_tags": [
+        "Sector news"
+      ],
+      "confidence": "M",
+      "status": "counted"
+    },
+    {
       "date": "Mon, 12 Oct 2026 07:00:00 GMT",
       "headline": "Fortis Healthcare (NSEI:FORTIS) Stock Forecast & Analyst Predictions",
       "source_url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxNb2M5WnFtemJwVW1HYVV0cWxKNFZIMUpQV0EzQ2NWSklpTEo4UThiazQzcUVsZjBJTTViQW9sMnZsRWRFMFBDTEF4bUpkVXhqZnp5dnlmUXN1RklUTTloRmhjN3l5YkN4bUlCa3BnODVldkRXcWpnSWE0bjQ5bUxQUTV0X0ptemtXQ21GTFFB?oc=5",
@@ -240,10 +253,9 @@
       "headline": "The Dial as Light Source: Fortis Unveils the Novonaut N-42 Halo",
       "source_url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxQa3ROeWd0eDA5U25xYlJYT2hIQzZHaXJwTEhYSUtpNWc0TkRPOUJlQXNmVVROQmg5Zk1TVkVNSWY5SUtCTmZITHhJbTdobVVpYzFfWUpmTmk3dE91aGt6d3FWaUtZZDFZRzkwVGdtc2c5b3JRdXZCeGdUbktETm1MekJyWnFLZEd5WHkzT1pFY193RDctOWc?oc=5",
       "source_label": "WatchTime",
-      "event_type": "product_launch",
+      "event_type": "",
       "source_kind": "Launch",
       "event_tags": [
-        "product_launch",
         "Launch"
       ],
       "confidence": "M",
@@ -379,22 +391,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (318 days old)"
-    },
-    {
-      "date": "2026-10-13",
-      "headline": "The Dial as Light Source: Fortis Unveils the Novonaut N-42 Halo",
-      "source_url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxQa3ROeWd0eDA5U25xYlJYT2hIQzZHaXJwTEhYSUtpNWc0TkRPOUJlQXNmVVROQmg5Zk1TVkVNSWY5SUtCTmZITHhJbTdobVVpYzFfWUpmTmk3dE91aGt6d3FWaUtZZDFZRzkwVGdtc2c5b3JRdXZCeGdUbktETm1MekJyWnFLZEd5WHkzT1pFY193RDctOWc?oc=5",
-      "source_label": "WatchTime",
-      "event_type": "product_launch",
-      "source_kind": "Event",
-      "event_tags": [
-        "product_launch",
-        "Event"
-      ],
-      "confidence": "H",
-      "status": "merged",
-      "exclusion_reason": "merged: duplicate phrasing of “The Dial as Light Source: Fortis Unveils the Novonaut N-42 H”"
+      "exclusion_reason": "aged >120d (319 days old)"
     }
   ]
 }

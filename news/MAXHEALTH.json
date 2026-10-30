@@ -2,19 +2,6 @@
   "ticker": "MAXHEALTH",
   "items": [
     {
-      "date": "27 Oct 2026",
-      "headline": "MAXHEALTH Share Price Today",
-      "source_url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTFBtOENsZTVDWGtza2RuRW14aWxLektLUExGd0hKMmhpSUxwTnIxTjBUNVpOZVM5VnBuQm5BZTFYMmQ3YnY0dGtUNmtRdzhBRUp3ZnppR0pVOU9OVFNTdF91ZVJSVlBCazA?oc=5",
-      "source_label": "scanx.trade",
-      "event_type": "",
-      "source_kind": "Sector news",
-      "event_tags": [
-        "Sector news"
-      ],
-      "confidence": "M",
-      "status": "counted"
-    },
-    {
       "date": "Sat, 24 Oct 2026 14:10:11 GMT",
       "headline": "MAXHEALTH Share Price Today",
       "source_url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTFBtOENsZTVDWGtza2RuRW14aWxLektLUExGd0hKMmhpSUxwTnIxTjBUNVpOZVM5VnBuQm5BZTFYMmQ3YnY0dGtUNmtRdzhBRUp3ZnppR0pVOU9OVFNTdF91ZVJSVlBCazA?oc=5",
@@ -25,8 +12,7 @@
         "Agreement"
       ],
       "confidence": "M",
-      "status": "merged",
-      "exclusion_reason": "merged: duplicate phrasing of “MAXHEALTH Share Price Today”"
+      "status": "counted"
     },
     {
       "date": "Mon, 05 Oct 2026 07:00:00 GMT",
@@ -37,6 +23,19 @@
       "source_kind": "Agreement",
       "event_tags": [
         "Agreement"
+      ],
+      "confidence": "M",
+      "status": "counted"
+    },
+    {
+      "date": "30 Oct 2026",
+      "headline": "Max Healthcare Institute Limited has informed the Exchange regarding allotment of Equity Shares under Max Healthcare Institute Limited - Employee Stock Option Scheme 2022",
+      "source_url": "https://nsearchives.nseindia.com/corporate/MAXHEALTH_30102026110106_SE_Intimation_Allotment_of_Equity_Shares.pdf",
+      "source_label": "NSE",
+      "event_type": "",
+      "source_kind": "Filing",
+      "event_tags": [
+        "Filing"
       ],
       "confidence": "M",
       "status": "counted"
@@ -78,7 +77,8 @@
         "Filing"
       ],
       "confidence": "M",
-      "status": "counted"
+      "status": "merged",
+      "exclusion_reason": "merged: duplicate phrasing of “Max Healthcare Institute Limited has informed the Exchange r”"
     }
   ]
 }
