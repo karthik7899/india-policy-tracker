@@ -188,10 +188,9 @@
       "headline": "Adani Power Limited has informed the Exchange about Letter of Award",
       "source_url": "https://nsearchives.nseindia.com/corporate/ADANIPOWER_14102026105706_APLLoAfromUttarakhand13102026.pdf",
       "source_label": "NSE",
-      "event_type": "order_win",
+      "event_type": "",
       "source_kind": "Filing",
       "event_tags": [
-        "order_win",
         "Filing"
       ],
       "confidence": "M",
@@ -261,7 +260,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (168 days old)"
+      "exclusion_reason": "aged >120d (169 days old)"
     },
     {
       "date": "01 Sep 2026",
@@ -303,21 +302,6 @@
       "status": "counted",
       "article_url": "https://www.livemint.com/market/stock-market-news/best-adani-stock-to-buy-after-q2-results-2026-adani-power-vs-adani-ports-vs-adani-enterprises-experts-views-targets-11793248073122.html",
       "summary": "Best Adani stock to buy after Q2 results 2026: Brokerages recommend Adani Enterprises, Adani Ports, Adani Energy Solutions, and Adani Power as top picks"
-    },
-    {
-      "date": "2026-10-14",
-      "headline": "Adani Power Limited has informed the Exchange about Letter of Award",
-      "source_url": "https://nsearchives.nseindia.com/corporate/ADANIPOWER_14102026105706_APLLoAfromUttarakhand13102026.pdf",
-      "source_label": "NSE",
-      "event_type": "order_win",
-      "source_kind": "Event",
-      "event_tags": [
-        "order_win",
-        "Event"
-      ],
-      "confidence": "H",
-      "status": "merged",
-      "exclusion_reason": "merged: duplicate phrasing of “Adani Power Limited has informed the Exchange about Letter o”"
     }
   ]
 }

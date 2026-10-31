@@ -573,9 +573,9 @@
     "name": "Birla Cable",
     "price_at_decision": 379.05,
     "target_at_decision": null,
-    "scored": false,
-    "outcome": null,
-    "realized_return_pct": null,
+    "scored": true,
+    "outcome": "No Analyst Target (unscored)",
+    "realized_return_pct": -16.7,
     "target_made_up": 473.81
   },
   {
@@ -1046,6 +1046,42 @@
     "name": "GE Vernova T&D",
     "price_at_decision": 4013.6,
     "target_at_decision": 5244.0,
+    "scored": false,
+    "outcome": null,
+    "realized_return_pct": null
+  },
+  {
+    "date": "2026-10-31",
+    "action": "rotated_in",
+    "sector": "midcap_it",
+    "ticker": "TECHM",
+    "name": "Tech Mahindra",
+    "price_at_decision": 1790.8,
+    "target_at_decision": 1800.0,
+    "scored": false,
+    "outcome": null,
+    "realized_return_pct": null
+  },
+  {
+    "date": "2026-10-31",
+    "action": "rotated_in",
+    "sector": "banking_financials",
+    "ticker": "MAHABANK",
+    "name": "Bank of Maharashtra",
+    "price_at_decision": 81.36,
+    "target_at_decision": 100.0,
+    "scored": false,
+    "outcome": null,
+    "realized_return_pct": null
+  },
+  {
+    "date": "2026-10-31",
+    "action": "rotated_in",
+    "sector": "sports_athleisure",
+    "ticker": "KKCL",
+    "name": "Kewal Kiran Clothing",
+    "price_at_decision": 428.3,
+    "target_at_decision": 714.0,
     "scored": false,
     "outcome": null,
     "realized_return_pct": null

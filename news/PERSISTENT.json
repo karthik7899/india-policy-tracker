@@ -2,6 +2,20 @@
   "ticker": "PERSISTENT",
   "items": [
     {
+      "date": "29 Oct 2026",
+      "headline": "Ratan Kaushal Appointed Vice President – Sales, Hi-Tech Business Unit at Persistent Systems",
+      "source_url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxPZks3elhmUUk2MktoNnVyZWZSNzRoYnExOXlqWXpJV0NDM2NnaGRQdm9vdzlNYVgtR0h6QXlWejlIZjJyVldlRjlVaW50TlJKYlVNT3NfZklqRmhrM2JTdzdxUk5ESERHWHE1SmZld25HSlppZTFSUEdrMHdFNHNtN05tc1Uyc3FTdWJFQXVVR0VIVEV6NHdLTUZ3cmIzWGZpQW1iLVJTZkw3Ylk3?oc=5",
+      "source_label": "https://hrtoday.in/",
+      "event_type": "management_change",
+      "source_kind": "Sector news",
+      "event_tags": [
+        "management_change",
+        "Sector news"
+      ],
+      "confidence": "M",
+      "status": "counted"
+    },
+    {
       "date": "Fri, 16 Oct 2026 08:27:40 GMT",
       "headline": "Persistent Systems to raise $842 mn debt to cover German acquisition loan",
       "source_url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxOZ2dXZFp1Q0dvc0hsUlNaN0RKYTdJWEVjMTBNVUVmRl9IaDNNS0ZQTUJhSEtVcnJvZGFZRnh1RTc5cjZoREx3SWpGU1dVQ0FWR08zX0FtUFVYekxQZWR1UVhaT3hqZFVJcVRQclFPcjBmRXdjb19OZm5XWnBobHdPeF9KT0lOTHN5c3A4OUxLbS1kVmNaYVZEMWNOb0_SAaQBQVVfeXFMT3h2eGlqbU9pUUpHbTQ1Q1llNjhWWUZ6dDZ1aEpWR29MN2VuWV8zWjB3dndfYXd3bFl5ZjhrMmppa2RNd0tNTzdHLUFCZ1gyNjVKdmhrWjBOTktWQTNvanNTWGw3Q1d6cmpETV90X1FPRWNlVnBVdXRWTTdoQ2kyRnZTNk5Wc0lVOGhkSUEwSUNBR0duYUNmdXFkQXl3WEtfNWw0QXg?oc=5",
@@ -51,7 +65,8 @@
         "Agreement"
       ],
       "confidence": "M",
-      "status": "counted"
+      "status": "excluded",
+      "exclusion_reason": "aged >120d (121 days old)"
     },
     {
       "date": "Tue, 13 Oct 2026 09:16:20 GMT",
@@ -91,7 +106,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (122 days old)"
+      "exclusion_reason": "aged >120d (123 days old)"
     },
     {
       "date": "Sat, 01 Aug 2026 07:00:00 GMT",
@@ -131,7 +146,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (123 days old)"
+      "exclusion_reason": "aged >120d (124 days old)"
     },
     {
       "date": "16 Oct 2026",
@@ -262,7 +277,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (123 days old)"
+      "exclusion_reason": "aged >120d (124 days old)"
     },
     {
       "date": "Fri, 26 Jun 2026 07:00:00 GMT",
@@ -276,7 +291,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (126 days old)"
+      "exclusion_reason": "aged >120d (127 days old)"
     },
     {
       "date": "Mon, 29 Jun 2026 07:00:00 GMT",
@@ -290,7 +305,22 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (123 days old)"
+      "exclusion_reason": "aged >120d (124 days old)"
+    },
+    {
+      "date": "2026-10-29",
+      "headline": "Ratan Kaushal Appointed Vice President – Sales, Hi-Tech Business Unit at Persistent Systems",
+      "source_url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxPZks3elhmUUk2MktoNnVyZWZSNzRoYnExOXlqWXpJV0NDM2NnaGRQdm9vdzlNYVgtR0h6QXlWejlIZjJyVldlRjlVaW50TlJKYlVNT3NfZklqRmhrM2JTdzdxUk5ESERHWHE1SmZld25HSlppZTFSUEdrMHdFNHNtN05tc1Uyc3FTdWJFQXVVR0VIVEV6NHdLTUZ3cmIzWGZpQW1iLVJTZkw3Ylk3?oc=5",
+      "source_label": "https://hrtoday.in/",
+      "event_type": "management_change",
+      "source_kind": "Event",
+      "event_tags": [
+        "management_change",
+        "Event"
+      ],
+      "confidence": "L",
+      "status": "merged",
+      "exclusion_reason": "merged: duplicate phrasing of “Ratan Kaushal Appointed Vice President – Sales, Hi-Tech Busi”"
     }
   ]
 }

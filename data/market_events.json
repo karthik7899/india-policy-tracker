@@ -1,6 +1,24 @@
 {
   "value": [
     {
+      "headline": "Varun Beverages Q3 net profit rises 13% YoY, but margins fall",
+      "event_type": "business_weakness",
+      "phrase": "margins fall",
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "VBL"
+      ],
+      "external": [],
+      "direction": "risk",
+      "date": "2026-10-31",
+      "first_seen": "2026-10-31",
+      "link": "https://economictimes.indiatimes.com/markets/stocks/earnings/varun-beverages-q3-net-profit-rises-13-yoy-but-margins-fall/articleshow/135387006.cms",
+      "source": "Economic Times",
+      "story": "Varun Beverages Q3 net profit rises 13% YoY, but margins fall",
+      "reports": 1
+    },
+    {
       "headline": "Suzlon Energy Shares Fall 9% as Net Profit Declines 69% for Q2",
       "event_type": "business_weakness",
       "phrase": "net profit declines",
@@ -12,10 +30,67 @@
       "external": [],
       "direction": "risk",
       "date": "2026-10-30",
-      "first_seen": "2026-10-30",
+      "first_seen": "2026-10-31",
       "link": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQaFhLdWZPMS1qRUdGTnNDcjI2SmloNEtPYWFqUVlnS19SV2pZQUVtekZaY3VmamVrY3kwRzBtWHNXUGdsU2FhS1YtTG05UGgwVElNV0huQy0yM2xpSldfTDViVl8zRl83NHVUZmhnYkl3NElzS25RcldaSjU2clNGSkEyM1h5bnVGbjJJME9EWnFSRzN4WTlBMjl0U1J1cjhyT2t3V2NFY2I?oc=5",
       "source": "India Infoline",
       "story": "Suzlon Energy Shares Fall 9% as Net Profit Declines 69% for Q2",
+      "reports": 1
+    },
+    {
+      "headline": "Suzlon Energy cuts operating margin guidance to 15%",
+      "event_type": "business_weakness",
+      "phrase": "cuts operating margin guidance",
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "SUZLON"
+      ],
+      "external": [],
+      "direction": "risk",
+      "date": "2026-10-30",
+      "first_seen": "2026-10-31",
+      "link": "https://news.google.com/rss/articles/CBMiqwJBVV95cUxPQzM5U2V4U0tnVTh6QUo4LXdiWVBkUXBmZldTV0hqSGVvMThTY3h2MGVNMGNBVU1HVXBzRjFHOVpPREpSa1hCQU1aZ2tnb0liUE4xdTFnUVl6WU1XS0gzb242cFVNdUxkUzZvcXc3Qm5FNjFKd1hpRmRibDNvZGY0QlVWUTkycVVrV0VJc0N2ek5nN0FYQW16eG5TajJKSlh3N294cXhGaTlNS21xdENTRFIycGdzcWROS29oZGZfYUxGRnZyMC0taDZLME5WdThJYTN5c05QSTVXQ2FpcVFiSHVCdURCSkZCYW5nOFhtTHltU0FGREZueGdGUWhqRWZXUTRBcElRRGZ6SHgwdDh5RDltdXgtZEtlbmF0OUVXM0VTMnc0OWI4UGNaSdIBxwFBVV95cUxORTJlM0F2OVVBS0RCWF9jVDNLdV9fTEhTMUQyR2tTRmhDNEpUdlZrTDVsc1FCMUhieFJ1bERhWEtGNXZHWGdod05qOVJrYmdVOTcwOFh2T3lxMXpuY25IV1N3Nm9SWFk3N2RncjN2Y3FFVW1HRC15TGczMjQ1WWhJUDJoTXBwX1hTdXV3YTZyLWViZ2w3bHlsN3lDOVdVdGxLOURZdXpwYTRtaHljWm93S2NXbUdxRHl4RFJpc3QxUmExWW9tQkk0?oc=5",
+      "source": "The Economic Times",
+      "story": "Suzlon Energy cuts operating margin guidance to 15%",
+      "reports": 1
+    },
+    {
+      "headline": "Samsung warns memory chip shortage will worsen in 2027, expects tight supply till 2028",
+      "event_type": "supply_disruption",
+      "phrase": "shortage",
+      "certainty": "completed",
+      "domains": [],
+      "actors": [],
+      "external": [
+        "Samsung"
+      ],
+      "direction": "risk",
+      "date": "2026-10-30",
+      "first_seen": "2026-10-31",
+      "link": "https://news.google.com/rss/articles/CBMi5wFBVV95cUxPX1plT01kUGRZMEh5eU43N2V3SWtQVi01eXdEZ0UxMGpwNXJLM04xc2ljNHR2Zld1TGRyMlo1dUUzcXdPaFZzVFdYb2R6ZlVaZmM2WWp0Tm1SblRwaEJ6M2ZPTGdGOEpUSVJITFo5R0VybHF5OHNTRno5VE1WVEtRcFhpTWdOTVVlSFBYSElMS2kzT2hKaWswZk05bkxRUnFxNWR4S1NQX1pGOXRYUmZWRWFWVVBRN0ZrNkhBRzQtRHFNN2FOTllzd2ZibjhzN2NTckEwZVppTl9ucThZUFNwYzhmTUdvWTjSAewBQVVfeXFMTnAtSEcyZkc0YW1jV3VtUUk0bkhHN3pfQjlBUDdWZGVEZlo0cFU4UHFzSUpqRE9qODRRSjl1cjFzQWNCMlNWc0dHcE5sUHZpekhfWlFjTTZZNm1FcjU3TDJHeVFZRHNkaVE5TGtMMGVQaERfY3FxelRrWFBTN3RBU2NjTTVCdW5fVkVTLWVIQVRYVVc0Z1RMSG5LSko5a0RvMy1BZEI0VV9tR1N5NlZBdC1wR0lPbjMzcU4wWEZZMkF2YzgyRkhqT0l5Ty1MaUFzVVUydDB0UjhGVWNISFMwQWxqWHd1cTFEZlhveEc?oc=5",
+      "source": "India Today",
+      "corroborated": true
+    },
+    {
+      "headline": "CONCOR–Aiyer Shipping Collaboration Targets Stronger Overseas Logistics Links",
+      "event_type": "tie_up",
+      "phrase": null,
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "CONCOR"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-10-30",
+      "reader": "llm",
+      "corroborated": false,
+      "counterparties": [
+        "Aiyer Shipping"
+      ],
+      "link": "https://news.google.com/rss/articles/CBMirwFBVV95cUxPbjQ4Nld3djgyczZzV2lscHRsYUx6TTJNNlFiVHF0RTMwTDBheDN0bzh3aS1sYUlRNEtLQi13Z2FJU0M3NUx0SGRibDhVNUlvTngwdTh1OW5HNmdDMXZXS0RGMm5KRi02ajBXZXhJbkxYam0zZ3dOSDVoMFBzczVzcHlqR0xFS1BYT3Y1elZ1R0h3cGlaMUJZSGhxX3JBVHl2WmVSVjFBVWtTMUdKZl9v?oc=5",
+      "source": "Maritime Gateway",
+      "story": "CONCOR–Aiyer Shipping Collaboration Targets Stronger Overseas Logistics Links",
       "reports": 1
     },
     {
@@ -78,23 +153,6 @@
       "corroborated": true
     },
     {
-      "headline": "Samsung warns memory chip shortage will worsen in 2027, expects tight supply till 2028",
-      "event_type": "supply_disruption",
-      "phrase": "shortage",
-      "certainty": "completed",
-      "domains": [],
-      "actors": [],
-      "external": [
-        "Samsung"
-      ],
-      "direction": "risk",
-      "date": "2026-10-30",
-      "first_seen": "2026-10-30",
-      "link": "https://news.google.com/rss/articles/CBMi7AFBVV95cUxOcC1IRzJmRzRhbWNXdW1RSTRuSEc3el9COUFQN1ZkZURmWjRwVThQcXNJSmpET2o4NFFKOXVyMXNBY0IyU1ZzR0dwTmxQdml6SF9aUWNNNlk2bUVyNTdMMkd5UVlEc2RpUTlMa0wwZVBoRF9jcXF6VGtYUFM3dEFTY2NNNUJ1bl9WRVMtZUhBVFhVVzRnVExIbktKSjlrRG8zLUFkQjRVX21HU3k2VkF0LXBHSU9uMzNxTjBYRlkyQXZjODJGSGpPSXlPLUxpQXNVVTJ0MHRSOEZVY0hIUzBBbGpYd3VxMURmWG94R9IB7AFBVV95cUxOcC1IRzJmRzRhbWNXdW1RSTRuSEc3el9COUFQN1ZkZURmWjRwVThQcXNJSmpET2o4NFFKOXVyMXNBY0IyU1ZzR0dwTmxQdml6SF9aUWNNNlk2bUVyNTdMMkd5UVlEc2RpUTlMa0wwZVBoRF9jcXF6VGtYUFM3dEFTY2NNNUJ1bl9WRVMtZUhBVFhVVzRnVExIbktKSjlrRG8zLUFkQjRVX21HU3k2VkF0LXBHSU9uMzNxTjBYRlkyQXZjODJGSGpPSXlPLUxpQXNVVTJ0MHRSOEZVY0hIUzBBbGpYd3VxMURmWG94Rw?oc=5",
-      "source": "India Today",
-      "corroborated": true
-    },
-    {
       "headline": "CONCOR Bags ₹485.93 Crore Wagon Order; Shares Rise 0.86%",
       "event_type": "order_win",
       "phrase": "bags ₹485.93 crore wagon order",
@@ -106,7 +164,7 @@
       "external": [],
       "direction": "opportunity",
       "date": "2026-10-29",
-      "first_seen": "2026-10-30",
+      "first_seen": "2026-10-31",
       "link": "https://news.google.com/rss/articles/CBMikwFBVV95cUxOTUo2dWE5RWRTT0dFUHFEQVpKR0plNGdFblJHUnpzejVKcUJMMVBuN3dqZk1SNE8tUXByNUFrRlU5SHRReHdjY001bHpRWko2SHNNNk8wSk1NZFRJbXFwZVhLN3dTWnFTZ1VqOEF4ckNkb3FCWnBmOUZOYTN3UVhDQlp5RUNPdEVKb2JTRzdpQVpFa0U?oc=5",
       "source": "HDFC Sky",
       "corroborated": true,
@@ -128,6 +186,65 @@
       }
     },
     {
+      "headline": "ADSL and Nigus Hercules Partner to Develop Defence MRO Capabilities in Nigeria",
+      "event_type": "tie_up",
+      "phrase": "and nigus hercules partner to",
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "ADSL"
+      ],
+      "external": [],
+      "counterparties": [
+        "Nigus Hercules"
+      ],
+      "direction": "opportunity",
+      "date": "2026-10-29",
+      "first_seen": "2026-10-31",
+      "link": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPVTdKOWZKYk5jT0xNWWkwenNYREJQRnl5OFVSR2FVcXpKTnVacWNkTjZ5cURkaHVobXZaNkQ4Qzc2SEQ4enQwRk8zS2VBV21SMVE5Z1Y0dFFla3IzblUwMkNxSG1Pc2VmMHdjb21BYmtnYmgzQi1CckpuWUJUOGROZk55VGx0bnJmclBwZFp3amtDYVJvcnp3Ti0wc0lwemRIQlNVc2RSRlRJVk0?oc=5",
+      "source": "Raksha Anirveda",
+      "corroborated": true,
+      "story": "ADSL and Nigus Hercules Partner to Develop Defence MRO Capabilities in Nigeria",
+      "reports": 1
+    },
+    {
+      "headline": "Suzlon Q2 profit falls 69% to ₹394 crore on deferred tax base effect",
+      "event_type": "business_weakness",
+      "phrase": "profit falls",
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "SUZLON"
+      ],
+      "external": [],
+      "direction": "risk",
+      "date": "2026-10-29",
+      "first_seen": "2026-10-31",
+      "link": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxNOUJYUlZBcml5ZmgyNGF0ZGVYYVhwbjFfRFdLYm5UWklLcTVWdWZJWElsYWhxVGNFanhCSENmQkh6aXZ5MlI2bF9FLW14QWdlclJGdDFLWFFxUThpYXJWN29vWERuRzZ6dGk2YU83WUNGNFdWdDlTMEQteHlkblRGeDJHTHpjdTN1ZFJ3U0YzcnRWX3VIRGRHV25WT2gzSEliTlhVbVlQN0xTNkV2eWNHYkZGaFVDbGpybksyLWFCM1A?oc=5",
+      "source": "TradingView",
+      "story": "Suzlon Q2 profit falls 69% to ₹394 crore on deferred tax base effect",
+      "reports": 1
+    },
+    {
+      "headline": "Suzlon wins 201.6 MW wind order from Waaree Group",
+      "event_type": "order_win",
+      "phrase": "wins 201.6 mw wind order",
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "SUZLON"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-10-29",
+      "first_seen": "2026-10-31",
+      "link": "https://news.google.com/rss/articles/CBMi7wFBVV95cUxQSGdzRUxjZmctQzhLUGZvOVd1NnBBQU0zRXM5dWlPVW56aVR0d3YyNkc2bk00clltLUNENlBncmE3emF1akdwbkVXMUVjQkxMcEl5cFAzOC1mbWpvX25OeTExX1NPMjNxY0Y5V3pwb1JLYlJFYUpQSmc3N1ZOb2xqenhpRU1pMDUzQkhwWFREWlIyMldBNGV1c1h3XzMwTmZMT3ZUOU41VGJPRFg2eU1pV0hrbVhxbkRyY01nRVNIUUEtVi0tbnhpSXoyRnhCM296YXNaeXRpdF9VZVNBMWVpNERtR2FNNWtvcW5WNDcyZw?oc=5",
+      "source": "scanx.trade",
+      "corroborated": true,
+      "story": "Suzlon wins 201.6 MW wind order from Waaree Group",
+      "reports": 1
+    },
+    {
       "headline": "Coforge Limited has informed the Exchange regarding a press release dated October 29, 2026, titled \" Coforge Introduces Autonomous Software Factory for the Era of Agentic Software ",
       "event_type": "product_launch",
       "phrase": "introduces",
@@ -139,7 +256,7 @@
       "external": [],
       "direction": "opportunity",
       "date": "2026-10-29",
-      "first_seen": "2026-10-30",
+      "first_seen": "2026-10-31",
       "link": "https://nsearchives.nseindia.com/corporate/COFORGE_29102026101428_IntimationofPressReleasellOctober292026.pdf",
       "source": "NSE",
       "corroborated": true,
@@ -158,13 +275,13 @@
       ],
       "direction": "risk",
       "date": "2026-10-29",
-      "first_seen": "2026-10-30",
+      "first_seen": "2026-10-31",
       "link": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQanRybGlRWnRJWXpERTlXWkhYU3lSa2Nnb1hjdjhGSXM3QlRQZUdjd19kRktPOGVFN0ptUGphWjM0T0hISWFKLXdoMzB0RnB1YzNOMHRWXzdLSlNoLWpUdUVKWWJpbmgtRUFWN3NuNHg1UE0tblVjSkt3MjBka0hpYWdIOGJVN1hrUVRFcXY3WXBnLXRnVFJSZQ?oc=5",
       "source": "TechSpot",
       "corroborated": true
     },
     {
-      "headline": "Samsung Says Memory Shortage to Last Through 2028; SK Hynix ADR Soars 13% While Taiwan Memory Stocks Fade After Higher Open",
+      "headline": "Samsung sees AI chip shortage worsening, keeps investors in suspense on returns",
       "event_type": "supply_disruption",
       "phrase": "shortage",
       "certainty": "completed",
@@ -175,41 +292,8 @@
       ],
       "direction": "risk",
       "date": "2026-10-29",
-      "first_seen": "2026-10-30",
-      "link": "https://news.google.com/rss/articles/CBMidkFVX3lxTE9iU0Z5elpBbzEyYVJmNXBNd2FreXhpNHk5ZXhlRFVaZ1luM1pMc0c1VTFfRU5kMHJqc2JUUnhwbnZrV3NaeW1NZWxKRHlZUThrZ210SkNhQ1YzaWVGU2t1elNLb3BoWEJ5YUtFQXRHV3RTSWZ4a1E?oc=5",
-      "source": "BigGo Finance",
-      "corroborated": true
-    },
-    {
-      "headline": "Carlsberg is leaning on soft drinks as beer sales weaken in Europe and Asia",
-      "event_type": "business_weakness",
-      "phrase": "sales weaken",
-      "certainty": "completed",
-      "domains": [],
-      "actors": [],
-      "external": [
-        "Carlsberg"
-      ],
-      "direction": "risk",
-      "date": "2026-10-29",
-      "first_seen": "2026-10-30",
-      "link": "https://news.google.com/rss/articles/CBMifkFVX3lxTE5ZZTdWZXlTQXc1Umc3elNERkh6c0NXVFk0ZW9SYkg2UXEtZG1GS2FCc285Mk1UTVl4Zy1RaHFreWlSYjEzcjRCdk1BVnotd1A3TXV1ZmZmVDBKZE95dDd3cTdGRDdCcHcyN05kX3VfblluWnlfVkJxbDJKX0Exdw?oc=5",
-      "source": "Quartz"
-    },
-    {
-      "headline": "Intel shares tumble after hours, hit by chip supply constraints, big cash burn",
-      "event_type": "supply_disruption",
-      "phrase": "supply constraints",
-      "certainty": "completed",
-      "domains": [],
-      "actors": [],
-      "external": [
-        "Intel"
-      ],
-      "direction": "risk",
-      "date": "2026-10-29",
-      "first_seen": "2026-10-30",
-      "link": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxPbEgxampOc0U5RENJWVd0a09uQjlFSkxueGxGVzVPX2NwdElzNDN3WXdjVFpvelNULXVObnMzTTJzb0ZfeFBtN1ZOQ0FVNXRuN0ZINkF0dWZkZlR6ZlkzUE5wQWpPTWg3dGtDLURwRl9OU0ZEb1UtejNBbC1KMnVWbmJ5OHQxWTBoU1I3cFduaXAyOHFBVkFIYjhCNXR1c0EyM2xlZFZNWFM?oc=5",
+      "first_seen": "2026-10-31",
+      "link": "https://news.google.com/rss/articles/CBMilgFBVV95cUxOZ2JmLWlsUUNaZ2g5VnF1TU1IZU5rWDV6T1ZLdXJBdmJrVnpHanBobFBiWjNkaXJGMjE1MUlqMlVrOGJOaHVrU18yVkRBWFVoOENmVjhqYVA3Vy1EdkdXTDN1REJPQWpVdFp5MFdlMzFhMXhEVUdBQS01STRwTW41R2RKWWloUHBhYUNVY2tyR19Geld5RHc?oc=5",
       "source": "Reuters",
       "corroborated": true
     },
@@ -236,22 +320,43 @@
       "reports": 1
     },
     {
-      "headline": "Logistri sells project properties to Hitachi Energy for SEK 1,382 million",
-      "event_type": "divestment",
+      "headline": "Anant Raj targets 357 MW data center capacity by FY32",
+      "event_type": "capacity_add",
+      "phrase": null,
+      "certainty": "announced",
+      "domains": [
+        "data_center_support"
+      ],
+      "actors": [
+        "ANANTRAJ"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-10-29",
+      "reader": "llm",
+      "corroborated": false,
+      "link": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxQbnRleEhfVmRrSEhlN0dZck1QTkxLbmpxTDNsYVB1QzhvdGVMNlB5TzFxS3puVUhRUUpfalRYQUl1ODlRYjU0SlM2QjFya1YxTUpDeGpBU3VqMFNjeXYyTm9SUG9BNjFJVUNudEVjc1M5cVhBdko2YXZXa3hlYk9BUjlXbXhBczVsbUtxMGkzOFBzVk13MGhfVkhGenFGQjlITVBmSHYxbkZxM096TnpZaTZzbjNzRVY0Uk9wU1MyRWxlSzI0ZWlUdjlBUFlRNlV40gHUAUFVX3lxTE1jMHpmX1d3ZXFRRW95VlNIcVNIbmpuQWZqSHJBWi1oY29CSjRNUzdra2tVekw2N3pIdFpJbkRSZUtlQWtBdU92QjF6X2syTkNZMnphcWdaYWE5dUVEQ1RTb2dCdi1BUlZGTExnR2R3RkliZkMwTjNiOVRVMDdsdmlxLU9Sc2JGTHFnUlotQXJ0c3h6VGhmTHdYMUVEQWpUQXdlLXlYbHNraURpX09zTjZWMWUzdjBpWmpsaGJWdVJMQ2FiLTJ2RUZmaGUwRF9wWGk4LW15?oc=5",
+      "source": "ET Datacenters",
+      "story": "Anant Raj eyes 357 MW data centre capacity by FY32",
+      "reports": 2
+    },
+    {
+      "headline": "Chalet Hotels Appoints New Chief Growth & Product Officer",
+      "event_type": "management_change",
       "phrase": null,
       "certainty": "completed",
       "domains": [],
       "actors": [
-        "POWERINDIA"
+        "CHALET"
       ],
       "external": [],
       "direction": "mixed",
       "date": "2026-10-29",
       "reader": "llm",
       "corroborated": false,
-      "link": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxObmNhTnlRUkh0Yk1Xbkk5NWJVNTR3ZlhXRTJuTmg2SVdsNkkyR3IxXzdvLTZOWFU1MnRSVXpScm9hQmZWUklja0h5bENLYl9Na0VzbTZHRjZEWm5mLXp2OVZZZ3NHdHh6alJLV2JNTElHRExSWTZZSGZPOXVZTWF1RnlxZG5ucGpMSVVDamZZMjcySmVLMEx2NGNlRkg0NklfandFeXVpdDc3d2ExUjVlbkN3ZFFjUk9rcVVlQjZNUDJZQ0NWdExSVEJlMHhKYlFjckZ1ZGpn?oc=5",
-      "source": "TradingView",
-      "story": "Logistri sells project properties to Hitachi Energy for SEK 1,382 million",
+      "link": "https://news.google.com/rss/articles/CBMidkFVX3lxTE45dkhiQXozUThKel9kWVE4WDlHVGMxVWRSU0IwSFZ1UEVObU1JSlpDWERTc0ZlZWo1cUJLRzhreXd0WXMxSDJmSFhMSGRKZWVRUGpQN0Q4TE9NdmphN0RkcWZ2U3NQRlAybUptU1preDhfUkk0Wnc?oc=5",
+      "source": "https://safariindia.com/",
+      "story": "Chalet Hotels Appoints New Chief Growth & Product Officer",
       "reports": 1
     },
     {
@@ -272,6 +377,25 @@
       "link": "https://news.google.com/rss/articles/CBMijgFBVV95cUxQRHkweFlrVGhvTWY5RGRFMnVYOUlYYXJTTlNPZkZtU0xwbGlkTG5QcHlRM3U1OEh5VEpjMXZCeDBOV2tHc1dEN3pXYlljVnZ2RThWZkNQZlQ1UFRRTDRlWUpoYkVldy1wN01fallsVWpzT3NGUkpkMW5UdkdYTXhMNGJTOTgwejl6NTRJdDdn?oc=5",
       "source": "Equitypandit",
       "story": "IdeaForge Ends US Drone Joint Venture With First Breach",
+      "reports": 1
+    },
+    {
+      "headline": "Logistri sells project properties to Hitachi Energy for SEK 1,382 million",
+      "event_type": "divestment",
+      "phrase": null,
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "POWERINDIA"
+      ],
+      "external": [],
+      "direction": "mixed",
+      "date": "2026-10-29",
+      "reader": "llm",
+      "corroborated": false,
+      "link": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxObmNhTnlRUkh0Yk1Xbkk5NWJVNTR3ZlhXRTJuTmg2SVdsNkkyR3IxXzdvLTZOWFU1MnRSVXpScm9hQmZWUklja0h5bENLYl9Na0VzbTZHRjZEWm5mLXp2OVZZZ3NHdHh6alJLV2JNTElHRExSWTZZSGZPOXVZTWF1RnlxZG5ucGpMSVVDamZZMjcySmVLMEx2NGNlRkg0NklfandFeXVpdDc3d2ExUjVlbkN3ZFFjUk9rcVVlQjZNUDJZQ0NWdExSVEJlMHhKYlFjckZ1ZGpn?oc=5",
+      "source": "TradingView",
+      "story": "Logistri sells project properties to Hitachi Energy for SEK 1,382 million",
       "reports": 1
     },
     {
@@ -341,25 +465,73 @@
       "reports": 1
     },
     {
-      "headline": "Anant Raj targets 357 MW data center capacity by FY32",
-      "event_type": "capacity_add",
+      "headline": "Ratan Kaushal Appointed Vice President – Sales, Hi-Tech Business Unit at Persistent Systems",
+      "event_type": "management_change",
       "phrase": null,
-      "certainty": "announced",
-      "domains": [
-        "data_center_support"
-      ],
+      "certainty": "completed",
+      "domains": [],
       "actors": [
-        "ANANTRAJ"
+        "PERSISTENT"
       ],
       "external": [],
-      "direction": "opportunity",
+      "direction": "mixed",
       "date": "2026-10-29",
       "reader": "llm",
       "corroborated": false,
-      "link": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxQbnRleEhfVmRrSEhlN0dZck1QTkxLbmpxTDNsYVB1QzhvdGVMNlB5TzFxS3puVUhRUUpfalRYQUl1ODlRYjU0SlM2QjFya1YxTUpDeGpBU3VqMFNjeXYyTm9SUG9BNjFJVUNudEVjc1M5cVhBdko2YXZXa3hlYk9BUjlXbXhBczVsbUtxMGkzOFBzVk13MGhfVkhGenFGQjlITVBmSHYxbkZxM096TnpZaTZzbjNzRVY0Uk9wU1MyRWxlSzI0ZWlUdjlBUFlRNlV40gHUAUFVX3lxTE1jMHpmX1d3ZXFRRW95VlNIcVNIbmpuQWZqSHJBWi1oY29CSjRNUzdra2tVekw2N3pIdFpJbkRSZUtlQWtBdU92QjF6X2syTkNZMnphcWdaYWE5dUVEQ1RTb2dCdi1BUlZGTExnR2R3RkliZkMwTjNiOVRVMDdsdmlxLU9Sc2JGTHFnUlotQXJ0c3h6VGhmTHdYMUVEQWpUQXdlLXlYbHNraURpX09zTjZWMWUzdjBpWmpsaGJWdVJMQ2FiLTJ2RUZmaGUwRF9wWGk4LW15?oc=5",
-      "source": "ET Datacenters",
-      "story": "Anant Raj eyes 357 MW data centre capacity by FY32",
-      "reports": 2
+      "link": "https://news.google.com/rss/articles/CBMirAFBVV95cUxPZks3elhmUUk2MktoNnVyZWZSNzRoYnExOXlqWXpJV0NDM2NnaGRQdm9vdzlNYVgtR0h6QXlWejlIZjJyVldlRjlVaW50TlJKYlVNT3NfZklqRmhrM2JTdzdxUk5ESERHWHE1SmZld25HSlppZTFSUEdrMHdFNHNtN05tc1Uyc3FTdWJFQXVVR0VIVEV6NHdLTUZ3cmIzWGZpQW1iLVJTZkw3Ylk3?oc=5",
+      "source": "https://hrtoday.in/",
+      "story": "Ratan Kaushal Appointed Vice President – Sales, Hi-Tech Business Unit at Persistent Systems",
+      "reports": 1
+    },
+    {
+      "headline": "Samsung Says Memory Shortage to Last Through 2028; SK Hynix ADR Soars 13% While Taiwan Memory Stocks Fade After Higher Open",
+      "event_type": "supply_disruption",
+      "phrase": "shortage",
+      "certainty": "completed",
+      "domains": [],
+      "actors": [],
+      "external": [
+        "Samsung"
+      ],
+      "direction": "risk",
+      "date": "2026-10-29",
+      "first_seen": "2026-10-30",
+      "link": "https://news.google.com/rss/articles/CBMidkFVX3lxTE9iU0Z5elpBbzEyYVJmNXBNd2FreXhpNHk5ZXhlRFVaZ1luM1pMc0c1VTFfRU5kMHJqc2JUUnhwbnZrV3NaeW1NZWxKRHlZUThrZ210SkNhQ1YzaWVGU2t1elNLb3BoWEJ5YUtFQXRHV3RTSWZ4a1E?oc=5",
+      "source": "BigGo Finance",
+      "corroborated": true
+    },
+    {
+      "headline": "Carlsberg is leaning on soft drinks as beer sales weaken in Europe and Asia",
+      "event_type": "business_weakness",
+      "phrase": "sales weaken",
+      "certainty": "completed",
+      "domains": [],
+      "actors": [],
+      "external": [
+        "Carlsberg"
+      ],
+      "direction": "risk",
+      "date": "2026-10-29",
+      "first_seen": "2026-10-30",
+      "link": "https://news.google.com/rss/articles/CBMifkFVX3lxTE5ZZTdWZXlTQXc1Umc3elNERkh6c0NXVFk0ZW9SYkg2UXEtZG1GS2FCc285Mk1UTVl4Zy1RaHFreWlSYjEzcjRCdk1BVnotd1A3TXV1ZmZmVDBKZE95dDd3cTdGRDdCcHcyN05kX3VfblluWnlfVkJxbDJKX0Exdw?oc=5",
+      "source": "Quartz"
+    },
+    {
+      "headline": "Intel shares tumble after hours, hit by chip supply constraints, big cash burn",
+      "event_type": "supply_disruption",
+      "phrase": "supply constraints",
+      "certainty": "completed",
+      "domains": [],
+      "actors": [],
+      "external": [
+        "Intel"
+      ],
+      "direction": "risk",
+      "date": "2026-10-29",
+      "first_seen": "2026-10-30",
+      "link": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxPbEgxampOc0U5RENJWVd0a09uQjlFSkxueGxGVzVPX2NwdElzNDN3WXdjVFpvelNULXVObnMzTTJzb0ZfeFBtN1ZOQ0FVNXRuN0ZINkF0dWZkZlR6ZlkzUE5wQWpPTWg3dGtDLURwRl9OU0ZEb1UtejNBbC1KMnVWbmJ5OHQxWTBoU1I3cFduaXAyOHFBVkFIYjhCNXR1c0EyM2xlZFZNWFM?oc=5",
+      "source": "Reuters",
+      "corroborated": true
     },
     {
       "headline": "Anant Raj eyes 357 MW data centre capacity by FY32",
@@ -383,22 +555,21 @@
       "reports": 2
     },
     {
-      "headline": "Chalet Hotels Appoints New Chief Growth & Product Officer",
-      "event_type": "management_change",
-      "phrase": null,
+      "headline": "First Breach Ends ideaForge JV, Avoiding $10 Million Initial Funding Tranche",
+      "event_type": "partnership_end",
+      "phrase": "ends ideaforge jv",
       "certainty": "completed",
       "domains": [],
       "actors": [
-        "CHALET"
+        "IDEAFORGE"
       ],
       "external": [],
-      "direction": "mixed",
-      "date": "2026-10-29",
-      "reader": "llm",
-      "corroborated": false,
-      "link": "https://news.google.com/rss/articles/CBMidkFVX3lxTE45dkhiQXozUThKel9kWVE4WDlHVGMxVWRSU0IwSFZ1UEVObU1JSlpDWERTc0ZlZWo1cUJLRzhreXd0WXMxSDJmSFhMSGRKZWVRUGpQN0Q4TE9NdmphN0RkcWZ2U3NQRlAybUptU1preDhfUkk0Wnc?oc=5",
-      "source": "https://safariindia.com/",
-      "story": "Chalet Hotels Appoints New Chief Growth & Product Officer",
+      "direction": "risk",
+      "date": "2026-10-28",
+      "first_seen": "2026-10-31",
+      "link": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxQd0x3b3N4WjN0MVZFTWhBTzRBc0w3SUpoU1RjOWI5ekp4cWpRcmJzN3F0Sjk1VExxVmJ5cV9PZFhvY2h3S2hiMURpeWJhTFZmeV9kcUp6ZzBHcExjOHZJaEQxWkRUcERORFJkdmdJQW11MFFUVzZhbXA4Sjl3WmhRV1BwcGFLd2dqWmp2TEplSFZTSXo4VGpsckVVYUFWMHlPTThHY3IydnNMTFBiZzZzSXJSbk9EUTNXMHZoMEhmM1pkSTd2SHV4V2hHLWdpM2l2V1E?oc=5",
+      "source": "TradingView",
+      "story": "First Breach Ends ideaForge JV, Avoiding $10 Million Initial Funding Tranche",
       "reports": 1
     },
     {
@@ -415,7 +586,7 @@
       "external": [],
       "direction": "risk",
       "date": "2026-10-28",
-      "first_seen": "2026-10-30",
+      "first_seen": "2026-10-31",
       "link": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQS0x3aWk5ZEV6dEMxdUdPTzFYalMwX3ZfNEplVUxuaHEyamlMdHd2QWNyQlViYy1FemoxcldaYWpSdU1tMl9VMnlaeFU5Z3RycVJFSDZKWGR4bXVpRWVmZlVwcnVMdW5wZWVyODdjLVF1aGRPREtvTm94QXpSaFNXNXdtQU5zS2tUcGlPQ3djT1BucEUwSXlUTFZRb29ETHl5WmJBX0g5TTUwV09EVGRKZw?oc=5",
       "source": "scanx.trade",
       "story": "IdeaForge Technology terminates joint venture agreement",
@@ -433,7 +604,7 @@
       "external": [],
       "direction": "opportunity",
       "date": "2026-10-28",
-      "first_seen": "2026-10-30",
+      "first_seen": "2026-10-31",
       "link": "https://news.google.com/rss/articles/CBMivwFBVV95cUxOQlo1anNQM2tXNEFrdF9FLWN2R2VQRnp2SE1UeTZ0N0lqbGxVY1Qtd2x6ZkxFQVA5R1FvTlhzNEptajVnMTVNMGItam84MGdkLURZUEtQbjJnQ3AxUGtlUEswUnFURThSZ29xcGUtWXQ0OEZGVHhBZ09RMWpXVU9Bc1VIamliOTg0QlpLZkJ6eVBvTEdvWE1ibGJDSTRReHpRSXFydFl4YTF1OFNiaVRVQ3FaamItSV90eWx3R3JsNA?oc=5",
       "source": "sUAS News",
       "corroborated": true
@@ -451,12 +622,49 @@
       "counterparties": [],
       "direction": "opportunity",
       "date": "2026-10-28",
-      "first_seen": "2026-10-30",
+      "first_seen": "2026-10-31",
       "link": "https://nsearchives.nseindia.com/corporate/COFORGE_28102026095518_IntimationofPressReleasellOctober282026.pdf",
       "source": "NSE",
       "corroborated": true,
       "story": "Coforge Limited has informed the Exchange regarding a press release dated October 27, 2026, titled \"\"Coforge Partners wi",
       "reports": 1
+    },
+    {
+      "headline": "Titagarh Rail Systems bags ₹1,717 crore additional order for 4,955 wagons from Railways",
+      "event_type": "order_win",
+      "phrase": "bags ₹1,717 crore additional order",
+      "certainty": "completed",
+      "domains": [],
+      "actors": [],
+      "external": [
+        "Titagarh"
+      ],
+      "direction": "opportunity",
+      "date": "2026-10-28",
+      "first_seen": "2026-10-31",
+      "link": "https://news.google.com/rss/articles/CBMi5gFBVV95cUxQMWU0ZG9oUEk0YkxzakQ4LUhBcExIRVhSUUVwRjFTRzdLWDg3elZ2VW16QlhYRHFVR3V6ODVFYzZPaWE1ZndUWWJwbVFWMmZxWXItSVF4ZlJqWC1JeDlXUVNJV1FFWVBSZmthZ0dKcDB5bzVGT3R3S1h0NHlrREE3OUZySUJ2ZlVuUC01a2hCLTVzcUFJMnFGMFBwckhDR1RrUkI3Z0hsNTVtSk43dWxRd1ctcDkxRFNya0U1d2NVMUVCVnlLUkJMZ0lGUld3R19GdDFWSy1EcmRJSjQ2V3R4NmhyY2tIQdIB6wFBVV95cUxONGNtY1l2dnplcmJLNDhuNlFqSkNiY3p2b0FFZFZEZlNYdGVvVU41R1ZoOG53dFhpcVRVSmRhSmJfbHBDT0tmNHFNbTN0QUNEV3hVNFEtaXF1dFpUREJ6d2VSR3VjTk0xUHFaeXk5TTM0V09lM1ZGNWowZHJLNTA0cE5neGtyQWlaS1FsN2JPV0FfM3dnRFZqb1Z0WG1DanpBcTRhai1USnV2SXpwZzBvalZJWTZubXVYNDNQc09qaWxWT3RkQ2pMa0dDdlJzRHVaVExZQU14ck5BM2VyY1NZclVlblY2eE1ZMFBv?oc=5",
+      "source": "CNBC TV18",
+      "corroborated": true,
+      "amount_cr": 1717.0
+    },
+    {
+      "headline": "Campus Activewear Challenges Workplace Norms with Vicky Kaushal in Latest Move Your Way Campaign",
+      "event_type": "product_launch",
+      "phrase": null,
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "CAMPUS"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-10-28",
+      "reader": "llm",
+      "corroborated": false,
+      "link": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxORzZtNmFibm8xY2x5NE82bU0zZ0IwUkx2M2h3YWl1MmQtTVR0QkZhMTd2R2YyZkU3T2pBUXRSMEdzd3R3S0JzZmhGMGJBTHE5VDdESGQwQm92SDI4MVRfM0JCNXRXWVVvUjN6bkVzZ21TQlNscS11WmxKVHRZT0d6OHdvb1RBOGxiTVhDdHk4dTVVcVpTLW56UVFINHpjRy1KblpaeDBCS0tvNHpVOFBMMDlLQ245b1F1Rk81Y3poSFFDY085dnFGMkpfX01yLThqMjdFMzdR0gHWAUFVX3lxTE5HNm02YWJubzFjbHk0TzZtTTNnQjBSTHYzaHdhaXUyZC1NVHRCRmExN3ZHZjJmRTdPakFRdFIwR3N3dHdLQnNmaEYwYkFMcTlUN0RIZDBCb3ZIMjgxVF8zQkI1dFdZVW9SM3puRXNnbVNCU2xxLXVabEpUdFlPR3o4d29vVEE4bGJNWEN0eTh1NVVxWlMtbnpRUUg0emNHLUpuWlp4MEJLS280elU4UEwwOUtDbjlvUXVGTzVjemhIUUNjTzl2cUYySl9fTXItOGoyN0UzN1E?oc=5",
+      "source": "TheWire.in",
+      "story": "Campus Activewear Challenges Workplace Norms with Vicky Kaushal in Latest ‘Move Your Way’ Campaign",
+      "reports": 2
     },
     {
       "headline": "Lemon Tree Hotels (NSE:LEMONTREE) Signs Licence Agreement for 76-Room Lemon Tree Hotel in Sirhind, Punjab",
@@ -500,25 +708,6 @@
       "reports": 1
     },
     {
-      "headline": "Campus Activewear Challenges Workplace Norms with Vicky Kaushal in Latest Move Your Way Campaign",
-      "event_type": "product_launch",
-      "phrase": null,
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "CAMPUS"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-10-28",
-      "reader": "llm",
-      "corroborated": false,
-      "link": "https://news.google.com/rss/articles/CBMi9wFBVV95cUxPdnpMS0t5clhSekZ4bjJEb0xQY1NnaVlDenBJanVvWG1pV1piaF9hY1IzdmxaZkxiZ0dMSkVJV3dDLW0wNl9DZTMtaGVnNjVVbjZHd002Uy1QSjNfbTFkRGNVZC1yMFFlM04zVWhoNFF0YU9pQm9xaTdUek1NUjJvV2ZNY0VWSmtiNnpIVVVQVXV4OGl2blhWbVN4V0JLNXYxM2k4TTNxTGlXZ0hyOElKWVdkblJ3OW1mTnp1NVdoUkFoWVFqX1Z4Z2VFQkN1U3duQjNraVhXOTAzcGFNcGF4d1N6akVyZUlISFZkTUdoblB5c183NXNZ0gH3AUFVX3lxTE92ekxLS3lyWFJ6RnhuMkRvTFBjU2dpWUN6cElqdW9YbWlXWmJoX2FjUjN2bFpmTGJnR0xKRUlXd0MtbTA2X0NlMy1oZWc2NVVuNkd3TTZTLVBKM19tMWREY1VkLXIwUWUzTjNVaGg0UXRhT2lCb3FpN1R6TU1SMm9XZk1jRVZKa2I2ekhVVVBVdXg4aXZuWFZtU3hXQks1djEzaThNM3FMaVdnSHI4SUpZV2RuUnc5bWZOenU1V2hSQWhZUWpfVnhnZUVCQ3VTd25CM2tpWFc5MDNwYU1wYXh3U3pqRXJlSUhIVmRNR2huUHlzXzc1c1k?oc=5",
-      "source": "The Tribune",
-      "story": "Campus Activewear Challenges Workplace Norms with Vicky Kaushal in Latest ‘Move Your Way’ Campaign",
-      "reports": 2
-    },
-    {
       "headline": "Coforge Limited has informed the Exchange regarding a press release dated October 27, 2026, titled \"\"Coforge Partners with Driving Forward to Expand Career Pathways for First-Gener",
       "event_type": "tie_up",
       "phrase": "partners with",
@@ -533,7 +722,7 @@
       ],
       "direction": "opportunity",
       "date": "2026-10-27",
-      "first_seen": "2026-10-30",
+      "first_seen": "2026-10-31",
       "link": "https://nsearchives.nseindia.com/corporate/COFORGE_27102026094229_IntimationofPressReleasellOctober272026.pdf",
       "source": "NSE",
       "corroborated": true,
@@ -552,7 +741,7 @@
       "external": [],
       "direction": "opportunity",
       "date": "2026-10-27",
-      "first_seen": "2026-10-30",
+      "first_seen": "2026-10-31",
       "link": "https://nsearchives.nseindia.com/corporate/VATECH_27102026082542_SI_RIL_27102026v2.pdf",
       "source": "NSE",
       "corroborated": true,
@@ -565,63 +754,6 @@
         "date": "2026-10-27",
         "link": "https://nsearchives.nseindia.com/corporate/VATECH_27102026082542_SI_RIL_27102026v2.pdf"
       }
-    },
-    {
-      "headline": "Ranveer Singh Joins CP PLUS as Brand Ambassador to Make Advanced Security Made-in-Bharat",
-      "event_type": "management_change",
-      "phrase": null,
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "CPPLUS"
-      ],
-      "external": [],
-      "direction": "mixed",
-      "date": "2026-10-27",
-      "reader": "llm",
-      "corroborated": false,
-      "link": "https://news.google.com/rss/articles/CBMikwFBVV95cUxNSkxDemFJZWJ4UDZMcnctLVg1RnVrU195V2plRlBrTG9fTlloWWVEU08yVGVlbF9zX21UdlNvdWpCdEhXa19OSmNtVnhra1pJWE93bTRoM1d0Mi12UzRHSFZaUnM0RUFvZ2N1TnlqNkZQUzFUWlpZRFNwMFBvc2ljS0NsRjJOdVZiQlJ6ZXlaN2ZoYWPSAZMBQVVfeXFMTUpMQ3phSWVieFA2THJ3LS1YNUZ1a1NfeVdqZUZQa0xvX05ZaFllRFNPMlRlZWxfc19tVHZTb3VqQnRIV2tfTkpjbVZ4a2taSVhPd200aDNXdDItdlM0R0hWWlJzNEVBb2djdU55ajZGUFMxVFpaWURTcDBQb3NpY0tDbEYyTnVWYkJSemV5WjdmaGFj?oc=5",
-      "source": "Local Samosa",
-      "story": "CP PLUS appoints Ranveer Singh as Brand Ambassador to strengthen smart security positioning",
-      "reports": 5
-    },
-    {
-      "headline": "CP Plus appoints Ranveer Singh as brand ambassador",
-      "event_type": "management_change",
-      "phrase": null,
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "CPPLUS"
-      ],
-      "external": [],
-      "direction": "mixed",
-      "date": "2026-10-27",
-      "reader": "llm",
-      "corroborated": false,
-      "link": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxOQ19RLTVtWi0yRmF0NmtWc1BNTWo5VlJWaG9ya0Y3Q2piYjIxdkhTaS00MlFDcjgyV09LNm1la3JVYzBXS2tKdWxrU2VjeHo4RTJVU1U2NzhyTzRoT0VuZlVuaDZ0MUEwUTRpUTVUTkdRb2dleDBjQmZwSlJKWmlDVVdTaGZiX3Zjc3RRY1hCY2lkenFUTGpNcGRpYW5Demc3c0Uya3F5WWZEd2M2NlNBNzBQMXphMUY4R3VxVm54aG9UZ9IBxwFBVV95cUxNeWpsUXJWN3hKU0ZMVzBaVW01V0F1NkthNE9QQ1ZNN3VzbFBFVkpyamNmUmdGSFhSYUZuNWY4Vk90MGRjSFRpWGduSFN3VHgtU19JWndKemdwa3BTUnpESTlJQy01UlJGY3JlUFVaay1BSl9OX1hGcmp2NG91V3hVcWVFWFoxMkU4dktwa1ZUVVBwdjV0Mkkwa2xLWkxUSmk1RnlFclI1ZGxsNmlFd19yMS1xLTJTNWk1b1ZhOTE5NTN5VklqV0Vv?oc=5",
-      "source": "ET BrandEquity",
-      "story": "CP PLUS appoints Ranveer Singh as Brand Ambassador to strengthen smart security positioning",
-      "reports": 5
-    },
-    {
-      "headline": "Ranveer Singh joins CP PLUS as brand ambassador",
-      "event_type": "management_change",
-      "phrase": null,
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "CPPLUS"
-      ],
-      "external": [],
-      "direction": "mixed",
-      "date": "2026-10-27",
-      "reader": "llm",
-      "corroborated": false,
-      "link": "https://news.google.com/rss/articles/CBMikgFBVV95cUxQOVU0VkZzNjlYQ00yN2s2UTZ2X1JnZlR0OEZJUDhlZ2tiZXNSRVZoTG01UHJQSmw0ZGRFTGxIQnYwa3YwMk9EQUpXd0pOTFZpTFdJdXU5OFZNNzJycWx6NEFfWUZzeF9Tb2c4RlBUeVBkNE42dmNkb3F2S2hsckxRRGppQjFxRnJUd3VjRFpnM2Rxdw?oc=5",
-      "source": "afaqs!",
-      "story": "CP PLUS appoints Ranveer Singh as Brand Ambassador to strengthen smart security positioning",
-      "reports": 5
     },
     {
       "headline": "HDFC Bank Limited has informed the Exchange regarding disclosure under Regulation 30 and other applicable regulations of the SEBI (Listing Obligations and Disclosure Requirements) ",
@@ -650,163 +782,26 @@
       }
     },
     {
-      "headline": "\"Even with accelerated localization, supply remains insufficient\" Continued Nvidia dependence amid China's AI chip shortage, including smuggling and overseas cloud utilization",
-      "event_type": "supply_disruption",
-      "phrase": "shortage",
-      "certainty": "completed",
-      "domains": [],
-      "actors": [],
-      "external": [
-        "Nvidia"
-      ],
-      "direction": "risk",
-      "date": "2026-10-27",
-      "first_seen": "2026-10-28",
-      "link": "https://news.google.com/rss/articles/CBMiV0FVX3lxTE02TFRqdC1sTjdmcmhrZXVsdGtFN21ZdHhKcEZPa0VqNE5XUVNzSEltUWVaSF9pWDM2YXRLSVVVZEl5QU1reWpRVUcxZ3RPM3pQckJ5ZE9Wcw?oc=5",
-      "source": "https://economy.ac/",
-      "corroborated": true
-    },
-    {
-      "headline": "TVS family feud, Apple iPhone sales down, and Anthropic’s IPO -- Editor’s Picks from Moneycontrol",
-      "event_type": "business_weakness",
-      "phrase": "sales down",
-      "certainty": "completed",
-      "domains": [],
-      "actors": [],
-      "external": [
-        "Apple"
-      ],
-      "direction": "risk",
-      "date": "2026-10-27",
-      "first_seen": "2026-10-28",
-      "link": "https://news.google.com/rss/articles/CBMilwFBVV95cUxNTUFvT3RpMVZKNURZVzM0S3R5WkhrUVBwTUE3RmcySnIzamxhWVE3OG9qY01nUFBsczg3aUJOZmZKUEZEZ1pKVURsUk41QmJvaWFUbG0yRnlfMXFtMlFkc0NYZlFvSGxDcEF2YjdYYjgzY2d3TFhlWUhudzRvV1BqRE80MUlySDJkaXBOSWZ4bm9mbXl2UnBv?oc=5",
-      "source": "LinkedIn"
-    },
-    {
-      "headline": "Apple iPhone loses spark in India, festive sales down up to 30%",
-      "event_type": "business_weakness",
-      "phrase": "sales down",
-      "certainty": "completed",
-      "domains": [],
-      "actors": [],
-      "external": [
-        "Apple"
-      ],
-      "direction": "risk",
-      "date": "2026-10-27",
-      "first_seen": "2026-10-28",
-      "link": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxOYzk4Q2NlTnVyS0ZkZXRrUndCSnRyWENFZnpMMXNocVZrR3lEQmNFSmFhbklrdXlsQ0kxX0ZGYWFfT2FjVFo4NEhOSHUwMmhwenN1QXVJUFRNczVmOWlUSVlSSXdPZkhVOW9kYUxFQmhIc1dyVWJkV2FXeWI3bElxTHAyOFBQVlVwcG1ram9xZ1drZEFaajR0TzFiLUR2eFhQS2JpTF81XzlsS0dYZFlFYjA0Vi14cFh1bExzNEt5LW7SAcYBQVVfeXFMT2lYZXZocjVXQlNqaDhudmM1Z1ZieldBLUlsaVN0UzBObm54V1lRaEhNWXVsbjRuWkNHV0dSUFVYZzJEWlhHbjRjX2dQMmxnN25CS1JhNk9hbVlkaHhMdEVXVFVtVnBRV1BoWHNyeHZSMjlfcndNa1BYOHBwWVl6YTgxU1JaTUhCckdxQlhrd0g1dHNacjY0UVNQNGZjSml2RHl6VlgzSnhVOHo1Z29KN1lPMkoyekxqODNsNk1xSmVCdjdLb09n?oc=5",
-      "source": "Moneycontrol.com"
-    },
-    {
-      "headline": "Anduril expanding into laptop manufacturing in partnership with Qualcomm",
+      "headline": "CONCOR signs Agency Agreement with Samudera Shipping Line to expand international shipping services",
       "event_type": "tie_up",
-      "phrase": "partnership with",
-      "certainty": "completed",
-      "domains": [
-        "manufacturing_electronics"
-      ],
-      "actors": [],
-      "external": [
-        "Qualcomm"
-      ],
-      "counterparties": [],
-      "direction": "opportunity",
-      "date": "2026-10-27",
-      "first_seen": "2026-10-28",
-      "link": "https://news.google.com/rss/articles/CBMijwFBVV95cUxPOTlaNGlRWjZFeHVXVUlWR1BBcmRFV3hPRGc0M21pM2RxeXR0ZEd6bzBkQWVfdFJlRDFiaEhneF9lMjRPWGhXRTRFcXVoOWZYdzZGMm5ZeUFnMXVYSzJCTTBBZmVEREllLVUwLWZSenk3cWZIQy1hQUFXbFY5TzBmdFZuZEZyWWNPQ19nT0FOOA?oc=5",
-      "source": "DefenseScoop",
-      "corroborated": true
-    },
-    {
-      "headline": "CP PLUS appoints Ranveer Singh as Brand Ambassador to strengthen smart security positioning",
-      "event_type": "management_change",
       "phrase": null,
       "certainty": "completed",
       "domains": [],
       "actors": [
-        "CPPLUS"
-      ],
-      "external": [],
-      "direction": "mixed",
-      "date": "2026-10-27",
-      "reader": "llm",
-      "corroborated": false,
-      "link": "https://news.google.com/rss/articles/CBMivAFBVV95cUxOSWQtanM2UG1QWkYwVkpyN2dGLTN0ZHdVYjc5ZE56dXlzdm8xblZYWHBDNHE1bVdreTcwLUtLUWRpbkdzTjNRa3EzaG0yU2gwMGZmZm81dmtQNERXS25jdzRvZVRBRHVpTkVxWWVnMm1VTUdsOG1MalY1OVRWWFBaSkh0WDRkMkpVODJhX2tmSTc1em5FLXRTOGhESmZMc2NEVktJVkpHblBCYkJHa0F3VGQwRG5fcjcxcDI5Yw?oc=5",
-      "source": "MediaNews4U",
-      "story": "CP PLUS appoints Ranveer Singh as Brand Ambassador to strengthen smart security positioning",
-      "reports": 5
-    },
-    {
-      "headline": "VA Tech Wabag Secures Industrial Plant Order From Reliance Industries In Jamnagar",
-      "event_type": "order_win",
-      "phrase": "secures industrial plant order",
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "WABAG"
+        "CONCOR"
       ],
       "external": [],
       "direction": "opportunity",
       "date": "2026-10-27",
-      "first_seen": "2026-10-27",
-      "link": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxQN2tGdHZ6Mm0yM01lYnRHcTlrVWpqZm8zT1N3R3Y4Q2dYLXg1ekhXUHQ2VXpnUmxmMHpWcUdfX29jWkt6Q1JmeV9TaWpMMEpOQ3dweFcyQ1VRWjZoUVVuZU5tRXpUV0MyWXJkSElXM3otTUw2VmdUOGJNQ0NHTmpLamVmLTc3bWdEYWtLaXVnUHlKWFBnSGQ2OS1EbDdyX3RGZGp4cDFuVWFxMnc?oc=5",
-      "source": "Sahi",
-      "corroborated": true,
-      "story": "VA Tech Wabag Secures Industrial Plant Order From Reliance Industries In Jamnagar",
-      "reports": 1,
-      "confirmation": {
-        "ticker": "WABAG",
-        "source": "NSE",
-        "filing": "Bagging of Order/Contract - WABAG secures order from RIL to deliver  Mega  Desalination Plant and Remineralisation Plant at Jamnagar",
-        "date": "2026-10-27",
-        "link": "https://nsearchives.nseindia.com/corporate/VATECH_27102026082542_SI_RIL_27102026v2.pdf"
-      }
-    },
-    {
-      "headline": "Anup Bagchi Takes Charge As HDFC Bank CEO: Top Challenges As Stock Nears Fresh 52-Week Low",
-      "event_type": "management_change",
-      "phrase": null,
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "HDFCBANK"
-      ],
-      "external": [],
-      "direction": "mixed",
-      "date": "2026-10-27",
       "reader": "llm",
       "corroborated": false,
-      "link": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxNRkZkTFQyOThoaE5pZjEzNUdhcTF5WDZVbllQWnhVZVc4QU9jcEhCbTRwUGRwcEVTdnNtVnQtbnBoeVBmQWE2eWNUNlg0VTF5ZnEzN1Z1UVhyNGtlREdXMS1hb2VGTmc2N2ptYnM2ZW5KTXdSYVlnOVZSYTJZZ1dzYWF2a3BOdUhueVBPX3Z4VEdxZjhfbmJGc3NBMHFMek5VX0JuQ2h1Vks1OTRxSF9DZmVfbUx0bGJQZ0hrLUtFdm02d1VPaWV5RUIwRVVWMXkwRWNmNlFOdUJKTlFuX1JxbHJ30gHqAUFVX3lxTE5LOVp5S2dhb0ZON1NoZC1MMThpMUx5OXJSMUV3RzFXRE1Gd3UwVzVDUGFKRzZRSTh6N3ZXaHdCQ29XZnd5UFo4OWpBZ1A0T1pUeHV6dE5PVXU0WGt2VkJxS3Vwem9mTkJRWXRacThZZWgwaGU4cXpvck1hazFIVHN4WTNneEtkNW4wb0Q1Q2pFWFlVbGV2NExsVnZhS1EySGVObkxLa3RlX1pwamEzSEgtV19sSk10OElXZXVWbDRsUWIzUzdXSG5LQmc5VmpzT2I3ejhIc1l2S0I0VzJFYVdyNnc5cEFVRmluQQ?oc=5",
-      "source": "NDTV Profit",
-      "story": "Anup Bagchi Takes Charge As HDFC Bank CEO: Top Challenges As Stock Nears Fresh 52-Week Low",
-      "reports": 1,
-      "confirmation": {
-        "ticker": "HDFCBANK",
-        "source": "NSE",
-        "filing": "HDFC Bank Limited has informed the Exchange regarding disclosure under Regulation 30 and other applicable regulations of the SEBI (Listing Obligations and Discl",
-        "date": "2026-10-27",
-        "link": "https://nsearchives.nseindia.com/corporate/HDFCBANK_27102026080232_SEIntimation_appt_of_AB.pdf"
-      }
-    },
-    {
-      "headline": "CP PLUS names Ranveer Singh as Brand Ambassador",
-      "event_type": "management_change",
-      "phrase": null,
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "CPPLUS"
+      "counterparties": [
+        "Samudera Shipping Line"
       ],
-      "external": [],
-      "direction": "mixed",
-      "date": "2026-10-27",
-      "reader": "llm",
-      "corroborated": false,
-      "link": "https://news.google.com/rss/articles/CBMipgFBVV95cUxQTmhMMGZwZkRIOXRRNENnaDI3eGt5LU9kM0tfNlY4d1E4Z3NpdG1qVHM5NmYzc1hXOHB0V1p5V1NTN2dFZmpSanU3ak1tV0NGdGtRdV82UUhrcjdESlpNUFZPd0V1SU1RS0FWR1BHZmd6ai1wVkIwTlNMRkR6Y2lrRVRCaVo0NHcxeFpGeDRsU2MxNEhQbFJNNC1pM01oX3Z6LWQteG5n?oc=5",
-      "source": "IMPACT Magazine",
-      "story": "CP PLUS appoints Ranveer Singh as Brand Ambassador to strengthen smart security positioning",
-      "reports": 5
+      "link": "https://news.google.com/rss/articles/CBMi6AFBVV95cUxPbW1yZWEtU2E4UHBvXzBXcGFjdG0weE54X1JGODlxandBMG5PYU83aEFvZjh6V19FMXFhT0xGRGpfeEhpOVRQbkJmT2lvb09mSkxmc29kWldnX0FMMkZTYUhVaDlFOFFvVjE0UkJlM01tUkNCdVJtSVpnSU90YkItd0d4amtGYnQtTF80S2NURENaTldKWnJrcDJlMkw5OU0tMWRGREpPLU9XRkJhckdzQjRJU055TVhIcHZzbzZGRmN5eE0yRktiQ01HY2ktYUk3YlBuX3h4RHlUc2RxbUxIMWZQY2VqYjZJ?oc=5",
+      "source": "India Shipping News",
+      "story": "CONCOR signs Agency Agreement with Samudera Shipping Line to expand international shipping services",
+      "reports": 1
     }
   ]
 }
