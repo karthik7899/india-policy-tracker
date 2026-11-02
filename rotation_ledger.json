@@ -586,9 +586,9 @@
     "name": "Optiemus Infra.",
     "price_at_decision": 590.35,
     "target_at_decision": null,
-    "scored": false,
-    "outcome": null,
-    "realized_return_pct": null,
+    "scored": true,
+    "outcome": "No Analyst Target (unscored)",
+    "realized_return_pct": 32.7,
     "target_made_up": 737.94
   },
   {
@@ -1082,6 +1082,30 @@
     "name": "Kewal Kiran Clothing",
     "price_at_decision": 428.3,
     "target_at_decision": 714.0,
+    "scored": false,
+    "outcome": null,
+    "realized_return_pct": null
+  },
+  {
+    "date": "2026-11-02",
+    "action": "rotated_in",
+    "sector": "midcap_it",
+    "ticker": "BBOX",
+    "name": "Black Box",
+    "price_at_decision": 790.0,
+    "target_at_decision": 1060.5,
+    "scored": false,
+    "outcome": null,
+    "realized_return_pct": null
+  },
+  {
+    "date": "2026-11-02",
+    "action": "added",
+    "sector": "healthcare_hospitals",
+    "ticker": "NH",
+    "name": "Narayana Hrudayalaya",
+    "price_at_decision": 1829.1,
+    "target_at_decision": 2200.0,
     "scored": false,
     "outcome": null,
     "realized_return_pct": null

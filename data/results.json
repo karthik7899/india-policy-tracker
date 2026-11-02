@@ -1,17 +1,48 @@
 {
   "value": {
-    "as_of": "2026-10-31",
+    "as_of": "2026-11-02",
     "tracking_since": "2026-10-10",
     "reported_today": [
-      "BEL",
-      "DIXON",
-      "IOC",
-      "LODHA",
-      "MAXHEALTH",
-      "RELIANCE",
-      "SYRMA"
+      "CAPILLARY",
+      "ZENTEC"
     ],
     "scorecards": [
+      {
+        "ticker": "ZENTEC",
+        "name": "Zen Technologies",
+        "sector": "surveillance_security",
+        "detected": "2026-11-02",
+        "quarter": "Sep 2026",
+        "quarters": 8,
+        "sales_cr": 345.0,
+        "sales_qoq_pct": 143.0,
+        "sales_rank": 1,
+        "sales_yoy_pct": 98.3,
+        "eps": 9.92,
+        "eps_yoy_pct": 50.8,
+        "opm_pct": 38.0,
+        "opm_change_pp": 11.0,
+        "net_profit_cr": 102.0,
+        "summary": "Sales ₹345 Cr, +98.3% on a year ago (+143.0% on the quarter before), the highest of 8 quarters; EPS 9.92, +50.8% on a year ago; operating margin 38%, +11.0 pts on the quarter before."
+      },
+      {
+        "ticker": "CAPILLARY",
+        "name": "Capillary Technologies India",
+        "sector": "midcap_it",
+        "detected": "2026-11-02",
+        "quarter": "Sep 2026",
+        "quarters": 8,
+        "sales_cr": 271.0,
+        "sales_qoq_pct": 5.4,
+        "sales_rank": 1,
+        "sales_yoy_pct": 51.4,
+        "eps": 2.75,
+        "eps_yoy_pct": 6775.0,
+        "opm_pct": 15.0,
+        "opm_change_pp": -1.0,
+        "net_profit_cr": 22.0,
+        "summary": "Sales ₹271 Cr, +51.4% on a year ago (+5.4% on the quarter before), the highest of 8 quarters; EPS 2.75, +6775.0% on a year ago; operating margin 15%, -1.0 pts on the quarter before."
+      },
       {
         "ticker": "SYRMA",
         "name": "Syrma SGS Technology",
@@ -385,24 +416,6 @@
         "margin_basis": "financing",
         "net_profit_cr": 21537.0,
         "summary": "Revenue ₹95,132 Cr, +9.4% on a year ago (+5.0% on the quarter before), the highest of 8 quarters; EPS 13.43, +5.3% on a year ago; financing margin -6%, +11.0 pts on the quarter before."
-      },
-      {
-        "ticker": "PERSISTENT",
-        "name": "Persistent Systems",
-        "sector": "midcap_it",
-        "detected": "2026-10-16",
-        "quarter": "Sep 2026",
-        "quarters": 8,
-        "sales_cr": 4664.0,
-        "sales_qoq_pct": 8.4,
-        "sales_rank": 1,
-        "sales_yoy_pct": 30.2,
-        "eps": 22.28,
-        "eps_yoy_pct": -26.1,
-        "opm_pct": 14.0,
-        "opm_change_pp": -2.0,
-        "net_profit_cr": 352.0,
-        "summary": "Sales ₹4,664 Cr, +30.2% on a year ago (+8.4% on the quarter before), the highest of 8 quarters; EPS 22.28, -26.1% on a year ago; operating margin 14%, -2.0 pts on the quarter before."
       },
       {
         "ticker": "METROBRAND",
