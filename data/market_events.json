@@ -1,25 +1,197 @@
 {
   "value": [
     {
-      "headline": "CXMT returns to profit as AI-driven memory prices soar",
-      "event_type": "input_cost_shock",
-      "phrase": "prices soar",
+      "headline": "AI demand, resin shock stretch India PCB shortage into 2027",
+      "event_type": "supply_disruption",
+      "phrase": "shortage",
+      "certainty": "completed",
+      "domains": [
+        "manufacturing_electronics"
+      ],
+      "actors": [],
+      "external": [],
+      "direction": "risk",
+      "date": "2026-11-03",
+      "first_seen": "2026-11-03",
+      "link": "https://news.google.com/rss/articles/CBMikAFBVV95cUxQYnUwVUVwcFI2MGNHbm9DSHJjQTdpUUh5UUk3YXl1NG9adUZQVnRzbkUzUi1GRDc3ejB1RmRla2gwWmRTMzlnR2xnV1JQQUcybkVteHQtME9HVzFSeEo4X3JscEF1TWtLRkllX3NVelNpVFJrbjZzWkpIWVNkSjlRdnp3MUQtSFNVaEtjcUdTVng?oc=5",
+      "source": "digitimes",
+      "corroborated": true
+    },
+    {
+      "headline": "Titagarh Rail Systems Bags Rs. 17.17 bn Wagon Order",
+      "event_type": "order_win",
+      "phrase": "bags rs. 17.17 bn wagon order",
       "certainty": "completed",
       "domains": [],
       "actors": [],
       "external": [
-        "CXMT"
+        "Titagarh"
       ],
-      "direction": "risk",
+      "direction": "opportunity",
+      "date": "2026-11-03",
+      "first_seen": "2026-11-03",
+      "link": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxQZUVnQmtfdTJIVFU5NVBOMFZJbEdRZXpwM3ozWDJ6ZjBXTTZnbHpZZmJlR0hwVE0zc0c2d0Z2ZDdRMmZMZk5jVVBkU29lZzNaelhJSUptdG9ERU40U2czOHBHM2U1TzRmTVFqU2xuQVVxTzItY2pzTHBxTnRQWGhnZW1mc0tKWWtiNWtNMnEteGx5VWt2U29kVGo5eGR0dEsxemw1SVRjc2V0OXJZQnM0X09UTjQzbUwxSVBQb2poenV4Rm5KbWRYa0dIaGVGc25tOFJYdjFVMmFfUEZ4a0c1WEF4SHRGM3dLZ0E?oc=5",
+      "source": "Construction World",
+      "corroborated": true,
+      "amount_cr": 1717.0
+    },
+    {
+      "headline": "Thermax and C1 Green Chemicals Join Hands to Develop Green Methanol Facility in India",
+      "event_type": "tie_up",
+      "phrase": null,
+      "certainty": "announced",
+      "domains": [],
+      "actors": [
+        "THERMAX"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-03",
+      "reader": "llm",
+      "corroborated": false,
+      "counterparties": [
+        "C1 Green Chemicals"
+      ],
+      "link": "https://news.google.com/rss/articles/CBMisAFBVV95cUxOQUZrQ1RvUFZlSzBkZ25ld0JnZG13Q2pEMzJZYkZxRk5mOHB0QnZ3dVVKNjFzLXVvU3dUaTlJYU1YaENDamVSWkE2dVFHMUQyTGRKMkpwcjNtcTdYbUkwd1ZtRks4RFNxVFZGdmFtTDJyS3Q3WDVDNjBWYlNDRkMzZ0lJY2xKOVhDcFBmOXJLNWxBd092TzBIQXNYV01TSUNDazl3bV9YRnBnODNkZ2JNSA?oc=5",
+      "source": "Chemical Industry Digest",
+      "story": "Thermax and C1 Green Chemicals Join Hands to Develop Green Methanol Facility in India",
+      "reports": 1
+    },
+    {
+      "headline": "GRSE shares jump 9% after signing Rs 32,000 crore Indian Navy contract for five next-generation corvettes",
+      "event_type": "order_win",
+      "phrase": null,
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "GRSE"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-03",
+      "reader": "llm",
+      "corroborated": false,
+      "link": "https://economictimes.indiatimes.com/markets/stocks/news/grse-shares-jump-9-after-signing-rs-32000-crore-indian-navy-contract-for-five-next-generation-corvettes/articleshow/135487819.cms",
+      "source": "Economic Times",
+      "story": "Aatmanirbhar Bharat: MoD inks Rs 53,866.50 crore contracts with GRSE & GSL for 8 Next Generation Corvettes for Indian Na",
+      "reports": 2
+    },
+    {
+      "headline": "Marvell Technology to Acquire Lumentum in US$115 Billion Deal",
+      "event_type": "acquisition",
+      "phrase": "to acquire",
+      "certainty": "announced",
+      "domains": [],
+      "actors": [],
+      "external": [
+        "Marvell"
+      ],
+      "direction": "opportunity",
       "date": "2026-11-02",
-      "first_seen": "2026-11-02",
-      "link": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPMW1qaXZreThyWDN1QUFwNUVpblZ3ai1wS193SW9aNFRnZ0RKMklLV045T3BUclc2UVpOMUVXWHpiRUxRNVlsa1FlTGpQTzNENjN4QlVQbHd6emN2endtVk9NYWdoSzhoV20wWHhjZjdzWUR5TGItUUVXeXgydDA0cDAxRWJZTVNFQ3RhZ08tUXNLQi1DUEZkWWZzaEZVREFraHFKZDBMTjFQZVU?oc=5",
-      "source": "marketscreener.com",
+      "first_seen": "2026-11-03",
+      "link": "https://news.google.com/rss/articles/CBMilwFBVV95cUxQSUttbXNWcUt6bHZzNGtOS3gxZFlTaVYwY2FMLWtkM3BUeFRKSGZYRmlkUGxsX2ZiWHB4SE5BOGFBMllEam5GTHZJRHBmcm9LYmE5SURYTHJqU2dtaXFVOW5jcUUxX3hXcGZqTDNIbGVxNUI0aUxXYk9sSUtlRTBzdVlabk1jOFBvdlZQYkdDZFRkQ0R5NWcw?oc=5",
+      "source": "Mexico Business News",
+      "corroborated": true,
+      "amount_cr": 954500.0
+    },
+    {
+      "headline": "LITE Stock Alert: What to Know About Marvell's $115 Billion Deal to Buy Lumentum",
+      "event_type": "capacity_add",
+      "phrase": "billion deal",
+      "certainty": "announced",
+      "domains": [],
+      "actors": [],
+      "external": [
+        "Marvell"
+      ],
+      "direction": "opportunity",
+      "date": "2026-11-02",
+      "first_seen": "2026-11-03",
+      "link": "https://news.google.com/rss/articles/CBMivwFBVV95cUxQMkFqNy1aOVhpQnNqWDVrYVZ1YmxoSU9zandZTE54b2RRMEw4LWRtMDNPeWZpRU1idVN4TEZFWENBVFVfLWpQZFlTV3ZKZlVRVW5TZl9tQ210eDFCYkw2YzlCS2JBVTBrOGNYZ1ZCVEtzaVdWdmtkYUFSdzRIeDBISUQ0VC1VbHlZSHBJRnRzekotanNlWFZod1BUV25NanhIa0VRdm5CQXI1emtwV1ltWmp0dmh1VnZ5TWtQRTQ3OA?oc=5",
+      "source": "Barchart.com",
       "corroborated": false,
       "llm_reading": {
-        "event_type": "none",
+        "event_type": "acquisition",
         "actors": []
-      }
+      },
+      "amount_cr": 954500.0
+    },
+    {
+      "headline": "Amazon’s $25 Thanksgiving meal deal launches today with same-day delivery",
+      "event_type": "product_launch",
+      "phrase": "launches",
+      "certainty": "completed",
+      "domains": [],
+      "actors": [],
+      "external": [
+        "Amazon"
+      ],
+      "direction": "opportunity",
+      "date": "2026-11-02",
+      "first_seen": "2026-11-03",
+      "link": "https://news.google.com/rss/articles/CBMivgFBVV95cUxNeTA4U3ExYjdZWW1zTFpUNkxxUm0zSEZ2TUVuMENmOGM0eG1kS2ZzXzhjbHl2SmFoN2dTUmtBNzlqSmF1QndFaVV0RUVjYnNNbmFNd2JOMndIVjd4ZEhUQ0dDbVl5U0VJZ1lUVkoza1RsMlpMMmhHenVtMHhaQnQxMHoxY3FtUUh4cENhandJMXBGaWVtOHNSY2RCdjNkcGYwZ21MZHVCSTFoeUZVTG5rMjhCbnhsZHczVDdKS1l3?oc=5",
+      "source": "USA Today",
+      "corroborated": true
+    },
+    {
+      "headline": "Foxconn eyes fresh AI hardware partnership with OpenAI as server demand lifts growth outlook",
+      "event_type": "tie_up",
+      "phrase": "partnership with",
+      "certainty": "completed",
+      "domains": [],
+      "actors": [],
+      "external": [
+        "Foxconn"
+      ],
+      "counterparties": [],
+      "direction": "opportunity",
+      "date": "2026-11-02",
+      "first_seen": "2026-11-03",
+      "link": "https://news.google.com/rss/articles/CBMivwFBVV95cUxOWW5IMzVUb2c0bXlxa1AwTVpiaXF2V0tDUEljbW1UdnB5Y3VGbUNTeGRSQmx3bUFteDVueXFxX21nUC12ZENPeGtUWkJNc1BFd1RacXA4cUN3ZmhWNW5Fc3c3MmFPdDVwZzZXRWpTa1RvaFduSWd2WENsMGFGZnM0UjlkTmxmbXB4Ri1NVFhlTmtHSXBQdTl1bWhneDZ0ZDJwbWQyS3hCRXdPQl9wNG5JUE5LcFY0bklQREduS25WZw?oc=5",
+      "source": "varindia",
+      "corroborated": true
+    },
+    {
+      "headline": "Marvell to buy Lumentum in $115 billion deal in AI data-center bet",
+      "event_type": "capacity_add",
+      "phrase": "billion deal",
+      "certainty": "announced",
+      "domains": [
+        "data_center_support"
+      ],
+      "actors": [],
+      "external": [
+        "Marvell"
+      ],
+      "direction": "opportunity",
+      "date": "2026-11-02",
+      "first_seen": "2026-11-03",
+      "link": "https://news.google.com/rss/articles/CBMiogFBVV95cUxOcm44MUVyRlRoRWdRX29BU3J4YzgwT1pSQmU3WlotYldJWmV1WGVjTmJHNjZGakN2bWxqSTcxOUt1clg3VDFBV1p1OUZDaWloWjBIbVNqMERDMFJLeGtFNGhwejA3cW53U0lVZU4zTmhxbkJHMHBHalYxUVg0SGdWQnB3aHVQa01ua3FLMDhaa0s5OXNaWUdMb3pMVHNNdzVhQ0E?oc=5",
+      "source": "Euronext Markets: Real-time Stock Market Data | live",
+      "corroborated": false,
+      "llm_reading": {
+        "event_type": "acquisition",
+        "actors": []
+      },
+      "amount_cr": 954500.0
+    },
+    {
+      "headline": "Marvell to Acquire Lumentum in Historic $115 Billion Tech Deal",
+      "event_type": "acquisition",
+      "phrase": "to acquire",
+      "certainty": "announced",
+      "domains": [],
+      "actors": [],
+      "external": [
+        "Marvell"
+      ],
+      "direction": "opportunity",
+      "date": "2026-11-02",
+      "first_seen": "2026-11-03",
+      "link": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxPV2FXN0VKVjBIUDlmNF8xMXBEcE9BQkRrQk5GR2k1dmNLMjlBMVlCSmRLc19PNXVCTUNZVUZRY3pQNzEtZGJuQlNwcnMxQWdqME8xa1FtOVkyendLS0RFSTV3cjNwQXJaYmVxTy1fREcyNk81S29pYWRGOTdLN3ljXzVVX1pIaDlTMXRGTHB1ck1qNEZnSUlsUkJIMWFJSmpHT1U5UjkyMEs?oc=5",
+      "source": "Bloomberg.com",
+      "corroborated": true,
+      "amount_cr": 954500.0
     },
     {
       "headline": "Capillary Technologies India Limited has informed the Exchange about Closure of operations",
@@ -41,21 +213,70 @@
       "reports": 1
     },
     {
-      "headline": "CG Semi starts commercial production at Sanand OSAT facility",
+      "headline": "IHCL Reaches 628 Hotels",
       "event_type": "capacity_add",
-      "phrase": "commercial production",
+      "phrase": null,
       "certainty": "completed",
-      "domains": [
-        "semiconductors_equipment"
+      "domains": [],
+      "actors": [
+        "INDHOTEL"
       ],
-      "actors": [],
       "external": [],
       "direction": "opportunity",
-      "date": "2026-11-01",
+      "date": "2026-11-02",
+      "reader": "llm",
+      "corroborated": false,
+      "link": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE5GdXhDYndJN1hybXhPSVhXQVBuTjdKXzN1UERnMzJXZkplaW1LNEdySFltOEhKTDdZMXRUN0pDQkZidGEwblJmQzcxV0dSNFA2dWVNdUd6ZVRuYUJN?oc=5",
+      "source": "https://safariindia.com/",
+      "story": "IHCL Reaches 628 Hotels",
+      "reports": 1
+    },
+    {
+      "headline": "Aatmanirbhar Bharat: MoD inks Rs 53,866.50 crore contracts with GRSE & GSL for 8 Next Generation Corvettes for Indian Navy",
+      "event_type": "order_win",
+      "phrase": null,
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "GRSE"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-02",
+      "reader": "llm",
+      "corroborated": false,
+      "link": "https://news.google.com/rss/articles/CBMie0FVX3lxTE1hcG5VZ1M2YURzZk1BSjh5a2VtZk9VSkROTXl4VjJwc1RJUXRrVnN2WnZKX3Ytd0JTNWJOR3ZFM0gxaGtoY2lxdzVrdnp6Y1R0OF83MkNQQ2pTa1R1UW94eV9NX294V05pNEtESTBJS0NyRGo4V1hHUEJsUQ?oc=5",
+      "source": "www.pib.gov.in",
+      "amount_cr": 53866.5,
+      "materiality": {
+        "GRSE": {
+          "pct_of_revenue": 717.55,
+          "band": "transformative"
+        }
+      },
+      "story": "Aatmanirbhar Bharat: MoD inks Rs 53,866.50 crore contracts with GRSE & GSL for 8 Next Generation Corvettes for Indian Na",
+      "reports": 2
+    },
+    {
+      "headline": "CXMT returns to profit as AI-driven memory prices soar",
+      "event_type": "input_cost_shock",
+      "phrase": "prices soar",
+      "certainty": "completed",
+      "domains": [],
+      "actors": [],
+      "external": [
+        "CXMT"
+      ],
+      "direction": "risk",
+      "date": "2026-11-02",
       "first_seen": "2026-11-02",
-      "link": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxPQ3N3ZWcxMjJXb0FUR3N5UkJmQ0pmcG9DcVVfY0F4Z2h4U1RlQ2trRy1jRFlsRjI2T0VsWEhNZDQ4VEhYRHQxTzFFZjh4M0VHQlBZNi1KT2pTZEtyNlJndTRveDVrR3RhLXZ6MXFGME5qUUxpSWN6YlNfSXoxV1NlZmU3VlBkRmhOOXhqQVhGLTJ4bFphdVdnU2MzdkpOTFlYWW1SUjRoQUtIMHhZbzAzUFF3UVl4LWNr?oc=5",
-      "source": "scanx.trade",
-      "corroborated": true
+      "link": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPMW1qaXZreThyWDN1QUFwNUVpblZ3ai1wS193SW9aNFRnZ0RKMklLV045T3BUclc2UVpOMUVXWHpiRUxRNVlsa1FlTGpQTzNENjN4QlVQbHd6emN2endtVk9NYWdoSzhoV20wWHhjZjdzWUR5TGItUUVXeXgydDA0cDAxRWJZTVNFQ3RhZ08tUXNLQi1DUEZkWWZzaEZVREFraHFKZDBMTjFQZVU?oc=5",
+      "source": "marketscreener.com",
+      "corroborated": false,
+      "llm_reading": {
+        "event_type": "none",
+        "actors": []
+      }
     },
     {
       "headline": "IIT Guwahati to Introduce Diploma, BTech Courses in Semiconductor Technology Through Tata Electronics Partnership",
@@ -69,7 +290,7 @@
       ],
       "direction": "opportunity",
       "date": "2026-11-01",
-      "first_seen": "2026-11-02",
+      "first_seen": "2026-11-03",
       "link": "https://news.google.com/rss/articles/CBMizgFBVV95cUxQV1J4SVVsUmo4U3lucFhzcHptbUhoZ2NRd21NQ2M4ZXNYekNmZ1g0ZUdvdjNqOWstVS10MURDdDNIZnhHTGRWc3BqbG9EZjNOT3g3NVNkdmtPUDQ0d0otTnp4alp0Ulg1RHJaRWszSUJfaWFrOXFWbnhCd2ZxLUNfSV9GaUkzSDJ5Vmh0ZS1oVXNDLUNha1RTcm1OX0Y5bjlsM1BZSDhNVlZIY3V6RkcwZFBrUEdLdVJHZjJOY3JKa3dsUjhIc3NSa3JHX3IxZw?oc=5",
       "source": "NKTV",
       "corroborated": false,
@@ -98,6 +319,45 @@
       "reports": 1
     },
     {
+      "headline": "Islamabad Traffic Police Introduces Home Delivery of Driving Licences Through TCS",
+      "event_type": "tie_up",
+      "phrase": null,
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "TCS"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-01",
+      "reader": "llm",
+      "corroborated": false,
+      "counterparties": [
+        "Islamabad Traffic Police"
+      ],
+      "link": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxPUG5PbWM0MjdvbHU0djZ5UXRRS3V4YlJIY3VxcndkTDZxaXZqSmJKcVEyOC02ZG0yRlFDYjlGbVNjNmhJYlhjRjdtV0ppUlNVZFpZZEh3dXRoOXNzNTk1RDhqbkZaUlI4OUpiSTNmS3Eyd1R5dEFIci11UUNCOXl5WGFjb29ORnc0cnJHTUlaYlAxSTFFS3VVSVZnU1FHelZJSzhnU3FLVDR2MU9KcHZrMlV3NXRYV2d6b0V4UC10OHRzdTdLb0M3MQ?oc=5",
+      "source": "Daily Independent",
+      "story": "Islamabad Traffic Police Introduces Home Delivery of Driving Licences Through TCS",
+      "reports": 1
+    },
+    {
+      "headline": "CG Semi starts commercial production at Sanand OSAT facility",
+      "event_type": "capacity_add",
+      "phrase": "commercial production",
+      "certainty": "completed",
+      "domains": [
+        "semiconductors_equipment"
+      ],
+      "actors": [],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-01",
+      "first_seen": "2026-11-02",
+      "link": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxPQ3N3ZWcxMjJXb0FUR3N5UkJmQ0pmcG9DcVVfY0F4Z2h4U1RlQ2trRy1jRFlsRjI2T0VsWEhNZDQ4VEhYRHQxTzFFZjh4M0VHQlBZNi1KT2pTZEtyNlJndTRveDVrR3RhLXZ6MXFGME5qUUxpSWN6YlNfSXoxV1NlZmU3VlBkRmhOOXhqQVhGLTJ4bFphdVdnU2MzdkpOTFlYWW1SUjRoQUtIMHhZbzAzUFF3UVl4LWNr?oc=5",
+      "source": "scanx.trade",
+      "corroborated": true
+    },
+    {
       "headline": "Coforge Unveils Autonomous Software Factory for the Era of Agentic AI Engineering",
       "event_type": "product_launch",
       "phrase": "unveils",
@@ -109,11 +369,36 @@
       "external": [],
       "direction": "opportunity",
       "date": "2026-10-31",
-      "first_seen": "2026-11-02",
+      "first_seen": "2026-11-03",
       "link": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxNeTdnSVh5d1J3N09NVzFFNlVjWnBNcXVETzRNOGtOeU53ekt0OGtfRFpRSmlZZzdTMEpIY0NyZ3A4OGZNSFRhcjR0MlNWRkp1MkNfM3E2Vnd2SllSUmR3UGRHd3A2aXE5SkFJLWtlazA3VmJHaTdEcEVyanlMdUpTaFdVNklpTUlpTTZmaE9KTHBka0tKcVpFZzB6bHVjNW9iY0JmcjNVN2VCM1pRaXd6SlhjS1hWSEtqcVZTU2t2cWjSAc4BQVVfeXFMTVY2Wi1NdFgtbHB0VkxDVVNEc2ZVSTlLQ0lzcld0c1E3ZkdLWkVCVS1wNUV1c25sWUU2dWE4ejN3UkQ0b3pzaHZqa1dObTVFYzlJX2g5VWxBWVpIcEVYTW11LVYwOXJGcG9ycUwtcGhKUFBIWS00bTlLN3dmLVpCM3VDYzBSQmZJNV9tcmNVVWtTY1ozWWpiQlQtOVFQdmdWYl9sY0lHVkNXdkJ5QXZqeXhLYWthZHpXZnVaODJrbjZ2TFVzU0xsUDhsd05BM1E?oc=5",
       "source": "digital terminal",
       "corroborated": true,
       "story": "Coforge Unveils Autonomous Software Factory for the Era of Agentic AI Engineering",
+      "reports": 1,
+      "confirmation": {
+        "ticker": "COFORGE",
+        "source": "NSE",
+        "filing": "Coforge Limited has informed the Exchange regarding a press release dated November 03, 2026, titled \" Coforge Launches BridgeCX Real-Time Personalization Soluti",
+        "date": "2026-11-03",
+        "link": "https://nsearchives.nseindia.com/corporate/COFORGE_03112026104435_SignedIntimationofPressReleasellNov032026.pdf"
+      }
+    },
+    {
+      "headline": "Varun Beverages Q3 net profit rises 13% YoY, but margins fall",
+      "event_type": "business_weakness",
+      "phrase": "margins fall",
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "VBL"
+      ],
+      "external": [],
+      "direction": "risk",
+      "date": "2026-10-31",
+      "first_seen": "2026-11-03",
+      "link": "https://economictimes.indiatimes.com/markets/stocks/earnings/varun-beverages-q3-net-profit-rises-13-yoy-but-margins-fall/articleshow/135387006.cms",
+      "source": "Economic Times",
+      "story": "Varun Beverages Q3 net profit rises 13% YoY, but margins fall",
       "reports": 1
     },
     {
@@ -133,24 +418,6 @@
       "link": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxPS19SQ0puNVR1M0IwZFp6VGNjemxjZVk2T1FlcFhlZG5rMGNmR0h3cDE4V3RLN0k1R2lyeC1ydXMySFlVM01CRVRYQ3RyNHowMFJZRllaU01FV1BaSGJTNFpxM05CQ21uQ1ktczdESlk2TTVsSWFJV1lUOXEyX3Z5cHV5T0RKY2hueEcxN0U0SVlXNldMTkVLcFgxbUlQUE9mV3gwamgySVFYQWROWEhPbm1tR1dsVzV2WVItMVF3bzgwVlRqVGVEekhFQjZXb3J4VkHSAdIBQVVfeXFMT0tfUkNKbjVUdTNCMGRaelRjY3psY2VZNk9RZXBYZWRuazBjZkdId3AxOFd0SzdJNUdpcngtcnVzMkhZVTNNQkVUWEN0cjR6MDBSWUZZWlNNRVdQWkhiUzRacTNOQkNtbkNZLXM3REpZNk01bElhSVdZVDlxMl92eXB1eU9ESmNobnhHMTdFNElZVzZXTE5FS3BYMW1JUFBPZld4MGpoMklRWEFkTlhIT25tbUdXbFc1dllSLTFRd284MFZUalRlRHpIRUI2V29yeFZB?oc=5",
       "source": "News18",
       "corroborated": true
-    },
-    {
-      "headline": "Varun Beverages Q3 net profit rises 13% YoY, but margins fall",
-      "event_type": "business_weakness",
-      "phrase": "margins fall",
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "VBL"
-      ],
-      "external": [],
-      "direction": "risk",
-      "date": "2026-10-31",
-      "first_seen": "2026-11-02",
-      "link": "https://economictimes.indiatimes.com/markets/stocks/earnings/varun-beverages-q3-net-profit-rises-13-yoy-but-margins-fall/articleshow/135387006.cms",
-      "source": "Economic Times",
-      "story": "Varun Beverages Q3 net profit rises 13% YoY, but margins fall",
-      "reports": 1
     },
     {
       "headline": "Lemon Tree Hotels Signs New Property in Visakhapatnam",
@@ -173,6 +440,94 @@
       "reports": 1
     },
     {
+      "headline": "Dixon Technologies Finalizes Joint Venture With Longcheer; Invests ₹7.39 Crore",
+      "event_type": "tie_up",
+      "phrase": "joint venture",
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "DIXON"
+      ],
+      "external": [
+        "Longcheer"
+      ],
+      "counterparties": [
+        "Longcheer"
+      ],
+      "direction": "opportunity",
+      "date": "2026-10-30",
+      "first_seen": "2026-11-03",
+      "link": "https://news.google.com/rss/articles/CBMi7wFBVV95cUxQdVFWMjdJQW1EY0RtT3NzZV94bnBtcUM0VENldG40RjJPS1hhTVJKdGhJUXpoN1N6WEY5MlJ1S2xvTHViaVgyTFkyaFJIVWtOWldqSGM4cjM1dEJfYlN1eHlBcFo3Mk5rQXBNeWNvMnhKcWlLOFN6enZmZ0VwWllkb2JQNW82MUVfQzBKUTlSakFFajlvRjJhMlF5NS1idENTUW1tbXN6U3R5dlh3WHk5XzctcGlOSnh3bVd4aTNmLW9ld2JwdG1qUE9GQUUyeFBTUnpHdUhIdVZyblBiaXpXUi1HdTNVSWZ4ZjBJVHZXZw?oc=5",
+      "source": "scanx.trade",
+      "corroborated": true,
+      "story": "Dixon Technologies Finalizes Joint Venture With Longcheer; Invests ₹7.39 Crore",
+      "reports": 1
+    },
+    {
+      "headline": "Suzlon Energy cuts operating margin guidance to 15%",
+      "event_type": "business_weakness",
+      "phrase": "cuts operating margin guidance",
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "SUZLON"
+      ],
+      "external": [],
+      "direction": "risk",
+      "date": "2026-10-30",
+      "first_seen": "2026-11-03",
+      "link": "https://news.google.com/rss/articles/CBMiqwJBVV95cUxPQzM5U2V4U0tnVTh6QUo4LXdiWVBkUXBmZldTV0hqSGVvMThTY3h2MGVNMGNBVU1HVXBzRjFHOVpPREpSa1hCQU1aZ2tnb0liUE4xdTFnUVl6WU1XS0gzb242cFVNdUxkUzZvcXc3Qm5FNjFKd1hpRmRibDNvZGY0QlVWUTkycVVrV0VJc0N2ek5nN0FYQW16eG5TajJKSlh3N294cXhGaTlNS21xdENTRFIycGdzcWROS29oZGZfYUxGRnZyMC0taDZLME5WdThJYTN5c05QSTVXQ2FpcVFiSHVCdURCSkZCYW5nOFhtTHltU0FGREZueGdGUWhqRWZXUTRBcElRRGZ6SHgwdDh5RDltdXgtZEtlbmF0OUVXM0VTMnc0OWI4UGNaSdIBxwFBVV95cUxORTJlM0F2OVVBS0RCWF9jVDNLdV9fTEhTMUQyR2tTRmhDNEpUdlZrTDVsc1FCMUhieFJ1bERhWEtGNXZHWGdod05qOVJrYmdVOTcwOFh2T3lxMXpuY25IV1N3Nm9SWFk3N2RncjN2Y3FFVW1HRC15TGczMjQ1WWhJUDJoTXBwX1hTdXV3YTZyLWViZ2w3bHlsN3lDOVdVdGxLOURZdXpwYTRtaHljWm93S2NXbUdxRHl4RFJpc3QxUmExWW9tQkk0?oc=5",
+      "source": "The Economic Times",
+      "story": "Suzlon Energy cuts operating margin guidance to 15%",
+      "reports": 1
+    },
+    {
+      "headline": "Amadeus Partners TCS",
+      "event_type": "tie_up",
+      "phrase": null,
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "TCS"
+      ],
+      "external": [
+        "Amadeus"
+      ],
+      "direction": "opportunity",
+      "date": "2026-10-30",
+      "reader": "llm",
+      "corroborated": false,
+      "counterparties": [
+        "Amadeus"
+      ],
+      "link": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxNWlVIbFViMXFYTzJOeUJuUEdWbnc3WnZkTmtHeTZGN2FxcUtVck9TcTRVb1hxdkpNOEI4VGltS01mVjVHVW85am9hUmVXRjNwdjFFVWE4akpSNWR3QmRKaEdhVU5lQm5TTXMtMEhDZUN1VnlLMm4zWF92azlTTkYzRkdLOU53aHphV2xZ?oc=5",
+      "source": "https://www.fintechbiznews.com/",
+      "story": "Amadeus Partners TCS",
+      "reports": 1
+    },
+    {
+      "headline": "Tech Mahindra’s Agreement With Vodafone Business",
+      "event_type": "tie_up",
+      "phrase": null,
+      "certainty": "announced",
+      "domains": [],
+      "actors": [
+        "TECHM"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-10-30",
+      "reader": "llm",
+      "corroborated": false,
+      "counterparties": [
+        "Vodafone Business"
+      ],
+      "link": "https://news.google.com/rss/articles/CBMingFBVV95cUxPRklTMU9zWjVaMGpScnA1aHpGVktKRDFONjBiSDhGSzNvZG5sa0ZsWHRpUkUwcXpkY2M4NjNFcE5TZUk3bElUVUliSzdoMWh1Z1ZnYTh1MDRLbG56Zl9jblkzMkxKX3NLTEJwVVFZVXpLRmdzeXUyQnVzei1Xb1djckJJQTFDRFJIS0Z0VUw4YkVWSTNQVzR1TmJJY3lSdw?oc=5",
+      "source": "https://www.fintechbiznews.com/",
+      "story": "Tech Mahindra’s Agreement With Vodafone Business",
+      "reports": 1
+    },
+    {
       "headline": "Suzlon Energy Shares Fall 9% as Net Profit Declines 69% for Q2",
       "event_type": "business_weakness",
       "phrase": "net profit declines",
@@ -191,24 +546,6 @@
       "reports": 1
     },
     {
-      "headline": "Suzlon Energy cuts operating margin guidance to 15%",
-      "event_type": "business_weakness",
-      "phrase": "cuts operating margin guidance",
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "SUZLON"
-      ],
-      "external": [],
-      "direction": "risk",
-      "date": "2026-10-30",
-      "first_seen": "2026-11-02",
-      "link": "https://news.google.com/rss/articles/CBMiqwJBVV95cUxPQzM5U2V4U0tnVTh6QUo4LXdiWVBkUXBmZldTV0hqSGVvMThTY3h2MGVNMGNBVU1HVXBzRjFHOVpPREpSa1hCQU1aZ2tnb0liUE4xdTFnUVl6WU1XS0gzb242cFVNdUxkUzZvcXc3Qm5FNjFKd1hpRmRibDNvZGY0QlVWUTkycVVrV0VJc0N2ek5nN0FYQW16eG5TajJKSlh3N294cXhGaTlNS21xdENTRFIycGdzcWROS29oZGZfYUxGRnZyMC0taDZLME5WdThJYTN5c05QSTVXQ2FpcVFiSHVCdURCSkZCYW5nOFhtTHltU0FGREZueGdGUWhqRWZXUTRBcElRRGZ6SHgwdDh5RDltdXgtZEtlbmF0OUVXM0VTMnc0OWI4UGNaSdIBxwFBVV95cUxORTJlM0F2OVVBS0RCWF9jVDNLdV9fTEhTMUQyR2tTRmhDNEpUdlZrTDVsc1FCMUhieFJ1bERhWEtGNXZHWGdod05qOVJrYmdVOTcwOFh2T3lxMXpuY25IV1N3Nm9SWFk3N2RncjN2Y3FFVW1HRC15TGczMjQ1WWhJUDJoTXBwX1hTdXV3YTZyLWViZ2w3bHlsN3lDOVdVdGxLOURZdXpwYTRtaHljWm93S2NXbUdxRHl4RFJpc3QxUmExWW9tQkk0?oc=5",
-      "source": "The Economic Times",
-      "story": "Suzlon Energy cuts operating margin guidance to 15%",
-      "reports": 1
-    },
-    {
       "headline": "Intel shares tumble after hours, hit by chip supply constraints, big cash burn",
       "event_type": "supply_disruption",
       "phrase": "supply constraints",
@@ -224,28 +561,6 @@
       "link": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxPbEgxampOc0U5RENJWVd0a09uQjlFSkxueGxGVzVPX2NwdElzNDN3WXdjVFpvelNULXVObnMzTTJzb0ZfeFBtN1ZOQ0FVNXRuN0ZINkF0dWZkZlR6ZlkzUE5wQWpPTWg3dGtDLURwRl9OU0ZEb1UtejNBbC1KMnVWbmJ5OHQxWTBoU1I3cFduaXAyOHFBVkFIYjhCNXR1c0EyM2xlZFZNWFM?oc=5",
       "source": "Reuters",
       "corroborated": true
-    },
-    {
-      "headline": "CONCOR–Aiyer Shipping Collaboration Targets Stronger Overseas Logistics Links",
-      "event_type": "tie_up",
-      "phrase": null,
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "CONCOR"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-10-30",
-      "reader": "llm",
-      "corroborated": false,
-      "counterparties": [
-        "Aiyer Shipping"
-      ],
-      "link": "https://news.google.com/rss/articles/CBMirwFBVV95cUxPbjQ4Nld3djgyczZzV2lscHRsYUx6TTJNNlFiVHF0RTMwTDBheDN0bzh3aS1sYUlRNEtLQi13Z2FJU0M3NUx0SGRibDhVNUlvTngwdTh1OW5HNmdDMXZXS0RGMm5KRi02ajBXZXhJbkxYam0zZ3dOSDVoMFBzczVzcHlqR0xFS1BYT3Y1elZ1R0h3cGlaMUJZSGhxX3JBVHl2WmVSVjFBVWtTMUdKZl9v?oc=5",
-      "source": "Maritime Gateway",
-      "story": "CONCOR–Aiyer Shipping Collaboration Targets Stronger Overseas Logistics Links",
-      "reports": 1
     },
     {
       "headline": "Samsung warns memory chip shortage will worsen in 2027, expects tight supply till 2028",
@@ -283,30 +598,6 @@
       "reports": 1
     },
     {
-      "headline": "Dixon Technologies Finalizes Joint Venture With Longcheer; Invests ₹7.39 Crore",
-      "event_type": "tie_up",
-      "phrase": "joint venture",
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "DIXON"
-      ],
-      "external": [
-        "Longcheer"
-      ],
-      "counterparties": [
-        "Longcheer"
-      ],
-      "direction": "opportunity",
-      "date": "2026-10-30",
-      "first_seen": "2026-10-30",
-      "link": "https://news.google.com/rss/articles/CBMi7wFBVV95cUxQdVFWMjdJQW1EY0RtT3NzZV94bnBtcUM0VENldG40RjJPS1hhTVJKdGhJUXpoN1N6WEY5MlJ1S2xvTHViaVgyTFkyaFJIVWtOWldqSGM4cjM1dEJfYlN1eHlBcFo3Mk5rQXBNeWNvMnhKcWlLOFN6enZmZ0VwWllkb2JQNW82MUVfQzBKUTlSakFFajlvRjJhMlF5NS1idENTUW1tbXN6U3R5dlh3WHk5XzctcGlOSnh3bVd4aTNmLW9ld2JwdG1qUE9GQUUyeFBTUnpHdUhIdVZyblBiaXpXUi1HdTNVSWZ4ZjBJVHZXZw?oc=5",
-      "source": "scanx.trade",
-      "corroborated": true,
-      "story": "Dixon Technologies Finalizes Joint Venture With Longcheer; Invests ₹7.39 Crore",
-      "reports": 1
-    },
-    {
       "headline": "Intel Shares Plunge 23% on Chip Supply Constraints & Cash Burn",
       "event_type": "supply_disruption",
       "phrase": "supply constraints",
@@ -324,39 +615,6 @@
       "corroborated": true
     },
     {
-      "headline": "CONCOR Bags ₹485.93 Crore Wagon Order; Shares Rise 0.86%",
-      "event_type": "order_win",
-      "phrase": "bags ₹485.93 crore wagon order",
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "CONCOR"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-10-29",
-      "first_seen": "2026-11-02",
-      "link": "https://news.google.com/rss/articles/CBMikwFBVV95cUxOTUo2dWE5RWRTT0dFUHFEQVpKR0plNGdFblJHUnpzejVKcUJMMVBuN3dqZk1SNE8tUXByNUFrRlU5SHRReHdjY001bHpRWko2SHNNNk8wSk1NZFRJbXFwZVhLN3dTWnFTZ1VqOEF4ckNkb3FCWnBmOUZOYTN3UVhDQlp5RUNPdEVKb2JTRzdpQVpFa0U?oc=5",
-      "source": "HDFC Sky",
-      "corroborated": true,
-      "amount_cr": 485.93,
-      "materiality": {
-        "CONCOR": {
-          "pct_of_revenue": 5.35,
-          "band": "material"
-        }
-      },
-      "story": "CONCOR Bags ₹485.93 Crore Wagon Order; Shares Rise 0.86%",
-      "reports": 1,
-      "confirmation": {
-        "ticker": "CONCOR",
-        "source": "NSE",
-        "filing": "Container Corporation Of India Limited has informed the Exchange about Awarding of order(s)/contract(s)",
-        "date": "2026-10-29",
-        "link": "https://nsearchives.nseindia.com/corporate/CONCOR_29102026133111_CONCOR_SE_291026_BLSS.pdf"
-      }
-    },
-    {
       "headline": "ADSL and Nigus Hercules Partner to Develop Defence MRO Capabilities in Nigeria",
       "event_type": "tie_up",
       "phrase": "and nigus hercules partner to",
@@ -371,7 +629,7 @@
       ],
       "direction": "opportunity",
       "date": "2026-10-29",
-      "first_seen": "2026-11-02",
+      "first_seen": "2026-11-03",
       "link": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPVTdKOWZKYk5jT0xNWWkwenNYREJQRnl5OFVSR2FVcXpKTnVacWNkTjZ5cURkaHVobXZaNkQ4Qzc2SEQ4enQwRk8zS2VBV21SMVE5Z1Y0dFFla3IzblUwMkNxSG1Pc2VmMHdjb21BYmtnYmgzQi1CckpuWUJUOGROZk55VGx0bnJmclBwZFp3amtDYVJvcnp3Ti0wc0lwemRIQlNVc2RSRlRJVk0?oc=5",
       "source": "Raksha Anirveda",
       "corroborated": true,
@@ -390,7 +648,7 @@
       "external": [],
       "direction": "opportunity",
       "date": "2026-10-29",
-      "first_seen": "2026-11-02",
+      "first_seen": "2026-11-03",
       "link": "https://news.google.com/rss/articles/CBMikgFBVV95cUxOU2VuNWFJV01pVTduTUFzRzdYOTJMSWFSX2k3LUJzbzFQWnFQb2NYVUZBdHdnWDdZZTNBTzQtWnVGOGxuRVowUzVrQnF0T0xNcVdmN0d6TEdrOGIxeG13eUQ5c240NU1wd1hObzNhSkhHOWRHR0ZlZGZkaGtmclRick10LVgyYW5HSEI5QkZLZHRBdw?oc=5",
       "source": "Equitypandit",
       "corroborated": false,
@@ -415,7 +673,7 @@
       "external": [],
       "direction": "risk",
       "date": "2026-10-29",
-      "first_seen": "2026-11-02",
+      "first_seen": "2026-11-03",
       "link": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxNOUJYUlZBcml5ZmgyNGF0ZGVYYVhwbjFfRFdLYm5UWklLcTVWdWZJWElsYWhxVGNFanhCSENmQkh6aXZ5MlI2bF9FLW14QWdlclJGdDFLWFFxUThpYXJWN29vWERuRzZ6dGk2YU83WUNGNFdWdDlTMEQteHlkblRGeDJHTHpjdTN1ZFJ3U0YzcnRWX3VIRGRHV25WT2gzSEliTlhVbVlQN0xTNkV2eWNHYkZGaFVDbGpybksyLWFCM1A?oc=5",
       "source": "TradingView",
       "story": "Suzlon Q2 profit falls 69% to ₹394 crore on deferred tax base effect",
@@ -433,7 +691,7 @@
       "external": [],
       "direction": "opportunity",
       "date": "2026-10-29",
-      "first_seen": "2026-11-02",
+      "first_seen": "2026-11-03",
       "link": "https://news.google.com/rss/articles/CBMi7wFBVV95cUxQSGdzRUxjZmctQzhLUGZvOVd1NnBBQU0zRXM5dWlPVW56aVR0d3YyNkc2bk00clltLUNENlBncmE3emF1akdwbkVXMUVjQkxMcEl5cFAzOC1mbWpvX25OeTExX1NPMjNxY0Y5V3pwb1JLYlJFYUpQSmc3N1ZOb2xqenhpRU1pMDUzQkhwWFREWlIyMldBNGV1c1h3XzMwTmZMT3ZUOU41VGJPRFg2eU1pV0hrbVhxbkRyY01nRVNIUUEtVi0tbnhpSXoyRnhCM296YXNaeXRpdF9VZVNBMWVpNERtR2FNNWtvcW5WNDcyZw?oc=5",
       "source": "scanx.trade",
       "corroborated": true,
@@ -454,7 +712,7 @@
       "external": [],
       "direction": "opportunity",
       "date": "2026-10-29",
-      "first_seen": "2026-11-02",
+      "first_seen": "2026-11-03",
       "link": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQSUplLWdNcy0xV2M1TTZkSUNmemh6eTRtVDExbFhEOGV5a1htWWFpZDBuU3BSMEZoS2lSRHZ5ZWFnaFNzMFZfejJIOFJfNjF0WURmU0pLNE5kNENIRXktaWJObFBocFdfWTZwMjJpdGUtamd4V2hqdkF5MllPcUxXcV9ackh6RkpiY2dhX2VHU2lrbnR0aXowS3FzQmJ0VC1qTVFIbktVY1A4X2xGMEdOaQ?oc=5",
       "source": "WWD",
       "corroborated": true,
@@ -473,7 +731,7 @@
       "external": [],
       "direction": "opportunity",
       "date": "2026-10-29",
-      "first_seen": "2026-11-02",
+      "first_seen": "2026-11-03",
       "link": "https://nsearchives.nseindia.com/corporate/COFORGE_29102026101428_IntimationofPressReleasellOctober292026.pdf",
       "source": "NSE",
       "corroborated": true,
@@ -537,258 +795,6 @@
       "source": "NSE",
       "story": "Capillary Technologies India Limited has informed the Exchange regarding a press release dated October 29, 2026, titled ",
       "reports": 1
-    },
-    {
-      "headline": "Container Corporation Of India Limited has informed the Exchange about Awarding of order(s)/contract(s)",
-      "event_type": "order_win",
-      "phrase": null,
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "CONCOR"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-10-29",
-      "reader": "llm",
-      "corroborated": false,
-      "link": "https://nsearchives.nseindia.com/corporate/CONCOR_29102026133111_CONCOR_SE_291026_BLSS.pdf",
-      "source": "NSE",
-      "story": "Container Corporation Of India Limited has informed the Exchange about Awarding of order(s)/contract(s)",
-      "reports": 1,
-      "confirmation": {
-        "ticker": "CONCOR",
-        "source": "NSE",
-        "filing": "Container Corporation Of India Limited has informed the Exchange about Awarding of order(s)/contract(s)",
-        "date": "2026-10-29",
-        "link": "https://nsearchives.nseindia.com/corporate/CONCOR_29102026133111_CONCOR_SE_291026_BLSS.pdf"
-      }
-    },
-    {
-      "headline": "CG Power and Industrial Solutions Limited has informed the Exchange regarding a press release dated October 29, 2026, titled \"Axiro Semiconductor Invests in ThinSiC to Strengthen P",
-      "event_type": "acquisition",
-      "phrase": null,
-      "certainty": "completed",
-      "domains": [
-        "semiconductors_equipment"
-      ],
-      "actors": [
-        "CGPOWER"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-10-29",
-      "reader": "llm",
-      "corroborated": false,
-      "link": "https://nsearchives.nseindia.com/corporate/CGPOWER_29102026122240_SE_Disclosure-Press_Release-Axiro-Investment_in_ThinSic.pdf",
-      "source": "NSE",
-      "story": "CG Power and Industrial Solutions Limited has informed the Exchange regarding a press release dated October 29, 2026, ti",
-      "reports": 1
-    },
-    {
-      "headline": "SK Hynix expects memory chip shortage to persist until at least 2030",
-      "event_type": "supply_disruption",
-      "phrase": "shortage",
-      "certainty": "completed",
-      "domains": [],
-      "actors": [],
-      "external": [
-        "SK Hynix"
-      ],
-      "direction": "risk",
-      "date": "2026-10-29",
-      "first_seen": "2026-10-31",
-      "link": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQanRybGlRWnRJWXpERTlXWkhYU3lSa2Nnb1hjdjhGSXM3QlRQZUdjd19kRktPOGVFN0ptUGphWjM0T0hISWFKLXdoMzB0RnB1YzNOMHRWXzdLSlNoLWpUdUVKWWJpbmgtRUFWN3NuNHg1UE0tblVjSkt3MjBka0hpYWdIOGJVN1hrUVRFcXY3WXBnLXRnVFJSZQ?oc=5",
-      "source": "TechSpot",
-      "corroborated": true
-    },
-    {
-      "headline": "Samsung sees AI chip shortage worsening, keeps investors in suspense on returns",
-      "event_type": "supply_disruption",
-      "phrase": "shortage",
-      "certainty": "completed",
-      "domains": [],
-      "actors": [],
-      "external": [
-        "Samsung"
-      ],
-      "direction": "risk",
-      "date": "2026-10-29",
-      "first_seen": "2026-10-31",
-      "link": "https://news.google.com/rss/articles/CBMilgFBVV95cUxOZ2JmLWlsUUNaZ2g5VnF1TU1IZU5rWDV6T1ZLdXJBdmJrVnpHanBobFBiWjNkaXJGMjE1MUlqMlVrOGJOaHVrU18yVkRBWFVoOENmVjhqYVA3Vy1EdkdXTDN1REJPQWpVdFp5MFdlMzFhMXhEVUdBQS01STRwTW41R2RKWWloUHBhYUNVY2tyR19Geld5RHc?oc=5",
-      "source": "Reuters",
-      "corroborated": true
-    },
-    {
-      "headline": "Anant Raj inks Haryana data center MOU as quarterly revenue hits US$ 69.46 million",
-      "event_type": "tie_up",
-      "phrase": null,
-      "certainty": "announced",
-      "domains": [
-        "data_center_support"
-      ],
-      "actors": [
-        "ANANTRAJ"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-10-29",
-      "reader": "llm",
-      "corroborated": false,
-      "counterparties": [],
-      "link": "https://news.google.com/rss/articles/CBMinwFBVV95cUxNVGlud0ZsaTNsOEdGVFNzbnBPWjBacU14QWstYWNPaFlUUlc4eFdfWHBweXpuOTY0NXljQ0VhQUV0VzlqYzlsQ2xtUzNBRWdqMGZDd3l0eE4xcnYtdnJpcU9CVnhrX2N1bEJhR0VzUFdyQXIydV9NcFZVR1dnRWhLblY3enFsdGVrMF9mdXlOWFJBaUZ4Ull1UmNnOGJKanM?oc=5",
-      "source": "W.Media",
-      "story": "Anant Raj inks Haryana data center MOU as quarterly revenue hits US$ 69.46 million",
-      "reports": 1
-    },
-    {
-      "headline": "Anant Raj targets 357 MW data center capacity by FY32",
-      "event_type": "capacity_add",
-      "phrase": null,
-      "certainty": "announced",
-      "domains": [
-        "data_center_support"
-      ],
-      "actors": [
-        "ANANTRAJ"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-10-29",
-      "reader": "llm",
-      "corroborated": false,
-      "link": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxQbnRleEhfVmRrSEhlN0dZck1QTkxLbmpxTDNsYVB1QzhvdGVMNlB5TzFxS3puVUhRUUpfalRYQUl1ODlRYjU0SlM2QjFya1YxTUpDeGpBU3VqMFNjeXYyTm9SUG9BNjFJVUNudEVjc1M5cVhBdko2YXZXa3hlYk9BUjlXbXhBczVsbUtxMGkzOFBzVk13MGhfVkhGenFGQjlITVBmSHYxbkZxM096TnpZaTZzbjNzRVY0Uk9wU1MyRWxlSzI0ZWlUdjlBUFlRNlV40gHUAUFVX3lxTE1jMHpmX1d3ZXFRRW95VlNIcVNIbmpuQWZqSHJBWi1oY29CSjRNUzdra2tVekw2N3pIdFpJbkRSZUtlQWtBdU92QjF6X2syTkNZMnphcWdaYWE5dUVEQ1RTb2dCdi1BUlZGTExnR2R3RkliZkMwTjNiOVRVMDdsdmlxLU9Sc2JGTHFnUlotQXJ0c3h6VGhmTHdYMUVEQWpUQXdlLXlYbHNraURpX09zTjZWMWUzdjBpWmpsaGJWdVJMQ2FiLTJ2RUZmaGUwRF9wWGk4LW15?oc=5",
-      "source": "ET Datacenters",
-      "story": "Anant Raj eyes 357 MW data centre capacity by FY32",
-      "reports": 2
-    },
-    {
-      "headline": "Chalet Hotels Appoints New Chief Growth & Product Officer",
-      "event_type": "management_change",
-      "phrase": null,
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "CHALET"
-      ],
-      "external": [],
-      "direction": "mixed",
-      "date": "2026-10-29",
-      "reader": "llm",
-      "corroborated": false,
-      "link": "https://news.google.com/rss/articles/CBMidkFVX3lxTE45dkhiQXozUThKel9kWVE4WDlHVGMxVWRSU0IwSFZ1UEVObU1JSlpDWERTc0ZlZWo1cUJLRzhreXd0WXMxSDJmSFhMSGRKZWVRUGpQN0Q4TE9NdmphN0RkcWZ2U3NQRlAybUptU1preDhfUkk0Wnc?oc=5",
-      "source": "https://safariindia.com/",
-      "story": "Chalet Hotels Appoints New Chief Growth & Product Officer",
-      "reports": 1
-    },
-    {
-      "headline": "Samsung Says Memory Shortage to Last Through 2028; SK Hynix ADR Soars 13% While Taiwan Memory Stocks Fade After Higher Open",
-      "event_type": "supply_disruption",
-      "phrase": "shortage",
-      "certainty": "completed",
-      "domains": [],
-      "actors": [],
-      "external": [
-        "Samsung"
-      ],
-      "direction": "risk",
-      "date": "2026-10-29",
-      "first_seen": "2026-10-30",
-      "link": "https://news.google.com/rss/articles/CBMidkFVX3lxTE9iU0Z5elpBbzEyYVJmNXBNd2FreXhpNHk5ZXhlRFVaZ1luM1pMc0c1VTFfRU5kMHJqc2JUUnhwbnZrV3NaeW1NZWxKRHlZUThrZ210SkNhQ1YzaWVGU2t1elNLb3BoWEJ5YUtFQXRHV3RTSWZ4a1E?oc=5",
-      "source": "BigGo Finance",
-      "corroborated": true
-    },
-    {
-      "headline": "Carlsberg is leaning on soft drinks as beer sales weaken in Europe and Asia",
-      "event_type": "business_weakness",
-      "phrase": "sales weaken",
-      "certainty": "completed",
-      "domains": [],
-      "actors": [],
-      "external": [
-        "Carlsberg"
-      ],
-      "direction": "risk",
-      "date": "2026-10-29",
-      "first_seen": "2026-10-30",
-      "link": "https://news.google.com/rss/articles/CBMifkFVX3lxTE5ZZTdWZXlTQXc1Umc3elNERkh6c0NXVFk0ZW9SYkg2UXEtZG1GS2FCc285Mk1UTVl4Zy1RaHFreWlSYjEzcjRCdk1BVnotd1A3TXV1ZmZmVDBKZE95dDd3cTdGRDdCcHcyN05kX3VfblluWnlfVkJxbDJKX0Exdw?oc=5",
-      "source": "Quartz"
-    },
-    {
-      "headline": "Anant Raj eyes 357 MW data centre capacity by FY32",
-      "event_type": "capacity_add",
-      "phrase": null,
-      "certainty": "announced",
-      "domains": [
-        "data_center_support"
-      ],
-      "actors": [
-        "ANANTRAJ"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-10-29",
-      "reader": "llm",
-      "corroborated": false,
-      "link": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNcUNJT2dLN2poVDJSUDBIV3lrZVhFajVsTmNjakZBaWs1Vy1fb0dQRjBnWmh3VkE2YjZjNUs5WXdCVVpmRkhpdUdIekFaN1BiYUpDMmdWSV9KQmdEODB4b0tBQWN3MTFjNzJUUjU1RHlZOTZwcVllMGF4Vlp3TEFyaFZ1ZGwtUG5faEZfRlRUSnJCVVpzTDRNVg?oc=5",
-      "source": "tele.net",
-      "story": "Anant Raj eyes 357 MW data centre capacity by FY32",
-      "reports": 2
-    },
-    {
-      "headline": "First Breach Ends ideaForge JV, Avoiding $10 Million Initial Funding Tranche",
-      "event_type": "partnership_end",
-      "phrase": "ends ideaforge jv",
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "IDEAFORGE"
-      ],
-      "external": [],
-      "direction": "risk",
-      "date": "2026-10-28",
-      "first_seen": "2026-11-02",
-      "link": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxQd0x3b3N4WjN0MVZFTWhBTzRBc0w3SUpoU1RjOWI5ekp4cWpRcmJzN3F0Sjk1VExxVmJ5cV9PZFhvY2h3S2hiMURpeWJhTFZmeV9kcUp6ZzBHcExjOHZJaEQxWkRUcERORFJkdmdJQW11MFFUVzZhbXA4Sjl3WmhRV1BwcGFLd2dqWmp2TEplSFZTSXo4VGpsckVVYUFWMHlPTThHY3IydnNMTFBiZzZzSXJSbk9EUTNXMHZoMEhmM1pkSTd2SHV4V2hHLWdpM2l2V1E?oc=5",
-      "source": "TradingView",
-      "story": "First Breach Ends ideaForge JV, Avoiding $10 Million Initial Funding Tranche",
-      "reports": 1
-    },
-    {
-      "headline": "IdeaForge terminates US UAV joint venture with First Breach",
-      "event_type": "partnership_end",
-      "phrase": "terminates us uav joint venture",
-      "certainty": "completed",
-      "domains": [
-        "aerospace_defence"
-      ],
-      "actors": [
-        "IDEAFORGE"
-      ],
-      "external": [],
-      "direction": "risk",
-      "date": "2026-10-28",
-      "first_seen": "2026-11-02",
-      "link": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQS0x3aWk5ZEV6dEMxdUdPTzFYalMwX3ZfNEplVUxuaHEyamlMdHd2QWNyQlViYy1FemoxcldaYWpSdU1tMl9VMnlaeFU5Z3RycVJFSDZKWGR4bXVpRWVmZlVwcnVMdW5wZWVyODdjLVF1aGRPREtvTm94QXpSaFNXNXdtQU5zS2tUcGlPQ3djT1BucEUwSXlUTFZRb29ETHl5WmJBX0g5TTUwV09EVGRKZw?oc=5",
-      "source": "scanx.trade",
-      "story": "IdeaForge Technology terminates joint venture agreement",
-      "reports": 4
-    },
-    {
-      "headline": "Maris-Tech Unveils Edge AI Platform for Real-Time Video Intelligence and Autonomous UAVs",
-      "event_type": "product_launch",
-      "phrase": "unveils",
-      "certainty": "completed",
-      "domains": [
-        "aerospace_defence"
-      ],
-      "actors": [],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-10-28",
-      "first_seen": "2026-11-02",
-      "link": "https://news.google.com/rss/articles/CBMivwFBVV95cUxOQlo1anNQM2tXNEFrdF9FLWN2R2VQRnp2SE1UeTZ0N0lqbGxVY1Qtd2x6ZkxFQVA5R1FvTlhzNEptajVnMTVNMGItam84MGdkLURZUEtQbjJnQ3AxUGtlUEswUnFURThSZ29xcGUtWXQ0OEZGVHhBZ09RMWpXVU9Bc1VIamliOTg0QlpLZkJ6eVBvTEdvWE1ibGJDSTRReHpRSXFydFl4YTF1OFNiaVRVQ3FaamItSV90eWx3R3JsNA?oc=5",
-      "source": "sUAS News",
-      "corroborated": true
     }
   ]
 }
