@@ -235,7 +235,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (124 days old)"
+      "exclusion_reason": "aged >120d (125 days old)"
     },
     {
       "date": "Tue, 30 Jun 2026 14:13:56 GMT",
@@ -249,7 +249,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (126 days old)"
+      "exclusion_reason": "aged >120d (127 days old)"
     },
     {
       "date": "Mon, 06 Jul 2026 07:08:44 GMT",
@@ -262,7 +262,8 @@
         "Agreement"
       ],
       "confidence": "M",
-      "status": "counted"
+      "status": "excluded",
+      "exclusion_reason": "aged >120d (121 days old)"
     },
     {
       "date": "Sun, 28 Jun 2026 19:41:29 GMT",
@@ -276,7 +277,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (128 days old)"
+      "exclusion_reason": "aged >120d (129 days old)"
     },
     {
       "date": "Fri, 26 Jun 2026 16:18:58 GMT",
@@ -290,7 +291,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (130 days old)"
+      "exclusion_reason": "aged >120d (131 days old)"
     },
     {
       "date": "Thu, 25 Jun 2026 05:00:29 GMT",
@@ -304,7 +305,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (131 days old)"
+      "exclusion_reason": "aged >120d (132 days old)"
     },
     {
       "date": "Mon, 22 Jun 2026 03:33:53 GMT",
@@ -540,7 +541,8 @@
         "Launch"
       ],
       "confidence": "M",
-      "status": "counted"
+      "status": "excluded",
+      "exclusion_reason": "aged >120d (121 days old)"
     },
     {
       "date": "Wed, 01 Jul 2026 11:28:57 GMT",
@@ -554,7 +556,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (125 days old)"
+      "exclusion_reason": "aged >120d (126 days old)"
     },
     {
       "date": "Tue, 30 Jun 2026 04:50:11 GMT",
@@ -568,7 +570,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (126 days old)"
+      "exclusion_reason": "aged >120d (127 days old)"
     },
     {
       "date": "Tue, 30 Jun 2026 05:11:57 GMT",
@@ -582,7 +584,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (126 days old)"
+      "exclusion_reason": "aged >120d (127 days old)"
     },
     {
       "date": "Tue, 23 Jun 2026 10:26:44 GMT",
@@ -596,7 +598,20 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (133 days old)"
+      "exclusion_reason": "aged >120d (134 days old)"
+    },
+    {
+      "date": "04 Nov 2026",
+      "headline": "Tata Consultancy Services Limited has informed the Exchange regarding 'Press Release -  TCS Enterprise AI Study: 84% say productivity is AI s top benefit; just 10% let AI act without human oversight'.",
+      "source_url": "https://nsearchives.nseindia.com/corporate/TCS_CORPCS_04112026104913_PR_04Nov26_signed.pdf",
+      "source_label": "NSE",
+      "event_type": "",
+      "source_kind": "Filing",
+      "event_tags": [
+        "Filing"
+      ],
+      "confidence": "M",
+      "status": "counted"
     },
     {
       "date": "19 Oct 2026",
@@ -753,7 +768,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (328 days old)"
+      "exclusion_reason": "aged >120d (329 days old)"
     },
     {
       "date": "Fri, 20 Mar 2026 07:00:00 GMT",
@@ -767,7 +782,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (228 days old)"
+      "exclusion_reason": "aged >120d (229 days old)"
     },
     {
       "date": "Thu, 19 Feb 2026 08:00:00 GMT",
@@ -781,7 +796,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (257 days old)"
+      "exclusion_reason": "aged >120d (258 days old)"
     },
     {
       "date": "Wed, 08 Apr 2026 07:00:00 GMT",
@@ -795,7 +810,21 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (209 days old)"
+      "exclusion_reason": "aged >120d (210 days old)"
+    },
+    {
+      "date": "Wed, 04 Nov 2026 09:11:05 +0530",
+      "headline": "TCS Share Price Live Updates: TCS Experiences Notable Drop",
+      "source_url": "https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/tcs-share-price-today-live-04-nov-2026/liveblog/135521276.cms",
+      "source_label": "Economic Times",
+      "event_type": "",
+      "source_kind": "Markets news",
+      "event_tags": [
+        "Markets news"
+      ],
+      "confidence": "M",
+      "status": "counted",
+      "article_url": "https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/tcs-share-price-today-live-04-nov-2026/liveblog/135521276.cms"
     },
     {
       "date": "Fri, 30 Oct 2026 08:50:53 +0530",

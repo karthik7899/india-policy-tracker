@@ -26,7 +26,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (128 days old)"
+      "exclusion_reason": "aged >120d (129 days old)"
     },
     {
       "date": "Tue, 01 Sep 2026 07:00:00 GMT",
@@ -92,7 +92,8 @@
         "Launch"
       ],
       "confidence": "M",
-      "status": "counted"
+      "status": "excluded",
+      "exclusion_reason": "aged >120d (121 days old)"
     },
     {
       "date": "Mon, 29 Jun 2026 08:06:00 GMT",
@@ -106,7 +107,20 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (127 days old)"
+      "exclusion_reason": "aged >120d (128 days old)"
+    },
+    {
+      "date": "04 Nov 2026",
+      "headline": "ITC Limited has informed the Exchange about Schedule of meet",
+      "source_url": "https://nsearchives.nseindia.com/corporate/ITC_04112026121821_SE.pdf",
+      "source_label": "NSE",
+      "event_type": "",
+      "source_kind": "Filing",
+      "event_tags": [
+        "Filing"
+      ],
+      "confidence": "M",
+      "status": "counted"
     },
     {
       "date": "05 Oct 2026",
@@ -145,7 +159,8 @@
         "Filing"
       ],
       "confidence": "M",
-      "status": "counted"
+      "status": "merged",
+      "exclusion_reason": "merged: duplicate phrasing of “ITC Limited has informed the Exchange about Schedule of meet”"
     },
     {
       "date": "Wed, 14 Jan 2026 08:00:00 GMT",
@@ -159,7 +174,37 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (293 days old)"
+      "exclusion_reason": "aged >120d (294 days old)"
+    },
+    {
+      "date": "Wed, 04 Nov 2026 11:35:56 +0530",
+      "headline": "ITC shares jump 6% in two days after Q2 results. More upside ahead?",
+      "source_url": "https://economictimes.indiatimes.com/markets/stocks/news/itc-shares-jump-6-in-two-days-after-q2-results-more-upside-ahead/articleshow/135526058.cms",
+      "source_label": "Economic Times",
+      "event_type": "",
+      "source_kind": "Markets news",
+      "event_tags": [
+        "Markets news"
+      ],
+      "confidence": "M",
+      "status": "counted",
+      "article_url": "https://economictimes.indiatimes.com/markets/stocks/news/itc-shares-jump-6-in-two-days-after-q2-results-more-upside-ahead/articleshow/135526058.cms",
+      "summary": "ITC shares rose to Rs 283.5 apiece on NSE on Wednesday morning, the highest level seen by the stock in nearly three months. The stock has now recovered more than 12% in five sessions after hitting a 52-week low of Rs 253 apiece in late October."
+    },
+    {
+      "date": "Wed, 04 Nov 2026 10:07:24 +0530",
+      "headline": "ITC shares continue to rise after Q2 results 2026; jumps 3% today | More rally to come? Check target, upside, returns",
+      "source_url": "https://www.livemint.com/market/stock-market-news/itc-shares-continue-to-rise-after-q2-results-2026-jumps-3-today-more-rally-to-come-check-target-upside-returns-11793764869079.html",
+      "source_label": "Livemint",
+      "event_type": "",
+      "source_kind": "Markets news",
+      "event_tags": [
+        "Markets news"
+      ],
+      "confidence": "M",
+      "status": "counted",
+      "article_url": "https://www.livemint.com/market/stock-market-news/itc-shares-continue-to-rise-after-q2-results-2026-jumps-3-today-more-rally-to-come-check-target-upside-returns-11793764869079.html",
+      "summary": "ITC shares opened at ₹272.90 apiece on NSE today, as compared to previous close of ₹273.90 on Tuesday and touched an intraday high of ₹276.15 on 4 November."
     },
     {
       "date": "Tue, 03 Nov 2026 09:35:48 +0530",
