@@ -13,7 +13,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (132 days old)"
+      "exclusion_reason": "aged >120d (133 days old)"
     },
     {
       "date": "Tue, 30 Jun 2026 01:50:43 GMT",
@@ -27,7 +27,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (127 days old)"
+      "exclusion_reason": "aged >120d (128 days old)"
     },
     {
       "date": "30 Oct 2026",
@@ -147,6 +147,36 @@
       "status": "counted"
     },
     {
+      "date": "Thu, 05 Nov 2026 08:51:14 +0530",
+      "headline": "HDFC Bank Share Price Live Updates: HDFC Bank's Performance Snapshot",
+      "source_url": "https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/hdfc-bank-stock-price-live-updates-05-nov-2026/liveblog/135557239.cms",
+      "source_label": "Economic Times",
+      "event_type": "",
+      "source_kind": "Markets news",
+      "event_tags": [
+        "Markets news"
+      ],
+      "confidence": "M",
+      "status": "counted",
+      "article_url": "https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/hdfc-bank-stock-price-live-updates-05-nov-2026/liveblog/135557239.cms"
+    },
+    {
+      "date": "Thu, 05 Nov 2026 13:07:00 +0530",
+      "headline": "HDFC Bank shares witness strong buying, rise 7% in 1 month. Can new CEO, improving fundamentals drive next leg of rally?",
+      "source_url": "https://www.livemint.com/market/stock-market-news/hdfc-bank-shares-witness-strong-buying-rise-7-in-1-month-can-new-ceo-improving-fundamentals-drive-next-leg-of-rally-11793861115989.html",
+      "source_label": "Livemint",
+      "event_type": "management_change",
+      "source_kind": "Markets news",
+      "event_tags": [
+        "management_change",
+        "Markets news"
+      ],
+      "confidence": "M",
+      "status": "counted",
+      "article_url": "https://www.livemint.com/market/stock-market-news/hdfc-bank-shares-witness-strong-buying-rise-7-in-1-month-can-new-ceo-improving-fundamentals-drive-next-leg-of-rally-11793861115989.html",
+      "summary": "HDFC Bank shares have rebounded recently but remain sharply lower year to date. Analysts see potential for further gains if the bank sustains its technical breakout and improves business performance.&nbsp;"
+    },
+    {
       "date": "Wed, 04 Nov 2026 08:21:42 +0530",
       "headline": "Reliance Industries shares: Another record! RIL biggest on MTF book with 60% jump; dethrones HDFC Bank | Buy or sell?",
       "source_url": "https://www.livemint.com/market/stock-market-news/reliance-industries-shares-in-focus-60-jump-in-mtf-book-dethrones-hdfc-bank-should-you-buy-sell-or-hold-11793758986934.html",
@@ -204,6 +234,21 @@
       "confidence": "M",
       "status": "counted",
       "article_url": "https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/hdfc-bank-share-price-live-29-oct-2026/liveblog/135288700.cms"
+    },
+    {
+      "date": "2026-11-05",
+      "headline": "HDFC Bank shares witness strong buying, rise 7% in 1 month. Can new CEO, improving fundamentals drive next leg of rally?",
+      "source_url": "https://www.livemint.com/market/stock-market-news/hdfc-bank-shares-witness-strong-buying-rise-7-in-1-month-can-new-ceo-improving-fundamentals-drive-next-leg-of-rally-11793861115989.html",
+      "source_label": "Livemint",
+      "event_type": "management_change",
+      "source_kind": "Event",
+      "event_tags": [
+        "management_change",
+        "Event"
+      ],
+      "confidence": "H",
+      "status": "merged",
+      "exclusion_reason": "merged: duplicate phrasing of “HDFC Bank shares witness strong buying, rise 7% in 1 month. ”"
     },
     {
       "date": "2026-10-27",
