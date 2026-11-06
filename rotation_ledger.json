@@ -599,9 +599,9 @@
     "name": "Birla Cable",
     "price_at_decision": 375.0,
     "target_at_decision": null,
-    "scored": false,
-    "outcome": null,
-    "realized_return_pct": null,
+    "scored": true,
+    "outcome": "No Analyst Target (unscored)",
+    "realized_return_pct": -7.0,
     "target_made_up": 468.75
   },
   {
@@ -1166,6 +1166,30 @@
     "name": "Global Health",
     "price_at_decision": 1388.3,
     "target_at_decision": 1586.0,
+    "scored": false,
+    "outcome": null,
+    "realized_return_pct": null
+  },
+  {
+    "date": "2026-11-06",
+    "action": "rotated_in",
+    "sector": "clean_energy",
+    "ticker": "GVT&D",
+    "name": "GE Vernova T&D",
+    "price_at_decision": 4014.7,
+    "target_at_decision": 5296.0,
+    "scored": false,
+    "outcome": null,
+    "realized_return_pct": null
+  },
+  {
+    "date": "2026-11-06",
+    "action": "rotated_in",
+    "sector": "big_cap_industries",
+    "ticker": "MRPL",
+    "name": "M R P L",
+    "price_at_decision": 175.35,
+    "target_at_decision": 197.5,
     "scored": false,
     "outcome": null,
     "realized_return_pct": null

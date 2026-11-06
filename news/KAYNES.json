@@ -2,6 +2,20 @@
   "ticker": "KAYNES",
   "items": [
     {
+      "date": "Mon, 02 Nov 2026 15:46:53 GMT",
+      "headline": "Kaynes Technology incorporates wholly owned subsidiary in Saudi Arabia",
+      "source_url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQNnJmbFVybEZ1dTVyVkZQQmhqQXEyRzNNYzM1UkI4Yll0LVhJQ2xiNEhsOUp5NVB0MW5wZGZNZ1RWY3B0NFVsajk5R0hwN1hoOWM5VEUtTThYYkJoZWpVYkp4MWFXTDN5cXVETTVfX3J2b3V1Qm10MnNSZ2NhRnhoaDB0aFQ5cnAtZnh4SkpmcTV3N09Wc0wzX0hocnROR2cydndKRkpXYXNGT05wMEtIdllpR0xvMDNqZW1PRGlGNVNZZw?oc=5",
+      "source_label": "scanx.trade",
+      "event_type": "capacity_add",
+      "source_kind": "Agreement",
+      "event_tags": [
+        "capacity_add",
+        "Agreement"
+      ],
+      "confidence": "M",
+      "status": "counted"
+    },
+    {
       "date": "Thu, 08 Oct 2026 08:50:37 GMT",
       "headline": "Kaynes Technology Maintains USD 1 Billion Revenue Target by FY28 Despite Current Year Shortfall",
       "source_url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxQbFNLUnhSelhVd3RILV9XTGpremI1ZThNYnpvY1MydzNvOGtENkJMVUViWTNjdzRGMFdfVlNiSVUwcnlDSDZBOVIwamVZN0pfRElIX1JKZUJiYU12WWpYRU9aQVpRY0d2RXE3MWlBd2ZxbXVSd2NGbG1WZWVPSW5BLXBsWFV2T0FnR21Udy1DX2xYQ0FPTm5mcHhBUEZpRlBaWHpub016VlNybXZ1NXdRYnNXekVJMmtjVmhVWjcwRmRzbHRZN1M4R3p4a1NyUQ?oc=5",
@@ -445,7 +459,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (335 days old)"
+      "exclusion_reason": "aged >120d (336 days old)"
     },
     {
       "date": "Thu, 05 Feb 2026 08:00:00 GMT",
@@ -459,7 +473,22 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (273 days old)"
+      "exclusion_reason": "aged >120d (274 days old)"
+    },
+    {
+      "date": "2026-11-02",
+      "headline": "Kaynes Technology incorporates wholly owned subsidiary in Saudi Arabia",
+      "source_url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQNnJmbFVybEZ1dTVyVkZQQmhqQXEyRzNNYzM1UkI4Yll0LVhJQ2xiNEhsOUp5NVB0MW5wZGZNZ1RWY3B0NFVsajk5R0hwN1hoOWM5VEUtTThYYkJoZWpVYkp4MWFXTDN5cXVETTVfX3J2b3V1Qm10MnNSZ2NhRnhoaDB0aFQ5cnAtZnh4SkpmcTV3N09Wc0wzX0hocnROR2cydndKRkpXYXNGT05wMEtIdllpR0xvMDNqZW1PRGlGNVNZZw?oc=5",
+      "source_label": "scanx.trade",
+      "event_type": "capacity_add",
+      "source_kind": "Event",
+      "event_tags": [
+        "capacity_add",
+        "Event"
+      ],
+      "confidence": "L",
+      "status": "merged",
+      "exclusion_reason": "merged: duplicate phrasing of “Kaynes Technology incorporates wholly owned subsidiary in Sa”"
     }
   ]
 }
