@@ -1,6 +1,96 @@
 {
   "value": [
     {
+      "headline": "Suzlon Planning Ten GW Wind Energy Business in Karnataka Over Five Years",
+      "event_type": "capacity_add",
+      "phrase": null,
+      "certainty": "announced",
+      "domains": [],
+      "actors": [
+        "SUZLON"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-07",
+      "reader": "llm",
+      "corroborated": false,
+      "link": "https://news.google.com/rss/articles/CBMinwFBVV95cUxOVFVVZnAzb3d2aE1yQUNTelVudjBHekhqdFZQLUhUUUpYQTZHWVE2TVlReEYxNGlJcHY1NU1kWG5MZjg0d0NPeVNZS1VoSEV1TUNlZTFVY0lfRGVabXJNdy1pdXotc2JIQXN2eXJoanVmUjZ1TlJSNEhlQ1JJeHNMcng2cmFHblE5c2xMVHBiRUU3RVpTejh6WGtFWlFrWXc?oc=5",
+      "source": "Chemical Industry Digest",
+      "story": "Suzlon Planning Ten GW Wind Energy Business in Karnataka Over Five Years",
+      "reports": 1
+    },
+    {
+      "headline": "Bharat Heavy Electricals Limited has informed the Exchange about Bagging/Receiving of orders/contracts",
+      "event_type": "order_win",
+      "phrase": null,
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "BHEL"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-07",
+      "reader": "llm",
+      "corroborated": false,
+      "link": "https://nsearchives.nseindia.com/corporate/BHEL_07112026125946_orderpgil07112026.pdf",
+      "source": "NSE",
+      "story": "Bharat Heavy Electricals Limited has informed the Exchange about Bagging/Receiving of orders/contracts",
+      "reports": 1,
+      "confirmation": {
+        "ticker": "BHEL",
+        "source": "NSE",
+        "filing": "Bharat Heavy Electricals Limited has informed the Exchange about Bagging/Receiving of orders/contracts",
+        "date": "2026-11-07",
+        "link": "https://nsearchives.nseindia.com/corporate/BHEL_07112026125946_orderpgil07112026.pdf"
+      }
+    },
+    {
+      "headline": "Bharat Electronics bags additional orders worth ₹909 crore since October 21",
+      "event_type": "order_win",
+      "phrase": "bags additional orders",
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "BEL"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-06",
+      "first_seen": "2026-11-07",
+      "link": "https://news.google.com/rss/articles/CBMirwFBVV95cUxNdmY0QnEwTFYwLUI5Y05QNWVzUkEtUFUwQ01WVFJhaWxUay1YQ0JIb0w3THg1X3FDS1lTMm8yM1AxTWtXLXRWT3VweXg0dEtjM1dYbl9FaVgwajZ4VERHTHI0Nl9nM1VtVHB4cVRnT2FNMG1iLW9jWVQ2Mjd2d1p5b1l0NUx6OURXRDdrSUc3OXBlMnhFT1RQWWNKMmxveTBaSXZtcWxjWk43Zk5TZDBz?oc=5",
+      "source": "IndiaIPO",
+      "corroborated": true,
+      "amount_cr": 909.0,
+      "materiality": {
+        "BEL": {
+          "pct_of_revenue": 3.0,
+          "band": "minor"
+        }
+      },
+      "story": "Bharat Electronics bags additional orders worth ₹909 crore since October 21",
+      "reports": 1
+    },
+    {
+      "headline": "Google acquires Wyoming data center site from AI infrastructure firm Crusoe",
+      "event_type": "acquisition",
+      "phrase": "acquires",
+      "certainty": "completed",
+      "domains": [
+        "data_center_support"
+      ],
+      "actors": [],
+      "external": [
+        "Google"
+      ],
+      "direction": "opportunity",
+      "date": "2026-11-06",
+      "first_seen": "2026-11-07",
+      "link": "https://news.google.com/rss/articles/CBMitgFBVV95cUxQUmdYV3dXUTRhWEJ2UTJxUXBMMmxVX292SEdXZlVJNmJIa0lzNVNRT0J3QjJhc0VnN2lYUnQybkNkd0JsRV8xUTc1Qk1nZllyQUx0RnJTTENFVEhJdXUyYW9SQXVodjFLT1RmSDF3UE1PODFDRnkzVnhkaEpVSDdwSDJRV2Y5dDZOTXF2cUoxUWlVVnBXWklYRjNpNGp0N2x1N0I1bFgtMFl3eldkdHZxUUlZRVdzQQ?oc=5",
+      "source": "Reuters",
+      "corroborated": true
+    },
+    {
       "headline": "Aditya Infotech to buy 30% stake in BLUE for ₹45 crore",
       "event_type": "acquisition",
       "phrase": null,
@@ -23,27 +113,8 @@
           "band": "immaterial"
         }
       },
-      "story": "Aditya Infotech to buy 30% stake in BLUE for ₹45 crore",
-      "reports": 1
-    },
-    {
-      "headline": "CP PLUS spotlights AI-led security with Ranveer Singh in new TVC",
-      "event_type": "product_launch",
-      "phrase": null,
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "CPPLUS"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-11-06",
-      "reader": "llm",
-      "corroborated": false,
-      "link": "https://news.google.com/rss/articles/CBMioAFBVV95cUxOa1pzMURBbVdmMGRKMDhGTEJLV3JrTG1LQmpBaWlDYkhab1BZTlVuUEowc0N5RnB6bzFkazhfZlNvZGRhVFlhd3VSLU1yU29KbmRwU3h3SWNkTmtXeVJfeFlLckZhWlpBb1JUTzloTktkQnRlWXJ4b2hxWXZOZ3luMW1SZnVpMElLUXltWEJZQ1dCeXJhVUpLSUw1M1M3WGpK?oc=5",
-      "source": "Adgully",
-      "story": "CP PLUS spotlights AI-led security with Ranveer Singh in new TVC",
-      "reports": 1
+      "story": "Aditya Infotech takes 30% of AI video startup BLUE in $4.8M deal",
+      "reports": 2
     },
     {
       "headline": "Lemon Tree Hotels Limited has informed the Exchange regarding a press release dated November 06, 2026, titled \"The Company has signed a License Agreement viz. Keys Select by Lemon ",
@@ -125,22 +196,72 @@
       }
     },
     {
-      "headline": "Element Six and Entegris partner on synthetic diamond technology for chip packaging",
+      "headline": "Lemon Tree Signs McLeodganj and Madurai Hotels",
       "event_type": "tie_up",
-      "phrase": "and entegris partner on",
+      "phrase": null,
       "certainty": "completed",
-      "domains": [
-        "semiconductors_equipment"
+      "domains": [],
+      "actors": [
+        "LEMONTREE"
       ],
-      "actors": [],
       "external": [],
-      "counterparties": [],
       "direction": "opportunity",
-      "date": "2026-11-05",
-      "first_seen": "2026-11-06",
-      "link": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxOUG5BSFprOE14eFN0RWl1RXNYMGstUHU4ekNMbjdRdUFwbDVPS1ZpSU5Cc2U4NDFuNFBMd3VNOXFTYzFzQWNsRi03LUFGUG91bjZycTBHQ3Q2N2Zwckw0RHB6bUdoZWFUMGFFamFiWWZjd3FTajhwTGVIME1heE9hOXc5WWdfVkU2ZGRiZ1JkS2stQV91UTBJMkc4Xzc5eXdscTluTzFXQ2lNdWdFVTVtd2Y1VVBnX2dJX1c3aVd3cTM1Qlg2UEN2cw?oc=5",
-      "source": "New Electronics",
-      "corroborated": true
+      "date": "2026-11-06",
+      "reader": "llm",
+      "corroborated": false,
+      "counterparties": [],
+      "link": "https://news.google.com/rss/articles/CBMie0FVX3lxTE5aVUQtSnFRdzhqWWMzT0hWS21fb21aWExyemdCTGVfTURYaldyRjNQWTVGT2JHbXYzOWNneWZlWk1mT09FZkQzSlEzWER5YjlaajNsRnVFLWlncTJkVFE0cVo5VWNzZUV3eXprUUVwU1VMNXlBQ0pCRVQ1dw?oc=5",
+      "source": "https://safariindia.com/",
+      "story": "Lemon Tree Hotels Signs New Property in Visakhapatnam",
+      "reports": 1,
+      "confirmation": {
+        "ticker": "LEMONTREE",
+        "source": "NSE",
+        "filing": "Lemon Tree Hotels Limited has informed the Exchange regarding a press release dated November 06, 2026, titled \"The Company has signed a License Agreement viz. K",
+        "date": "2026-11-06",
+        "link": "https://nsearchives.nseindia.com/corporate/LEMONTREE_06112026150135_Intimation_Mathura.pdf"
+      }
+    },
+    {
+      "headline": "India's Coforge joins SpaceX partner network to deploy Grok AI tools for enterprises",
+      "event_type": "tie_up",
+      "phrase": null,
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "COFORGE"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-06",
+      "reader": "llm",
+      "corroborated": false,
+      "counterparties": [
+        "SpaceX"
+      ],
+      "link": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxPVm1rN0dhNG5aaDhDRVRyQVpMaXVROE8wbUFRVUJLZnYwaUQwZF9jMGtfX0doQjVZM3JaRFZHd2FSNFRvODVIUy1TeXJ3d09OZEZPMDB6cEE0eWhHdDNGa3FTRWRCRkhjaERjTnhudVNMTDV6RmdBX0ZqOTNjbDZFblljUE9INGpzN05KSV81YzdHTlVFS1lKeExydFBaaHVLV0pzR2tyQTBSbHV5SUF3VEY3STZHX0gzZzM1S1VYOWtpSEZsRXhKWjl3YzhQQUpy?oc=5",
+      "source": "Reuters",
+      "story": "India's Coforge joins SpaceX partner network to deploy Grok AI tools for enterprises",
+      "reports": 1
+    },
+    {
+      "headline": "CP PLUS spotlights AI-led security with Ranveer Singh in new TVC",
+      "event_type": "product_launch",
+      "phrase": null,
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "CPPLUS"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-06",
+      "reader": "llm",
+      "corroborated": false,
+      "link": "https://news.google.com/rss/articles/CBMioAFBVV95cUxOa1pzMURBbVdmMGRKMDhGTEJLV3JrTG1LQmpBaWlDYkhab1BZTlVuUEowc0N5RnB6bzFkazhfZlNvZGRhVFlhd3VSLU1yU29KbmRwU3h3SWNkTmtXeVJfeFlLckZhWlpBb1JUTzloTktkQnRlWXJ4b2hxWXZOZ3luMW1SZnVpMElLUXltWEJZQ1dCeXJhVUpLSUw1M1M3WGpK?oc=5",
+      "source": "Adgully",
+      "story": "CP PLUS spotlights AI-led security with Ranveer Singh in new TVC",
+      "reports": 1
     },
     {
       "headline": "China blocks SoftBank’s $5.4 billion takeover of ABB’s robotics division",
@@ -154,7 +275,7 @@
       ],
       "direction": "opportunity",
       "date": "2026-11-05",
-      "first_seen": "2026-11-06",
+      "first_seen": "2026-11-07",
       "link": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxNTVBJa2g4T1RZOXVuY3phU1ZicmlpM0kzUTdjNlBrMmtNZ29aNlBxZzNwQWkzam9WNVB6MGFwV2tERnA5WWNhWE9ZaWtKaV9JMDdpWHBKRjUyU2ZKU2lEN2R4U29ZQlo3T3g1cndpLUNqZXFhclphYzdyN0thaXM5WXl4UnN2eGZiUXd4SXdUenppTXNRTU1CV3RURnEyT05XUFRNUWFiMGNwN0QzYjVtS1Zoc24zcV9lWHV2eDZQckJwb2ZpS3g0OG9VMnpJaHJt?oc=5",
       "source": "Reuters",
       "corroborated": true,
@@ -173,7 +294,7 @@
       ],
       "direction": "opportunity",
       "date": "2026-11-05",
-      "first_seen": "2026-11-06",
+      "first_seen": "2026-11-07",
       "link": "https://news.google.com/rss/articles/CBMipAFBVV95cUxOWDJ6Ny1ISUNUamR3UW9KLTg1RGRldEhXaVg5bFhVYmFDSWEyVFNNUG1wSHd1MFRyUDNreVE5bDNvcGRmTF9wUl9oZEJqMDQ1d3RlY0ZzSnFrZVk4UmE0eDdJR0t2eEstdnhPUVNqd0hVaVF5MjVTbHBqS3V5aWdSM0xMa0FWQlhYQmZhSS1QbFdCaUIxb2NwRlFsSkNFMXFnaDh6UQ?oc=5",
       "source": "The Motley Fool",
       "corroborated": false,
@@ -195,7 +316,7 @@
       "external": [],
       "direction": "mixed",
       "date": "2026-11-05",
-      "first_seen": "2026-11-06",
+      "first_seen": "2026-11-07",
       "link": "https://www.livemint.com/market/stock-market-news/hdfc-bank-shares-witness-strong-buying-rise-7-in-1-month-can-new-ceo-improving-fundamentals-drive-next-leg-of-rally-11793861115989.html",
       "source": "Livemint",
       "corroborated": false,
@@ -204,44 +325,6 @@
         "actors": []
       },
       "story": "HDFC Bank shares witness strong buying, rise 7% in 1 month. Can new CEO, improving fundamentals drive next leg of rally?",
-      "reports": 1
-    },
-    {
-      "headline": "Campus broadens portfolio with apparel and performance shoes",
-      "event_type": "product_launch",
-      "phrase": null,
-      "certainty": "announced",
-      "domains": [],
-      "actors": [
-        "CAMPUS"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-11-05",
-      "reader": "llm",
-      "corroborated": false,
-      "link": "https://news.google.com/rss/articles/CBMivgFBVV95cUxON0hwY0J2SDJVOUV6YzZGdnBfNDVPRm5tbVBwWXdZaWJoQy1FMzNYSVhzTVg0SUpnaHg1VTRWYjgzaElrNzRaSjJOMjhwQ1hDc3ZKYW11cjQ2UkNmZUNST1BJX3JBZ2l6Q2FLeEotSWJqMS1DVDBPbmNsYUZxSTh1NXVyYV9YYjN1RnB5UXRqNDFiT0V1bndhTjg4Y3R1UmR1UjYzcEhobzh0Y3I0SmpfVC1qN0dVQTd6aTVwaURR?oc=5",
-      "source": "Multibagg AI",
-      "story": "Campus broadens portfolio with apparel and performance shoes",
-      "reports": 1
-    },
-    {
-      "headline": "CAMPUS Plans UK, UAE and Southeast Asia Market Expansion",
-      "event_type": "capacity_add",
-      "phrase": null,
-      "certainty": "announced",
-      "domains": [],
-      "actors": [
-        "CAMPUS"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-11-05",
-      "reader": "llm",
-      "corroborated": false,
-      "link": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQWjM2SHpiXzM2SS1OQWE2Y0k0MjhDMkpwQjdKMHJza3g1bjVxUmpjUDVwSlNxX2tadjYyODFjZG1GenZ2cmNXR1VmMzk3N3NSRWFERWNLdGg2RXdXczdmNzBsVF9laUsxQk1GZm5JSXNHYk1Hejg2RjNWZjF5NU00RFdqQnpOWVR5N1RtNEtWNFRqMVQ1S3pNU2lZZ2hwQlpYMldaaGZEd0Q?oc=5",
-      "source": "Multibagg AI",
-      "story": "CAMPUS Plans UK, UAE and Southeast Asia Market Expansion",
       "reports": 1
     },
     {
@@ -320,6 +403,122 @@
       "reports": 1
     },
     {
+      "headline": "Apollo Hospitals Reports 32% Profit Growth In Q2, Plans Rs 7,100 Cr Expansion",
+      "event_type": "capacity_add",
+      "phrase": null,
+      "certainty": "announced",
+      "domains": [],
+      "actors": [
+        "APOLLOHOSP"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-05",
+      "reader": "llm",
+      "corroborated": false,
+      "link": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQYmpIYzM0RmxqZk9NdDVtVVgzLUpxdUxjYkNfZE1NNGNOSERHZTdtZHFFekVpRlFxVlkzQmpDUkRlMExHZDcxTTZyNVFWa0V1YlNrYllfdUZFWnllempTWl96MldBOGhUWnl0bms3aTBndG1FS29WWTN5Q3hZVm1mN2FKUTZiZ29VVGxmN3dsUGJmSDE5VDFlODJESG5ORk1FeUFILXhaUEFFV3pUWWk1NG53d1VnNW5Ha0VfaHRTX2RCZw?oc=5",
+      "source": "BW Healthcare World",
+      "story": "Apollo Hospitals Reports 32% Profit Growth In Q2, Plans Rs 7,100 Cr Expansion",
+      "reports": 1
+    },
+    {
+      "headline": "Aditya Infotech takes 30% of AI video startup BLUE in $4.8M deal",
+      "event_type": "acquisition",
+      "phrase": null,
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "CPPLUS"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-05",
+      "reader": "llm",
+      "corroborated": false,
+      "link": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQWGVHdEFxT2wxTlJQTzdpRlNCbXhlckRvbWVhQzd2cDZkaTlmbUtfUk5FanBvdi1hU0NWc0ZVOGNlSmJxNXozSThFSGJFbU0yTFluR2VBV0JCcHBHV3MySERvbTVKRTJmQkRxV29oNEljbmwwcjRSSXZxZjhmLUJSZ3Z6Q0VnWE16eFdudHBtRlg0TkN1elpMWDFqSXg?oc=5",
+      "source": "Dealroom",
+      "story": "Aditya Infotech takes 30% of AI video startup BLUE in $4.8M deal",
+      "reports": 2
+    },
+    {
+      "headline": "Optiemus plans 51:49 CMF venture to expand brand role",
+      "event_type": "tie_up",
+      "phrase": null,
+      "certainty": "announced",
+      "domains": [],
+      "actors": [
+        "OPTIEMUS"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-05",
+      "reader": "llm",
+      "corroborated": false,
+      "counterparties": [
+        "CMF"
+      ],
+      "link": "https://news.google.com/rss/articles/CBMirAFBVV95cUxNa092dldvdEpzSEpHbWlmTXNqNnFKTm9hT2oyVGFfZkFnTm01TjFuWHV5cHFhX2htOXZEMXhzM1lFcUFGRmhOYjBRMTV0UzJhV2hLYUdRQktKcm1reHhPdE1zU1g1ZEI3MV9wZE9DMDQ2cXFyR3pLaFoyWGUxOU9ZLWR0S1JTak95Z09PTW5uamZsajc1U0VkalN0bWE4VG40ZTF1cHFscEhhNlJx?oc=5",
+      "source": "Multibagg AI",
+      "story": "Optiemus plans 51:49 CMF venture to expand brand role",
+      "reports": 1
+    },
+    {
+      "headline": "Element Six and Entegris partner on synthetic diamond technology for chip packaging",
+      "event_type": "tie_up",
+      "phrase": "and entegris partner on",
+      "certainty": "completed",
+      "domains": [
+        "semiconductors_equipment"
+      ],
+      "actors": [],
+      "external": [],
+      "counterparties": [],
+      "direction": "opportunity",
+      "date": "2026-11-05",
+      "first_seen": "2026-11-06",
+      "link": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxOUG5BSFprOE14eFN0RWl1RXNYMGstUHU4ekNMbjdRdUFwbDVPS1ZpSU5Cc2U4NDFuNFBMd3VNOXFTYzFzQWNsRi03LUFGUG91bjZycTBHQ3Q2N2Zwckw0RHB6bUdoZWFUMGFFamFiWWZjd3FTajhwTGVIME1heE9hOXc5WWdfVkU2ZGRiZ1JkS2stQV91UTBJMkc4Xzc5eXdscTluTzFXQ2lNdWdFVTVtd2Y1VVBnX2dJX1c3aVd3cTM1Qlg2UEN2cw?oc=5",
+      "source": "New Electronics",
+      "corroborated": true
+    },
+    {
+      "headline": "Campus broadens portfolio with apparel and performance shoes",
+      "event_type": "product_launch",
+      "phrase": null,
+      "certainty": "announced",
+      "domains": [],
+      "actors": [
+        "CAMPUS"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-05",
+      "reader": "llm",
+      "corroborated": false,
+      "link": "https://news.google.com/rss/articles/CBMivgFBVV95cUxON0hwY0J2SDJVOUV6YzZGdnBfNDVPRm5tbVBwWXdZaWJoQy1FMzNYSVhzTVg0SUpnaHg1VTRWYjgzaElrNzRaSjJOMjhwQ1hDc3ZKYW11cjQ2UkNmZUNST1BJX3JBZ2l6Q2FLeEotSWJqMS1DVDBPbmNsYUZxSTh1NXVyYV9YYjN1RnB5UXRqNDFiT0V1bndhTjg4Y3R1UmR1UjYzcEhobzh0Y3I0SmpfVC1qN0dVQTd6aTVwaURR?oc=5",
+      "source": "Multibagg AI",
+      "story": "Campus broadens portfolio with apparel and performance shoes",
+      "reports": 1
+    },
+    {
+      "headline": "CAMPUS Plans UK, UAE and Southeast Asia Market Expansion",
+      "event_type": "capacity_add",
+      "phrase": null,
+      "certainty": "announced",
+      "domains": [],
+      "actors": [
+        "CAMPUS"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-05",
+      "reader": "llm",
+      "corroborated": false,
+      "link": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQWjM2SHpiXzM2SS1OQWE2Y0k0MjhDMkpwQjdKMHJza3g1bjVxUmpjUDVwSlNxX2tadjYyODFjZG1GenZ2cmNXR1VmMzk3N3NSRWFERWNLdGg2RXdXczdmNzBsVF9laUsxQk1GZm5JSXNHYk1Hejg2RjNWZjF5NU00RFdqQnpOWVR5N1RtNEtWNFRqMVQ1S3pNU2lZZ2hwQlpYMldaaGZEd0Q?oc=5",
+      "source": "Multibagg AI",
+      "story": "CAMPUS Plans UK, UAE and Southeast Asia Market Expansion",
+      "reports": 1
+    },
+    {
       "headline": "BHEL secures four Adani Power orders valued ₹5,000-₹7,000 crore each",
       "event_type": "order_win",
       "phrase": "secures four adani power orders",
@@ -331,7 +530,7 @@
       "external": [],
       "direction": "opportunity",
       "date": "2026-11-04",
-      "first_seen": "2026-11-06",
+      "first_seen": "2026-11-07",
       "link": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxNS0lUUm83SENKZWtsTGN6UVFyU1BCcGd4c3I1TTd3R2JwTkdUdUhqdHpLVDlPcFE5V1hmaHF0R1ZCZnl1ZW9zMmswb05jZG92RGZNZ002a1hLa1pxY3B6bEU4Z1lKdkZVVmt6eXdiWU9RZkVpbXVLSnpmekZxeGh3a1ZXaC04eS1hRnQyOWtrNGVwUE1KTm91c2dVcjExS1YyaUZ2WHN3QnBrdnZkQWQ4TFlpRW1IRkZzaHd2em85T0xsaEVhSFd0edIBzgFBVV95cUxOLUNrc2JpRHFxTXNELTdmOFcyMjdGUllZTXZpX1J1aDFxbXhyY1BvM3VaVzd5bnJTTGhHTk90NHdzMk5rQV9jajR6bjJYNFhUdUp5YW1xb2puZTBTVndlX0otRU5semg3TTMwMjBUeEJUOG5mSzZfdjc0TS1GOUpBYVFlQ2tyYzk4VDhxRlpvWklIVTlJWnhjd2lzdkVySnE0T0R5dTRNdjhRN1RzdUZseTEtOV83UUlnT0E4UGEzb2wzc1BScTFRbDhCQlVhZw?oc=5",
       "source": "ET EnergyWorld",
       "corroborated": true,
@@ -364,7 +563,7 @@
       "external": [],
       "direction": "opportunity",
       "date": "2026-11-04",
-      "first_seen": "2026-11-06",
+      "first_seen": "2026-11-07",
       "link": "https://news.google.com/rss/articles/CBMia0FVX3lxTE8wUFowZnd2b2I5OUhVMHJ1LW5yX0VQWld2MjBMcVJlcG9kNHB0c1JUSThfVlM5Z3hXUnhteTFvLUh5ZDIyNVl3WnZLUk0wSUlONVdlOUlFbGlwRzN3UkhTbU1YYlRhUG1FeEIw?oc=5",
       "source": "BigInfo.in",
       "corroborated": true,
@@ -390,7 +589,7 @@
       "external": [],
       "direction": "opportunity",
       "date": "2026-11-04",
-      "first_seen": "2026-11-06",
+      "first_seen": "2026-11-07",
       "link": "https://news.google.com/rss/articles/CBMigwFBVV95cUxOZ2tPek9nZGRrTDFqSFFZckpjTnNzSThpNUc2RXExcUU0UlUtTmh0VHhIVHpsNU5Xc3BLclBmbng3dHljT1JiY1VtbWFOOFIyVjN4VThhbmJWaWZnZ3RCMFN0dHNYV3JiMmVBbDRyTlNNTUd6aFVXUld2WFJNYVI4d3R6SQ?oc=5",
       "source": "Indianweb2.com",
       "corroborated": true,
@@ -412,6 +611,23 @@
       }
     },
     {
+      "headline": "Apple’s Supply Chain Faces Big Test From AI Chip Shortage",
+      "event_type": "supply_disruption",
+      "phrase": "shortage",
+      "certainty": "completed",
+      "domains": [],
+      "actors": [],
+      "external": [
+        "Apple"
+      ],
+      "direction": "risk",
+      "date": "2026-11-04",
+      "first_seen": "2026-11-07",
+      "link": "https://news.google.com/rss/articles/CBMif0FVX3lxTE9GT2JYQXNPZVZQekZ4eVBvUGpRMDRva29mY2hRY0w2YlVCa3dkdjNpblF3eWEyUV9zdDVSTF9xV1ladXdYV2VsU2tKQ1N1VGdEbFFwbUtVS2dUMk1sOFJQelptSXRmQm1UX1JUekxOYmhDQ3pYT19GYktkaGFSVzg?oc=5",
+      "source": "Barron's",
+      "corroborated": true
+    },
+    {
       "headline": "US Export Curbs Complicate SK Hynix’s Proposed $45 Billion New York Chip Investment",
       "event_type": "supply_disruption",
       "phrase": "export curb",
@@ -423,7 +639,7 @@
       ],
       "direction": "risk",
       "date": "2026-11-04",
-      "first_seen": "2026-11-06",
+      "first_seen": "2026-11-07",
       "link": "https://news.google.com/rss/articles/CBMitAFBVV95cUxPS1BOdmk4ckJfRzlGSDRWZWN6cnd4TUgtTHE0bm1nY2tuX3Q3MTlRN1NNNWppeTVKMVlvUjJ4ODlFVEY3Wk5LNnBlTE40alR3eGdjZTEwQjFPamZGbjdaemxjc19iWnd2MFUtck5nd0pXX0s0LVhwZHktTk81bGlKMDcyMUFZZFNGeU13Y1lPNkRHWElHZ1NqQWk3XzBXQ0RhYUVCRC1NTTVRUnd3aGdGY0lPZGo?oc=5",
       "source": "CXO Digitalpulse",
       "corroborated": false,
@@ -480,23 +696,6 @@
       "source": "Indiatimes",
       "story": "Thermax and C1 Green Chemicals Join Hands to Develop Green Methanol Facility in India",
       "reports": 3
-    },
-    {
-      "headline": "Apple’s Supply Chain Faces Big Test From AI Chip Shortage",
-      "event_type": "supply_disruption",
-      "phrase": "shortage",
-      "certainty": "completed",
-      "domains": [],
-      "actors": [],
-      "external": [
-        "Apple"
-      ],
-      "direction": "risk",
-      "date": "2026-11-04",
-      "first_seen": "2026-11-05",
-      "link": "https://news.google.com/rss/articles/CBMif0FVX3lxTE9GT2JYQXNPZVZQekZ4eVBvUGpRMDRva29mY2hRY0w2YlVCa3dkdjNpblF3eWEyUV9zdDVSTF9xV1ladXdYV2VsU2tKQ1N1VGdEbFFwbUtVS2dUMk1sOFJQelptSXRmQm1UX1JUekxOYmhDQ3pYT19GYktkaGFSVzg?oc=5",
-      "source": "Barron's",
-      "corroborated": true
     },
     {
       "headline": "Qualcomm Revenue Falls as Handset Slowdown Offsets Automotive Gains",
@@ -618,7 +817,7 @@
       ],
       "direction": "risk",
       "date": "2026-11-03",
-      "first_seen": "2026-11-06",
+      "first_seen": "2026-11-07",
       "link": "https://news.google.com/rss/articles/CBMi9wFBVV95cUxPUkJpVTdFYWFUSmlXRmtDTzd3bTlPWl9MQkhLNHYzZFN5by1uYUV2cENUdWJpblNUcXltS2duNk5lck1rd0EwOGFPZ0loV3ptNFRQTGk5bzU4SGN2cHQ5NkZoV3Z0TG4tbDV4dFBCczNoUk5ScW9xbnNaLXFsWkxNTTNtWllzX0NtYzBhTjJHLWVCU2plOTZxMHBxLUlWdGdSLWVLMEVtekFaWlBXZ2RURmR0WFVVRFZsLU16dncwOTJ5QUlvVmlCOGh2ZmZ6bEJKa0NDU3hKNXpXeTRXVjJ0RVpwc1E2QTdrZ2JuSjVOTU5QQ3VfQ2Fr0gH8AUFVX3lxTE13cnYzX182Y0I5dGlZU2U3UjVOdGZ0WkcwdHVfQnpCcnlsLWlEZzl4djlRQ1d2bi1lQWJfN0x4djNUWnZTc2dEa1FwRTV5VUUxVWpZUEUtcEw1NkhPcTE5NGRaWC13NTVZS2NkT0VXOTJGc3RuMno5N2V3eGFmaGJMS3RzQ0oxMEprRVFkMVlmTVFpTmNxRTF1RHRwUFhpQ3NKTnZEblpxY2xKWTNHQVlORnFrUFJhN2Y5TGRiOG9rWlBJTUk1MWJTX0p5cGp1OXQ4bS1hSkowQ0REeE5uSWk5VUJfSnlGQm1LOTNCYmJzc25OdGVIaFJtdzNjUQ?oc=5",
       "source": "Storyboard18",
       "corroborated": true
@@ -682,176 +881,6 @@
       "corroborated": true,
       "story": "Elgi Equipments Launches Patented Demand=Match™ Technology in Middle East and Africa",
       "reports": 1
-    },
-    {
-      "headline": "Apple can’t say when iPhone Duo supply constraints will ease",
-      "event_type": "supply_disruption",
-      "phrase": "supply constraints",
-      "certainty": "completed",
-      "domains": [],
-      "actors": [],
-      "external": [
-        "Apple"
-      ],
-      "direction": "risk",
-      "date": "2026-11-03",
-      "first_seen": "2026-11-04",
-      "link": "https://news.google.com/rss/articles/CBMifEFVX3lxTE15NV9iNmJNSWcyWWQ4bnFscVZ0X2xmQVZEaHhXMk9ZZDA0WDVRLTdZWjEyQ0dMdTgwNndPZ2J6TTN0ZjRGd2hqWXVId09JRXgxQ1UtYzBRZFc4OERhMU9TMUp1bVNVODJURWFsdkhfcHZiSDBaQUpYbGJRc0I?oc=5",
-      "source": "Cult of Mac",
-      "corroborated": true
-    },
-    {
-      "headline": "Marvell Technology to acquire Lumentum Holdings in historic US$115 billion deal",
-      "event_type": "acquisition",
-      "phrase": "to acquire",
-      "certainty": "announced",
-      "domains": [],
-      "actors": [],
-      "external": [
-        "Marvell"
-      ],
-      "direction": "opportunity",
-      "date": "2026-11-03",
-      "first_seen": "2026-11-04",
-      "link": "https://news.google.com/rss/articles/CBMidkFVX3lxTE5TZExMZ2hZMHZ0aVZXby1sR3VJSHJUSU54dGpkQ2lXZDlYWU55aXdJbWdkOFVKdl9CejJiU2phMWN5RFZaeHNpSzdTQWtwVzk0Q21PaHNseWE1dFJMT3N3OE1TZXo5Z2pzdlhTa1NLY3U3U0R2eHc?oc=5",
-      "source": "Taipei Times",
-      "corroborated": true,
-      "amount_cr": 954500.0
-    },
-    {
-      "headline": "Lemon Tree Hotels elevates its brand portfolio in Bengaluru and Hyderabad",
-      "event_type": "product_launch",
-      "phrase": null,
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "LEMONTREE"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-11-03",
-      "reader": "llm",
-      "corroborated": false,
-      "link": "https://news.google.com/rss/articles/CBMi2wFBVV95cUxOb1VTa1FwNUNVNElIbUp0SjhGR2lTczRBTVF6cUdBRF9zMmNzZDVVYUJKZFEyNDYyOXF1UXAycVkwZTl6aHl6UF81NjI0Y01CeGNCTm5Bd0VjVFpmV1d6bHZkOWRzVk5Xb25BUk4weWtndzhuY1NvcUxjYkUzWHFuaTJJbWdDb2pPQ1NkWEZBWmVHQVAzcng2NE1uX2JJZDR6bE1LX1VkNmVTaUl1LU1pQU14djU4a0xQQjBrMm9kUGtuaTZTRVpSYlNBSEF0U1VIMS00Yl9yZ0RUZE3SAeABQVVfeXFMTTE0SXNpUG5ZQ0s4bFZCRXh2dE1IQ3dOLVZBWjBPeEFHYWNPU3lFbDFmN2ZtTVU5QjRpb0ZMUDJLdWg0cVpkdmVSMzdmXzJyUktqMzlDUXh5RjhPMWpDci1qYlRLU1gtTVFkT2FXaUJQNl9UcXVxWlhfMWRQSl80UEZBR2xmZ2JWVGxYQjZvcWdhb1RCMG1HNkVyeDFVQXBDakdnb1FhUmFoaWgxb3g4dzY0UmNJbnVSMGJWdFkwMm10R0lLWGlOckh1SEYwQkp6cnh4VU1aMWNCbE5HS2hUcVo?oc=5",
-      "source": "ET HospitalityWorld",
-      "story": "Lemon Tree Hotels elevates its brand portfolio in Bengaluru and Hyderabad",
-      "reports": 1
-    },
-    {
-      "headline": "AI demand, resin shock stretch India PCB shortage into 2027",
-      "event_type": "supply_disruption",
-      "phrase": "shortage",
-      "certainty": "completed",
-      "domains": [
-        "manufacturing_electronics"
-      ],
-      "actors": [],
-      "external": [],
-      "direction": "risk",
-      "date": "2026-11-03",
-      "first_seen": "2026-11-03",
-      "link": "https://news.google.com/rss/articles/CBMikAFBVV95cUxQYnUwVUVwcFI2MGNHbm9DSHJjQTdpUUh5UUk3YXl1NG9adUZQVnRzbkUzUi1GRDc3ejB1RmRla2gwWmRTMzlnR2xnV1JQQUcybkVteHQtME9HVzFSeEo4X3JscEF1TWtLRkllX3NVelNpVFJrbjZzWkpIWVNkSjlRdnp3MUQtSFNVaEtjcUdTVng?oc=5",
-      "source": "digitimes",
-      "corroborated": true
-    },
-    {
-      "headline": "Titagarh Rail Systems Bags Rs. 17.17 bn Wagon Order",
-      "event_type": "order_win",
-      "phrase": "bags rs. 17.17 bn wagon order",
-      "certainty": "completed",
-      "domains": [],
-      "actors": [],
-      "external": [
-        "Titagarh"
-      ],
-      "direction": "opportunity",
-      "date": "2026-11-03",
-      "first_seen": "2026-11-03",
-      "link": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxQZUVnQmtfdTJIVFU5NVBOMFZJbEdRZXpwM3ozWDJ6ZjBXTTZnbHpZZmJlR0hwVE0zc0c2d0Z2ZDdRMmZMZk5jVVBkU29lZzNaelhJSUptdG9ERU40U2czOHBHM2U1TzRmTVFqU2xuQVVxTzItY2pzTHBxTnRQWGhnZW1mc0tKWWtiNWtNMnEteGx5VWt2U29kVGo5eGR0dEsxemw1SVRjc2V0OXJZQnM0X09UTjQzbUwxSVBQb2poenV4Rm5KbWRYa0dIaGVGc25tOFJYdjFVMmFfUEZ4a0c1WEF4SHRGM3dLZ0E?oc=5",
-      "source": "Construction World",
-      "corroborated": true,
-      "amount_cr": 1717.0
-    },
-    {
-      "headline": "PepsiCo India launches Doritos Loaded Nachos, Kurkure Mast Bhel kits for at-home snacking",
-      "event_type": "product_launch",
-      "phrase": "launches",
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "VBL"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-11-02",
-      "first_seen": "2026-11-06",
-      "link": "https://news.google.com/rss/articles/CBMipgJBVV95cUxNeXQ0Q3JMTkc0TmpGRmxrVmRTWlZucmJpSUVPdVNVWkVwanBqU3RWNE10LXNHc1EzbEZOY3pJQzJEY291QV9FVTNOMWUxLUpEUk4yRzBuV1Rib2VoWERjb01wQ2lzbXhwcEUwZFJ2TlgwcmczQWs0VXZUTHEyOUFVMlVGdVpKNlNLaUhjZUVNb2pMRUtYMWo2Q1NGelI2RXJteVZFNmhvZUI5TUxiZmZvWXVzUk42MklabHlCdC1jZm9NeGtxZ29aaXQzcExhVWFfWE4zcHNkSG5ITWhPRmZsTVZhOUVMYkIyeldoRjJoYmJ5ckhlQ2tMc1VSZkJ3N0s2c1NBMEJ6YjBRbzRBNjF0SDRIZGxDU2FFS083UnhVTk1FNnVqOFHSAasCQVVfeXFMTTBBVVdQSVFsUkZKQndXOWxjUXBVLUUzWEhpZ2tkWUUzbGp0R0ItN284V1E4dU94UXN0YUF3OHdoYU9QRXcyNGtWUGM0bE04SUVjQ1FWMnh3RUwxTGNBazEyZVMyRlkzRTVwNGV5aUQwaU9UM01GLWUxZXpsWkVNWEM5b01LcHFMNnFEVFJMNnJLNlFGdlNPdWRhblo3bW5uZjlZeWtYdmVnOG5GblJacnM5YjJwdDRfdGp0TmU3RHJ6azQ4Ynl2RU83S3Fzdms5eEFneGNDNUpGQk9xRjFOWVNtdXlWc0VFLTFSVGk0eS1JamNqR0xsckZ4Qm15SDVRc193VUU4OVBoXzRuZkMzQjNQdEMyU1NFVF9CMWJXQjR5QzNhb3hjWmlpSjg?oc=5",
-      "source": "ET Retail",
-      "corroborated": true,
-      "story": "PepsiCo India launches Doritos Loaded Nachos, Kurkure Mast Bhel kits for at-home snacking",
-      "reports": 1
-    },
-    {
-      "headline": "Capillary Technologies India Limited has informed the Exchange about Closure of operations",
-      "event_type": "supply_disruption",
-      "phrase": null,
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "CAPILLARY"
-      ],
-      "external": [],
-      "direction": "risk",
-      "date": "2026-11-02",
-      "reader": "llm",
-      "corroborated": false,
-      "link": "https://nsearchives.nseindia.com/corporate/CAPILLARY12_02112026122244_Intimation_Cessation_of_Subsidiary.pdf",
-      "source": "NSE",
-      "story": "Capillary Technologies India Limited has informed the Exchange about Closure of operations",
-      "reports": 1
-    },
-    {
-      "headline": "Kaynes Technology incorporates wholly owned subsidiary in Saudi Arabia",
-      "event_type": "capacity_add",
-      "phrase": null,
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "KAYNES"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-11-02",
-      "reader": "llm",
-      "corroborated": false,
-      "link": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQNnJmbFVybEZ1dTVyVkZQQmhqQXEyRzNNYzM1UkI4Yll0LVhJQ2xiNEhsOUp5NVB0MW5wZGZNZ1RWY3B0NFVsajk5R0hwN1hoOWM5VEUtTThYYkJoZWpVYkp4MWFXTDN5cXVETTVfX3J2b3V1Qm10MnNSZ2NhRnhoaDB0aFQ5cnAtZnh4SkpmcTV3N09Wc0wzX0hocnROR2cydndKRkpXYXNGT05wMEtIdllpR0xvMDNqZW1PRGlGNVNZZw?oc=5",
-      "source": "scanx.trade",
-      "story": "Kaynes Technology incorporates wholly owned subsidiary in Saudi Arabia",
-      "reports": 1
-    },
-    {
-      "headline": "Marvell to buy Lumentum in $115 billion deal in AI data-center bet",
-      "event_type": "capacity_add",
-      "phrase": "billion deal",
-      "certainty": "announced",
-      "domains": [
-        "data_center_support"
-      ],
-      "actors": [],
-      "external": [
-        "Marvell"
-      ],
-      "direction": "opportunity",
-      "date": "2026-11-02",
-      "first_seen": "2026-11-05",
-      "link": "https://news.google.com/rss/articles/CBMiogFBVV95cUxOcm44MUVyRlRoRWdRX29BU3J4YzgwT1pSQmU3WlotYldJWmV1WGVjTmJHNjZGakN2bWxqSTcxOUt1clg3VDFBV1p1OUZDaWloWjBIbVNqMERDMFJLeGtFNGhwejA3cW53U0lVZU4zTmhxbkJHMHBHalYxUVg0SGdWQnB3aHVQa01ua3FLMDhaa0s5OXNaWUdMb3pMVHNNdzVhQ0E?oc=5",
-      "source": "Euronext Markets: Real-time Stock Market Data | live",
-      "corroborated": false,
-      "llm_reading": {
-        "event_type": "acquisition",
-        "actors": []
-      },
-      "amount_cr": 954500.0
     }
   ]
 }

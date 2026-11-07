@@ -221,7 +221,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (123 days old)"
+      "exclusion_reason": "aged >120d (124 days old)"
     },
     {
       "date": "Tue, 07 Jul 2026 14:33:14 GMT",
@@ -235,7 +235,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (122 days old)"
+      "exclusion_reason": "aged >120d (123 days old)"
     },
     {
       "date": "Tue, 07 Jul 2026 14:33:14 GMT",
@@ -249,7 +249,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (122 days old)"
+      "exclusion_reason": "aged >120d (123 days old)"
     },
     {
       "date": "Thu, 29 Oct 2026 19:00:35 GMT",
@@ -343,7 +343,8 @@
         "Launch"
       ],
       "confidence": "M",
-      "status": "counted"
+      "status": "excluded",
+      "exclusion_reason": "aged >120d (121 days old)"
     },
     {
       "date": "03 Nov 2026",
@@ -477,7 +478,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (183 days old)"
+      "exclusion_reason": "aged >120d (184 days old)"
     },
     {
       "date": "27 Aug 2026",
@@ -521,20 +522,6 @@
       "confidence": "H",
       "status": "merged",
       "exclusion_reason": "merged: duplicate phrasing of “Prime Minister Narendra Modi Inaugurates Arvind Limited’s ₹1”"
-    },
-    {
-      "date": "2026-10-25",
-      "headline": "PM Modi inaugurates ₹150-crore Arvind Limited textile plant in Varanasi | India News",
-      "source_url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxQanUweVUtS0N0cjRzQlJnTEVwazQyY3pHUDB4eUlfdzFEeGhlWGZhYWREb2x6RlJJSHVPT21ZTzM1b2c3RXFQUDk5MWpKcEhab0ZLaVZkbWpQc0NXYVRlMlhUSXVKYmJXYlVDdXJkOTlBd1VjM3FpWnhjdXdPQm1CRFA0Q0IxUXFmaEE1MEtxZEltTHlncEk4V3JBVEZHUHpjVDRNdU5fbFJiTXpHcWQtbWVPREN6YWh4RHEyRjlEamFYSndZa0RYenBQTVEzUdIB0wFBVV95cUxQSHRxVDdadlBhNEFMd0JHMm9fMFg2UEVxbXZCQ05zTFpFYklwMHpDYXZ5STVDbmwycTVSV2JMV2JGUWdfekdwRnEwdk1qRC1DWXdQX1YxR1VPbVZiQ3FqSGFXTjJ0bXhSMFdUS0kzc3hRcFBQbGppN2hBYVRyVGFsY2JmcHhZYkNDbUgzOVpQNmI2cnFVZFNDY1o0eEVpYXBTR3ctWENGb1FON3BGVndkWTdMWlFuTTR4bVZWSWU0VjA1VG1jb0l1TDNzV1BaTUxVdlhF?oc=5",
-      "source_label": "Hindustan Times",
-      "event_type": "capacity_add",
-      "source_kind": "Event",
-      "event_tags": [
-        "capacity_add",
-        "Event"
-      ],
-      "confidence": "H",
-      "status": "counted"
     }
   ]
 }

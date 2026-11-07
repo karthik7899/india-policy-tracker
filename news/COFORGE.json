@@ -2,6 +2,33 @@
   "ticker": "COFORGE",
   "items": [
     {
+      "date": "06 Nov 2026",
+      "headline": "India's Coforge joins SpaceX partner network to deploy Grok AI tools for enterprises",
+      "source_url": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxPVm1rN0dhNG5aaDhDRVRyQVpMaXVROE8wbUFRVUJLZnYwaUQwZF9jMGtfX0doQjVZM3JaRFZHd2FSNFRvODVIUy1TeXJ3d09OZEZPMDB6cEE0eWhHdDNGa3FTRWRCRkhjaERjTnhudVNMTDV6RmdBX0ZqOTNjbDZFblljUE9INGpzN05KSV81YzdHTlVFS1lKeExydFBaaHVLV0pzR2tyQTBSbHV5SUF3VEY3STZHX0gzZzM1S1VYOWtpSEZsRXhKWjl3YzhQQUpy?oc=5",
+      "source_label": "Reuters",
+      "event_type": "tie_up",
+      "source_kind": "Sector news",
+      "event_tags": [
+        "tie_up",
+        "Sector news"
+      ],
+      "confidence": "M",
+      "status": "counted"
+    },
+    {
+      "date": "05 Nov 2026",
+      "headline": "COFORGE Stock Price and Chart — NSE:COFORGE",
+      "source_url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE5PTEZDS2ZXSGlxb3ZKMnVZSVEza0h3cno4bk9UajBjSUNCU3M4XzBJdExXOU5rbkVzOXJrTlJyaXNZVW9uMThWWmlUY2R5OExsa2tERjFqQnVQdFlI?oc=5",
+      "source_label": "TradingView",
+      "event_type": "",
+      "source_kind": "Sector news",
+      "event_tags": [
+        "Sector news"
+      ],
+      "confidence": "M",
+      "status": "counted"
+    },
+    {
       "date": "Thu, 29 Oct 2026 08:33:43 GMT",
       "headline": "Coforge Launches Autonomous Software Factory for AI Agents",
       "source_url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxOU2VuNWFJV01pVTduTUFzRzdYOTJMSWFSX2k3LUJzbzFQWnFQb2NYVUZBdHdnWDdZZTNBTzQtWnVGOGxuRVowUzVrQnF0T0xNcVdmN0d6TEdrOGIxeG13eUQ5c240NU1wd1hObzNhSkhHOWRHR0ZlZGZkaGtmclRick10LVgyYW5HSEI5QkZLZHRBdw?oc=5",
@@ -78,7 +105,8 @@
         "Agreement"
       ],
       "confidence": "M",
-      "status": "counted"
+      "status": "excluded",
+      "exclusion_reason": "aged >120d (121 days old)"
     },
     {
       "date": "Thu, 09 Jul 2026 06:38:10 GMT",
@@ -91,7 +119,8 @@
         "Agreement"
       ],
       "confidence": "M",
-      "status": "counted"
+      "status": "excluded",
+      "exclusion_reason": "aged >120d (121 days old)"
     },
     {
       "date": "Tue, 07 Jul 2026 10:14:04 GMT",
@@ -105,7 +134,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (122 days old)"
+      "exclusion_reason": "aged >120d (123 days old)"
     },
     {
       "date": "Sat, 31 Oct 2026 08:38:00 GMT",
@@ -198,8 +227,8 @@
         "Launch"
       ],
       "confidence": "M",
-      "status": "merged",
-      "exclusion_reason": "merged: duplicate phrasing of “Coforge launches AI-Powered zero trust security product in p”"
+      "status": "excluded",
+      "exclusion_reason": "aged >120d (121 days old)"
     },
     {
       "date": "Thu, 09 Jul 2026 07:42:56 GMT",
@@ -212,7 +241,8 @@
         "Launch"
       ],
       "confidence": "M",
-      "status": "counted"
+      "status": "excluded",
+      "exclusion_reason": "aged >120d (121 days old)"
     },
     {
       "date": "29 Oct 2026",
@@ -460,7 +490,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (227 days old)"
+      "exclusion_reason": "aged >120d (228 days old)"
     },
     {
       "date": "Tue, 16 Jun 2026 07:00:00 GMT",
@@ -474,7 +504,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (143 days old)"
+      "exclusion_reason": "aged >120d (144 days old)"
     },
     {
       "date": "Tue, 16 Jun 2026 07:00:00 GMT",
@@ -488,7 +518,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (143 days old)"
+      "exclusion_reason": "aged >120d (144 days old)"
     },
     {
       "date": "Fri, 30 Oct 2026 17:02:58 +0530",
@@ -504,6 +534,21 @@
       "status": "counted",
       "article_url": "https://economictimes.indiatimes.com/markets/stocks/news/coforge-among-6-stocks-hitting-52-week-highs-rally-up-to-20-in-a-month/slideshow/135359688.cms",
       "summary": "Six BSE 200 stocks, including Coforge, Indian Hotels and Kotak Mahindra Bank, hit fresh 52-week highs as the Sensex rallied, with monthly gains reaching 17%."
+    },
+    {
+      "date": "2026-11-06",
+      "headline": "India's Coforge joins SpaceX partner network to deploy Grok AI tools for enterprises",
+      "source_url": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxPVm1rN0dhNG5aaDhDRVRyQVpMaXVROE8wbUFRVUJLZnYwaUQwZF9jMGtfX0doQjVZM3JaRFZHd2FSNFRvODVIUy1TeXJ3d09OZEZPMDB6cEE0eWhHdDNGa3FTRWRCRkhjaERjTnhudVNMTDV6RmdBX0ZqOTNjbDZFblljUE9INGpzN05KSV81YzdHTlVFS1lKeExydFBaaHVLV0pzR2tyQTBSbHV5SUF3VEY3STZHX0gzZzM1S1VYOWtpSEZsRXhKWjl3YzhQQUpy?oc=5",
+      "source_label": "Reuters",
+      "event_type": "tie_up",
+      "source_kind": "Event",
+      "event_tags": [
+        "tie_up",
+        "Event"
+      ],
+      "confidence": "L",
+      "status": "merged",
+      "exclusion_reason": "merged: duplicate phrasing of “India's Coforge joins SpaceX partner network to deploy Grok ”"
     },
     {
       "date": "2026-10-31",

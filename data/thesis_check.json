@@ -9,6 +9,35 @@
         "challenged": [],
         "supported": [
           {
+            "headline": "Bharat Electronics bags additional orders worth ₹909 crore since October 21",
+            "claim": "securing major naval and surveillance command radar orders",
+            "because": "bags additional orders worth ₹909 crore",
+            "date": "2026-11-06",
+            "link": "https://news.google.com/rss/articles/CBMirwFBVV95cUxNdmY0QnEwTFYwLUI5Y05QNWVzUkEtUFUwQ01WVFJhaWxUay1YQ0JIb0w3THg1X3FDS1lTMm8yM1AxTWtXLXRWT3VweXg0dEtjM1dYbl9FaVgwajZ4VERHTHI0Nl9nM1VtVHB4cVRnT2FNMG1iLW9jWVQ2Mjd2d1p5b1l0NUx6OURXRDdrSUc3OXBlMnhFT1RQWWNKMmxveTBaSXZtcWxjWk43Zk5TZDBz?oc=5",
+            "source": "IndiaIPO",
+            "reader": "llm"
+          },
+          {
+            "headline": "Diwali stock picks: 4 large cap stocks to buy for Samvat 2083 - PL Capital bullish on BEL, Britannia to ICICI | Target",
+            "claim": "Defence electronics leader, securing major naval and surveillance command radar orders",
+            "because": "PL Capital bullish on BEL",
+            "date": "2026-11-06",
+            "link": "https://www.livemint.com/market/stock-market-news/diwali-stock-picks-4-large-cap-stocks-to-buy-for-samvat-2083-pl-capital-bullish-on-bel-britannia-to-icici-target-11793974105149.html",
+            "source": "Livemint",
+            "call": {
+              "call": "‘Buy’ rating with a target price of ₹ 490 per share",
+              "brokerage": "PL Capital",
+              "reasons": [
+                "Its strong order book will provide healthy execution visibility",
+                "The company’s QRSAM orders are “expected shortly with BEL well positioned to retain its role given its decade-long development experience,” read PL Capital report"
+              ],
+              "claim": "securing major naval and surveillance command radar orders",
+              "source": "article",
+              "url": "https://www.livemint.com/market/stock-market-news/diwali-stock-picks-4-large-cap-stocks-to-buy-for-samvat-2083-pl-capital-bullish-on-bel-britannia-to-icici-target-11793974105149.html"
+            },
+            "reader": "llm"
+          },
+          {
             "headline": "Bharat Electronics: Nomura raises target price to Rs 520 on large defence order pipeline",
             "claim": "securing major naval and surveillance command radar orders",
             "because": "large defence order pipeline",
@@ -45,7 +74,7 @@
             "reader": "llm"
           }
         ],
-        "read": 7,
+        "read": 9,
         "unread": 0
       },
       "BDL": {
@@ -74,8 +103,18 @@
         "sector": "banking_financials",
         "thesis": "Largest private lender; post-merger deposit repricing and a direct read on retail credit demand.",
         "challenged": [],
-        "supported": [],
-        "read": 7,
+        "supported": [
+          {
+            "headline": "Muhurat Trading 2026: Equirus Prive's 16 Diwali picks include HDFC Bank, M&M, ESFB Voltas; upside seen up to 54%",
+            "claim": "Largest private lender; post-merger deposit repricing and a direct read on retail credit demand",
+            "because": "Equirus Prive's 16 Diwali picks include HDFC Bank",
+            "date": "2026-11-06",
+            "link": "https://www.livemint.com/market/stock-market-news/muhurat-trading-2026-equirus-prives-16-diwali-picks-include-hdfc-bank-m-m-esfb-voltas-upside-seen-up-to-54-11793974438126.html",
+            "source": "Livemint",
+            "reader": "llm"
+          }
+        ],
+        "read": 9,
         "unread": 0
       },
       "ICICIBANK": {
@@ -95,7 +134,7 @@
             "reader": "llm"
           }
         ],
-        "read": 5,
+        "read": 6,
         "unread": 0
       },
       "SBIN": {
@@ -104,18 +143,8 @@
         "sector": "banking_financials",
         "thesis": "Primary financing channel for government infrastructure and PLI-linked capex lending.",
         "challenged": [],
-        "supported": [
-          {
-            "headline": "State Bank of India Q2 FY27: NII Seen Rising 11-13%",
-            "claim": "Primary financing channel for government infrastructure and PLI-linked capex lending",
-            "because": "NII Seen Rising 11-13%",
-            "date": "2026-11-03",
-            "link": "https://news.google.com/rss/articles/CBMiogFBVV95cUxOeWxOWUFhQWtCWTVDb2FrQmVKdzl6d256WFQ5Z3dXcFhiZXlNb01NVGNIZ0JVdmdtcGs1aHQwN2l2aHIzc3d0Umw1dXREb2FpcENleDNGcVYxMFZmSENvMWpYaTFiWlVCVlc1VTZ1NlM1bklWZXUzTVBIQmtUZE1Tbm1rNDBGc3hDWTBYWWtKckRiQ0xiVkliU0tkYXpseDhERXc?oc=5",
-            "source": "Multibagg AI",
-            "reader": "llm"
-          }
-        ],
-        "read": 7,
+        "supported": [],
+        "read": 6,
         "unread": 0
       },
       "RELIANCE": {
@@ -163,7 +192,11 @@
           }
         ],
         "read": 15,
-        "unread": 0
+        "unread": 0,
+        "not_about": [
+          "Badr MoU: Search for Defence Self-Reliance in West Asia",
+          "India's Defence Strength Powering National Security through Self-Reliance"
+        ]
       },
       "KPIL": {
         "ticker": "KPIL",
@@ -345,12 +378,12 @@
         ],
         "supported": [
           {
-            "headline": "Suzlon Eyes Global Markets With 5 MW, 6.3 MW Wind Turbine Platforms",
+            "headline": "Suzlon Planning Ten GW Wind Energy Business in Karnataka Over Five Years",
             "claim": "dominating wind turbine supply with a record order book",
-            "because": "Suzlon Eyes Global Markets With 5 MW, 6.3 MW Wind Turbine Platforms",
-            "date": "2026-11-04",
-            "link": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxNY1AxcTRHRHRSeDRQYWdCM1FSRzJfZ1lhOS04S0RqQ05OdFdJMW1jenlzTnNJVmQ4MUg4WDhjYzNFUXNrVkRPb3daOF9CcV9RMDRQUURWdEs4aHVLbHZLMHUyTkpyNkZsUDJ0RWZfajE3SjZ3dHFUeV92aG1hUlhvODJkOUZ0NEIyUm9CNWpteDd1bVlyQThyWE5HdnBlX1pvY1MwZFdRRGN4cmhqeHVDU2VXMVRJVDFmVkRN?oc=5",
-            "source": "Saur Energy",
+            "because": "Planning Ten GW Wind Energy Business in Karnataka Over Five Years",
+            "date": "2026-11-07",
+            "link": "https://news.google.com/rss/articles/CBMinwFBVV95cUxOVFVVZnAzb3d2aE1yQUNTelVudjBHekhqdFZQLUhUUUpYQTZHWVE2TVlReEYxNGlJcHY1NU1kWG5MZjg0d0NPeVNZS1VoSEV1TUNlZTFVY0lfRGVabXJNdy1pdXotc2JIQXN2eXJoanVmUjZ1TlJSNEhlQ1JJeHNMcng2cmFHblE5c2xMVHBiRUU3RVpTejh6WGtFWlFrWXc?oc=5",
+            "source": "Chemical Industry Digest",
             "reader": "llm"
           },
           {
@@ -876,10 +909,9 @@
             "reader": "llm"
           }
         ],
-        "read": 15,
+        "read": 14,
         "unread": 0,
         "group_news": [
-          "India says PepsiCo, Monster marketed with 'energy drink' label to dupe consumers",
           "PepsiCo India launches Doritos Loaded Nachos, Kurkure Mast Bhel kits for at-home snacking"
         ]
       },
@@ -923,6 +955,15 @@
         "thesis": "Largest hospital network; bed-capacity expansion and the Heal-in-India medical tourism push.",
         "challenged": [],
         "supported": [
+          {
+            "headline": "Apollo Hospitals Reports 32% Profit Growth In Q2, Plans Rs 7,100 Cr Expansion",
+            "claim": "bed-capacity expansion",
+            "because": "Plans Rs 7,100 Cr Expansion",
+            "date": "2026-11-05",
+            "link": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQYmpIYzM0RmxqZk9NdDVtVVgzLUpxdUxjYkNfZE1NNGNOSERHZTdtZHFFekVpRlFxVlkzQmpDUkRlMExHZDcxTTZyNVFWa0V1YlNrYllfdUZFWnllempTWl96MldBOGhUWnl0bms3aTBndG1FS29WWTN5Q3hZVm1mN2FKUTZiZ29VVGxmN3dsUGJmSDE5VDFlODJESG5ORk1FeUFILXhaUEFFV3pUWWk1NG53d1VnNW5Ha0VfaHRTX2RCZw?oc=5",
+            "source": "BW Healthcare World",
+            "reader": "llm"
+          },
           {
             "headline": "Apollo Hospitals Integrated Healthcare Model and Expansion Outlook",
             "claim": "bed-capacity expansion",
@@ -1114,15 +1155,6 @@
         "challenged": [],
         "supported": [
           {
-            "headline": "Chalet Hotels reports strong Q2 FY27 results; core EBITDA grows 13%",
-            "claim": "geared to corporate travel recovery",
-            "because": "core EBITDA grows 13%",
-            "date": "2026-11-05",
-            "link": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxNOERfOGtUVEhJTVo5TV9oTXpqYnJ6VG14dWM3bm5PeGVEODhIai1kTGs0V1ZPaGJMQzVGQldBdmJEaE1QOXNXMVFmUTl6UmF1czVOQnI3OC0zSmpmMmtkdEhIOTlTazg1Rk1WVVZ2VXpCdnMzX0EwUUF6dTVzTXpabUJkMHNsamNUY1JUU1dIeWd5enRqM0NmZHo2RlpOQVBycFJwZHZZcjJwQ3M0Y1dGZmhqLVI4TzljOGFXRWJnQ1hKV2FfQXRMMk9BY0VRTjZnRWpfcmVn0gHWAUFVX3lxTE04RF84a1RUSElNWjlNX2hNempicnpUbXh1Yzdubk94ZUQ4OEhqLWRMazRXVk9oYkxDNUZCV0F2YkRoTVA5c1cxUWZROXpSYXVzNU5Ccjc4LTNKamYya2R0SEg5OVNrODVGTVZVVnZVekJ2czNfQTBRQXp1NXNNelptQmQwc2xqY1RjUlRTV0h5Z3l6dGozQ2ZkejZGWk5BUHJwUnBkdllyMnBDczRjV0ZmaGotUjhPOWM4YVdFYmdDWEpXYV9BdEwyT0FjRVFONmdFal9yZWc?oc=5",
-            "source": "ET HospitalityWorld",
-            "reader": "llm"
-          },
-          {
             "headline": "Chalet Hotels Limited Unveils New Brand Film for Athiva Pulse, Extending “Joy Is on the House”",
             "claim": "Business-hotel portfolio near airports and office hubs, geared to corporate travel recovery",
             "because": "Unveils New Brand Film for Athiva Pulse",
@@ -1132,7 +1164,7 @@
             "reader": "llm"
           }
         ],
-        "read": 4,
+        "read": 3,
         "unread": 0,
         "not_about": [
           "Happy Socks unveils its festive \"The Happy Chalet\" collection"
@@ -1145,6 +1177,15 @@
         "thesis": "Mid-market chain expanding into tier-2 cities as UDAN air connectivity widens the travel base.",
         "challenged": [],
         "supported": [
+          {
+            "headline": "Lemon Tree Signs McLeodganj and Madurai Hotels",
+            "claim": "expanding into tier-2 cities as UDAN air connectivity widens the travel base",
+            "because": "Lemon Tree Signs McLeodganj and Madurai Hotels",
+            "date": "2026-11-06",
+            "link": "https://news.google.com/rss/articles/CBMie0FVX3lxTE5aVUQtSnFRdzhqWWMzT0hWS21fb21aWExyemdCTGVfTURYaldyRjNQWTVGT2JHbXYzOWNneWZlWk1mT09FZkQzSlEzWER5YjlaajNsRnVFLWlncTJkVFE0cVo5VWNzZUV3eXprUUVwU1VMNXlBQ0pCRVQ1dw?oc=5",
+            "source": "https://safariindia.com/",
+            "reader": "llm"
+          },
           {
             "headline": "Lemon Tree Hotels Limited has informed the Exchange regarding a press release dated November 06, 2026, titled \"The Company has signed a License Agreement viz. Keys Select by Lemon Tree Hotels, Mathura\".",
             "claim": "Mid-market chain expanding into tier-2 cities",
@@ -1236,7 +1277,7 @@
             "reader": "llm"
           }
         ],
-        "read": 11,
+        "read": 12,
         "unread": 0
       },
       "THERMAX": {
@@ -1304,6 +1345,16 @@
           }
         ],
         "read": 7,
+        "unread": 0
+      },
+      "KIRLOSENG": {
+        "ticker": "KIRLOSENG",
+        "name": "Kirloskar Oil Engines",
+        "sector": "industrial_manufacturing",
+        "thesis": "Legacy engineering major pivoting to power generation and farm equipment manufacturing under 'Make in India'.",
+        "challenged": [],
+        "supported": [],
+        "read": 1,
         "unread": 0
       },
       "ELGIEQUIP": {
@@ -1645,15 +1696,6 @@
         "challenged": [],
         "supported": [
           {
-            "headline": "Beyond assembly: Syrma SGS bets on components and engineering",
-            "claim": "Electronics manufacturing services provider",
-            "because": "Beyond assembly: Syrma SGS bets on components and engineering",
-            "date": "2026-11-05",
-            "link": "https://news.google.com/rss/articles/CBMiogFBVV95cUxNQ0ZyMTk5UVVVZXN5TGRRLTVONV9SSWIyNFNsX01uTVhGQXdNNGxRakdCdEV6SFA1UGp4RXlaUVlVODZ1U2NmX0ZhR2wzRlBWWUhPd2k5SHo1dm9aVzN5RUl0enBaZDRGdTRZaTZwRUdSMXhDRU5qTTBCMTBIYjJwQVBpR0RteklyMG1JRXJqdDFCd0Y0T1hQLXd2eW1TaTY1UkE?oc=5",
-            "source": "Manufacturing Today India",
-            "reader": "llm"
-          },
-          {
             "headline": "Syrma SGS revenue crosses ₹2,000 crore in Q2 FY27",
             "claim": "targeting 35%+ revenue growth",
             "because": "Syrma SGS revenue crosses ₹2,000 crore in Q2 FY27",
@@ -1746,6 +1788,15 @@
         "challenged": [],
         "supported": [
           {
+            "headline": "India's Coforge joins SpaceX partner network to deploy Grok AI tools for enterprises",
+            "claim": "Mid-tier IT services firm with large deal wins in BFSI and travel verticals, expanding margins via GenAI offerings",
+            "because": "joins SpaceX partner network to deploy Grok AI tools for enterprises",
+            "date": "2026-11-06",
+            "link": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxPVm1rN0dhNG5aaDhDRVRyQVpMaXVROE8wbUFRVUJLZnYwaUQwZF9jMGtfX0doQjVZM3JaRFZHd2FSNFRvODVIUy1TeXJ3d09OZEZPMDB6cEE0eWhHdDNGa3FTRWRCRkhjaERjTnhudVNMTDV6RmdBX0ZqOTNjbDZFblljUE9INGpzN05KSV81YzdHTlVFS1lKeExydFBaaHVLV0pzR2tyQTBSbHV5SUF3VEY3STZHX0gzZzM1S1VYOWtpSEZsRXhKWjl3YzhQQUpy?oc=5",
+            "source": "Reuters",
+            "reader": "llm"
+          },
+          {
             "headline": "Coforge Unveils Autonomous Software Factory for the Era of Agentic AI Engineering",
             "claim": "expanding margins via GenAI offerings",
             "because": "Unveils Autonomous Software Factory for the Era of Agentic AI Engineering",
@@ -1815,24 +1866,6 @@
             "date": "2026-09-30",
             "link": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxNZ0JmU1FWLW5KcG1lRHpvOVZkMVVhTEhVM1FsaWVmZ0k5R09SRG9xS0dISFZzZWNVbngyWWVoekFiQlk3Y2Q3ZThNSG1tSTJ4TTNOV2UwZzdlLVd1aTdacFg1YkxqQkRzYlRsdUNhbWxZeGJkUG4wVThIbEZIa1dCbEVqRS1wcl9LaFBPOExMVDc3ci1YM25RTFNGVGV1eW1rWGYzdGowT21icmRNRFVEQ0Z5blhJdUl4VjFQeDVxVHB0UmtZQjdnLWpjUFNucXJkMm1qVE1sYXpoeFdxOWNoUEsyZFluZTRQdmxJ0gHwAUFVX3lxTFAxZ0p2N0REXzNDZmM3VnpFTG9yVGhmbWx3YmRHM2RsTlRrREZreGtERnVzS3c5VHF0ckZ1MV9fZi1BT0ZXWExpNXI2MXl2dElTYUdabHNyRHV1aU5HdnkybVFxUDFmTFdRRHVkRjBaUHdxN2NISENwdDFrcEZrbVhkTF9BUGQxdVM1T19fME5nVnBTSTVTczJ4azljZWQyRjZpQXRZeEdiN2xlS2dxcFh5VTBpVnV5bG15VU9wY2E4RGU2QmlkcC13cmhMQ0F6TGg5ZV9lOVgxdDd5cXlEUnNWQm9CV3B4cUZfREx2cGs4Rw?oc=5",
             "source": "ET Enterprise AI",
-            "reader": "llm"
-          },
-          {
-            "headline": "Coforge Limited has informed the Exchange regarding a press release dated September 30, 2026, titled \"\"Coforge Launches CXNova, an Agentic CX Orchestration Platform that Delivers Intelligent, Real-Time Customer Experiences\"\".",
-            "claim": "expanding margins via GenAI offerings",
-            "because": "Coforge Launches CXNova, an Agentic CX Orchestration Platform that Delivers Intelligent, Real-Time Customer Experiences",
-            "date": "2026-09-30",
-            "link": "https://nsearchives.nseindia.com/corporate/COFORGE_30092026105841_2llIntimationofPressReleasellSeptember302026.pdf",
-            "source": "NSE",
-            "reader": "llm"
-          },
-          {
-            "headline": "Coforge Limited has informed the Exchange regarding a press release dated September 30, 2026, titled \"\"Coforge Highlights the Shift to Agentic Travel and Modern Airline Retailing\"\".",
-            "claim": "Mid-tier IT services firm with large deal wins in BFSI and travel verticals",
-            "because": "Coforge Highlights the Shift to Agentic Travel and Modern Airline Retailing",
-            "date": "2026-09-30",
-            "link": "https://nsearchives.nseindia.com/corporate/COFORGE_30092026105513_1llIntimationofPressReleasellSeptember302026.pdf",
-            "source": "NSE",
             "reader": "llm"
           }
         ],
@@ -2037,6 +2070,33 @@
             "reader": "llm"
           },
           {
+            "headline": "Campus cuts shoe manufacturing lead times to 60-90 days",
+            "claim": "Dominant direct-to-consumer sports footwear brand in tier-2/3 cities, major beneficiary of fitness trends",
+            "because": "Campus cuts shoe manufacturing lead times to 60-90 days",
+            "date": "2026-11-05",
+            "link": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxPWlYxel9FbDZGdnNSeUhkcUQwZmRsOGJieVlsRUw1QkF6VHlHa0Z4dmx6OUI0Nl9rbWF2cldUNEg1Q2d2T3Y1by05TE1tMkVCVFFZVDJpSTY0N1RJRjZBLTBiakVBNTV0YlhCcHNueHZ5V0hLNEVoemhURjQwa21sNzZGeU1YQlhidTVxaEdFdmpLcFdOVU51c0ZNSG5sUi1EMjZ1cEI4WU5YcDRDRnNVUjhCQm51YWpranNR?oc=5",
+            "source": "Multibagg AI",
+            "reader": "llm"
+          },
+          {
+            "headline": "Campus Activewear Q2FY27 Results: Net profit up 21% YoY to ₹24 crore",
+            "claim": "Dominant direct-to-consumer sports footwear brand",
+            "because": "Net profit up 21% YoY",
+            "date": "2026-11-05",
+            "link": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxQSG1uZFNpcG00aC14cEFrS2hmdUtIOV9iRUhKU0FjUkQ3RzBMUWk4RFlsejd4cXNmWFdIczRlTmI5MlBZY3ZKbTdBaUpvTVFMYUJ0Sk9jVHh0SEM0ZzN5LU5iOFAteGllT090Y1pHempXUWVvS3NwUms1YnVqcTFvMW1VbTJ5aC1fdHZ5RTNBOVJLeWl2RUhLS002TzN5Nm1kamR4LTlEc3hBU0xqTTVQTTc2TjFsTlFtaHhr?oc=5",
+            "source": "scanx.trade",
+            "reader": "llm"
+          },
+          {
+            "headline": "Campus Activewear Limited has informed the Exchange regarding a press release dated November 05, 2026, titled \"Campus Activewear Limited Q2 and H1FY27 performance Sustained Double-Digit Volume Growth with Stronger Profit Growth\".",
+            "claim": "Dominant direct-to-consumer sports footwear brand",
+            "because": "Sustained Double-Digit Volume Growth with Stronger Profit Growth",
+            "date": "2026-11-05",
+            "link": "https://nsearchives.nseindia.com/corporate/CAMPUSSHOES_05112026131151_pressreleasesigned.pdf",
+            "source": "NSE",
+            "reader": "llm"
+          },
+          {
             "headline": "Campus broadens portfolio with apparel and performance shoes",
             "claim": "Dominant direct-to-consumer sports footwear brand in tier-2/3 cities",
             "because": "Campus broadens portfolio with apparel and performance shoes",
@@ -2055,24 +2115,6 @@
             "reader": "llm"
           },
           {
-            "headline": "Campus Activewear Limited has informed the Exchange regarding a press release dated November 05, 2026, titled \"Campus Activewear Limited Q2 and H1FY27 performance Sustained Double-Digit Volume Growth with Stronger Profit Growth\".",
-            "claim": "Dominant direct-to-consumer sports footwear brand",
-            "because": "Sustained Double-Digit Volume Growth with Stronger Profit Growth",
-            "date": "2026-11-05",
-            "link": "https://nsearchives.nseindia.com/corporate/CAMPUSSHOES_05112026131151_pressreleasesigned.pdf",
-            "source": "NSE",
-            "reader": "llm"
-          },
-          {
-            "headline": "Campus Activewear's Youth-Centric Brand Strategy",
-            "claim": "Dominant direct-to-consumer sports footwear brand in tier-2/3 cities, major beneficiary of fitness trends",
-            "because": "Campus Activewear's Youth-Centric Brand Strategy",
-            "date": "2026-11-04",
-            "link": "https://news.google.com/rss/articles/CBMihgFBVV95cUxOWmJ5Uk11ZDVjRklWRG5SelhmNUttemRVNFp3UWlPQWhQcFUzWnRlTXpiZU5ob2ZCdGxwTVlxeEJNTmNxV0RaWlBORTJEM1QxZFhYc0xVaVNKZmswVUY1NHZYbk1uQ0xOZi1Cb3ZoUm9FYUVLTWJDRXR6eV9wMko3M2xINHN3UQ?oc=5",
-            "source": "MarkHub24",
-            "reader": "llm"
-          },
-          {
             "headline": "Campus Activewear Challenges Workplace Norms with Vicky Kaushal in Latest Move Your Way Campaign",
             "claim": "Dominant direct-to-consumer sports footwear brand in tier-2/3 cities, major beneficiary of fitness trends",
             "because": "Campaign",
@@ -2082,7 +2124,7 @@
             "reader": "llm"
           }
         ],
-        "read": 9,
+        "read": 10,
         "unread": 0,
         "not_about": [
           "TCS' HyperVault Secures 264 Acres For Massive 1GW AI Data Center Campus In Hyderabad"
@@ -2143,6 +2185,15 @@
             "reader": "llm"
           },
           {
+            "headline": "Aditya Infotech takes 30% of AI video startup BLUE in $4.8M deal",
+            "claim": "scaling domestic camera manufacturing under PLI",
+            "because": "Aditya Infotech takes 30% of AI video startup BLUE in $4.8M deal",
+            "date": "2026-11-05",
+            "link": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQWGVHdEFxT2wxTlJQTzdpRlNCbXhlckRvbWVhQzd2cDZkaTlmbUtfUk5FanBvdi1hU0NWc0ZVOGNlSmJxNXozSThFSGJFbU0yTFluR2VBV0JCcHBHV3MySERvbTVKRTJmQkRxV29oNEljbmwwcjRSSXZxZjhmLUJSZ3Z6Q0VnWE16eFdudHBtRlg0TkN1elpMWDFqSXg?oc=5",
+            "source": "Dealroom",
+            "reader": "llm"
+          },
+          {
             "headline": "Ranveer Singh Joins CP PLUS as Brand Ambassador to Make Advanced Security Made-in-Bharat",
             "claim": "scaling domestic camera manufacturing under PLI",
             "because": "Make Advanced Security Made-in-Bharat",
@@ -2161,7 +2212,7 @@
             "reader": "llm"
           }
         ],
-        "read": 8,
+        "read": 9,
         "unread": 0
       },
       "IDEAFORGE": {
@@ -2307,6 +2358,24 @@
         ],
         "supported": [
           {
+            "headline": "Optiemus targets 25 million protectors monthly by March 2027",
+            "claim": "expanding into screen-protector and cover-glass finishing",
+            "because": "targets 25 million protectors monthly by March 2027",
+            "date": "2026-11-06",
+            "link": "https://news.google.com/rss/articles/CBMitgFBVV95cUxPd2hPY2UwWHNjVWtIRElwVnhrQzNzTVF3QnZKU0VjSGNvcWZUVTk4R2dMV0ZLdjZnWVpNd1NNdF9FS2RSbzJyUTl5eDJGTkJtY3dpZXBFNlI5Z296NnRqUDU0eTFKVS1tTDZ2eEc4cERqS29uYjlSYWRyN29uZmZ3T0UtSk9UZXFHQThKNnp0RnJlMUdrQlBOSGVDVFVBLXJwYk5faUZxODlkVUx2d25wYUJCS1dsZw?oc=5",
+            "source": "Multibagg AI",
+            "reader": "llm"
+          },
+          {
+            "headline": "Optiemus plans 51:49 CMF venture to expand brand role",
+            "claim": "manufacturing JV with Nothing",
+            "because": "plans 51:49 CMF venture to expand brand role",
+            "date": "2026-11-05",
+            "link": "https://news.google.com/rss/articles/CBMirAFBVV95cUxNa092dldvdEpzSEpHbWlmTXNqNnFKTm9hT2oyVGFfZkFnTm01TjFuWHV5cHFhX2htOXZEMXhzM1lFcUFGRmhOYjBRMTV0UzJhV2hLYUdRQktKcm1reHhPdE1zU1g1ZEI3MV9wZE9DMDQ2cXFyR3pLaFoyWGUxOU9ZLWR0S1JTak95Z09PTW5uamZsajc1U0VkalN0bWE4VG40ZTF1cHFscEhhNlJx?oc=5",
+            "source": "Multibagg AI",
+            "reader": "llm"
+          },
+          {
             "headline": "Optiemus Infracom (NSE: OPTIEMUS) Screen Protector Expansion and Electronics Manufacturing Update",
             "claim": "expanding into screen-protector and cover-glass finishing",
             "because": "Screen Protector Expansion and Electronics Manufacturing Update",
@@ -2325,7 +2394,7 @@
             "reader": "llm"
           }
         ],
-        "read": 4,
+        "read": 6,
         "unread": 0
       },
       "ARVIND": {
@@ -2381,15 +2450,6 @@
             "reader": "llm"
           },
           {
-            "headline": "PM Modi inaugurates ₹150-crore Arvind Limited textile plant in Varanasi | India News",
-            "claim": "investing in technical textiles under recent government schemes",
-            "because": "PM Modi inaugurates ₹150-crore Arvind Limited textile plant in Varanasi",
-            "date": "2026-10-25",
-            "link": "https://news.google.com/rss/articles/CBMizgFBVV95cUxQanUweVUtS0N0cjRzQlJnTEVwazQyY3pHUDB4eUlfdzFEeGhlWGZhYWREb2x6RlJJSHVPT21ZTzM1b2c3RXFQUDk5MWpKcEhab0ZLaVZkbWpQc0NXYVRlMlhUSXVKYmJXYlVDdXJkOTlBd1VjM3FpWnhjdXdPQm1CRFA0Q0IxUXFmaEE1MEtxZEltTHlncEk4V3JBVEZHUHpjVDRNdU5fbFJiTXpHcWQtbWVPREN6YWh4RHEyRjlEamFYSndZa0RYenBQTVEzUdIB0wFBVV95cUxQSHRxVDdadlBhNEFMd0JHMm9fMFg2UEVxbXZCQ05zTFpFYklwMHpDYXZ5STVDbmwycTVSV2JMV2JGUWdfekdwRnEwdk1qRC1DWXdQX1YxR1VPbVZiQ3FqSGFXTjJ0bXhSMFdUS0kzc3hRcFBQbGppN2hBYVRyVGFsY2JmcHhZYkNDbUgzOVpQNmI2cnFVZFNDY1o0eEVpYXBTR3ctWENGb1FON3BGVndkWTdMWlFuTTR4bVZWSWU0VjA1VG1jb0l1TDNzV1BaTUxVdlhF?oc=5",
-            "source": "Hindustan Times",
-            "reader": "llm"
-          },
-          {
             "headline": "Arvind: Building the Next Generation of Textile and Advanced Materials Businesses",
             "claim": "investing in technical textiles",
             "because": "Building the Next Generation of Textile and Advanced Materials Businesses",
@@ -2432,6 +2492,15 @@
             "date": "2026-08-25",
             "link": "https://news.google.com/rss/articles/CBMipgFBVV95cUxOTVAzejQtc0k0WXYxMWJiUmhMcmJVRlA1dWVFaGNBbHp0MlhQaGN0UWsxaWd2U2JYN045aU45Q3MyZ0JKS0k3R3lfNktnWFlTTkc4NFRiSDl1STNCdWd0cDg4Z1ZKOUJsRWRrVW10SDFpTGNvMEU0MEpPdW9CYlNpWnBISVlGMm9haXhxWWN1cUFucUVlOGUzeGpLUUxnbnI1ZkFrSVVR?oc=5",
             "source": "scanx.trade",
+            "reader": "llm"
+          },
+          {
+            "headline": "Arvind unveils AD Denim campaign with actor Raghav Juyal",
+            "claim": "Leading denim manufacturer, investing in technical textiles under recent government schemes",
+            "because": "unveils AD Denim campaign",
+            "date": "2026-08-25",
+            "link": "https://news.google.com/rss/articles/CBMifkFVX3lxTE8yNXhCdWxnMnIwM25ibTY0WGVmOTlxRUphYkNlN0Q0aE16UmhlNjRuLURNQnd3aGUta3pPNmRqNzNLQTlHY1JTZmVGUUZCcEpYcXhiX1BHY2thckpCdEg3R1JfclBHUWZNTUlTUDFBbXRSUGFwN3c2TF85VGVKUQ?oc=5",
+            "source": "Indian Broadcasting World",
             "reader": "llm"
           }
         ],
@@ -2493,6 +2562,7 @@
       "BHEL",
       "DELHIVERY",
       "EMMVEE",
+      "ENRIN",
       "GARFIBRES",
       "GRSE",
       "GVT&D",
@@ -2505,7 +2575,6 @@
       "MRPL",
       "NH",
       "PGEL",
-      "PREMIERENE",
       "SHADOWFAX",
       "TECHM",
       "VINCOFE",
@@ -2513,19 +2582,19 @@
     ],
     "challenged": 7,
     "status": {
-      "cached": 357,
-      "read": 21,
+      "cached": 369,
+      "read": 17,
       "pending": 0,
       "skipped": "",
-      "confirmed": 1,
+      "confirmed": 0,
       "refused": 0,
       "checks_pending": 0,
       "checks_skipped": "",
-      "reasons_read": 0,
+      "reasons_read": 2,
       "reasons_cached": 5,
       "reasons_pending": 0,
       "reasons_skipped": "",
-      "articles": 0,
+      "articles": 1,
       "articles_refused": 0,
       "model": "gemini-flash-lite-latest"
     }

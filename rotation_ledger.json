@@ -612,9 +612,9 @@
     "name": "Optiemus Infra.",
     "price_at_decision": 811.0,
     "target_at_decision": null,
-    "scored": false,
-    "outcome": null,
-    "realized_return_pct": null,
+    "scored": true,
+    "outcome": "No Analyst Target (unscored)",
+    "realized_return_pct": -7.9,
     "target_made_up": 1013.75
   },
   {
@@ -1190,6 +1190,18 @@
     "name": "M R P L",
     "price_at_decision": 175.35,
     "target_at_decision": 197.5,
+    "scored": false,
+    "outcome": null,
+    "realized_return_pct": null
+  },
+  {
+    "date": "2026-11-07",
+    "action": "rotated_in",
+    "sector": "clean_energy",
+    "ticker": "ENRIN",
+    "name": "Siemens Energy India",
+    "price_at_decision": 2809.0,
+    "target_at_decision": 3655.0,
     "scored": false,
     "outcome": null,
     "realized_return_pct": null
