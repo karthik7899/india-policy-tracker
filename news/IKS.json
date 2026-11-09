@@ -2,6 +2,20 @@
   "ticker": "IKS",
   "items": [
     {
+      "date": "Thu, 05 Nov 2026 16:23:49 GMT",
+      "headline": "IKS: TruBridge acquisition lifts scale, while debt funding and consolidation reshape comparability",
+      "source_url": "https://news.google.com/rss/articles/CBMiiwJBVV95cUxQeFY5UzItRmZGTW95cFpEdjBMYU9wbm1PaXJtT1ZFdFMwQVZyREZXX3N1VzBkMThkNTRFcWlBRXY1T1ZPLVEzWmpMVlFwNGdWekl1NDhXWWZ2R2lYTXhhWXlIU3VoYTlGYlhvV1VyYm5LQm1CNFpCam03dy11bDBLUlhiR3FhMmVfNTJzNlpwODlqbWhLMFNXZDI4OTJQUlJ0d1l5TjlaS2Y4aTVRbFA2b09xQ21hSGhrT0cxalRvd0JKWHJTRlZaTGZkT1M2MmtFenh3Nk80Mm5jbjZSWUNwaWFwdjNCZWpKaS10YWZnRkYyVVNnNmt4RFlHZlVWUDU0VWN5a0p1ekg1bUE?oc=5",
+      "source_label": "TradingView",
+      "event_type": "acquisition",
+      "source_kind": "Agreement",
+      "event_tags": [
+        "acquisition",
+        "Agreement"
+      ],
+      "confidence": "M",
+      "status": "counted"
+    },
+    {
       "date": "Wed, 07 Oct 2026 12:03:00 GMT",
       "headline": "Grønn Vekst Retains Garden Waste Handling Contract with Follo Ren Iks",
       "source_url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxNN2JSR2EwdktCNUlQZTVFZ29uNkJyUWo5SEl3VmVpVkR3MFhxLUVvdlJGdnhKTUYwaUY3SEJUTjB2N3ZFVlhsYnQyOHlmNzE3Z2pNYWxlYjN3SzlEWnFLRk0waVlSNXoyY0x4b2JYT2EyYzREclRaRmZWZEFvZjgzS04yTFRiSnV4LVBYR2RzWHdCRWJkdVZnSGNNeTFWUUFhbkdFdnB0bHdkU2hUdmJERl9maUtYMTAwdGxtYmZEOA?oc=5",
@@ -91,7 +105,22 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (208 days old)"
+      "exclusion_reason": "aged >120d (210 days old)"
+    },
+    {
+      "date": "2026-11-05",
+      "headline": "IKS: TruBridge acquisition lifts scale, while debt funding and consolidation reshape comparability",
+      "source_url": "https://news.google.com/rss/articles/CBMiiwJBVV95cUxQeFY5UzItRmZGTW95cFpEdjBMYU9wbm1PaXJtT1ZFdFMwQVZyREZXX3N1VzBkMThkNTRFcWlBRXY1T1ZPLVEzWmpMVlFwNGdWekl1NDhXWWZ2R2lYTXhhWXlIU3VoYTlGYlhvV1VyYm5LQm1CNFpCam03dy11bDBLUlhiR3FhMmVfNTJzNlpwODlqbWhLMFNXZDI4OTJQUlJ0d1l5TjlaS2Y4aTVRbFA2b09xQ21hSGhrT0cxalRvd0JKWHJTRlZaTGZkT1M2MmtFenh3Nk80Mm5jbjZSWUNwaWFwdjNCZWpKaS10YWZnRkYyVVNnNmt4RFlHZlVWUDU0VWN5a0p1ekg1bUE?oc=5",
+      "source_label": "TradingView",
+      "event_type": "acquisition",
+      "source_kind": "Event",
+      "event_tags": [
+        "acquisition",
+        "Event"
+      ],
+      "confidence": "L",
+      "status": "merged",
+      "exclusion_reason": "merged: duplicate phrasing of “IKS: TruBridge acquisition lifts scale, while debt funding a”"
     }
   ]
 }

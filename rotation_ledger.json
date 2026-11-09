@@ -625,9 +625,9 @@
     "name": "Birla Cable",
     "price_at_decision": 350.0,
     "target_at_decision": null,
-    "scored": false,
-    "outcome": null,
-    "realized_return_pct": null,
+    "scored": true,
+    "outcome": "No Analyst Target (unscored)",
+    "realized_return_pct": -1.4,
     "target_made_up": 437.5
   },
   {
@@ -638,9 +638,9 @@
     "name": "Optiemus Infra.",
     "price_at_decision": 781.5,
     "target_at_decision": null,
-    "scored": false,
-    "outcome": null,
-    "realized_return_pct": null,
+    "scored": true,
+    "outcome": "No Analyst Target (unscored)",
+    "realized_return_pct": -4.8,
     "target_made_up": 976.88
   },
   {
@@ -651,9 +651,9 @@
     "name": "Birla Cable",
     "price_at_decision": 345.2,
     "target_at_decision": null,
-    "scored": false,
-    "outcome": null,
-    "realized_return_pct": null,
+    "scored": true,
+    "outcome": "No Analyst Target (unscored)",
+    "realized_return_pct": -0.0,
     "target_made_up": 431.5
   },
   {
@@ -664,9 +664,9 @@
     "name": "Optiemus Infra.",
     "price_at_decision": 781.5,
     "target_at_decision": null,
-    "scored": false,
-    "outcome": null,
-    "realized_return_pct": null,
+    "scored": true,
+    "outcome": "No Analyst Target (unscored)",
+    "realized_return_pct": -4.8,
     "target_made_up": 976.88
   },
   {
@@ -677,9 +677,9 @@
     "name": "Birla Cable",
     "price_at_decision": 345.2,
     "target_at_decision": null,
-    "scored": false,
-    "outcome": null,
-    "realized_return_pct": null,
+    "scored": true,
+    "outcome": "No Analyst Target (unscored)",
+    "realized_return_pct": -0.0,
     "target_made_up": 431.5
   },
   {
@@ -1202,6 +1202,30 @@
     "name": "Siemens Energy India",
     "price_at_decision": 2809.0,
     "target_at_decision": 3655.0,
+    "scored": false,
+    "outcome": null,
+    "realized_return_pct": null
+  },
+  {
+    "date": "2026-11-09",
+    "action": "rotated_in",
+    "sector": "healthcare_hospitals",
+    "ticker": "ASTERDM",
+    "name": "Aster DM Quality",
+    "price_at_decision": 733.5,
+    "target_at_decision": 905.0,
+    "scored": false,
+    "outcome": null,
+    "realized_return_pct": null
+  },
+  {
+    "date": "2026-11-09",
+    "action": "rotated_in",
+    "sector": "logistics_heavy_capital",
+    "ticker": "VRLLOG",
+    "name": "VRL Logistics",
+    "price_at_decision": 323.8,
+    "target_at_decision": 390.0,
     "scored": false,
     "outcome": null,
     "realized_return_pct": null
