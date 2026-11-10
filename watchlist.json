@@ -16,8 +16,8 @@
       "target_low": "347.00",
       "rec_score": 1.3,
       "screener": {
-        "market_cap": 288152.0,
-        "current_price": 394.0,
+        "market_cap": 288407.0,
+        "current_price": 395.0,
         "pe_ratio": 45.1,
         "dividend_yield": 0.63,
         "roce": 36.4,
@@ -119,19 +119,19 @@
         "isin": "INE263A01024",
         "week52_low": 362.0,
         "week52_high": 467.81,
-        "pct_above_low": 9.86,
-        "advt_cr": 412.13,
+        "pct_above_low": 8.99,
+        "advt_cr": 412.14,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.1,
-        "deliv_pct": 59.5,
-        "delivery_band": "delivery-led",
+        "deliv_pct": 48.98,
+        "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 116.05,
+        "turnover_cr_last": 364.18,
         "industry_share_pct": 44.2,
         "industry_peer_count": 8,
-        "industry_share_change_pp": -0.17,
+        "industry_share_change_pp": 0.0,
         "peer_share_pct": 71.3,
         "peer_share_change_pp": -3.21,
         "peer_share_lookback": 4,
@@ -190,9 +190,9 @@
         "surveillance"
       ],
       "_fetched": {
-        "price": "2026-11-09T10:10:07+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:16+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       }
     },
     {
@@ -211,10 +211,10 @@
       "target_low": "1280.00",
       "rec_score": 1.8,
       "screener": {
-        "market_cap": 15709.0,
-        "current_price": 1654.0,
-        "pe_ratio": 83.1,
-        "dividend_yield": 0.15,
+        "market_cap": 15758.0,
+        "current_price": 1660.0,
+        "pe_ratio": 83.4,
+        "dividend_yield": 0.14,
         "roce": 20.3,
         "roe": 16.0,
         "q_sales": 177.0,
@@ -314,16 +314,16 @@
         "isin": "INE386C01029",
         "week52_low": 877.96,
         "week52_high": 1858.97,
-        "pct_above_low": 82.99,
+        "pct_above_low": 89.04,
         "advt_cr": 41.91,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.1,
         "days_to_exit_5cr": 0.6,
-        "deliv_pct": 61.75,
-        "delivery_band": "delivery-led",
+        "deliv_pct": 45.92,
+        "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 20.41,
+        "turnover_cr_last": 57.44,
         "industry_share_pct": 1.08,
         "industry_peer_count": 8,
         "industry_share_change_pp": 0.0,
@@ -344,7 +344,7 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 83.1 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 83.4 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "industry_pe": 78.1,
@@ -366,7 +366,7 @@
         "risks": [
           "Operating margin contracted (-14.0pp)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 83.1 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 83.4 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -383,11 +383,11 @@
         "surveillance"
       ],
       "_fetched": {
-        "price": "2026-11-09T10:10:07+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:16+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       },
-      "thesis_broken_runs": 20
+      "thesis_broken_runs": 21
     },
     {
       "ticker": "BDL",
@@ -397,9 +397,9 @@
       "rating": "Hold",
       "revenue_growth": "+130.8%",
       "_fetched": {
-        "price": "2026-11-09T10:10:07+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:16+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       },
       "earnings_growth": "+548.0%",
       "analyst_count": 16,
@@ -414,10 +414,10 @@
       ],
       "growth_pct": "+17.4%",
       "screener": {
-        "market_cap": 40670.0,
+        "market_cap": 40676.0,
         "current_price": 1110.0,
         "pe_ratio": 78.1,
-        "dividend_yield": 0.47,
+        "dividend_yield": 0.44,
         "roce": 13.9,
         "roe": 10.2,
         "q_sales": 572.0,
@@ -517,19 +517,19 @@
         "isin": "INE171Z01026",
         "week52_low": 974.0,
         "week52_high": 1607.54,
-        "pct_above_low": 9.75,
+        "pct_above_low": 13.93,
         "advt_cr": 102.7,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.2,
-        "deliv_pct": 61.3,
-        "delivery_band": "delivery-led",
+        "deliv_pct": 28.15,
+        "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 20.99,
+        "turnover_cr_last": 156.32,
         "industry_share_pct": 3.45,
         "industry_peer_count": 8,
-        "industry_share_change_pp": -0.02,
+        "industry_share_change_pp": 0.0,
         "peer_share_pct": 5.6,
         "peer_share_change_pp": 2.37,
         "peer_share_lookback": 4,
@@ -587,9 +587,9 @@
       "revenue_growth": "+72.3%",
       "yahoo_industry": "Aerospace & Defense",
       "_fetched": {
-        "price": "2026-11-09T10:10:07+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:16+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       },
       "earnings_growth": "+50.0%",
       "target_median": "505.00",
@@ -597,8 +597,8 @@
       "target_low": "460.00",
       "business_keywords": [],
       "screener": {
-        "market_cap": 15421.0,
-        "current_price": 415.0,
+        "market_cap": 15386.0,
+        "current_price": 414.0,
         "pe_ratio": 111.0,
         "dividend_yield": 0.06,
         "roce": 14.5,
@@ -700,19 +700,19 @@
         "isin": "INE713T01028",
         "week52_low": 189.37,
         "week52_high": 449.77,
-        "pct_above_low": 123.16,
-        "advt_cr": 488.9,
+        "pct_above_low": 118.64,
+        "advt_cr": 488.91,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.1,
-        "deliv_pct": 33.44,
+        "deliv_pct": 29.77,
         "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 105.41,
+        "turnover_cr_last": 253.49,
         "industry_share_pct": 2.34,
         "industry_peer_count": 8,
-        "industry_share_change_pp": -0.01,
+        "industry_share_change_pp": 0.0,
         "peer_share_pct": 3.8,
         "peer_share_change_pp": 0.88,
         "peer_share_lookback": 4,
@@ -776,9 +776,9 @@
         "surveillance"
       ],
       "_fetched": {
-        "price": "2026-11-09T10:10:07+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:16+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       },
       "earnings_growth": "+43.9%",
       "target_median": "2987.50",
@@ -786,10 +786,10 @@
       "target_low": "1640.00",
       "rec_score": 2.2,
       "screener": {
-        "market_cap": 25091.0,
-        "current_price": 2190.0,
+        "market_cap": 25180.0,
+        "current_price": 2198.0,
         "pe_ratio": 31.4,
-        "dividend_yield": 0.9,
+        "dividend_yield": 0.89,
         "roce": 42.8,
         "roe": 31.6,
         "q_sales": 1815.0,
@@ -889,19 +889,19 @@
         "isin": "INE382Z01011",
         "week52_low": 1861.0,
         "week52_high": 3042.56,
-        "pct_above_low": 15.87,
+        "pct_above_low": 18.11,
         "advt_cr": 164.7,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.2,
-        "deliv_pct": 51.2,
-        "delivery_band": "delivery-led",
+        "deliv_pct": 30.56,
+        "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 22.25,
+        "turnover_cr_last": 132.21,
         "industry_share_pct": 10.95,
         "industry_peer_count": 8,
-        "industry_share_change_pp": -0.04,
+        "industry_share_change_pp": 0.0,
         "peer_share_pct": 17.7,
         "peer_share_change_pp": 0.81,
         "peer_share_lookback": 4,
@@ -926,12 +926,12 @@
         "pe_vs_peers": "60% below peers"
       },
       "score": {
-        "overall_score": 1,
+        "overall_score": 4,
         "fundamental_score": 0,
-        "momentum_score": 1,
+        "momentum_score": 4,
         "confidence": "High",
         "reasons": [
-          "Sector benefits from macro policy tailwinds (Fallback)",
+          "Government Contract/MoU: Paradip's cargo growth, GRSE's shipbuilding order and more | The Port Report #37",
           "Strong revenue growth (TTM +39.6%)",
           "High Return on Capital (ROCE: 42.8%)",
           "High Return on Equity (ROE: 31.6%)",
@@ -959,10 +959,10 @@
       "name": "HDFC Bank",
       "catalyst": "Largest private lender; post-merger deposit repricing and a direct read on retail credit demand.",
       "screener": {
-        "market_cap": 1228574.0,
-        "current_price": 796.0,
-        "pe_ratio": 15.3,
-        "dividend_yield": 1.64,
+        "market_cap": 1231738.0,
+        "current_price": 798.0,
+        "pe_ratio": 15.4,
+        "dividend_yield": 1.63,
         "roce": 7.02,
         "roe": 13.6,
         "q_sales": 95132.0,
@@ -1042,16 +1042,16 @@
         "isin": "INE040A01034",
         "week52_low": 692.8,
         "week52_high": 991.21,
-        "pct_above_low": 13.18,
+        "pct_above_low": 15.21,
         "advt_cr": 2592.99,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.0,
-        "deliv_pct": 42.97,
-        "delivery_band": "mixed",
+        "deliv_pct": 62.7,
+        "delivery_band": "delivery-led",
         "series": "EQ",
-        "turnover_cr_last": 568.89,
+        "turnover_cr_last": 5150.98,
         "industry_share_pct": 40.01,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
@@ -1109,9 +1109,9 @@
       "yahoo_industry": "Banks - Regional",
       "business_keywords": [],
       "_fetched": {
-        "price": "2026-11-09T10:10:07+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:16+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       }
     },
     {
@@ -1119,8 +1119,8 @@
       "name": "ICICI Bank",
       "catalyst": "Retail-led credit growth with sector-leading asset quality and digital lending scale.",
       "screener": {
-        "market_cap": 1138218.0,
-        "current_price": 1585.0,
+        "market_cap": 1141091.0,
+        "current_price": 1589.0,
         "pe_ratio": 19.3,
         "dividend_yield": 0.76,
         "roce": 7.18,
@@ -1199,17 +1199,17 @@
         "accounts": "consolidated",
         "isin": "INE090A01021",
         "week52_low": 1205.64,
-        "week52_high": 1565.0,
-        "pct_above_low": 29.81,
-        "advt_cr": 2263.78,
+        "week52_high": 1589.0,
+        "pct_above_low": 31.8,
+        "advt_cr": 2264.32,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.0,
-        "deliv_pct": 35.14,
-        "delivery_band": "mixed",
+        "deliv_pct": 64.52,
+        "delivery_band": "delivery-led",
         "series": "EQ",
-        "turnover_cr_last": 314.58,
+        "turnover_cr_last": 4355.59,
         "industry_share_pct": 23.55,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
@@ -1267,9 +1267,9 @@
       "yahoo_industry": "Banks - Regional",
       "business_keywords": [],
       "_fetched": {
-        "price": "2026-11-09T10:10:07+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:16+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       }
     },
     {
@@ -1277,10 +1277,10 @@
       "name": "State Bank of India",
       "catalyst": "Primary financing channel for government infrastructure and PLI-linked capex lending.",
       "screener": {
-        "market_cap": 961338.0,
-        "current_price": 1041.0,
+        "market_cap": 961846.0,
+        "current_price": 1042.0,
         "pe_ratio": 11.3,
-        "dividend_yield": 1.68,
+        "dividend_yield": 1.67,
         "roce": 6.13,
         "roe": 15.4,
         "q_sales": 141073.0,
@@ -1360,16 +1360,16 @@
         "isin": "INE062A01020",
         "week52_low": 946.1,
         "week52_high": 1194.57,
-        "pct_above_low": 7.39,
-        "advt_cr": 1179.97,
+        "pct_above_low": 10.14,
+        "advt_cr": 1179.99,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.0,
-        "deliv_pct": 48.13,
+        "deliv_pct": 46.38,
         "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 198.89,
+        "turnover_cr_last": 2497.45,
         "industry_share_pct": 46.31,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
@@ -1427,9 +1427,9 @@
       "yahoo_industry": "Banks - Regional",
       "business_keywords": [],
       "_fetched": {
-        "price": "2026-11-09T10:10:07+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:16+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       }
     },
     {
@@ -1444,9 +1444,9 @@
       "revenue_growth": "+21.1%",
       "yahoo_industry": "Banks - Regional",
       "_fetched": {
-        "price": "2026-11-09T10:10:07+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:17+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       },
       "earnings_growth": "+39.0%",
       "target_median": "1590.00",
@@ -1455,7 +1455,7 @@
       "rec_score": 1.2,
       "business_keywords": [],
       "screener": {
-        "market_cap": 408279.0,
+        "market_cap": 408185.0,
         "current_price": 1311.0,
         "pe_ratio": 13.6,
         "dividend_yield": 0.08,
@@ -1538,16 +1538,16 @@
         "isin": "INE238A01034",
         "week52_low": 1196.38,
         "week52_high": 1382.83,
-        "pct_above_low": 9.89,
-        "advt_cr": 862.28,
+        "pct_above_low": 9.56,
+        "advt_cr": 862.29,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.0,
-        "deliv_pct": 36.77,
-        "delivery_band": "mixed",
+        "deliv_pct": 50.36,
+        "delivery_band": "delivery-led",
         "series": "EQ",
-        "turnover_cr_last": 74.28,
+        "turnover_cr_last": 627.21,
         "industry_share_pct": 16.02,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
@@ -1606,9 +1606,9 @@
         "renewable"
       ],
       "_fetched": {
-        "price": "2026-11-09T10:10:07+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:17+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       },
       "earnings_growth": "+28.1%",
       "target_median": "100.00",
@@ -1616,10 +1616,10 @@
       "target_low": "95.00",
       "rec_score": 1.0,
       "screener": {
-        "market_cap": 67670.0,
-        "current_price": 88.0,
-        "pe_ratio": 8.54,
-        "dividend_yield": 2.5,
+        "market_cap": 67440.0,
+        "current_price": 87.7,
+        "pe_ratio": 8.43,
+        "dividend_yield": 2.51,
         "roce": 6.03,
         "roe": 22.6,
         "q_sales": 8606.0,
@@ -1699,16 +1699,16 @@
         "isin": "INE457A01014",
         "week52_low": 55.28,
         "week52_high": 90.19,
-        "pct_above_low": 55.89,
-        "advt_cr": 134.1,
+        "pct_above_low": 58.6,
+        "advt_cr": 134.11,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.2,
-        "deliv_pct": 51.84,
-        "delivery_band": "delivery-led",
+        "deliv_pct": 41.97,
+        "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 34.48,
+        "turnover_cr_last": 225.59,
         "industry_share_pct": 2.82,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
@@ -1729,7 +1729,7 @@
         "hyper_growth_warning": false,
         "valuation_alerts": [],
         "industry_pe": 13.6,
-        "pe_vs_peers": "37% below peers"
+        "pe_vs_peers": "38% below peers"
       },
       "score": {
         "overall_score": 8,
@@ -1771,9 +1771,9 @@
       "target_low": "1280.00",
       "rec_score": 1.2,
       "screener": {
-        "market_cap": 1791572.0,
+        "market_cap": 1792249.0,
         "current_price": 1324.0,
-        "pe_ratio": 21.9,
+        "pe_ratio": 21.8,
         "dividend_yield": 0.45,
         "roce": 10.3,
         "roe": 8.91,
@@ -1874,16 +1874,16 @@
         "isin": "INE002A01018",
         "week52_low": 1164.9,
         "week52_high": 1584.97,
-        "pct_above_low": 13.66,
-        "advt_cr": 2602.58,
+        "pct_above_low": 13.69,
+        "advt_cr": 2602.6,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.0,
-        "deliv_pct": 52.61,
+        "deliv_pct": 51.98,
         "delivery_band": "delivery-led",
         "series": "EQ",
-        "turnover_cr_last": 550.99,
+        "turnover_cr_last": 2598.16,
         "industry_share_pct": 35.89,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
@@ -1904,9 +1904,9 @@
         "hyper_growth_warning": false,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 21.9 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 21.8 > 15 & Price > Intrinsic)"
         ],
-        "industry_pe": 21.9,
+        "industry_pe": 21.8,
         "pe_vs_peers": "In line with peers"
       },
       "score": {
@@ -1924,7 +1924,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 21.9 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 21.8 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Hold / Monitor"
@@ -1937,30 +1937,30 @@
         "renewable"
       ],
       "_fetched": {
-        "price": "2026-11-09T10:10:08+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:17+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       }
     },
     {
       "ticker": "KPIL",
       "name": "Kalpataru Projects International",
       "price": "1370.50",
-      "target": "1667.00",
-      "growth_pct": "+21.6%",
+      "target": "1669.00",
+      "growth_pct": "+21.8%",
       "catalyst": "Power-transmission and infrastructure EPC contractor, converting a large order book into revenue with earnings growing faster than sales.",
       "rating": "Strong Buy",
-      "revenue_growth": "+3.8%",
-      "earnings_growth": "+45.2%",
-      "analyst_count": 20,
-      "target_median": "1667.00",
+      "revenue_growth": "+7.3%",
+      "earnings_growth": "+20.3%",
+      "analyst_count": 19,
+      "target_median": "1669.00",
       "target_high": "1865.00",
       "target_low": "1400.00",
       "rec_score": 1.1,
       "screener": {
-        "market_cap": 23357.0,
-        "current_price": 1368.0,
-        "pe_ratio": 20.1,
+        "market_cap": 23404.0,
+        "current_price": 1370.0,
+        "pe_ratio": 20.2,
         "dividend_yield": 0.8,
         "roce": 18.3,
         "roe": 13.7,
@@ -2061,16 +2061,16 @@
         "isin": "INE220B01022",
         "week52_low": 1062.49,
         "week52_high": 1445.5,
-        "pct_above_low": 28.72,
+        "pct_above_low": 28.99,
         "advt_cr": 15.71,
         "liquidity_band": "adequate",
         "sessions": 21,
         "days_to_exit_1cr": 0.3,
         "days_to_exit_5cr": 1.6,
-        "deliv_pct": 41.69,
-        "delivery_band": "mixed",
+        "deliv_pct": 53.41,
+        "delivery_band": "delivery-led",
         "series": "EQ",
-        "turnover_cr_last": 2.63,
+        "turnover_cr_last": 12.57,
         "industry_share_pct": 7.08,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
@@ -2092,7 +2092,7 @@
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)"
         ],
-        "industry_pe": 21.9,
+        "industry_pe": 21.8,
         "pe_vs_peers": "In line with peers"
       },
       "score": {
@@ -2122,9 +2122,9 @@
         "security"
       ],
       "_fetched": {
-        "price": "2026-11-09T10:10:07+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:17+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       }
     },
     {
@@ -2246,16 +2246,16 @@
         "isin": "INE814H01029",
         "week52_low": 132.85,
         "week52_high": 243.37,
-        "pct_above_low": 53.86,
+        "pct_above_low": 55.06,
         "advt_cr": 365.0,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.1,
-        "deliv_pct": 49.95,
+        "deliv_pct": 35.2,
         "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 79.97,
+        "turnover_cr_last": 240.93,
         "industry_share_pct": 32.17,
         "industry_peer_count": 6,
         "industry_share_change_pp": 0.0,
@@ -2278,7 +2278,7 @@
           "Fails Debt Limit (Debt > Net Assets)",
           "No Dividend Yield"
         ],
-        "industry_pe": 21.9,
+        "industry_pe": 21.8,
         "pe_vs_peers": "In line with peers"
       },
       "score": {
@@ -2311,9 +2311,9 @@
         "thermal"
       ],
       "_fetched": {
-        "price": "2026-11-09T10:10:07+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:17+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       }
     },
     {
@@ -2332,9 +2332,9 @@
         "semiconductor"
       ],
       "_fetched": {
-        "price": "2026-11-09T10:10:07+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:17+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       },
       "earnings_growth": "+23.0%",
       "target_median": "2455.00",
@@ -2342,10 +2342,10 @@
       "target_low": "1870.00",
       "rec_score": 1.0,
       "screener": {
-        "market_cap": 12546.0,
-        "current_price": 2006.0,
+        "market_cap": 12569.0,
+        "current_price": 2010.0,
         "pe_ratio": 30.0,
-        "dividend_yield": 0.26,
+        "dividend_yield": 0.25,
         "roce": 21.3,
         "roe": 15.9,
         "q_sales": 1000.0,
@@ -2445,16 +2445,16 @@
         "isin": "INE956G01038",
         "week52_low": 1058.52,
         "week52_high": 2277.9,
-        "pct_above_low": 89.66,
+        "pct_above_low": 89.88,
         "advt_cr": 90.79,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.1,
         "days_to_exit_5cr": 0.3,
-        "deliv_pct": 42.88,
+        "deliv_pct": 31.33,
         "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 32.66,
+        "turnover_cr_last": 82.97,
         "industry_share_pct": 32.87,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
@@ -2477,8 +2477,8 @@
           "Fails Debt Limit (Debt > Net Assets)",
           "Fails P/E Screen (P/E 30.0 > 15 & Price > Intrinsic)"
         ],
-        "industry_pe": 21.9,
-        "pe_vs_peers": "37% above peers"
+        "industry_pe": 21.8,
+        "pe_vs_peers": "38% above peers"
       },
       "score": {
         "overall_score": 9,
@@ -2522,9 +2522,9 @@
         "renewable"
       ],
       "_fetched": {
-        "price": "2026-11-09T10:10:07+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:17+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       },
       "earnings_growth": "+32.5%",
       "target_median": "4540.00",
@@ -2532,10 +2532,10 @@
       "target_low": "3450.00",
       "rec_score": 1.5,
       "screener": {
-        "market_cap": 575862.0,
+        "market_cap": 575821.0,
         "current_price": 4185.0,
-        "pe_ratio": 30.4,
-        "dividend_yield": 0.92,
+        "pe_ratio": 30.5,
+        "dividend_yield": 0.91,
         "roce": 14.6,
         "roe": 15.9,
         "q_sales": 78750.0,
@@ -2633,16 +2633,16 @@
         "isin": "INE018A01030",
         "week52_low": 3401.58,
         "week52_high": 4338.23,
-        "pct_above_low": 20.83,
-        "advt_cr": 898.23,
+        "pct_above_low": 23.03,
+        "advt_cr": 898.26,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.0,
-        "deliv_pct": 48.87,
-        "delivery_band": "mixed",
+        "deliv_pct": 57.09,
+        "delivery_band": "delivery-led",
         "series": "EQ",
-        "turnover_cr_last": 128.05,
+        "turnover_cr_last": 1347.65,
         "industry_share_pct": 79.59,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
@@ -2663,10 +2663,10 @@
         "hyper_growth_warning": false,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 30.4 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 30.5 > 15 & Price > Intrinsic)"
         ],
-        "industry_pe": 21.9,
-        "pe_vs_peers": "39% above peers"
+        "industry_pe": 21.8,
+        "pe_vs_peers": "40% above peers"
       },
       "score": {
         "overall_score": 8,
@@ -2674,8 +2674,8 @@
         "momentum_score": 8,
         "confidence": "High",
         "reasons": [
+          "Policy Notification: Key facts: NSE:LT Q2 profit +33%; margins narrowed to 7–8%",
           "Policy Notification: Bagging/Receiving of orders/contracts",
-          "Policy Notification: Updates on the Business Transfer Agreement with Vyoma.AI Limited (Vyoma), Wholly owned Subsidiary of the Company and Share Purchase Agreement towards sale of entire stake held in L&T Network Services Private Limited to Vyoma Extension of…",
           "High Return on Equity (ROE: 15.9%)",
           "Liquid (Rs 898 Cr traded daily)",
           "FII Accumulation (+0.09%)",
@@ -2683,7 +2683,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 30.4 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 30.5 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Hold / Monitor"
@@ -2700,13 +2700,13 @@
       "growth_pct": "+12.0%",
       "analyst_count": 2,
       "catalyst": "Auto-discovered via media radar. Catalyst: Policy tailwinds in the big_cap_industries segment.",
-      "rating": "N/A",
+      "rating": "Buy",
       "revenue_growth": "+43.6%",
       "yahoo_industry": "Oil & Gas Refining & Marketing",
       "_fetched": {
-        "price": "2026-11-09T10:10:07+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:17+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       },
       "earnings_growth": "+203.1%",
       "target_median": "197.50",
@@ -2714,9 +2714,9 @@
       "target_low": "180.00",
       "business_keywords": [],
       "screener": {
-        "market_cap": 30793.0,
+        "market_cap": 30897.0,
         "current_price": 176.0,
-        "pe_ratio": 7.4,
+        "pe_ratio": 7.45,
         "dividend_yield": 2.27,
         "roce": 18.0,
         "roe": 14.5,
@@ -2817,16 +2817,16 @@
         "isin": "INE103A01014",
         "week52_low": 133.97,
         "week52_high": 198.79,
-        "pct_above_low": 31.86,
+        "pct_above_low": 31.59,
         "advt_cr": 326.49,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.1,
-        "deliv_pct": 37.84,
+        "deliv_pct": 28.65,
         "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 16.91,
+        "turnover_cr_last": 86.56,
         "industry_share_pct": 3.53,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
@@ -2848,7 +2848,7 @@
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)"
         ],
-        "industry_pe": 21.9,
+        "industry_pe": 21.8,
         "pe_vs_peers": "66% below peers"
       },
       "score": {
@@ -2873,7 +2873,8 @@
         ]
       },
       "fundamental_value": 399.0,
-      "estimate_method": "Analyst Consensus"
+      "estimate_method": "Analyst Consensus",
+      "rec_score": 2.0
     }
   ],
   "clean_energy": [
@@ -2893,9 +2894,9 @@
       "target_low": "40.00",
       "rec_score": 1.4,
       "screener": {
-        "market_cap": 52896.0,
-        "current_price": 38.8,
-        "pe_ratio": 23.4,
+        "market_cap": 53059.0,
+        "current_price": 38.9,
+        "pe_ratio": 23.5,
         "dividend_yield": 0.0,
         "roce": 34.2,
         "roe": 39.7,
@@ -2996,16 +2997,16 @@
         "isin": "INE040H01021",
         "week52_low": 33.9,
         "week52_high": 59.2,
-        "pct_above_low": 15.04,
-        "advt_cr": 347.3,
+        "pct_above_low": 14.78,
+        "advt_cr": 347.31,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.1,
-        "deliv_pct": 53.46,
-        "delivery_band": "delivery-led",
+        "deliv_pct": 32.89,
+        "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 68.51,
+        "turnover_cr_last": 195.3,
         "industry_share_pct": 14.22,
         "industry_peer_count": 8,
         "industry_share_change_pp": 0.0,
@@ -3026,7 +3027,7 @@
         "hyper_growth_warning": false,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 23.4 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 23.5 > 15 & Price > Intrinsic)",
           "No Dividend Yield"
         ],
         "industry_pe": 26.4,
@@ -3048,7 +3049,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 23.4 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 23.5 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Buy Candidate"
@@ -3061,9 +3062,9 @@
         "renewable"
       ],
       "_fetched": {
-        "price": "2026-11-09T10:10:08+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:17+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       }
     },
     {
@@ -3082,9 +3083,9 @@
       "target_low": "496.00",
       "rec_score": 1.0,
       "screener": {
-        "market_cap": 11026.0,
-        "current_price": 359.0,
-        "pe_ratio": 29.5,
+        "market_cap": 10960.0,
+        "current_price": 357.0,
+        "pe_ratio": 29.3,
         "dividend_yield": 0.0,
         "roe": 23.9,
         "q_sales": 1307.0,
@@ -3162,16 +3163,16 @@
         "isin": "INE12UR01024",
         "week52_low": 182.93,
         "week52_high": 477.4,
-        "pct_above_low": 96.22,
+        "pct_above_low": 94.97,
         "advt_cr": 9.72,
         "liquidity_band": "adequate",
         "sessions": 21,
         "days_to_exit_1cr": 0.5,
         "days_to_exit_5cr": 2.6,
-        "deliv_pct": 52.06,
+        "deliv_pct": 54.67,
         "delivery_band": "delivery-led",
         "series": "EQ",
-        "turnover_cr_last": 5.64,
+        "turnover_cr_last": 20.32,
         "industry_share_pct": 5.97,
         "industry_peer_count": 8,
         "industry_share_change_pp": 0.0,
@@ -3192,11 +3193,11 @@
         "hyper_growth_warning": false,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 29.5 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 29.3 > 15 & Price > Intrinsic)",
           "No Dividend Yield"
         ],
         "industry_pe": 26.4,
-        "pe_vs_peers": "12% above peers"
+        "pe_vs_peers": "11% above peers"
       },
       "score": {
         "overall_score": 1,
@@ -3211,7 +3212,7 @@
         "risks": [
           "Operating margin contracted (-2.0pp)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 29.5 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 29.3 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Avoid / High Risk"
@@ -3223,9 +3224,9 @@
         "renewable"
       ],
       "_fetched": {
-        "price": "2026-11-09T10:10:08+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:17+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       },
       "fundamental_value": 153.7
     },
@@ -3244,9 +3245,9 @@
         "renewable"
       ],
       "_fetched": {
-        "price": "2026-11-09T10:10:08+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:17+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       },
       "earnings_growth": "+37.7%",
       "target_median": "385.00",
@@ -3254,9 +3255,9 @@
       "target_low": "285.00",
       "rec_score": 1.8,
       "screener": {
-        "market_cap": 18333.0,
-        "current_price": 265.0,
-        "pe_ratio": 13.0,
+        "market_cap": 18311.0,
+        "current_price": 264.0,
+        "pe_ratio": 12.9,
         "dividend_yield": 0.38,
         "roce": 44.6,
         "roe": 50.7,
@@ -3357,16 +3358,16 @@
         "isin": "INE1C6T01020",
         "week52_low": 183.41,
         "week52_high": 357.85,
-        "pct_above_low": 45.86,
+        "pct_above_low": 44.2,
         "advt_cr": 70.03,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.1,
         "days_to_exit_5cr": 0.4,
-        "deliv_pct": 26.17,
+        "deliv_pct": 38.25,
         "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 89.11,
+        "turnover_cr_last": 43.65,
         "industry_share_pct": 7.2,
         "industry_peer_count": 8,
         "industry_share_change_pp": 0.0,
@@ -3433,9 +3434,9 @@
         "renewable"
       ],
       "_fetched": {
-        "price": "2026-11-09T10:10:08+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:17+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       },
       "earnings_growth": "+43.9%",
       "target_median": "5296.00",
@@ -3443,10 +3444,10 @@
       "target_low": "4390.00",
       "rec_score": 1.4,
       "screener": {
-        "market_cap": 104981.0,
-        "current_price": 4100.0,
-        "pe_ratio": 562.0,
-        "dividend_yield": 0.25,
+        "market_cap": 105134.0,
+        "current_price": 4106.0,
+        "pe_ratio": 563.0,
+        "dividend_yield": 0.24,
         "roe": 18.6,
         "operating_margin_trend": [
           12.0
@@ -3477,16 +3478,16 @@
         "isin": "INE200A01026",
         "week52_low": 2614.83,
         "week52_high": 5519.84,
-        "pct_above_low": 55.08,
+        "pct_above_low": 57.03,
         "advt_cr": 340.18,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.1,
-        "deliv_pct": 48.37,
+        "deliv_pct": 40.93,
         "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 33.62,
+        "turnover_cr_last": 173.55,
         "industry_share_pct": 5.91,
         "industry_peer_count": 8,
         "industry_share_change_pp": 0.0,
@@ -3499,7 +3500,7 @@
         "hyper_growth_warning": false,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 562.0 > 15; no intrinsic value to justify it)"
+          "Fails P/E Screen (P/E 563.0 > 15; no intrinsic value to justify it)"
         ],
         "industry_pe": 26.4,
         "pe_vs_peers": "Extreme outlier (excluded from peer stats)"
@@ -3519,7 +3520,7 @@
         "risks": [
           "FII Selling (-3.73%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 562.0 > 15; no intrinsic value to justify it)"
+          "Fails P/E Screen (P/E 563.0 > 15; no intrinsic value to justify it)"
         ],
         "recommendations": [
           "Avoid / High Risk"
@@ -3542,9 +3543,9 @@
         "renewable"
       ],
       "_fetched": {
-        "price": "2026-11-09T10:10:08+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:17+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       },
       "earnings_growth": "+67.8%",
       "target_median": "3655.00",
@@ -3552,9 +3553,9 @@
       "target_low": "3077.00",
       "rec_score": 1.9,
       "screener": {
-        "market_cap": 101174.0,
-        "current_price": 2841.0,
-        "pe_ratio": 66.3,
+        "market_cap": 101039.0,
+        "current_price": 2837.0,
+        "pe_ratio": 66.2,
         "dividend_yield": 0.14,
         "roce": 67.8,
         "roe": 50.5,
@@ -3637,16 +3638,16 @@
         "isin": "INE1NPP01017",
         "week52_low": 2121.97,
         "week52_high": 3872.1,
-        "pct_above_low": 34.52,
+        "pct_above_low": 33.71,
         "advt_cr": 140.72,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.2,
-        "deliv_pct": 52.12,
+        "deliv_pct": 50.19,
         "delivery_band": "delivery-led",
         "series": "EQ",
-        "turnover_cr_last": 14.52,
+        "turnover_cr_last": 114.53,
         "industry_share_pct": 7.25,
         "industry_peer_count": 8,
         "industry_share_change_pp": 0.0,
@@ -3667,7 +3668,7 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 66.3 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 66.2 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "industry_pe": 26.4,
@@ -3689,7 +3690,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 66.3 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 66.2 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -3717,10 +3718,10 @@
       "target_low": "1840.00",
       "rec_score": 2.2,
       "screener": {
-        "market_cap": 894066.0,
-        "current_price": 2471.0,
-        "pe_ratio": 16.3,
-        "dividend_yield": 2.55,
+        "market_cap": 895621.0,
+        "current_price": 2475.0,
+        "pe_ratio": 16.4,
+        "dividend_yield": 2.59,
         "roce": 63.0,
         "roe": 51.8,
         "q_sales": 73188.0,
@@ -3820,16 +3821,16 @@
         "isin": "INE467B01029",
         "week52_low": 2046.84,
         "week52_high": 3146.21,
-        "pct_above_low": 22.08,
-        "advt_cr": 1449.77,
+        "pct_above_low": 20.94,
+        "advt_cr": 1449.81,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.0,
-        "deliv_pct": 34.09,
+        "deliv_pct": 49.04,
         "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 75.56,
+        "turnover_cr_last": 714.5,
         "industry_share_pct": 33.97,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
@@ -3850,9 +3851,9 @@
         "hyper_growth_warning": false,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 16.3 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 16.4 > 15 & Price > Intrinsic)"
         ],
-        "industry_pe": 16.3,
+        "industry_pe": 16.4,
         "pe_vs_peers": "In line with peers"
       },
       "score": {
@@ -3871,7 +3872,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 16.3 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 16.4 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Buy Candidate"
@@ -3885,9 +3886,9 @@
         "surveillance"
       ],
       "_fetched": {
-        "price": "2026-11-09T10:10:08+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:17+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       }
     },
     {
@@ -3906,8 +3907,8 @@
       "target_low": null,
       "rec_score": null,
       "screener": {
-        "market_cap": 835.0,
-        "current_price": 154.0,
+        "market_cap": 827.0,
+        "current_price": 152.0,
         "dividend_yield": 0.0,
         "roce": -5.97,
         "roe": -3.82,
@@ -4008,16 +4009,16 @@
         "isin": "INE306L01010",
         "week52_low": 132.57,
         "week52_high": 317.95,
-        "pct_above_low": 14.22,
+        "pct_above_low": 14.99,
         "advt_cr": 22.15,
         "liquidity_band": "adequate",
         "sessions": 21,
         "days_to_exit_1cr": 0.2,
         "days_to_exit_5cr": 1.1,
-        "deliv_pct": 42.41,
-        "delivery_band": "mixed",
+        "deliv_pct": 51.83,
+        "delivery_band": "delivery-led",
         "series": "EQ",
-        "turnover_cr_last": 1.19,
+        "turnover_cr_last": 1.92,
         "industry_share_pct": 1.6,
         "industry_peer_count": 8,
         "industry_share_change_pp": 0.0,
@@ -4064,9 +4065,9 @@
         "security"
       ],
       "_fetched": {
-        "price": "2026-11-09T10:10:08+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:17+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       }
     }
   ],
@@ -4078,7 +4079,7 @@
       "target": "1460.00",
       "growth_pct": "+117.6%",
       "catalyst": "Expanding optical fiber and cable capacities to meet hyper-scale data center interconnect demands.",
-      "rating": "Buy",
+      "rating": "N/A",
       "revenue_growth": "+144.6%",
       "earnings_growth": "+11600.0%",
       "analyst_count": 3,
@@ -4087,7 +4088,7 @@
       "target_low": "1350.00",
       "rec_score": 1.7,
       "screener": {
-        "market_cap": 34488.0,
+        "market_cap": 34501.0,
         "current_price": 671.0,
         "pe_ratio": 46.0,
         "dividend_yield": 0.0,
@@ -4190,8 +4191,8 @@
         "isin": "INE089C01029",
         "week52_low": 88.39,
         "week52_high": 1015.2,
-        "pct_above_low": 699.02,
-        "advt_cr": 168.62,
+        "pct_above_low": 659.08,
+        "advt_cr": 168.63,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.0,
@@ -4199,7 +4200,7 @@
         "deliv_pct": null,
         "delivery_band": "trade-to-trade",
         "series": "BE",
-        "turnover_cr_last": 116.4,
+        "turnover_cr_last": 162.56,
         "industry_share_pct": 48.53,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
@@ -4255,29 +4256,29 @@
         "data_centre"
       ],
       "_fetched": {
-        "price": "2026-11-09T10:10:08+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:17+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       }
     },
     {
       "ticker": "ANANTRAJ",
       "name": "Anant Raj",
       "price": "449.55",
-      "target": "680.00",
-      "growth_pct": "+51.3%",
+      "target": "665.00",
+      "growth_pct": "+47.9%",
       "catalyst": "Real-estate developer transitioning commercial properties into major data center hubs in NCR.",
       "rating": "Strong Buy",
       "revenue_growth": "+4.9%",
       "earnings_growth": "+8.5%",
       "analyst_count": 2,
-      "target_median": "680.00",
-      "target_high": "710.00",
+      "target_median": "665.00",
+      "target_high": "680.00",
       "target_low": "650.00",
       "rec_score": 1.5,
       "screener": {
-        "market_cap": 16166.0,
-        "current_price": 449.0,
+        "market_cap": 16178.0,
+        "current_price": 450.0,
         "pe_ratio": 27.1,
         "dividend_yield": 0.22,
         "roce": 12.1,
@@ -4379,16 +4380,16 @@
         "isin": "INE242C01024",
         "week52_low": 436.58,
         "week52_high": 629.95,
-        "pct_above_low": 4.65,
+        "pct_above_low": 2.97,
         "advt_cr": 90.7,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.1,
         "days_to_exit_5cr": 0.3,
-        "deliv_pct": 47.1,
+        "deliv_pct": 42.53,
         "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 17.31,
+        "turnover_cr_last": 57.62,
         "industry_share_pct": 4.59,
         "industry_peer_count": 8,
         "industry_share_change_pp": 0.0,
@@ -4437,9 +4438,9 @@
         "data_centre"
       ],
       "_fetched": {
-        "price": "2026-11-09T10:10:08+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:17+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       }
     },
     {
@@ -4453,10 +4454,10 @@
       "revenue_growth": "+102.2%",
       "earnings_growth": "+5150.0%",
       "screener": {
-        "market_cap": 1030.0,
-        "current_price": 343.0,
+        "market_cap": 1035.0,
+        "current_price": 345.0,
         "pe_ratio": 12.4,
-        "dividend_yield": 0.34,
+        "dividend_yield": 0.36,
         "roce": 8.96,
         "roe": 6.26,
         "q_sales": 355.0,
@@ -4551,16 +4552,16 @@
         "isin": "INE800A01015",
         "week52_low": 111.17,
         "week52_high": 409.5,
-        "pct_above_low": 226.75,
+        "pct_above_low": 210.42,
         "advt_cr": 12.13,
         "liquidity_band": "adequate",
         "sessions": 21,
         "days_to_exit_1cr": 0.4,
         "days_to_exit_5cr": 2.1,
-        "deliv_pct": 41.51,
+        "deliv_pct": 42.65,
         "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 16.94,
+        "turnover_cr_last": 12.33,
         "industry_share_pct": 6.81,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
@@ -4612,9 +4613,9 @@
         "renewable"
       ],
       "_fetched": {
-        "price": "2026-11-09T10:10:08+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:17+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       },
       "upside_capped": "cap"
     },
@@ -4629,9 +4630,9 @@
       "revenue_growth": "+135.4%",
       "earnings_growth": "+252.8%",
       "screener": {
-        "market_cap": 22051.0,
-        "current_price": 369.0,
-        "pe_ratio": 79.7,
+        "market_cap": 22227.0,
+        "current_price": 372.0,
+        "pe_ratio": 80.4,
         "dividend_yield": 0.0,
         "roce": 11.8,
         "q_sales": 1032.0,
@@ -4731,16 +4732,16 @@
         "isin": "INE989C01038",
         "week52_low": 119.7,
         "week52_high": 380.95,
-        "pct_above_low": 210.23,
-        "advt_cr": 43.26,
+        "pct_above_low": 210.48,
+        "advt_cr": 43.27,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.1,
         "days_to_exit_5cr": 0.6,
-        "deliv_pct": 68.0,
+        "deliv_pct": 56.48,
         "delivery_band": "delivery-led",
         "series": "EQ",
-        "turnover_cr_last": 8.82,
+        "turnover_cr_last": 20.71,
         "peer_share_pct": 14.6,
         "peer_share_change_pp": 2.94,
         "peer_share_lookback": 4,
@@ -4758,11 +4759,11 @@
         "hyper_growth_warning": false,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 79.7 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 80.4 > 15 & Price > Intrinsic)",
           "No Dividend Yield"
         ],
         "industry_pe": 46.0,
-        "pe_vs_peers": "73% above peers"
+        "pe_vs_peers": "75% above peers"
       },
       "score": {
         "overall_score": 6,
@@ -4780,7 +4781,7 @@
         "risks": [
           "Promoters cut their stake (-9.98%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 79.7 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 80.4 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Hold / Monitor"
@@ -4795,9 +4796,9 @@
       ],
       "upside_capped": "floor",
       "_fetched": {
-        "price": "2026-11-09T10:10:08+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:17+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       }
     },
     {
@@ -4817,9 +4818,9 @@
         "semiconductor"
       ],
       "_fetched": {
-        "price": "2026-11-09T10:10:08+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:17+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       },
       "earnings_growth": "+123.5%",
       "analyst_count": 21,
@@ -4828,8 +4829,8 @@
       "target_low": "30100.00",
       "rec_score": 2.0,
       "screener": {
-        "market_cap": 125459.0,
-        "current_price": 28147.0,
+        "market_cap": 125471.0,
+        "current_price": 28150.0,
         "pe_ratio": 105.0,
         "dividend_yield": 0.03,
         "roce": 29.4,
@@ -4931,16 +4932,16 @@
         "isin": "INE07Y701011",
         "week52_low": 16210.13,
         "week52_high": 38435.82,
-        "pct_above_low": 71.74,
+        "pct_above_low": 73.66,
         "advt_cr": 401.68,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.1,
-        "deliv_pct": 33.56,
+        "deliv_pct": 34.25,
         "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 48.36,
+        "turnover_cr_last": 428.36,
         "peer_share_pct": 35.3,
         "peer_share_change_pp": -4.09,
         "peer_share_lookback": 4,
@@ -5011,7 +5012,7 @@
       "screener": {
         "market_cap": 147139.0,
         "current_price": 435.0,
-        "pe_ratio": 42.4,
+        "pe_ratio": 42.6,
         "dividend_yield": 0.34,
         "roce": 19.7,
         "roe": 16.4,
@@ -5118,10 +5119,10 @@
         "sessions": 21,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.1,
-        "deliv_pct": 60.89,
+        "deliv_pct": 56.09,
         "delivery_band": "delivery-led",
         "series": "EQ",
-        "turnover_cr_last": 22.19,
+        "turnover_cr_last": 199.64,
         "industry_share_pct": 99.13,
         "industry_peer_count": 4,
         "industry_share_change_pp": 0.0,
@@ -5142,11 +5143,11 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 42.4 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 42.6 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 35.8,
-        "pe_vs_peers": "18% above peers"
+        "industry_pe": 35.9,
+        "pe_vs_peers": "19% above peers"
       },
       "score": {
         "overall_score": 6,
@@ -5166,7 +5167,7 @@
           "Operating margin contracted (-5.0pp)",
           "FII Selling (-1.5%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 42.4 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 42.6 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -5178,9 +5179,9 @@
       "yahoo_industry": "Beverages - Non-Alcoholic",
       "business_keywords": [],
       "_fetched": {
-        "price": "2026-11-09T10:10:08+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:17+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       }
     },
     {
@@ -5199,10 +5200,10 @@
       "target_low": "1050.00",
       "rec_score": 1.3,
       "screener": {
-        "market_cap": 106986.0,
-        "current_price": 1081.0,
-        "pe_ratio": 62.2,
-        "dividend_yield": 0.94,
+        "market_cap": 107273.0,
+        "current_price": 1084.0,
+        "pe_ratio": 62.4,
+        "dividend_yield": 0.92,
         "roce": 9.24,
         "roe": 7.35,
         "q_sales": 5661.0,
@@ -5302,16 +5303,16 @@
         "isin": "INE192A01025",
         "week52_low": 955.0,
         "week52_high": 1223.65,
-        "pct_above_low": 13.09,
+        "pct_above_low": 13.5,
         "advt_cr": 191.98,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.1,
-        "deliv_pct": 50.11,
+        "deliv_pct": 52.93,
         "delivery_band": "delivery-led",
         "series": "EQ",
-        "turnover_cr_last": 8.66,
+        "turnover_cr_last": 144.31,
         "industry_share_pct": 72.86,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
@@ -5332,10 +5333,10 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 62.2 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 62.4 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 35.8,
+        "industry_pe": 35.9,
         "pe_vs_peers": "74% above peers"
       },
       "score": {
@@ -5350,7 +5351,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 62.2 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 62.4 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -5362,9 +5363,9 @@
       "yahoo_industry": "Packaged Foods",
       "business_keywords": [],
       "_fetched": {
-        "price": "2026-11-09T10:10:08+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:17+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       }
     },
     {
@@ -5383,10 +5384,10 @@
       "target_low": "280.00",
       "rec_score": 2.0,
       "screener": {
-        "market_cap": 349014.0,
-        "current_price": 278.0,
+        "market_cap": 349390.0,
+        "current_price": 279.0,
         "pe_ratio": 18.5,
-        "dividend_yield": 5.17,
+        "dividend_yield": 5.2,
         "roce": 38.9,
         "roe": 29.3,
         "q_sales": 20269.0,
@@ -5484,16 +5485,16 @@
         "isin": "INE154A01025",
         "week52_low": 255.9,
         "week52_high": 389.17,
-        "pct_above_low": 10.77,
-        "advt_cr": 538.91,
+        "pct_above_low": 8.95,
+        "advt_cr": 538.93,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.0,
-        "deliv_pct": 55.33,
-        "delivery_band": "delivery-led",
+        "deliv_pct": 45.7,
+        "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 83.47,
+        "turnover_cr_last": 518.87,
         "industry_share_pct": 50.24,
         "industry_peer_count": 5,
         "industry_share_change_pp": 0.0,
@@ -5516,7 +5517,7 @@
           "Fails Debt Limit (Debt > Net Assets)",
           "Fails P/E Screen (P/E 18.5 > 15 & Price > Intrinsic)"
         ],
-        "industry_pe": 35.8,
+        "industry_pe": 35.9,
         "pe_vs_peers": "48% below peers"
       },
       "score": {
@@ -5547,9 +5548,9 @@
       "yahoo_industry": "Tobacco",
       "business_keywords": [],
       "_fetched": {
-        "price": "2026-11-09T10:10:08+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:17+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       }
     },
     {
@@ -5561,17 +5562,17 @@
       "revenue_growth": "+65.7%",
       "yahoo_industry": "Beverages - Non-Alcoholic",
       "_fetched": {
-        "price": "2026-11-09T10:10:08+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:17+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       },
       "earnings_growth": "+56.1%",
       "business_keywords": [],
       "screener": {
-        "market_cap": 2296.0,
-        "current_price": 157.0,
+        "market_cap": 2289.0,
+        "current_price": 156.0,
         "pe_ratio": 29.1,
-        "dividend_yield": 0.09,
+        "dividend_yield": 0.1,
         "roce": 18.2,
         "roe": 16.6,
         "q_sales": 161.0,
@@ -5670,16 +5671,16 @@
         "isin": "INE498Q01014",
         "week52_low": 122.77,
         "week52_high": 184.15,
-        "pct_above_low": 32.58,
+        "pct_above_low": 27.29,
         "advt_cr": 24.34,
         "liquidity_band": "adequate",
         "sessions": 21,
         "days_to_exit_1cr": 0.2,
         "days_to_exit_5cr": 1.0,
-        "deliv_pct": 54.95,
+        "deliv_pct": 59.17,
         "delivery_band": "delivery-led",
         "series": "EQ",
-        "turnover_cr_last": 4.25,
+        "turnover_cr_last": 13.49,
         "industry_share_pct": 2.07,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
@@ -5701,7 +5702,7 @@
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)"
         ],
-        "industry_pe": 35.8,
+        "industry_pe": 35.9,
         "pe_vs_peers": "19% below peers"
       },
       "score": {
@@ -5736,10 +5737,10 @@
       "name": "Apollo Hospitals Enterprise",
       "catalyst": "Largest hospital network; bed-capacity expansion and the Heal-in-India medical tourism push.",
       "screener": {
-        "market_cap": 122763.0,
-        "current_price": 8538.0,
-        "pe_ratio": 54.2,
-        "dividend_yield": 0.24,
+        "market_cap": 122929.0,
+        "current_price": 8550.0,
+        "pe_ratio": 54.3,
+        "dividend_yield": 0.23,
         "roce": 17.4,
         "roe": 21.5,
         "q_sales": 7615.0,
@@ -5839,16 +5840,16 @@
         "isin": "INE437A01024",
         "week52_low": 6786.08,
         "week52_high": 8946.58,
-        "pct_above_low": 24.22,
+        "pct_above_low": 25.99,
         "advt_cr": 477.31,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.1,
-        "deliv_pct": 42.41,
+        "deliv_pct": 49.77,
         "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 24.0,
+        "turnover_cr_last": 424.91,
         "industry_share_pct": 32.89,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
@@ -5869,10 +5870,10 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 54.2 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 54.3 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 54.4,
+        "industry_pe": 54.5,
         "pe_vs_peers": "In line with peers"
       },
       "price": "8549.50",
@@ -5881,7 +5882,7 @@
       "earnings_growth": "+31.9%",
       "analyst_count": 30,
       "target_median": "10000.00",
-      "target_high": "10800.00",
+      "target_high": "10770.00",
       "target_low": "6230.00",
       "target": "10000.00",
       "rec_score": 1.5,
@@ -5901,7 +5902,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 54.2 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 54.3 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -5913,9 +5914,9 @@
       "yahoo_industry": "Medical Care Facilities",
       "business_keywords": [],
       "_fetched": {
-        "price": "2026-11-09T10:10:08+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:17+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       }
     },
     {
@@ -6026,16 +6027,16 @@
         "isin": "INE027H01010",
         "week52_low": 815.0,
         "week52_high": 1179.0,
-        "pct_above_low": 13.62,
-        "advt_cr": 344.0,
+        "pct_above_low": 12.27,
+        "advt_cr": 344.01,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.1,
-        "deliv_pct": 49.48,
-        "delivery_band": "mixed",
+        "deliv_pct": 50.66,
+        "delivery_band": "delivery-led",
         "series": "EQ",
-        "turnover_cr_last": 9.25,
+        "turnover_cr_last": 158.26,
         "industry_share_pct": 11.1,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
@@ -6059,7 +6060,7 @@
           "Fails P/E Screen (P/E 62.7 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 54.4,
+        "industry_pe": 54.5,
         "pe_vs_peers": "15% above peers"
       },
       "price": "915.00",
@@ -6101,9 +6102,9 @@
       "yahoo_industry": "Medical Care Facilities",
       "business_keywords": [],
       "_fetched": {
-        "price": "2026-11-09T10:10:08+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:17+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       }
     },
     {
@@ -6111,9 +6112,9 @@
       "name": "Fortis Healthcare",
       "catalyst": "Hospital and diagnostics network benefiting from insurance penetration and Ayushman Bharat volumes.",
       "screener": {
-        "market_cap": 58358.0,
-        "current_price": 773.0,
-        "pe_ratio": 54.4,
+        "market_cap": 58475.0,
+        "current_price": 775.0,
+        "pe_ratio": 54.5,
         "dividend_yield": 0.13,
         "roce": 13.4,
         "roe": 11.2,
@@ -6214,16 +6215,16 @@
         "isin": "INE061F01013",
         "week52_low": 712.9,
         "week52_high": 989.3,
-        "pct_above_low": 8.52,
+        "pct_above_low": 8.65,
         "advt_cr": 114.97,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.2,
-        "deliv_pct": 42.6,
+        "deliv_pct": 46.68,
         "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 13.12,
+        "turnover_cr_last": 55.27,
         "industry_share_pct": 11.81,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
@@ -6244,10 +6245,10 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 54.4 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 54.5 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 54.4,
+        "industry_pe": 54.5,
         "pe_vs_peers": "In line with peers"
       },
       "price": "774.55",
@@ -6255,12 +6256,12 @@
       "revenue_growth": "+17.3%",
       "earnings_growth": "-2.8%",
       "analyst_count": 20,
-      "target_median": "1082.50",
+      "target_median": "1062.50",
       "target_high": "1180.00",
       "target_low": "810.00",
-      "target": "1082.50",
+      "target": "1062.50",
       "rec_score": 1.4,
-      "growth_pct": "+39.8%",
+      "growth_pct": "+37.2%",
       "score": {
         "overall_score": 4,
         "fundamental_score": -4,
@@ -6277,7 +6278,7 @@
         "risks": [
           "FII Selling (-2.0%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 54.4 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 54.5 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -6289,9 +6290,9 @@
       "yahoo_industry": "Medical Care Facilities",
       "business_keywords": [],
       "_fetched": {
-        "price": "2026-11-09T10:10:08+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:17+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       }
     },
     {
@@ -6306,9 +6307,9 @@
       "revenue_growth": "+73.0%",
       "yahoo_industry": "Medical Care Facilities",
       "_fetched": {
-        "price": "2026-11-09T10:10:08+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:17+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       },
       "earnings_growth": "+16.5%",
       "target_median": "2285.00",
@@ -6317,10 +6318,10 @@
       "rec_score": 1.3,
       "business_keywords": [],
       "screener": {
-        "market_cap": 38657.0,
+        "market_cap": 38659.0,
         "current_price": 1892.0,
-        "pe_ratio": 42.6,
-        "dividend_yield": 0.23,
+        "pe_ratio": 42.7,
+        "dividend_yield": 0.24,
         "roce": 15.5,
         "roe": 20.5,
         "q_sales": 2844.0,
@@ -6420,16 +6421,16 @@
         "isin": "INE410P01011",
         "week52_low": 1621.41,
         "week52_high": 2038.68,
-        "pct_above_low": 18.43,
+        "pct_above_low": 16.67,
         "advt_cr": 30.38,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.2,
         "days_to_exit_5cr": 0.8,
-        "deliv_pct": 61.75,
+        "deliv_pct": 56.56,
         "delivery_band": "delivery-led",
         "series": "EQ",
-        "turnover_cr_last": 4.07,
+        "turnover_cr_last": 16.93,
         "industry_share_pct": 12.28,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
@@ -6450,10 +6451,10 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 42.6 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 42.7 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 54.4,
+        "industry_pe": 54.5,
         "pe_vs_peers": "22% below peers"
       },
       "score": {
@@ -6472,7 +6473,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 42.6 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 42.7 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -6486,26 +6487,26 @@
       "ticker": "ASTERDM",
       "name": "Aster DM Quality",
       "price": "733.50",
-      "target": "905.00",
-      "growth_pct": "+23.4%",
+      "target": "897.50",
+      "growth_pct": "+22.4%",
       "analyst_count": 12,
       "catalyst": "Auto-discovered via media radar. Catalyst: Policy tailwinds in the healthcare_hospitals segment.",
       "rating": "Buy",
       "revenue_growth": "+136.3%",
       "yahoo_industry": "Medical Care Facilities",
       "_fetched": {
-        "price": "2026-11-09T10:10:08+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:17+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       },
       "earnings_growth": "+49.8%",
-      "target_median": "905.00",
+      "target_median": "897.50",
       "target_high": "1070.00",
-      "target_low": "810.00",
+      "target_low": "850.00",
       "rec_score": 1.6,
       "business_keywords": [],
       "screener": {
-        "market_cap": 63972.0,
+        "market_cap": 63937.0,
         "current_price": 734.0,
         "pe_ratio": 122.0,
         "dividend_yield": 0.41,
@@ -6608,18 +6609,19 @@
         "isin": "INE914M01019",
         "week52_low": 552.83,
         "week52_high": 869.7,
-        "pct_above_low": 35.55,
+        "pct_above_low": 32.68,
         "advt_cr": 66.92,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.1,
         "days_to_exit_5cr": 0.4,
-        "deliv_pct": 17.4,
-        "delivery_band": "churn",
+        "deliv_pct": 39.14,
+        "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 107.74,
+        "turnover_cr_last": 150.96,
         "industry_share_pct": 12.22,
         "industry_peer_count": 7,
+        "industry_share_change_pp": 0.0,
         "peer_share_pct": 15.2,
         "peer_share_change_pp": 6.35,
         "peer_share_lookback": 4,
@@ -6639,22 +6641,22 @@
           "Fails Debt Limit (Debt > Net Assets)",
           "Fails P/E Screen (P/E 122.0 > 15 & Price > Intrinsic)"
         ],
-        "industry_pe": 54.4,
+        "industry_pe": 54.5,
         "pe_vs_peers": "124% above peers"
       },
       "score": {
-        "overall_score": 3,
-        "fundamental_score": -1,
+        "overall_score": 4,
+        "fundamental_score": 0,
         "momentum_score": 4,
         "confidence": "High",
         "reasons": [
           "Policy Notification: Reports of Audit Committee and Independent Directors of the Company certifying that the Company has compensated the eligible shareholders of Quality Care India Limited who…",
           "Strong revenue growth (TTM +50.5%)",
           "Operating Margin Expansion (+3.0%)",
+          "Liquid (Rs 67 Cr traded daily)",
           "FII Accumulation (+1.73%)"
         ],
         "risks": [
-          "Rs 107.74 Cr traded but only 17% delivered — most of that volume is intraday churn, so the liquidity band flatters this name.",
           "Fails Debt Limit (Debt > Net Assets)",
           "Fails P/E Screen (P/E 122.0 > 15 & Price > Intrinsic)"
         ],
@@ -6672,10 +6674,10 @@
       "name": "Indian Hotels Company",
       "catalyst": "Taj operator scaling asset-light management contracts against record domestic travel demand.",
       "screener": {
-        "market_cap": 126685.0,
-        "current_price": 890.0,
+        "market_cap": 126920.0,
+        "current_price": 892.0,
         "pe_ratio": 63.1,
-        "dividend_yield": 0.37,
+        "dividend_yield": 0.36,
         "roce": 17.1,
         "roe": 15.4,
         "q_sales": 2484.0,
@@ -6774,17 +6776,17 @@
         "accounts": "consolidated",
         "isin": "INE053A01029",
         "week52_low": 580.17,
-        "week52_high": 889.0,
-        "pct_above_low": 53.23,
+        "week52_high": 891.65,
+        "pct_above_low": 53.69,
         "advt_cr": 488.38,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.1,
-        "deliv_pct": 54.64,
+        "deliv_pct": 64.06,
         "delivery_band": "delivery-led",
         "series": "EQ",
-        "turnover_cr_last": 37.62,
+        "turnover_cr_last": 531.35,
         "industry_share_pct": 41.26,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
@@ -6850,9 +6852,9 @@
       "yahoo_industry": "Lodging",
       "business_keywords": [],
       "_fetched": {
-        "price": "2026-11-09T10:10:08+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:17+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       }
     },
     {
@@ -6860,10 +6862,10 @@
       "name": "Chalet Hotels",
       "catalyst": "Business-hotel portfolio near airports and office hubs, geared to corporate travel recovery.",
       "screener": {
-        "market_cap": 17796.0,
-        "current_price": 813.0,
+        "market_cap": 17779.0,
+        "current_price": 812.0,
         "pe_ratio": 29.8,
-        "dividend_yield": 0.24,
+        "dividend_yield": 0.25,
         "roce": 17.0,
         "roe": 19.0,
         "q_sales": 502.0,
@@ -6963,16 +6965,16 @@
         "isin": "INE427F01016",
         "week52_low": 722.67,
         "week52_high": 901.47,
-        "pct_above_low": 13.23,
+        "pct_above_low": 12.34,
         "advt_cr": 7.53,
         "liquidity_band": "adequate",
         "sessions": 21,
         "days_to_exit_1cr": 0.7,
         "days_to_exit_5cr": 3.3,
-        "deliv_pct": 55.85,
-        "delivery_band": "delivery-led",
+        "deliv_pct": 37.68,
+        "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 0.52,
+        "turnover_cr_last": 7.32,
         "industry_share_pct": 8.34,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
@@ -7003,12 +7005,12 @@
       "revenue_growth": "-31.7%",
       "earnings_growth": "+39.6%",
       "analyst_count": 21,
-      "target_median": "1010.00",
+      "target_median": "980.00",
       "target_high": "1250.00",
       "target_low": "890.00",
-      "target": "1010.00",
+      "target": "980.00",
       "rec_score": 1.2,
-      "growth_pct": "+24.4%",
+      "growth_pct": "+20.7%",
       "score": {
         "overall_score": 4,
         "fundamental_score": -2,
@@ -7036,20 +7038,20 @@
       "business_keywords": [],
       "fundamental_value": 143.8,
       "_fetched": {
-        "price": "2026-11-09T10:10:08+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:17+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       },
-      "thesis_broken_runs": 4
+      "thesis_broken_runs": 5
     },
     {
       "ticker": "LEMONTREE",
       "name": "Lemon Tree Hotels",
       "catalyst": "Mid-market chain expanding into tier-2 cities as UDAN air connectivity widens the travel base.",
       "screener": {
-        "market_cap": 9194.0,
+        "market_cap": 9184.0,
         "current_price": 116.0,
-        "pe_ratio": 34.5,
+        "pe_ratio": 34.4,
         "dividend_yield": 0.0,
         "roce": 14.1,
         "roe": 19.2,
@@ -7150,16 +7152,16 @@
         "isin": "INE970X01018",
         "week52_low": 101.11,
         "week52_high": 164.53,
-        "pct_above_low": 17.11,
+        "pct_above_low": 14.65,
         "advt_cr": 38.51,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.1,
         "days_to_exit_5cr": 0.6,
-        "deliv_pct": 56.07,
+        "deliv_pct": 51.11,
         "delivery_band": "delivery-led",
         "series": "EQ",
-        "turnover_cr_last": 13.77,
+        "turnover_cr_last": 19.21,
         "industry_share_pct": 6.0,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
@@ -7180,7 +7182,7 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 34.5 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 34.4 > 15 & Price > Intrinsic)",
           "No Dividend Yield",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
@@ -7214,7 +7216,7 @@
         "risks": [
           "FII Selling (-1.17%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 34.5 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 34.4 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -7226,9 +7228,9 @@
       "yahoo_industry": "Lodging",
       "business_keywords": [],
       "_fetched": {
-        "price": "2026-11-09T10:10:08+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:17+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       }
     },
     {
@@ -7238,13 +7240,13 @@
       "target": "700.00",
       "growth_pct": "+6.0%",
       "catalyst": "Brookfield-backed luxury palace-hotel owner and operator, growing revenue over 20% a year at 40%-plus margins after IPO proceeds halved its debt.",
-      "rating": "N/A",
+      "rating": "Strong Buy",
       "revenue_growth": "+32.6%",
       "yahoo_industry": "Lodging",
       "_fetched": {
-        "price": "2026-11-09T10:10:08+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:18+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       },
       "earnings_growth": "+20.4%",
       "analyst_count": 18,
@@ -7254,9 +7256,9 @@
       "rec_score": 1.2,
       "business_keywords": [],
       "screener": {
-        "market_cap": 22228.0,
-        "current_price": 666.0,
-        "pe_ratio": 47.6,
+        "market_cap": 22050.0,
+        "current_price": 660.0,
+        "pe_ratio": 47.1,
         "dividend_yield": 0.0,
         "roce": 8.73,
         "roe": 8.21,
@@ -7349,16 +7351,16 @@
         "isin": "INE0AQ201015",
         "week52_low": 397.65,
         "week52_high": 684.55,
-        "pct_above_low": 72.15,
+        "pct_above_low": 66.04,
         "advt_cr": 52.41,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.1,
         "days_to_exit_5cr": 0.5,
-        "deliv_pct": 44.92,
-        "delivery_band": "mixed",
+        "deliv_pct": 56.92,
+        "delivery_band": "delivery-led",
         "series": "EQ",
-        "turnover_cr_last": 4.73,
+        "turnover_cr_last": 39.05,
         "industry_share_pct": 6.84,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
@@ -7379,11 +7381,11 @@
         "hyper_growth_warning": false,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 47.6 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 47.1 > 15 & Price > Intrinsic)",
           "No Dividend Yield"
         ],
         "industry_pe": 37.2,
-        "pe_vs_peers": "28% above peers"
+        "pe_vs_peers": "27% above peers"
       },
       "score": {
         "overall_score": 0,
@@ -7399,7 +7401,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 47.6 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 47.1 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Avoid / High Risk"
@@ -7420,9 +7422,9 @@
       "revenue_growth": "+25.6%",
       "yahoo_industry": "Resorts & Casinos",
       "_fetched": {
-        "price": "2026-11-09T10:10:08+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:18+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       },
       "earnings_growth": "+50.0%",
       "target_median": "210.00",
@@ -7434,7 +7436,7 @@
         "market_cap": 36852.0,
         "current_price": 177.0,
         "pe_ratio": 37.2,
-        "dividend_yield": 0.56,
+        "dividend_yield": 0.57,
         "roce": 11.2,
         "roe": 7.89,
         "q_sales": 1054.0,
@@ -7521,16 +7523,16 @@
         "isin": "INE379A01028",
         "week52_low": 140.85,
         "week52_high": 207.82,
-        "pct_above_low": 25.87,
+        "pct_above_low": 25.6,
         "advt_cr": 73.29,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.1,
         "days_to_exit_5cr": 0.3,
-        "deliv_pct": 58.54,
+        "deliv_pct": 53.28,
         "delivery_band": "delivery-led",
         "series": "EQ",
-        "turnover_cr_last": 21.22,
+        "turnover_cr_last": 75.26,
         "industry_share_pct": 17.51,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
@@ -7587,21 +7589,21 @@
       "ticker": "THERMAX",
       "name": "Thermax",
       "price": "2785.90",
-      "target": "4100.00",
-      "growth_pct": "+47.2%",
+      "target": "4060.00",
+      "growth_pct": "+45.7%",
       "catalyst": "Industrial energy & environment engineering leader, scaling green hydrogen and boiler manufacturing capacity.",
       "rating": "Buy",
       "revenue_growth": "+7.1%",
       "earnings_growth": "-83.4%",
       "analyst_count": 20,
-      "target_median": "4100.00",
+      "target_median": "4060.00",
       "target_high": "5325.00",
       "target_low": "3000.00",
       "rec_score": 2.5,
       "screener": {
-        "market_cap": 33065.0,
-        "current_price": 2775.0,
-        "pe_ratio": 60.7,
+        "market_cap": 33196.0,
+        "current_price": 2786.0,
+        "pe_ratio": 60.9,
         "dividend_yield": 0.5,
         "roce": 13.9,
         "roe": 10.6,
@@ -7700,18 +7702,18 @@
         "dii_change": -0.28,
         "accounts": "consolidated",
         "isin": "INE152A01029",
-        "week52_low": 2834.12,
+        "week52_low": 2785.9,
         "week52_high": 4962.43,
-        "pct_above_low": 0.2,
+        "pct_above_low": 0.0,
         "advt_cr": 93.71,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.1,
         "days_to_exit_5cr": 0.3,
-        "deliv_pct": 39.63,
+        "deliv_pct": 41.5,
         "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 35.36,
+        "turnover_cr_last": 111.86,
         "industry_share_pct": 8.57,
         "industry_peer_count": 8,
         "industry_share_change_pp": 0.0,
@@ -7732,9 +7734,9 @@
         "hyper_growth_warning": false,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 60.7 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 60.9 > 15 & Price > Intrinsic)"
         ],
-        "industry_pe": 51.1,
+        "industry_pe": 51.2,
         "pe_vs_peers": "19% above peers"
       },
       "score": {
@@ -7750,7 +7752,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 60.7 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 60.9 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Hold / Monitor"
@@ -7765,31 +7767,31 @@
         "semiconductor"
       ],
       "_fetched": {
-        "price": "2026-11-09T10:10:08+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:18+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       }
     },
     {
       "ticker": "KIRLOSENG",
       "name": "Kirloskar Oil Engines",
       "price": "1622.70",
-      "target": "2565.50",
-      "growth_pct": "+58.1%",
+      "target": "2488.00",
+      "growth_pct": "+53.3%",
       "catalyst": "Legacy engineering major pivoting to power generation and farm equipment manufacturing under 'Make in India'.",
       "rating": "Strong Buy",
       "revenue_growth": "+17.2%",
       "earnings_growth": "-19.3%",
       "analyst_count": 6,
-      "target_median": "2565.50",
-      "target_high": "2800.00",
-      "target_low": "2056.00",
+      "target_median": "2488.00",
+      "target_high": "2600.00",
+      "target_low": "1970.00",
       "rec_score": 1.3,
       "screener": {
-        "market_cap": 23660.0,
-        "current_price": 1625.0,
-        "pe_ratio": 43.9,
-        "dividend_yield": 0.45,
+        "market_cap": 23622.0,
+        "current_price": 1623.0,
+        "pe_ratio": 43.8,
+        "dividend_yield": 0.43,
         "roce": 14.6,
         "roe": 17.5,
         "q_sales": 2284.0,
@@ -7889,16 +7891,16 @@
         "isin": "INE146L01010",
         "week52_low": 1087.83,
         "week52_high": 2486.64,
-        "pct_above_low": 50.1,
+        "pct_above_low": 49.17,
         "advt_cr": 100.34,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.2,
-        "deliv_pct": 46.23,
+        "deliv_pct": 37.8,
         "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 14.58,
+        "turnover_cr_last": 125.73,
         "industry_share_pct": 24.08,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
@@ -7919,10 +7921,10 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 43.9 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 43.8 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 51.1,
+        "industry_pe": 51.2,
         "pe_vs_peers": "14% below peers"
       },
       "score": {
@@ -7941,7 +7943,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 43.9 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 43.8 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -7957,9 +7959,9 @@
         "renewable"
       ],
       "_fetched": {
-        "price": "2026-11-09T10:10:08+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:18+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       }
     },
     {
@@ -7978,9 +7980,9 @@
       "target_low": "638.00",
       "rec_score": 1.5,
       "screener": {
-        "market_cap": 17744.0,
-        "current_price": 560.0,
-        "pe_ratio": 37.4,
+        "market_cap": 17554.0,
+        "current_price": 554.0,
+        "pe_ratio": 37.1,
         "dividend_yield": 0.49,
         "roce": 22.1,
         "roe": 19.0,
@@ -8081,16 +8083,16 @@
         "isin": "INE285A01027",
         "week52_low": 423.03,
         "week52_high": 642.1,
-        "pct_above_low": 32.53,
+        "pct_above_low": 30.94,
         "advt_cr": 18.85,
         "liquidity_band": "adequate",
         "sessions": 21,
         "days_to_exit_1cr": 0.3,
         "days_to_exit_5cr": 1.3,
-        "deliv_pct": 46.25,
+        "deliv_pct": 43.63,
         "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 6.11,
+        "turnover_cr_last": 14.46,
         "industry_share_pct": 11.96,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
@@ -8111,11 +8113,11 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 37.4 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 37.1 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 51.1,
-        "pe_vs_peers": "27% below peers"
+        "industry_pe": 51.2,
+        "pe_vs_peers": "28% below peers"
       },
       "score": {
         "overall_score": 8,
@@ -8134,7 +8136,7 @@
         "risks": [
           "FII Selling (-1.7%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 37.4 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 37.1 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -8146,9 +8148,9 @@
       "yahoo_industry": "Specialty Industrial Machinery",
       "business_keywords": [],
       "_fetched": {
-        "price": "2026-11-09T10:10:08+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:18+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       }
     },
     {
@@ -8166,9 +8168,9 @@
       "target_high": "10240.00",
       "target_low": "8000.00",
       "screener": {
-        "market_cap": 16896.0,
-        "current_price": 5493.0,
-        "pe_ratio": 124.0,
+        "market_cap": 16969.0,
+        "current_price": 5516.0,
+        "pe_ratio": 125.0,
         "dividend_yield": 0.0,
         "roce": 15.1,
         "roe": 12.4,
@@ -8269,16 +8271,16 @@
         "isin": "INE864I01014",
         "week52_low": 2339.4,
         "week52_high": 8374.5,
-        "pct_above_low": 144.53,
-        "advt_cr": 162.07,
+        "pct_above_low": 135.81,
+        "advt_cr": 162.08,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.2,
-        "deliv_pct": 52.92,
-        "delivery_band": "delivery-led",
+        "deliv_pct": 47.39,
+        "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 57.18,
+        "turnover_cr_last": 258.28,
         "peer_share_pct": 2.3,
         "peer_share_change_pp": 1.08,
         "peer_share_lookback": 4,
@@ -8296,11 +8298,11 @@
         "hyper_growth_warning": false,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 124.0 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 125.0 > 15 & Price > Intrinsic)",
           "No Dividend Yield"
         ],
-        "industry_pe": 51.1,
-        "pe_vs_peers": "143% above peers"
+        "industry_pe": 51.2,
+        "pe_vs_peers": "144% above peers"
       },
       "score": {
         "overall_score": 7,
@@ -8319,7 +8321,7 @@
         "risks": [
           "FII Selling (-3.93%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 124.0 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 125.0 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Hold / Monitor"
@@ -8333,9 +8335,9 @@
         "defence"
       ],
       "_fetched": {
-        "price": "2026-11-09T10:10:08+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:18+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       }
     },
     {
@@ -8355,9 +8357,9 @@
         "thermal"
       ],
       "_fetched": {
-        "price": "2026-11-09T10:10:08+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:18+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       },
       "earnings_growth": "+118.5%",
       "target_median": "500.00",
@@ -8365,10 +8367,10 @@
       "target_low": "140.00",
       "rec_score": 2.7,
       "screener": {
-        "market_cap": 146943.0,
-        "current_price": 422.0,
-        "pe_ratio": 51.1,
-        "dividend_yield": 0.34,
+        "market_cap": 147274.0,
+        "current_price": 423.0,
+        "pe_ratio": 51.2,
+        "dividend_yield": 0.33,
         "roce": 9.14,
         "roe": 6.25,
         "q_sales": 9300.0,
@@ -8468,16 +8470,16 @@
         "isin": "INE257A01026",
         "week52_low": 241.72,
         "week52_high": 439.9,
-        "pct_above_low": 72.6,
-        "advt_cr": 550.7,
+        "pct_above_low": 74.97,
+        "advt_cr": 550.72,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.0,
-        "deliv_pct": 42.36,
+        "deliv_pct": 35.25,
         "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 49.96,
+        "turnover_cr_last": 426.15,
         "industry_share_pct": 28.92,
         "industry_peer_count": 8,
         "industry_share_change_pp": 0.0,
@@ -8498,9 +8500,9 @@
         "hyper_growth_warning": false,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 51.1 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 51.2 > 15 & Price > Intrinsic)"
         ],
-        "industry_pe": 51.1,
+        "industry_pe": 51.2,
         "pe_vs_peers": "In line with peers"
       },
       "score": {
@@ -8518,7 +8520,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 51.1 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 51.2 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Hold / Monitor"
@@ -8545,10 +8547,10 @@
       "target_low": "3500.00",
       "rec_score": 1.9,
       "screener": {
-        "market_cap": 114320.0,
-        "current_price": 4124.0,
-        "pe_ratio": 49.2,
-        "dividend_yield": 1.61,
+        "market_cap": 114628.0,
+        "current_price": 4135.0,
+        "pe_ratio": 49.3,
+        "dividend_yield": 1.6,
         "roce": 39.5,
         "roe": 30.2,
         "q_sales": 3301.0,
@@ -8648,18 +8650,18 @@
         "isin": "INE298A01020",
         "week52_low": 3880.42,
         "week52_high": 5832.62,
-        "pct_above_low": 6.05,
+        "pct_above_low": 6.57,
         "advt_cr": 362.09,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.1,
-        "deliv_pct": 37.37,
-        "delivery_band": "mixed",
+        "deliv_pct": 52.55,
+        "delivery_band": "delivery-led",
         "series": "EQ",
-        "turnover_cr_last": 43.41,
-        "peer_share_pct": 26.5,
-        "peer_share_change_pp": -3.18,
+        "turnover_cr_last": 291.99,
+        "peer_share_pct": 25.4,
+        "peer_share_change_pp": -3.85,
         "peer_share_lookback": 4,
         "peer_group_size": 5,
         "revenue_yoy_pct": 4.1,
@@ -8675,11 +8677,11 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 49.2 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 49.3 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 49.2,
-        "pe_vs_peers": "In line with peers"
+        "industry_pe": 74.6,
+        "pe_vs_peers": "34% below peers"
       },
       "score": {
         "overall_score": 2,
@@ -8698,7 +8700,7 @@
           "Operating margin contracted (-3.0pp)",
           "FII Selling (-1.72%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 49.2 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 49.3 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -8713,11 +8715,11 @@
         "renewable"
       ],
       "_fetched": {
-        "price": "2026-11-09T10:10:08+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:18+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       },
-      "thesis_broken_runs": 4
+      "thesis_broken_runs": 5
     },
     {
       "ticker": "TVSSCS",
@@ -8729,9 +8731,9 @@
       "rating": "N/A",
       "revenue_growth": "+28.7%",
       "screener": {
-        "market_cap": 5282.0,
+        "market_cap": 5288.0,
         "current_price": 120.0,
-        "pe_ratio": 74.5,
+        "pe_ratio": 74.6,
         "dividend_yield": 0.0,
         "roce": 10.1,
         "roe": 9.7,
@@ -8832,21 +8834,21 @@
         "isin": "INE395N01027",
         "week52_low": 93.96,
         "week52_high": 141.66,
-        "pct_above_low": 27.6,
+        "pct_above_low": 27.32,
         "advt_cr": 5.08,
         "liquidity_band": "adequate",
         "sessions": 21,
         "days_to_exit_1cr": 1.0,
         "days_to_exit_5cr": 4.9,
-        "deliv_pct": 63.48,
+        "deliv_pct": 56.22,
         "delivery_band": "delivery-led",
         "series": "EQ",
-        "turnover_cr_last": 2.04,
+        "turnover_cr_last": 2.3,
         "industry_share_pct": 23.15,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
-        "peer_share_pct": 26.8,
-        "peer_share_change_pp": 2.51,
+        "peer_share_pct": 25.6,
+        "peer_share_change_pp": 1.74,
         "peer_share_lookback": 4,
         "peer_group_size": 5,
         "revenue_yoy_pct": 28.7,
@@ -8862,12 +8864,12 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 74.5 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 74.6 > 15 & Price > Intrinsic)",
           "No Dividend Yield",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 49.2,
-        "pe_vs_peers": "51% above peers"
+        "industry_pe": 74.6,
+        "pe_vs_peers": "In line with peers"
       },
       "score": {
         "overall_score": -1,
@@ -8882,7 +8884,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 74.5 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 74.6 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -8898,9 +8900,9 @@
       ],
       "upside_capped": "floor",
       "_fetched": {
-        "price": "2026-11-09T10:10:09+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:18+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       }
     },
     {
@@ -8914,9 +8916,9 @@
       "revenue_growth": "+15.0%",
       "yahoo_industry": "Integrated Freight & Logistics",
       "_fetched": {
-        "price": "2026-11-09T10:10:09+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:18+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       },
       "earnings_growth": "+81.2%",
       "analyst_count": 5,
@@ -8926,8 +8928,8 @@
       "rec_score": 2.2,
       "business_keywords": [],
       "screener": {
-        "market_cap": 10678.0,
-        "current_price": 4500.0,
+        "market_cap": 10635.0,
+        "current_price": 4482.0,
         "pe_ratio": 30.7,
         "dividend_yield": 0.56,
         "roce": 15.8,
@@ -9029,21 +9031,21 @@
         "isin": "INE233B01017",
         "week52_low": 4170.8,
         "week52_high": 5963.98,
-        "pct_above_low": 9.75,
+        "pct_above_low": 7.45,
         "advt_cr": 6.01,
         "liquidity_band": "adequate",
         "sessions": 21,
         "days_to_exit_1cr": 0.8,
         "days_to_exit_5cr": 4.2,
-        "deliv_pct": 44.06,
+        "deliv_pct": 27.31,
         "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 5.14,
+        "turnover_cr_last": 9.49,
         "industry_share_pct": 12.32,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
-        "peer_share_pct": 14.3,
-        "peer_share_change_pp": -0.26,
+        "peer_share_pct": 13.6,
+        "peer_share_change_pp": -0.64,
         "peer_share_lookback": 4,
         "peer_group_size": 5,
         "revenue_yoy_pct": 14.5,
@@ -9062,8 +9064,8 @@
           "Fails P/E Screen (P/E 30.7 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 49.2,
-        "pe_vs_peers": "38% below peers"
+        "industry_pe": 74.6,
+        "pe_vs_peers": "59% below peers"
       },
       "score": {
         "overall_score": -1,
@@ -9099,9 +9101,9 @@
       "revenue_growth": "+19.8%",
       "yahoo_industry": "Integrated Freight & Logistics",
       "_fetched": {
-        "price": "2026-11-09T10:10:09+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:18+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       },
       "target_median": "537.50",
       "target_high": "600.00",
@@ -9109,9 +9111,9 @@
       "rec_score": 1.4,
       "business_keywords": [],
       "screener": {
-        "market_cap": 32230.0,
-        "current_price": 430.0,
-        "pe_ratio": 153.0,
+        "market_cap": 32466.0,
+        "current_price": 433.0,
+        "pe_ratio": 154.0,
         "dividend_yield": 0.0,
         "roce": 1.01,
         "roe": -0.21,
@@ -9210,21 +9212,21 @@
         "isin": "INE148O01028",
         "week52_low": 370.0,
         "week52_high": 520.3,
-        "pct_above_low": 16.22,
+        "pct_above_low": 17.07,
         "advt_cr": 142.93,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.2,
-        "deliv_pct": 49.2,
-        "delivery_band": "mixed",
+        "deliv_pct": 55.24,
+        "delivery_band": "delivery-led",
         "series": "EQ",
-        "turnover_cr_last": 6.0,
+        "turnover_cr_last": 97.38,
         "industry_share_pct": 21.29,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
-        "peer_share_pct": 24.7,
-        "peer_share_change_pp": 0.66,
+        "peer_share_pct": 23.6,
+        "peer_share_change_pp": -0.02,
         "peer_share_lookback": 4,
         "peer_group_size": 5,
         "revenue_yoy_pct": 19.8,
@@ -9240,12 +9242,12 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 153.0 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 154.0 > 15 & Price > Intrinsic)",
           "No Dividend Yield",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 49.2,
-        "pe_vs_peers": "211% above peers"
+        "industry_pe": 74.6,
+        "pe_vs_peers": "106% above peers"
       },
       "score": {
         "overall_score": 4,
@@ -9253,8 +9255,8 @@
         "momentum_score": 8,
         "confidence": "High",
         "reasons": [
-          "Government Contract/MoU: Delhivery Q2 FY27 Results: Profit Rises to ₹40.6 Crore",
           "Government Contract/MoU: Shadowfax vs Delhivery: Which Logistics Stock Is Better Positioned for Growth After Q2FY27 Results?",
+          "Government Contract/MoU: Delhivery Q2 FY27 Results: Profit Rises to ₹40.6 Crore",
           "Strong revenue growth (TTM +23.7%)",
           "Operating Margin Expansion (+2.2%)",
           "Liquid (Rs 143 Cr traded daily)",
@@ -9263,7 +9265,7 @@
         "risks": [
           "FII Selling (-2.39%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 153.0 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 154.0 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -9274,185 +9276,184 @@
       "estimate_method": "Analyst Consensus"
     },
     {
-      "ticker": "VRLLOG",
-      "name": "VRL Logistics",
-      "price": "323.80",
-      "target": "390.00",
-      "growth_pct": "+20.4%",
+      "ticker": "SHADOWFAX",
+      "name": "Shadowfax Technologies",
+      "price": "284.95",
+      "target": "343.50",
+      "growth_pct": "+20.5%",
       "analyst_count": 6,
       "catalyst": "Auto-discovered via media radar. Catalyst: Policy tailwinds in the logistics_heavy_capital segment.",
-      "rating": "N/A",
-      "revenue_growth": "+19.7%",
-      "yahoo_industry": "Trucking",
+      "rating": "Strong Buy",
+      "revenue_growth": "+56.6%",
+      "yahoo_industry": "Integrated Freight & Logistics",
       "_fetched": {
-        "price": "2026-11-09T10:10:08+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:18+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       },
-      "earnings_growth": "+106.7%",
-      "target_median": "390.00",
-      "target_high": "520.00",
-      "target_low": "340.00",
+      "earnings_growth": "+356.0%",
+      "target_median": "343.50",
+      "target_high": "360.00",
+      "target_low": "320.00",
+      "rec_score": 1.5,
       "business_keywords": [],
       "screener": {
-        "market_cap": 5638.0,
-        "current_price": 322.0,
-        "pe_ratio": 17.6,
-        "dividend_yield": 1.51,
-        "roce": 18.3,
-        "roe": 21.7,
-        "q_sales": 962.0,
-        "qoq_sales_growth": 9.44,
+        "market_cap": 16777.0,
+        "current_price": 285.0,
+        "pe_ratio": 74.9,
+        "dividend_yield": 0.0,
+        "roce": 10.0,
+        "roe": 10.4,
+        "q_sales": 1538.0,
+        "qoq_sales_growth": 13.25,
         "quarterly_revenue_growth": [
-          827.0,
-          853.0,
-          879.0,
-          962.0
+          1160.0,
+          1237.0,
+          1358.0,
+          1538.0
         ],
         "sales_trend": [
-          825.0,
-          809.0,
-          744.0,
-          797.0,
-          827.0,
-          853.0,
-          879.0,
-          962.0
+          701.0,
+          712.0,
+          824.0,
+          982.0,
+          1160.0,
+          1237.0,
+          1358.0,
+          1538.0
         ],
-        "q_opm": 23.0,
+        "q_opm": 7.0,
         "quarterly_ebitda_margin": [
-          21.0,
-          21.0,
-          21.0,
-          23.0
+          6.0,
+          7.0,
+          7.0,
+          7.0
         ],
-        "opm_expansion": 2.0,
-        "q_eps": 5.89,
+        "opm_expansion": 0.0,
+        "q_eps": 1.16,
         "eps_trend": [
-          3.4,
-          4.25,
-          2.86,
-          2.85,
-          3.7,
-          4.12,
-          4.6,
-          5.89
+          0.54,
+          -0.65,
+          0.53,
+          0.86,
+          0.7,
+          0.96,
+          1.12,
+          1.16
         ],
-        "ttm_eps": 18.31,
-        "q_net_profit": 103.0,
+        "ttm_eps": 3.94,
+        "q_net_profit": 68.0,
         "operating_margin_trend": [
-          15.0,
-          14.0,
-          18.0,
-          20.0,
-          21.0
+          -8.0,
+          1.0,
+          2.5,
+          5.0,
+          6.0
         ],
         "annual_sales_trend": [
-          2164.0,
-          2649.0,
-          2889.0,
-          3161.0,
-          3221.0,
-          3521.0
+          1415.0,
+          1885.0,
+          2485.0,
+          4202.0,
+          5293.0
         ],
         "annual_eps_trend": [
-          9.06,
-          18.29,
-          5.08,
-          10.46,
-          13.54,
-          18.31
+          -12.35,
+          -0.99,
+          0.42,
+          1.92,
+          3.94
         ],
         "debt_trend": [
-          720.0,
-          1036.0,
-          1228.0,
-          1154.0,
-          1313.0
+          72.0,
+          289.0,
+          393.0,
+          247.0,
+          364.0
         ],
         "cash_flow_trend": [
-          371.0,
-          318.0,
-          424.0,
-          555.0,
-          654.0
+          -73.0,
+          132.0,
+          50.0,
+          350.0
         ],
-        "capex": 192.4,
+        "capex": 307.6,
         "rd_pct": 1.5,
         "roce_trend": [
-          22.0,
-          18.0,
-          11.0,
-          16.0,
-          18.0
+          1.0,
+          4.0,
+          10.0
         ],
-        "debtor_days": 10.0,
-        "working_capital_days": -26.0,
-        "promoter_pct": 60.24,
-        "promoter_change": 0.0,
-        "fii_pct": 3.69,
-        "fii_change": 1.01,
-        "dii_pct": 24.5,
-        "dii_change": -0.42,
-        "accounts": "standalone",
-        "isin": "INE366I01010",
-        "week52_low": 229.89,
-        "week52_high": 318.1,
-        "pct_above_low": 38.37,
-        "advt_cr": 53.53,
+        "debtor_days": 45.0,
+        "working_capital_days": -25.0,
+        "promoter_pct": 16.46,
+        "promoter_change": -0.05,
+        "fii_pct": 16.34,
+        "fii_change": 7.56,
+        "dii_pct": 28.78,
+        "dii_change": 9.68,
+        "accounts": "consolidated",
+        "isin": "INE12UN01015",
+        "week52_low": 107.47,
+        "week52_high": 296.05,
+        "pct_above_low": 165.14,
+        "advt_cr": 132.75,
         "liquidity_band": "liquid",
         "sessions": 21,
-        "days_to_exit_1cr": 0.1,
-        "days_to_exit_5cr": 0.5,
-        "deliv_pct": 43.68,
+        "days_to_exit_1cr": 0.0,
+        "days_to_exit_5cr": 0.2,
+        "deliv_pct": 49.0,
         "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 18.61,
-        "industry_share_pct": 6.68,
+        "turnover_cr_last": 90.33,
+        "industry_share_pct": 10.42,
         "industry_peer_count": 7,
-        "peer_share_pct": 7.7,
-        "peer_share_change_pp": 0.26,
+        "peer_share_pct": 11.8,
+        "peer_share_change_pp": 2.77,
         "peer_share_lookback": 4,
         "peer_group_size": 5,
-        "revenue_yoy_pct": 20.7,
-        "revenue_ttm_growth_pct": 10.9,
-        "revenue_cagr_pct": 10.2,
+        "revenue_yoy_pct": 56.6,
+        "revenue_ttm_growth_pct": 64.4,
+        "revenue_cagr_pct": 39.1,
         "revenue_growth_quality": "ok",
-        "graham_intrinsic_value": 443.1,
-        "owner_earnings": 324.6,
+        "graham_intrinsic_value": 95.3,
+        "owner_earnings": -6.5,
         "retained_earnings_ratio": 2.86,
-        "moat_status": "Strong (Wide Moat)",
+        "moat_status": "Weak/None",
         "is_bargain": false,
         "net_current_assets": null,
-        "hyper_growth_warning": false,
+        "hyper_growth_warning": true,
         "valuation_alerts": [
-          "Fails Debt Limit (Debt > Net Assets)"
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Fails P/E Screen (P/E 74.9 > 15 & Price > Intrinsic)",
+          "No Dividend Yield",
+          "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 49.2,
-        "pe_vs_peers": "64% below peers"
+        "industry_pe": 74.6,
+        "pe_vs_peers": "In line with peers"
       },
       "score": {
-        "overall_score": 11,
-        "fundamental_score": 7,
-        "momentum_score": 4,
+        "overall_score": -1,
+        "fundamental_score": -2,
+        "momentum_score": 1,
         "confidence": "High",
         "reasons": [
-          "Policy Notification: Offer opening advertisement of the Buyback of 87,50,000 equity shares of face value of Rs.10/- each at price of Rs.320/- per share",
-          "Operating Margin Expansion (+2.0%)",
-          "High Return on Equity (ROE: 21.7%)",
-          "Liquid (Rs 54 Cr traded daily)",
-          "FII Accumulation (+1.01%)",
-          "Wide Economic Moat (Sustained Margin Expansion)",
-          "Trading below Graham Intrinsic Value (443.1)"
+          "Sector benefits from macro policy tailwinds (Fallback)",
+          "Strong revenue growth (TTM +64.4%)",
+          "Liquid (Rs 133 Cr traded daily)",
+          "FII Accumulation (+7.56%)",
+          "DII Accumulation (+9.68%)"
         ],
         "risks": [
-          "Fails Debt Limit (Debt > Net Assets)"
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Fails P/E Screen (P/E 74.9 > 15 & Price > Intrinsic)",
+          "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
-          "Buy Candidate"
+          "Avoid / High Risk"
         ]
       },
-      "fundamental_value": 443.1,
+      "fundamental_value": 95.3,
       "estimate_method": "Analyst Consensus"
     }
   ],
@@ -9480,20 +9481,20 @@
         "isin": "INF769K01IB1",
         "week52_low": 144.2,
         "week52_high": 169.61,
-        "pct_above_low": 13.38,
+        "pct_above_low": 13.07,
         "advt_cr": 0.45,
         "liquidity_band": "illiquid",
         "sessions": 21,
         "days_to_exit_1cr": 11.2,
         "days_to_exit_5cr": 56.2,
-        "deliv_pct": 72.85,
-        "delivery_band": "delivery-led",
+        "deliv_pct": 40.08,
+        "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 0.31
+        "turnover_cr_last": 0.29
       },
       "_fetched": {
-        "price": "2026-11-09T10:10:09+00:00",
-        "screener": "2026-11-09T10:11:40+00:00"
+        "price": "2026-11-10T10:16:18+00:00",
+        "screener": "2026-11-10T10:17:49+00:00"
       }
     }
   ],
@@ -9514,9 +9515,9 @@
       "target_low": "9082.00",
       "rec_score": 1.8,
       "screener": {
-        "market_cap": 77092.0,
-        "current_price": 12595.0,
-        "pe_ratio": 49.8,
+        "market_cap": 77141.0,
+        "current_price": 12603.0,
+        "pe_ratio": 49.7,
         "dividend_yield": 0.08,
         "roce": 29.2,
         "roe": 25.2,
@@ -9617,16 +9618,16 @@
         "isin": "INE935N01020",
         "week52_low": 9912.87,
         "week52_high": 15407.14,
-        "pct_above_low": 27.15,
+        "pct_above_low": 27.14,
         "advt_cr": 435.54,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.1,
-        "deliv_pct": 43.44,
+        "deliv_pct": 36.51,
         "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 34.75,
+        "turnover_cr_last": 215.3,
         "industry_share_pct": 71.87,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
@@ -9647,7 +9648,7 @@
         "hyper_growth_warning": false,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 49.8 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 49.7 > 15 & Price > Intrinsic)"
         ],
         "industry_pe": 66.4,
         "pe_vs_peers": "25% below peers"
@@ -9670,7 +9671,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 49.8 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 49.7 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Buy Candidate"
@@ -9681,9 +9682,9 @@
       "yahoo_industry": "Consumer Electronics",
       "business_keywords": [],
       "_fetched": {
-        "price": "2026-11-09T10:10:09+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:18+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       }
     },
     {
@@ -9702,8 +9703,8 @@
       "target_low": "2790.00",
       "rec_score": 3.2,
       "screener": {
-        "market_cap": 22189.0,
-        "current_price": 3301.0,
+        "market_cap": 22183.0,
+        "current_price": 3300.0,
         "pe_ratio": 63.9,
         "dividend_yield": 0.0,
         "roce": 12.7,
@@ -9805,16 +9806,16 @@
         "isin": "INE918Z01012",
         "week52_low": 3076.9,
         "week52_high": 6332.0,
-        "pct_above_low": 6.05,
+        "pct_above_low": 7.25,
         "advt_cr": 204.21,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.1,
-        "deliv_pct": 43.8,
-        "delivery_band": "mixed",
+        "deliv_pct": 24.23,
+        "delivery_band": "churn",
         "series": "EQ",
-        "turnover_cr_last": 21.68,
+        "turnover_cr_last": 129.04,
         "industry_share_pct": 12.24,
         "industry_peer_count": 6,
         "industry_share_change_pp": 0.0,
@@ -9843,19 +9844,19 @@
         "pe_vs_peers": "In line with peers"
       },
       "score": {
-        "overall_score": 6,
-        "fundamental_score": -2,
+        "overall_score": 5,
+        "fundamental_score": -3,
         "momentum_score": 8,
         "confidence": "High",
         "reasons": [
           "Government Contract/MoU: Kaynes Technology incorporates wholly owned subsidiary in Saudi Arabia",
           "Government Contract/MoU [transformative, 212.9% of revenue]: Kaynes Technology Maintains USD 1 Billion Revenue Target by FY28 Despite Current Year Shortfall",
           "Strong revenue growth (TTM +34.9%)",
-          "Liquid (Rs 204 Cr traded daily)",
           "FII Accumulation (+0.26%)",
           "DII Accumulation (+0.69%)"
         ],
         "risks": [
+          "Rs 129.04 Cr traded but only 24% delivered — most of that volume is intraday churn, so the liquidity band flatters this name.",
           "Fails Debt Limit (Debt > Net Assets)",
           "Fails P/E Screen (P/E 63.9 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
@@ -9871,9 +9872,9 @@
         "defence"
       ],
       "_fetched": {
-        "price": "2026-11-09T10:10:09+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:18+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       }
     },
     {
@@ -9892,10 +9893,10 @@
       "target_low": "720.00",
       "rec_score": 1.9,
       "screener": {
-        "market_cap": 125882.0,
-        "current_price": 799.0,
-        "pe_ratio": 90.0,
-        "dividend_yield": 0.17,
+        "market_cap": 126039.0,
+        "current_price": 800.0,
+        "pe_ratio": 90.2,
+        "dividend_yield": 0.16,
         "roce": 26.7,
         "roe": 20.5,
         "q_sales": 3802.0,
@@ -9995,16 +9996,16 @@
         "isin": "INE067A01029",
         "week52_low": 547.89,
         "week52_high": 963.7,
-        "pct_above_low": 42.86,
-        "advt_cr": 319.87,
+        "pct_above_low": 46.01,
+        "advt_cr": 319.88,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.1,
-        "deliv_pct": 42.93,
+        "deliv_pct": 44.49,
         "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 68.35,
+        "turnover_cr_last": 282.21,
         "peer_share_pct": 12.9,
         "peer_share_change_pp": -1.53,
         "peer_share_lookback": 4,
@@ -10022,7 +10023,7 @@
         "hyper_growth_warning": false,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 90.0 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 90.2 > 15 & Price > Intrinsic)"
         ],
         "industry_pe": 66.4,
         "pe_vs_peers": "36% above peers"
@@ -10046,7 +10047,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 90.0 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 90.2 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Buy Candidate"
@@ -10059,9 +10060,9 @@
         "semiconductor"
       ],
       "_fetched": {
-        "price": "2026-11-09T10:10:09+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:18+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       }
     },
     {
@@ -10183,16 +10184,16 @@
         "isin": "INE0DYJ01015",
         "week52_low": 664.67,
         "week52_high": 1732.6,
-        "pct_above_low": 126.43,
+        "pct_above_low": 119.96,
         "advt_cr": 247.12,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.1,
-        "deliv_pct": 37.2,
+        "deliv_pct": 36.37,
         "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 46.87,
+        "turnover_cr_last": 140.97,
         "industry_share_pct": 25.75,
         "industry_peer_count": 6,
         "industry_share_change_pp": 0.0,
@@ -10246,9 +10247,9 @@
         "defence"
       ],
       "_fetched": {
-        "price": "2026-11-09T10:10:09+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:18+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       }
     },
     {
@@ -10263,9 +10264,9 @@
       "revenue_growth": "+42.5%",
       "yahoo_industry": "Electronic Components",
       "_fetched": {
-        "price": "2026-11-09T10:10:09+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:18+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       },
       "earnings_growth": "+422.2%",
       "target_median": "680.00",
@@ -10274,10 +10275,10 @@
       "rec_score": 1.3,
       "business_keywords": [],
       "screener": {
-        "market_cap": 16202.0,
-        "current_price": 565.0,
-        "pe_ratio": 74.7,
-        "dividend_yield": 0.05,
+        "market_cap": 16173.0,
+        "current_price": 564.0,
+        "pe_ratio": 74.6,
+        "dividend_yield": 0.04,
         "roce": 10.3,
         "roe": 6.7,
         "q_sales": 934.0,
@@ -10377,16 +10378,16 @@
         "isin": "INE457L01029",
         "week52_low": 454.24,
         "week52_high": 630.35,
-        "pct_above_low": 19.55,
+        "pct_above_low": 24.16,
         "advt_cr": 92.42,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.1,
         "days_to_exit_5cr": 0.3,
-        "deliv_pct": 28.71,
-        "delivery_band": "mixed",
+        "deliv_pct": 23.11,
+        "delivery_band": "churn",
         "series": "EQ",
-        "turnover_cr_last": 7.9,
+        "turnover_cr_last": 124.36,
         "industry_share_pct": 3.08,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
@@ -10407,27 +10408,27 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 74.7 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 74.6 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "industry_pe": 66.4,
         "pe_vs_peers": "12% above peers"
       },
       "score": {
-        "overall_score": -4,
-        "fundamental_score": -5,
+        "overall_score": -5,
+        "fundamental_score": -6,
         "momentum_score": 1,
         "confidence": "High",
         "reasons": [
           "Sector benefits from macro policy tailwinds (Fallback)",
           "Strong revenue growth (TTM +21.0%)",
-          "Liquid (Rs 92 Cr traded daily)",
           "DII Accumulation (+2.7%)"
         ],
         "risks": [
+          "Rs 124.36 Cr traded but only 23% delivered — most of that volume is intraday churn, so the liquidity band flatters this name.",
           "FII Selling (-1.23%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 74.7 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 74.6 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -10455,9 +10456,9 @@
       "target_low": "1267.00",
       "rec_score": 1.6,
       "screener": {
-        "market_cap": 90739.0,
-        "current_price": 2048.0,
-        "pe_ratio": 41.7,
+        "market_cap": 90695.0,
+        "current_price": 2047.0,
+        "pe_ratio": 41.8,
         "dividend_yield": 0.59,
         "roce": 23.5,
         "roe": 21.4,
@@ -10558,16 +10559,16 @@
         "isin": "INE591G01025",
         "week52_low": 1086.77,
         "week52_high": 2072.0,
-        "pct_above_low": 90.66,
+        "pct_above_low": 88.36,
         "advt_cr": 531.82,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.0,
-        "deliv_pct": 45.95,
-        "delivery_band": "mixed",
+        "deliv_pct": 55.35,
+        "delivery_band": "delivery-led",
         "series": "EQ",
-        "turnover_cr_last": 36.58,
+        "turnover_cr_last": 237.37,
         "industry_share_pct": 2.78,
         "industry_peer_count": 8,
         "industry_share_change_pp": 0.0,
@@ -10588,10 +10589,10 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 41.7 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 41.8 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 33.1,
+        "industry_pe": 33.2,
         "pe_vs_peers": "26% above peers"
       },
       "score": {
@@ -10613,7 +10614,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 41.7 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 41.8 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -10625,31 +10626,31 @@
       "yahoo_industry": "Information Technology Services",
       "business_keywords": [],
       "_fetched": {
-        "price": "2026-11-09T10:10:09+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:18+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       }
     },
     {
       "ticker": "MPHASIS",
       "name": "Mphasis",
       "price": "2455.00",
-      "target": "2772.50",
-      "growth_pct": "+12.9%",
+      "target": "2790.00",
+      "growth_pct": "+13.6%",
       "catalyst": "Direct-core BFS-focused IT services player, key beneficiary of enterprise cloud and cost-takeout deals.",
       "rating": "Buy",
       "revenue_growth": "+17.4%",
       "earnings_growth": "+19.6%",
       "analyst_count": 36,
-      "target_median": "2772.50",
+      "target_median": "2790.00",
       "target_high": "3200.00",
       "target_low": "1770.00",
       "rec_score": 1.8,
       "screener": {
-        "market_cap": 46675.0,
-        "current_price": 2444.0,
-        "pe_ratio": 23.0,
-        "dividend_yield": 2.57,
+        "market_cap": 46878.0,
+        "current_price": 2455.0,
+        "pe_ratio": 23.1,
+        "dividend_yield": 2.53,
         "roce": 22.1,
         "roe": 18.5,
         "q_sales": 4581.0,
@@ -10749,16 +10750,16 @@
         "isin": "INE356A01018",
         "week52_low": 2028.81,
         "week52_high": 2876.48,
-        "pct_above_low": 24.41,
-        "advt_cr": 220.43,
+        "pct_above_low": 21.01,
+        "advt_cr": 220.44,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.1,
-        "deliv_pct": 31.66,
+        "deliv_pct": 49.96,
         "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 12.75,
+        "turnover_cr_last": 215.66,
         "industry_share_pct": 2.08,
         "industry_peer_count": 8,
         "industry_share_change_pp": 0.0,
@@ -10779,10 +10780,10 @@
         "hyper_growth_warning": false,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 23.0 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 23.1 > 15 & Price > Intrinsic)"
         ],
-        "industry_pe": 33.1,
-        "pe_vs_peers": "31% below peers"
+        "industry_pe": 33.2,
+        "pe_vs_peers": "30% below peers"
       },
       "score": {
         "overall_score": 11,
@@ -10801,7 +10802,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 23.0 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 23.1 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Buy Candidate"
@@ -10814,29 +10815,29 @@
         "security"
       ],
       "_fetched": {
-        "price": "2026-11-09T10:10:09+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:18+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       }
     },
     {
       "ticker": "IKS",
       "name": "Inventurus Knowledge Solutions",
       "price": "1651.30",
-      "target": "1965.00",
-      "growth_pct": "+19.0%",
+      "target": "2002.50",
+      "growth_pct": "+21.3%",
       "catalyst": "Healthcare technology and services provider to US physician groups, growing revenue around 20% a year with high returns on capital.",
       "rating": "Buy",
       "revenue_growth": "+103.9%",
       "earnings_growth": "+20.2%",
-      "analyst_count": 9,
-      "target_median": "1965.00",
+      "analyst_count": 10,
+      "target_median": "2002.50",
       "target_high": "2230.00",
-      "target_low": "1730.00",
-      "rec_score": 1.7,
+      "target_low": "1650.00",
+      "rec_score": 1.6,
       "screener": {
-        "market_cap": 28373.0,
-        "current_price": 1653.0,
+        "market_cap": 28347.0,
+        "current_price": 1651.0,
         "pe_ratio": 35.4,
         "dividend_yield": 0.0,
         "roce": 31.5,
@@ -10938,16 +10939,16 @@
         "isin": "INE115Q01022",
         "week52_low": 1327.3,
         "week52_high": 1928.1,
-        "pct_above_low": 27.17,
+        "pct_above_low": 24.41,
         "advt_cr": 19.66,
         "liquidity_band": "adequate",
         "sessions": 21,
         "days_to_exit_1cr": 0.3,
         "days_to_exit_5cr": 1.3,
-        "deliv_pct": 52.03,
+        "deliv_pct": 59.44,
         "delivery_band": "delivery-led",
         "series": "EQ",
-        "turnover_cr_last": 3.21,
+        "turnover_cr_last": 54.85,
         "industry_share_pct": 12.79,
         "industry_peer_count": 8,
         "industry_share_change_pp": 0.0,
@@ -10971,7 +10972,7 @@
           "Fails P/E Screen (P/E 35.4 > 15 & Price > Intrinsic)",
           "No Dividend Yield"
         ],
-        "industry_pe": 33.1,
+        "industry_pe": 33.2,
         "pe_vs_peers": "In line with peers"
       },
       "score": {
@@ -11002,9 +11003,9 @@
       "yahoo_industry": "Health Information Services",
       "business_keywords": [],
       "_fetched": {
-        "price": "2026-11-09T10:10:09+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:18+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       }
     },
     {
@@ -11023,10 +11024,10 @@
       "target_low": "11750.00",
       "rec_score": 1.0,
       "screener": {
-        "market_cap": 87311.0,
-        "current_price": 10020.0,
+        "market_cap": 87476.0,
+        "current_price": 10039.0,
         "pe_ratio": 24.5,
-        "dividend_yield": 3.95,
+        "dividend_yield": 3.98,
         "roce": 45.3,
         "roe": 32.6,
         "q_sales": 1907.0,
@@ -11126,16 +11127,16 @@
         "isin": "INE881D01027",
         "week52_low": 6344.25,
         "week52_high": 12190.0,
-        "pct_above_low": 59.77,
+        "pct_above_low": 58.24,
         "advt_cr": 208.39,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.1,
-        "deliv_pct": 52.77,
-        "delivery_band": "delivery-led",
+        "deliv_pct": 32.74,
+        "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 8.82,
+        "turnover_cr_last": 62.77,
         "peer_share_pct": 5.8,
         "peer_share_change_pp": -0.97,
         "peer_share_lookback": 4,
@@ -11154,15 +11155,16 @@
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)"
         ],
-        "industry_pe": 33.1,
+        "industry_pe": 33.2,
         "pe_vs_peers": "26% below peers"
       },
       "score": {
-        "overall_score": 9,
+        "overall_score": 13,
         "fundamental_score": 5,
-        "momentum_score": 4,
+        "momentum_score": 8,
         "confidence": "High",
         "reasons": [
+          "Policy Notification: Top stocks in news: Dr Reddys, HCL Tech, IndusInd Bank, HPCL, NTPC Green, OFSS, NAM India",
           "Policy Notification: OFSS shares crack 7%; what's spooking Nifty IT's best-performing stock?",
           "Strong revenue growth (TTM +28.2%)",
           "High Return on Capital (ROCE: 45.3%)",
@@ -11176,7 +11178,7 @@
           "Fails Debt Limit (Debt > Net Assets)"
         ],
         "recommendations": [
-          "Hold / Monitor"
+          "Buy Candidate"
         ]
       },
       "fundamental_value": 9076.8,
@@ -11184,9 +11186,9 @@
       "yahoo_industry": "Software - Infrastructure",
       "business_keywords": [],
       "_fetched": {
-        "price": "2026-11-09T10:10:09+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:18+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       }
     },
     {
@@ -11204,7 +11206,7 @@
       "target_high": "700.00",
       "target_low": "645.00",
       "screener": {
-        "market_cap": 4006.0,
+        "market_cap": 4008.0,
         "current_price": 503.0,
         "pe_ratio": 55.0,
         "dividend_yield": 0.0,
@@ -11307,16 +11309,16 @@
         "isin": "INE0ILV01024",
         "week52_low": 461.95,
         "week52_high": 719.35,
-        "pct_above_low": 9.68,
+        "pct_above_low": 8.88,
         "advt_cr": 18.34,
         "liquidity_band": "adequate",
         "sessions": 21,
         "days_to_exit_1cr": 0.3,
         "days_to_exit_5cr": 1.4,
-        "deliv_pct": 49.33,
+        "deliv_pct": 47.87,
         "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 1.22,
+        "turnover_cr_last": 4.12,
         "peer_share_pct": 0.8,
         "peer_share_change_pp": 0.15,
         "peer_share_lookback": 4,
@@ -11338,7 +11340,7 @@
           "No Dividend Yield",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 33.1,
+        "industry_pe": 33.2,
         "pe_vs_peers": "66% above peers"
       },
       "score": {
@@ -11369,9 +11371,9 @@
         "footwear"
       ],
       "_fetched": {
-        "price": "2026-11-09T10:10:09+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:18+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       },
       "fundamental_value": 194.1
     },
@@ -11391,10 +11393,10 @@
       "target_low": "125.00",
       "rec_score": 1.0,
       "screener": {
-        "market_cap": 598.0,
-        "current_price": 106.0,
-        "pe_ratio": 16.6,
-        "dividend_yield": 1.4,
+        "market_cap": 596.0,
+        "current_price": 105.0,
+        "pe_ratio": 16.5,
+        "dividend_yield": 1.42,
         "roce": 7.39,
         "roe": 4.82,
         "q_sales": 265.0,
@@ -11494,16 +11496,16 @@
         "isin": "INE102I01027",
         "week52_low": 90.47,
         "week52_high": 168.06,
-        "pct_above_low": 16.88,
+        "pct_above_low": 16.38,
         "advt_cr": 4.11,
         "liquidity_band": "thin",
         "sessions": 21,
         "days_to_exit_1cr": 1.2,
         "days_to_exit_5cr": 6.1,
-        "deliv_pct": 50.86,
-        "delivery_band": "delivery-led",
+        "deliv_pct": 39.46,
+        "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 0.19,
+        "turnover_cr_last": 0.72,
         "industry_share_pct": 2.13,
         "industry_peer_count": 8,
         "industry_share_change_pp": 0.0,
@@ -11524,9 +11526,9 @@
         "hyper_growth_warning": false,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 16.6 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 16.5 > 15 & Price > Intrinsic)"
         ],
-        "industry_pe": 33.1,
+        "industry_pe": 33.2,
         "pe_vs_peers": "50% below peers"
       },
       "score": {
@@ -11542,7 +11544,7 @@
         "risks": [
           "Thin: Rs 4.11 Cr traded daily, ~1 sessions to exit Rs 1 Cr",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 16.6 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 16.5 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Avoid / High Risk"
@@ -11555,9 +11557,9 @@
         "security"
       ],
       "_fetched": {
-        "price": "2026-11-09T10:10:09+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:18+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       }
     },
     {
@@ -11575,9 +11577,9 @@
         "data_centre"
       ],
       "_fetched": {
-        "price": "2026-11-09T10:10:09+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:18+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       },
       "earnings_growth": "+32.5%",
       "target_median": "1800.00",
@@ -11585,10 +11587,10 @@
       "target_low": "1220.00",
       "rec_score": 2.0,
       "screener": {
-        "market_cap": 176437.0,
-        "current_price": 1800.0,
-        "pe_ratio": 30.8,
-        "dividend_yield": 2.79,
+        "market_cap": 176927.0,
+        "current_price": 1805.0,
+        "pe_ratio": 31.0,
+        "dividend_yield": 2.83,
         "roce": 23.1,
         "roe": 17.5,
         "q_sales": 16180.0,
@@ -11688,16 +11690,16 @@
         "isin": "INE669C01036",
         "week52_low": 1287.33,
         "week52_high": 1829.9,
-        "pct_above_low": 42.15,
+        "pct_above_low": 40.21,
         "advt_cr": 728.97,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.0,
-        "deliv_pct": 46.15,
-        "delivery_band": "mixed",
+        "deliv_pct": 61.38,
+        "delivery_band": "delivery-led",
         "series": "EQ",
-        "turnover_cr_last": 21.76,
+        "turnover_cr_last": 508.65,
         "industry_share_pct": 7.35,
         "industry_peer_count": 8,
         "industry_share_change_pp": 0.0,
@@ -11718,10 +11720,10 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 30.8 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 31.0 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 33.1,
+        "industry_pe": 33.2,
         "pe_vs_peers": "In line with peers"
       },
       "score": {
@@ -11740,7 +11742,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 30.8 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 31.0 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -11767,18 +11769,18 @@
         "security"
       ],
       "_fetched": {
-        "price": "2026-11-09T10:10:09+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:18+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       },
       "earnings_growth": "+12.9%",
       "target_median": "1060.50",
       "target_high": "1201.00",
       "target_low": "920.00",
       "screener": {
-        "market_cap": 14503.0,
-        "current_price": 817.0,
-        "pe_ratio": 50.7,
+        "market_cap": 14470.0,
+        "current_price": 815.0,
+        "pe_ratio": 50.6,
         "dividend_yield": 0.12,
         "roce": 21.6,
         "roe": 25.7,
@@ -11879,16 +11881,16 @@
         "isin": "INE676A01027",
         "week52_low": 460.98,
         "week52_high": 1071.45,
-        "pct_above_low": 82.39,
+        "pct_above_low": 76.74,
         "advt_cr": 88.97,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.1,
         "days_to_exit_5cr": 0.3,
-        "deliv_pct": 48.83,
+        "deliv_pct": 36.76,
         "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 16.03,
+        "turnover_cr_last": 21.98,
         "industry_share_pct": 13.8,
         "industry_peer_count": 8,
         "industry_share_change_pp": 0.0,
@@ -11909,11 +11911,11 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 50.7 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 50.6 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 33.1,
-        "pe_vs_peers": "53% above peers"
+        "industry_pe": 33.2,
+        "pe_vs_peers": "52% above peers"
       },
       "score": {
         "overall_score": 0,
@@ -11929,7 +11931,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 50.7 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 50.6 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -11944,8 +11946,8 @@
     {
       "ticker": "ASMTEC",
       "name": "ASM Technologies",
-      "price": "6300.00",
-      "target": "3150.00",
+      "price": "6309.60",
+      "target": "3154.80",
       "growth_pct": "-50.0%",
       "catalyst": "Engineering design services for semiconductor equipment makers under India Semiconductor Mission (ISM) 2.0.",
       "rating": "N/A",
@@ -11957,10 +11959,10 @@
       "target_low": null,
       "rec_score": null,
       "screener": {
-        "market_cap": 9232.0,
-        "current_price": 6329.0,
+        "market_cap": 9204.0,
+        "current_price": 6310.0,
         "pe_ratio": 109.0,
-        "dividend_yield": 0.25,
+        "dividend_yield": 0.26,
         "roce": 27.0,
         "roe": 25.5,
         "q_sales": 268.0,
@@ -12078,7 +12080,7 @@
           "Fails Debt Limit (Debt > Net Assets)",
           "Fails P/E Screen (P/E 109.0 > 15 & Price > Intrinsic)"
         ],
-        "industry_pe": 101.1,
+        "industry_pe": 101.0,
         "pe_vs_peers": "In line with peers"
       },
       "score": {
@@ -12109,9 +12111,9 @@
         "semiconductor"
       ],
       "_fetched": {
-        "price": "2026-11-09T10:10:10+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:19+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       },
       "fundamental_value": 1386.4,
       "upside_capped": "floor"
@@ -12130,9 +12132,9 @@
         "semiconductor"
       ],
       "_fetched": {
-        "price": "2026-11-09T10:10:09+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:18+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       },
       "earnings_growth": "+145.3%",
       "analyst_count": 16,
@@ -12141,9 +12143,9 @@
       "target_low": "983.00",
       "rec_score": 2.7,
       "screener": {
-        "market_cap": 12443.0,
-        "current_price": 1860.0,
-        "pe_ratio": 93.2,
+        "market_cap": 12413.0,
+        "current_price": 1856.0,
+        "pe_ratio": 92.9,
         "dividend_yield": 0.0,
         "roce": 19.3,
         "roe": 16.5,
@@ -12244,16 +12246,16 @@
         "isin": "INE0LCL01028",
         "week52_low": 803.35,
         "week52_high": 2537.7,
-        "pct_above_low": 143.94,
+        "pct_above_low": 130.97,
         "advt_cr": 67.03,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.1,
         "days_to_exit_5cr": 0.4,
-        "deliv_pct": 39.65,
+        "deliv_pct": 41.73,
         "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 11.17,
+        "turnover_cr_last": 62.21,
         "peer_share_pct": 64.4,
         "peer_share_change_pp": -3.35,
         "peer_share_lookback": 4,
@@ -12271,11 +12273,11 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 93.2 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 92.9 > 15 & Price > Intrinsic)",
           "No Dividend Yield",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 101.1,
+        "industry_pe": 101.0,
         "pe_vs_peers": "In line with peers"
       },
       "score": {
@@ -12294,7 +12296,7 @@
         "risks": [
           "Promoters cut their stake (-4.04%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 93.2 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 92.9 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -12322,9 +12324,9 @@
       "target_low": "924.00",
       "rec_score": 1.7,
       "screener": {
-        "market_cap": 22518.0,
-        "current_price": 826.0,
-        "pe_ratio": 54.3,
+        "market_cap": 22565.0,
+        "current_price": 828.0,
+        "pe_ratio": 54.4,
         "dividend_yield": 0.72,
         "roce": 20.1,
         "roe": 22.1,
@@ -12425,16 +12427,16 @@
         "isin": "INE317I01021",
         "week52_low": 819.3,
         "week52_high": 1172.87,
-        "pct_above_low": 2.84,
+        "pct_above_low": 1.03,
         "advt_cr": 3.91,
         "liquidity_band": "thin",
         "sessions": 21,
         "days_to_exit_1cr": 1.3,
         "days_to_exit_5cr": 6.4,
-        "deliv_pct": 50.14,
+        "deliv_pct": 51.28,
         "delivery_band": "delivery-led",
         "series": "EQ",
-        "turnover_cr_last": 0.37,
+        "turnover_cr_last": 0.86,
         "industry_share_pct": 21.15,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
@@ -12455,7 +12457,7 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 54.3 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 54.4 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "industry_pe": 44.6,
@@ -12478,7 +12480,7 @@
           "Operating margin contracted (-3.0pp)",
           "Thin: Rs 3.91 Cr traded daily, ~1 sessions to exit Rs 1 Cr",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 54.3 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 54.4 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -12492,9 +12494,9 @@
         "footwear"
       ],
       "_fetched": {
-        "price": "2026-11-09T10:10:09+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:18+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       }
     },
     {
@@ -12505,7 +12507,7 @@
       "growth_pct": "+50.4%",
       "catalyst": "Dominant direct-to-consumer sports footwear brand in tier-2/3 cities, major beneficiary of fitness trends.",
       "rating": "Strong Buy",
-      "revenue_growth": "+18.3%",
+      "revenue_growth": "+16.9%",
       "earnings_growth": "+19.7%",
       "analyst_count": 7,
       "target_median": "298.00",
@@ -12513,10 +12515,10 @@
       "target_low": "217.00",
       "rec_score": 1.3,
       "screener": {
-        "market_cap": 6052.0,
+        "market_cap": 6056.0,
         "current_price": 198.0,
         "pe_ratio": 44.6,
-        "dividend_yield": 0.77,
+        "dividend_yield": 0.76,
         "roce": 31.8,
         "roe": 29.5,
         "q_sales": 338.0,
@@ -12610,16 +12612,16 @@
         "isin": "INE278Y01022",
         "week52_low": 189.15,
         "week52_high": 274.02,
-        "pct_above_low": 6.03,
+        "pct_above_low": 4.75,
         "advt_cr": 9.07,
         "liquidity_band": "adequate",
         "sessions": 21,
         "days_to_exit_1cr": 0.6,
         "days_to_exit_5cr": 2.8,
-        "deliv_pct": 50.5,
-        "delivery_band": "delivery-led",
+        "deliv_pct": 46.57,
+        "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 2.15,
+        "turnover_cr_last": 3.96,
         "industry_share_pct": 13.09,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
@@ -12675,9 +12677,9 @@
         "footwear"
       ],
       "_fetched": {
-        "price": "2026-11-09T10:10:09+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:18+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       }
     },
     {
@@ -12696,10 +12698,10 @@
       "target_low": "32000.00",
       "rec_score": 2.3,
       "screener": {
-        "market_cap": 40489.0,
-        "current_price": 36300.0,
-        "pe_ratio": 51.8,
-        "dividend_yield": 1.54,
+        "market_cap": 40578.0,
+        "current_price": 36380.0,
+        "pe_ratio": 51.9,
+        "dividend_yield": 1.51,
         "roce": 64.4,
         "roe": 54.3,
         "q_sales": 1420.0,
@@ -12799,19 +12801,19 @@
         "isin": "INE761H01022",
         "week52_low": 30000.77,
         "week52_high": 42565.0,
-        "pct_above_low": 19.2,
+        "pct_above_low": 21.26,
         "advt_cr": 50.33,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.1,
         "days_to_exit_5cr": 0.5,
-        "deliv_pct": 35.76,
+        "deliv_pct": 31.31,
         "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 4.6,
-        "industry_share_pct": 16.35,
-        "industry_peer_count": 8,
-        "industry_share_change_pp": 0.0,
+        "turnover_cr_last": 76.15,
+        "industry_share_pct": 16.74,
+        "industry_peer_count": 7,
+        "industry_share_change_pp": 0.39,
         "peer_share_pct": 39.8,
         "peer_share_change_pp": -0.69,
         "peer_share_lookback": 4,
@@ -12829,7 +12831,7 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 51.8 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 51.9 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "industry_pe": 44.6,
@@ -12849,7 +12851,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 51.8 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 51.9 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -12862,9 +12864,9 @@
         "renewable"
       ],
       "_fetched": {
-        "price": "2026-11-09T10:10:09+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:18+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       },
       "fundamental_value": 3620.5
     },
@@ -12884,10 +12886,10 @@
       "target_low": "265.00",
       "rec_score": 2.4,
       "screener": {
-        "market_cap": 7285.0,
-        "current_price": 293.0,
-        "pe_ratio": 39.3,
-        "dividend_yield": 1.19,
+        "market_cap": 7237.0,
+        "current_price": 291.0,
+        "pe_ratio": 39.0,
+        "dividend_yield": 1.2,
         "roce": 11.2,
         "roe": 8.33,
         "q_sales": 705.0,
@@ -12987,16 +12989,16 @@
         "isin": "INE131B01039",
         "week52_low": 246.96,
         "week52_high": 435.04,
-        "pct_above_low": 19.86,
+        "pct_above_low": 17.71,
         "advt_cr": 3.02,
         "liquidity_band": "thin",
         "sessions": 21,
         "days_to_exit_1cr": 1.7,
         "days_to_exit_5cr": 8.3,
-        "deliv_pct": 57.62,
+        "deliv_pct": 67.47,
         "delivery_band": "delivery-led",
         "series": "EQ",
-        "turnover_cr_last": 0.91,
+        "turnover_cr_last": 4.3,
         "industry_share_pct": 20.42,
         "industry_peer_count": 7,
         "industry_share_change_pp": 0.0,
@@ -13017,11 +13019,11 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 39.3 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 39.0 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "industry_pe": 44.6,
-        "pe_vs_peers": "12% below peers"
+        "pe_vs_peers": "13% below peers"
       },
       "score": {
         "overall_score": 0,
@@ -13036,7 +13038,7 @@
           "Operating margin contracted (-2.0pp)",
           "Thin: Rs 3.02 Cr traded daily, ~2 sessions to exit Rs 1 Cr",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 39.3 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 39.0 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -13050,9 +13052,9 @@
         "renewable"
       ],
       "_fetched": {
-        "price": "2026-11-09T10:10:09+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:18+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       },
       "fundamental_value": 39.8
     },
@@ -13068,9 +13070,9 @@
       "revenue_growth": "+5.3%",
       "yahoo_industry": "Apparel Manufacturing",
       "_fetched": {
-        "price": "2026-11-09T10:10:09+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:18+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       },
       "earnings_growth": "+7.5%",
       "target_median": "614.00",
@@ -13078,9 +13080,9 @@
       "target_low": "608.00",
       "business_keywords": [],
       "screener": {
-        "market_cap": 2623.0,
-        "current_price": 426.0,
-        "pe_ratio": 17.2,
+        "market_cap": 2643.0,
+        "current_price": 429.0,
+        "pe_ratio": 17.4,
         "dividend_yield": 0.93,
         "roce": 17.2,
         "roe": 15.3,
@@ -13181,19 +13183,19 @@
         "isin": "INE401H01017",
         "week52_low": 418.68,
         "week52_high": 518.94,
-        "pct_above_low": 0.96,
+        "pct_above_low": 2.45,
         "advt_cr": 1.66,
         "liquidity_band": "thin",
         "sessions": 21,
         "days_to_exit_1cr": 3.0,
         "days_to_exit_5cr": 15.1,
-        "deliv_pct": 67.13,
+        "deliv_pct": 59.89,
         "delivery_band": "delivery-led",
         "series": "EQ",
-        "turnover_cr_last": 0.15,
-        "industry_share_pct": 4.29,
-        "industry_peer_count": 8,
-        "industry_share_change_pp": 0.0,
+        "turnover_cr_last": 1.22,
+        "industry_share_pct": 4.4,
+        "industry_peer_count": 7,
+        "industry_share_change_pp": 0.11,
         "peer_share_pct": 10.5,
         "peer_share_change_pp": -0.43,
         "peer_share_lookback": 4,
@@ -13250,7 +13252,7 @@
       "growth_pct": "+5.5%",
       "catalyst": "CCTV market leader (35%+ share) newly listed, scaling domestic camera manufacturing under PLI.",
       "rating": "Strong Buy",
-      "revenue_growth": "+90.3%",
+      "revenue_growth": "+89.9%",
       "earnings_growth": "+151.1%",
       "analyst_count": 6,
       "target_median": "4455.50",
@@ -13258,9 +13260,9 @@
       "target_low": "3100.00",
       "rec_score": 1.2,
       "screener": {
-        "market_cap": 52382.0,
-        "current_price": 4270.0,
-        "pe_ratio": 84.8,
+        "market_cap": 51829.0,
+        "current_price": 4225.0,
+        "pe_ratio": 83.9,
         "dividend_yield": 0.04,
         "roce": 28.6,
         "roe": 25.4,
@@ -13360,21 +13362,21 @@
         "accounts": "consolidated",
         "isin": "INE819V01029",
         "week52_low": 1385.97,
-        "week52_high": 4212.6,
-        "pct_above_low": 203.95,
+        "week52_high": 4224.9,
+        "pct_above_low": 204.83,
         "advt_cr": 165.59,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.2,
-        "deliv_pct": 43.07,
+        "deliv_pct": 38.11,
         "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 25.05,
-        "peer_share_pct": 55.2,
-        "peer_share_change_pp": -4.09,
+        "turnover_cr_last": 90.97,
+        "peer_share_pct": 48.8,
+        "peer_share_change_pp": -1.29,
         "peer_share_lookback": 4,
-        "peer_group_size": 4,
+        "peer_group_size": 5,
         "revenue_yoy_pct": 89.8,
         "revenue_ttm_growth_pct": 64.7,
         "revenue_cagr_pct": 28.2,
@@ -13388,18 +13390,19 @@
         "hyper_growth_warning": false,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 84.8 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 83.9 > 15 & Price > Intrinsic)"
         ],
-        "industry_pe": 86.1,
+        "industry_pe": 85.6,
         "pe_vs_peers": "In line with peers"
       },
       "score": {
-        "overall_score": 7,
+        "overall_score": 11,
         "fundamental_score": 4,
-        "momentum_score": 3,
+        "momentum_score": 7,
         "confidence": "High",
         "reasons": [
           "Capacity/Product Launch: Stock Alert: 360 One Wam, IRB Infra, Arvind Smartspace, Aditya Infotech, Cupid",
+          "Policy Notification: Aditya Infotech Ltd (NSE:CPPLUS) (Q2 2027) Earnings Call Highlights: Record 89. ...",
           "Strong revenue growth (TTM +64.7%)",
           "Operating Margin Expansion (+2.0%)",
           "High Return on Capital (ROCE: 28.6%)",
@@ -13412,10 +13415,10 @@
         "risks": [
           "Promoters cut their stake (-2.91%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 84.8 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 83.9 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
-          "Hold / Monitor"
+          "Buy Candidate"
         ]
       },
       "estimate_method": "Analyst Consensus",
@@ -13425,9 +13428,9 @@
         "surveillance"
       ],
       "_fetched": {
-        "price": "2026-11-09T10:10:09+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:19+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       }
     },
     {
@@ -13446,8 +13449,8 @@
       "target_low": "905.00",
       "rec_score": 1.5,
       "screener": {
-        "market_cap": 3340.0,
-        "current_price": 672.0,
+        "market_cap": 3331.0,
+        "current_price": 670.0,
         "pe_ratio": 111.0,
         "dividend_yield": 0.0,
         "roce": -2.81,
@@ -13549,23 +13552,23 @@
         "isin": "INE349Y01013",
         "week52_low": 385.25,
         "week52_high": 945.0,
-        "pct_above_low": 77.56,
+        "pct_above_low": 73.89,
         "advt_cr": 25.63,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.2,
         "days_to_exit_5cr": 1.0,
-        "deliv_pct": 52.17,
-        "delivery_band": "delivery-led",
+        "deliv_pct": 44.3,
+        "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 3.76,
+        "turnover_cr_last": 9.48,
         "industry_share_pct": 0.56,
         "industry_peer_count": 8,
         "industry_share_change_pp": 0.0,
-        "peer_share_pct": 2.9,
-        "peer_share_change_pp": 0.26,
+        "peer_share_pct": 2.6,
+        "peer_share_change_pp": 0.33,
         "peer_share_lookback": 4,
-        "peer_group_size": 4,
+        "peer_group_size": 5,
         "revenue_yoy_pct": 124.0,
         "revenue_ttm_growth_pct": 263.5,
         "revenue_cagr_pct": 15.9,
@@ -13582,8 +13585,8 @@
           "Fails P/E Screen (P/E 111.0 > 15 & Price > Intrinsic)",
           "No Dividend Yield"
         ],
-        "industry_pe": 86.1,
-        "pe_vs_peers": "29% above peers"
+        "industry_pe": 85.6,
+        "pe_vs_peers": "30% above peers"
       },
       "score": {
         "overall_score": 7,
@@ -13615,9 +13618,9 @@
         "surveillance"
       ],
       "_fetched": {
-        "price": "2026-11-09T10:10:09+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:19+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       },
       "fundamental_value": 36.0
     },
@@ -13637,9 +13640,9 @@
       "target_low": "1700.00",
       "rec_score": 1.7,
       "screener": {
-        "market_cap": 15394.0,
-        "current_price": 1705.0,
-        "pe_ratio": 72.5,
+        "market_cap": 15463.0,
+        "current_price": 1713.0,
+        "pe_ratio": 72.8,
         "dividend_yield": 0.06,
         "roce": 16.2,
         "roe": 10.7,
@@ -13740,23 +13743,23 @@
         "isin": "INE251B01027",
         "week52_low": 1286.93,
         "week52_high": 1995.95,
-        "pct_above_low": 33.68,
+        "pct_above_low": 33.08,
         "advt_cr": 85.5,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.1,
         "days_to_exit_5cr": 0.3,
-        "deliv_pct": 54.77,
-        "delivery_band": "delivery-led",
+        "deliv_pct": 33.04,
+        "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 8.97,
+        "turnover_cr_last": 31.33,
         "industry_share_pct": 2.09,
         "industry_peer_count": 8,
-        "industry_share_change_pp": -0.04,
-        "peer_share_pct": 10.9,
-        "peer_share_change_pp": -0.31,
+        "industry_share_change_pp": 0.0,
+        "peer_share_pct": 9.7,
+        "peer_share_change_pp": 0.17,
         "peer_share_lookback": 4,
-        "peer_group_size": 4,
+        "peer_group_size": 5,
         "revenue_yoy_pct": 98.3,
         "revenue_ttm_growth_pct": 4.2,
         "revenue_cagr_pct": 64.5,
@@ -13770,10 +13773,10 @@
         "hyper_growth_warning": false,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 72.5 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 72.8 > 15 & Price > Intrinsic)"
         ],
-        "industry_pe": 86.1,
-        "pe_vs_peers": "16% below peers"
+        "industry_pe": 85.6,
+        "pe_vs_peers": "15% below peers"
       },
       "score": {
         "overall_score": 9,
@@ -13791,7 +13794,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 72.5 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 72.8 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Hold / Monitor"
@@ -13805,9 +13808,9 @@
         "surveillance"
       ],
       "_fetched": {
-        "price": "2026-11-09T10:10:09+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:19+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       }
     },
     {
@@ -13825,9 +13828,9 @@
       ],
       "earnings_growth": "+28.2%",
       "screener": {
-        "market_cap": 6716.0,
-        "current_price": 745.0,
-        "pe_ratio": 87.4,
+        "market_cap": 6706.0,
+        "current_price": 744.0,
+        "pe_ratio": 87.2,
         "dividend_yield": 0.0,
         "roce": 10.9,
         "roe": 9.15,
@@ -13928,20 +13931,20 @@
         "isin": "INE350C01017",
         "week52_low": 310.85,
         "week52_high": 815.85,
-        "pct_above_low": 144.43,
+        "pct_above_low": 139.26,
         "advt_cr": 34.55,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.1,
         "days_to_exit_5cr": 0.7,
-        "deliv_pct": 46.39,
-        "delivery_band": "mixed",
+        "deliv_pct": 53.13,
+        "delivery_band": "delivery-led",
         "series": "EQ",
-        "turnover_cr_last": 4.4,
-        "peer_share_pct": 31.1,
-        "peer_share_change_pp": 4.14,
+        "turnover_cr_last": 7.49,
+        "peer_share_pct": 27.5,
+        "peer_share_change_pp": 4.72,
         "peer_share_lookback": 4,
-        "peer_group_size": 4,
+        "peer_group_size": 5,
         "revenue_yoy_pct": 135.2,
         "revenue_ttm_growth_pct": 56.8,
         "revenue_cagr_pct": 42.6,
@@ -13955,11 +13958,11 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 87.4 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 87.2 > 15 & Price > Intrinsic)",
           "No Dividend Yield",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
-        "industry_pe": 86.1,
+        "industry_pe": 85.6,
         "pe_vs_peers": "In line with peers"
       },
       "score": {
@@ -13978,7 +13981,7 @@
         "risks": [
           "Promoters cut their stake (-1.07%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 87.4 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 87.2 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -13989,10 +13992,182 @@
       "estimate_method": "Fundamental Estimate",
       "upside_capped": "floor",
       "_fetched": {
-        "price": "2026-11-09T10:10:09+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:19+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       }
+    },
+    {
+      "ticker": "AEQUS",
+      "name": "Aequs",
+      "price": "236.20",
+      "target": "245.00",
+      "growth_pct": "+3.7%",
+      "analyst_count": 5,
+      "catalyst": "Auto-discovered via media radar. Catalyst: Policy tailwinds in the surveillance_security segment.",
+      "rating": "Buy",
+      "revenue_growth": "+45.3%",
+      "yahoo_industry": "Aerospace & Defense",
+      "_fetched": {
+        "price": "2026-11-10T10:16:18+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
+      },
+      "target_median": "245.00",
+      "target_high": "444.00",
+      "target_low": "235.00",
+      "rec_score": 2.4,
+      "business_keywords": [],
+      "screener": {
+        "market_cap": 15841.0,
+        "current_price": 236.0,
+        "dividend_yield": 0.0,
+        "roce": 1.69,
+        "roe": -9.96,
+        "q_sales": 409.0,
+        "qoq_sales_growth": 3.28,
+        "quarterly_revenue_growth": [
+          326.0,
+          367.0,
+          396.0,
+          409.0
+        ],
+        "sales_trend": [
+          216.0,
+          249.0,
+          256.0,
+          282.0,
+          326.0,
+          367.0,
+          396.0,
+          409.0
+        ],
+        "q_opm": 3.4,
+        "quarterly_ebitda_margin": [
+          9.0,
+          1.1,
+          3.7,
+          3.4
+        ],
+        "opm_expansion": -0.3,
+        "q_eps": -0.78,
+        "eps_trend": [
+          -0.94,
+          0.15,
+          0.06,
+          -0.34,
+          -0.64,
+          -0.8,
+          -0.79,
+          -0.78
+        ],
+        "ttm_eps": -3.01,
+        "q_net_profit": -52.0,
+        "operating_margin_trend": [
+          4.9,
+          13.0,
+          9.0,
+          7.0,
+          4.1
+        ],
+        "annual_sales_trend": [
+          812.0,
+          965.0,
+          925.0,
+          1230.0,
+          1498.0
+        ],
+        "annual_eps_trend": [
+          -2.33,
+          -0.26,
+          -1.76,
+          -1.69,
+          -3.01
+        ],
+        "debt_trend": [
+          664.0,
+          1106.0,
+          785.0,
+          701.0,
+          836.0
+        ],
+        "cash_flow_trend": [
+          10.0,
+          -19.0,
+          26.0,
+          -99.0
+        ],
+        "capex": 81.8,
+        "rd_pct": 1.5,
+        "roce_trend": [
+          4.0,
+          1.0,
+          2.0
+        ],
+        "debtor_days": 78.0,
+        "working_capital_days": 49.0,
+        "promoter_pct": 59.09,
+        "promoter_change": 0.0,
+        "fii_pct": 5.93,
+        "fii_change": 0.76,
+        "dii_pct": 9.28,
+        "dii_change": 0.43,
+        "accounts": "consolidated",
+        "isin": "INE947N01017",
+        "week52_low": 116.8,
+        "week52_high": 275.05,
+        "pct_above_low": 102.23,
+        "advt_cr": 126.12,
+        "liquidity_band": "liquid",
+        "sessions": 21,
+        "days_to_exit_1cr": 0.0,
+        "days_to_exit_5cr": 0.2,
+        "deliv_pct": 33.76,
+        "delivery_band": "mixed",
+        "series": "EQ",
+        "turnover_cr_last": 119.51,
+        "industry_share_pct": 2.47,
+        "industry_peer_count": 8,
+        "peer_share_pct": 11.4,
+        "peer_share_change_pp": -3.93,
+        "peer_share_lookback": 4,
+        "peer_group_size": 5,
+        "revenue_yoy_pct": 45.0,
+        "revenue_ttm_growth_pct": 49.4,
+        "revenue_cagr_pct": 16.5,
+        "revenue_growth_quality": "ok",
+        "graham_intrinsic_value": null,
+        "owner_earnings": -222.9,
+        "retained_earnings_ratio": 1.2,
+        "moat_status": "Weak/None",
+        "is_bargain": false,
+        "net_current_assets": null,
+        "hyper_growth_warning": false,
+        "valuation_alerts": [
+          "Fails Debt Limit (Debt > Net Assets)",
+          "No Dividend Yield"
+        ]
+      },
+      "score": {
+        "overall_score": 3,
+        "fundamental_score": 2,
+        "momentum_score": 1,
+        "confidence": "Medium",
+        "reasons": [
+          "Sector benefits from macro policy tailwinds (Fallback)",
+          "Strong revenue growth (TTM +49.4%)",
+          "Liquid (Rs 126 Cr traded daily)",
+          "FII Accumulation (+0.76%)",
+          "DII Accumulation (+0.43%)"
+        ],
+        "risks": [
+          "Fails Debt Limit (Debt > Net Assets)"
+        ],
+        "recommendations": [
+          "Avoid / High Risk"
+        ]
+      },
+      "estimate_method": "Analyst Consensus"
     }
   ],
   "textiles_apparel": [
@@ -14000,21 +14175,21 @@
       "ticker": "GOKEX",
       "name": "Gokaldas Exports",
       "price": "678.10",
-      "target": "953.00",
-      "growth_pct": "+40.5%",
+      "target": "949.00",
+      "growth_pct": "+39.9%",
       "catalyst": "Top apparel manufacturer, setting up new fabrics processing mill under textile PLI approval.",
       "rating": "Strong Buy",
       "revenue_growth": "+20.7%",
       "earnings_growth": "+3.4%",
       "analyst_count": 9,
-      "target_median": "953.00",
+      "target_median": "949.00",
       "target_high": "1110.00",
       "target_low": "800.00",
       "rec_score": 1.1,
       "screener": {
-        "market_cap": 4962.0,
-        "current_price": 677.0,
-        "pe_ratio": 36.4,
+        "market_cap": 4969.0,
+        "current_price": 678.0,
+        "pe_ratio": 36.5,
         "dividend_yield": 0.0,
         "roce": 7.65,
         "roe": 3.09,
@@ -14115,16 +14290,16 @@
         "isin": "INE887G01027",
         "week52_low": 557.45,
         "week52_high": 937.8,
-        "pct_above_low": 25.39,
+        "pct_above_low": 21.64,
         "advt_cr": 27.55,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.2,
         "days_to_exit_5cr": 0.9,
-        "deliv_pct": 40.76,
+        "deliv_pct": 39.15,
         "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 6.44,
+        "turnover_cr_last": 29.41,
         "peer_share_pct": 22.2,
         "peer_share_change_pp": -2.19,
         "peer_share_lookback": 4,
@@ -14142,7 +14317,7 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 36.4 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 36.5 > 15 & Price > Intrinsic)",
           "No Dividend Yield",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
@@ -14162,7 +14337,7 @@
         "risks": [
           "FII Selling (-1.05%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 36.4 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 36.5 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -14174,9 +14349,9 @@
       "yahoo_industry": "Apparel Manufacturing",
       "business_keywords": [],
       "_fetched": {
-        "price": "2026-11-09T10:10:10+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:19+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       }
     },
     {
@@ -14195,8 +14370,8 @@
       "target_low": "565.00",
       "rec_score": 1.0,
       "screener": {
-        "market_cap": 13629.0,
-        "current_price": 501.0,
+        "market_cap": 13613.0,
+        "current_price": 500.0,
         "pe_ratio": 29.4,
         "dividend_yield": 0.9,
         "roce": 14.7,
@@ -14298,16 +14473,16 @@
         "isin": "INE034A01011",
         "week52_low": 293.65,
         "week52_high": 575.1,
-        "pct_above_low": 70.12,
+        "pct_above_low": 70.41,
         "advt_cr": 38.83,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.1,
         "days_to_exit_5cr": 0.6,
-        "deliv_pct": 52.52,
-        "delivery_band": "delivery-led",
+        "deliv_pct": 43.14,
+        "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 4.93,
+        "turnover_cr_last": 9.17,
         "peer_share_pct": 58.3,
         "peer_share_change_pp": -0.55,
         "peer_share_lookback": 4,
@@ -14360,9 +14535,9 @@
         "defence"
       ],
       "_fetched": {
-        "price": "2026-11-09T10:10:10+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:19+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       }
     },
     {
@@ -14376,7 +14551,7 @@
       "revenue_growth": "+8.2%",
       "earnings_growth": "-24.6%",
       "screener": {
-        "market_cap": 1328.0,
+        "market_cap": 1329.0,
         "current_price": 540.0,
         "pe_ratio": 26.0,
         "dividend_yield": 0.0,
@@ -14479,16 +14654,16 @@
         "isin": "INE963C01033",
         "week52_low": 349.8,
         "week52_high": 621.85,
-        "pct_above_low": 55.52,
+        "pct_above_low": 54.5,
         "advt_cr": 9.44,
         "liquidity_band": "adequate",
         "sessions": 21,
         "days_to_exit_1cr": 0.5,
         "days_to_exit_5cr": 2.6,
-        "deliv_pct": 45.1,
+        "deliv_pct": 39.0,
         "delivery_band": "mixed",
         "series": "EQ",
-        "turnover_cr_last": 1.01,
+        "turnover_cr_last": 2.01,
         "industry_share_pct": 2.2,
         "industry_peer_count": 8,
         "industry_share_change_pp": 0.0,
@@ -14540,9 +14715,9 @@
       "business_keywords": [],
       "upside_capped": "floor",
       "_fetched": {
-        "price": "2026-11-09T10:10:10+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:19+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       }
     },
     {
@@ -14559,9 +14734,9 @@
         "defence"
       ],
       "_fetched": {
-        "price": "2026-11-09T10:10:10+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:19+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       },
       "earnings_growth": "+539.1%",
       "analyst_count": 1,
@@ -14569,9 +14744,9 @@
       "target_high": "800.00",
       "target_low": "800.00",
       "screener": {
-        "market_cap": 5775.0,
+        "market_cap": 5780.0,
         "current_price": 550.0,
-        "pe_ratio": 45.1,
+        "pe_ratio": 45.2,
         "dividend_yield": 0.0,
         "roce": 23.8,
         "roe": 25.9,
@@ -14655,16 +14830,16 @@
         "isin": "INE0ISX01025",
         "week52_low": 535.5,
         "week52_high": 640.55,
-        "pct_above_low": 5.04,
+        "pct_above_low": 2.8,
         "advt_cr": 13.37,
         "liquidity_band": "adequate",
         "sessions": 21,
         "days_to_exit_1cr": 0.4,
         "days_to_exit_5cr": 1.9,
-        "deliv_pct": 57.5,
+        "deliv_pct": 54.47,
         "delivery_band": "delivery-led",
         "series": "EQ",
-        "turnover_cr_last": 1.2,
+        "turnover_cr_last": 3.54,
         "industry_share_pct": 2.09,
         "industry_peer_count": 8,
         "industry_share_change_pp": 0.0,
@@ -14685,20 +14860,20 @@
         "hyper_growth_warning": true,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 45.1 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 45.2 > 15 & Price > Intrinsic)",
           "No Dividend Yield",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "industry_pe": 29.4,
-        "pe_vs_peers": "53% above peers"
+        "pe_vs_peers": "54% above peers"
       },
       "score": {
-        "overall_score": -1,
+        "overall_score": 2,
         "fundamental_score": -2,
-        "momentum_score": 1,
+        "momentum_score": 4,
         "confidence": "High",
         "reasons": [
-          "Sector benefits from macro policy tailwinds (Fallback)",
+          "Government Contract/MoU: Kusumgar profit rises to Rs 40.60 crore in September quarter",
           "High Return on Capital (ROCE: 23.8%)",
           "High Return on Equity (ROE: 25.9%)",
           "Wide Economic Moat (Sustained Margin Expansion)"
@@ -14706,7 +14881,7 @@
         "risks": [
           "Operating margin contracted (-3.0pp)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 45.1 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 45.2 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -14729,9 +14904,9 @@
       "revenue_growth": "+33.0%",
       "yahoo_industry": "Textile Manufacturing",
       "_fetched": {
-        "price": "2026-11-09T10:10:10+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:19+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       },
       "earnings_growth": "+86.3%",
       "target_median": "900.00",
@@ -14740,9 +14915,9 @@
       "rec_score": 1.3,
       "business_keywords": [],
       "screener": {
-        "market_cap": 7146.0,
-        "current_price": 732.0,
-        "pe_ratio": 29.0,
+        "market_cap": 7136.0,
+        "current_price": 731.0,
+        "pe_ratio": 28.9,
         "dividend_yield": 1.23,
         "roce": 22.0,
         "roe": 16.1,
@@ -14843,14 +15018,14 @@
         "isin": "INE276A01018",
         "week52_low": 591.72,
         "week52_high": 819.0,
-        "pct_above_low": 22.61,
+        "pct_above_low": 23.5,
         "advt_cr": 3.47,
         "liquidity_band": "thin",
         "sessions": 21,
         "days_to_exit_1cr": 1.4,
         "days_to_exit_5cr": 7.2,
-        "deliv_pct": 39.02,
-        "delivery_band": "mixed",
+        "deliv_pct": 51.56,
+        "delivery_band": "delivery-led",
         "series": "EQ",
         "turnover_cr_last": 0.86,
         "industry_share_pct": 3.85,
@@ -14873,7 +15048,7 @@
         "hyper_growth_warning": false,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 29.0 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 28.9 > 15 & Price > Intrinsic)"
         ],
         "industry_pe": 29.4,
         "pe_vs_peers": "In line with peers"
@@ -14895,7 +15070,7 @@
           "Operating margin contracted (-2.0pp)",
           "Thin: Rs 3.47 Cr traded daily, ~1 sessions to exit Rs 1 Cr",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 29.0 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 28.9 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Avoid / High Risk"
@@ -14913,7 +15088,7 @@
       "target": "2229.00",
       "growth_pct": "+22.8%",
       "catalyst": "Large residential developer adding projects such as the ₹6,000 crore Marine Lines launch in Mumbai, with pre-sales momentum in Mumbai and NCR.",
-      "rating": "Buy",
+      "rating": "N/A",
       "revenue_growth": "+161.4%",
       "earnings_growth": "-61.9%",
       "analyst_count": 22,
@@ -14922,10 +15097,10 @@
       "target_low": "1325.00",
       "rec_score": 1.7,
       "screener": {
-        "market_cap": 54627.0,
-        "current_price": 1814.0,
-        "pe_ratio": 39.9,
-        "dividend_yield": 0.57,
+        "market_cap": 54661.0,
+        "current_price": 1815.0,
+        "pe_ratio": 40.0,
+        "dividend_yield": 0.55,
         "roce": 7.63,
         "roe": 9.4,
         "q_sales": 1935.0,
@@ -15025,16 +15200,16 @@
         "isin": "INE484J01027",
         "week52_low": 1496.5,
         "week52_high": 2185.24,
-        "pct_above_low": 19.95,
+        "pct_above_low": 21.26,
         "advt_cr": 113.97,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.2,
-        "deliv_pct": 40.13,
-        "delivery_band": "mixed",
+        "deliv_pct": 51.56,
+        "delivery_band": "delivery-led",
         "series": "EQ",
-        "turnover_cr_last": 10.48,
+        "turnover_cr_last": 126.16,
         "peer_share_pct": 30.2,
         "peer_share_change_pp": 13.92,
         "peer_share_lookback": 4,
@@ -15052,10 +15227,10 @@
         "hyper_growth_warning": false,
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 39.9 > 15; no intrinsic value to justify it)"
+          "Fails P/E Screen (P/E 40.0 > 15; no intrinsic value to justify it)"
         ],
-        "industry_pe": 33.6,
-        "pe_vs_peers": "19% above peers"
+        "industry_pe": 33.8,
+        "pe_vs_peers": "18% above peers"
       },
       "score": {
         "overall_score": 6,
@@ -15072,7 +15247,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 39.9 > 15; no intrinsic value to justify it)"
+          "Fails P/E Screen (P/E 40.0 > 15; no intrinsic value to justify it)"
         ],
         "recommendations": [
           "Hold / Monitor"
@@ -15082,9 +15257,9 @@
       "yahoo_industry": "Real Estate - Development",
       "business_keywords": [],
       "_fetched": {
-        "price": "2026-11-09T10:10:10+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:19+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       }
     },
     {
@@ -15099,9 +15274,9 @@
       "revenue_growth": "+17.6%",
       "yahoo_industry": "Real Estate - Development",
       "_fetched": {
-        "price": "2026-11-09T10:10:10+00:00",
-        "screener": "2026-11-09T10:11:40+00:00",
-        "run": "2026-11-09T10:12:18+00:00"
+        "price": "2026-11-10T10:16:19+00:00",
+        "screener": "2026-11-10T10:17:49+00:00",
+        "run": "2026-11-10T10:18:26+00:00"
       },
       "earnings_growth": "+28.6%",
       "target_median": "1384.00",
@@ -15112,8 +15287,8 @@
       "screener": {
         "market_cap": 119440.0,
         "current_price": 1195.0,
-        "pe_ratio": 27.4,
-        "dividend_yield": 0.37,
+        "pe_ratio": 27.5,
+        "dividend_yield": 0.36,
         "roce": 16.4,
         "roe": 15.6,
         "q_sales": 4467.0,
@@ -15213,16 +15388,16 @@
         "isin": "INE670K01029",
         "week52_low": 693.61,
         "week52_high": 1274.0,
-        "pct_above_low": 69.24,
+        "pct_above_low": 72.29,
         "advt_cr": 148.04,
         "liquidity_band": "liquid",
         "sessions": 21,
         "days_to_exit_1cr": 0.0,
         "days_to_exit_5cr": 0.2,
-        "deliv_pct": 35.6,
-        "delivery_band": "mixed",
+        "deliv_pct": 51.39,
+        "delivery_band": "delivery-led",
         "series": "EQ",
-        "turnover_cr_last": 15.05,
+        "turnover_cr_last": 122.89,
         "peer_share_pct": 69.8,
         "peer_share_change_pp": -13.92,
         "peer_share_lookback": 4,
@@ -15241,16 +15416,18 @@
         "valuation_alerts": [
           "Fails Debt Limit (Debt > Net Assets)"
         ],
-        "industry_pe": 33.6,
-        "pe_vs_peers": "18% below peers"
+        "industry_pe": 33.8,
+        "pe_vs_peers": "19% below peers"
       },
       "score": {
-        "overall_score": 5,
+        "overall_score": 10,
         "fundamental_score": 4,
-        "momentum_score": 1,
+        "momentum_score": 6,
         "confidence": "High",
         "reasons": [
-          "Sector benefits from macro policy tailwinds (Fallback)",
+          "Government Contract/MoU [immaterial, 0.0% of revenue]: Rs 6.86 crore Mumbai flat in Lower Parel sold for Rs 5.36 crore, Rs 5 crore adjusted as brokerage; Lodha",
+          "Government Contract/MoU [immaterial, 0.0% of revenue]: Who is Rajendra Lodha? Former Lodha Developers director faces fresh FIR over alleged ₹6.67 crore Mumbai flat fraud",
+          "Government Contract/MoU: Lodha Developers' return of launch momentum excites investors",
           "Strong revenue growth (TTM +20.9%)",
           "High Return on Equity (ROE: 15.6%)",
           "Liquid (Rs 148 Cr traded daily)",
@@ -15262,7 +15439,7 @@
           "Fails Debt Limit (Debt > Net Assets)"
         ],
         "recommendations": [
-          "Hold / Monitor"
+          "Buy Candidate"
         ]
       },
       "fundamental_value": 1053.7,

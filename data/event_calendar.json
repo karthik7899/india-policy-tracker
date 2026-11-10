@@ -1,6 +1,6 @@
 {
   "value": {
-    "as_of": "2026-11-09",
+    "as_of": "2026-11-10",
     "ahead_days": 45,
     "back_days": 14,
     "upcoming": [
@@ -102,6 +102,17 @@
         "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
         "name": "TVS Supply",
         "sector": "logistics_heavy_capital"
+      },
+      {
+        "ticker": "KAYNES",
+        "date": "2026-11-14",
+        "kind": "results",
+        "title": "Board meeting: Financial Results",
+        "detail": "To consider and approve the financial results for the period ended September 30, 2026",
+        "source": "NSE event calendar",
+        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
+        "name": "Kaynes Technology",
+        "sector": "manufacturing_electronics"
       }
     ],
     "recent": [
@@ -436,17 +447,6 @@
         "sector": "midcap_it"
       },
       {
-        "ticker": "VRLLOG",
-        "date": "2026-11-02",
-        "kind": "results",
-        "title": "Board meeting: Financial Results",
-        "detail": "To consider and approve the financial results for the period ended September 30, 2026",
-        "source": "NSE event calendar",
-        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
-        "name": "VRL Logistics",
-        "sector": "logistics_heavy_capital"
-      },
-      {
         "ticker": "KKCL",
         "date": "2026-11-02",
         "kind": "results",
@@ -623,6 +623,17 @@
         "sector": "clean_energy"
       },
       {
+        "ticker": "SHADOWFAX",
+        "date": "2026-10-29",
+        "kind": "results",
+        "title": "Board meeting: Financial Results",
+        "detail": "Shadowfax Technologies Limited has informed the Exchange about Board Meeting to be held on October 29, 2026 to inter-alia consider and approve the Unaudited Financial results of the Company for the q…",
+        "source": "NSE event calendar",
+        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
+        "name": "Shadowfax Technologies",
+        "sector": "logistics_heavy_capital"
+      },
+      {
         "ticker": "MTARTECH",
         "date": "2026-10-29",
         "kind": "results",
@@ -709,39 +720,6 @@
         "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
         "name": "Avalon Technologies",
         "sector": "semiconductors_equipment"
-      },
-      {
-        "ticker": "TATACONSUM",
-        "date": "2026-10-26",
-        "kind": "results",
-        "title": "Board meeting: Financial Results/Other business matters",
-        "detail": "To consider and approve the financial results for the period ended September 30, 2026 and other business matters",
-        "source": "NSE event calendar",
-        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
-        "name": "Tata Consumer Products",
-        "sector": "fmcg"
-      },
-      {
-        "ticker": "MAHABANK",
-        "date": "2026-10-26",
-        "kind": "results",
-        "title": "Board meeting: Financial Results",
-        "detail": "To consider and approve the financial results for the period ended September 30, 2026",
-        "source": "NSE event calendar",
-        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
-        "name": "Bank of Maharashtra",
-        "sector": "banking_financials"
-      },
-      {
-        "ticker": "ITCHOTELS",
-        "date": "2026-10-26",
-        "kind": "results",
-        "title": "Board meeting: Financial Results",
-        "detail": "To consider and approve the financial results for the period ended September 30, 2026",
-        "source": "NSE event calendar",
-        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
-        "name": "ITC Hotels",
-        "sector": "hospitality_travel"
       }
     ],
     "macro": [],
@@ -754,12 +732,13 @@
       "POWERINDIA": "2026-11-12",
       "BBOX": "2026-11-13",
       "RELAXO": "2026-11-13",
-      "TVSSCS": "2026-11-13"
+      "TVSSCS": "2026-11-13",
+      "KAYNES": "2026-11-14"
     },
     "sources": {
       "nse": {
-        "event_calendar": 2152,
-        "corporate_actions": 132
+        "event_calendar": 2127,
+        "corporate_actions": 156
       },
       "nse_errors": [],
       "filings": 1,

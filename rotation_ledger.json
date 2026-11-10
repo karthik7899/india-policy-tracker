@@ -690,9 +690,9 @@
     "name": "Optiemus Infra.",
     "price_at_decision": 758.55,
     "target_at_decision": null,
-    "scored": false,
-    "outcome": null,
-    "realized_return_pct": null,
+    "scored": true,
+    "outcome": "No Analyst Target (unscored)",
+    "realized_return_pct": -2.0,
     "target_made_up": 948.19
   },
   {
@@ -703,9 +703,9 @@
     "name": "Birla Cable",
     "price_at_decision": 362.45,
     "target_at_decision": null,
-    "scored": false,
-    "outcome": null,
-    "realized_return_pct": null,
+    "scored": true,
+    "outcome": "No Analyst Target (unscored)",
+    "realized_return_pct": -4.8,
     "target_made_up": 453.06
   },
   {
@@ -1226,6 +1226,30 @@
     "name": "VRL Logistics",
     "price_at_decision": 323.8,
     "target_at_decision": 390.0,
+    "scored": false,
+    "outcome": null,
+    "realized_return_pct": null
+  },
+  {
+    "date": "2026-11-10",
+    "action": "rotated_in",
+    "sector": "logistics_heavy_capital",
+    "ticker": "SHADOWFAX",
+    "name": "Shadowfax Technologies",
+    "price_at_decision": 284.95,
+    "target_at_decision": 343.5,
+    "scored": false,
+    "outcome": null,
+    "realized_return_pct": null
+  },
+  {
+    "date": "2026-11-10",
+    "action": "added",
+    "sector": "surveillance_security",
+    "ticker": "AEQUS",
+    "name": "Aequs",
+    "price_at_decision": 236.2,
+    "target_at_decision": 245.0,
     "scored": false,
     "outcome": null,
     "realized_return_pct": null
