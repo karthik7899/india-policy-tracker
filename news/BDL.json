@@ -12,7 +12,8 @@
         "Agreement"
       ],
       "confidence": "M",
-      "status": "counted"
+      "status": "excluded",
+      "exclusion_reason": "aged >120d (121 days old)"
     },
     {
       "date": "Mon, 22 Jun 2026 09:47:32 GMT",
@@ -26,7 +27,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (141 days old)"
+      "exclusion_reason": "aged >120d (142 days old)"
     },
     {
       "date": "Tue, 18 Aug 2026 07:53:57 GMT",
@@ -66,7 +67,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (128 days old)"
+      "exclusion_reason": "aged >120d (129 days old)"
     },
     {
       "date": "Wed, 10 Jun 2026 04:09:58 GMT",
@@ -80,7 +81,22 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (153 days old)"
+      "exclusion_reason": "aged >120d (154 days old)"
+    },
+    {
+      "date": "Wed, 11 Nov 2026 09:01:18 +0530",
+      "headline": "Bharat Dynamics among 5 stocks showing RSI trending up",
+      "source_url": "https://economictimes.indiatimes.com/markets/stocks/news/bharat-dynamics-among-5-stocks-showing-rsi-trending-up/slideshow/135724716.cms",
+      "source_label": "Economic Times",
+      "event_type": "",
+      "source_kind": "Markets news",
+      "event_tags": [
+        "Markets news"
+      ],
+      "confidence": "M",
+      "status": "counted",
+      "article_url": "https://economictimes.indiatimes.com/markets/stocks/news/bharat-dynamics-among-5-stocks-showing-rsi-trending-up/slideshow/135724716.cms",
+      "summary": "Five Nifty500 stocks that gained over 3% on November 9 featured in StockEdge’s RSI Trending Up scan, with their Relative Strength Index (RSI) crossing above 50 from below, signalling strengthening price momentum."
     }
   ]
 }

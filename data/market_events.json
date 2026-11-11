@@ -1,6 +1,50 @@
 {
   "value": [
     {
+      "headline": "Bharat Heavy Electricals Limited has informed the Exchange about Bagging/Receiving of orders/contracts",
+      "event_type": "order_win",
+      "phrase": null,
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "BHEL"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-11",
+      "reader": "llm",
+      "corroborated": false,
+      "link": "https://nsearchives.nseindia.com/corporate/BHEL_11112026114240_orderpowergrid11112026.pdf",
+      "source": "NSE",
+      "story": "Bharat Heavy Electricals Limited has informed the Exchange about Bagging/Receiving of orders/contracts",
+      "reports": 1,
+      "confirmation": {
+        "ticker": "BHEL",
+        "source": "NSE",
+        "filing": "Bharat Heavy Electricals Limited has informed the Exchange about Bagging/Receiving of orders/contracts",
+        "date": "2026-11-11",
+        "link": "https://nsearchives.nseindia.com/corporate/BHEL_11112026114240_orderpowergrid11112026.pdf"
+      }
+    },
+    {
+      "headline": "Commvault Announces Strategic Partnership with Zscaler to Help Enterprises Adopt AI with Confidence, Control, and Resilience",
+      "event_type": "tie_up",
+      "phrase": "strategic partnership",
+      "certainty": "completed",
+      "domains": [],
+      "actors": [],
+      "external": [
+        "Zscaler"
+      ],
+      "counterparties": [],
+      "direction": "opportunity",
+      "date": "2026-11-10",
+      "first_seen": "2026-11-11",
+      "link": "https://news.google.com/rss/articles/CBMiigJBVV95cUxQcGYtbzJOcEZnVEV0blRnZ3Y5ajlmSWVFVkhWdWdkME5vdW9qcU5tLXhROFRKeWYtczBJeVU0M1I1bTRVMkRxWDlrVDgxUnhxa1FRT25aN0NZVmR0dHQtbEptNFpNbFVGWkdtNlo0b2RiY3R2amY3c0pmNVpQeXA2d1JSYmJoM2JuZXQ3b1NJTThlQm1oR19Dc3dJNnhiR0xkdkZJcG9uMy03TVhRbjhrdHJfTHBENDJhdjVYWG1CSHpES3V6aFBGX2syY0dlNEVUNnh0QncydGZGUTNMZXdKRXRaQm56NlhmVFFWMTYyTXI4SGV3WWxGTmtSSUY4YVdKLTBzX2kyc3dHZw?oc=5",
+      "source": "PR Newswire",
+      "corroborated": true
+    },
+    {
       "headline": "Indian Hotels, Ambuja plan Rs 2,700-crore hospitality expansion across West Bengal",
       "event_type": "capacity_add",
       "phrase": null,
@@ -18,6 +62,51 @@
       "source": "The Indian Express",
       "story": "Indian Hotels, Ambuja plan Rs 2,700-crore hospitality expansion across West Bengal",
       "reports": 1
+    },
+    {
+      "headline": "Varanasi Textile Facility By Arvind To Employ 1,000 People",
+      "event_type": "capacity_add",
+      "phrase": null,
+      "certainty": "announced",
+      "domains": [],
+      "actors": [
+        "ARVIND"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-10",
+      "reader": "llm",
+      "corroborated": false,
+      "link": "https://news.google.com/rss/articles/CBMingFBVV95cUxQbmN3QkNkaUo1LWJHXzl2MGw2b0lrSE1IdGVpQkZqN21SWTZHbVRfdldOejM5TlJtRkxoUWw3a3FRX3R3QVdWQzYzVkVta0NiSXhrVXNnaEwtTHZZNEtmblR1dHgzalN4ZlYxT3NLbVN6QVlUbWhYQTYtcmdpUWFyTE9tdlRVWUkxem9LSEdqRENKU2xySFBXN25kemJUdw?oc=5",
+      "source": "BW People",
+      "story": "Varanasi Textile Facility By Arvind To Employ 1,000 People",
+      "reports": 1
+    },
+    {
+      "headline": "Larsen & Toubro Limited has informed the Exchange about Bagging/Receiving of orders/contracts",
+      "event_type": "order_win",
+      "phrase": null,
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "LT"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-09",
+      "reader": "llm",
+      "corroborated": false,
+      "link": "https://nsearchives.nseindia.com/corporate/PAM_09112026103717_PressRelease09112026.pdf",
+      "source": "NSE",
+      "story": "Larsen & Toubro Limited has informed the Exchange about Bagging/Receiving of orders/contracts",
+      "reports": 1,
+      "confirmation": {
+        "ticker": "LT",
+        "source": "NSE",
+        "filing": "Larsen & Toubro Limited has informed the Exchange about Bagging/Receiving of orders/contracts",
+        "date": "2026-11-09",
+        "link": "https://nsearchives.nseindia.com/corporate/PAM_09112026103717_PressRelease09112026.pdf"
+      }
     },
     {
       "headline": "Godrej Properties to launch ₹32,000 crore worth homes for sale in H2 FY27 to cash in on demand",
@@ -76,32 +165,6 @@
       "link": "https://news.google.com/rss/articles/CBMinAFBVV95cUxNNlpqUGQ1cU9ESXpWTUN1LVRQLXJvMWpwbmhBSjJHQzNLMEdBWl9VSjJHRnNzbkxqZ2Z5aWlrbVgxcVVQcHlGSXJQTHRfWWd2UTVDYThMUUl5T19YMDhNUG1qQkw5c25lNTBGNnVzbWtxYU9ScjVhc0pXdzlnVVcyQ29WNnRveGVSUlRVVlUyLVBaQ1Z5V2dLcmFYbkU?oc=5",
       "source": "DD News",
       "corroborated": true
-    },
-    {
-      "headline": "Larsen & Toubro Limited has informed the Exchange about Bagging/Receiving of orders/contracts",
-      "event_type": "order_win",
-      "phrase": null,
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "LT"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-11-09",
-      "reader": "llm",
-      "corroborated": false,
-      "link": "https://nsearchives.nseindia.com/corporate/PAM_09112026103717_PressRelease09112026.pdf",
-      "source": "NSE",
-      "story": "Larsen & Toubro Limited has informed the Exchange about Bagging/Receiving of orders/contracts",
-      "reports": 1,
-      "confirmation": {
-        "ticker": "LT",
-        "source": "NSE",
-        "filing": "Larsen & Toubro Limited has informed the Exchange about Bagging/Receiving of orders/contracts",
-        "date": "2026-11-09",
-        "link": "https://nsearchives.nseindia.com/corporate/PAM_09112026103717_PressRelease09112026.pdf"
-      }
     },
     {
       "headline": "Landmark Partnership Between Unspun And Arvind Limited",
@@ -182,32 +245,6 @@
       "reports": 1
     },
     {
-      "headline": "Bharat Heavy Electricals Limited has informed the Exchange about Bagging/Receiving of orders/contracts",
-      "event_type": "order_win",
-      "phrase": null,
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "BHEL"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-11-07",
-      "reader": "llm",
-      "corroborated": false,
-      "link": "https://nsearchives.nseindia.com/corporate/BHEL_07112026125946_orderpgil07112026.pdf",
-      "source": "NSE",
-      "story": "Bharat Heavy Electricals Limited has informed the Exchange about Bagging/Receiving of orders/contracts",
-      "reports": 1,
-      "confirmation": {
-        "ticker": "BHEL",
-        "source": "NSE",
-        "filing": "Bharat Heavy Electricals Limited has informed the Exchange about Bagging/Receiving of orders/contracts",
-        "date": "2026-11-07",
-        "link": "https://nsearchives.nseindia.com/corporate/BHEL_07112026125946_orderpgil07112026.pdf"
-      }
-    },
-    {
       "headline": "Bharat Electronics bags additional orders worth ₹909 crore since October 21",
       "event_type": "order_win",
       "phrase": "bags additional orders",
@@ -219,7 +256,7 @@
       "external": [],
       "direction": "opportunity",
       "date": "2026-11-06",
-      "first_seen": "2026-11-10",
+      "first_seen": "2026-11-11",
       "link": "https://news.google.com/rss/articles/CBMirwFBVV95cUxNdmY0QnEwTFYwLUI5Y05QNWVzUkEtUFUwQ01WVFJhaWxUay1YQ0JIb0w3THg1X3FDS1lTMm8yM1AxTWtXLXRWT3VweXg0dEtjM1dYbl9FaVgwajZ4VERHTHI0Nl9nM1VtVHB4cVRnT2FNMG1iLW9jWVQ2Mjd2d1p5b1l0NUx6OURXRDdrSUc3OXBlMnhFT1RQWWNKMmxveTBaSXZtcWxjWk43Zk5TZDBz?oc=5",
       "source": "IndiaIPO",
       "corroborated": true,
@@ -232,6 +269,28 @@
       },
       "story": "Bharat Electronics bags additional orders worth ₹909 crore since October 21",
       "reports": 1
+    },
+    {
+      "headline": "India's Coforge joins SpaceX partner network to deploy Grok AI tools for enterprises",
+      "event_type": "tie_up",
+      "phrase": null,
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "COFORGE"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-06",
+      "reader": "llm",
+      "corroborated": false,
+      "counterparties": [
+        "SpaceX"
+      ],
+      "link": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxPVm1rN0dhNG5aaDhDRVRyQVpMaXVROE8wbUFRVUJLZnYwaUQwZF9jMGtfX0doQjVZM3JaRFZHd2FSNFRvODVIUy1TeXJ3d09OZEZPMDB6cEE0eWhHdDNGa3FTRWRCRkhjaERjTnhudVNMTDV6RmdBX0ZqOTNjbDZFblljUE9INGpzN05KSV81YzdHTlVFS1lKeExydFBaaHVLV0pzR2tyQTBSbHV5SUF3VEY3STZHX0gzZzM1S1VYOWtpSEZsRXhKWjl3YzhQQUpy?oc=5",
+      "source": "Reuters",
+      "story": "Coforge joins SpaceX partner network to deploy Grok solutions for clients",
+      "reports": 2
     },
     {
       "headline": "Aditya Infotech to buy 30% stake in BLUE for ₹45 crore",
@@ -429,28 +488,6 @@
       }
     },
     {
-      "headline": "India's Coforge joins SpaceX partner network to deploy Grok AI tools for enterprises",
-      "event_type": "tie_up",
-      "phrase": null,
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "COFORGE"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-11-06",
-      "reader": "llm",
-      "corroborated": false,
-      "counterparties": [
-        "SpaceX"
-      ],
-      "link": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxPVm1rN0dhNG5aaDhDRVRyQVpMaXVROE8wbUFRVUJLZnYwaUQwZF9jMGtfX0doQjVZM3JaRFZHd2FSNFRvODVIUy1TeXJ3d09OZEZPMDB6cEE0eWhHdDNGa3FTRWRCRkhjaERjTnhudVNMTDV6RmdBX0ZqOTNjbDZFblljUE9INGpzN05KSV81YzdHTlVFS1lKeExydFBaaHVLV0pzR2tyQTBSbHV5SUF3VEY3STZHX0gzZzM1S1VYOWtpSEZsRXhKWjl3YzhQQUpy?oc=5",
-      "source": "Reuters",
-      "story": "Coforge joins SpaceX partner network to deploy Grok solutions for clients",
-      "reports": 2
-    },
-    {
       "headline": "CP PLUS spotlights AI-led security with Ranveer Singh in new TVC",
       "event_type": "product_launch",
       "phrase": null,
@@ -470,6 +507,24 @@
       "reports": 1
     },
     {
+      "headline": "Chalet revenue falls as real-estate income drops sharply",
+      "event_type": "business_weakness",
+      "phrase": "revenue falls",
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "CHALET"
+      ],
+      "external": [],
+      "direction": "risk",
+      "date": "2026-11-05",
+      "first_seen": "2026-11-11",
+      "link": "https://news.google.com/rss/articles/CBMivgFBVV95cUxNT255ejdySXRPX0FmNm5YUm9fdTBMWDRxUEowWFNrTU44TE9BNm9QU0gxcjV3Wk5xWFA5LU5seFc0c2FNZDg4cmcydDhSYW93RGNvZXc2SExuNl83WW84aGp6czNFNnBCQXB6NXJqWDV3dUF0Sno3UUo2amIza0xwNWc4aGFfLW9MUnZNX0lxR0l6bFJkcF9DdVdKcTlJS0dQOHJCVW9QeUE3LWtkYzd1bzBBc0g2Z0lHdUJaSmZR?oc=5",
+      "source": "Multibagg AI",
+      "story": "Chalet revenue falls as real-estate income drops sharply",
+      "reports": 1
+    },
+    {
       "headline": "HDFC Bank shares witness strong buying, rise 7% in 1 month. Can new CEO, improving fundamentals drive next leg of rally?",
       "event_type": "management_change",
       "phrase": "new ceo",
@@ -481,7 +536,7 @@
       "external": [],
       "direction": "mixed",
       "date": "2026-11-05",
-      "first_seen": "2026-11-10",
+      "first_seen": "2026-11-11",
       "link": "https://www.livemint.com/market/stock-market-news/hdfc-bank-shares-witness-strong-buying-rise-7-in-1-month-can-new-ceo-improving-fundamentals-drive-next-leg-of-rally-11793861115989.html",
       "source": "Livemint",
       "corroborated": false,
@@ -491,44 +546,6 @@
       },
       "story": "HDFC Bank shares witness strong buying, rise 7% in 1 month. Can new CEO, improving fundamentals drive next leg of rally?",
       "reports": 1
-    },
-    {
-      "headline": "Campus broadens portfolio with apparel and performance shoes",
-      "event_type": "product_launch",
-      "phrase": null,
-      "certainty": "announced",
-      "domains": [],
-      "actors": [
-        "CAMPUS"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-11-05",
-      "reader": "llm",
-      "corroborated": false,
-      "link": "https://news.google.com/rss/articles/CBMivgFBVV95cUxON0hwY0J2SDJVOUV6YzZGdnBfNDVPRm5tbVBwWXdZaWJoQy1FMzNYSVhzTVg0SUpnaHg1VTRWYjgzaElrNzRaSjJOMjhwQ1hDc3ZKYW11cjQ2UkNmZUNST1BJX3JBZ2l6Q2FLeEotSWJqMS1DVDBPbmNsYUZxSTh1NXVyYV9YYjN1RnB5UXRqNDFiT0V1bndhTjg4Y3R1UmR1UjYzcEhobzh0Y3I0SmpfVC1qN0dVQTd6aTVwaURR?oc=5",
-      "source": "Multibagg AI",
-      "story": "Campus broadens portfolio with apparel and performance shoes",
-      "reports": 1
-    },
-    {
-      "headline": "Aditya Infotech takes 30% of AI video startup BLUE in $4.8M deal",
-      "event_type": "acquisition",
-      "phrase": null,
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "CPPLUS"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-11-05",
-      "reader": "llm",
-      "corroborated": false,
-      "link": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQWGVHdEFxT2wxTlJQTzdpRlNCbXhlckRvbWVhQzd2cDZkaTlmbUtfUk5FanBvdi1hU0NWc0ZVOGNlSmJxNXozSThFSGJFbU0yTFluR2VBV0JCcHBHV3MySERvbTVKRTJmQkRxV29oNEljbmwwcjRSSXZxZjhmLUJSZ3Z6Q0VnWE16eFdudHBtRlg0TkN1elpMWDFqSXg?oc=5",
-      "source": "Dealroom",
-      "story": "Aditya Infotech takes 30% of AI video startup BLUE in $4.8M deal",
-      "reports": 2
     },
     {
       "headline": "Thermax Takes 51% ExactSpace Control in Rs 70.26 Crore Deal",
@@ -666,6 +683,44 @@
       "reports": 1
     },
     {
+      "headline": "Campus broadens portfolio with apparel and performance shoes",
+      "event_type": "product_launch",
+      "phrase": null,
+      "certainty": "announced",
+      "domains": [],
+      "actors": [
+        "CAMPUS"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-05",
+      "reader": "llm",
+      "corroborated": false,
+      "link": "https://news.google.com/rss/articles/CBMivgFBVV95cUxON0hwY0J2SDJVOUV6YzZGdnBfNDVPRm5tbVBwWXdZaWJoQy1FMzNYSVhzTVg0SUpnaHg1VTRWYjgzaElrNzRaSjJOMjhwQ1hDc3ZKYW11cjQ2UkNmZUNST1BJX3JBZ2l6Q2FLeEotSWJqMS1DVDBPbmNsYUZxSTh1NXVyYV9YYjN1RnB5UXRqNDFiT0V1bndhTjg4Y3R1UmR1UjYzcEhobzh0Y3I0SmpfVC1qN0dVQTd6aTVwaURR?oc=5",
+      "source": "Multibagg AI",
+      "story": "Campus broadens portfolio with apparel and performance shoes",
+      "reports": 1
+    },
+    {
+      "headline": "Aditya Infotech takes 30% of AI video startup BLUE in $4.8M deal",
+      "event_type": "acquisition",
+      "phrase": null,
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "CPPLUS"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-05",
+      "reader": "llm",
+      "corroborated": false,
+      "link": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQWGVHdEFxT2wxTlJQTzdpRlNCbXhlckRvbWVhQzd2cDZkaTlmbUtfUk5FanBvdi1hU0NWc0ZVOGNlSmJxNXozSThFSGJFbU0yTFluR2VBV0JCcHBHV3MySERvbTVKRTJmQkRxV29oNEljbmwwcjRSSXZxZjhmLUJSZ3Z6Q0VnWE16eFdudHBtRlg0TkN1elpMWDFqSXg?oc=5",
+      "source": "Dealroom",
+      "story": "Aditya Infotech takes 30% of AI video startup BLUE in $4.8M deal",
+      "reports": 2
+    },
+    {
       "headline": "Amazon partners with Uber Eats to bring restaurant delivery to Prime members",
       "event_type": "tie_up",
       "phrase": "partners with",
@@ -792,7 +847,7 @@
       "external": [],
       "direction": "opportunity",
       "date": "2026-11-04",
-      "first_seen": "2026-11-10",
+      "first_seen": "2026-11-11",
       "link": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxNS0lUUm83SENKZWtsTGN6UVFyU1BCcGd4c3I1TTd3R2JwTkdUdUhqdHpLVDlPcFE5V1hmaHF0R1ZCZnl1ZW9zMmswb05jZG92RGZNZ002a1hLa1pxY3B6bEU4Z1lKdkZVVmt6eXdiWU9RZkVpbXVLSnpmekZxeGh3a1ZXaC04eS1hRnQyOWtrNGVwUE1KTm91c2dVcjExS1YyaUZ2WHN3QnBrdnZkQWQ4TFlpRW1IRkZzaHd2em85T0xsaEVhSFd0edIBzgFBVV95cUxOLUNrc2JpRHFxTXNELTdmOFcyMjdGUllZTXZpX1J1aDFxbXhyY1BvM3VaVzd5bnJTTGhHTk90NHdzMk5rQV9jajR6bjJYNFhUdUp5YW1xb2puZTBTVndlX0otRU5semg3TTMwMjBUeEJUOG5mSzZfdjc0TS1GOUpBYVFlQ2tyYzk4VDhxRlpvWklIVTlJWnhjd2lzdkVySnE0T0R5dTRNdjhRN1RzdUZseTEtOV83UUlnT0E4UGEzb2wzc1BScTFRbDhCQlVhZw?oc=5",
       "source": "ET EnergyWorld",
       "corroborated": true,
@@ -803,91 +858,6 @@
           "band": "transformative"
         }
       },
-      "story": "BHEL Bags Adani Power Orders Worth Up to ₹28,000 Crore for Four Thermal Projects",
-      "reports": 4,
-      "confirmation": {
-        "ticker": "BHEL",
-        "source": "NSE",
-        "filing": "Bharat Heavy Electricals Limited has informed the Exchange about Bagging/Receiving of orders/contracts",
-        "date": "2026-11-04",
-        "link": "https://nsearchives.nseindia.com/corporate/BHEL_04112026085754_APLorder04112026.pdf"
-      }
-    },
-    {
-      "headline": "BHEL bags 4 orders from Adani Power",
-      "event_type": "order_win",
-      "phrase": "bags 4 orders",
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "BHEL"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-11-04",
-      "first_seen": "2026-11-10",
-      "link": "https://news.google.com/rss/articles/CBMia0FVX3lxTE8wUFowZnd2b2I5OUhVMHJ1LW5yX0VQWld2MjBMcVJlcG9kNHB0c1JUSThfVlM5Z3hXUnhteTFvLUh5ZDIyNVl3WnZLUk0wSUlONVdlOUlFbGlwRzN3UkhTbU1YYlRhUG1FeEIw?oc=5",
-      "source": "BigInfo.in",
-      "corroborated": true,
-      "story": "BHEL Bags Adani Power Orders Worth Up to ₹28,000 Crore for Four Thermal Projects",
-      "reports": 4,
-      "confirmation": {
-        "ticker": "BHEL",
-        "source": "NSE",
-        "filing": "Bharat Heavy Electricals Limited has informed the Exchange about Bagging/Receiving of orders/contracts",
-        "date": "2026-11-04",
-        "link": "https://nsearchives.nseindia.com/corporate/BHEL_04112026085754_APLorder04112026.pdf"
-      }
-    },
-    {
-      "headline": "BHEL Bags Adani Power Orders Worth Up to ₹28,000 Crore for Four Thermal Projects",
-      "event_type": "order_win",
-      "phrase": "bags adani power orders",
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "BHEL"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-11-04",
-      "first_seen": "2026-11-10",
-      "link": "https://news.google.com/rss/articles/CBMigwFBVV95cUxOZ2tPek9nZGRrTDFqSFFZckpjTnNzSThpNUc2RXExcUU0UlUtTmh0VHhIVHpsNU5Xc3BLclBmbng3dHljT1JiY1VtbWFOOFIyVjN4VThhbmJWaWZnZ3RCMFN0dHNYV3JiMmVBbDRyTlNNTUd6aFVXUld2WFJNYVI4d3R6SQ?oc=5",
-      "source": "Indianweb2.com",
-      "corroborated": true,
-      "amount_cr": 28000.0,
-      "materiality": {
-        "BHEL": {
-          "pct_of_revenue": 74.11,
-          "band": "transformative"
-        }
-      },
-      "story": "BHEL Bags Adani Power Orders Worth Up to ₹28,000 Crore for Four Thermal Projects",
-      "reports": 4,
-      "confirmation": {
-        "ticker": "BHEL",
-        "source": "NSE",
-        "filing": "Bharat Heavy Electricals Limited has informed the Exchange about Bagging/Receiving of orders/contracts",
-        "date": "2026-11-04",
-        "link": "https://nsearchives.nseindia.com/corporate/BHEL_04112026085754_APLorder04112026.pdf"
-      }
-    },
-    {
-      "headline": "BHEL Share Price Jumps 5% on securing ₹28,000 crore Orders from Adani Power",
-      "event_type": "order_win",
-      "phrase": null,
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "BHEL"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-11-04",
-      "reader": "llm",
-      "corroborated": false,
-      "link": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxPS0pmemhvV2lnNXlJSzVlcDkwVndzTXh2alhibVpXOERoeUhXeEQ3QlhsZmZ3NHozblA0RU45V0V3SXFGbDZXbElRV3NEX0x2N3RaSDBiZnJ3czZyVTNNZm1LOXkzVWVmYkJqd01oRGlHbE1WOGxrYUwzanFQNXJNWEd2VXJEMlE1TDM4aFZxbTZ5MFhFZGNWOWl2eFlUUEc0NzVWNEhQdEhTZDlQN3hkRVQxbk1wRzFw?oc=5",
-      "source": "India Infoline",
       "story": "BHEL Bags Adani Power Orders Worth Up to ₹28,000 Crore for Four Thermal Projects",
       "reports": 4,
       "confirmation": {

@@ -407,7 +407,8 @@
         "Agreement"
       ],
       "confidence": "M",
-      "status": "counted"
+      "status": "excluded",
+      "exclusion_reason": "aged >120d (121 days old)"
     },
     {
       "date": "Mon, 13 Jul 2026 13:09:18 GMT",
@@ -420,7 +421,8 @@
         "Agreement"
       ],
       "confidence": "M",
-      "status": "counted"
+      "status": "excluded",
+      "exclusion_reason": "aged >120d (121 days old)"
     },
     {
       "date": "Mon, 13 Jul 2026 13:09:18 GMT",
@@ -433,7 +435,8 @@
         "Agreement"
       ],
       "confidence": "M",
-      "status": "counted"
+      "status": "excluded",
+      "exclusion_reason": "aged >120d (121 days old)"
     },
     {
       "date": "Mon, 13 Jul 2026 04:38:26 GMT",
@@ -446,7 +449,8 @@
         "Agreement"
       ],
       "confidence": "M",
-      "status": "counted"
+      "status": "excluded",
+      "exclusion_reason": "aged >120d (121 days old)"
     },
     {
       "date": "Wed, 08 Jul 2026 10:19:58 GMT",
@@ -460,7 +464,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (125 days old)"
+      "exclusion_reason": "aged >120d (126 days old)"
     },
     {
       "date": "Wed, 08 Jul 2026 03:35:09 GMT",
@@ -474,7 +478,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (125 days old)"
+      "exclusion_reason": "aged >120d (126 days old)"
     },
     {
       "date": "Tue, 07 Jul 2026 07:55:34 GMT",
@@ -488,7 +492,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (126 days old)"
+      "exclusion_reason": "aged >120d (127 days old)"
     },
     {
       "date": "Wed, 08 Jul 2026 02:13:42 GMT",
@@ -502,7 +506,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (125 days old)"
+      "exclusion_reason": "aged >120d (126 days old)"
     },
     {
       "date": "Wed, 08 Jul 2026 02:05:33 GMT",
@@ -516,7 +520,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (125 days old)"
+      "exclusion_reason": "aged >120d (126 days old)"
     },
     {
       "date": "Fri, 23 Oct 2026 17:33:32 GMT",
@@ -582,7 +586,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (236 days old)"
+      "exclusion_reason": "aged >120d (237 days old)"
     },
     {
       "date": "Fri, 22 May 2026 07:00:00 GMT",
@@ -596,7 +600,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (172 days old)"
+      "exclusion_reason": "aged >120d (173 days old)"
     },
     {
       "date": "Tue, 11 Feb 2025 08:00:00 GMT",
@@ -610,7 +614,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (637 days old)"
+      "exclusion_reason": "aged >120d (638 days old)"
     },
     {
       "date": "Mon, 09 Mar 2026 07:00:00 GMT",
@@ -624,7 +628,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (246 days old)"
+      "exclusion_reason": "aged >120d (247 days old)"
     },
     {
       "date": "Mon, 09 Mar 2026 07:00:00 GMT",
@@ -638,7 +642,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (246 days old)"
+      "exclusion_reason": "aged >120d (247 days old)"
     },
     {
       "date": "Fri, 24 Jul 2026 07:00:00 GMT",
@@ -665,7 +669,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (196 days old)"
+      "exclusion_reason": "aged >120d (197 days old)"
     },
     {
       "date": "Tue, 11 Aug 2026 03:45:17 GMT",
@@ -693,7 +697,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (237 days old)"
+      "exclusion_reason": "aged >120d (238 days old)"
     },
     {
       "date": "Wed, 20 Aug 2025 07:00:00 GMT",
@@ -707,7 +711,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (447 days old)"
+      "exclusion_reason": "aged >120d (448 days old)"
     },
     {
       "date": "Tue, 14 Jul 2026 05:01:20 GMT",
@@ -718,6 +722,32 @@
       "source_kind": "Launch",
       "event_tags": [
         "Launch"
+      ],
+      "confidence": "M",
+      "status": "counted"
+    },
+    {
+      "date": "11 Nov 2026",
+      "headline": "Ideaforge Technology Limited has informed the Exchange about Schedule of meet",
+      "source_url": "https://nsearchives.nseindia.com/corporate/IDEAFORGE_11112026115503_IntimationAnalystInvestor17112026.pdf",
+      "source_label": "NSE",
+      "event_type": "",
+      "source_kind": "Filing",
+      "event_tags": [
+        "Filing"
+      ],
+      "confidence": "M",
+      "status": "counted"
+    },
+    {
+      "date": "11 Nov 2026",
+      "headline": "Ideaforge Technology Limited has informed the Exchange about Transcript",
+      "source_url": "https://nsearchives.nseindia.com/corporate/IDEAFORGE_11112026110042_Transcript_Uploading_03112026.pdf",
+      "source_label": "NSE",
+      "event_type": "",
+      "source_kind": "Filing",
+      "event_tags": [
+        "Filing"
       ],
       "confidence": "M",
       "status": "counted"
@@ -734,7 +764,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (282 days old)"
+      "exclusion_reason": "aged >120d (283 days old)"
     },
     {
       "date": "Fri, 09 Oct 2026 07:00:00 GMT",
@@ -761,7 +791,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (159 days old)"
+      "exclusion_reason": "aged >120d (160 days old)"
     },
     {
       "date": "Wed, 24 Sep 2025 07:00:00 GMT",
@@ -775,7 +805,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (412 days old)"
+      "exclusion_reason": "aged >120d (413 days old)"
     },
     {
       "date": "Fri, 09 Oct 2026 18:34:54 GMT",
@@ -856,7 +886,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (125 days old)"
+      "exclusion_reason": "aged >120d (126 days old)"
     },
     {
       "date": "Tue, 07 Jul 2026 07:00:00 GMT",
@@ -870,7 +900,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (126 days old)"
+      "exclusion_reason": "aged >120d (127 days old)"
     },
     {
       "date": "25 Sep 2026",
@@ -897,7 +927,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (187 days old)"
+      "exclusion_reason": "aged >120d (188 days old)"
     },
     {
       "date": "22 Sep 2026",
@@ -937,7 +967,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (158 days old)"
+      "exclusion_reason": "aged >120d (159 days old)"
     },
     {
       "date": "Mon, 06 Apr 2026 07:00:00 GMT",
@@ -951,7 +981,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (218 days old)"
+      "exclusion_reason": "aged >120d (219 days old)"
     },
     {
       "date": "Wed, 04 Nov 2026 11:01:51 +0530",
