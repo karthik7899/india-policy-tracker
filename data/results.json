@@ -1,9 +1,48 @@
 {
   "value": {
-    "as_of": "2026-11-11",
+    "as_of": "2026-11-12",
     "tracking_since": "2026-10-10",
-    "reported_today": [],
+    "reported_today": [
+      "ASTRAMICRO",
+      "GRSE"
+    ],
     "scorecards": [
+      {
+        "ticker": "GRSE",
+        "name": "Garden Reach Shipbuilders & Engineers",
+        "sector": "aerospace_defence",
+        "detected": "2026-11-12",
+        "quarter": "Sep 2026",
+        "quarters": 8,
+        "sales_cr": 1827.0,
+        "sales_qoq_pct": 0.7,
+        "sales_rank": 3,
+        "sales_yoy_pct": 8.9,
+        "eps": 15.01,
+        "eps_yoy_pct": 11.8,
+        "opm_pct": 11.0,
+        "opm_change_pp": 3.0,
+        "net_profit_cr": 172.0,
+        "summary": "Sales ₹1,827 Cr, +8.9% on a year ago (+0.7% on the quarter before); EPS 15.01, +11.8% on a year ago; operating margin 11%, +3.0 pts on the quarter before."
+      },
+      {
+        "ticker": "ASTRAMICRO",
+        "name": "Astra Microwave",
+        "sector": "aerospace_defence",
+        "detected": "2026-11-12",
+        "quarter": "Sep 2026",
+        "quarters": 8,
+        "sales_cr": 263.0,
+        "sales_qoq_pct": 48.6,
+        "sales_rank": 3,
+        "sales_yoy_pct": 22.3,
+        "eps": 5.38,
+        "eps_yoy_pct": 113.5,
+        "opm_pct": 33.0,
+        "opm_change_pp": 14.0,
+        "net_profit_cr": 51.0,
+        "summary": "Sales ₹263 Cr, +22.3% on a year ago (+48.6% on the quarter before); EPS 5.38, +113.5% on a year ago; operating margin 33%, +14.0 pts on the quarter before."
+      },
       {
         "ticker": "ASMTEC",
         "name": "ASM Technologies",

@@ -1,20 +1,9 @@
 {
   "value": {
-    "as_of": "2026-11-11",
+    "as_of": "2026-11-12",
     "ahead_days": 45,
     "back_days": 14,
     "upcoming": [
-      {
-        "ticker": "GRSE",
-        "date": "2026-11-11",
-        "kind": "results",
-        "title": "Board meeting: Financial Results",
-        "detail": "This has reference to our letter No. SECY/GRSE/BD-69/CA/35/26-27 dated 23 Oct 2026 on the subject matter of Intimation of Date of Board Meeting to, inter alia, consider and approve, Unaudited Financi…",
-        "source": "NSE event calendar",
-        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
-        "name": "Garden Reach Shipbuilders & Engineers",
-        "sector": "aerospace_defence"
-      },
       {
         "ticker": "ASTRAMICRO",
         "date": "2026-11-12",
@@ -116,6 +105,17 @@
       }
     ],
     "recent": [
+      {
+        "ticker": "GRSE",
+        "date": "2026-11-11",
+        "kind": "results",
+        "title": "Board meeting: Financial Results",
+        "detail": "This has reference to our letter No. SECY/GRSE/BD-69/CA/35/26-27 dated 23 Oct 2026 on the subject matter of Intimation of Date of Board Meeting to, inter alia, consider and approve, Unaudited Financi…",
+        "source": "NSE event calendar",
+        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
+        "name": "Garden Reach Shipbuilders & Engineers",
+        "sector": "aerospace_defence"
+      },
       {
         "ticker": "KKCL",
         "date": "2026-11-06",
@@ -654,33 +654,10 @@
         "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
         "name": "Garware Technical Fibres",
         "sector": "textiles_apparel"
-      },
-      {
-        "ticker": "ARVIND",
-        "date": "2026-10-28",
-        "kind": "results",
-        "title": "Board meeting: Financial Results",
-        "detail": "To consider and approve the financial results for the period ended September 30, 2026",
-        "source": "NSE event calendar",
-        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
-        "name": "Arvind",
-        "sector": "textiles_apparel"
-      },
-      {
-        "ticker": "ANANTRAJ",
-        "date": "2026-10-28",
-        "kind": "results",
-        "title": "Board meeting: Financial Results",
-        "detail": "To consider and approve the financial results for the period ended September 30, 2026",
-        "source": "NSE event calendar",
-        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
-        "name": "Anant Raj",
-        "sector": "data_center_support"
       }
     ],
     "macro": [],
     "next_results": {
-      "GRSE": "2026-11-11",
       "ASTRAMICRO": "2026-11-12",
       "AVALON": "2026-11-12",
       "BDL": "2026-11-12",
@@ -693,11 +670,11 @@
     },
     "sources": {
       "nse": {
-        "event_calendar": 2061,
-        "corporate_actions": 162
+        "event_calendar": 1972,
+        "corporate_actions": 163
       },
       "nse_errors": [],
-      "filings": 1,
+      "filings": 2,
       "carried": 0
     }
   }

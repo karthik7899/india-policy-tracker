@@ -1,6 +1,91 @@
 {
   "value": [
     {
+      "headline": "HFCL secures Rs 834 crore export orders, eyes AI data centre demand",
+      "event_type": "order_win",
+      "phrase": "secures rs 834 crore export orders",
+      "certainty": "completed",
+      "domains": [
+        "data_center_support"
+      ],
+      "actors": [],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-12",
+      "first_seen": "2026-11-12",
+      "link": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxPTUhLcVlpSVpPNE15dWk0MUpubXRTcFRwODZRQWlEc3lQNmNaWlJSOVFPbHR3cVpaNTkzMWhiZktlY0pwX2d2Ti1BeXAtX1dNVERDb1N3WEFjbHhlVHUzanh5YW01S0RrbDB4TTlfd21XWElyWEVjSTZuZTdWQml0S3E4c2hOTlJYWERZUzN0VEhKUHhfc3pWa2p2bXMwM3lzVV92VDgxbXhYR1FMTGh2Yk9vc1RkSHByZ2gzSUZGSzROa3ZrT0kyUTRWOGhmelF2SmdtdFZtMU1DSWRJUHE4WnlpdklFUWZ4aWfSAeoBQVVfeXFMT01IS3FZaUlaTzRNeXVpNDFKbm10U3BUcDg2UUFpRHN5UDZjWlpSUjlRT2x0d3FaWjU5MzFoYmZLZWNKcF9ndk4tQXlwLV9XTVREQ29Td1hBY2x4ZVR1M2p4eWFtNUtEa2wweE05X3dtV1hJclhFY0k2bmU3VkJpdEtxOHNoTk5SWFhEWVMzdFRISlB4X3N6Vmtqdm1zMDN5c1VfdlQ4MW14WEdRTExodmJPb3NUZEhwcmdoM0lGRks0Tmt2a09JMlE0VjhoZnpRdkpnbXRWbTFNQ0lkSVBxOFp5aXZJRVFmeGln?oc=5",
+      "source": "The Economic Times",
+      "corroborated": true,
+      "amount_cr": 834.0
+    },
+    {
+      "headline": "BHEL Secures Power Grid Order Valued Between ₹600 Crore And ₹900 Crore",
+      "event_type": "order_win",
+      "phrase": "secures power grid order",
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "BHEL"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-11",
+      "first_seen": "2026-11-12",
+      "link": "https://news.google.com/rss/articles/CBMimgFBVV95cUxQV2JhbnlPZnpseDU0TDhBWnFObnhvOWM2NHhXZ1FNY2NLdnhGMVI5cnhWV3AwczdZVlZSdi1jQ1BINjktTEJETzFYamJ1aG4wN2thdU1WenAtQUtKQ0ViU2pfUmNET2dSajAxaHFkblkxN0hOOHhyNi1GTGZzZ3RRU3lES3FZbTJQYzRWYkxsRXk1b3I4T2VnMGdR?oc=5",
+      "source": "Sahi",
+      "corroborated": true,
+      "amount_cr": 900.0,
+      "materiality": {
+        "BHEL": {
+          "pct_of_revenue": 2.38,
+          "band": "minor"
+        }
+      },
+      "story": "BHEL Bags Adani Power Orders Worth Up to ₹28,000 Crore for Four Thermal Projects",
+      "reports": 5,
+      "confirmation": {
+        "ticker": "BHEL",
+        "source": "NSE",
+        "filing": "Bharat Heavy Electricals Limited has informed the Exchange about Bagging/Receiving of orders/contracts",
+        "date": "2026-11-11",
+        "link": "https://nsearchives.nseindia.com/corporate/BHEL_11112026114240_orderpowergrid11112026.pdf"
+      }
+    },
+    {
+      "headline": "Yomiuri: Rakuten, AST SpaceMobile to Launch Joint Venture for Satellite-to-Smartphone Service",
+      "event_type": "tie_up",
+      "phrase": "joint venture",
+      "certainty": "completed",
+      "domains": [
+        "manufacturing_electronics"
+      ],
+      "actors": [],
+      "external": [],
+      "counterparties": [],
+      "direction": "opportunity",
+      "date": "2026-11-11",
+      "first_seen": "2026-11-12",
+      "link": "https://news.google.com/rss/articles/CBMi5gFBVV95cUxPMDk5WGt5TE5mTUJKMW1STTZoc1NIRWY2WUdRYlVOX1BLVEhrSW16Sk1wdzdVMm05X1g4RkJYam1LUVI3Q0xha3kzakdTQmxndDRUQ2JSYVI2MXl0YkJKc1RWelZlYlFwcXBjdk9kQWtMSnB5RGViQWhEWGVUSTlBZEpfZW1mc24xSGxxY0dNdW1LMFJxOGw0SXI4SDcxc3MtTXVzNThYeGwtU0FpVnBBRVQxdTE1UzhKYVVlVERwazhaZXdodlVfbmh6UmVnUXlSX1pRSU43d1RqVERiTjNqaHR5b3R5dw?oc=5",
+      "source": "MarketWatch",
+      "corroborated": true
+    },
+    {
+      "headline": "BYD’s BEV Sales Soar While Its PHEV Sales Slide",
+      "event_type": "business_weakness",
+      "phrase": "sales slide",
+      "certainty": "completed",
+      "domains": [],
+      "actors": [],
+      "external": [
+        "BYD"
+      ],
+      "direction": "risk",
+      "date": "2026-11-11",
+      "first_seen": "2026-11-12",
+      "link": "https://news.google.com/rss/articles/CBMijAFBVV95cUxPSjJqSE9rQVRpcDRTMGRtdE5rSmZWVkRuYUIzeVl5LXZpZFEtSkY4Z2tCbVIxWnR2Y0hWcC1wRG1ob2NjOU5TWVlzdEJsUkdrZm8tY3NWS284SDFoNTdNSWlRV1FNaWhCZDBxTVhWdVF1Q1ZBcDItcFdrNDBkSUR6aXdiVG15Z3hfVGh0ag?oc=5",
+      "source": "CleanTechnica"
+    },
+    {
       "headline": "Bharat Heavy Electricals Limited has informed the Exchange about Bagging/Receiving of orders/contracts",
       "event_type": "order_win",
       "phrase": null,
@@ -39,9 +124,27 @@
       "counterparties": [],
       "direction": "opportunity",
       "date": "2026-11-10",
-      "first_seen": "2026-11-11",
+      "first_seen": "2026-11-12",
       "link": "https://news.google.com/rss/articles/CBMiigJBVV95cUxQcGYtbzJOcEZnVEV0blRnZ3Y5ajlmSWVFVkhWdWdkME5vdW9qcU5tLXhROFRKeWYtczBJeVU0M1I1bTRVMkRxWDlrVDgxUnhxa1FRT25aN0NZVmR0dHQtbEptNFpNbFVGWkdtNlo0b2RiY3R2amY3c0pmNVpQeXA2d1JSYmJoM2JuZXQ3b1NJTThlQm1oR19Dc3dJNnhiR0xkdkZJcG9uMy03TVhRbjhrdHJfTHBENDJhdjVYWG1CSHpES3V6aFBGX2syY0dlNEVUNnh0QncydGZGUTNMZXdKRXRaQm56NlhmVFFWMTYyTXI4SGV3WWxGTmtSSUY4YVdKLTBzX2kyc3dHZw?oc=5",
       "source": "PR Newswire",
+      "corroborated": true
+    },
+    {
+      "headline": "Commvault Announces Strategic Partnership with Zscaler",
+      "event_type": "tie_up",
+      "phrase": "strategic partnership",
+      "certainty": "completed",
+      "domains": [],
+      "actors": [],
+      "external": [
+        "Zscaler"
+      ],
+      "counterparties": [],
+      "direction": "opportunity",
+      "date": "2026-11-10",
+      "first_seen": "2026-11-12",
+      "link": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxNakxTbklRT1lmT2lUQ1pPbGJyM21XVFpjWXRnektiSXZiRnhEeTZSak1lZEVKRTMzTWd4M0RJcTlxbVlNVGo5Y09CdjVCWTJLSVZfVGhxN0xHZW5ra2xaY2hmbEswS0V4YlBnYzAtSFZvTWtLMkpObXgtN256QmlXb2Y3OXZIZGtWYzI3b1RKYXYteDE1Y0xhb2tVQldKeVNzb2dnZ3dKaDJrSDQ?oc=5",
+      "source": "www.marketscreener.com",
       "corroborated": true
     },
     {
@@ -83,6 +186,30 @@
       "reports": 1
     },
     {
+      "headline": "Grasim Industries and Suzlon partner to develop India's first wind turbines with recyclable blades",
+      "event_type": "tie_up",
+      "phrase": "and suzlon partner to",
+      "certainty": "completed",
+      "domains": [
+        "clean_energy"
+      ],
+      "actors": [
+        "SUZLON"
+      ],
+      "external": [],
+      "counterparties": [
+        "Grasim Industries"
+      ],
+      "direction": "opportunity",
+      "date": "2026-11-09",
+      "first_seen": "2026-11-12",
+      "link": "https://news.google.com/rss/articles/CBMi5AFBVV95cUxQNzZBemhOTGNTREkyUkhZb3hxZEktaVFfa2I4SHdGUndreVRRMHhpTXdwbG5qR1NmdVpmRGQ1aGY4TWJTUVZxQzA1R2tZUTZvVFlzRXNleVdybkQtWk4wN05IMHB4Vk9ZNmRWSlhKZ0JlLU1HUVVOajVjc3YzckZ6cnhZWE1SakR0MUs1cnBNNFNCblN3bFAycGoyN3JmNjAzRmVjVWhaS3o2aGdnMEh6LUplZ1dod0lDWFMxVDZ6RnIzbFg5OEZpVUhBeFVZTmhvY2FnSlpDbm5WdXZtdVctTTRmSHU?oc=5",
+      "source": "Prop News Time",
+      "corroborated": true,
+      "story": "Grasim Industries and Suzlon partner to develop India's first wind turbines with recyclable blades",
+      "reports": 3
+    },
+    {
       "headline": "Larsen & Toubro Limited has informed the Exchange about Bagging/Receiving of orders/contracts",
       "event_type": "order_win",
       "phrase": null,
@@ -107,6 +234,71 @@
         "date": "2026-11-09",
         "link": "https://nsearchives.nseindia.com/corporate/PAM_09112026103717_PressRelease09112026.pdf"
       }
+    },
+    {
+      "headline": "ASM Technologies maps ₹510 crore DLM expansion strategy",
+      "event_type": "capacity_add",
+      "phrase": null,
+      "certainty": "announced",
+      "domains": [],
+      "actors": [
+        "ASMTEC"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-09",
+      "reader": "llm",
+      "corroborated": false,
+      "link": "https://news.google.com/rss/articles/CBMisgFBVV95cUxQLVR5ak5SRHVSaXVaZWVsRGVaQXhrYk4wakVoSWtod3Z5M0xSVGNVYm1KVk56TzVaekN5cklyYUJsalR6U3VPMFlnek9jRzVMRVBFVFZMSnhIc21TOUFVbEZIampZcDNOdEEzRzFFUE5QSG9pSGJPTjBmN0k1ei04TEpEdUp0Y2d4WWpoV3JseVBWd01HWHFpbzZsckd0ZWhRd1owVWh0YXdiVGNmNlpyQmt3?oc=5",
+      "source": "Multibagg AI",
+      "story": "ASM Technologies maps ₹510 crore DLM expansion strategy",
+      "reports": 1
+    },
+    {
+      "headline": "India's Wind Energy Sector Moves Towards First Recyclable Turbine Blades With Grasim-Suzlon Partnership",
+      "event_type": "tie_up",
+      "phrase": null,
+      "certainty": "announced",
+      "domains": [],
+      "actors": [
+        "SUZLON"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-09",
+      "reader": "llm",
+      "corroborated": false,
+      "counterparties": [
+        "Grasim"
+      ],
+      "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTFBRcnNJeTdwaC0zZGVDcm9WLUcxN05kWFFlZFpvb3FvRGJlcVd0d2lPV2FCRVN1M1VyNG94UWEtTHpVSXJlNUR5N1JQRUlXWU5iUXB1SEtJY3pXS3p3Y255SFVkN21wVTZOUmx3Nzdha0E?oc=5",
+      "source": "The 420.in",
+      "story": "Grasim Industries and Suzlon partner to develop India's first wind turbines with recyclable blades",
+      "reports": 3
+    },
+    {
+      "headline": "Grasim, Suzlon Partner to Develop Recyclable Wind Turbine Blades",
+      "event_type": "tie_up",
+      "phrase": null,
+      "certainty": "announced",
+      "domains": [
+        "clean_energy"
+      ],
+      "actors": [
+        "SUZLON"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-09",
+      "reader": "llm",
+      "corroborated": false,
+      "counterparties": [
+        "Grasim"
+      ],
+      "link": "https://news.google.com/rss/articles/CBMizwFBVV95cUxPbE4xZkxNa0Q2N0xIcURkeWdybDFPWTFyUjQxWjY0bzlYYThkZ00xMUl6R200c0piVVVTSXVmRVNWdjVzbEg2UDNnbVZwMHpwWXBqS05JZmRDTFRwTENBS3VKclR0QmI0SDJGbVY4VkRHQmtFWXhkb0hhdEU4TEY2WUpZMEdIQjFuQXF4SXhWSEd2dzBNbEtOaGh4OVVVUXhiSnpzcUt3a2tfQnp5R3BoVFNTZWdubm1wUFBqUlZ6ZmRaTjJqTEZiNGM0ZlI3Zk0?oc=5",
+      "source": "Construction World",
+      "story": "Grasim Industries and Suzlon partner to develop India's first wind turbines with recyclable blades",
+      "reports": 3
     },
     {
       "headline": "Godrej Properties to launch ₹32,000 crore worth homes for sale in H2 FY27 to cash in on demand",
@@ -256,7 +448,7 @@
       "external": [],
       "direction": "opportunity",
       "date": "2026-11-06",
-      "first_seen": "2026-11-11",
+      "first_seen": "2026-11-12",
       "link": "https://news.google.com/rss/articles/CBMirwFBVV95cUxNdmY0QnEwTFYwLUI5Y05QNWVzUkEtUFUwQ01WVFJhaWxUay1YQ0JIb0w3THg1X3FDS1lTMm8yM1AxTWtXLXRWT3VweXg0dEtjM1dYbl9FaVgwajZ4VERHTHI0Nl9nM1VtVHB4cVRnT2FNMG1iLW9jWVQ2Mjd2d1p5b1l0NUx6OURXRDdrSUc3OXBlMnhFT1RQWWNKMmxveTBaSXZtcWxjWk43Zk5TZDBz?oc=5",
       "source": "IndiaIPO",
       "corroborated": true,
@@ -269,54 +461,6 @@
       },
       "story": "Bharat Electronics bags additional orders worth ₹909 crore since October 21",
       "reports": 1
-    },
-    {
-      "headline": "India's Coforge joins SpaceX partner network to deploy Grok AI tools for enterprises",
-      "event_type": "tie_up",
-      "phrase": null,
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "COFORGE"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-11-06",
-      "reader": "llm",
-      "corroborated": false,
-      "counterparties": [
-        "SpaceX"
-      ],
-      "link": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxPVm1rN0dhNG5aaDhDRVRyQVpMaXVROE8wbUFRVUJLZnYwaUQwZF9jMGtfX0doQjVZM3JaRFZHd2FSNFRvODVIUy1TeXJ3d09OZEZPMDB6cEE0eWhHdDNGa3FTRWRCRkhjaERjTnhudVNMTDV6RmdBX0ZqOTNjbDZFblljUE9INGpzN05KSV81YzdHTlVFS1lKeExydFBaaHVLV0pzR2tyQTBSbHV5SUF3VEY3STZHX0gzZzM1S1VYOWtpSEZsRXhKWjl3YzhQQUpy?oc=5",
-      "source": "Reuters",
-      "story": "Coforge joins SpaceX partner network to deploy Grok solutions for clients",
-      "reports": 2
-    },
-    {
-      "headline": "Aditya Infotech to buy 30% stake in BLUE for ₹45 crore",
-      "event_type": "acquisition",
-      "phrase": null,
-      "certainty": "announced",
-      "domains": [],
-      "actors": [
-        "CPPLUS"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-11-06",
-      "reader": "llm",
-      "corroborated": false,
-      "link": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxQZ1ZnQnM3RDFwX21CNWdXQ2M1d255elBLelhXNE1yTXlIUmRURTdNbFJrWEtVaGRvN0J4Vm50Y3dTQWVCQ2xHbUk1NGRBSTlZVUYxdGJsdEVmQWI0LUU1NmJ6YmtCaE1vb0xvNGJ5dk5HX3h5YVhXS1hyRjctQVlHM0xWLVgzX1JFRzZLVWR1YlA3Qy1KWEE2ODJZNXctRmdfY3NBeW44bGl0WTdHclRPR2FOLXhFcmpscHhweUl3SU9lQURUUmhfcmpBMWdZZ0dscjJYQtIB2gFBVV95cUxOR29ZYnNqazFaeFY5alBJR09PU1ppN0R5TGF3T2VWRFQzaEVvMjVYSGRURmM3NFhiUnJkRHgyaXNRQ19sYi1teVFJWElMalZXb2pGcmdEYVFhODRIXzMtWV9hZFVKUVp0elpJME5pUE13Q2J5cGZXSlNnZ29yekpHd0FvTTdWTi1UNjNjc1daN25iRkFQRmhpNW1DU2lRRTF0SGxkcndSSFh1Q2ZaQTRjZkg4cWdmWWV0RnVYY1hFM2F2ekoxazlQTGh6cDk5UmRaX3ZGUkxMbTE1UQ?oc=5",
-      "source": "electronics.economictimes.indiatimes.com",
-      "amount_cr": 45.0,
-      "materiality": {
-        "CPPLUS": {
-          "pct_of_revenue": 0.79,
-          "band": "immaterial"
-        }
-      },
-      "story": "Aditya Infotech takes 30% of AI video startup BLUE in $4.8M deal",
-      "reports": 2
     },
     {
       "headline": "Thermax and C1 Green Chemicals team up on green methanol push in India",
@@ -420,6 +564,54 @@
       }
     },
     {
+      "headline": "India's Coforge joins SpaceX partner network to deploy Grok AI tools for enterprises",
+      "event_type": "tie_up",
+      "phrase": null,
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "COFORGE"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-06",
+      "reader": "llm",
+      "corroborated": false,
+      "counterparties": [
+        "SpaceX"
+      ],
+      "link": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxPVm1rN0dhNG5aaDhDRVRyQVpMaXVROE8wbUFRVUJLZnYwaUQwZF9jMGtfX0doQjVZM3JaRFZHd2FSNFRvODVIUy1TeXJ3d09OZEZPMDB6cEE0eWhHdDNGa3FTRWRCRkhjaERjTnhudVNMTDV6RmdBX0ZqOTNjbDZFblljUE9INGpzN05KSV81YzdHTlVFS1lKeExydFBaaHVLV0pzR2tyQTBSbHV5SUF3VEY3STZHX0gzZzM1S1VYOWtpSEZsRXhKWjl3YzhQQUpy?oc=5",
+      "source": "Reuters",
+      "story": "Coforge joins SpaceX partner network to deploy Grok solutions for clients",
+      "reports": 2
+    },
+    {
+      "headline": "Aditya Infotech to buy 30% stake in BLUE for ₹45 crore",
+      "event_type": "acquisition",
+      "phrase": null,
+      "certainty": "announced",
+      "domains": [],
+      "actors": [
+        "CPPLUS"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-06",
+      "reader": "llm",
+      "corroborated": false,
+      "link": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxQZ1ZnQnM3RDFwX21CNWdXQ2M1d255elBLelhXNE1yTXlIUmRURTdNbFJrWEtVaGRvN0J4Vm50Y3dTQWVCQ2xHbUk1NGRBSTlZVUYxdGJsdEVmQWI0LUU1NmJ6YmtCaE1vb0xvNGJ5dk5HX3h5YVhXS1hyRjctQVlHM0xWLVgzX1JFRzZLVWR1YlA3Qy1KWEE2ODJZNXctRmdfY3NBeW44bGl0WTdHclRPR2FOLXhFcmpscHhweUl3SU9lQURUUmhfcmpBMWdZZ0dscjJYQtIB2gFBVV95cUxOR29ZYnNqazFaeFY5alBJR09PU1ppN0R5TGF3T2VWRFQzaEVvMjVYSGRURmM3NFhiUnJkRHgyaXNRQ19sYi1teVFJWElMalZXb2pGcmdEYVFhODRIXzMtWV9hZFVKUVp0elpJME5pUE13Q2J5cGZXSlNnZ29yekpHd0FvTTdWTi1UNjNjc1daN25iRkFQRmhpNW1DU2lRRTF0SGxkcndSSFh1Q2ZaQTRjZkg4cWdmWWV0RnVYY1hFM2F2ekoxazlQTGh6cDk5UmRaX3ZGUkxMbTE1UQ?oc=5",
+      "source": "electronics.economictimes.indiatimes.com",
+      "story": "Aditya Infotech takes 30% of AI video startup BLUE in $4.8M deal",
+      "reports": 2,
+      "amount_cr": 45.0,
+      "materiality": {
+        "CPPLUS": {
+          "pct_of_revenue": 0.79,
+          "band": "immaterial"
+        }
+      }
+    },
+    {
       "headline": "Google acquires Wyoming data center site from AI infrastructure firm Crusoe",
       "event_type": "acquisition",
       "phrase": "acquires",
@@ -518,7 +710,7 @@
       "external": [],
       "direction": "risk",
       "date": "2026-11-05",
-      "first_seen": "2026-11-11",
+      "first_seen": "2026-11-12",
       "link": "https://news.google.com/rss/articles/CBMivgFBVV95cUxNT255ejdySXRPX0FmNm5YUm9fdTBMWDRxUEowWFNrTU44TE9BNm9QU0gxcjV3Wk5xWFA5LU5seFc0c2FNZDg4cmcydDhSYW93RGNvZXc2SExuNl83WW84aGp6czNFNnBCQXB6NXJqWDV3dUF0Sno3UUo2amIza0xwNWc4aGFfLW9MUnZNX0lxR0l6bFJkcF9DdVdKcTlJS0dQOHJCVW9QeUE3LWtkYzd1bzBBc0g2Z0lHdUJaSmZR?oc=5",
       "source": "Multibagg AI",
       "story": "Chalet revenue falls as real-estate income drops sharply",
@@ -536,7 +728,7 @@
       "external": [],
       "direction": "mixed",
       "date": "2026-11-05",
-      "first_seen": "2026-11-11",
+      "first_seen": "2026-11-12",
       "link": "https://www.livemint.com/market/stock-market-news/hdfc-bank-shares-witness-strong-buying-rise-7-in-1-month-can-new-ceo-improving-fundamentals-drive-next-leg-of-rally-11793861115989.html",
       "source": "Livemint",
       "corroborated": false,
@@ -681,192 +873,6 @@
       "source": "Kalkine India",
       "story": "Adani Power (NSE:ADANIPOWER) Signs 25-Year Power Supply Agreement for 1,234 MW of Thermal Power",
       "reports": 1
-    },
-    {
-      "headline": "Campus broadens portfolio with apparel and performance shoes",
-      "event_type": "product_launch",
-      "phrase": null,
-      "certainty": "announced",
-      "domains": [],
-      "actors": [
-        "CAMPUS"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-11-05",
-      "reader": "llm",
-      "corroborated": false,
-      "link": "https://news.google.com/rss/articles/CBMivgFBVV95cUxON0hwY0J2SDJVOUV6YzZGdnBfNDVPRm5tbVBwWXdZaWJoQy1FMzNYSVhzTVg0SUpnaHg1VTRWYjgzaElrNzRaSjJOMjhwQ1hDc3ZKYW11cjQ2UkNmZUNST1BJX3JBZ2l6Q2FLeEotSWJqMS1DVDBPbmNsYUZxSTh1NXVyYV9YYjN1RnB5UXRqNDFiT0V1bndhTjg4Y3R1UmR1UjYzcEhobzh0Y3I0SmpfVC1qN0dVQTd6aTVwaURR?oc=5",
-      "source": "Multibagg AI",
-      "story": "Campus broadens portfolio with apparel and performance shoes",
-      "reports": 1
-    },
-    {
-      "headline": "Aditya Infotech takes 30% of AI video startup BLUE in $4.8M deal",
-      "event_type": "acquisition",
-      "phrase": null,
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "CPPLUS"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-11-05",
-      "reader": "llm",
-      "corroborated": false,
-      "link": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQWGVHdEFxT2wxTlJQTzdpRlNCbXhlckRvbWVhQzd2cDZkaTlmbUtfUk5FanBvdi1hU0NWc0ZVOGNlSmJxNXozSThFSGJFbU0yTFluR2VBV0JCcHBHV3MySERvbTVKRTJmQkRxV29oNEljbmwwcjRSSXZxZjhmLUJSZ3Z6Q0VnWE16eFdudHBtRlg0TkN1elpMWDFqSXg?oc=5",
-      "source": "Dealroom",
-      "story": "Aditya Infotech takes 30% of AI video startup BLUE in $4.8M deal",
-      "reports": 2
-    },
-    {
-      "headline": "Amazon partners with Uber Eats to bring restaurant delivery to Prime members",
-      "event_type": "tie_up",
-      "phrase": "partners with",
-      "certainty": "completed",
-      "domains": [],
-      "actors": [],
-      "external": [
-        "Amazon"
-      ],
-      "counterparties": [],
-      "direction": "opportunity",
-      "date": "2026-11-05",
-      "first_seen": "2026-11-09",
-      "link": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxPaDJ0ZzAwbzhmQm1UX216QkRHMUQyRk5GSk1KQ2E3Y2dtQUFHUmtDQUgyT3JOTmdVSUE1U2xaQktFeUd6OWNrU0Jybjc3TmFManBOSVY5dm1nMnJuZjFhM2VudTh1b2VObHVPejBQRjBITWJvZXNtTEdPcm54eU9oTmpVczk3a1NXYUNlUjN0Z0JFS1lLd2FNM0hIZHRiYkVYT2lHcDNtR3hSM25IdnhSb1VRMDI3dTRhbzc3Z1NVR2owejV2UHVoT2U1NnVYR3Z6Y1E?oc=5",
-      "source": "Yahoo Finance",
-      "corroborated": true
-    },
-    {
-      "headline": "China blocks SoftBank’s $5.4 billion takeover of ABB’s robotics division",
-      "event_type": "acquisition",
-      "phrase": "takeover of",
-      "certainty": "completed",
-      "domains": [],
-      "actors": [],
-      "external": [
-        "ABB"
-      ],
-      "direction": "opportunity",
-      "date": "2026-11-05",
-      "first_seen": "2026-11-07",
-      "link": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxNTVBJa2g4T1RZOXVuY3phU1ZicmlpM0kzUTdjNlBrMmtNZ29aNlBxZzNwQWkzam9WNVB6MGFwV2tERnA5WWNhWE9ZaWtKaV9JMDdpWHBKRjUyU2ZKU2lEN2R4U29ZQlo3T3g1cndpLUNqZXFhclphYzdyN0thaXM5WXl4UnN2eGZiUXd4SXdUenppTXNRTU1CV3RURnEyT05XUFRNUWFiMGNwN0QzYjVtS1Zoc24zcV9lWHV2eDZQckJwb2ZpS3g0OG9VMnpJaHJt?oc=5",
-      "source": "Reuters",
-      "corroborated": true,
-      "amount_cr": 44820.0
-    },
-    {
-      "headline": "Is Broadcom Stock a Buy After Marvell's $115 Billion Deal?",
-      "event_type": "capacity_add",
-      "phrase": "billion deal",
-      "certainty": "completed",
-      "domains": [],
-      "actors": [],
-      "external": [
-        "Broadcom",
-        "Marvell"
-      ],
-      "direction": "opportunity",
-      "date": "2026-11-05",
-      "first_seen": "2026-11-07",
-      "link": "https://news.google.com/rss/articles/CBMipAFBVV95cUxOWDJ6Ny1ISUNUamR3UW9KLTg1RGRldEhXaVg5bFhVYmFDSWEyVFNNUG1wSHd1MFRyUDNreVE5bDNvcGRmTF9wUl9oZEJqMDQ1d3RlY0ZzSnFrZVk4UmE0eDdJR0t2eEstdnhPUVNqd0hVaVF5MjVTbHBqS3V5aWdSM0xMa0FWQlhYQmZhSS1QbFdCaUIxb2NwRlFsSkNFMXFnaDh6UQ?oc=5",
-      "source": "The Motley Fool",
-      "corroborated": false,
-      "llm_reading": {
-        "event_type": "none",
-        "actors": []
-      },
-      "amount_cr": 954500.0
-    },
-    {
-      "headline": "Apollo Hospitals Reports 32% Profit Growth In Q2, Plans Rs 7,100 Cr Expansion",
-      "event_type": "capacity_add",
-      "phrase": null,
-      "certainty": "announced",
-      "domains": [],
-      "actors": [
-        "APOLLOHOSP"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-11-05",
-      "reader": "llm",
-      "corroborated": false,
-      "link": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQYmpIYzM0RmxqZk9NdDVtVVgzLUpxdUxjYkNfZE1NNGNOSERHZTdtZHFFekVpRlFxVlkzQmpDUkRlMExHZDcxTTZyNVFWa0V1YlNrYllfdUZFWnllempTWl96MldBOGhUWnl0bms3aTBndG1FS29WWTN5Q3hZVm1mN2FKUTZiZ29VVGxmN3dsUGJmSDE5VDFlODJESG5ORk1FeUFILXhaUEFFV3pUWWk1NG53d1VnNW5Ha0VfaHRTX2RCZw?oc=5",
-      "source": "BW Healthcare World",
-      "story": "Apollo Hospitals Reports 32% Profit Growth In Q2, Plans Rs 7,100 Cr Expansion",
-      "reports": 1
-    },
-    {
-      "headline": "Element Six and Entegris partner on synthetic diamond technology for chip packaging",
-      "event_type": "tie_up",
-      "phrase": "and entegris partner on",
-      "certainty": "completed",
-      "domains": [
-        "semiconductors_equipment"
-      ],
-      "actors": [],
-      "external": [],
-      "counterparties": [],
-      "direction": "opportunity",
-      "date": "2026-11-05",
-      "first_seen": "2026-11-06",
-      "link": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxOUG5BSFprOE14eFN0RWl1RXNYMGstUHU4ekNMbjdRdUFwbDVPS1ZpSU5Cc2U4NDFuNFBMd3VNOXFTYzFzQWNsRi03LUFGUG91bjZycTBHQ3Q2N2Zwckw0RHB6bUdoZWFUMGFFamFiWWZjd3FTajhwTGVIME1heE9hOXc5WWdfVkU2ZGRiZ1JkS2stQV91UTBJMkc4Xzc5eXdscTluTzFXQ2lNdWdFVTVtd2Y1VVBnX2dJX1c3aVd3cTM1Qlg2UEN2cw?oc=5",
-      "source": "New Electronics",
-      "corroborated": true
-    },
-    {
-      "headline": "CAMPUS Plans UK, UAE and Southeast Asia Market Expansion",
-      "event_type": "capacity_add",
-      "phrase": null,
-      "certainty": "announced",
-      "domains": [],
-      "actors": [
-        "CAMPUS"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-11-05",
-      "reader": "llm",
-      "corroborated": false,
-      "link": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQWjM2SHpiXzM2SS1OQWE2Y0k0MjhDMkpwQjdKMHJza3g1bjVxUmpjUDVwSlNxX2tadjYyODFjZG1GenZ2cmNXR1VmMzk3N3NSRWFERWNLdGg2RXdXczdmNzBsVF9laUsxQk1GZm5JSXNHYk1Hejg2RjNWZjF5NU00RFdqQnpOWVR5N1RtNEtWNFRqMVQ1S3pNU2lZZ2hwQlpYMldaaGZEd0Q?oc=5",
-      "source": "Multibagg AI",
-      "story": "CAMPUS Plans UK, UAE and Southeast Asia Market Expansion",
-      "reports": 1
-    },
-    {
-      "headline": "BHEL secures four Adani Power orders valued ₹5,000-₹7,000 crore each",
-      "event_type": "order_win",
-      "phrase": "secures four adani power orders",
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "BHEL"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-11-04",
-      "first_seen": "2026-11-11",
-      "link": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxNS0lUUm83SENKZWtsTGN6UVFyU1BCcGd4c3I1TTd3R2JwTkdUdUhqdHpLVDlPcFE5V1hmaHF0R1ZCZnl1ZW9zMmswb05jZG92RGZNZ002a1hLa1pxY3B6bEU4Z1lKdkZVVmt6eXdiWU9RZkVpbXVLSnpmekZxeGh3a1ZXaC04eS1hRnQyOWtrNGVwUE1KTm91c2dVcjExS1YyaUZ2WHN3QnBrdnZkQWQ4TFlpRW1IRkZzaHd2em85T0xsaEVhSFd0edIBzgFBVV95cUxOLUNrc2JpRHFxTXNELTdmOFcyMjdGUllZTXZpX1J1aDFxbXhyY1BvM3VaVzd5bnJTTGhHTk90NHdzMk5rQV9jajR6bjJYNFhUdUp5YW1xb2puZTBTVndlX0otRU5semg3TTMwMjBUeEJUOG5mSzZfdjc0TS1GOUpBYVFlQ2tyYzk4VDhxRlpvWklIVTlJWnhjd2lzdkVySnE0T0R5dTRNdjhRN1RzdUZseTEtOV83UUlnT0E4UGEzb2wzc1BScTFRbDhCQlVhZw?oc=5",
-      "source": "ET EnergyWorld",
-      "corroborated": true,
-      "amount_cr": 7000.0,
-      "materiality": {
-        "BHEL": {
-          "pct_of_revenue": 18.53,
-          "band": "transformative"
-        }
-      },
-      "story": "BHEL Bags Adani Power Orders Worth Up to ₹28,000 Crore for Four Thermal Projects",
-      "reports": 4,
-      "confirmation": {
-        "ticker": "BHEL",
-        "source": "NSE",
-        "filing": "Bharat Heavy Electricals Limited has informed the Exchange about Bagging/Receiving of orders/contracts",
-        "date": "2026-11-04",
-        "link": "https://nsearchives.nseindia.com/corporate/BHEL_04112026085754_APLorder04112026.pdf"
-      }
     }
   ]
 }
