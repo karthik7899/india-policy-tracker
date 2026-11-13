@@ -2,6 +2,20 @@
   "ticker": "ASTRAMICRO",
   "items": [
     {
+      "date": "12 Nov 2026",
+      "headline": "Astra Microwave order book nearly doubles to Rs 3,937 crore",
+      "source_url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxQM2I2aHRPanBMYm45aEtEakhPOFlvdF9PMzRUbk1FQkFfSlpKZTl4eEdWNHhDTDJwVHR3anZQd1dxWTg5bXd4bVA5S2lsRE5oUzBhOUFfcjVoQXFhaURqdmQtdG15QUFmQlBpVGJfYmxQcVdGM1lsTTZhc3hnMmh3SXgxVENON3pvZFpqNzhsTVZlYWwtRXFtbXoxOG4tLWNPTHVtamF6ZGV0SjhzOVRxSTVB?oc=5",
+      "source_label": "Multibagg AI",
+      "event_type": "order_win",
+      "source_kind": "Sector news",
+      "event_tags": [
+        "order_win",
+        "Sector news"
+      ],
+      "confidence": "M",
+      "status": "counted"
+    },
+    {
       "date": "Tue, 27 Oct 2026 04:03:00 GMT",
       "headline": "Apollo Micro, MTAR Tech, Astra Microwave, HAL gain up to 6% after DAC clears Rs 2.12 lakh crore in defence proposals",
       "source_url": "https://news.google.com/rss/articles/CBMihgJBVV95cUxOYm54UERYa1E1eFY0S1hlQWZidWNOLWlxU0VQLUUyLWJBSDBUdzY5Zl9kbkdTLWFKUjljcGFwSkg0bVk2WGpWM0g2WXZUVE00ZHJpVHN3NkpQdjd5RzBrYk1IZnpsSXE3WWU4U05JRFZhV2t5LW5NVFU5YjZCMDctQ2lfLTFxcmx2ZjNxaFp5RjhNZTZ5dzY5SVVCaEp1MFdLeVVmN18xWjZCSHliU1diNzFyR0V4cTNoY1hMLWEtSU5HeXVtdWRZVG5wYTZVYkNZRkhPVGRFaWNPNjRyRVlneFJhUDlCOG55NTZJOGJiNDdvelRVOXBlREZobTJlNkRqLW5iMGp3?oc=5",
@@ -10,6 +24,19 @@
       "source_kind": "Agreement",
       "event_tags": [
         "Agreement"
+      ],
+      "confidence": "M",
+      "status": "counted"
+    },
+    {
+      "date": "13 Nov 2026",
+      "headline": "Astra Microwave Products Limited has informed the Exchange about Copy of Newspaper Publication",
+      "source_url": "https://nsearchives.nseindia.com/corporate/ASTRAMICRO_13112026114055_NewspaperClippingIntimation.pdf",
+      "source_label": "NSE",
+      "event_type": "",
+      "source_kind": "Filing",
+      "event_tags": [
+        "Filing"
       ],
       "confidence": "M",
       "status": "counted"
@@ -65,7 +92,22 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (321 days old)"
+      "exclusion_reason": "aged >120d (322 days old)"
+    },
+    {
+      "date": "2026-11-12",
+      "headline": "Astra Microwave order book nearly doubles to Rs 3,937 crore",
+      "source_url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxQM2I2aHRPanBMYm45aEtEakhPOFlvdF9PMzRUbk1FQkFfSlpKZTl4eEdWNHhDTDJwVHR3anZQd1dxWTg5bXd4bVA5S2lsRE5oUzBhOUFfcjVoQXFhaURqdmQtdG15QUFmQlBpVGJfYmxQcVdGM1lsTTZhc3hnMmh3SXgxVENON3pvZFpqNzhsTVZlYWwtRXFtbXoxOG4tLWNPTHVtamF6ZGV0SjhzOVRxSTVB?oc=5",
+      "source_label": "Multibagg AI",
+      "event_type": "order_win",
+      "source_kind": "Event",
+      "event_tags": [
+        "order_win",
+        "Event"
+      ],
+      "confidence": "L",
+      "status": "merged",
+      "exclusion_reason": "merged: duplicate phrasing of “Astra Microwave order book nearly doubles to Rs 3,937 crore”"
     }
   ]
 }

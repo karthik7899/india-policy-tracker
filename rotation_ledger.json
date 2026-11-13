@@ -729,9 +729,9 @@
     "name": "Birla Cable",
     "price_at_decision": 368.95,
     "target_at_decision": null,
-    "scored": false,
-    "outcome": null,
-    "realized_return_pct": null,
+    "scored": true,
+    "outcome": "No Analyst Target (unscored)",
+    "realized_return_pct": -11.8,
     "target_made_up": 461.19
   },
   {
@@ -1262,6 +1262,18 @@
     "name": "VRL Logistics",
     "price_at_decision": 337.05,
     "target_at_decision": 417.5,
+    "scored": false,
+    "outcome": null,
+    "realized_return_pct": null
+  },
+  {
+    "date": "2026-11-13",
+    "action": "rotated_in",
+    "sector": "big_cap_industries",
+    "ticker": "TATAPOWER",
+    "name": "Tata Power Company",
+    "price_at_decision": 347.95,
+    "target_at_decision": 415.5,
     "scored": false,
     "outcome": null,
     "realized_return_pct": null
