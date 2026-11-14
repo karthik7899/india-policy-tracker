@@ -150,7 +150,6 @@ def test_no_key_skips_without_breaking_pipeline(tmp_path, monkeypatch):
     assert "GEMINI_API_KEY" in result["status"]["skipped"]
 
 
-
 def test_research_input_includes_institutional_and_tradeability_signals():
     watchlist, digest = _fixture()
     stock = watchlist["industrial"][0]
