@@ -742,9 +742,9 @@
     "name": "Optiemus Infra.",
     "price_at_decision": 787.05,
     "target_at_decision": null,
-    "scored": false,
-    "outcome": null,
-    "realized_return_pct": null,
+    "scored": true,
+    "outcome": "No Analyst Target (unscored)",
+    "realized_return_pct": 3.4,
     "target_made_up": 983.81
   },
   {
@@ -1274,6 +1274,42 @@
     "name": "Tata Power Company",
     "price_at_decision": 347.95,
     "target_at_decision": 415.5,
+    "scored": false,
+    "outcome": null,
+    "realized_return_pct": null
+  },
+  {
+    "date": "2026-11-14",
+    "action": "added",
+    "sector": "fmcg",
+    "ticker": "ANDREWYU",
+    "name": "Andrew Yule & Company",
+    "price_at_decision": 24.12,
+    "target_at_decision": null,
+    "scored": false,
+    "outcome": null,
+    "realized_return_pct": null
+  },
+  {
+    "date": "2026-11-14",
+    "action": "rotated_in",
+    "sector": "clean_energy",
+    "ticker": "PREMIERENE",
+    "name": "Premier Energies",
+    "price_at_decision": 895.9,
+    "target_at_decision": 1050.0,
+    "scored": false,
+    "outcome": null,
+    "realized_return_pct": null
+  },
+  {
+    "date": "2026-11-14",
+    "action": "rotated_in",
+    "sector": "hospitality_travel",
+    "ticker": "EIHOTEL",
+    "name": "EIH",
+    "price_at_decision": 316.55,
+    "target_at_decision": 367.5,
     "scored": false,
     "outcome": null,
     "realized_return_pct": null

@@ -1,14 +1,67 @@
 {
   "value": {
-    "as_of": "2026-11-13",
+    "as_of": "2026-11-14",
     "tracking_since": "2026-10-10",
     "reported_today": [
-      "AVALON",
-      "BDL",
-      "PAGEIND",
-      "POWERINDIA"
+      "BBOX",
+      "RELAXO",
+      "TVSSCS"
     ],
     "scorecards": [
+      {
+        "ticker": "TVSSCS",
+        "name": "TVS Supply",
+        "sector": "logistics_heavy_capital",
+        "detected": "2026-11-14",
+        "quarter": "Sep 2026",
+        "quarters": 8,
+        "sales_cr": 3687.0,
+        "sales_qoq_pct": 10.6,
+        "sales_rank": 1,
+        "sales_yoy_pct": 38.5,
+        "eps": 0.8,
+        "eps_yoy_pct": 128.6,
+        "opm_pct": 7.0,
+        "opm_change_pp": 0.0,
+        "net_profit_cr": 37.0,
+        "summary": "Sales ₹3,687 Cr, +38.5% on a year ago (+10.6% on the quarter before), the highest of 8 quarters; EPS 0.80, +128.6% on a year ago; operating margin 7%."
+      },
+      {
+        "ticker": "RELAXO",
+        "name": "Relaxo Footwears",
+        "sector": "sports_athleisure",
+        "detected": "2026-11-14",
+        "quarter": "Sep 2026",
+        "quarters": 8,
+        "sales_cr": 702.0,
+        "sales_qoq_pct": -0.4,
+        "sales_rank": 3,
+        "sales_yoy_pct": 11.6,
+        "eps": 1.48,
+        "eps_yoy_pct": 2.1,
+        "opm_pct": 12.0,
+        "opm_change_pp": -3.0,
+        "net_profit_cr": 37.0,
+        "summary": "Sales ₹702 Cr, +11.6% on a year ago (-0.4% on the quarter before); EPS 1.48, +2.1% on a year ago; operating margin 12%, -3.0 pts on the quarter before."
+      },
+      {
+        "ticker": "BBOX",
+        "name": "Black Box",
+        "sector": "midcap_it",
+        "detected": "2026-11-14",
+        "quarter": "Sep 2026",
+        "quarters": 8,
+        "sales_cr": 1936.0,
+        "sales_qoq_pct": 12.7,
+        "sales_rank": 1,
+        "sales_yoy_pct": 22.1,
+        "eps": 4.09,
+        "eps_yoy_pct": 25.1,
+        "opm_pct": 9.0,
+        "opm_change_pp": 0.0,
+        "net_profit_cr": 73.0,
+        "summary": "Sales ₹1,936 Cr, +22.1% on a year ago (+12.7% on the quarter before), the highest of 8 quarters; EPS 4.09, +25.1% on a year ago; operating margin 9%."
+      },
       {
         "ticker": "POWERINDIA",
         "name": "Hitachi Energy",
@@ -885,24 +938,6 @@
         "opm_change_pp": 0.0,
         "net_profit_cr": 7019.0,
         "summary": "Sales ₹19,439 Cr, +44.5% on a year ago (+2.8% on the quarter before), the highest of 8 quarters; operating margin 42%."
-      },
-      {
-        "ticker": "INDHOTEL",
-        "name": "Indian Hotels Company",
-        "sector": "hospitality_travel",
-        "detected": "2026-10-22",
-        "quarter": "Sep 2026",
-        "quarters": 8,
-        "sales_cr": 2484.0,
-        "sales_qoq_pct": 6.2,
-        "sales_rank": 4,
-        "sales_yoy_pct": 21.7,
-        "eps": 2.46,
-        "eps_yoy_pct": 23.0,
-        "opm_pct": 28.0,
-        "opm_change_pp": -1.0,
-        "net_profit_cr": 380.0,
-        "summary": "Sales ₹2,484 Cr, +21.7% on a year ago (+6.2% on the quarter before); EPS 2.46, +23.0% on a year ago; operating margin 28%, -1.0 pts on the quarter before."
       },
       {
         "ticker": "ICICIBANK",

@@ -114,7 +114,7 @@
             "reader": "llm"
           }
         ],
-        "read": 3,
+        "read": 4,
         "unread": 0
       },
       "HDFCBANK": {
@@ -125,6 +125,15 @@
         "challenged": [],
         "supported": [
           {
+            "headline": "Looking for stocks to buy for 2027? HDFC Bank, Meesho, Paytm, Park Medi, LG Electronics - Ventura's top picks revealed",
+            "claim": "Largest private lender; post-merger deposit repricing and a direct read on retail credit demand",
+            "because": "Ventura's top picks revealed",
+            "date": "2026-11-13",
+            "link": "https://www.livemint.com/market/stock-market-news/looking-for-stocks-to-buy-for-2027-hdfc-bank-meesho-paytm-park-medi-lg-electronics-venturas-top-picks-revealed-11794556121055.html",
+            "source": "Livemint",
+            "reader": "llm"
+          },
+          {
             "headline": "Muhurat Trading 2026: Equirus Prive's 16 Diwali picks include HDFC Bank, M&M, ESFB Voltas; upside seen up to 54%",
             "claim": "Largest private lender; post-merger deposit repricing and a direct read on retail credit demand",
             "because": "Equirus Prive's 16 Diwali picks include HDFC Bank",
@@ -134,7 +143,7 @@
             "reader": "llm"
           }
         ],
-        "read": 12,
+        "read": 13,
         "unread": 0
       },
       "ICICIBANK": {
@@ -466,6 +475,24 @@
             "date": "2026-09-08",
             "link": "https://nsearchives.nseindia.com/corporate/SUZLON1_08092026092626_Suzlon_08-09-2026.pdf",
             "source": "NSE",
+            "reader": "llm"
+          },
+          {
+            "headline": "Suzlon Energy Secures 250 MW Wind Order From Torrent Green Energy",
+            "claim": "dominating wind turbine supply with a record order book",
+            "because": "Secures 250 MW Wind Order From Torrent Green Energy",
+            "date": "2026-08-25",
+            "link": "https://news.google.com/rss/articles/CBMipwFBVV95cUxOXy1ibEVacTcwdTFMeGI3SWxHQXNZX1NLRzBjMkkwalN1emdyLWNlVDRBUE85QmZfMUJzcnNLM3lHMTE2YzQ1cXdiZXlwV21wWVhBekw5a25tZHJ4cTJ1dC1sUGYzSzhycTJjdXF1b1Z3VzhpbEl0TXJpX2dMRjZxMTI3UkVrbTd3YTl0dEstMng4cW5ObUpmVmQ2bzNsQ1gxaXR5dVU1dw?oc=5",
+            "source": "Sahi",
+            "reader": "llm"
+          },
+          {
+            "headline": "AP Government and Suzlon break ground for 1,325 MW wind projects in Ananthapuramu; unlock 10,500 crores investment and create 1,600 green jobs",
+            "claim": "dominating wind turbine supply with a record order book",
+            "because": "AP Government and Suzlon break ground for 1,325 MW wind projects",
+            "date": "2026-08-25",
+            "link": "https://news.google.com/rss/articles/CBMilwJBVV95cUxOUjhQbGx0dnh2NDVMSGotc3Z0OEZydlA2T3JNdWwxNWo0VHY5R3pJcTVkb2Mxc0ZaeEVqWnNUd1dEQV9XZlNWUWtFUTZzdXFKS1liS3JpaWw2R0cxeldIaEJGVERNLXcybTg1Z3VpSk5Kc0dJUm82Wkl0ZUFIanQ3clJGYXlRWFc1YVl5SDhndldMcGFnMDhnMDhPdHFyMU5XRTJxemNFc09pTGJJZnY2RE9kOUtSSmdUYXFlWW1ySF9jTTF2eTlBSk1NbGxhTzFQTlRiS2dSYjdLSGMtRlpWZE1FQjhCUDVHMWFfOFVCRVc1TkFLUFdFVnMtVHMwNjFNYWFHeU82TFhOM1oxeFFtNFU4emwzNUk?oc=5",
+            "source": "suzlon.com",
             "reader": "llm"
           }
         ],
@@ -1058,89 +1085,6 @@
           "Fortis unveils garden-centred Rosemont apartment development in New Farm"
         ]
       },
-      "INDHOTEL": {
-        "ticker": "INDHOTEL",
-        "name": "Indian Hotels Company",
-        "sector": "hospitality_travel",
-        "thesis": "Taj operator scaling asset-light management contracts against record domestic travel demand.",
-        "challenged": [],
-        "supported": [
-          {
-            "headline": "Indian Hotels, Ambuja plan Rs 2,700-crore hospitality expansion across West Bengal",
-            "claim": "Taj operator scaling asset-light management contracts against record domestic travel demand",
-            "because": "hospitality expansion across West Bengal",
-            "date": "2026-11-10",
-            "link": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxPVVc0TkJVSzJkWGI4SlUwaUJOVTdzb2k0bDBocl9FOHZwWmhLcTkwbXVjZ1NWOGhJS0Q1SGJ3UzBma2RWWkFDNVhUNVVNMmJrYU1YSTEyNmRXNnVkZGhobVNIWEF3cG1QUVlKLXBjME85cGVUUkJxRFJFME1RbUhiU1lGOEFsVElCNHBoT1duU3k3aFlKY3dhWFlJUm14QXRhN1VvbnR4Z3dxeGRyb1dtUnUwRHpLSjZWeEJKNHJQak9wMU5pU1lhV9IBzwFBVV95cUxPNXdwdFF6T1dUd1ZSWTlKZTMxWEU5TFU2NDU3b2x5TWQyc2dtUVU5LUVEVjMySGxXblU0QlRZZDR6ZXdKbzVORHB6NlJTQjQ5akQ3N1N0T19LdWxRdlY2Q0JNZzUzS0ViWjdXSV9zM01kOTFKakZPNVV0bHVzd1FhdFpwLWhocGN1ZWpGZlJocC00TTlMY0YxS3ZGUWNJUmtyeGtLb2dYWG9jYTV5dkd2emVMV19NaFg1TGx5M2xuTmwzbkJsb2dpdDlqeEMtc28?oc=5",
-            "source": "The Indian Express",
-            "reader": "llm"
-          },
-          {
-            "headline": "IHCL Reaches 628 Hotels",
-            "claim": "Taj operator scaling asset-light management contracts against record domestic travel demand",
-            "because": "IHCL Reaches 628 Hotels",
-            "date": "2026-11-02",
-            "link": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE5GdXhDYndJN1hybXhPSVhXQVBuTjdKXzN1UERnMzJXZkplaW1LNEdySFltOEhKTDdZMXRUN0pDQkZidGEwblJmQzcxV0dSNFA2dWVNdUd6ZVRuYUJN?oc=5",
-            "source": "https://safariindia.com/",
-            "reader": "llm"
-          },
-          {
-            "headline": "IHCL and AAHL Sign Pact to Set Up 8 Hotels in 4 Cities",
-            "claim": "Taj operator scaling asset-light management contracts against record domestic travel demand",
-            "because": "IHCL and AAHL Sign Pact to Set Up 8 Hotels in 4 Cities",
-            "date": "2026-10-30",
-            "link": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQYmxNc0F4c2VKeDhiRUJUUlNKcUFOdFZuanB1SzhVZjkxaDNHMXM5RWdGdzcwQ29aNXQ4MlVmdEk2OVM0YXYxSTV0dmVEVGdnYXJ4blV0bWhDanRJYkoyenAxU1Q2SzUzMUgycTBIN2FFUHdfRnRXeFR2SF9rZlJVZWR6d1ZtbUdLM1llbk1kSGZsNzNXZlp3Vm1XMTY1STBNTUJKcnBiNU1tRmo3aHZ2Uw?oc=5",
-            "source": "TradingView",
-            "reader": "llm"
-          },
-          {
-            "headline": "Adani Airports, IHCL sign eight-hotel agreement in 4 cities",
-            "claim": "Taj operator scaling asset-light management contracts against record domestic travel demand",
-            "because": "Adani Airports, IHCL sign eight-hotel agreement in 4 cities",
-            "date": "2026-10-29",
-            "link": "https://news.google.com/rss/articles/CBMiugFBVV95cUxNZC1JZWdTR1pURnNnTjJmcE8yR24yMVF6WDYxSFRpY2FoRWNjUVZWMWlpY2xIUnFnX3R6bTQwWlZjdVJGTVJrSkxFZ2sxZndybm9PZ3AzbXBGdzd5NGxaZWNud2w1Y1FLT0JnNHYtV2M5V0pqNExHZjZvcUtrdXZhNkFvdWt2amF1UUtoNjlKLVA2YnBTTzNxQUYyc2FjMWNSWHdrbXZQaGtOdGRtdDZlUUtpYkg5QW0xV0HSAb8BQVVfeXFMUEdxVHFmODhVcG9iUGZIUWtNUFFTREdFM3BFSU8xamRBdkM5X3pLNjVEQWpDc3NWU1R3V0V6ODNLazlDQmdUcUcyc190c2RmLVF2TzhkZS1zNTVnR2JoZTg2aG1VWmVyWFkySTJLWGdxV3BHblZDR3BYS3ZCWjRMNTFCaUhhR2ZJMDBYdm9qdUNuTWRvVmtHeHV0cTVSR0RaOUJ4bk8yS1VGTTBoLWZpS0pIQ2ozRG14Ny1Hc3VQbm8?oc=5",
-            "source": "Livemint",
-            "reader": "llm"
-          },
-          {
-            "headline": "INDHOTEL: Hotel Services led H1 growth as consolidated revenue reached ₹482,351 lakh",
-            "claim": "Taj operator scaling asset-light management contracts against record domestic travel demand",
-            "because": "Hotel Services led H1 growth as consolidated revenue reached ₹482,351 lakh",
-            "date": "2026-10-21",
-            "link": "https://news.google.com/rss/articles/CBMi-AFBVV95cUxPem45RXpPXzNEQmVlZUtqcWdXeGtMS0lDRXVMWlZ3WXJfc2pKbVJTQW9XXzl4WUFwZFNUb25pWE1QTTBPWjVlYlpsaVFHMmRsNnhNSEhvMEs4NHJOOG5mRzBQWG94Wko4VHh5MTIwZEk4VEZ3eVhIZkpSWkd5YjhEWmNYb21JWEFGUHdhc1hUQ3g3V0Z5a196OHJvNlgxbjMxTEhPbXlfWmtrRUFXOE5qODF3TjFnUXBqQWxjanhGYmFuV0RjRXl4RUNxWVVyNDJCOTZncXA3VXZKdXItbEVtXzZUd3hNeHlIZl9faHMwX01ucHdaeGJpZg?oc=5",
-            "source": "TradingView",
-            "reader": "llm"
-          },
-          {
-            "headline": "Indian Hotels: Oriental Hotels acquisition likely EPS accretive; retain 'Buy', target price Rs 830",
-            "claim": "Taj operator scaling asset-light management contracts against record domestic travel demand",
-            "because": "retain 'Buy', target price Rs 830",
-            "date": "2026-08-25",
-            "link": "https://news.google.com/rss/articles/CBMi7AFBVV95cUxPZl9faXVqRXRGeS16N0U5MUpRRjhIV0tMVTg1SUZPOHFac2h1NWphbDc4a1YwWVVkUW5wYVcxYk5YU2dfVEFRNm1Yc05Camd0OVdtcm9DTWlnY3l2OEVjWTcwZTlXbEd3dl85bFdUMDczb0c5NGtLMFNqQklfNm1Va2tmblV0MWhTeW5sSDROVDVUSGUyZmtscy1IN3hPWGRCNkNFU1dpX1hCWHBLMzk2RHZCdlZUQ2l0UEE4bG1ad25RT0FwNDdFeFVMZGNzamRKYWZIcDJhb1Bsc1NrMDF3UEYwQ0Q5eE9mSTFFeg?oc=5",
-            "source": "TradingView",
-            "reader": "llm"
-          },
-          {
-            "headline": "The Indian Hotels Company Limited has informed the Exchange about Scheme of Arrangement between Oriental Hotels Limited and The Indian Hotels Company Limited and their respective shareholders",
-            "claim": "Taj operator scaling asset-light management contracts against record domestic travel demand",
-            "because": "Scheme of Arrangement between Oriental Hotels Limited and The Indian Hotels Company Limited",
-            "date": "2026-08-24",
-            "link": "https://nsearchives.nseindia.com/corporate/bakhtawar_irani_tajhotels_com_24082026085942_Reg_30_IHCL_FINAL.pdf",
-            "source": "NSE",
-            "reader": "llm"
-          },
-          {
-            "headline": "INDHOTEL: Revenue and profit rose year-over-year, driven by hotel segment growth and a key acquisition",
-            "claim": "Taj operator scaling asset-light management contracts against record domestic travel demand",
-            "because": "Revenue and profit rose year-over-year, driven by hotel segment growth and a key acquisition",
-            "date": "2026-07-21",
-            "link": "https://news.google.com/rss/articles/CBMikAJBVV95cUxPdHFkM2NiVmxmRkN3YS1mREE5T1NiSXdiWUtHVVZTclU1WlNvSGdmLXozY1dlaHZYTVJFS0RLYnhiS1RmRzVuRlUzUXAzanV3SGJiMnhrd0pzSTV6ZF9fVlByay1rSmxRY2FDcUdOX0h0blJqSVhpZkx0VTZFdUczT0wwQzVHWlZQRzBfbGZDbHNLQUtaVF81MGdDOUR0VU9fdlhkZ05ydUZxWl82TzhCN3k3UlF6cUZ6WkRUek5HbEtGZmpVMDh1TDJMZlc3ZXJGMVV5WTNXcjVpRzVoVTdUQjdCWWZUNnZ6MC01T1lEMldlaVZiWGgwT3QtVm9DNkdUX19mU24teVFfMEs5QnVUXw?oc=5",
-            "source": "TradingView",
-            "reader": "llm"
-          }
-        ],
-        "read": 9,
-        "unread": 0
-      },
       "CHALET": {
         "ticker": "CHALET",
         "name": "Chalet Hotels",
@@ -1528,18 +1472,9 @@
             "link": "https://news.google.com/rss/articles/CBMihgJBVV95cUxNQVd2VzZ0N2NGUVQ0X3pDdHo5ZF83LXRyNmxfUkxqNFJhZXQtMGRFZ0pxMlpaeUU4UURYQzdwV1Frdk42VmZMZXpZS2V5ZjFYaVNuMzJoNjdoa2F1VHhJUVFmTmJNUVcxeTI0dlppTTc3amVBUXJKZlN3Q1NKUEJIa2w0cVhHbjZhTC1CSFpqV2ZKUnpTNWVHY0lyLUxmRExTT3F2UjZxM01LUlRobXlOc0NjWi11U2VkY1Nkcy1aWUltOTBTTDM0eFlneEtBSGZxRm9LOXE2X1FKelJEYXNkcmNZSVprWDQ2OHFSUlY1bmdDOExnS2dTenFLSG9EQjM4UmczUGZn0gGLAkFVX3lxTE1uR3JjTllIU3M0NWdvSjNmVXdDaVg2ZVBZZVpzaHpFVUdDS0tBajJ6NkdTdVduYk1VdXpCWDJFTVlqWEZDTlJHNUNqTll1Z3VNc1FpaGNnbkdRdmtMM0dZbXU4NmktRlhTSkVGRGIxUjRTbHM4MUtwd2dlc181cGkxSFAxQkFCMThtRU9mUGJBanZpQWVRYzNLR3gxNEQ0T0F0TUNSWU5GVTJtMmcxSTR0XzV0UTJKODhoYUxHVlUyb1dTNlBERjBGNERMUHNrXy03dmdvclZHMVlzOW51WWdHRUhHN1JRaVNNSEE5a0I3dXpqeHlnUjVKSlcxc3NJUWxaeFBfZ0liMnZrVQ?oc=5",
             "source": "ET Telecom",
             "reader": "llm"
-          },
-          {
-            "headline": "Gigabyte unveils its first Made-in-India gaming laptop, Gaming A16, in partnership with Dixon Technologies",
-            "claim": "Leader in electronic assembly (mobile, laptop, LED TV)",
-            "because": "Gigabyte unveils its first Made-in-India gaming laptop, Gaming A16, in partnership with Dixon Technologies",
-            "date": "2026-07-16",
-            "link": "https://news.google.com/rss/articles/CBMi_wFBVV95cUxOZ1JJNWRQaFo2R1NuWmRrMmpDcXd1TjBXaS1WNGs1RjVJLVV1WnFkcE1reEY4WlBwNGtQNERHZkE3V2hKeDIyLUlXYnRWYTBLUXA3aVdvTFVzeE5LWlNkb0JPbWI2TWlxdUU5N1ZYNzN4emk5VWFNMm44NUF3N09qS18xZjJuWFhQNEZpSDFHdHIwdUFYTmtjV2h2VW9HbDdJOHlHTFlOeEU4bzBzcE14THNiZmNLRHJpRW5fTEtBV0JkbHpnN2JOaVg1LUpxZGluQnpBczlDTXN5dzdJM2RNenRVbDdfWnhWbWNvMFRGMzE3a3BOUEViYmsyWjhPaEnSAf8BQVVfeXFMTmdSSTVkUGhaNkdTblpkazJqQ3F3dU4wV2ktVjRrNUY1SS1VdVpxZHBNa3hGOFpQcDRrUDRER2ZBN1doSngyMi1JV2J0VmEwS1FwN2lXb0xVc3hOS1pTZG9CT21iNk1pcXVFOTdWWDczeHppOVVhTTJuODVBdzdPaktfMWYyblhYUDRGaUgxR3RyMHVBWE5rY1dodlVvR2w3STh5R0xZTnhFOG8wc3BNeExzYmZjS0RyaUVuX0xLQVdCZGx6ZzdiTmlYNS1KcWRpbkJ6QXM5Q01zeXc3STNkTXp0VWw3X1p4Vm1jbzBURjMxN2twTlBFYmJrMlo4T2hJ?oc=5",
-            "source": "Moneycontrol.com",
-            "reader": "llm"
           }
         ],
-        "read": 15,
+        "read": 14,
         "unread": 0,
         "not_about": [
           "The teaser for ‘The Walking Dead: Daryl Dixon’ final season is out and it unveils a new key character",
@@ -1857,15 +1792,6 @@
             "reader": "llm"
           },
           {
-            "headline": "Coforge Limited has informed the Exchange regarding a press release dated October 29, 2026, titled \" Coforge Introduces Autonomous Software Factory for the Era of Agentic Software ",
-            "claim": "expanding margins via GenAI offerings",
-            "because": "Coforge Introduces Autonomous Software Factory for the Era of Agentic Software",
-            "date": "2026-10-29",
-            "link": "https://nsearchives.nseindia.com/corporate/COFORGE_29102026101428_IntimationofPressReleasellOctober292026.pdf",
-            "source": "NSE",
-            "reader": "llm"
-          },
-          {
             "headline": "Coforge Limited has informed the Exchange regarding a press release dated October 26, 2026, titled \"Coforge Named a Leader in Everest Group Quality Engineering (QE) Services for AI Applications and Systems PEAK Matrix® Assessment 2026\".",
             "claim": "expanding margins via GenAI offerings",
             "because": "Coforge Named a Leader in Everest Group Quality Engineering (QE) Services for AI Applications and Systems PEAK Matrix® Assessment 2026",
@@ -1898,6 +1824,15 @@
             "because": "Coforge Launches CXNova, an Agentic CX Orchestration Platform that Delivers Intelligent, Real-Time Customer Experiences",
             "date": "2026-09-30",
             "link": "https://nsearchives.nseindia.com/corporate/COFORGE_30092026105841_2llIntimationofPressReleasellSeptember302026.pdf",
+            "source": "NSE",
+            "reader": "llm"
+          },
+          {
+            "headline": "Coforge Limited has informed the Exchange regarding a press release dated September 30, 2026, titled \"\"Coforge Highlights the Shift to Agentic Travel and Modern Airline Retailing\"\".",
+            "claim": "Mid-tier IT services firm with large deal wins in BFSI and travel verticals",
+            "because": "Coforge Highlights the Shift to Agentic Travel and Modern Airline Retailing",
+            "date": "2026-09-30",
+            "link": "https://nsearchives.nseindia.com/corporate/COFORGE_30092026105513_1llIntimationofPressReleasellSeptember302026.pdf",
             "source": "NSE",
             "reader": "llm"
           }
@@ -2210,25 +2145,25 @@
         "challenged": [],
         "supported": [
           {
-            "headline": "Relaxo Footwears Q1FY27 net profit up 12% to ₹549 crore",
-            "claim": "profit recovering as volume demand returns",
-            "because": "net profit up 12% to ₹549 crore",
-            "date": "2026-08-13",
-            "link": "https://news.google.com/rss/articles/CBMitgFBVV95cUxQSlhKRTU2UU9ET1JSelVfNmF3OWpSV2FmS1FYaWIzOFF0c0tJQXZITjhsMktFOWpET1lMdVY4WU15RjVfYXZjemN2bWFJMGk3YnM4U2c4Znd0LVBwMDV0eVV3cWlDbjBBdHZ0aU44N0V0UXNKdjhCbkFVU3BpRDg0WFpfSFNBdmREcjRQT1otN0hlbktnNVRnYTFWb3RzRVZaVXlUcnBPNG14S0tobmp0T3ZVRlY3QQ?oc=5",
+            "headline": "Relaxo to set up footwear JV in Kenya with 51% stake",
+            "claim": "Mass-market footwear leader with a wide distribution network, profit recovering as volume demand returns",
+            "because": "Relaxo to set up footwear JV in Kenya with 51% stake",
+            "date": "2026-11-13",
+            "link": "https://news.google.com/rss/articles/CBMingFBVV95cUxQU1lNdmp4X3d4MVBfUW9wUVB2ZFdPaFlmTFdfcTU3Y2NvTmlOWDJXQnpMS2h5QXF6bHNxQXNUWmpncDB6VUtUcmVBcjdSTUtTNl9KVzlLMTNLU2hjUlN3aGF2b2Q1TDF5RjlUNmRuU21OUW14TE5lcWJWcVpWTGlJQVRBNlpMQXljZjVzZGJUM0xtWjIwY2RIMkVnRm41UQ?oc=5",
             "source": "scanx.trade",
             "reader": "llm"
           },
           {
-            "headline": "Relaxo and EaseMyTrip Revive ‘BUY & FLY’ Campaign, Offering Travel Rewards on Footwear Purchases",
-            "claim": "Mass-market footwear leader with a wide distribution network",
-            "because": "Revive ‘BUY & FLY’ Campaign, Offering Travel Rewards on Footwear Purchases",
-            "date": "2026-07-29",
-            "link": "https://news.google.com/rss/articles/CBMivgFBVV95cUxQRndkUHNrcnYybVA1Q1VHcS1nQm1zM2JWNTVfbms3LTVrY0VPeVgtSG1sNFYwbmZlNXVMdzB2blptb2N1MlVxckJHdGc5OXRPRWVQS0pNdk1CanVKaGtzTG1FeWpJbmd2cy1NRDUyajNMbkU2WGN6SU5sQllRTXVmNk42aG8yek1WbG1GaGphSUxkVDlEczJHUEV5ZWhsWE91ZF8wSFM2NkdCTlA5eTVwS2JHeVdhZ2dIU1BjVkNn?oc=5",
-            "source": "travelworldonline.in",
+            "headline": "Relaxo to take 51% Kenyan venture stake for Rs 35.70 crore",
+            "claim": "Mass-market footwear leader with a wide distribution network, profit recovering as volume demand returns",
+            "because": "Relaxo to take 51% Kenyan venture stake for Rs 35.70 crore",
+            "date": "2026-11-13",
+            "link": "https://news.google.com/rss/articles/CBMivwFBVV95cUxQZjh5S09MQkJxNXFHcHp4SHprQm01QXhxR3dSelRwcEdraTNMdE9RWmo5QktpVEx1eFk3Q2M0ZF9zZmhYb2lWSmJnaXhtWEtxbVJZMFE1UUZuWFdJa0gxeGtLcUdVSWcyb3A1dEliVFdYb3laRU0xZkJ0aTNGNHFfcFZGeFhfRWg4QmJ5bkkzdlJEamxOWTVLSDg1TERXTzEyTU5CeFJpWFc2RU8zZUY2cnBObFVzdWFCaV9YYWtEcw?oc=5",
+            "source": "Multibagg AI",
             "reader": "llm"
           }
         ],
-        "read": 14,
+        "read": 15,
         "unread": 0
       },
       "CPPLUS": {
@@ -2468,6 +2403,15 @@
         "challenged": [],
         "supported": [
           {
+            "headline": "Arvind Ltd. and unspun announce partnership",
+            "claim": "Leading denim manufacturer, investing in technical textiles under recent government schemes",
+            "because": "partnership",
+            "date": "2026-11-13",
+            "link": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE1lV2hzbm1YNko0U2htdnRtZFA3SGFxVUJDYmxhRUhqRkducFNXZFhXUDN4N0JFLVNEc2dyMjY1U2VVZ1NrejRDNENGWnZKdjJlWURNbHBfc1dxTWZmTGJPb3FvX1lMV2pU?oc=5",
+            "source": "Specialty Fabrics Review",
+            "reader": "llm"
+          },
+          {
             "headline": "Varanasi Textile Facility By Arvind To Employ 1,000 People",
             "claim": "technical textiles",
             "because": "Varanasi Textile Facility By Arvind To Employ 1,000 People",
@@ -2556,15 +2500,6 @@
             "link": "https://news.google.com/rss/articles/CBMixwFBVV95cUxPUVIxZGp0ZFU2WjNfbjJNb2M2OWNyaVVKa2tjS1I0cDNhaTFfSmRnTFZRbmdvaGsxTHQ5RU8tR2NBY1NyVFhxcWZjMjgya19sWVhfbm5aY3Ffa3JHa181QkFKVzhKN1FsWjZadWhzN2pERkpMcnNjUkJZcTBNVTdsMzFjSHFKb3FSLXAtaGMzMFFHN1BoMmpaMEZMbW94X2RmWHVPTF9hek5QYjRSazFVVFFTMTF5ZlpMdng1NzBNdTJzSFE5ak04?oc=5",
             "source": "FashionNetwork India",
             "reader": "llm"
-          },
-          {
-            "headline": "CARE Ratings upgrades LT ratings of Arvind to 'AA' with 'stable' outlook",
-            "claim": "Leading denim manufacturer, investing in technical textiles under recent government schemes",
-            "because": "CARE Ratings upgrades LT ratings of Arvind to 'AA' with 'stable' outlook",
-            "date": "2026-08-26",
-            "link": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxOMjRwZFl0U0ZLNzFrRnZvLVoxYXk0TU1XWnRXcVUzMXlwbThQcDMwTXFOcHZZWi1YdnB0dkZnMU56NHFNZWd6UnY4RkJKOW1oSHpnQ3V1ZlFaS2NYQXA1SkkxSTlZaVZQR1FESmdqdGJ4R3RfazBsUjFVemZZbWJqal8xSHR5ajZESmFUcjdYci1VQXI5NTVQbTZSX3FCcXFKNnBlTVdka29qNUZOYTVkSnJsWUk4Q2pYRDVmU1h2Q1ZmRjJJNkxMODl5M3owZnRNU2o0N3ZwUEVlV1F5TUtQRjAxUVBQWEF6UkHSAeoBQVVfeXFMTjI0cGRZdFNGSzcxa0Z2by1aMWF5NE1NV1p0V3FVMzF5cG04UHAzME1xTnB2WVotWHZwdHZGZzFOejRxTWVnelJ2OEZCSjltaEh6Z0N1dWZRWktjWEFwNUpJMUk5WWlWUEdRREpnanRieEd0X2swbFIxVXpmWW1iampfMUh0eWo2REphVHI3WHItVUFyOTU1UG02Ul9xQnFxSjZwZU1XZGtvajVGTmE1ZEpybFlJOENqWEQ1ZlNYdkNWZkYySTZMTDg5eTN6MGZ0TVNqNDd2cFBFZVdReU1LUEYwMVFQUFhBelJB?oc=5",
-            "source": "Business Standard",
-            "reader": "llm"
           }
         ],
         "read": 15,
@@ -2598,12 +2533,39 @@
         "challenged": [],
         "supported": [
           {
+            "headline": "Godrej Properties Buys 31-Acre Land in Indore for ₹130 Crore, Plans Residential Project",
+            "claim": "Large residential developer adding projects such as the ₹6,000 crore Marine Lines launch in Mumbai, with pre-sales momentum in Mumbai and NCR",
+            "because": "Buys 31-Acre Land in Indore for ₹130 Crore, Plans Residential Project",
+            "date": "2026-11-13",
+            "link": "https://news.google.com/rss/articles/CBMixwFBVV95cUxObU05YTRJU19RNWR4eHdLWWtMYXhHRl9rNnkxX1FvN3RBS1BUTlE2NU9DRTh6dzcyS21FXzBwWFdyRmFQTmpCaVFfd1Rtd2w3a0VKbzQzWmFJS2ZTbW9JU0d6TTl5WkoyUk0zZjdiVUNvelRFWXBDUzdzME5zNDNjVFpyVVFWVFFiVUZ1VkRkT2hVNExVRzVyQWZWbUZZZmNCVWp0M01sczExM0Vjci1vSThNQXROaWVjOVN4VTlZMUxySGtxYmdV?oc=5",
+            "source": "India Business Trade",
+            "reader": "llm"
+          },
+          {
+            "headline": "Godrej Properties acquires 31-acre land in Indore for plotted housing project",
+            "claim": "Large residential developer adding projects such as the ₹6,000 crore Marine Lines launch in Mumbai, with pre-sales momentum in Mumbai and NCR",
+            "because": "acquires 31-acre land in Indore for plotted housing project",
+            "date": "2026-11-13",
+            "link": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxQaUlhSDhBVGg5UE1nNE9rbVlmU3FzRmZKNXRaRGdPOVYtNldfbFlzYlFCbFk5a1FZTnVxeWYtVTJwbzRtcHN2WEFBUFR6dnNPOVphUE90blFJT3JqdjBqdko5Q1B6Sjl1X3BVaWlaVUNrVWpVYU9wcDBodG54cmtZTFJXYTZyQ3JNRlQ2SUxKUG1oc3VVUjM5RlJ3SE1ONm85eU9Zd203RVlBUFc2QzZxel9CT3NjclljSjlWbVh5SGNDZ0JBRThSTmhFVGZmVUhSZ2puMHZvNkVWamVVVVHSAeMBQVVfeXFMUE9XeUFEcWlDd2gxSEpJOUwwMW53dVVPcnFsYXM2VU9BSjNxS0pvYW8zQ0x6OEg3U0Uyd05YQ1ItWFhoMnNzUnIyMmc4UTJxT3RSNmZCZW5Dam4wMk13UWZWYWMyYnZWTGlnRkF0T24tQkxvMTJlNHhNNF9NSm1zQ1hQWEJuSmNYdl9MYS1DalZGMmY4eTNNcTQyMGgySy1EYVNKRVhNVWI0S1dCVzgtV0JZT2g5STBVUi0xRjhHV1poTm9TNklPT1prMEJGbkZ6dHBtdzdvenB2czlPR0lieXVOa0U?oc=5",
+            "source": "ET Realty",
+            "reader": "llm"
+          },
+          {
             "headline": "Godrej Properties Expands Footprint with 31-Acre Land Acquisition for Residential Plots in Indore",
             "claim": "Large residential developer adding projects",
             "because": "Godrej Properties Expands Footprint with 31-Acre Land Acquisition for Residential Plots in Indore",
             "date": "2026-11-13",
             "link": "https://news.google.com/rss/articles/CBMi3AFBVV95cUxPbTQwd3B6eV9obUZtUTlJdVU3ODAxMklLTm01Z0dsQmNSWExBUldWVEh5RThueFo2ZmdiN0JnYmt1ZEY5RDk2T0RqWkZCMXRFX0NmWHpsbTZwSGM2VmZfN2ViV3A4dlpzdlhzLXZ4ZnFwRU1Rd0UwUzFHMXFNMldrUnF4eUpuN0NUVG53TDlQUk11Q05pNVl3bFVnODBLZXpvZVVOME43cjd6SHhPVE53TEF3aEdwWl9Ic2RPaWxMZ09JV1NMWkZoUHNNSkUwMGdBWkdveUVEQ0Zuak5P?oc=5",
             "source": "Kalkine Media",
+            "reader": "llm"
+          },
+          {
+            "headline": "Godrej Properties buys 31-acre land in Indore for Rs 130 cr to build housing project",
+            "claim": "Large residential developer adding projects such as the ₹6,000 crore Marine Lines launch in Mumbai, with pre-sales momentum in Mumbai and NCR",
+            "because": "buys 31-acre land in Indore for Rs 130 cr to build housing project",
+            "date": "2026-11-13",
+            "link": "https://economictimes.indiatimes.com/markets/digital-real-estate/realty-news/godrej-properties-buys-31-acre-land-in-indore-for-rs-130-cr-to-build-housing-project/articleshow/135804198.cms",
+            "source": "Economic Times",
             "reader": "llm"
           },
           {
@@ -2652,20 +2614,21 @@
             "reader": "llm"
           }
         ],
-        "read": 8,
+        "read": 11,
         "unread": 0
       }
     },
     "no_thesis": [
       "AEQUS",
+      "ANDREWYU",
       "APOLLO",
       "ASTERDM",
       "AXISBANK",
       "BBOX",
       "BHEL",
       "DELHIVERY",
+      "EIHOTEL",
       "EMMVEE",
-      "ENRIN",
       "GARFIBRES",
       "GRSE",
       "GVT&D",
@@ -2676,6 +2639,7 @@
       "MRPL",
       "NH",
       "PGEL",
+      "PREMIERENE",
       "TATAPOWER",
       "TECHM",
       "VINCOFE",
@@ -2684,21 +2648,21 @@
     ],
     "challenged": 8,
     "status": {
-      "cached": 400,
-      "read": 15,
+      "cached": 399,
+      "read": 12,
       "pending": 0,
       "skipped": "",
       "confirmed": 0,
-      "refused": 1,
+      "refused": 0,
       "checks_pending": 0,
       "checks_skipped": "",
-      "reasons_read": 0,
+      "reasons_read": 1,
       "reasons_cached": 8,
       "reasons_pending": 0,
       "reasons_skipped": "",
       "articles": 0,
       "articles_refused": 0,
-      "model": "gemini-3.6-flash"
+      "model": "gemini-flash-lite-latest"
     }
   }
 }
