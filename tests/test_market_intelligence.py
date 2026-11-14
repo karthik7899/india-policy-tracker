@@ -128,7 +128,6 @@ def test_supply_chain_tree_separates_direct_links_from_sector_inputs():
     assert exposure["relationship_scope"] == "sector_level_not_company_specific"
 
 
-
 def test_market_intelligence_surfaces_mtf_book_with_provenance():
     stock = _stock(
         "BDL",
@@ -159,8 +158,16 @@ def test_supply_chain_tree_builds_component_and_manufacturer_tiers():
     graph = {
         "edges": [
             {"src": "Nvidia", "dst": "data_center_support", "type": "anchor_demand"},
-            {"src": "optical transceivers", "dst": "data_center_support", "type": "component_dependency"},
-            {"src": "HBM", "dst": "data_center_support", "type": "component_dependency"},
+            {
+                "src": "optical transceivers",
+                "dst": "data_center_support",
+                "type": "component_dependency",
+            },
+            {
+                "src": "HBM",
+                "dst": "data_center_support",
+                "type": "component_dependency",
+            },
             {"src": "Micron", "dst": "HBM", "type": "component_manufacturer"},
         ]
     }
