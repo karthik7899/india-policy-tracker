@@ -1416,14 +1416,16 @@ def _parse_block_deal_headline(headline, flat_watchlist, headline_lower):
     else:
         action = None
 
-    buyer_match = re.search(
+    participant_match = re.search(
         r"^([A-Z0-9][A-Za-z0-9\s.&]+?)\s+"
         r"(?:buys|bought|acquires|acquired|sells|sold|purchases|purchased|"
         r"picks up|offloads|exits|increases|decreases)",
         headline,
         re.IGNORECASE,
     )
-    buyer = buyer_match.group(1).strip() if buyer_match else None
+    participant = (
+        participant_match.group(1).strip() if participant_match else None
+    )
 
     details_match = re.search(
         r"(\d+(?:\.\d+)?%\s*stake|\d+\s*"
@@ -1436,7 +1438,9 @@ def _parse_block_deal_headline(headline, flat_watchlist, headline_lower):
     deal_type = "Block Deal" if "block deal" in headline_lower else "Bulk Deal"
 
     return {
-        "buyer": buyer,
+        "buyer": participant if action == "Buy" else None,
+        "seller": participant if action == "Sell" else None,
+        "participant": participant,
         "action": action,
         "company": f"{matched_company} ({matched_ticker})",
         "ticker": matched_ticker,
