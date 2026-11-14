@@ -1429,7 +1429,7 @@ def _parse_block_deal_headline(headline, flat_watchlist, headline_lower):
         r"(\d+(?:\.\d+)?%\s*stake|\d+\s*"
         r"(?:lakh|million|crore)?\s*shares|"
         r"(?:Rs\.?|INR|₹)\s*\d+(?:\.\d+)?\s*"
-        r"(?:cr|crore|crores|lakh|lakhs)?)",
+        r"(?:crores|crore|cr|lakhs|lakh)?)",
         headline,
         re.IGNORECASE,
     )
