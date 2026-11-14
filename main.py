@@ -32,6 +32,7 @@ from analysis.market_share import (
 )
 from entities import find_duplicate_holdings
 from providers.nse_delivery import apply_delivery, fetch_delivery_async
+from providers.nse_deals import fetch_nse_deals_async
 from providers.mtf import apply_mtf, fetch_mtf_async
 from providers.isin_master import (
     load_isin_master,
@@ -260,6 +261,7 @@ async def run_pipeline():
         adv_rss_task = fetch_advanced_rss_feeds_async(session, watchlist)
         sebi_task = check_sebi_sid_filings_async(session)
         inst_task = fetch_institutional_activity_async(session, watchlist)
+        nse_deals_task = fetch_nse_deals_async(session, watchlist)
         held_exchange_filings: list = []
         filings_task = fetch_exchange_filings_async(
             session, watchlist, held_out=held_exchange_filings
@@ -304,6 +306,7 @@ async def run_pipeline():
             (agreements, launches),
             sebi_filings,
             inst_activity,
+            nse_deals,
             corp_filings,
             _isin_added,
             global_market_news,
@@ -315,6 +318,7 @@ async def run_pipeline():
             adv_rss_task,
             sebi_task,
             inst_task,
+            nse_deals_task,
             filings_task,
             isin_refresh_task,
             global_events_task,
@@ -326,6 +330,10 @@ async def run_pipeline():
         from history.store import HistoryStore
 
         store = HistoryStore()
+        # Preserve exchange-disclosed transactions alongside headline-derived
+        # context, while deduplicating by transaction identity rather than
+        # company/title (which is absent from the exchange schema).
+        inst_activity.extend(nse_deals)
 
         merged_competitors = store.deduplicate_and_merge(
             "emerging_competitors", pli_competitors, ["name", "scheme"]
@@ -343,7 +351,9 @@ async def run_pipeline():
             "sebi_filings", sebi_filings, ["company", "link"]
         )
         merged_inst = store.deduplicate_and_merge(
-            "institutional_activity", inst_activity, ["company", "title"]
+            "institutional_activity",
+            inst_activity,
+            ["ticker", "deal_type", "date", "participant", "headline"],
         )
 
         data["emerging_competitors"] = merged_competitors
