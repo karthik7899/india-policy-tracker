@@ -723,3 +723,44 @@ td .disclose-summary { padding: 2px 0; }
 .data-inspect-body p { margin: 2px 0; }
 /* Live / LKG cached / Missing, each in its status colour (src/core/completeness.js). */
 .data-state-pill { font-size: 11px; padding: 0 6px; }
+
+/* Research workstation navigation: stable routes grouped by task. */
+.workstation-nav {
+  display: flex; align-items: stretch; gap: 4px; flex-wrap: wrap;
+  padding: 0 18px; border-bottom: 1px solid var(--border); background: var(--surface);
+}
+.workstation-group { position: relative; min-width: 0; }
+.workstation-group-title {
+  display: flex; align-items: center; gap: 8px; min-height: 44px;
+  padding: 0 12px; cursor: pointer; list-style: none;
+  color: var(--ink-2); font-size: 13px; white-space: nowrap;
+  border-bottom: 2px solid transparent;
+}
+.workstation-group-title::-webkit-details-marker { display: none; }
+.workstation-group-title:hover { color: var(--ink); }
+.group-active > .workstation-group-title {
+  color: var(--ink); border-bottom-color: var(--series-1); font-weight: 600;
+}
+.workstation-group-current { color: var(--muted); font-size: 11px; font-weight: 400; }
+.workstation-chevron { color: var(--muted); font-size: 12px; transition: transform .15s ease; }
+.workstation-group[open] .workstation-chevron { transform: rotate(180deg); }
+.workstation-group-links {
+  position: absolute; z-index: 20; top: calc(100% - 1px); left: 0;
+  display: none; min-width: 220px; padding: 7px;
+  border: 1px solid var(--border); border-radius: 0 0 var(--radius) var(--radius);
+  background: var(--surface); box-shadow: 0 12px 28px rgba(0,0,0,.12);
+}
+.workstation-group[open] .workstation-group-links { display: grid; gap: 2px; }
+.workstation-link {
+  display: block; padding: 9px 10px; border-radius: 7px;
+  color: var(--ink-2); text-decoration: none; font-size: 13px;
+}
+.workstation-link:hover, .workstation-link.nav-active { color: var(--ink); background: var(--plane); }
+.workstation-link.nav-active { color: var(--series-1); font-weight: 600; }
+@media (max-width: 640px) {
+  .workstation-nav { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; padding: 8px 12px; }
+  .workstation-group-title { min-height: 40px; padding: 0 9px; border: 1px solid var(--border); border-radius: 8px; justify-content: space-between; }
+  .workstation-group-current { display: none; }
+  .workstation-group[open] .workstation-group-title { border-color: var(--series-1); border-radius: 8px 8px 0 0; }
+  .workstation-group-links { position: static; min-width: 0; border-top: 0; border-radius: 0 0 8px 8px; box-shadow: none; }
+}

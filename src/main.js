@@ -26,6 +26,7 @@ import * as system from "./views/system.js";
 import { restoreFocus } from "./views/filterbar.js";
 import { mountSearch } from "./views/searchbox.js";
 import { crumbsFor } from "./core/crumbs.js";
+import { NAV_GROUPS, groupForView } from "./core/navigation.js";
 
 const VIEWS = {
   overview: { label: "Overview", module: overview },
@@ -47,35 +48,39 @@ const VIEWS = {
 let payload = null;
 
 function nav(active) {
-  const shown = Object.entries(VIEWS).filter(([, v]) => !v.hidden);
-  const link = ([key, { label }], cls) =>
-    el(
-      "a",
-      {
-        class: `${cls}${key === active ? " nav-active" : ""}`,
-        href: router.href(key),
-        role: "tab",
-        "aria-selected": key === active ? "true" : "false",
-      },
-      label,
-    );
-  // Two forms of the same links; CSS shows one. A phone showed four of the
-  // eight tabs and gave no sign the strip scrolled, so half the dashboard
-  // was out of sight. Below 640px the strip becomes a menu that lists them all.
-  return [
-    el("nav", { class: "main-nav", role: "tablist" }, shown.map((v) => link(v, "nav-item"))),
-    el(
-      "details",
-      { class: "nav-menu" },
-      el(
-        "summary",
-        { class: "nav-menu-summary" },
-        el("span", {}, VIEWS[active]?.label || "Menu"),
-        el("span", { class: "nav-menu-hint" }, `${shown.length} views \u25be`),
-      ),
-      el("nav", { class: "nav-menu-list", role: "tablist" }, shown.map((v) => link(v, "nav-menu-item"))),
-    ),
-  ];
+  const selected = VIEWS[active]?.under || active;
+  const activeGroup = groupForView(selected);
+  return el(
+    "nav",
+    { class: "workstation-nav", "aria-label": "Research workstation" },
+    NAV_GROUPS.map((group) => {
+      const isActive = group === activeGroup;
+      const items = group.views.map((key) => {
+        const view = VIEWS[key];
+        return el(
+          "a",
+          {
+            class: "workstation-link" + (key === selected ? " nav-active" : ""),
+            href: router.href(key),
+            "aria-current": key === selected ? "page" : null,
+          },
+          view.label,
+        );
+      });
+      return el(
+        "details",
+        { class: "workstation-group" + (isActive ? " group-active" : ""), name: "workstation", open: isActive },
+        el(
+          "summary",
+          { class: "workstation-group-title" },
+          el("span", {}, group.label),
+          el("span", { class: "workstation-group-current" }, isActive ? VIEWS[selected]?.label || "" : ""),
+          el("span", { class: "workstation-chevron", "aria-hidden": "true" }, "⌄"),
+        ),
+        el("div", { class: "workstation-group-links" }, items),
+      );
+    }),
+  );
 }
 
 /**
