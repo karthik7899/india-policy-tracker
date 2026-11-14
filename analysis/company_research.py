@@ -110,11 +110,7 @@ def _evidence(company: Dict[str, Any]) -> List[Dict[str, Any]]:
 
 
 def _company_input(company: Dict[str, Any], stock: Dict[str, Any]) -> Dict[str, Any]:
-    screener = (
-        stock.get("screener")
-        if isinstance(stock.get("screener"), dict)
-        else {}
-    )
+    screener = stock.get("screener") if isinstance(stock.get("screener"), dict) else {}
     metrics = {}
     keys = (
         "price",
