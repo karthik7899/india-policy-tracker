@@ -113,6 +113,7 @@ def build_market_intelligence(
     watchlist: Dict[str, Any],
     company_digest: Dict[str, Any],
     institutional_activity: List[Dict[str, Any]] = None,
+    graph: Dict[str, Any] = None,
     as_of: str = None,
 ) -> Dict[str, Any]:
     """Return per-ticker ownership/tradeability snapshots and ranked ideas."""
@@ -233,6 +234,7 @@ def build_market_intelligence(
         ],
         "snapshots": snapshots,
         "opportunity_ranking": priorities,
+        "supply_chain_trees": build_supply_chain_trees(graph or {}, watchlist),
         "coverage": {
             "holdings": len(snapshots),
             "mtf_available": 0,
