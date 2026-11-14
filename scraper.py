@@ -1388,17 +1388,31 @@ def _parse_block_deal_headline(headline, flat_watchlist, headline_lower):
     matched_company, matched_ticker = matched
 
     sell_terms = (
-        "sells", "sold", "dumped", "offloads", "offloaded",
-        "exits", "reduces stake", "cuts stake",
+        "sells",
+        "sold",
+        "dumped",
+        "offloads",
+        "offloaded",
+        "exits",
+        "reduces stake",
+        "cuts stake",
     )
     buy_terms = (
-        "buys", "bought", "acquires", "acquired", "purchases",
-        "purchased", "picks up", "increases stake",
+        "buys",
+        "bought",
+        "acquires",
+        "acquired",
+        "purchases",
+        "purchased",
+        "picks up",
+        "increases stake",
     )
     has_sell = any(term in headline_lower for term in sell_terms)
     has_buy = any(term in headline_lower for term in buy_terms)
-    action = "Sell" if has_sell and not has_buy else (
-        "Buy" if has_buy and not has_sell else None
+    action = (
+        "Sell"
+        if has_sell and not has_buy
+        else "Buy" if has_buy and not has_sell else None
     )
 
     buyer_match = re.search(
@@ -1418,7 +1432,9 @@ def _parse_block_deal_headline(headline, flat_watchlist, headline_lower):
         re.IGNORECASE,
     )
     details = details_match.group(1).strip() if details_match else None
-    deal_type = "Block Deal" if "block deal" in headline_lower else "Bulk Deal"
+    deal_type = (
+        "Block Deal" if "block deal" in headline_lower else "Bulk Deal"
+    )
 
     return {
         "buyer": buyer,
@@ -1429,6 +1445,7 @@ def _parse_block_deal_headline(headline, flat_watchlist, headline_lower):
         "deal_type": deal_type,
         "confidence": "headline_attributed",
     }
+
 
 async def fetch_institutional_activity_async(session, watchlist):
     log.info(
