@@ -35,7 +35,8 @@ def test_tracked_company_deal_has_explicit_direction_and_ticker():
     assert parsed["action"] == "Sell"
     assert parsed["deal_type"] == "Block Deal"
     assert parsed["details"] == "Rs 109 crore"
-    assert parsed["buyer"] == "Theleme Partners"
+    assert parsed["seller"] == "Theleme Partners"
+    assert parsed["buyer"] is None
     assert parsed["confidence"] == "headline_attributed"
 
 
