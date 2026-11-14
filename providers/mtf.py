@@ -62,9 +62,11 @@ def parse_mtf_payload(payload: Any) -> Dict[str, Dict[str, Any]]:
     for row in _rows(payload):
         if not isinstance(row, dict):
             continue
-        ticker = str(
-            _first(row, ("ticker", "symbol", "stock_symbol", "scrip")) or ""
-        ).strip().upper()
+        ticker = (
+            str(_first(row, ("ticker", "symbol", "stock_symbol", "scrip")) or "")
+            .strip()
+            .upper()
+        )
         if not ticker:
             continue
         book = _number(
