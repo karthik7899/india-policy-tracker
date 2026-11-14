@@ -17,7 +17,7 @@ from utils import atomic_write_json
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CACHE_PATH = os.path.join(ROOT, "research_cache.json")
-PROMPT_VERSION = "1"
+PROMPT_VERSION = "2"
 DEFAULT_MAX_NEW = 4
 MAX_EVIDENCE = 6
 MAX_TEXT = 700
@@ -146,6 +146,14 @@ def _company_input(company: Dict[str, Any], stock: Dict[str, Any]) -> Dict[str, 
         "fii_change",
         "dii_change",
         "promoter_change",
+        "pledged_pct",
+        "pledged_change",
+        "advt_cr",
+        "liquidity_band",
+        "days_to_exit_1cr",
+        "deliv_pct",
+        "delivery_band",
+        "turnover_cr_last",
         "mtf_pct",
         "mtf",
     )
@@ -172,7 +180,7 @@ def _prompt(companies: List[Dict[str, Any]]) -> str:
         "You are an equity research assistant reviewing Indian listed companies. "
         "Use only supplied company metrics and evidence. Do not browse, infer "
         "missing figures, invent events, or give buy/sell/target-price advice. "
-        "Separate business impact from short-term share-price reaction; use the supplied four-week price return only for market reaction. If "
+        "Separate business impact from short-term share-price reaction; use the supplied four-week price return only for market reaction. Treat FII/DII and promoter holding changes, pledge exposure, delivery and liquidity as distinct signals; do not infer MTF exposure when it is absent. If "
         "evidence is insufficient, say so plainly. Treat policy as a tailwind "
         "only when its supplied direction supports that sector/company. Thesis "
         "view must compare evidence with the supplied thesis and status. Keep "
