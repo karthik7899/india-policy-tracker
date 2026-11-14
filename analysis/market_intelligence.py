@@ -13,7 +13,6 @@ lower-priority dimension cannot outweigh a higher-priority one.
 import datetime
 from typing import Any, Dict, List, Optional
 
-
 _EVENT_IMPACT = {
     "order": 100,
     "capacity": 85,
@@ -296,9 +295,7 @@ def build_supply_chain_trees(
         upstream = []
         for supplier in suppliers:
             for edge in direct:
-                if str(edge.get("dst", "")).lower() == str(
-                    supplier["name"]
-                ).lower():
+                if str(edge.get("dst", "")).lower() == str(supplier["name"]).lower():
                     upstream.append(
                         {
                             "name": edge.get("src"),
@@ -340,8 +337,12 @@ def build_supply_chain_trees(
                 "root_ticker": companies.get(root.lower(), {}).get("ticker"),
                 "tiers": [
                     {"tier": 0, "role": "anchor", "nodes": [{"name": root}]},
-                    {"tier": 1, "role": "direct_relationships", "suppliers": suppliers,
-                     "customers": customers},
+                    {
+                        "tier": 1,
+                        "role": "direct_relationships",
+                        "suppliers": suppliers,
+                        "customers": customers,
+                    },
                     {"tier": 2, "role": "upstream_suppliers", "nodes": upstream},
                 ],
                 "sector_exposures": sector_exposures,
