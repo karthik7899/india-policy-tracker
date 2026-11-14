@@ -110,6 +110,26 @@ def _evidence(company: Dict[str, Any]) -> List[Dict[str, Any]]:
     return rows[:MAX_EVIDENCE]
 
 
+def _four_week_return(company: Dict[str, Any]) -> Optional[float]:
+    prices = company.get("prices")
+    if not isinstance(prices, list) or len(prices) < 2:
+        return None
+
+    def close(row):
+        try:
+            value = row[1] if isinstance(row, (list, tuple)) else None
+            number = float(value)
+            return number if number > 0 else None
+        except (TypeError, ValueError, IndexError):
+            return None
+
+    end = close(prices[-1])
+    base = close(prices[max(0, len(prices) - 1 - 4)])
+    if end is None or base is None:
+        return None
+    return round((end / base - 1) * 100, 2)
+
+
 def _company_input(company: Dict[str, Any], stock: Dict[str, Any]) -> Dict[str, Any]:
     screener = stock.get("screener") if isinstance(stock.get("screener"), dict) else {}
     metrics = {}
@@ -140,6 +160,7 @@ def _company_input(company: Dict[str, Any], stock: Dict[str, Any]) -> Dict[str, 
         "thesis": company.get("thesis") or "",
         "thesis_status": company.get("thesis_status") or "not available",
         "metrics": metrics,
+        "market_reaction_4w_pct": _four_week_return(company),
         "activity": _evidence(company),
         "policy_net": company.get("policy_net"),
         "activity_count": company.get("activity_count", 0),
@@ -151,7 +172,7 @@ def _prompt(companies: List[Dict[str, Any]]) -> str:
         "You are an equity research assistant reviewing Indian listed companies. "
         "Use only supplied company metrics and evidence. Do not browse, infer "
         "missing figures, invent events, or give buy/sell/target-price advice. "
-        "Separate business impact from short-term share-price reaction. If "
+        "Separate business impact from short-term share-price reaction; use the supplied four-week price return only for market reaction. If "
         "evidence is insufficient, say so plainly. Treat policy as a tailwind "
         "only when its supplied direction supports that sector/company. Thesis "
         "view must compare evidence with the supplied thesis and status. Keep "
