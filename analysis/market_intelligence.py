@@ -251,8 +251,12 @@ def build_market_intelligence(
         "supply_chain_trees": build_supply_chain_trees(graph or {}, watchlist),
         "coverage": {
             "holdings": len(snapshots),
-            "mtf_unavailable": sum(1 for row in snapshots if row["mtf"]["status"] != "available"),
-            "mtf_available": sum(1 for row in snapshots if row["mtf"]["status"] == "available"),
+            "mtf_unavailable": sum(
+                1 for row in snapshots if row["mtf"]["status"] != "available"
+            ),
+            "mtf_available": sum(
+                1 for row in snapshots if row["mtf"]["status"] == "available"
+            ),
         },
     }
 
@@ -367,7 +371,8 @@ def build_supply_chain_trees(
             makers = [
                 {
                     "name": edge.get("src"),
-                    "relationship": edge.get("note") or "Curated component manufacturer",
+                    "relationship": edge.get("note")
+                    or "Curated component manufacturer",
                     "evidence": edge.get("evidence") or "curated",
                     "tier": 3,
                 }
