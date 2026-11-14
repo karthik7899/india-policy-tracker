@@ -74,3 +74,44 @@ def test_market_reaction_uses_four_week_price_change():
     row = result["opportunity_ranking"][0]
     assert row["market_reaction_4w_pct"] == 10.0
     assert row["dimensions"]["market_reaction"] == 75.0
+
+
+def test_supply_chain_tree_separates_direct_links_from_sector_inputs():
+    from analysis.market_intelligence import build_supply_chain_trees
+
+    graph = {
+        "edges": [
+            {
+                "src": "Micron",
+                "dst": "Nvidia",
+                "type": "supplier_customer",
+                "note": "HBM supply",
+                "evidence": "curated",
+            },
+            {
+                "src": "Micron",
+                "dst": "Apple",
+                "type": "supplier_customer",
+                "note": "DRAM supply",
+                "evidence": "curated",
+            },
+            {
+                "src": "Nvidia",
+                "dst": "semiconductors_equipment",
+                "type": "anchor_demand",
+                "evidence": "curated",
+            },
+            {
+                "src": "HBM",
+                "dst": "semiconductors_equipment",
+                "type": "input_cost",
+                "evidence": "curated",
+            },
+        ]
+    }
+    trees = build_supply_chain_trees(graph, {})
+    nvidia = next(tree for tree in trees if tree["root"] == "Nvidia")
+    assert nvidia["tiers"][1]["suppliers"][0]["name"] == "Micron"
+    exposure = nvidia["sector_exposures"][0]
+    assert exposure["inputs"][0]["component"] == "HBM"
+    assert exposure["relationship_scope"] == "sector_level_not_company_specific"
