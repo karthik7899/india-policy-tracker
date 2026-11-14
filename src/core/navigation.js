@@ -2,7 +2,7 @@
 // These are presentation groups only: every existing hash route is unchanged.
 export const NAV_GROUPS = [
   { id: "daily", label: "Daily Intelligence", views: ["intelligence", "overview", "flow", "calendar"] },
-  { id: "companies", label: "Company Research", views: ["companies", "network"] },
+  { id: "companies", label: "Company Research", views: ["impact", "companies", "network"] },
   { id: "portfolio", label: "Portfolio", views: ["portfolio", "holdings"] },
   { id: "advanced", label: "Advanced Research", views: ["review", "valuation", "risk", "ask", "system"] },
 ];

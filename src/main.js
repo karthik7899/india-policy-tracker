@@ -13,6 +13,7 @@ import { destroyAll } from "./charts/charts.js";
 import * as overview from "./views/overview.js";
 import * as intelligence from "./views/intelligence.js";
 import * as companies from "./views/companies.js";
+import * as impact from "./views/impact.js";
 import * as portfolio from "./views/portfolio.js";
 import * as calendar from "./views/calendar.js";
 import * as company from "./views/company.js";
@@ -32,6 +33,7 @@ import { NAV_GROUPS, groupForView } from "./core/navigation.js";
 const VIEWS = {
   intelligence: { label: "Daily Intelligence", module: intelligence },
   overview: { label: "Overview", module: overview },
+  impact: { label: "Company Impact", module: impact },
   companies: { label: "Companies", module: companies },
   portfolio: { label: "Portfolio", module: portfolio },
   calendar: { label: "Calendar", module: calendar },
