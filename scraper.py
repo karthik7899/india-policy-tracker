@@ -1427,8 +1427,9 @@ def _parse_block_deal_headline(headline, flat_watchlist, headline_lower):
 
     details_match = re.search(
         r"(\d+(?:\.\d+)?%\s*stake|\d+\s*"
-        r"(?:lakh|million|crore)?\s*shares|worth\s*(?:Rs\s*)?"
-        r"\d+\s*(?:cr|crore|crores)?)",
+        r"(?:lakh|million|crore)?\s*shares|"
+        r"(?:Rs\.?|INR|₹)\s*\d+(?:\.\d+)?\s*"
+        r"(?:cr|crore|crores|lakh|lakhs)?)",
         headline,
         re.IGNORECASE,
     )
@@ -1452,9 +1453,7 @@ async def fetch_institutional_activity_async(session, watchlist):
     log.info(
         "Fetching institutional activity block deals and mutual fund buying trends (Async)..."
     )
-    query = (
-        '"block deal" OR "bulk deal" OR "mutual fund buys" OR "FII buying" India'
-    )
+    query = '"block deal" OR "bulk deal" OR "mutual fund buys" OR "FII buying" India'
     encoded_query = urllib.parse.quote(f"{query} when:7d")
     rss_url = (
         "https://news.google.com/rss/search"
