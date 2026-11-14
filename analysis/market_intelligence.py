@@ -168,10 +168,20 @@ def build_market_intelligence(
                     "ownership": ownership,
                     "tradeability": tradeability,
                     "mtf": {
-                        "status": "unavailable",
-                        "value": None,
-                        "source": None,
-                        "note": "No verified stock-level MTF feed is configured",
+                        "status": sc.get("mtf_status") or "unavailable",
+                        "outstanding_cr": _number(sc.get("mtf_outstanding_cr")),
+                        "change_1m_pct": _number(sc.get("mtf_change_1m_pct")),
+                        "change_1w_pct": _number(sc.get("mtf_change_1w_pct")),
+                        "rank": sc.get("mtf_rank"),
+                        "as_of": sc.get("mtf_as_of"),
+                        "source": sc.get("mtf_source"),
+                        "source_url": sc.get("mtf_source_url"),
+                        "attribution": sc.get("mtf_attribution"),
+                        "note": (
+                            "NSE-disclosure-backed stock-level MTF outstanding"
+                            if sc.get("mtf_status") == "available"
+                            else "No matching stock-level MTF disclosure in the latest feed"
+                        ),
                     },
                     "block_bulk_deals": deal_rows.get(ticker, [])[:10],
                 }
@@ -225,6 +235,10 @@ def build_market_intelligence(
 
     return {
         "as_of": as_of,
+        "mtf_attribution": (
+            "MTF data via Margin Trading Facility "
+            "(https://margintradingfacility.com), compiled from NSE disclosures"
+        ),
         "method": "lexicographic_v1",
         "priority_order": [
             "business_impact",
@@ -237,8 +251,8 @@ def build_market_intelligence(
         "supply_chain_trees": build_supply_chain_trees(graph or {}, watchlist),
         "coverage": {
             "holdings": len(snapshots),
-            "mtf_available": 0,
-            "mtf_unavailable": len(snapshots),
+            "mtf_unavailable": sum(1 for row in snapshots if row["mtf"]["status"] != "available"),
+            "mtf_available": sum(1 for row in snapshots if row["mtf"]["status"] == "available"),
         },
     }
 
