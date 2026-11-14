@@ -3,21 +3,33 @@
 from scraper import _parse_block_deal_headline
 
 
-WATCHLIST = [("IIFLCAP", "IIFL Capital Services", "financials"), ("TCS", "Tata Consultancy Services", "it_services")]
+WATCHLIST = [
+    ("IIFLCAP", "IIFL Capital Services", "financials"),
+    ("TCS", "Tata Consultancy Services", "it_services"),
+]
 
 
 def test_generic_fii_commentary_is_not_a_block_deal():
-    headline = "Sensex, Nifty close with rally on FII buying but profit booking limits gains"
+    headline = (
+        "Sensex, Nifty close with rally on FII buying but profit booking "
+        "limits gains"
+    )
     assert _parse_block_deal_headline(headline, WATCHLIST, headline.lower()) is None
 
 
 def test_deal_without_a_tracked_company_is_not_attributed():
-    headline = "Theleme Partners sells Rs 109 crore worth of unknown company shares in block deal"
+    headline = (
+        "Theleme Partners sells Rs 109 crore worth of unknown company "
+        "shares in block deal"
+    )
     assert _parse_block_deal_headline(headline, WATCHLIST, headline.lower()) is None
 
 
 def test_tracked_company_deal_has_explicit_direction_and_ticker():
-    headline = "Theleme Partners sells Rs 109 crore worth of IIFL Capital Services shares in block deal"
+    headline = (
+        "Theleme Partners sells Rs 109 crore worth of IIFL Capital Services "
+        "shares in block deal"
+    )
     parsed = _parse_block_deal_headline(headline, WATCHLIST, headline.lower())
     assert parsed["ticker"] == "IIFLCAP"
     assert parsed["action"] == "Sell"
