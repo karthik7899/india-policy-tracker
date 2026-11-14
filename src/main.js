@@ -14,6 +14,7 @@ import * as overview from "./views/overview.js";
 import * as intelligence from "./views/intelligence.js";
 import * as companies from "./views/companies.js";
 import * as impact from "./views/impact.js";
+import * as peers from "./views/peers.js";
 import * as portfolio from "./views/portfolio.js";
 import * as calendar from "./views/calendar.js";
 import * as company from "./views/company.js";
@@ -34,15 +35,16 @@ const VIEWS = {
   intelligence: { label: "Daily Intelligence", module: intelligence },
   overview: { label: "Overview", module: overview },
   impact: { label: "Company Impact", module: impact },
+  peers: { label: "Peer Comparisons", module: peers },
   companies: { label: "Companies", module: companies },
   portfolio: { label: "Portfolio", module: portfolio },
-  calendar: { label: "Calendar", module: calendar },
+  calendar: { label: "Catalyst Timeline", module: calendar },
   review: { label: "Review", module: review },
   ask: { label: "Ask (public)", module: ask },
   holdings: { label: "Holdings", module: holdings },
   valuation: { label: "Valuation", module: valuation },
   risk: { label: "Risk", module: risk },
-  flow: { label: "Flow", module: flow },
+  flow: { label: "News & Catalysts", module: flow },
   network: { label: "Network", module: network },
   system: { label: "Run health", module: system },
   // Reached from any ticker or the search box, not the tab bar.
