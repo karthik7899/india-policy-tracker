@@ -27,7 +27,9 @@ def test_parse_mtf_payload_normalizes_stock_book_and_change():
 
 
 def test_parse_mtf_payload_does_not_turn_missing_or_negative_book_into_zero():
-    assert parse_mtf_payload({"stocks": [{"symbol": "A", "outstanding_cr": None}]}) == {}
+    assert (
+        parse_mtf_payload({"stocks": [{"symbol": "A", "outstanding_cr": None}]}) == {}
+    )
     assert parse_mtf_payload({"stocks": [{"symbol": "A", "outstanding_cr": -2}]}) == {}
 
 
