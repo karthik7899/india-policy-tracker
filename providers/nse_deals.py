@@ -55,9 +55,7 @@ def parse_deal_csv(text: str, deal_type: str, tracked: Dict[str, str]):
             price_raw = _pick(row, "Wtd. Avg. Price", "Weighted Average Price", "Price")
             try:
                 quantity = (
-                    float(str(quantity_raw).replace(",", ""))
-                    if quantity_raw
-                    else None
+                    float(str(quantity_raw).replace(",", "")) if quantity_raw else None
                 )
                 price = float(str(price_raw).replace(",", "")) if price_raw else None
             except (TypeError, ValueError):
