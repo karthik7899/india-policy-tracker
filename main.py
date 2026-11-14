@@ -782,6 +782,7 @@ async def run_pipeline():
         watchlist,
         data["company_digest"],
         data.get("institutional_activity") or [],
+        graph=graph,
     )
     log.info(
         "Market intelligence: "
