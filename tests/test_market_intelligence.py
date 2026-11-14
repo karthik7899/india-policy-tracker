@@ -12,23 +12,27 @@ def _stock(ticker, fundamental=0, **metrics):
 
 def test_market_intelligence_keeps_mtf_unknown_and_exposes_sources():
     result = build_market_intelligence(
-        {"industry": [_stock(
-            "ABC",
-            4,
-            promoter_pct=45.0,
-            promoter_change=-0.5,
-            fii_pct=12.0,
-            fii_change=0.8,
-            dii_pct=8.0,
-            dii_change=0.2,
-            pledged_pct=3.0,
-            advt_cr=12.0,
-            liquidity_band="liquid",
-            deliv_pct=57.0,
-            delivery_band="delivery-led",
-            series="EQ",
-            days_to_exit_1cr=0.4,
-        )]},
+        {
+            "industry": [
+                _stock(
+                    "ABC",
+                    4,
+                    promoter_pct=45.0,
+                    promoter_change=-0.5,
+                    fii_pct=12.0,
+                    fii_change=0.8,
+                    dii_pct=8.0,
+                    dii_change=0.2,
+                    pledged_pct=3.0,
+                    advt_cr=12.0,
+                    liquidity_band="liquid",
+                    deliv_pct=57.0,
+                    delivery_band="delivery-led",
+                    series="EQ",
+                    days_to_exit_1cr=0.4,
+                )
+            ]
+        },
         {"companies": []},
         as_of="2026-11-14",
     )
@@ -62,13 +66,20 @@ def test_priority_order_is_lexicographic_business_impact_first():
 def test_market_reaction_uses_four_week_price_change():
     result = build_market_intelligence(
         {"industry": [_stock("A")]},
-        {"companies": [{"ticker": "A", "prices": [
-            ["2026-10-10", 100],
-            ["2026-10-17", 101],
-            ["2026-10-24", 102],
-            ["2026-10-31", 103],
-            ["2026-11-07", 110],
-        ]}]},
+        {
+            "companies": [
+                {
+                    "ticker": "A",
+                    "prices": [
+                        ["2026-10-10", 100],
+                        ["2026-10-17", 101],
+                        ["2026-10-24", 102],
+                        ["2026-10-31", 103],
+                        ["2026-11-07", 110],
+                    ],
+                }
+            ]
+        },
         as_of="2026-11-14",
     )
     row = result["opportunity_ranking"][0]
