@@ -58,6 +58,8 @@ PROPOSALS_PATH = os.path.join(
 EDGE_TYPES = {
     "anchor_demand",
     "supplier_customer",
+    "component_dependency",
+    "component_manufacturer",
     "partner",
     "competitor",
     "input_cost",
