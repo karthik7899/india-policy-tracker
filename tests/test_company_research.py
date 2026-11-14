@@ -1,6 +1,11 @@
 import json
 
-from analysis.company_research import _clean, _company_input, build_company_research
+from analysis.company_research import (
+    _clean,
+    _company_input,
+    _four_week_return,
+    build_company_research,
+)
 
 
 def _fixture():
@@ -47,6 +52,20 @@ def test_research_input_uses_only_supplied_metrics_and_evidence():
     assert payload["metrics"]["roce"] == 18
     assert payload["activity"][0]["link"] == "https://example.com/order"
     assert "portfolio" not in payload
+
+
+def test_four_week_market_reaction_is_computed_from_weekly_closes():
+    company = {
+        "prices": [
+            ["2026-10-17", 90],
+            ["2026-10-24", 94],
+            ["2026-10-31", 96],
+            ["2026-11-07", 98],
+            ["2026-11-14", 100],
+        ]
+    }
+    assert _four_week_return(company) == 11.11
+    assert _four_week_return({"prices": []}) is None
 
 
 def test_evidence_refs_are_bounded_and_grounded():
