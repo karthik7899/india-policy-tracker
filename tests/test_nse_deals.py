@@ -1,6 +1,5 @@
 from providers.nse_deals import parse_deal_csv
 
-
 TRACKED = {"BDL": "Bharat Dynamics Limited", "TCS": "Tata Consultancy Services"}
 
 
