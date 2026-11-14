@@ -170,6 +170,7 @@ def build_market_intelligence(
                     "mtf": {
                         "status": sc.get("mtf_status") or "unavailable",
                         "outstanding_cr": _number(sc.get("mtf_outstanding_cr")),
+                        "value": _number(sc.get("mtf_outstanding_cr")),
                         "change_1m_pct": _number(sc.get("mtf_change_1m_pct")),
                         "change_1w_pct": _number(sc.get("mtf_change_1w_pct")),
                         "rank": sc.get("mtf_rank"),
