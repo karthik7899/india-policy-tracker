@@ -36,7 +36,7 @@ jobs:
 
       - name: Lint and Format
         run: |
-          black --diff analysis/market_intelligence.py
+          black --check .
           flake8 .
 
       - name: Run tests
