@@ -87,6 +87,16 @@ class CompanyFinancials(BaseModel):
     days_to_exit_1cr: Optional[float] = None
     days_to_exit_5cr: Optional[float] = None
     sessions: Optional[int] = None
+    # Stock-level MTF book from NSE daily disclosures; absent is unknown, not zero.
+    mtf_outstanding_cr: Optional[float] = None
+    mtf_change_1m_pct: Optional[float] = None
+    mtf_change_1w_pct: Optional[float] = None
+    mtf_rank: Optional[int] = None
+    mtf_as_of: Optional[str] = None
+    mtf_source: Optional[str] = None
+    mtf_source_url: Optional[str] = None
+    mtf_attribution: Optional[str] = None
+    mtf_status: Optional[str] = None
 
 
 class CompanyScore(BaseModel):
