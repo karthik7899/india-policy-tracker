@@ -11,6 +11,7 @@ import * as router from "./core/router.js";
 import { destroyAll } from "./charts/charts.js";
 
 import * as overview from "./views/overview.js";
+import * as intelligence from "./views/intelligence.js";
 import * as companies from "./views/companies.js";
 import * as portfolio from "./views/portfolio.js";
 import * as calendar from "./views/calendar.js";
@@ -29,12 +30,13 @@ import { crumbsFor } from "./core/crumbs.js";
 import { NAV_GROUPS, groupForView } from "./core/navigation.js";
 
 const VIEWS = {
+  intelligence: { label: "Daily Intelligence", module: intelligence },
   overview: { label: "Overview", module: overview },
   companies: { label: "Companies", module: companies },
   portfolio: { label: "Portfolio", module: portfolio },
   calendar: { label: "Calendar", module: calendar },
   review: { label: "Review", module: review },
-  ask: { label: "Ask", module: ask },
+  ask: { label: "Ask (public)", module: ask },
   holdings: { label: "Holdings", module: holdings },
   valuation: { label: "Valuation", module: valuation },
   risk: { label: "Risk", module: risk },

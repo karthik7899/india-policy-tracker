@@ -11,7 +11,7 @@
 // and searching again.
 
 const listeners = new Set();
-let current = { view: "overview", focus: null, params: {} };
+let current = { view: "intelligence", focus: null, params: {} };
 
 /** Parse "#/view?focus=X&q=Y" into a route. */
 export function parse(hash) {
@@ -30,7 +30,7 @@ export function parse(hash) {
     params[key] = value;
   });
   return {
-    view: path || "overview",
+    view: path || "intelligence",
     focus: params.focus ? String(params.focus).toUpperCase() : null,
     params,
   };
