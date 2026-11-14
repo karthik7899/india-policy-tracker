@@ -1,15 +1,13 @@
 """Source-grounded, cached company research briefs.
 
-This is an optional synthesis layer over evidence the pipeline already collects.
+This optional synthesis layer uses evidence already collected by the pipeline.
 It never changes deterministic scores, warnings, thesis health or rankings.
-Every returned source reference is copied from the input digest; model claims
-without usable source references are discarded.
+Every returned source reference is copied from the input digest.
 """
 import datetime
 import hashlib
 import json
 import os
-import re
 from typing import Any, Dict, List, Optional
 
 from analysis.reader_runtime import ReaderUnavailable, default_transport
@@ -37,8 +35,13 @@ _SCHEMA = {
             "evidence_refs": {"type": "ARRAY", "items": {"type": "INTEGER"}},
         },
         "required": [
-            "ticker", "business_impact", "market_readthrough", "opportunity",
-            "risks", "thesis_view", "evidence_refs",
+            "ticker",
+            "business_impact",
+            "market_readthrough",
+            "opportunity",
+            "risks",
+            "thesis_view",
+            "evidence_refs",
         ],
     },
 }
@@ -62,10 +65,17 @@ def _fingerprint(company: Dict[str, Any], stock: Dict[str, Any]) -> str:
         "version": PROMPT_VERSION,
         "company": company,
         "financials": {
-            key: stock.get(key) for key in (
-                "price", "revenue_growth", "growth_pct", "pe_ratio",
-                "market_cap", "score", "screener",
-            ) if stock.get(key) is not None
+            key: stock.get(key)
+            for key in (
+                "price",
+                "revenue_growth",
+                "growth_pct",
+                "pe_ratio",
+                "market_cap",
+                "score",
+                "screener",
+            )
+            if stock.get(key) is not None
         },
     }
     raw = json.dumps(source, sort_keys=True, ensure_ascii=False, default=str)
@@ -74,38 +84,55 @@ def _fingerprint(company: Dict[str, Any], stock: Dict[str, Any]) -> str:
 
 def _evidence(company: Dict[str, Any]) -> List[Dict[str, Any]]:
     rows = []
-    for kind, items in (
+    groups = (
         ("company_activity", company.get("activity") or []),
         ("policy", company.get("policies") or []),
         ("brokerage_call", company.get("calls") or []),
         ("thesis_challenge", company.get("challenges") or []),
-    ):
+    )
+    for kind, items in groups:
         for item in items:
             if not isinstance(item, dict):
                 continue
             text = item.get("text") or item.get("headline") or ""
             if not text:
                 continue
-            rows.append({
+            row = {
                 "type": kind,
                 "date": str(item.get("date") or ""),
                 "text": str(text)[:MAX_TEXT],
-                **({"link": item["link"]} if item.get("link") else {}),
-                **({"source": item["source"]} if item.get("source") else {}),
-                **({"direction": item["direction"]} if item.get("direction") else {}),
-                **({"stance": item["stance"]} if item.get("stance") else {}),
-            })
+            }
+            for field in ("link", "source", "direction", "stance"):
+                if item.get(field):
+                    row[field] = item[field]
+            rows.append(row)
     return rows[:MAX_EVIDENCE]
 
 
 def _company_input(company: Dict[str, Any], stock: Dict[str, Any]) -> Dict[str, Any]:
-    screener = stock.get("screener") if isinstance(stock.get("screener"), dict) else {}
+    screener = (
+        stock.get("screener")
+        if isinstance(stock.get("screener"), dict)
+        else {}
+    )
     metrics = {}
-    for key in (
-        "price", "revenue_growth", "growth_pct", "pe_ratio", "market_cap",
-        "roce", "roe", "debt_to_equity", "operating_margin", "fii_change",
-        "dii_change", "promoter_change", "mtf_pct", "mtf",
-    ):
+    keys = (
+        "price",
+        "revenue_growth",
+        "growth_pct",
+        "pe_ratio",
+        "market_cap",
+        "roce",
+        "roe",
+        "debt_to_equity",
+        "operating_margin",
+        "fii_change",
+        "dii_change",
+        "promoter_change",
+        "mtf_pct",
+        "mtf",
+    )
+    for key in keys:
         value = stock.get(key, screener.get(key))
         if value is not None and value != "":
             metrics[key] = value
@@ -123,20 +150,19 @@ def _company_input(company: Dict[str, Any], stock: Dict[str, Any]) -> Dict[str, 
 
 
 def _prompt(companies: List[Dict[str, Any]]) -> str:
-    return (
+    instructions = (
         "You are an equity research assistant reviewing Indian listed companies. "
-        "Use only the supplied company metrics and evidence. Do not browse, "
-        "infer missing figures, invent events, or give buy/sell/target-price advice. "
-        "Separate business impact from short-term share-price reaction. "
-        "If evidence is insufficient, say so plainly. Treat policy as a tailwind "
-        "only when its supplied direction supports that sector/company. "
-        "Thesis view must compare evidence with the supplied thesis and status. "
-        "Keep each field to 1-3 concise sentences. evidence_refs must contain only "
-        "zero-based indices of supplied activity entries that support the brief; "
-        "do not cite a source that does not support the claim. Return one object "
-        "per ticker and no extra prose.\nINPUT:\n"
-        + json.dumps(companies, ensure_ascii=False, default=str)
+        "Use only supplied company metrics and evidence. Do not browse, infer "
+        "missing figures, invent events, or give buy/sell/target-price advice. "
+        "Separate business impact from short-term share-price reaction. If "
+        "evidence is insufficient, say so plainly. Treat policy as a tailwind "
+        "only when its supplied direction supports that sector/company. Thesis "
+        "view must compare evidence with the supplied thesis and status. Keep "
+        "each field to 1-3 concise sentences. evidence_refs must contain only "
+        "zero-based indices of supplied activity entries that support the brief. "
+        "Return one object per ticker and no extra prose.\nINPUT:\n"
     )
+    return instructions + json.dumps(companies, ensure_ascii=False, default=str)
 
 
 def _clean(raw: Any, inputs: Dict[str, Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
@@ -146,7 +172,11 @@ def _clean(raw: Any, inputs: Dict[str, Dict[str, Any]]) -> Dict[str, Dict[str, A
         raise ValueError("research response is not an array")
     out = {}
     fields = (
-        "business_impact", "market_readthrough", "opportunity", "risks", "thesis_view"
+        "business_impact",
+        "market_readthrough",
+        "opportunity",
+        "risks",
+        "thesis_view",
     )
     for item in raw:
         if not isinstance(item, dict):
@@ -158,12 +188,22 @@ def _clean(raw: Any, inputs: Dict[str, Dict[str, Any]]) -> Dict[str, Dict[str, A
         evidence = source["activity"]
         refs = []
         for index in item.get("evidence_refs") or []:
-            if isinstance(index, int) and 0 <= index < len(evidence) and index not in refs:
+            if (
+                isinstance(index, int)
+                and 0 <= index < len(evidence)
+                and index not in refs
+            ):
                 refs.append(index)
-        row = {"ticker": ticker, "name": source["name"], "evidence": [evidence[i] for i in refs]}
+        row = {
+            "ticker": ticker,
+            "name": source["name"],
+            "evidence": [evidence[i] for i in refs],
+        }
         for field in fields:
             value = str(item.get(field) or "").strip()
-            row[field] = value[:700] if value else "Insufficient evidence in this run."
+            row[field] = (
+                value[:700] if value else "Insufficient evidence in this run."
+            )
         row["generated_by"] = "Gemini"
         row["evidence_count"] = len(refs)
         out[ticker] = row
@@ -183,14 +223,22 @@ def build_company_research(
     try:
         cache = _load_cache(cache_path)
         if cache is None:
-            return {"as_of": today, "companies": {}, "status": {
-                "cached": 0, "read": 0, "pending": 0, "skipped": "research cache unreadable"
-            }}
+            return {
+                "as_of": today,
+                "companies": {},
+                "status": {
+                    "cached": 0,
+                    "read": 0,
+                    "pending": 0,
+                    "skipped": "research cache unreadable",
+                },
+            }
         stocks = {
             str(stock.get("ticker") or "").upper(): stock
             for sector, rows in (watchlist or {}).items()
             if sector != "macro_indicators" and isinstance(rows, list)
-            for stock in rows if isinstance(stock, dict) and stock.get("ticker")
+            for stock in rows
+            if isinstance(stock, dict) and stock.get("ticker")
         }
         inputs = {}
         for company in (digest or {}).get("companies") or []:
@@ -207,24 +255,39 @@ def build_company_research(
         todo = []
         for ticker, (payload, fingerprint) in inputs.items():
             entry = entries.get(ticker) or {}
-            if entry.get("fingerprint") == fingerprint and isinstance(entry.get("brief"), dict):
+            if (
+                entry.get("fingerprint") == fingerprint
+                and isinstance(entry.get("brief"), dict)
+            ):
                 result[ticker] = entry["brief"]
             else:
                 todo.append((ticker, payload, fingerprint))
-        todo.sort(key=lambda row: (
-            str(row[1].get("activity", [{}])[0].get("date", "")) if row[1].get("activity") else "",
-            row[0],
-        ), reverse=True)
+        todo.sort(
+            key=lambda row: (
+                str(row[1].get("activity", [{}])[0].get("date", ""))
+                if row[1].get("activity")
+                else "",
+                row[0],
+            ),
+            reverse=True,
+        )
 
         limit = max_new
         if limit is None:
             try:
-                limit = int(os.environ.get("GEMINI_RESEARCH_MAX_COMPANIES", DEFAULT_MAX_NEW))
+                limit = int(
+                    os.environ.get("GEMINI_RESEARCH_MAX_COMPANIES", DEFAULT_MAX_NEW)
+                )
             except (TypeError, ValueError):
                 limit = DEFAULT_MAX_NEW
         limit = max(0, min(limit, 12))
         selected = todo[:limit]
-        status = {"cached": len(result), "read": 0, "pending": len(todo), "skipped": ""}
+        status = {
+            "cached": len(result),
+            "read": 0,
+            "pending": len(todo),
+            "skipped": "",
+        }
         if not selected:
             return {"as_of": today, "companies": result, "status": status}
 
@@ -236,9 +299,8 @@ def build_company_research(
 
         request_inputs = {ticker: payload for ticker, payload, _ in selected}
         raw = transport(_prompt([payload for _, payload, _ in selected]))
-        parsed = json.loads(raw)
-        cleaned = _clean(parsed, request_inputs)
-        for ticker, payload, fingerprint in selected:
+        cleaned = _clean(json.loads(raw), request_inputs)
+        for ticker, _, fingerprint in selected:
             brief = cleaned.get(ticker)
             if not brief:
                 continue
@@ -257,11 +319,25 @@ def build_company_research(
         return {"as_of": today, "companies": result, "status": status}
     except (ReaderUnavailable, ValueError, TypeError, KeyError) as error:
         log.warning(f"Company research skipped safely: {error!r}")
-        return {"as_of": today, "companies": {}, "status": {
-            "cached": 0, "read": 0, "pending": 0, "skipped": str(error)
-        }}
+        return {
+            "as_of": today,
+            "companies": {},
+            "status": {
+                "cached": 0,
+                "read": 0,
+                "pending": 0,
+                "skipped": str(error),
+            },
+        }
     except Exception as error:  # enrichment must never fail the daily pipeline
         log.warning(f"Company research failed safely: {error!r}")
-        return {"as_of": today, "companies": {}, "status": {
-            "cached": 0, "read": 0, "pending": 0, "skipped": "unexpected research error"
-        }}
+        return {
+            "as_of": today,
+            "companies": {},
+            "status": {
+                "cached": 0,
+                "read": 0,
+                "pending": 0,
+                "skipped": "unexpected research error",
+            },
+        }
