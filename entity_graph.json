@@ -1129,6 +1129,54 @@
       "evidence": "curated",
       "added": "2026-09-13",
       "note": "Leading-edge foundry"
+    },
+    {
+      "src": "Nvidia",
+      "dst": "data_center_support",
+      "type": "anchor_demand",
+      "evidence": "curated",
+      "added": "2026-11-14",
+      "note": "AI accelerator deployments drive rack-scale networking, optics and fibre infrastructure"
+    },
+    {
+      "src": "HBM",
+      "dst": "data_center_support",
+      "type": "component_dependency",
+      "evidence": "curated",
+      "added": "2026-11-14",
+      "note": "High-bandwidth memory is a core accelerator memory subsystem"
+    },
+    {
+      "src": "optical transceivers",
+      "dst": "data_center_support",
+      "type": "component_dependency",
+      "evidence": "curated",
+      "added": "2026-11-14",
+      "note": "Optical interconnects connect accelerators, switches and racks"
+    },
+    {
+      "src": "fiber optic cable",
+      "dst": "data_center_support",
+      "type": "component_dependency",
+      "evidence": "curated",
+      "added": "2026-11-14",
+      "note": "Fibre infrastructure carries high-bandwidth links between racks and facilities"
+    },
+    {
+      "src": "Micron",
+      "dst": "HBM",
+      "type": "component_manufacturer",
+      "evidence": "curated",
+      "added": "2026-11-14",
+      "note": "HBM product manufacturer"
+    },
+    {
+      "src": "SK Hynix",
+      "dst": "HBM",
+      "type": "component_manufacturer",
+      "evidence": "curated",
+      "added": "2026-11-14",
+      "note": "HBM product manufacturer"
     }
   ],
   "aliases": {
