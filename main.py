@@ -221,7 +221,9 @@ async def run_pipeline():
     async with aiohttp.ClientSession() as mtf_session:
         mtf_rows = await fetch_mtf_async(mtf_session, watchlist)
     mtf_applied = apply_mtf(watchlist, mtf_rows)
-    log.info(f"MTF: attached verified disclosed book values to {mtf_applied} holding(s).")
+    log.info(
+        f"MTF: attached verified disclosed book values to {mtf_applied} holding(s)."
+    )
 
     # Every live source has now written. A value one of them failed to
     # deliver is put back if it is under a week old, and marked as kept, so
