@@ -239,3 +239,117 @@ def build_market_intelligence(
             "mtf_unavailable": len(snapshots),
         },
     }
+
+
+def build_supply_chain_trees(
+    graph: Dict[str, Any],
+    watchlist: Dict[str, Any],
+) -> List[Dict[str, Any]]:
+    """Build evidence-labelled tiers from curated directed graph edges.
+
+    Direct supplier/customer links and sector-level inputs are kept separate:
+    sector exposure is not presented as a confirmed company-specific purchase.
+    """
+    edges = (graph or {}).get("edges") or []
+    direct = [e for e in edges if e.get("type") == "supplier_customer"]
+    anchors = [e for e in edges if e.get("type") == "anchor_demand"]
+    input_costs = [e for e in edges if e.get("type") == "input_cost"]
+    companies = {}
+    for stocks in (watchlist or {}).values():
+        for stock in stocks or []:
+            if isinstance(stock, dict) and stock.get("ticker"):
+                companies[str(stock["name"]).lower()] = {
+                    "ticker": str(stock["ticker"]).upper(),
+                    "name": stock.get("name"),
+                    "sector": stock.get("sector"),
+                }
+
+    roots = sorted(
+        {str(e.get("dst")) for e in direct if e.get("dst")}
+        | {str(e.get("src")) for e in anchors if e.get("src")},
+        key=str.lower,
+    )
+    trees = []
+    for root in roots:
+        suppliers = [
+            {
+                "name": e.get("src"),
+                "relationship": e.get("note") or "Curated supplier relationship",
+                "evidence": e.get("evidence") or "curated",
+                "tier": 1,
+            }
+            for e in direct
+            if str(e.get("dst", "")).lower() == root.lower()
+        ]
+        customers = [
+            {
+                "name": e.get("dst"),
+                "relationship": e.get("note") or "Curated customer relationship",
+                "evidence": e.get("evidence") or "curated",
+                "tier": 1,
+            }
+            for e in direct
+            if str(e.get("src", "")).lower() == root.lower()
+        ]
+        upstream = []
+        for supplier in suppliers:
+            for edge in direct:
+                if str(edge.get("dst", "")).lower() == str(
+                    supplier["name"]
+                ).lower():
+                    upstream.append(
+                        {
+                            "name": edge.get("src"),
+                            "supplies": supplier["name"],
+                            "relationship": edge.get("note")
+                            or "Curated upstream supplier relationship",
+                            "evidence": edge.get("evidence") or "curated",
+                            "tier": 2,
+                        }
+                    )
+
+        sector_exposures = []
+        for anchor in anchors:
+            if str(anchor.get("src", "")).lower() != root.lower():
+                continue
+            sector = str(anchor.get("dst") or "")
+            inputs = [
+                {
+                    "component": edge.get("src"),
+                    "relationship": edge.get("note") or "Sector input-cost exposure",
+                    "evidence": edge.get("evidence") or "curated",
+                }
+                for edge in input_costs
+                if str(edge.get("dst", "")).lower() == sector.lower()
+            ]
+            sector_exposures.append(
+                {
+                    "sector": sector,
+                    "anchor_relationship": anchor.get("note") or "",
+                    "inputs": inputs,
+                    "relationship_scope": "sector_level_not_company_specific",
+                }
+            )
+        if not suppliers and not customers and not sector_exposures:
+            continue
+        trees.append(
+            {
+                "root": root,
+                "root_ticker": companies.get(root.lower(), {}).get("ticker"),
+                "tiers": [
+                    {"tier": 0, "role": "anchor", "nodes": [{"name": root}]},
+                    {"tier": 1, "role": "direct_relationships", "suppliers": suppliers,
+                     "customers": customers},
+                    {"tier": 2, "role": "upstream_suppliers", "nodes": upstream},
+                ],
+                "sector_exposures": sector_exposures,
+                "source_scope": "curated_entity_graph",
+                "completeness": "partial",
+                "limitations": (
+                    "Only curated relationships are shown. Missing links do not "
+                    "mean no commercial relationship; sector inputs are not "
+                    "company-specific supplier claims."
+                ),
+            }
+        )
+    return trees
