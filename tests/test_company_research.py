@@ -148,3 +148,28 @@ def test_no_key_skips_without_breaking_pipeline(tmp_path, monkeypatch):
     )
     assert result["companies"] == {}
     assert "GEMINI_API_KEY" in result["status"]["skipped"]
+
+
+
+def test_research_input_includes_institutional_and_tradeability_signals():
+    watchlist, digest = _fixture()
+    stock = watchlist["industrial"][0]
+    stock["screener"].update(
+        {
+            "fii_change": 0.4,
+            "dii_change": -0.2,
+            "pledged_pct": 8.0,
+            "pledged_change": 1.0,
+            "advt_cr": 3.2,
+            "liquidity_band": "thin",
+            "days_to_exit_1cr": 1.6,
+            "deliv_pct": 62.0,
+            "delivery_band": "delivery-led",
+            "turnover_cr_last": 4.1,
+        }
+    )
+    payload = _company_input(digest["companies"][0], stock)
+    assert payload["metrics"]["fii_change"] == 0.4
+    assert payload["metrics"]["pledged_pct"] == 8.0
+    assert payload["metrics"]["liquidity_band"] == "thin"
+    assert payload["metrics"]["deliv_pct"] == 62.0
