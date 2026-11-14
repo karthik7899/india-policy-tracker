@@ -79,7 +79,7 @@ export function buildResearchContext(payload, resolved = {}) {
       variantPerception: briefing.variant_perception ?? null,
     },
     sidecars: { ...resolved },
-    stockTopicsManifest: briefing.stock_topics ?? null,
+    stockTopicsManifest: briefing["stock_topics"] ?? null,
   };
 }
 
