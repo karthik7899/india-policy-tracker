@@ -1409,11 +1409,12 @@ def _parse_block_deal_headline(headline, flat_watchlist, headline_lower):
     )
     has_sell = any(term in headline_lower for term in sell_terms)
     has_buy = any(term in headline_lower for term in buy_terms)
-    action = (
-        "Sell"
-        if has_sell and not has_buy
-        else "Buy" if has_buy and not has_sell else None
-    )
+    if has_sell and not has_buy:
+        action = "Sell"
+    elif has_buy and not has_sell:
+        action = "Buy"
+    else:
+        action = None
 
     buyer_match = re.search(
         r"^([A-Z0-9][A-Za-z0-9\s.&]+?)\s+"
@@ -1432,9 +1433,7 @@ def _parse_block_deal_headline(headline, flat_watchlist, headline_lower):
         re.IGNORECASE,
     )
     details = details_match.group(1).strip() if details_match else None
-    deal_type = (
-        "Block Deal" if "block deal" in headline_lower else "Bulk Deal"
-    )
+    deal_type = "Block Deal" if "block deal" in headline_lower else "Bulk Deal"
 
     return {
         "buyer": buyer,
@@ -1451,12 +1450,19 @@ async def fetch_institutional_activity_async(session, watchlist):
     log.info(
         "Fetching institutional activity block deals and mutual fund buying trends (Async)..."
     )
-    query = '"block deal" OR "bulk deal" OR "mutual fund buys" OR "FII buying" India'
+    query = (
+        '"block deal" OR "bulk deal" OR "mutual fund buys" OR "FII buying" India'
+    )
     encoded_query = urllib.parse.quote(f"{query} when:7d")
-    rss_url = f"https://news.google.com/rss/search?q={encoded_query}&hl=en-IN&gl=IN&ceid=IN:en"
+    rss_url = (
+        "https://news.google.com/rss/search"
+        f"?q={encoded_query}&hl=en-IN&gl=IN&ceid=IN:en"
+    )
 
     flat_watchlist = [
-        (s["ticker"], s["name"], None) for stocks in watchlist.values() for s in stocks
+        (stock["ticker"], stock["name"], None)
+        for stocks in watchlist.values()
+        for stock in stocks
     ]
 
     activity = []
