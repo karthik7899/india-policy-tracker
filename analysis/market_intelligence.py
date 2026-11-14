@@ -378,8 +378,7 @@ def build_supply_chain_trees(
                     "relationship": edge.get("note")
                     or "Curated component manufacturer",
                     "evidence": edge.get("evidence") or "curated",
-                    "scope": edge.get("scope")
-                    or "curated_component_manufacturer",
+                    "scope": edge.get("scope") or "curated_component_manufacturer",
                     "source_url": (
                         edge.get("evidence")
                         if str(edge.get("evidence", "")).startswith("https://")
