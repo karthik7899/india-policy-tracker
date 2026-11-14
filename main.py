@@ -32,6 +32,7 @@ from analysis.market_share import (
 )
 from entities import find_duplicate_holdings
 from providers.nse_delivery import apply_delivery, fetch_delivery_async
+from providers.mtf import apply_mtf, fetch_mtf_async
 from providers.isin_master import (
     load_isin_master,
     load_registered_names,
@@ -213,6 +214,13 @@ async def run_pipeline():
         delivery_rows = await fetch_delivery_async(delivery_session)
     delivery_applied = apply_delivery(watchlist, delivery_rows)
     log.info(f"Delivery: attached to {delivery_applied} holding(s).")
+
+    # NSE's daily MTF disclosure is aggregated by a public API whose methodology
+    # links each figure back to the exchange file. Missing tickers stay unknown.
+    async with aiohttp.ClientSession() as mtf_session:
+        mtf_rows = await fetch_mtf_async(mtf_session, watchlist)
+    mtf_applied = apply_mtf(watchlist, mtf_rows)
+    log.info(f"MTF: attached verified disclosed book values to {mtf_applied} holding(s).")
 
     # Every live source has now written. A value one of them failed to
     # deliver is put back if it is under a week old, and marked as kept, so
