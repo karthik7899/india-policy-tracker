@@ -156,6 +156,11 @@ def _company_input(company: Dict[str, Any], stock: Dict[str, Any]) -> Dict[str, 
         "turnover_cr_last",
         "mtf_pct",
         "mtf",
+        "mtf_outstanding_cr",
+        "mtf_change_1m_pct",
+        "mtf_change_1w_pct",
+        "mtf_rank",
+        "mtf_status",
     )
     for key in keys:
         value = stock.get(key, screener.get(key))
