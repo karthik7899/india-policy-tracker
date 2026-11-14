@@ -372,6 +372,9 @@ def build_supply_chain_trees(
             makers = [
                 {
                     "name": edge.get("src"),
+                    "ticker": companies.get(str(edge.get("src", "")).lower(), {}).get(
+                        "ticker"
+                    ),
                     "relationship": edge.get("note")
                     or "Curated component manufacturer",
                     "evidence": edge.get("evidence") or "curated",
