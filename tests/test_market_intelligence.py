@@ -126,3 +126,51 @@ def test_supply_chain_tree_separates_direct_links_from_sector_inputs():
     exposure = nvidia["sector_exposures"][0]
     assert exposure["inputs"][0]["component"] == "HBM"
     assert exposure["relationship_scope"] == "sector_level_not_company_specific"
+
+
+
+def test_market_intelligence_surfaces_mtf_book_with_provenance():
+    stock = _stock(
+        "BDL",
+        mtf_outstanding_cr=245.6,
+        mtf_change_1m_pct=18.4,
+        mtf_change_1w_pct=-2.1,
+        mtf_rank=27,
+        mtf_as_of="2026-11-13",
+        mtf_status="available",
+        mtf_source="Margin Trading Facility (NSE disclosure aggregation)",
+        mtf_source_url="https://margintradingfacility.com/methodology",
+        mtf_attribution="MTF data via Margin Trading Facility",
+    )
+    result = build_market_intelligence({"industry": [stock]}, {"companies": []})
+    mtf = result["snapshots"][0]["mtf"]
+    assert mtf["status"] == "available"
+    assert mtf["outstanding_cr"] == 245.6
+    assert mtf["change_1m_pct"] == 18.4
+    assert mtf["as_of"] == "2026-11-13"
+    assert mtf["source_url"].endswith("/methodology")
+    assert result["coverage"]["mtf_available"] == 1
+    assert result["coverage"]["mtf_unavailable"] == 0
+
+
+def test_supply_chain_tree_builds_component_and_manufacturer_tiers():
+    from analysis.market_intelligence import build_supply_chain_trees
+
+    graph = {
+        "edges": [
+            {"src": "Nvidia", "dst": "data_center_support", "type": "anchor_demand"},
+            {"src": "optical transceivers", "dst": "data_center_support", "type": "component_dependency"},
+            {"src": "HBM", "dst": "data_center_support", "type": "component_dependency"},
+            {"src": "Micron", "dst": "HBM", "type": "component_manufacturer"},
+        ]
+    }
+    tree = next(
+        item for item in build_supply_chain_trees(graph, {}) if item["root"] == "Nvidia"
+    )
+    components = tree["tiers"][3 - 1]["nodes"]
+    hbm = next(item for item in components if item["component"] == "HBM")
+    assert hbm["manufacturers"][0]["name"] == "Micron"
+    assert {item["component"] for item in components} == {
+        "HBM",
+        "optical transceivers",
+    }
