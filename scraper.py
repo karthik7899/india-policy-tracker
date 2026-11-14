@@ -1423,9 +1423,7 @@ def _parse_block_deal_headline(headline, flat_watchlist, headline_lower):
         headline,
         re.IGNORECASE,
     )
-    participant = (
-        participant_match.group(1).strip() if participant_match else None
-    )
+    participant = participant_match.group(1).strip() if participant_match else None
 
     details_match = re.search(
         r"(\d+(?:\.\d+)?%\s*stake|\d+\s*"
