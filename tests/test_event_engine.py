@@ -625,8 +625,12 @@ def test_committed_graph_is_well_formed():
     graph = load_entity_graph(os.path.join(_REPO_ROOT, "entity_graph.json"))
     assert len(graph["edges"]) >= 30
 
-    terminal = {"anchor_demand", "input_cost", "partner"}
-    relational = {"competitor", "supplier_customer"}
+    terminal = {"anchor_demand", "input_cost", "partner", "component_dependency"}
+    relational = {
+        "competitor",
+        "supplier_customer",
+        "component_manufacturer",
+    }
 
     for edge in graph["edges"]:
         dst = edge["dst"]
