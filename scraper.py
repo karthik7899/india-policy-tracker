@@ -1366,70 +1366,69 @@ async def check_sebi_sid_filings_async(session):
 
 
 def _parse_block_deal_headline(headline, flat_watchlist, headline_lower):
-    buyer = "Institutional Investor"
-    action = "Buy"
-    company = "Listed Company"
-    details = "Block Deal"
+    """Parse only tracked-company block/bulk deal headlines.
 
-    if any(
-        w in headline_lower
-        for w in [
-            "sells",
-            "dumped",
-            "exits",
-            "offloads",
-            "reduces stake",
-        ]
-    ):
-        action = "Sell"
-    elif any(
-        w in headline_lower
-        for w in [
-            "buys",
-            "acquires",
-            "purchases",
-            "picks up",
-            "increases stake",
-        ]
-    ):
-        action = "Buy"
+    Broad FII-flow commentary and market recaps are not transactions. Unknown
+    buyer, direction and consideration remain unknown rather than being
+    replaced with fabricated defaults.
+    """
+    if not any(term in headline_lower for term in ("block deal", "bulk deal")):
+        return None
+
+    matched = next(
+        (
+            (name, ticker)
+            for ticker, name, _sector in flat_watchlist
+            if title_matches_company(headline, ticker, name)
+        ),
+        None,
+    )
+    if not matched:
+        return None
+    matched_company, matched_ticker = matched
+
+    sell_terms = (
+        "sells", "sold", "dumped", "offloads", "offloaded",
+        "exits", "reduces stake", "cuts stake",
+    )
+    buy_terms = (
+        "buys", "bought", "acquires", "acquired", "purchases",
+        "purchased", "picks up", "increases stake",
+    )
+    has_sell = any(term in headline_lower for term in sell_terms)
+    has_buy = any(term in headline_lower for term in buy_terms)
+    action = "Sell" if has_sell and not has_buy else (
+        "Buy" if has_buy and not has_sell else None
+    )
 
     buyer_match = re.search(
-        r"^([A-Z0-9][A-Za-z0-9\s\.\&]+?)\s+(?:buys|acquires|sells|purchases|picks up|offloads|exits|increases|decreases|shares|block|bulk|mutual)",
-        headline,
-    )
-    if buyer_match:
-        buyer = buyer_match.group(1).strip()
-
-    details_match = re.search(
-        r"(\d+(?:\.\d+)?%\s*stake|\d+\s*(?:lakh|million|crore)?\s*shares|worth\s*(?:Rs\s*)?\d+\s*(?:cr|crore|crores)?)",
+        r"^([A-Z0-9][A-Za-z0-9\s.&]+?)\s+"
+        r"(?:buys|bought|acquires|acquired|sells|sold|purchases|purchased|"
+        r"picks up|offloads|exits|increases|decreases)",
         headline,
         re.IGNORECASE,
     )
-    if details_match:
-        details = details_match.group(1).strip()
+    buyer = buyer_match.group(1).strip() if buyer_match else None
 
-    company_match = re.search(
-        r"(?:in|of|shares of|stake in|shares in)\s+([A-Z][A-Za-z0-9\s\&]+?)(?:\s+via|\s+worth|\s+for|\s+at|\s+through|\s+block|\s+bulk|$)",
+    details_match = re.search(
+        r"(\d+(?:\.\d+)?%\s*stake|\d+\s*"
+        r"(?:lakh|million|crore)?\s*shares|worth\s*(?:Rs\s*)?"
+        r"\d+\s*(?:cr|crore|crores)?)",
         headline,
+        re.IGNORECASE,
     )
-    if company_match:
-        company = company_match.group(1).strip()
+    details = details_match.group(1).strip() if details_match else None
+    deal_type = "Block Deal" if "block deal" in headline_lower else "Bulk Deal"
 
-    # Match against watchlist stocks (word-boundary + person-name guard)
-    matched_company = None
-    matched_ticker = None
-    for ticker_sym, s_name, _sector in flat_watchlist:
-        if title_matches_company(headline, ticker_sym, s_name):
-            matched_company = s_name
-            matched_ticker = ticker_sym
-            break
-
-    if matched_company:
-        company = f"{matched_company} ({matched_ticker})"
-
-    return buyer, action, company, details
-
+    return {
+        "buyer": buyer,
+        "action": action,
+        "company": f"{matched_company} ({matched_ticker})",
+        "ticker": matched_ticker,
+        "details": details,
+        "deal_type": deal_type,
+        "confidence": "headline_attributed",
+    }
 
 async def fetch_institutional_activity_async(session, watchlist):
     log.info(
@@ -1453,9 +1452,11 @@ async def fetch_institutional_activity_async(session, watchlist):
                     headline = entry.get("title", "").split(" - ")[0].strip()
                     headline_lower = headline.lower()
 
-                    buyer, action, company, details = _parse_block_deal_headline(
+                    parsed = _parse_block_deal_headline(
                         headline, flat_watchlist, headline_lower
                     )
+                    if not parsed:
+                        continue
 
                     activity.append(
                         {
@@ -1465,10 +1466,7 @@ async def fetch_institutional_activity_async(session, watchlist):
                                 "title", "Finance Media"
                             ),
                             "date": entry.get("published", ""),
-                            "buyer": buyer,
-                            "action": action,
-                            "company": company,
-                            "details": details,
+                            **parsed,
                         }
                     )
     except Exception as e:
