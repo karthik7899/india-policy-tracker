@@ -7,7 +7,7 @@ fields; incomplete rows are not promoted to institutional activity.
 
 import csv
 import io
-from typing import Any, Dict
+from typing import Dict
 
 from logger import log
 
@@ -48,17 +48,26 @@ def parse_deal_csv(text: str, deal_type: str, tracked: Dict[str, str]):
             if ticker not in tracked:
                 continue
             participant = _pick(row, "Client Name", "Client", "Name of Client")
-            action = (_pick(row, "Buy/Sell", "Buy Sell", "Transaction Type") or "").upper()
+            action = (
+                _pick(row, "Buy/Sell", "Buy Sell", "Transaction Type") or ""
+            ).upper()
             quantity_raw = _pick(row, "Quantity", "Traded Quantity", "Qty")
-            price_raw = _pick(
-                row, "Wtd. Avg. Price", "Weighted Average Price", "Price"
-            )
+            price_raw = _pick(row, "Wtd. Avg. Price", "Weighted Average Price", "Price")
             try:
-                quantity = float(str(quantity_raw).replace(",", "")) if quantity_raw else None
+                quantity = (
+                    float(str(quantity_raw).replace(",", ""))
+                    if quantity_raw
+                    else None
+                )
                 price = float(str(price_raw).replace(",", "")) if price_raw else None
             except (TypeError, ValueError):
                 continue
-            if not participant or action not in ("BUY", "SELL") or not quantity or quantity <= 0:
+            if (
+                not participant
+                or action not in ("BUY", "SELL")
+                or not quantity
+                or quantity <= 0
+            ):
                 continue
             if price is not None and price <= 0:
                 price = None
@@ -105,7 +114,9 @@ async def fetch_nse_deals_async(session, watchlist):
         try:
             async with session.get(url, headers=HEADERS, timeout=20) as response:
                 if response.status != 200:
-                    log.info(f"NSE {deal_type} deal file unavailable (HTTP {response.status}).")
+                    log.info(
+                        f"NSE {deal_type} deal file unavailable (HTTP {response.status})."
+                    )
                     continue
                 body = await response.text()
             rows = parse_deal_csv(body, deal_type.title(), tracked)
