@@ -2,7 +2,6 @@
 
 from scraper import _parse_block_deal_headline
 
-
 WATCHLIST = [
     ("IIFLCAP", "IIFL Capital Services", "financials"),
     ("TCS", "Tata Consultancy Services", "it_services"),
