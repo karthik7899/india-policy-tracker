@@ -761,6 +761,28 @@ async def run_pipeline():
         group_news=group_news,
     )
 
+    # AI company research is a bounded, cached synthesis of the evidence above.
+    # It is informational only: deterministic scores, warnings and ranking do
+    # not consume these model-generated conclusions.
+    from analysis.company_research import build_company_research
+
+    data["ai_research"] = build_company_research(watchlist, data["company_digest"])
+    research_status = data["ai_research"].get("status") or {}
+    reader_runtime.note(
+        "research",
+        {k: research_status.get(k) for k in ("read", "cached", "pending")},
+        research_status.get("skipped") or "",
+    )
+    data["ai_readers"] = reader_runtime.report()
+    log.info(
+        "Company research: "
+        f"{research_status.get('read', 0)} generated, "
+        f"{research_status.get('cached', 0)} cached, "
+        f"{research_status.get('pending', 0)} pending"
+        + (f" ({research_status['skipped']})" if research_status.get("skipped") else "")
+        + "."
+    )
+
     # What is coming up for each holding, and what the results that came in
     # since the last run said (analysis/event_calendar.py).
     from analysis.event_calendar import build_calendar, update_results
