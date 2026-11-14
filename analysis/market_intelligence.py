@@ -323,6 +323,7 @@ def build_supply_chain_trees(
                     )
 
         sector_exposures = []
+        component_nodes = {}
         for anchor in anchors:
             if str(anchor.get("src", "")).lower() != root.lower():
                 continue
@@ -332,16 +333,54 @@ def build_supply_chain_trees(
                     "component": edge.get("src"),
                     "relationship": edge.get("note") or "Sector input-cost exposure",
                     "evidence": edge.get("evidence") or "curated",
+                    "sector": sector,
+                    "scope": "sector_level_not_company_specific",
                 }
                 for edge in input_costs
                 if str(edge.get("dst", "")).lower() == sector.lower()
             ]
+            dependencies = [
+                {
+                    "component": edge.get("src"),
+                    "relationship": edge.get("note") or "Sector component dependency",
+                    "evidence": edge.get("evidence") or "curated",
+                    "sector": sector,
+                    "scope": "sector_level_not_company_specific",
+                }
+                for edge in edges
+                if edge.get("type") == "component_dependency"
+                and str(edge.get("dst", "")).lower() == sector.lower()
+            ]
+            for node in inputs + dependencies:
+                component_nodes.setdefault(str(node["component"]).lower(), node)
             sector_exposures.append(
                 {
                     "sector": sector,
                     "anchor_relationship": anchor.get("note") or "",
                     "inputs": inputs,
+                    "components": dependencies,
                     "relationship_scope": "sector_level_not_company_specific",
+                }
+            )
+        component_layer = []
+        for component in component_nodes.values():
+            makers = [
+                {
+                    "name": edge.get("src"),
+                    "relationship": edge.get("note") or "Curated component manufacturer",
+                    "evidence": edge.get("evidence") or "curated",
+                    "tier": 3,
+                }
+                for edge in edges
+                if edge.get("type") == "component_manufacturer"
+                and str(edge.get("dst", "")).lower()
+                == str(component["component"]).lower()
+            ]
+            component_layer.append(
+                {
+                    **component,
+                    "tier": 2,
+                    "manufacturers": makers,
                 }
             )
         if not suppliers and not customers and not sector_exposures:
@@ -359,6 +398,23 @@ def build_supply_chain_trees(
                         "customers": customers,
                     },
                     {"tier": 2, "role": "upstream_suppliers", "nodes": upstream},
+                    {
+                        "tier": 2,
+                        "role": "components",
+                        "nodes": sorted(
+                            component_layer,
+                            key=lambda node: str(node["component"]).lower(),
+                        ),
+                    },
+                    {
+                        "tier": 3,
+                        "role": "component_manufacturers",
+                        "nodes": [
+                            maker
+                            for node in component_layer
+                            for maker in node["manufacturers"]
+                        ],
+                    },
                 ],
                 "sector_exposures": sector_exposures,
                 "source_scope": "curated_entity_graph",
