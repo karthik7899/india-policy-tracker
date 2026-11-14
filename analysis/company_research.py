@@ -4,6 +4,7 @@ This optional synthesis layer uses evidence already collected by the pipeline.
 It never changes deterministic scores, warnings, thesis health or rankings.
 Every returned source reference is copied from the input digest.
 """
+
 import datetime
 import hashlib
 import json
@@ -197,9 +198,7 @@ def _clean(raw: Any, inputs: Dict[str, Dict[str, Any]]) -> Dict[str, Dict[str, A
         }
         for field in fields:
             value = str(item.get(field) or "").strip()
-            row[field] = (
-                value[:700] if value else "Insufficient evidence in this run."
-            )
+            row[field] = value[:700] if value else "Insufficient evidence in this run."
         row["generated_by"] = "Gemini"
         row["evidence_count"] = len(refs)
         out[ticker] = row
@@ -251,18 +250,19 @@ def build_company_research(
         todo = []
         for ticker, (payload, fingerprint) in inputs.items():
             entry = entries.get(ticker) or {}
-            if (
-                entry.get("fingerprint") == fingerprint
-                and isinstance(entry.get("brief"), dict)
+            if entry.get("fingerprint") == fingerprint and isinstance(
+                entry.get("brief"), dict
             ):
                 result[ticker] = entry["brief"]
             else:
                 todo.append((ticker, payload, fingerprint))
         todo.sort(
             key=lambda row: (
-                str(row[1].get("activity", [{}])[0].get("date", ""))
-                if row[1].get("activity")
-                else "",
+                (
+                    str(row[1].get("activity", [{}])[0].get("date", ""))
+                    if row[1].get("activity")
+                    else ""
+                ),
                 row[0],
             ),
             reverse=True,
