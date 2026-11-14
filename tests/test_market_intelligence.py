@@ -167,7 +167,7 @@ def test_supply_chain_tree_builds_component_and_manufacturer_tiers():
     tree = next(
         item for item in build_supply_chain_trees(graph, {}) if item["root"] == "Nvidia"
     )
-    components = tree["tiers"][3 - 1]["nodes"]
+    components = tree["tiers"][3]["nodes"]
     hbm = next(item for item in components if item["component"] == "HBM")
     assert hbm["manufacturers"][0]["name"] == "Micron"
     assert {item["component"] for item in components} == {
