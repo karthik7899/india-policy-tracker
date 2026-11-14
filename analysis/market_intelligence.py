@@ -30,6 +30,7 @@ _EVENT_IMPACT = {
     "adverse": 0,
 }
 
+
 def _number(value: Any) -> Optional[float]:
     try:
         if value is None or value == "":
