@@ -793,9 +793,9 @@ async def run_pipeline():
         {k: research_status.get(k) for k in ("read", "cached", "pending")},
         research_status.get("skipped") or "",
     )
-    # Consolidate reported ownership, NSE delivery and market liquidity,
-    # then rank opportunities in the user's strict priority order. MTF remains
-    # explicitly unavailable until a verifiable stock-level feed is sourced.
+    # Consolidate reported ownership, NSE delivery, market liquidity and any
+    # matched provider-reported MTF disclosures, then rank opportunities in
+    # the user's strict priority order. Missing MTF values remain unavailable.
     from analysis.market_intelligence import build_market_intelligence
 
     data["market_intelligence"] = build_market_intelligence(
@@ -807,7 +807,8 @@ async def run_pipeline():
     log.info(
         "Market intelligence: "
         f"{data['market_intelligence']['coverage']['holdings']} holdings; "
-        "MTF unavailable pending a verified provider."
+        f"{data['market_intelligence']['coverage']['mtf_available']} matched MTF "
+        "disclosures; missing values remain unavailable."
     )
 
     data["ai_readers"] = reader_runtime.report()
