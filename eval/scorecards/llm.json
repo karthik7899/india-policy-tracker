@@ -3,20 +3,20 @@
  "metrics": {
   "all": {
    "actors_exact": 1.0,
-   "labelled_events": 83,
+   "labelled_events": 82,
    "partners": 0.921,
    "pending": 0,
-   "precision": 0.938,
-   "recall": 0.904,
+   "precision": 0.925,
+   "recall": 0.902,
    "rows": 157
   },
   "dev": {
    "actors_exact": 1.0,
-   "labelled_events": 53,
+   "labelled_events": 52,
    "partners": 0.947,
    "pending": 0,
-   "precision": 0.961,
-   "recall": 0.925,
+   "precision": 0.941,
+   "recall": 0.923,
    "rows": 102
   },
   "holdout": {
@@ -257,9 +257,9 @@
   },
   "Coforge unveils SecureEdge2Cloud AI security on Zscaler Zero Trust Exchange": {
    "got": "product_launch COFORGE",
-   "outcome": "found",
+   "outcome": "false_alarm",
    "split": "dev",
-   "want": "product_launch COFORGE"
+   "want": "none"
   },
   "Container Corp of India Share Price": {
    "got": "none",
