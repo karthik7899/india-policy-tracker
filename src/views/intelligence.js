@@ -70,6 +70,116 @@ function evidenceList(rows, limit = 8) {
   );
 }
 
+
+function marketIntelligencePanel(data) {
+  if (!data || typeof data !== "object") {
+    return panel(
+      "Market intelligence",
+      "Ownership, tradeability, MTF and opportunity ranking.",
+      el("p", { class: "company-empty" }, "Not present in the latest published data. It will appear after a successful pipeline refresh."),
+    );
+  }
+
+  const snapshots = Array.isArray(data.snapshots) ? data.snapshots : [];
+  const ranking = Array.isArray(data.opportunity_ranking) ? data.opportunity_ranking : [];
+  const coverage = data.coverage || {};
+  const availableMtf = snapshots.filter((row) => row.mtf?.status === "available");
+  const topRows = ranking.slice(0, 10);
+
+  const rankingTable = topRows.length
+    ? dataTable(
+        topRows,
+        [
+          { key: "rank", label: "Rank" },
+          { key: "ticker", label: "Company", render: (row) => tickerLink(row.ticker) },
+          { key: "business_impact", label: "Business", render: (row) => row.dimensions?.business_impact ?? "—" },
+          { key: "market_reaction", label: "Reaction", render: (row) => row.dimensions?.market_reaction ?? "—" },
+          { key: "market_opportunity", label: "Opportunity", render: (row) => row.dimensions?.market_opportunity ?? "—" },
+          { key: "financial_strength", label: "Financials", render: (row) => row.dimensions?.financial_strength ?? "—" },
+        ],
+        { empty: "No ranked opportunities in this run." },
+      )
+    : el("p", { class: "company-empty" }, "No opportunity ranking is available.");
+
+  const mtfTable = availableMtf.length
+    ? dataTable(
+        availableMtf.slice(0, 12),
+        [
+          { key: "ticker", label: "Company", render: (row) => tickerLink(row.ticker) },
+          { key: "outstanding_cr", label: "MTF book (₹ cr)", render: (row) => row.mtf?.outstanding_cr ?? "—" },
+          { key: "change_1m_pct", label: "1M change", render: (row) => row.mtf?.change_1m_pct == null ? "—" : row.mtf.change_1m_pct + "%" },
+          { key: "rank", label: "Provider rank", render: (row) => row.mtf?.rank ?? "—" },
+          { key: "as_of", label: "As of", render: (row) => row.mtf?.as_of || "—" },
+        ],
+        { empty: "No MTF values are available." },
+      )
+    : el("p", { class: "company-empty" }, "No matched MTF disclosures. Missing values are unknown, not zero.");
+
+  const treeRows = (data.supply_chain_trees || []).slice(0, 6);
+  const trees = treeRows.length
+    ? el(
+        "div",
+        { class: "evidence" },
+        treeRows.map((tree) => {
+          const components = (tree.tiers || []).find((tier) => tier.role === "components")?.nodes || [];
+          return el(
+            "section",
+            { class: "net-card" },
+            el("h4", { class: "net-card-title" }, tree.root),
+            components.length
+              ? el(
+                  "ul",
+                  { class: "evidence" },
+                  components.map((component) =>
+                    el(
+                      "li",
+                      {},
+                      el("strong", {}, component.component),
+                      el("span", { class: "evidence-meta" }, component.relationship || "Sector-level component dependency"),
+                      component.manufacturers?.length
+                        ? el(
+                            "ul",
+                            { class: "evidence" },
+                            component.manufacturers.map((maker) =>
+                              el(
+                                "li",
+                                {},
+                                maker.ticker ? [tickerLink(maker.ticker), " · "] : null,
+                                maker.name,
+                                el("span", { class: "evidence-meta" }, maker.evidence || "Curated relationship"),
+                              ),
+                            ),
+                          )
+                        : el("span", { class: "evidence-meta" }, "Manufacturer mapping not available"),
+                    ),
+                  ),
+                )
+              : el("p", { class: "company-empty" }, "No component tier is mapped for this anchor."),
+            el("p", { class: "evidence-meta" }, tree.limitations || "Partial curated map; absence is not proof of no supplier relationship."),
+          );
+        }),
+      )
+    : el("p", { class: "company-empty" }, "No supply-chain trees are available in this run.");
+
+  return panel(
+    "Market intelligence",
+    "Rankings are lexicographic: business impact → market reaction → market opportunity → financial strength. MTF values retain provider attribution and as-of dates.",
+    el(
+      "div",
+      { class: "stat-row" },
+      stat("Holdings covered", coverage.holdings ?? snapshots.length, "Market snapshots"),
+      stat("MTF matched", coverage.mtf_available ?? availableMtf.length, "Provider-reported disclosures"),
+      stat("MTF unavailable", coverage.mtf_unavailable ?? Math.max(0, snapshots.length - availableMtf.length), "Not treated as zero"),
+    ),
+    rankingTable,
+    el("h4", {}, "Margin trading facility"),
+    mtfTable,
+    el("p", { class: "evidence-meta" }, data.mtf_attribution || "MTF source attribution unavailable."),
+    el("h4", {}, "Supply-chain tiers"),
+    trees,
+  );
+}
+
 function upcomingPanel(calendar) {
   const rows = (calendar?.upcoming || []).slice().sort((a, b) => String(a.date).localeCompare(String(b.date))).slice(0, 8);
   return panel(
@@ -143,6 +253,7 @@ export async function render(container, { payload, route }) {
       stat("Institutional signals", institutionalRows.length, "Institutional and block-deal news feed"),
       stat("Companies covered", digestCompanies.length || "—", "With a company activity digest"),
     ),
+    marketIntelligencePanel(b.market_intelligence),
     panel(
       "Decision queue",
       "High-severity risks appear first, followed by medium and lower-severity signals. Confidence is shown as evidence quality, not as a probability.",
