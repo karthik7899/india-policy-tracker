@@ -2,19 +2,6 @@
   "ticker": "COFORGE",
   "items": [
     {
-      "date": "11 Nov 2026",
-      "headline": "‘Nobody Wants a Proprietary Platform,’ Says Coforge’s Anup Nair",
-      "source_url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxNTVNLVDh3bS1fYjU2ZjVxbjBjRzR5TUpDc1FFaTdJZmZlMHlWeFAyV2o3Tzhna1BQX1Zja01McEVnVGJmel9XNTA5ZVhIT1FrN1N0TDIzZ3VZV0N1bVpqUGFZdzBzSnM4ME43bUdNc1VnbUI5RlFJd1gxZWVoS2ZQcC01Ykh4a3NJQ3Q3UFU4M0R5Wm5jYURqVXNhLV9sYWwzYXlF?oc=5",
-      "source_label": "Analytics India Magazine",
-      "event_type": "",
-      "source_kind": "Sector news",
-      "event_tags": [
-        "Sector news"
-      ],
-      "confidence": "M",
-      "status": "counted"
-    },
-    {
       "date": "Thu, 29 Oct 2026 08:33:43 GMT",
       "headline": "Coforge Launches Autonomous Software Factory for AI Agents",
       "source_url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxOU2VuNWFJV01pVTduTUFzRzdYOTJMSWFSX2k3LUJzbzFQWnFQb2NYVUZBdHdnWDdZZTNBTzQtWnVGOGxuRVowUzVrQnF0T0xNcVdmN0d6TEdrOGIxeG13eUQ5c240NU1wd1hObzNhSkhHOWRHR0ZlZGZkaGtmclRick10LVgyYW5HSEI5QkZLZHRBdw?oc=5",
@@ -64,7 +51,8 @@
         "Agreement"
       ],
       "confidence": "M",
-      "status": "counted"
+      "status": "excluded",
+      "exclusion_reason": "aged >120d (122 days old)"
     },
     {
       "date": "Sun, 12 Jul 2026 06:36:38 GMT",
@@ -78,7 +66,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (125 days old)"
+      "exclusion_reason": "aged >120d (127 days old)"
     },
     {
       "date": "Thu, 09 Jul 2026 06:29:01 GMT",
@@ -92,7 +80,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (128 days old)"
+      "exclusion_reason": "aged >120d (130 days old)"
     },
     {
       "date": "Thu, 09 Jul 2026 06:38:10 GMT",
@@ -106,7 +94,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (128 days old)"
+      "exclusion_reason": "aged >120d (130 days old)"
     },
     {
       "date": "Tue, 07 Jul 2026 10:14:04 GMT",
@@ -120,17 +108,16 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (130 days old)"
+      "exclusion_reason": "aged >120d (132 days old)"
     },
     {
       "date": "Sat, 31 Oct 2026 08:38:00 GMT",
       "headline": "Coforge Unveils Autonomous Software Factory for the Era of Agentic AI Engineering",
       "source_url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxNeTdnSVh5d1J3N09NVzFFNlVjWnBNcXVETzRNOGtOeU53ekt0OGtfRFpRSmlZZzdTMEpIY0NyZ3A4OGZNSFRhcjR0MlNWRkp1MkNfM3E2Vnd2SllSUmR3UGRHd3A2aXE5SkFJLWtlazA3VmJHaTdEcEVyanlMdUpTaFdVNklpTUlpTTZmaE9KTHBka0tKcVpFZzB6bHVjNW9iY0JmcjNVN2VCM1pRaXd6SlhjS1hWSEtqcVZTU2t2cWjSAc4BQVVfeXFMTVY2Wi1NdFgtbHB0VkxDVVNEc2ZVSTlLQ0lzcld0c1E3ZkdLWkVCVS1wNUV1c25sWUU2dWE4ejN3UkQ0b3pzaHZqa1dObTVFYzlJX2g5VWxBWVpIcEVYTW11LVYwOXJGcG9ycUwtcGhKUFBIWS00bTlLN3dmLVpCM3VDYzBSQmZJNV9tcmNVVWtTY1ozWWpiQlQtOVFQdmdWYl9sY0lHVkNXdkJ5QXZqeXhLYWthZHpXZnVaODJrbjZ2TFVzU0xsUDhsd05BM1E?oc=5",
       "source_label": "digital terminal",
-      "event_type": "product_launch",
+      "event_type": "",
       "source_kind": "Launch",
       "event_tags": [
-        "product_launch",
         "Launch"
       ],
       "confidence": "M",
@@ -214,7 +201,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (128 days old)"
+      "exclusion_reason": "aged >120d (130 days old)"
     },
     {
       "date": "Thu, 09 Jul 2026 07:42:56 GMT",
@@ -228,7 +215,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (128 days old)"
+      "exclusion_reason": "aged >120d (130 days old)"
     },
     {
       "date": "29 Oct 2026",
@@ -476,7 +463,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (235 days old)"
+      "exclusion_reason": "aged >120d (237 days old)"
     },
     {
       "date": "Tue, 16 Jun 2026 07:00:00 GMT",
@@ -490,7 +477,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (151 days old)"
+      "exclusion_reason": "aged >120d (153 days old)"
     },
     {
       "date": "Tue, 16 Jun 2026 07:00:00 GMT",
@@ -504,7 +491,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (151 days old)"
+      "exclusion_reason": "aged >120d (153 days old)"
     },
     {
       "date": "Fri, 30 Oct 2026 17:02:58 +0530",
@@ -548,21 +535,6 @@
       ],
       "confidence": "L",
       "status": "counted"
-    },
-    {
-      "date": "2026-10-31",
-      "headline": "Coforge Unveils Autonomous Software Factory for the Era of Agentic AI Engineering",
-      "source_url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxNeTdnSVh5d1J3N09NVzFFNlVjWnBNcXVETzRNOGtOeU53ekt0OGtfRFpRSmlZZzdTMEpIY0NyZ3A4OGZNSFRhcjR0MlNWRkp1MkNfM3E2Vnd2SllSUmR3UGRHd3A2aXE5SkFJLWtlazA3VmJHaTdEcEVyanlMdUpTaFdVNklpTUlpTTZmaE9KTHBka0tKcVpFZzB6bHVjNW9iY0JmcjNVN2VCM1pRaXd6SlhjS1hWSEtqcVZTU2t2cWjSAc4BQVVfeXFMTVY2Wi1NdFgtbHB0VkxDVVNEc2ZVSTlLQ0lzcld0c1E3ZkdLWkVCVS1wNUV1c25sWUU2dWE4ejN3UkQ0b3pzaHZqa1dObTVFYzlJX2g5VWxBWVpIcEVYTW11LVYwOXJGcG9ycUwtcGhKUFBIWS00bTlLN3dmLVpCM3VDYzBSQmZJNV9tcmNVVWtTY1ozWWpiQlQtOVFQdmdWYl9sY0lHVkNXdkJ5QXZqeXhLYWthZHpXZnVaODJrbjZ2TFVzU0xsUDhsd05BM1E?oc=5",
-      "source_label": "digital terminal",
-      "event_type": "product_launch",
-      "source_kind": "Event",
-      "event_tags": [
-        "product_launch",
-        "Event"
-      ],
-      "confidence": "H",
-      "status": "merged",
-      "exclusion_reason": "merged: duplicate phrasing of “Coforge Unveils Autonomous Software Factory for the Era of A”"
     }
   ]
 }

@@ -1,20 +1,9 @@
 {
   "value": {
-    "as_of": "2026-11-14",
+    "as_of": "2026-11-16",
     "ahead_days": 45,
     "back_days": 14,
     "upcoming": [
-      {
-        "ticker": "KAYNES",
-        "date": "2026-11-14",
-        "kind": "results",
-        "title": "Board meeting: Financial Results",
-        "detail": "To consider and approve the financial results for the period ended September 30, 2026",
-        "source": "NSE event calendar",
-        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
-        "name": "Kaynes Technology",
-        "sector": "manufacturing_electronics"
-      },
       {
         "ticker": "PAGEIND",
         "date": "2026-11-18",
@@ -28,6 +17,17 @@
       }
     ],
     "recent": [
+      {
+        "ticker": "KAYNES",
+        "date": "2026-11-14",
+        "kind": "results",
+        "title": "Board meeting: Financial Results",
+        "detail": "To consider and approve the financial results for the period ended September 30, 2026",
+        "source": "NSE event calendar",
+        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
+        "name": "Kaynes Technology",
+        "sector": "manufacturing_electronics"
+      },
       {
         "ticker": "TVSSCS",
         "date": "2026-11-13",
@@ -137,17 +137,6 @@
         "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
         "name": "Tata Power Company",
         "sector": "big_cap_industries"
-      },
-      {
-        "ticker": "PREMIERENE",
-        "date": "2026-11-11",
-        "kind": "dividend",
-        "title": "Ex-date: Interim Dividend - Re 0.50 Per Share",
-        "detail": "record date 2026-11-11",
-        "source": "NSE corporate actions",
-        "link": "https://www.nseindia.com/companies-listing/corporate-filings-actions",
-        "name": "Premier Energies",
-        "sector": "clean_energy"
       },
       {
         "ticker": "GRSE",
@@ -392,17 +381,6 @@
         "sector": "fmcg"
       },
       {
-        "ticker": "PREMIERENE",
-        "date": "2026-11-04",
-        "kind": "results",
-        "title": "Board meeting: Financial Results/Dividend",
-        "detail": "To consider and approve the financial results for the period ended September 30, 2026 and dividend",
-        "source": "NSE event calendar",
-        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
-        "name": "Premier Energies",
-        "sector": "clean_energy"
-      },
-      {
         "ticker": "KIRLOSENG",
         "date": "2026-11-04",
         "kind": "results",
@@ -447,17 +425,6 @@
         "sector": "hospitality_travel"
       },
       {
-        "ticker": "APOLLOHOSP",
-        "date": "2026-11-04",
-        "kind": "results",
-        "title": "Board meeting: Financial Results/Other business matters",
-        "detail": "To consider and approve the financial results for the period ended September 30, 2026 and other business matters",
-        "source": "NSE event calendar",
-        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
-        "name": "Apollo Hospitals Enterprise",
-        "sector": "healthcare_hospitals"
-      },
-      {
         "ticker": "SBIN",
         "date": "2026-11-03",
         "kind": "results",
@@ -467,6 +434,17 @@
         "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
         "name": "State Bank of India",
         "sector": "banking_financials"
+      },
+      {
+        "ticker": "MEDANTA",
+        "date": "2026-11-03",
+        "kind": "results",
+        "title": "Board meeting: Financial Results",
+        "detail": "To consider and approve the financial results for the period ended September 30, 2026",
+        "source": "NSE event calendar",
+        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
+        "name": "Global Health",
+        "sector": "healthcare_hospitals"
       },
       {
         "ticker": "FAZE3Q",
@@ -555,27 +533,14 @@
         "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
         "name": "Capillary Technologies India",
         "sector": "midcap_it"
-      },
-      {
-        "ticker": "ZENTEC",
-        "date": "2026-10-31",
-        "kind": "results",
-        "title": "Board meeting: Financial Results/Other business matters",
-        "detail": "To consider and approve the financial results for the period ended September 30, 2026 and other business matters",
-        "source": "NSE event calendar",
-        "link": "https://www.nseindia.com/companies-listing/corporate-filings-event-calendar",
-        "name": "Zen Technologies",
-        "sector": "surveillance_security"
       }
     ],
     "macro": [],
-    "next_results": {
-      "KAYNES": "2026-11-14"
-    },
+    "next_results": {},
     "sources": {
       "nse": {
-        "event_calendar": 1748,
-        "corporate_actions": 155
+        "event_calendar": 1695,
+        "corporate_actions": 164
       },
       "nse_errors": [],
       "filings": 2,

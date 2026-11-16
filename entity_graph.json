@@ -154,6 +154,14 @@
     },
     {
       "src": "Nvidia",
+      "dst": "data_center_support",
+      "type": "anchor_demand",
+      "evidence": "curated",
+      "added": "2026-11-14",
+      "note": "AI accelerator deployments drive rack-scale networking, optics and fibre infrastructure"
+    },
+    {
+      "src": "Nvidia",
       "dst": "manufacturing_electronics",
       "type": "anchor_demand",
       "note": "Global electronics demand anchor — India EMS/PLI ecosystem exposure",
@@ -337,6 +345,82 @@
         "chip assembly",
         "semiconductor assembly"
       ]
+    },
+    {
+      "src": "fiber optic cable",
+      "dst": "data_center_support",
+      "type": "component_dependency",
+      "evidence": "curated",
+      "added": "2026-11-14",
+      "note": "Fibre infrastructure carries high-bandwidth links between racks and facilities"
+    },
+    {
+      "src": "HBM",
+      "dst": "data_center_support",
+      "type": "component_dependency",
+      "evidence": "curated",
+      "added": "2026-11-14",
+      "note": "High-bandwidth memory is a core accelerator memory subsystem"
+    },
+    {
+      "src": "optical transceivers",
+      "dst": "data_center_support",
+      "type": "component_dependency",
+      "evidence": "curated",
+      "added": "2026-11-14",
+      "note": "Optical interconnects connect accelerators, switches and racks"
+    },
+    {
+      "src": "Coherent",
+      "dst": "optical transceivers",
+      "type": "component_manufacturer",
+      "evidence": "https://www.coherent.com/networking/transceivers",
+      "added": "2026-11-14",
+      "note": "Datacom and data-centre optical transceiver manufacturer",
+      "scope": "ecosystem_manufacturer_not_confirmed_customer_supplier"
+    },
+    {
+      "src": "Corning",
+      "dst": "fiber optic cable",
+      "type": "component_manufacturer",
+      "evidence": "https://www.corning.com/optical-communications/worldwide/en/home/products.html",
+      "added": "2026-11-14",
+      "note": "Optical fibre and fibre-optic cable manufacturer",
+      "scope": "ecosystem_manufacturer_not_confirmed_customer_supplier"
+    },
+    {
+      "src": "Lumentum",
+      "dst": "optical transceivers",
+      "type": "component_manufacturer",
+      "evidence": "https://www.lumentum.com/en/products/data-center",
+      "added": "2026-11-14",
+      "note": "Data-centre optical transceiver and photonics manufacturer",
+      "scope": "ecosystem_manufacturer_not_confirmed_customer_supplier"
+    },
+    {
+      "src": "Micron",
+      "dst": "HBM",
+      "type": "component_manufacturer",
+      "evidence": "curated",
+      "added": "2026-11-14",
+      "note": "HBM product manufacturer"
+    },
+    {
+      "src": "SK Hynix",
+      "dst": "HBM",
+      "type": "component_manufacturer",
+      "evidence": "curated",
+      "added": "2026-11-14",
+      "note": "HBM product manufacturer"
+    },
+    {
+      "src": "Sterlite Technologies (STL)",
+      "dst": "fiber optic cable",
+      "type": "component_manufacturer",
+      "evidence": "https://stl.tech/stl-redefines-optical-connectivity-with-indias-first-hollow-core-fibre-cable-for-data-centre-networks/",
+      "added": "2026-11-14",
+      "note": "Indian optical fibre and high-density data-centre cable manufacturer",
+      "scope": "ecosystem_manufacturer_not_confirmed_customer_supplier"
     },
     {
       "src": "aluminium",
@@ -704,6 +788,24 @@
       "link": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxPNEMwWkZ3NVlsSDZQcWxSb1QyX2hCdFRsb3RuVFhFbUxfX3hkMV84cThEY2pmVk1ZOE1lX2dCZjk1TmY4NHRKVndGN283eGYwb25rQVdjN0dvWEhaNEJhUGQtUmVEc3VRa0Y5NFp4RUNBYlVGYkstWHNZY1pkSFUzWGYyWkpkWmJ1TzhHMGJSRkRQakw1TXNfemtlazdicXhRT1MxNUZtMThwWEY3aGJKOGZWY2FTNk15dnc5YndKWEFJSnlYR3hDeUVYSVZWQjhiSUszdzNR0gHcAUFVX3lxTE9XM0VGZG5DYkc2bm1HejV5cGktQWxxQUt3Zl9MZFQxVlNUYjlId2ZtenVYa0VURVJTQ29HOXBJS09OUGxXMDJIb3N6ZjdidHZNemJLdml6SXlyUy05MzljcnhGWHVYbnQzMzNOZE04aDFhVy1SQjB5T2FoMjFSTmFlYTZ4Y1JZZjlLSHZXeENhLU93QTJpX0JrbkROZ293eVFmTS0wUzdXelFNN0lDNnFMVWlIQU03SWY2SUxQSlU1MVpsZ1IyTUloOERTcDhFTDdNNl80Wk51Tzl4eGg?oc=5"
     },
     {
+      "src": "Adani Airports",
+      "dst": "INDHOTEL",
+      "type": "partner",
+      "evidence": "Adani Airports, IHCL sign eight-hotel agreement in 4 cities",
+      "added": "2026-11-16",
+      "note": "Accepted from partner proposals",
+      "link": "https://news.google.com/rss/articles/CBMiugFBVV95cUxNZC1JZWdTR1pURnNnTjJmcE8yR24yMVF6WDYxSFRpY2FoRWNjUVZWMWlpY2xIUnFnX3R6bTQwWlZjdVJGTVJrSkxFZ2sxZndybm9PZ3AzbXBGdzd5NGxaZWNud2w1Y1FLT0JnNHYtV2M5V0pqNExHZjZvcUtrdXZhNkFvdWt2amF1UUtoNjlKLVA2YnBTTzNxQUYyc2FjMWNSWHdrbXZQaGtOdGRtdDZlUUtpYkg5QW0xV0HSAb8BQVVfeXFMUEdxVHFmODhVcG9iUGZIUWtNUFFTREdFM3BFSU8xamRBdkM5X3pLNjVEQWpDc3NWU1R3V0V6ODNLazlDQmdUcUcyc190c2RmLVF2TzhkZS1zNTVnR2JoZTg2aG1VWmVyWFkySTJLWGdxV3BHblZDR3BYS3ZCWjRMNTFCaUhhR2ZJMDBYdm9qdUNuTWRvVmtHeHV0cTVSR0RaOUJ4bk8yS1VGTTBoLWZpS0pIQ2ozRG14Ny1Hc3VQbm8?oc=5"
+    },
+    {
+      "src": "Aiyer Shipping",
+      "dst": "CONCOR",
+      "type": "partner",
+      "evidence": "CONCOR–Aiyer Shipping Collaboration Targets Stronger Overseas Logistics Links",
+      "added": "2026-11-16",
+      "note": "Accepted from partner proposals",
+      "link": "https://news.google.com/rss/articles/CBMirwFBVV95cUxPbjQ4Nld3djgyczZzV2lscHRsYUx6TTJNNlFiVHF0RTMwTDBheDN0bzh3aS1sYUlRNEtLQi13Z2FJU0M3NUx0SGRibDhVNUlvTngwdTh1OW5HNmdDMXZXS0RGMm5KRi02ajBXZXhJbkxYam0zZ3dOSDVoMFBzczVzcHlqR0xFS1BYT3Y1elZ1R0h3cGlaMUJZSGhxX3JBVHl2WmVSVjFBVWtTMUdKZl9v?oc=5"
+    },
+    {
       "src": "Amadeus",
       "dst": "TCS",
       "type": "partner",
@@ -824,6 +926,15 @@
       "link": "https://news.google.com/rss/articles/CBMizgFBVV95cUxOSGROWklHWFFjWEtZWmxjeC1uVU5qMTBJTThwbmlBQ0pwM2NWQ1lQdjRBUW9SNzUxaGJ6QjdhRFo2eng5MHppNEhnSGpRX1YxRXBlRjFqNDNrU3Rub3hCT1V3QUgtcHhhVzBXcVh5eS00QnpvbzAxWEQ1aVNDcmI1NVNIQnpHaHF4aXJZakkzdzlsdUVOd1BzdjAzZ2VYZm9JbnFmempTT3VOSXIxRnJuVkd6RElGZ1BFQ3hDRXVQbXNaLWE2a1FtcDhpZFM2UdIB0wFBVV95cUxQc216NzBteGF0b3BqOVlOUl8zS2dZN2VScUJocWNydC1jY1B3SEx4SjRHUXotb3pYWjk5aEl2TTVjVVlham9FQWlHLWthb3NBUDhoLTl2WGc0NUN1bmZndW1ZZk1BN0dkdUdOZ2VucnkxMTlNQnVaQXRYT3ducEM3Ykl3ZUNmZFlDblpGNnJ1NTNlVm9NWmFHOTM3aC1fWGgxc19EVHBnb0d6N0lSdTJ6U3dHb1FiMHlUa20yRHFpTGg3UnNZQjhBN1EwaFFqX1JZaUJR?oc=5"
     },
     {
+      "src": "Driving Forward",
+      "dst": "COFORGE",
+      "type": "partner",
+      "evidence": "Coforge Limited has informed the Exchange regarding a press release dated October 27, 2026, titled \"\"Coforge Partners with Driving Forward to Expand Career Path",
+      "added": "2026-11-16",
+      "note": "Accepted from partner proposals",
+      "link": "https://nsearchives.nseindia.com/corporate/COFORGE_27102026094229_IntimationofPressReleasellOctober272026.pdf"
+    },
+    {
       "src": "Elemaster",
       "dst": "SYRMA",
       "type": "partner",
@@ -842,6 +953,15 @@
       "link": "https://news.google.com/rss/articles/CBMiswFBVV95cUxQVTZ2MzkwZFlpa0duVFpYM0ZBMVFKN1Q4R3NoM1g5ekRwUUJmYnRlN1pHWEREV2JBSEJxbXZ6VzRNR3pZYXBMdEg0YkFmY2RLYnZ3bHJGeVlRQ1N6OVlpQWVUcjFMenpMSmI3aE03NWtzLThqVWlkcUI4RU1icDFlMk9PYXJkREktcEFwcS10XzMwWFduODJQTDZNY0hiQk4zc3ZlbVZxYkZTNlItTlMxbW1jcw?oc=5"
     },
     {
+      "src": "Euler Motors",
+      "dst": "DELHIVERY",
+      "type": "partner",
+      "evidence": "Delhivery Partners with Tata Motors, Euler Motors and Montra Electric to Deploy Up to 2,000 Electric Commercial Vehicles",
+      "added": "2026-11-16",
+      "note": "Accepted from partner proposals",
+      "link": "https://news.google.com/rss/articles/CBMi8AFBVV95cUxPU2VpOUR6ekJLclVDV1NhNEF4SU1uUzc5RW9VOXFtc1JORGJ2Q0xCbTQ3NmZTZDBReHVpdG1KWTFxQXFWbHNDTDJoRWxkaThlTUR2WTJ4ak0xNHhka3gwXzR2M1phbzlOWmxlSmxiNUZ5TUY4cHloM1k1V0FOdkY4SEs4cTZDcDJjMEd5MlBQdHNtTWhMOHJJcFVTVklHWTFzWWhlMS1KYnQyWU9QQmZYVG1NaEZCWjJLUVNGTWVXQ0tVVDdZczdRUWdoZE9KTXlHNW9kN0swS3N5ZlAxbmJtdk1IM2NpN3ZhRXZxMUhuUVU?oc=5"
+    },
+    {
       "src": "Everest International",
       "dst": "VBL",
       "type": "partner",
@@ -849,6 +969,15 @@
       "added": "2026-10-06",
       "note": "Accepted from partner proposals",
       "link": "https://news.google.com/rss/articles/CBMixgJBVV95cUxOVkdzdERTTlN2RDZQR2dwMDFWeXpkTHhRNnVpZGhIQl95dUtjRnUydnBtTzRHUkRtQnBEMlZYanpnZHNnZFZXSUowTjJEQjZPWVZTZldTako4dzdrTU9ibVJhcEIyY1ZWUTFnOVJiTXFxYUc4WVlKaGwya3hzVEptUUpMaDR6ZnQxSWtLQThrUDhvdTU0dnNWUW5EeUlVWXVCb0lKbmNRQ1luU2RQMXl0RnlnMi1FYmxJWjROSXcxN3VLMFU5LTc1SWtGMThYN243VThFQzliYTRPU3hIS1Z3U0pBUVhQTURJQWJBOUgzVFlDc1VFS2tMWVE5NkFaMHBzNWQwanVHaDd5eVlfdkY0WERvakItQ2tWWjl0eUlhNEtUVjFGVU5QUTVtZlZQcGp1YVpKTE9Sc2FaZEpKNjlpU3ZGTHVVQdIBywJBVV95cUxQZkhqT0NybERZa08zMVpiT3hxNlRBYlVwVGgtdWZDT1kxTmtWY21Wbng1TkkxSlc3cmVVUEdHbXZBU1hGNi13MVQxU2Z2Yi04UDl2Ti0yZjE5cDVIYzRTbm9DQmExcXl4WU1pNEppNnduV1hwdjllNGh3QzR5YjNTemdRN0NEd21tUVZLczl4bnFYSHh3b3hMd2Zrek1lV1U4QTFodTdJZWNEMWhHcnkwQ0JtV3QwVzZoRXo4RGZ6bUFKS0pPSEpmQThFb0lRcEVUekpxQkhGZENGaVl5QVNJSGJWa3FkalhDN3dfSnhxQk1zUVc4Vk1WZk10Z3hTelBrakU1eUV0NnpmNGc0WDl3RWxqc2VJNWtXWGttUk1LQ3J2X014RUZFVnh5VzVkYmVicWF5czd3UEo0LXlVanVUTV9LZF9TdkpnZm9r?oc=5"
+    },
+    {
+      "src": "Exel Composites",
+      "dst": "SUZLON",
+      "type": "partner",
+      "evidence": "Suzlon, Exel Composites Sign Multiyear €100M Deal for Carbon Fiber Planks Supply",
+      "added": "2026-11-16",
+      "note": "Accepted from partner proposals",
+      "link": "https://news.google.com/rss/articles/CBMitgFBVV95cUxQZEJoNnRIbk00TnZ5S2pieGR4eDRhaS1MekdtdW90U2VXSHJkeFRWWEtyRVVmb1hQaTFxU28zTkpoazhrVnRXLS16TUpDNWN5YVd3azg3Y3FaaVU0MHdHcEF4Z00zXzRZS25RcEVjbklGYU9oUU1MdDRmbXFodHJlaXhYOTRBRVpCRTlONDhMUUYyLUVoU2RGYndTQW04ckhkN1FySkJFOFhYV29uTlBHeTN0TlBCZw?oc=5"
     },
     {
       "src": "Gemtek",
@@ -886,6 +1015,15 @@
       "link": "https://news.google.com/rss/articles/CBMi_wFBVV95cUxOZ1JJNWRQaFo2R1NuWmRrMmpDcXd1TjBXaS1WNGs1RjVJLVV1WnFkcE1reEY4WlBwNGtQNERHZkE3V2hKeDIyLUlXYnRWYTBLUXA3aVdvTFVzeE5LWlNkb0JPbWI2TWlxdUU5N1ZYNzN4emk5VWFNMm44NUF3N09qS18xZjJuWFhQNEZpSDFHdHIwdUFYTmtjV2h2VW9HbDdJOHlHTFlOeEU4bzBzcE14THNiZmNLRHJpRW5fTEtBV0JkbHpnN2JOaVg1LUpxZGluQnpBczlDTXN5dzdJM2RNenRVbDdfWnhWbWNvMFRGMzE3a3BOUEViYmsyWjhPaEnSAf8BQVVfeXFMTmdSSTVkUGhaNkdTblpkazJqQ3F3dU4wV2ktVjRrNUY1SS1VdVpxZHBNa3hGOFpQcDRrUDRER2ZBN1doSngyMi1JV2J0VmEwS1FwN2lXb0xVc3hOS1pTZG9CT21iNk1pcXVFOTdWWDczeHppOVVhTTJuODVBdzdPaktfMWYyblhYUDRGaUgxR3RyMHVBWE5rY1dodlVvR2w3STh5R0xZTnhFOG8wc3BNeExzYmZjS0RyaUVuX0xLQVdCZGx6ZzdiTmlYNS1KcWRpbkJ6QXM5Q01zeXc3STNkTXp0VWw3X1p4Vm1jbzBURjMxN2twTlBFYmJrMlo4T2hJ?oc=5"
     },
     {
+      "src": "Grasim Industries",
+      "dst": "SUZLON",
+      "type": "partner",
+      "evidence": "Grasim Industries and Suzlon partner to develop India's first wind turbines with recyclable blades",
+      "added": "2026-11-16",
+      "note": "Accepted from partner proposals",
+      "link": "https://news.google.com/rss/articles/CBMi5AFBVV95cUxQNzZBemhOTGNTREkyUkhZb3hxZEktaVFfa2I4SHdGUndreVRRMHhpTXdwbG5qR1NmdVpmRGQ1aGY4TWJTUVZxQzA1R2tZUTZvVFlzRXNleVdybkQtWk4wN05IMHB4Vk9ZNmRWSlhKZ0JlLU1HUVVOajVjc3YzckZ6cnhZWE1SakR0MUs1cnBNNFNCblN3bFAycGoyN3JmNjAzRmVjVWhaS3o2aGdnMEh6LUplZ1dod0lDWFMxVDZ6RnIzbFg5OEZpVUhBeFVZTmhvY2FnSlpDbm5WdXZtdVctTTRmSHU?oc=5"
+    },
+    {
       "src": "Honda Motorcycles",
       "dst": "CONCOR",
       "type": "partner",
@@ -902,6 +1040,15 @@
       "added": "2026-10-06",
       "note": "Accepted from partner proposals",
       "link": "https://news.google.com/rss/articles/CBMivgFBVV95cUxQR1NlU0s1VTJtS0RCNTliMnJWMktOaXNIazZJS2owc3J4TEpPOUh4OFlMbEFKLVZhZ2UyQzFnVDNlenkwbkp0TlJ3MUx5Z1B4TVdKVE5DcHBsbGtvMHdseFZjY1BUWUpaMDRtbFZUTFUwRGRWVVQtZkNMNklmSWg3QmpzSjByYmFzOVZMZVVaOUtXUGh1cDYyT09DeDcxUWtfUDdaTGl0UnZveDQxU09XWXl3MmdjcUVxSkZneE53?oc=5"
+    },
+    {
+      "src": "Indian Bank",
+      "dst": "TCS",
+      "type": "partner",
+      "evidence": "Tata Consultancy Services Limited has informed the Exchange regarding 'Press Release - TCS BaNCS for Treasury marks its entry into Sri Lanka with Indian Bank'.",
+      "added": "2026-11-16",
+      "note": "Accepted from partner proposals",
+      "link": "https://nsearchives.nseindia.com/corporate/TCS_CORPCS_19102026112258_PR_19Oct26_signed.pdf"
     },
     {
       "src": "Jindal Stainless",
@@ -930,11 +1077,47 @@
       "note": "Accepted from partner proposals"
     },
     {
+      "src": "Mastercard",
+      "dst": "TECHM",
+      "type": "partner",
+      "evidence": "Tech Mahindra (TECHM) Partners With Mastercard To Embed B2B Payments",
+      "added": "2026-11-16",
+      "note": "Accepted from partner proposals",
+      "link": "https://news.google.com/rss/articles/CBMixwFBVV95cUxNV202RV94TVo0SWd5Mkwyc2Zhd1huY193SG5mU1lPYWFCSElLOVBKdFpyNDduQS1PXzVGeGRNTE1jWVc1c2J4MWM2b0I3Uy1fRmx4OHV4ejJWRXZNN3dUczdWT05YVjdqX3FyaVM0Wlc2Ym11QnVmYVZSSktQbVNsOThvSllFZ05NaVZQV21CLXBjQmZFTDhtRTByaXlnVlJpWndSdlJqcG9kZi1fZER5U1YyWm9sRnFodjQ0UnYzZnBfUG5BRURB?oc=5"
+    },
+    {
+      "src": "Montra Electric",
+      "dst": "DELHIVERY",
+      "type": "partner",
+      "evidence": "Delhivery Partners with Tata Motors, Euler Motors and Montra Electric to Deploy Up to 2,000 Electric Commercial Vehicles",
+      "added": "2026-11-16",
+      "note": "Accepted from partner proposals",
+      "link": "https://news.google.com/rss/articles/CBMi8AFBVV95cUxPU2VpOUR6ekJLclVDV1NhNEF4SU1uUzc5RW9VOXFtc1JORGJ2Q0xCbTQ3NmZTZDBReHVpdG1KWTFxQXFWbHNDTDJoRWxkaThlTUR2WTJ4ak0xNHhka3gwXzR2M1phbzlOWmxlSmxiNUZ5TUY4cHloM1k1V0FOdkY4SEs4cTZDcDJjMEd5MlBQdHNtTWhMOHJJcFVTVklHWTFzWWhlMS1KYnQyWU9QQmZYVG1NaEZCWjJLUVNGTWVXQ0tVVDdZczdRUWdoZE9KTXlHNW9kN0swS3N5ZlAxbmJtdk1IM2NpN3ZhRXZxMUhuUVU?oc=5"
+    },
+    {
       "src": "NHPC",
       "dst": "TCS",
       "type": "partner",
       "evidence": "NTPC signs MoU with NHPC, PTC and TCS",
       "added": "2026-07-29"
+    },
+    {
+      "src": "Nigus Hercules",
+      "dst": "ADSL",
+      "type": "partner",
+      "evidence": "ADSL and Nigus Hercules Partner to Develop Defence MRO Capabilities in Nigeria",
+      "added": "2026-11-16",
+      "note": "Accepted from partner proposals",
+      "link": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPVTdKOWZKYk5jT0xNWWkwenNYREJQRnl5OFVSR2FVcXpKTnVacWNkTjZ5cURkaHVobXZaNkQ4Qzc2SEQ4enQwRk8zS2VBV21SMVE5Z1Y0dFFla3IzblUwMkNxSG1Pc2VmMHdjb21BYmtnYmgzQi1CckpuWUJUOGROZk55VGx0bnJmclBwZFp3amtDYVJvcnp3Ti0wc0lwemRIQlNVc2RSRlRJVk0?oc=5"
+    },
+    {
+      "src": "Nokia",
+      "dst": "LTTS",
+      "type": "partner",
+      "evidence": "L&T Technology Services and Nokia Forge Engineering Collaboration",
+      "added": "2026-11-16",
+      "note": "Accepted from partner proposals",
+      "link": "https://news.google.com/rss/articles/CBMifEFVX3lxTE5nNkoyaWxlNmhVSGw1eTNlVjRHVm1YcUthWFJwRW5qX3dEZVhqWWJJcnpQMkJ4SzAwb2tLZGNvUi1ydU5RWkNqbmpYY3VRZ3EzdTNLWGJ0Z3hVOGZIVVdzQ2pfZ2lTb0NUOGpuUkwzY3lPUW93c2tWeUhHMVI?oc=5"
     },
     {
       "src": "Nothing Electronics",
@@ -997,6 +1180,15 @@
       "link": "https://news.google.com/rss/articles/CBMiugFBVV95cUxOOXRNb2g3Q3VZQ2lEVnhHU251U21KTWlFVk94Z3pqd1F6T0swbU11dnIxRER4S08zdlptci1fbmtRbmpGdTlvRGlSYldLbHBPby0yZEpGRnhkaE45WEhzTUMtOWxQb19kclNsYmpLbDYxbzluOFFqMjFVdU5QNjBTZzAtZDRDVGU0NEJEaG5veGlpSmZ0ak5VTVdFZ1ZqamNjQlE1TnpPRlVHRUtEanNXOFZHWl9ldzFHZVE?oc=5"
     },
     {
+      "src": "Samudera Shipping Line",
+      "dst": "CONCOR",
+      "type": "partner",
+      "evidence": "CONCOR signs Agency Agreement with Samudera Shipping Line to expand international shipping services",
+      "added": "2026-11-16",
+      "note": "Accepted from partner proposals",
+      "link": "https://news.google.com/rss/articles/CBMi6AFBVV95cUxPbW1yZWEtU2E4UHBvXzBXcGFjdG0weE54X1JGODlxandBMG5PYU83aEFvZjh6V19FMXFhT0xGRGpfeEhpOVRQbkJmT2lvb09mSkxmc29kWldnX0FMMkZTYUhVaDlFOFFvVjE0UkJlM01tUkNCdVJtSVpnSU90YkItd0d4amtGYnQtTF80S2NURENaTldKWnJrcDJlMkw5OU0tMWRGREpPLU9XRkJhckdzQjRJU055TVhIcHZzbzZGRmN5eE0yRktiQ01HY2ktYUk3YlBuX3h4RHlUc2RxbUxIMWZQY2VqYjZJ?oc=5"
+    },
+    {
       "src": "SAS",
       "dst": "TCS",
       "type": "partner",
@@ -1004,6 +1196,24 @@
       "added": "2026-10-06",
       "note": "Accepted from partner proposals",
       "link": "https://news.google.com/rss/articles/CBMirAFBVV95cUxOOFE1bFFtY1FCd0tZcEltSFRhY3ZycjVTczlWQU1HZzVFMkxvcTBLWmVPNmsyaE9YaVhXTlgxa1Bscl9GdDZwVVhvUHg0dDUxVXN3dU1EdXFkQklXSnd2dGtzcFZwWmd1U3hQaUN6Mml1TzlJYk9yalp3azYtXzBiRHNRejl0THlTdXV5d3VBS3V4ZjF4V0g5SmVHbjNNYlNLYXUxYU52Qm5PdzAt?oc=5"
+    },
+    {
+      "src": "SpaceX",
+      "dst": "COFORGE",
+      "type": "partner",
+      "evidence": "India's Coforge joins SpaceX partner network to deploy Grok AI tools for enterprises",
+      "added": "2026-11-16",
+      "note": "Accepted from partner proposals",
+      "link": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxPVm1rN0dhNG5aaDhDRVRyQVpMaXVROE8wbUFRVUJLZnYwaUQwZF9jMGtfX0doQjVZM3JaRFZHd2FSNFRvODVIUy1TeXJ3d09OZEZPMDB6cEE0eWhHdDNGa3FTRWRCRkhjaERjTnhudVNMTDV6RmdBX0ZqOTNjbDZFblljUE9INGpzN05KSV81YzdHTlVFS1lKeExydFBaaHVLV0pzR2tyQTBSbHV5SUF3VEY3STZHX0gzZzM1S1VYOWtpSEZsRXhKWjl3YzhQQUpy?oc=5"
+    },
+    {
+      "src": "Tata Motors",
+      "dst": "DELHIVERY",
+      "type": "partner",
+      "evidence": "Delhivery Partners with Tata Motors, Euler Motors and Montra Electric to Deploy Up to 2,000 Electric Commercial Vehicles",
+      "added": "2026-11-16",
+      "note": "Accepted from partner proposals",
+      "link": "https://news.google.com/rss/articles/CBMi8AFBVV95cUxPU2VpOUR6ekJLclVDV1NhNEF4SU1uUzc5RW9VOXFtc1JORGJ2Q0xCbTQ3NmZTZDBReHVpdG1KWTFxQXFWbHNDTDJoRWxkaThlTUR2WTJ4ak0xNHhka3gwXzR2M1phbzlOWmxlSmxiNUZ5TUY4cHloM1k1V0FOdkY4SEs4cTZDcDJjMEd5MlBQdHNtTWhMOHJJcFVTVklHWTFzWWhlMS1KYnQyWU9QQmZYVG1NaEZCWjJLUVNGTWVXQ0tVVDdZczdRUWdoZE9KTXlHNW9kN0swS3N5ZlAxbmJtdk1IM2NpN3ZhRXZxMUhuUVU?oc=5"
     },
     {
       "src": "Tata Power",
@@ -1015,6 +1225,15 @@
       "link": "https://news.google.com/rss/articles/CBMi2AFBVV95cUxPNU9iaXpvN2FSZlpkYkl3OVl1Y1RrWEptUV9iVHh0dWpzQ2pIaFhEcmpGUnR0YXk0eE14bWg0T0hnVU85Tng4RkZMV0VwcEgweDcyVzRjSmxEY0w5TmdsYW9aNlU2MUlSdWU1VzJOX0RidjVrWEx4QVVFcU9wR0JLNjBDMkl4aGN5cjFuN3dETzhHaUptbzZBa0Etc2JmZFRGU0QyRG92SEpCc2NaNjBtM3lEaEdnYVZaSURVc2trbEQ5T0pKZFl4YkpMelAybk1mVWpFWXpTTXE?oc=5"
     },
     {
+      "src": "TDB",
+      "dst": "IDEAFORGE",
+      "type": "partner",
+      "evidence": "TDB signs Rs 151 crore funding agreement with ideaForge Technology for heavy-lift logistics drone YETI",
+      "added": "2026-11-16",
+      "note": "Accepted from partner proposals",
+      "link": "https://news.google.com/rss/articles/CBMixwFBVV95cUxObWVFUHQ4S18wYV9rM2ppbzh5eno3UEJXeDdUaS1zdDNZQUxmX2ZQVDBmcEZrRkc0Y3U5Qk1mVXUyWGZURTc4bWE1YnlvbFZLWkw1LTNPOUpLMmdRbjVuT09KQkE2TTNWWk9neGlzU2VldWxheWFaN3RSZ0dMaXhJcTJOOGRsVTZITmszZzlyd01ZcWV3aHZ0eFVhdmtGSWpBMjI0MGdGNVVGU1hBaWxZQTd0MkI4eXpVaVczUjF4dVZMM3dYNmZZ?oc=5"
+    },
+    {
       "src": "Titagarh",
       "dst": "BHEL",
       "type": "partner",
@@ -1022,6 +1241,24 @@
       "added": "2026-10-06",
       "note": "Accepted from partner proposals",
       "link": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxOWTY4M3F6N2g5YlRtWUZWV0tpSGR4TnVhUEpPR1FCbW1DZjFHZWxMQU9RTVFzdnQtNFRNVmJvemxLY25Yckx4VG9lUFc4QU5MRjlXZEpJWWxSNm5uR2NHT0d1aHRnMklJWWEteEtSSnZzd1BVdnJJT3NGZ0JPNENoRzFmMUowanc5V0ZmZ3hkQUtnWHJYbXFRZUxXb2w1QnBCWjNGUWRIYXhELWI1WnNqakswVnRMSV9UcjBOWUhpRmVVMTDSAcoBQVVfeXFMTVFfOGR0Vy14T25mSS1MM2h6X056TVBZUmtXM3htdDRocTBWMjhtMTNjLU5jYlBsaVp5WlI5bGtFZzg5dl9wV3htRHJ3cFcwQnJyVkRpc3cwSXNKTkJGU3RqZm9TLWx6bDBXZ0JsV1hBX0JCRVpLQkpIR0tiRnUyWFE1UXczemUzdFpwN0gwZ3g4bk91aE5FQ05ZcHBXcUZTSThYNVpQUXNuY0w5a2ZPUlFZYlNPT01Ba0lJZE5vSC1CM2NVdmVGTWRKdw?oc=5"
+    },
+    {
+      "src": "Unspun",
+      "dst": "ARVIND",
+      "type": "partner",
+      "evidence": "Landmark Partnership Between Unspun And Arvind Limited",
+      "added": "2026-11-16",
+      "note": "Accepted from partner proposals",
+      "link": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxQX3dSNlp0aHo3aElBVjFUYlJKM1pYMm0tWjJsRVFmR24xajgwYnNnam00ajFCWTRKbzBTQXExUmg3U2EtUjNiNkxXazJueXNFVU00ZksxS2s3cFh5X19qMm1LcHZ5VS1LODNjdXlFU0ljVndsUjdNR3ZNU0drdnU4c2V0WHhKbWFEOWd0dmtlNmJFX3RRdUFyOFNLX3pGQ0Vhd0NFUk9kZi1tR2lldjNESHMyTllScjRlZ0FuRGNWUnM?oc=5"
+    },
+    {
+      "src": "Vishay Intertechnology",
+      "dst": "KAYNES",
+      "type": "partner",
+      "evidence": "Vishay Intertechnology to form semiconductor joint venture with Kaynes Technology in India By Investing.com",
+      "added": "2026-11-16",
+      "note": "Accepted from partner proposals",
+      "link": "https://news.google.com/rss/articles/CBMi5gFBVV95cUxQMnVjWHJtaG8yNDZ0X0NubGRMLXhINW14Ym9leTdFeE5XMV9ZRnBqcHNkUjFTY1J2MzRoeG1GTjBiYi0ycHNYZEZfTnkwbFducFRsS0FPWEJyRHBOUHh5VnB4d1BZRGJ6UWlzcHp6U1FVeHJVbm9WX3B5dWtIM0VnR0lHdGZuQVprekZfZWMwWXF3MzMwN2J1cmdiRzZZODN1endNQnA2QVhxWkp6RDNRZ2UxNUk1R0F3ZVpBNkx2Wkd2dk9jN1BRcjZTaEtab0VQc282dnkzbTNGRkt1dzJXYzJDOGdQUQ?oc=5"
     },
     {
       "src": "Vivo",
@@ -1129,90 +1366,6 @@
       "evidence": "curated",
       "added": "2026-09-13",
       "note": "Leading-edge foundry"
-    },
-    {
-      "src": "Nvidia",
-      "dst": "data_center_support",
-      "type": "anchor_demand",
-      "evidence": "curated",
-      "added": "2026-11-14",
-      "note": "AI accelerator deployments drive rack-scale networking, optics and fibre infrastructure"
-    },
-    {
-      "src": "HBM",
-      "dst": "data_center_support",
-      "type": "component_dependency",
-      "evidence": "curated",
-      "added": "2026-11-14",
-      "note": "High-bandwidth memory is a core accelerator memory subsystem"
-    },
-    {
-      "src": "optical transceivers",
-      "dst": "data_center_support",
-      "type": "component_dependency",
-      "evidence": "curated",
-      "added": "2026-11-14",
-      "note": "Optical interconnects connect accelerators, switches and racks"
-    },
-    {
-      "src": "fiber optic cable",
-      "dst": "data_center_support",
-      "type": "component_dependency",
-      "evidence": "curated",
-      "added": "2026-11-14",
-      "note": "Fibre infrastructure carries high-bandwidth links between racks and facilities"
-    },
-    {
-      "src": "Micron",
-      "dst": "HBM",
-      "type": "component_manufacturer",
-      "evidence": "curated",
-      "added": "2026-11-14",
-      "note": "HBM product manufacturer"
-    },
-    {
-      "src": "SK Hynix",
-      "dst": "HBM",
-      "type": "component_manufacturer",
-      "evidence": "curated",
-      "added": "2026-11-14",
-      "note": "HBM product manufacturer"
-    },
-    {
-      "src": "Coherent",
-      "dst": "optical transceivers",
-      "type": "component_manufacturer",
-      "evidence": "https://www.coherent.com/networking/transceivers",
-      "added": "2026-11-14",
-      "note": "Datacom and data-centre optical transceiver manufacturer",
-      "scope": "ecosystem_manufacturer_not_confirmed_customer_supplier"
-    },
-    {
-      "src": "Lumentum",
-      "dst": "optical transceivers",
-      "type": "component_manufacturer",
-      "evidence": "https://www.lumentum.com/en/products/data-center",
-      "added": "2026-11-14",
-      "note": "Data-centre optical transceiver and photonics manufacturer",
-      "scope": "ecosystem_manufacturer_not_confirmed_customer_supplier"
-    },
-    {
-      "src": "Corning",
-      "dst": "fiber optic cable",
-      "type": "component_manufacturer",
-      "evidence": "https://www.corning.com/optical-communications/worldwide/en/home/products.html",
-      "added": "2026-11-14",
-      "note": "Optical fibre and fibre-optic cable manufacturer",
-      "scope": "ecosystem_manufacturer_not_confirmed_customer_supplier"
-    },
-    {
-      "src": "Sterlite Technologies (STL)",
-      "dst": "fiber optic cable",
-      "type": "component_manufacturer",
-      "evidence": "https://stl.tech/stl-redefines-optical-connectivity-with-indias-first-hollow-core-fibre-cable-for-data-centre-networks/",
-      "added": "2026-11-14",
-      "note": "Indian optical fibre and high-density data-centre cable manufacturer",
-      "scope": "ecosystem_manufacturer_not_confirmed_customer_supplier"
     }
   ],
   "aliases": {

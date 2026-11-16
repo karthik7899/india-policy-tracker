@@ -2,6 +2,38 @@
   "_how_to_review": "Partner edges proposed from completed tie-up headlines. Nothing here reaches the graph until you set status to 'accepted'; 'rejected' stops the pair being proposed again. You may correct 'counterparty' before accepting (e.g. 'Vivo Mobile' -> 'Vivo') — it is the name the graph will match in future headlines. Leave 'proposed_as' alone: it is how the pipeline recognises the same pair next time.",
   "proposals": [
     {
+      "holding": "CAPILLARY",
+      "counterparty": "Hero Cycles",
+      "proposed_as": "Hero Cycles",
+      "status": "pending",
+      "first_seen": "2026-11-16",
+      "last_seen": "2026-11-16",
+      "evidence": [
+        {
+          "headline": "Capillary Technologies India Limited has informed the Exchange regarding a press release dated November 16, 2026, titled \"Press Release   Hero Cycles Selects Capillary to Power Loy",
+          "date": "2026-11-16",
+          "link": "https://nsearchives.nseindia.in/corporate/CAPILLARY12_16112026104823_Press_release.pdf",
+          "source": "NSE"
+        }
+      ]
+    },
+    {
+      "holding": "POWERINDIA",
+      "counterparty": "Goldman Sachs",
+      "proposed_as": "Goldman Sachs",
+      "status": "pending",
+      "first_seen": "2026-11-16",
+      "last_seen": "2026-11-16",
+      "evidence": [
+        {
+          "headline": "Hitachi Energy India unveils investor presentation in collaboration with Goldman Sachs",
+          "date": "2026-11-16",
+          "link": "https://news.google.com/rss/articles/CBMixgFBVV95cUxOdmZSakdHUGo5emNZdjhiWWNLMS1fd1JpOGNXUzM1UXpraXl3aXY0SEo0dVhVMUFhVHBoZERqOGg5ejlTZTRQeWlfLUUtZjlLZnAzY1JIa3VIdXBwcGJmcFhFRXpKbERsTkNTWlo4dkdZNnZPa1FjTVBMUlZMczZ2dVlIbFBZYndvX0EyMXpPOEJNQnVIR2JKZm5acy15OGVYTXlTVXgyM08zaXlUbEdjbzZib24wNUt1Rk1jTnNtOUx6dGZHdFE?oc=5",
+          "source": "Business Upturn"
+        }
+      ]
+    },
+    {
       "holding": "BHEL",
       "counterparty": "Titagarh",
       "proposed_as": "Titagarh",

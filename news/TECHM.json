@@ -6,10 +6,9 @@
       "headline": "Tech Mahindra’s Agreement With Vodafone Business",
       "source_url": "https://news.google.com/rss/articles/CBMingFBVV95cUxPRklTMU9zWjVaMGpScnA1aHpGVktKRDFONjBiSDhGSzNvZG5sa0ZsWHRpUkUwcXpkY2M4NjNFcE5TZUk3bElUVUliSzdoMWh1Z1ZnYTh1MDRLbG56Zl9jblkzMkxKX3NLTEJwVVFZVXpLRmdzeXUyQnVzei1Xb1djckJJQTFDRFJIS0Z0VUw4YkVWSTNQVzR1TmJJY3lSdw?oc=5",
       "source_label": "https://www.fintechbiznews.com/",
-      "event_type": "tie_up",
+      "event_type": "",
       "source_kind": "Agreement",
       "event_tags": [
-        "tie_up",
         "Agreement"
       ],
       "confidence": "M",
@@ -54,7 +53,21 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (303 days old)"
+      "exclusion_reason": "aged >120d (305 days old)"
+    },
+    {
+      "date": "Mon, 16 Nov 2026 08:51:15 +0530",
+      "headline": "Tech Mahindra Share Price Live Updates: Tech Mahindra's Stock Price and Volume Insights",
+      "source_url": "https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/tech-mahindra-share-price-live-16-nov-2026/liveblog/135871297.cms",
+      "source_label": "Economic Times",
+      "event_type": "",
+      "source_kind": "Markets news",
+      "event_tags": [
+        "Markets news"
+      ],
+      "confidence": "M",
+      "status": "counted",
+      "article_url": "https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/tech-mahindra-share-price-live-16-nov-2026/liveblog/135871297.cms"
     },
     {
       "date": "Fri, 13 Nov 2026 08:19:46 +0530",
@@ -201,21 +214,6 @@
       "confidence": "L",
       "status": "merged",
       "exclusion_reason": "merged: duplicate phrasing of “Tech Mahindra Share Price Live Updates: Announcement under R”"
-    },
-    {
-      "date": "2026-10-30",
-      "headline": "Tech Mahindra’s Agreement With Vodafone Business",
-      "source_url": "https://news.google.com/rss/articles/CBMingFBVV95cUxPRklTMU9zWjVaMGpScnA1aHpGVktKRDFONjBiSDhGSzNvZG5sa0ZsWHRpUkUwcXpkY2M4NjNFcE5TZUk3bElUVUliSzdoMWh1Z1ZnYTh1MDRLbG56Zl9jblkzMkxKX3NLTEJwVVFZVXpLRmdzeXUyQnVzei1Xb1djckJJQTFDRFJIS0Z0VUw4YkVWSTNQVzR1TmJJY3lSdw?oc=5",
-      "source_label": "https://www.fintechbiznews.com/",
-      "event_type": "tie_up",
-      "source_kind": "Event",
-      "event_tags": [
-        "tie_up",
-        "Event"
-      ],
-      "confidence": "L",
-      "status": "merged",
-      "exclusion_reason": "merged: duplicate phrasing of “Tech Mahindra’s Agreement With Vodafone Business”"
     }
   ]
 }
