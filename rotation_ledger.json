@@ -755,9 +755,9 @@
     "name": "Birla Cable",
     "price_at_decision": 382.0,
     "target_at_decision": null,
-    "scored": false,
-    "outcome": null,
-    "realized_return_pct": null,
+    "scored": true,
+    "outcome": "No Analyst Target (unscored)",
+    "realized_return_pct": -23.0,
     "target_made_up": 477.5
   },
   {
@@ -1334,6 +1334,30 @@
     "name": "Global Health",
     "price_at_decision": 1433.6,
     "target_at_decision": 1700.0,
+    "scored": false,
+    "outcome": null,
+    "realized_return_pct": null
+  },
+  {
+    "date": "2026-11-17",
+    "action": "rotated_in",
+    "sector": "healthcare_hospitals",
+    "ticker": "APOLLOHOSP",
+    "name": "Apollo Hospitals",
+    "price_at_decision": 8712.5,
+    "target_at_decision": 9995.0,
+    "scored": false,
+    "outcome": null,
+    "realized_return_pct": null
+  },
+  {
+    "date": "2026-11-17",
+    "action": "rotated_in",
+    "sector": "clean_energy",
+    "ticker": "PREMIERENE",
+    "name": "Premier Energies",
+    "price_at_decision": 833.0,
+    "target_at_decision": 1050.0,
     "scored": false,
     "outcome": null,
     "realized_return_pct": null

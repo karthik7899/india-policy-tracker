@@ -13,7 +13,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (144 days old)"
+      "exclusion_reason": "aged >120d (145 days old)"
     },
     {
       "date": "Tue, 30 Jun 2026 01:50:43 GMT",
@@ -27,7 +27,33 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (139 days old)"
+      "exclusion_reason": "aged >120d (140 days old)"
+    },
+    {
+      "date": "17 Nov 2026",
+      "headline": "HDFC Bank Limited has informed the Exchange regarding 'Grant of stock options under Employee Stock Option Scheme (ESOS   Plan H-2024) and Grant of Restricted Stock Units under Employees  Stock Incentive Master Scheme   2022'.",
+      "source_url": "https://nsearchives.nseindia.in/corporate/HDFCBANK3_17112026155359_SE_Intimation_grant_of_ESOP_17112026.pdf",
+      "source_label": "NSE",
+      "event_type": "",
+      "source_kind": "Filing",
+      "event_tags": [
+        "Filing"
+      ],
+      "confidence": "M",
+      "status": "counted"
+    },
+    {
+      "date": "17 Nov 2026",
+      "headline": "HDFC Bank Limited has informed the Exchange regarding Allotment of 1412278  Shares.",
+      "source_url": "https://nsearchives.nseindia.in/corporate/HDFCBANK3_17112026135613_SELetterESOP17112026.pdf",
+      "source_label": "NSE",
+      "event_type": "",
+      "source_kind": "Filing",
+      "event_tags": [
+        "Filing"
+      ],
+      "confidence": "M",
+      "status": "counted"
     },
     {
       "date": "12 Nov 2026",
@@ -160,6 +186,35 @@
       "status": "counted"
     },
     {
+      "date": "Tue, 17 Nov 2026 08:31:33 +0530",
+      "headline": "HDFC Bank Share Price Live Updates: HDFC Bank's Current Trading Status",
+      "source_url": "https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/hdfc-bank-share-price-live-updates-17-nov-2026/liveblog/135908470.cms",
+      "source_label": "Economic Times",
+      "event_type": "",
+      "source_kind": "Markets news",
+      "event_tags": [
+        "Markets news"
+      ],
+      "confidence": "M",
+      "status": "counted",
+      "article_url": "https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/hdfc-bank-share-price-live-updates-17-nov-2026/liveblog/135908470.cms"
+    },
+    {
+      "date": "Tue, 17 Nov 2026 15:44:25 +0530",
+      "headline": "HDFC Bank vs Axis Bank: Both shares recover after Q2 sell-off; which banking stock offers higher upside? Check targets",
+      "source_url": "https://www.livemint.com/market/stock-market-news/hdfc-bank-vs-axis-bank-both-shares-recover-after-q2-sell-off-which-banking-stock-offers-higher-upside-check-targets-11794907748296.html",
+      "source_label": "Livemint",
+      "event_type": "",
+      "source_kind": "Markets news",
+      "event_tags": [
+        "Markets news"
+      ],
+      "confidence": "M",
+      "status": "counted",
+      "article_url": "https://www.livemint.com/market/stock-market-news/hdfc-bank-vs-axis-bank-both-shares-recover-after-q2-sell-off-which-banking-stock-offers-higher-upside-check-targets-11794907748296.html",
+      "summary": "HDFC Bank and Axis Bank shares have rebounded since October, putting both lenders back in focus. Axis Bank posted stronger quarterly profit growth, while HDFC Bank delivered healthy lending growth and improved asset quality.&nbsp;"
+    },
+    {
       "date": "Mon, 16 Nov 2026 08:16:53 +0530",
       "headline": "HDFC Bank Share Price Live Updates: HDFC Bank's Market Activity Today",
       "source_url": "https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/hdfc-bank-share-price-today-live-16-nov-2026/liveblog/135870632.cms",
@@ -213,8 +268,9 @@
         "Markets news"
       ],
       "confidence": "M",
-      "status": "counted",
-      "article_url": "https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/hdfc-bank-stock-price-livestock-price-today-live-updates-12-nov-2026/liveblog/135753001.cms"
+      "status": "merged",
+      "article_url": "https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/hdfc-bank-stock-price-livestock-price-today-live-updates-12-nov-2026/liveblog/135753001.cms",
+      "exclusion_reason": "merged: duplicate phrasing of “HDFC Bank Share Price Live Updates: HDFC Bank's Current Trad”"
     },
     {
       "date": "Thu, 12 Nov 2026 07:00:38 +0530",
