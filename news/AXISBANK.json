@@ -13,7 +13,20 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (140 days old)"
+      "exclusion_reason": "aged >120d (141 days old)"
+    },
+    {
+      "date": "18 Nov 2026",
+      "headline": "Axis Bank Limited has informed the Exchange regarding Notice of Postal Ballot",
+      "source_url": "https://nsearchives.nseindia.in/corporate/Kapil_18112026151412_SEintimationPostalBallot18112026_FinalSigned.pdf",
+      "source_label": "NSE",
+      "event_type": "",
+      "source_kind": "Filing",
+      "event_tags": [
+        "Filing"
+      ],
+      "confidence": "M",
+      "status": "counted"
     },
     {
       "date": "06 Nov 2026",
@@ -40,6 +53,20 @@
       ],
       "confidence": "M",
       "status": "counted"
+    },
+    {
+      "date": "Wed, 18 Nov 2026 08:15:42 +0530",
+      "headline": "Axis Bank Share Price Live Updates: Axis Bank's Market Update",
+      "source_url": "https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/axis-bank-stock-price-today-live-18-nov-2026/liveblog/135946395.cms",
+      "source_label": "Economic Times",
+      "event_type": "",
+      "source_kind": "Markets news",
+      "event_tags": [
+        "Markets news"
+      ],
+      "confidence": "M",
+      "status": "counted",
+      "article_url": "https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/axis-bank-stock-price-today-live-18-nov-2026/liveblog/135946395.cms"
     },
     {
       "date": "Tue, 17 Nov 2026 15:44:25 +0530",
@@ -81,8 +108,9 @@
         "Markets news"
       ],
       "confidence": "M",
-      "status": "counted",
-      "article_url": "https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/axis-bank-share-price-today-live-13-nov-2026/liveblog/135787285.cms"
+      "status": "merged",
+      "article_url": "https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/axis-bank-share-price-today-live-13-nov-2026/liveblog/135787285.cms",
+      "exclusion_reason": "merged: duplicate phrasing of “Axis Bank Share Price Live Updates: Axis Bank's Market Updat”"
     },
     {
       "date": "Thu, 12 Nov 2026 08:32:00 +0530",

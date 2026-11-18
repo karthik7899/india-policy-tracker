@@ -1,6 +1,103 @@
 {
   "value": [
     {
+      "headline": "AirTrunk signs MoU for hyperscale data centre in Andhra Pradesh",
+      "event_type": "tie_up",
+      "phrase": "signs mou",
+      "certainty": "announced",
+      "domains": [
+        "data_center_support"
+      ],
+      "actors": [],
+      "external": [],
+      "counterparties": [],
+      "direction": "opportunity",
+      "date": "2026-11-18",
+      "first_seen": "2026-11-18",
+      "link": "https://news.google.com/rss/articles/CBMikAFBVV95cUxORXRobV95ckUxN1FvcG12UTNTN25rWWNnQVduTEx3VC1FSFFybV8zckZVTGhHbGt5ODliT2ZYQ2pkN0hfYkhvZWxVZ1JlZUp0X3pIbV9scTk0bDdycUxycllwanRvLXRCQTJBNjJHdWVENDY0UlZWcmZyU0Q2ZjFSQ3M1R2pPMHFDaTF6Um9zR1E?oc=5",
+      "source": "BigInfo.in",
+      "corroborated": true
+    },
+    {
+      "headline": "Chip shortage forces Apple to sign long-term contract with Samsung",
+      "event_type": "supply_disruption",
+      "phrase": "shortage",
+      "certainty": "completed",
+      "domains": [],
+      "actors": [],
+      "external": [
+        "Apple",
+        "Samsung"
+      ],
+      "direction": "risk",
+      "date": "2026-11-17",
+      "first_seen": "2026-11-18",
+      "link": "https://news.google.com/rss/articles/CBMirgFBVV95cUxOeWFvbE9RU3pLNmdZNjg4TGE0WlNxVjBLeDZoYVV5UERnSy1ZenB6M1Vnb0VVdUp0bHFtNDViMjRwNEtBZndaWHg5UlQyVE53dnE1Qm8wc3BaYU9LYTl5RnFmTVBybzJabDgzdmNxZ3l2amsxQ09HYUxDT0ZsaVBpam82U0hTVU1rYXJBSmJiS3cxTXhjbFF1LVFvZWFzSTFfQ2k1Z2dTWjBVQWoySXc?oc=5",
+      "source": "AppleInsider",
+      "corroborated": false,
+      "llm_reading": {
+        "event_type": "tie_up",
+        "actors": []
+      }
+    },
+    {
+      "headline": "Apple reportedly nearing long-term Samsung memory deal amid chip shortage",
+      "event_type": "supply_disruption",
+      "phrase": "shortage",
+      "certainty": "reported",
+      "domains": [],
+      "actors": [],
+      "external": [
+        "Apple",
+        "Samsung"
+      ],
+      "direction": "risk",
+      "date": "2026-11-17",
+      "first_seen": "2026-11-18",
+      "link": "https://news.google.com/rss/articles/CBMivAFBVV95cUxOX2E4SmZwdUJrbVlac1o3OEVtQ0llMHFscnBqR1ZrRDhONHVyUmNNRVpPUklDTkJWbGo1MThwM1p1Z2ZBWlhKX3dmR21hcm1nQmM0TnhfZUNYY25hM29CMXFiNDBESXhpbWpJZEplRWE3Rm82dHVWemFHZnRHTkpZRkx0a2hEQlRNMmdCZGE1akp5WGlFdW5wcGd2cldGYjVxLU5ibFZsN2RGTDRQczczZldJbC1Id1Z4R3Q0U9IBwgFBVV95cUxQOGJWTUtMVXM3eU9GWm5CMVFTLWp2RUNZdzRjY015Qk9yUmJiSUU3SDFIQmFRUzNMXzVXMGlxSm12S0JKYWRpenlici10QmZsX2N3alI3QzMzS3puRDgtajVnaFJlYzhtLWJUYm1kcklpZVJ0Ml9FdzF4WFpUeDJfQnJsbkEweExSbTVEbUUyc1hIc2hCTlI5b1ZRZldlOTN0cmFBdjVjcFNydTNWMzhWRkg3N2E2WVhzR0l6dFlCU1ZmQQ?oc=5",
+      "source": "The Apple Post",
+      "corroborated": false,
+      "llm_reading": {
+        "event_type": "tie_up",
+        "actors": []
+      }
+    },
+    {
+      "headline": "DNEG signs technology partnership with Meta for 3D VR movie titles",
+      "event_type": "tie_up",
+      "phrase": "partnership with",
+      "certainty": "completed",
+      "domains": [],
+      "actors": [],
+      "external": [
+        "Meta"
+      ],
+      "counterparties": [],
+      "direction": "opportunity",
+      "date": "2026-11-17",
+      "first_seen": "2026-11-18",
+      "link": "https://news.google.com/rss/articles/CBMitAFBVV95cUxNZXBhMDhvdGFtemFpUVNsTUtnSkFJLU5CeWo0djE4MVNfUTlna0JEU09rcndoYlIteXJYN19YdXhCeDNoRlNLTzFxSXpwMHZOQjFmVVcwWExPaVhQbFpYZEdMemlQMlViaXBTYlJsRjRCMG1xUGgzSm1WRTNfNU42Ny1qZVV4RmdMT3NZSkhzUGxWcnJlSWNyOHh1SEY3b2FxV0FJVjdmTWVUcE1heWlhNkRkUEw?oc=5",
+      "source": "scanx.trade",
+      "corroborated": true
+    },
+    {
+      "headline": "Agnikul Cosmos to set up data centre manufacturing unit in Tirupati",
+      "event_type": "capacity_add",
+      "phrase": "set up data centre manufacturing unit",
+      "certainty": "completed",
+      "domains": [
+        "data_center_support"
+      ],
+      "actors": [],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-17",
+      "first_seen": "2026-11-18",
+      "link": "https://news.google.com/rss/articles/CBMilgFBVV95cUxOc0l5X2VPZ1Z6eHBrSmM3NjJqTUJYeWxJRTczYU1KOFpyajQxVGx0WGhveUV4dE5CMExrMmE2VktvWGRmZ2pacXpkMW5VMnB6Mi1XVDZDT2tWeHpWRGRlRmVyeVV1aE9veEp4emVLMnNWS0NZYzR6VG5ra3V5MXNmTnB2Uk9naU1TZ1pSMzhwYy1DdnpTbnc?oc=5",
+      "source": "BigInfo.in",
+      "corroborated": true
+    },
+    {
       "headline": "Spintronics AI Unveils Wafer-Out For 650V GaN Power HEMT Development",
       "event_type": "product_launch",
       "phrase": "unveils",
@@ -29,12 +126,38 @@
       "external": [],
       "direction": "opportunity",
       "date": "2026-11-16",
-      "first_seen": "2026-11-17",
+      "first_seen": "2026-11-18",
       "link": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxNSXNkVDU0ZkJ2QVN2cWlCODN0dm43SkFaRzVhWHd4YmNxNXlaWlY1b09ocDVwSzBhRlhzclN0VHpoM3pyQUU4QlNFNUJENEF0cXNxVzZselJTZnhHMkIwaWlSZGhnemZFYUtuTHpCTVJNUTJfZW9IWGNfZDdmcUNzSnFHbmVpcHlGbmdabmYxUUZ4OXdnVENDRmd3QkY4TzN2VWhBVDVTYWFYWUE?oc=5",
       "source": "TradingView",
       "corroborated": true,
       "story": "Bharat Electronics bags additional orders worth ₹909 crore since October 21",
       "reports": 3
+    },
+    {
+      "headline": "BHEL Secures Rs. 6-9 bn Order from Power Grid",
+      "event_type": "order_win",
+      "phrase": "secures rs. 6-9 bn order",
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "BHEL"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-16",
+      "first_seen": "2026-11-18",
+      "link": "https://news.google.com/rss/articles/CBMizwFBVV95cUxNbzl4SkpRblA0MzUtOEY0cEhjNW5uMy1wb1EzX3VOOU5rRHRuUDBrRzJDVTJLR2NVV1BudGpYb192UV95aGNEOU9zX2NrUmZxOG04Uk1PcW01V2JzbUJfd1YyRXBsNGJDNW9pcGREYjFERGdNZ3lKS0dKNlVCSFZyeEROUExSR1AtdHNJWHF0VllLZmdUV3BvV3R0aXBGQWtBd1Rvdi1oYXZ6QVlnUUV5T1hCaV96cU1NNGdDR2xMX0Y4azVPelA3ZzQtVjI2YWc?oc=5",
+      "source": "Construction World",
+      "corroborated": true,
+      "story": "BHEL Bags Adani Power Orders Worth Up to ₹28,000 Crore for Four Thermal Projects",
+      "reports": 7,
+      "confirmation": {
+        "ticker": "BHEL",
+        "source": "NSE",
+        "filing": "Bharat Heavy Electricals Limited has informed the Exchange about Bagging/Receiving of orders/contracts",
+        "date": "2026-11-11",
+        "link": "https://nsearchives.nseindia.com/corporate/BHEL_11112026114240_orderpowergrid11112026.pdf"
+      }
     },
     {
       "headline": "Hitachi Energy India unveils investor presentation in collaboration with Goldman Sachs",
@@ -51,7 +174,7 @@
       ],
       "direction": "opportunity",
       "date": "2026-11-16",
-      "first_seen": "2026-11-17",
+      "first_seen": "2026-11-18",
       "link": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxPMnpvc09tOEQtdUw3eG5PZ0doNjFZN3kwcEdRWWZiSzJSamNrbUV3aVBtYkdTSUZfcGM2NW0zbmpsazRZaGNjcTYxT0hxQlFpQU4tWHdpdDVFTldJRUFPcjVkdDZENUs5MG94M2JPWkpYMmRTeFgxRDZ5aXVwR1dwc2g2cGZ5dUkxVlVWRmRybTJOZnN6UGVyR3d1eDVJc09CYW5hbnhtLUYxa1k4Z3lRTVIwMWk1cTlCN1hGVFhxQkc?oc=5",
       "source": "Business Upturn",
       "corroborated": true,
@@ -72,7 +195,7 @@
       ],
       "direction": "opportunity",
       "date": "2026-11-16",
-      "first_seen": "2026-11-17",
+      "first_seen": "2026-11-18",
       "link": "https://nsearchives.nseindia.in/corporate/VPTPCL_16112026103024_Press_Release16112026.pdf",
       "source": "NSE",
       "corroborated": false,
@@ -82,6 +205,138 @@
       },
       "story": "Tata Power Company Limited has informed the Exchange regarding a press release dated November 16, 2026, titled \"Tata Pow",
       "reports": 1
+    },
+    {
+      "headline": "Samsung Electronics' 9-Month Raw Material Purchases Hit 95.6 Trillion Won as Memory Price Surge Pressures Costs",
+      "event_type": "input_cost_shock",
+      "phrase": "price surge",
+      "certainty": "completed",
+      "domains": [],
+      "actors": [],
+      "external": [
+        "Samsung"
+      ],
+      "direction": "risk",
+      "date": "2026-11-16",
+      "first_seen": "2026-11-18",
+      "link": "https://news.google.com/rss/articles/CBMidkFVX3lxTE1TdDNRM2h1XzlCT0ZzOXVrOHdWSmlLd25mbWNXb2oyaUF4WWNTRGlHaDlMSVdxbjYzd1hTeFA5RlNtSEN1VHdndjVqTVNaTWxMb1BwTGNVRlRqdXdHZ0puOGVkSXlSaWtIRGNfSk9uREEwdHRzZFE?oc=5",
+      "source": "BigGo Finance",
+      "corroborated": true
+    },
+    {
+      "headline": "Bharat Electronics & Esri India To Strengthen India’s Defence Capabilities",
+      "event_type": "tie_up",
+      "phrase": null,
+      "certainty": "announced",
+      "domains": [],
+      "actors": [
+        "BEL"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-16",
+      "reader": "llm",
+      "corroborated": false,
+      "counterparties": [
+        "Esri India"
+      ],
+      "link": "https://news.google.com/rss/articles/CBMizgFBVV95cUxOcmplREVWQnBJVERjd1JJcUp5R0JzQkxRVHd5V0hzRGpNTXgyaWJDTzVyWnItYVZLQWk1UzAxSC1BMXNZUGNNY2wwdDRTQ25Rd0NTVGk4VmswWnVJWS0wWnNWd19od0swQXVVSGFRTnB3bWgteWRRdVViVDJxLXBaODVCT2t1WUMyeUZLT2JfRF9yRVhiQTlOZmdsSTNKbmtaZmU3clRqaFNrazB0M1llcXhfSjBYZzFkeFJpVUhJdkpvOXo5NHlDc3BRZWFwQQ?oc=5",
+      "source": "https://www.fintechbiznews.com/",
+      "story": "Bharat Electronics & Esri India To Strengthen India’s Defence Capabilities",
+      "reports": 1
+    },
+    {
+      "headline": "Aster DM Quality Care to open 300-bed Hyderabad hospital in March 2027",
+      "event_type": "capacity_add",
+      "phrase": null,
+      "certainty": "announced",
+      "domains": [],
+      "actors": [
+        "ASTERDM"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-16",
+      "reader": "llm",
+      "corroborated": false,
+      "link": "https://news.google.com/rss/articles/CBMivAFBVV95cUxOWEt1X2RmYjh5RVpXZFNNMEJqcWhpQTNRTDRYNDc3TTg4MnFDUHppY2R2RzN2VEJ3Y0tEclZYemVnajFMNk9sTG5mMG1qS1g1NW1OblRzZFA3ejMtSkZrZWNxUUF0SkRqQ1k4Vm1NWm1tTmtBaWZoQ2puSjF1Y2RkVEl2TFhmMXNyUjFrekRMck5aeVBhQWppUXpnVkVkZEo3LVZBOFJveXppc3F0VTU0RE1tc0NPM2lkczFRYQ?oc=5",
+      "source": "www.expresshealthcare.in",
+      "story": "Aster DM Quality Care to open 300-bed Hyderabad hospital in March 2027",
+      "reports": 1
+    },
+    {
+      "headline": "Dixon signs Rs 49.75 crore semi-automatic washer asset deal",
+      "event_type": "acquisition",
+      "phrase": null,
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "DIXON"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-16",
+      "reader": "llm",
+      "corroborated": false,
+      "link": "https://news.google.com/rss/articles/CBMivAFBVV95cUxNMjZUWHdlLWw3VlVBMVpmTkVLZEVGUGF2di1FSnJrSHhnSUwtdGZsczJBbnBZazRNeXBuSm5RV3FqZndseEtqLU9HZVNhUUgxQzRjUHVkZVRjZkFJZks4QlZkWjZSVnZiVHB4eGUwQ2VSV3cyeGItX0VRaHlpM0dyUlNZck9GYnlKUFBCLTF2ZHZyZUl0UlBOcUtQOXA1c2tmME54U0lwaFFsb28wclhSdVlmNHA2ZC1IVUx2Vw?oc=5",
+      "source": "Multibagg AI",
+      "amount_cr": 49.75,
+      "materiality": {
+        "DIXON": {
+          "pct_of_revenue": 0.09,
+          "band": "immaterial"
+        }
+      },
+      "story": "Dixon signs Rs 49.75 crore semi-automatic washer asset deal",
+      "reports": 1
+    },
+    {
+      "headline": "Capillary Technologies India Limited has informed the Exchange regarding a press release dated November 16, 2026, titled \"Press Release   Hero Cycles Selects Capillary to Power Loy",
+      "event_type": "tie_up",
+      "phrase": null,
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "CAPILLARY"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-16",
+      "reader": "llm",
+      "corroborated": false,
+      "counterparties": [
+        "Hero Cycles"
+      ],
+      "link": "https://nsearchives.nseindia.in/corporate/CAPILLARY12_16112026104823_Press_release.pdf",
+      "source": "NSE",
+      "story": "Capillary Technologies India Limited has informed the Exchange regarding a press release dated November 16, 2026, titled",
+      "reports": 1
+    },
+    {
+      "headline": "Kalpataru Projects International Limited has informed the Exchange about Bagging/Receiving of orders/contracts",
+      "event_type": "order_win",
+      "phrase": null,
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "KPIL"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-16",
+      "reader": "llm",
+      "corroborated": false,
+      "link": "https://nsearchives.nseindia.in/corporate/KALPATPOWR_16112026084614_SEIntimationPR16112026s.pdf",
+      "source": "NSE",
+      "story": "Kalpataru Projects International Limited has informed the Exchange about Bagging/Receiving of orders/contracts",
+      "reports": 1,
+      "confirmation": {
+        "ticker": "KPIL",
+        "source": "NSE",
+        "filing": "Kalpataru Projects International Limited has informed the Exchange about Bagging/Receiving of orders/contracts",
+        "date": "2026-11-16",
+        "link": "https://nsearchives.nseindia.in/corporate/KALPATPOWR_16112026084614_SEIntimationPR16112026s.pdf"
+      }
     },
     {
       "headline": "AI data centre demand drives chip shortage, raises costs for Indian automakers",
@@ -98,23 +353,6 @@
       "first_seen": "2026-11-17",
       "link": "https://news.google.com/rss/articles/CBMi-gFBVV95cUxOVVNnUVBkRUhqbGl6UnlIcm5iN3ZobnlqZ1Z0d0hwcFJxRkdmZDdieXB6WlVOSXFOVzZ6WlY1Szd2MXltRXk0STVMMWFiREdnS1NJajQtWTU0YTRQalpQYmVNYUFTM2I3TE5xT0tBeFE0VUhSel9JZHRTeHExeUNKVGhyMW5UVlF1TkV5UGc2bzF5cXl0YkJHaWJEeUZWNHQ0d3ZwR2g2dWR5eFNqU0dQb0RrclRKZEFFNGl5TVQ3YXJ3Tzl3eWVteUNPNHVaNkJkUDZNeXdIM2NmUl9FRnZybXdyaGcyQ00zM0VqVHo3M0U1Q2doVjNPbThB0gH_AUFVX3lxTE9KWThXeWVzR282MHNOVWVjYUxNTGJ6cEx0WW1UMDE5TE40NnNFNERnc0dZMzRSQnI4S2JnQTEyUXBSU2VVS0oxd2tRZy14WV8tdUdZX2RWU2Z1NzhZbzhlWm9MSW9HaVN1WlVXSWUzSkJoa19Pd19FRU9Ncm45MzIybGMtVDk4WV9LaUdQel9jQ295TDVqQ0ZQcTVzalpSOWFZZXpDTXpocjZTREFNOFBvejNnZlZIamsteC1Wa0t5STBGd0RNR3ExYXZHa0luS0JwVEN5QmxaU2xkVWs0R0I4dUtQa0NDR0xiOV9iRElJQ05OM0VDRlhwdExMVGFQWQ?oc=5",
       "source": "ET Datacenters",
-      "corroborated": true
-    },
-    {
-      "headline": "Samsung Electronics' 9-Month Raw Material Purchases Hit 95.6 Trillion Won as Memory Price Surge Pressures Costs",
-      "event_type": "input_cost_shock",
-      "phrase": "price surge",
-      "certainty": "completed",
-      "domains": [],
-      "actors": [],
-      "external": [
-        "Samsung"
-      ],
-      "direction": "risk",
-      "date": "2026-11-16",
-      "first_seen": "2026-11-17",
-      "link": "https://news.google.com/rss/articles/CBMidkFVX3lxTE1TdDNRM2h1XzlCT0ZzOXVrOHdWSmlLd25mbWNXb2oyaUF4WWNTRGlHaDlMSVdxbjYzd1hTeFA5RlNtSEN1VHdndjVqTVNaTWxMb1BwTGNVRlRqdXdHZ0puOGVkSXlSaWtIRGNfSk9uREEwdHRzZFE?oc=5",
-      "source": "BigGo Finance",
       "corroborated": true
     },
     {
@@ -178,25 +416,6 @@
       "amount_cr": 41500.0
     },
     {
-      "headline": "Aster DM Quality Care to open 300-bed Hyderabad hospital in March 2027",
-      "event_type": "capacity_add",
-      "phrase": null,
-      "certainty": "announced",
-      "domains": [],
-      "actors": [
-        "ASTERDM"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-11-16",
-      "reader": "llm",
-      "corroborated": false,
-      "link": "https://news.google.com/rss/articles/CBMivAFBVV95cUxOWEt1X2RmYjh5RVpXZFNNMEJqcWhpQTNRTDRYNDc3TTg4MnFDUHppY2R2RzN2VEJ3Y0tEclZYemVnajFMNk9sTG5mMG1qS1g1NW1OblRzZFA3ejMtSkZrZWNxUUF0SkRqQ1k4Vm1NWm1tTmtBaWZoQ2puSjF1Y2RkVEl2TFhmMXNyUjFrekRMck5aeVBhQWppUXpnVkVkZEo3LVZBOFJveXppc3F0VTU0RE1tc0NPM2lkczFRYQ?oc=5",
-      "source": "www.expresshealthcare.in",
-      "story": "Aster DM Quality Care to open 300-bed Hyderabad hospital in March 2027",
-      "reports": 1
-    },
-    {
       "headline": "Lemon Tree Signs McLeodganj and Madurai Hotels",
       "event_type": "tie_up",
       "phrase": null,
@@ -214,102 +433,6 @@
       "link": "https://news.google.com/rss/articles/CBMie0FVX3lxTE5aVUQtSnFRdzhqWWMzT0hWS21fb21aWExyemdCTGVfTURYaldyRjNQWTVGT2JHbXYzOWNneWZlWk1mT09FZkQzSlEzWER5YjlaajNsRnVFLWlncTJkVFE0cVo5VWNzZUV3eXprUUVwU1VMNXlBQ0pCRVQ1dw?oc=5",
       "source": "https://safariindia.com/",
       "story": "Lemon Tree Signs McLeodganj and Madurai Hotels",
-      "reports": 1
-    },
-    {
-      "headline": "Capillary Technologies India Limited has informed the Exchange regarding a press release dated November 16, 2026, titled \"Press Release   Hero Cycles Selects Capillary to Power Loy",
-      "event_type": "tie_up",
-      "phrase": null,
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "CAPILLARY"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-11-16",
-      "reader": "llm",
-      "corroborated": false,
-      "counterparties": [
-        "Hero Cycles"
-      ],
-      "link": "https://nsearchives.nseindia.in/corporate/CAPILLARY12_16112026104823_Press_release.pdf",
-      "source": "NSE",
-      "story": "Capillary Technologies India Limited has informed the Exchange regarding a press release dated November 16, 2026, titled",
-      "reports": 1
-    },
-    {
-      "headline": "Kalpataru Projects International Limited has informed the Exchange about Bagging/Receiving of orders/contracts",
-      "event_type": "order_win",
-      "phrase": null,
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "KPIL"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-11-16",
-      "reader": "llm",
-      "corroborated": false,
-      "link": "https://nsearchives.nseindia.in/corporate/KALPATPOWR_16112026084614_SEIntimationPR16112026s.pdf",
-      "source": "NSE",
-      "story": "Kalpataru Projects International Limited has informed the Exchange about Bagging/Receiving of orders/contracts",
-      "reports": 1,
-      "confirmation": {
-        "ticker": "KPIL",
-        "source": "NSE",
-        "filing": "Kalpataru Projects International Limited has informed the Exchange about Bagging/Receiving of orders/contracts",
-        "date": "2026-11-16",
-        "link": "https://nsearchives.nseindia.in/corporate/KALPATPOWR_16112026084614_SEIntimationPR16112026s.pdf"
-      }
-    },
-    {
-      "headline": "Bharat Electronics & Esri India To Strengthen India’s Defence Capabilities",
-      "event_type": "tie_up",
-      "phrase": null,
-      "certainty": "announced",
-      "domains": [],
-      "actors": [
-        "BEL"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-11-16",
-      "reader": "llm",
-      "corroborated": false,
-      "counterparties": [
-        "Esri India"
-      ],
-      "link": "https://news.google.com/rss/articles/CBMizgFBVV95cUxOcmplREVWQnBJVERjd1JJcUp5R0JzQkxRVHd5V0hzRGpNTXgyaWJDTzVyWnItYVZLQWk1UzAxSC1BMXNZUGNNY2wwdDRTQ25Rd0NTVGk4VmswWnVJWS0wWnNWd19od0swQXVVSGFRTnB3bWgteWRRdVViVDJxLXBaODVCT2t1WUMyeUZLT2JfRF9yRVhiQTlOZmdsSTNKbmtaZmU3clRqaFNrazB0M1llcXhfSjBYZzFkeFJpVUhJdkpvOXo5NHlDc3BRZWFwQQ?oc=5",
-      "source": "https://www.fintechbiznews.com/",
-      "story": "Bharat Electronics & Esri India To Strengthen India’s Defence Capabilities",
-      "reports": 1
-    },
-    {
-      "headline": "Dixon signs Rs 49.75 crore semi-automatic washer asset deal",
-      "event_type": "acquisition",
-      "phrase": null,
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "DIXON"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-11-16",
-      "reader": "llm",
-      "corroborated": false,
-      "link": "https://news.google.com/rss/articles/CBMivAFBVV95cUxNMjZUWHdlLWw3VlVBMVpmTkVLZEVGUGF2di1FSnJrSHhnSUwtdGZsczJBbnBZazRNeXBuSm5RV3FqZndseEtqLU9HZVNhUUgxQzRjUHVkZVRjZkFJZks4QlZkWjZSVnZiVHB4eGUwQ2VSV3cyeGItX0VRaHlpM0dyUlNZck9GYnlKUFBCLTF2ZHZyZUl0UlBOcUtQOXA1c2tmME54U0lwaFFsb28wclhSdVlmNHA2ZC1IVUx2Vw?oc=5",
-      "source": "Multibagg AI",
-      "amount_cr": 49.75,
-      "materiality": {
-        "DIXON": {
-          "pct_of_revenue": 0.09,
-          "band": "immaterial"
-        }
-      },
-      "story": "Dixon signs Rs 49.75 crore semi-automatic washer asset deal",
       "reports": 1
     },
     {
@@ -413,6 +536,29 @@
       "reports": 1
     },
     {
+      "headline": "ICICI Bank credit card alert: 6 important changes to be introduced starting from 25 November; check affected cards",
+      "event_type": "product_launch",
+      "phrase": "introduced",
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "ICICIBANK"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-14",
+      "first_seen": "2026-11-18",
+      "link": "https://news.google.com/rss/articles/CBMijAJBVV95cUxNcENPb1ptX1o4ZElwUC1lbGY4Tm9xd1ljNkJCOXgxT1Jndi1kY2xQZlZxVGJJa1E0UFpWLUx2NTgzck80M0V0cmZlOFJnY3VIaUhkSk9EVnk4WUFhak42UHEzV2VPRjJzNGs4WmU1blJLd2xjeS1LWGVmbWlUeGRrR3FFLTRMaHhkNzl1MVE5MnNRQWRBazVkeWh5SlNsM0hwd00waVZXNW9lenRkbTZseFhTYTBFSzJkdlVfbk5DYmVBZHlkZngxel84eDhwc3RKR0tjUnFHd1VmeThJQ0N2eV9kSUZWdHZnY2x1REVPSTRuM1B5OHpkNHRmZjltbGVMQzdhREJyWkZWNEZy0gGSAkFVX3lxTE9iQ2xOOTFLWHR3YzFVRUp5U29CT0hfY1ZYa3I0emRscnNNWkZvdlNRNkJZc2Q0N2NaSkxQbHVrWlZqM2RYRmRxUUVxM3REeC0yVENzX3pMVHNNb280WUQwMzBiV0laUm9zODlVeHFkMXFyODBjdHVNWjA3MFhYMUNXYXhwNzZSbDViWEhWU3B3N2c0Rnc1OHJCdU5YU2VrbGJ3VVNNWC1sM1lyeFdDaC1heDVzaS00ZVdzeHRBSW43S01UUGxKZmNzZC1UaXJzR1A4MG9HQ3lEWlZwdUl6M044Ui1iUEYybWVSRW4yS05GdGN1cjdkal8xaGlnSmlGVnV1SDZ5QWNWN0R2WTRwcTMzN1E?oc=5",
+      "source": "Livemint",
+      "corroborated": false,
+      "llm_reading": {
+        "event_type": "none",
+        "actors": []
+      },
+      "story": "ICICI Bank credit card alert: 6 important changes to be introduced starting from 25 November; check affected cards",
+      "reports": 1
+    },
+    {
       "headline": "Update on our earlier intimation dated July 24, 2025 titled WABAG receives a Letter of Award for a 300 MLD Mega Sea Water Desalination Plant in the Kingdom of Saudi Arabia, worth a",
       "event_type": "order_win",
       "phrase": "letter of award",
@@ -424,7 +570,7 @@
       "external": [],
       "direction": "opportunity",
       "date": "2026-11-14",
-      "first_seen": "2026-11-17",
+      "first_seen": "2026-11-18",
       "link": "https://nsearchives.nseindia.in/corporate/VATECH_14112026082246_SI_YanbuCancellation_14Nov2026_sd.pdf",
       "source": "NSE",
       "corroborated": true,
@@ -458,66 +604,32 @@
       "reports": 1
     },
     {
-      "headline": "ICICI Bank credit card alert: 6 important changes to be introduced starting from 25 November; check affected cards",
-      "event_type": "product_launch",
-      "phrase": "introduced",
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "ICICIBANK"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-11-14",
-      "first_seen": "2026-11-16",
-      "link": "https://news.google.com/rss/articles/CBMijAJBVV95cUxNcENPb1ptX1o4ZElwUC1lbGY4Tm9xd1ljNkJCOXgxT1Jndi1kY2xQZlZxVGJJa1E0UFpWLUx2NTgzck80M0V0cmZlOFJnY3VIaUhkSk9EVnk4WUFhak42UHEzV2VPRjJzNGs4WmU1blJLd2xjeS1LWGVmbWlUeGRrR3FFLTRMaHhkNzl1MVE5MnNRQWRBazVkeWh5SlNsM0hwd00waVZXNW9lenRkbTZseFhTYTBFSzJkdlVfbk5DYmVBZHlkZngxel84eDhwc3RKR0tjUnFHd1VmeThJQ0N2eV9kSUZWdHZnY2x1REVPSTRuM1B5OHpkNHRmZjltbGVMQzdhREJyWkZWNEZy0gGSAkFVX3lxTE9iQ2xOOTFLWHR3YzFVRUp5U29CT0hfY1ZYa3I0emRscnNNWkZvdlNRNkJZc2Q0N2NaSkxQbHVrWlZqM2RYRmRxUUVxM3REeC0yVENzX3pMVHNNb280WUQwMzBiV0laUm9zODlVeHFkMXFyODBjdHVNWjA3MFhYMUNXYXhwNzZSbDViWEhWU3B3N2c0Rnc1OHJCdU5YU2VrbGJ3VVNNWC1sM1lyeFdDaC1heDVzaS00ZVdzeHRBSW43S01UUGxKZmNzZC1UaXJzR1A4MG9HQ3lEWlZwdUl6M044Ui1iUEYybWVSRW4yS05GdGN1cjdkal8xaGlnSmlGVnV1SDZ5QWNWN0R2WTRwcTMzN1E?oc=5",
-      "source": "Livemint",
-      "corroborated": false,
-      "llm_reading": {
-        "event_type": "none",
-        "actors": []
-      },
-      "story": "ICICI Bank credit card alert: 6 important changes to be introduced starting from 25 November; check affected cards",
-      "reports": 1
-    },
-    {
-      "headline": "US' Vishay Intertechnology, Kaynes Semicon form India JV for chip manufacturing",
+      "headline": "Delhivery partners with Tata Motors, Euler Motors, Montra Electric to deploy up to 2,000 electric commercial vehicles",
       "event_type": "tie_up",
-      "phrase": "form india jv",
-      "certainty": "completed",
-      "domains": [],
-      "actors": [],
-      "external": [
-        "Vishay Intertechnology"
-      ],
-      "counterparties": [],
-      "direction": "opportunity",
-      "date": "2026-11-13",
-      "first_seen": "2026-11-17",
-      "link": "https://news.google.com/rss/articles/CBMi7AFBVV95cUxPSkxTSHgxbC1wbDY1eHNCMmpLS3F2ZHk0Ti1qVWktRmFWVVNVbkVDSkc3d3FhM2hvcmNiUEhQM2tFdERuQ3FCT0trMDVLY05OM1dIenZMU3F5UlYyNm9nSHRKamR4a3JvX0lpeE5saGVhVEd0ajVOWk9LTmduV3VSejBlNHg4dXdycHNNQ3FBN2w3OXpJbDNqNUhSc05TME82OF8zMVFFYTlUMHU0TmVyaVVGZjZGZUtHZG5zLUhRR0ppMUZVNE5IUTRvbUxPOFpFSUYwRms4UThrbWN6OVpVYjYtblVIVl9Fb3dWVdIB8AFBVV95cUxOZEk1NEk0UmRmTGgyQWJfNGFUN09wblZSOU5sWC1BclRLNzZpVmZsVDF1dWkzTEdBZEZHMnhlYnJIaGxxOEMtd3ZMWTZ2d3BST3A3dVZPUlBESURvVU9EU1llNnRYck8zNlIzaWtrVXZuT2RDajdSR25oSktaVndyR2t1RTd3Q2wwRjZjSDBjY1k0c1AzeW1MNzN2bkh6TTU2WXlHbll1N2J0b2J3a3luODRKekxlLW5ONUlIRjlzYlc4TnFDcjRGdUpWbXdHZnlkMDRKd0pIRTNCZ0o2amM4dTk2cm5tdHhWOVZjWHIwMmY?oc=5",
-      "source": "electronics.economictimes.indiatimes.com",
-      "corroborated": true
-    },
-    {
-      "headline": "Relaxo Footwears Limited Acquires 26% in Clean Max MUOI",
-      "event_type": "acquisition",
-      "phrase": "acquires",
+      "phrase": "partners with",
       "certainty": "completed",
       "domains": [],
       "actors": [
-        "RELAXO"
+        "DELHIVERY"
       ],
       "external": [
-        "Clean Max"
+        "Euler Motors",
+        "Montra Electric",
+        "Tata Motors"
+      ],
+      "counterparties": [
+        "Tata Motors",
+        "Euler Motors",
+        "Montra Electric"
       ],
       "direction": "opportunity",
       "date": "2026-11-13",
-      "first_seen": "2026-11-17",
-      "link": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOZlM4ZzVfZWU5NFRVUElyaHBtbFBhc3VoeDNwemRCUFlyelQ3akk1X3dJX010RVlONWx0UW13RUJDTUtSWjJEYjNHQnFjU05rX3dxS19EeDNhUGdyeGNnUXZOd3dXQm1QZkRSbGd6dkY0dXkwQUdfeGtiWUUxQWxHYnhjU1BHYkdpRjhTZHNpZlpOWnppa01Sb2w1VV9QU05zdVlEOWNVWFN6UQ?oc=5",
-      "source": "Multibagg AI",
+      "first_seen": "2026-11-18",
+      "link": "https://news.google.com/rss/articles/CBMisAFBVV95cUxOei1wekxFRE9zT0V2S3RCd3FGdDZkSUxpQnIxSlZiTncwWU1wLW5oZlE2N0ttOWxKWUVuTnlFUlIzWlVJakg0SmtyLTllLVdQeEFyVjdzbDktUjNQbURRSXpRQXE4VHBoNlRLMW00N1pzaG5UTzJJaDBSQXM3WWEyYk9WbG1TbzVELTRuM3ZtVlE4TVRLb1B4dHpfNEktT0NJR3I4blNQUktqbGVMcHQtUA?oc=5",
+      "source": "YourStory.com",
       "corroborated": true,
-      "story": "Relaxo Footwears Limited Acquires 26% in Clean Max MUOI",
-      "reports": 1
+      "story": "Delhivery Partners Tata Motors, Euler Motors And Montra Electric For EV Fleet Expansion",
+      "reports": 4
     },
     {
       "headline": "Delhivery Partners with Tata Motors, Euler Motors and Montra Electric to Deploy Up to 2,000 Electric Commercial Vehicles",
@@ -540,7 +652,7 @@
       ],
       "direction": "opportunity",
       "date": "2026-11-13",
-      "first_seen": "2026-11-17",
+      "first_seen": "2026-11-18",
       "link": "https://news.google.com/rss/articles/CBMi8AFBVV95cUxPU2VpOUR6ekJLclVDV1NhNEF4SU1uUzc5RW9VOXFtc1JORGJ2Q0xCbTQ3NmZTZDBReHVpdG1KWTFxQXFWbHNDTDJoRWxkaThlTUR2WTJ4ak0xNHhka3gwXzR2M1phbzlOWmxlSmxiNUZ5TUY4cHloM1k1V0FOdkY4SEs4cTZDcDJjMEd5MlBQdHNtTWhMOHJJcFVTVklHWTFzWWhlMS1KYnQyWU9QQmZYVG1NaEZCWjJLUVNGTWVXQ0tVVDdZczdRUWdoZE9KTXlHNW9kN0swS3N5ZlAxbmJtdk1IM2NpN3ZhRXZxMUhuUVU?oc=5",
       "source": "Indian Startup Times",
       "corroborated": true,
@@ -548,10 +660,49 @@
       "reports": 4
     },
     {
-      "headline": "Delhivery partners with Tata Motors, Euler Motors, Montra Electric to deploy up to 2,000 electric commercial vehicles",
+      "headline": "US' Vishay Intertechnology, Kaynes Semicon form India JV for chip manufacturing",
       "event_type": "tie_up",
-      "phrase": "partners with",
+      "phrase": "form india jv",
       "certainty": "completed",
+      "domains": [],
+      "actors": [],
+      "external": [
+        "Vishay Intertechnology"
+      ],
+      "counterparties": [],
+      "direction": "opportunity",
+      "date": "2026-11-13",
+      "first_seen": "2026-11-18",
+      "link": "https://news.google.com/rss/articles/CBMi7AFBVV95cUxPSkxTSHgxbC1wbDY1eHNCMmpLS3F2ZHk0Ti1qVWktRmFWVVNVbkVDSkc3d3FhM2hvcmNiUEhQM2tFdERuQ3FCT0trMDVLY05OM1dIenZMU3F5UlYyNm9nSHRKamR4a3JvX0lpeE5saGVhVEd0ajVOWk9LTmduV3VSejBlNHg4dXdycHNNQ3FBN2w3OXpJbDNqNUhSc05TME82OF8zMVFFYTlUMHU0TmVyaVVGZjZGZUtHZG5zLUhRR0ppMUZVNE5IUTRvbUxPOFpFSUYwRms4UThrbWN6OVpVYjYtblVIVl9Fb3dWVdIB8AFBVV95cUxOZEk1NEk0UmRmTGgyQWJfNGFUN09wblZSOU5sWC1BclRLNzZpVmZsVDF1dWkzTEdBZEZHMnhlYnJIaGxxOEMtd3ZMWTZ2d3BST3A3dVZPUlBESURvVU9EU1llNnRYck8zNlIzaWtrVXZuT2RDajdSR25oSktaVndyR2t1RTd3Q2wwRjZjSDBjY1k0c1AzeW1MNzN2bkh6TTU2WXlHbll1N2J0b2J3a3luODRKekxlLW5ONUlIRjlzYlc4TnFDcjRGdUpWbXdHZnlkMDRKd0pIRTNCZ0o2amM4dTk2cm5tdHhWOVZjWHIwMmY?oc=5",
+      "source": "electronics.economictimes.indiatimes.com",
+      "corroborated": true
+    },
+    {
+      "headline": "Relaxo Footwears Limited Acquires 26% in Clean Max MUOI",
+      "event_type": "acquisition",
+      "phrase": "acquires",
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "RELAXO"
+      ],
+      "external": [
+        "Clean Max"
+      ],
+      "direction": "opportunity",
+      "date": "2026-11-13",
+      "first_seen": "2026-11-18",
+      "link": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOZlM4ZzVfZWU5NFRVUElyaHBtbFBhc3VoeDNwemRCUFlyelQ3akk1X3dJX010RVlONWx0UW13RUJDTUtSWjJEYjNHQnFjU05rX3dxS19EeDNhUGdyeGNnUXZOd3dXQm1QZkRSbGd6dkY0dXkwQUdfeGtiWUUxQWxHYnhjU1BHYkdpRjhTZHNpZlpOWnppa01Sb2w1VV9QU05zdVlEOWNVWFN6UQ?oc=5",
+      "source": "Multibagg AI",
+      "corroborated": true,
+      "story": "Relaxo Footwears Limited Acquires 26% in Clean Max MUOI",
+      "reports": 1
+    },
+    {
+      "headline": "Delhivery Partners Tata Motors, Euler Motors And Montra Electric For EV Fleet Expansion",
+      "event_type": "tie_up",
+      "phrase": null,
+      "certainty": "announced",
       "domains": [],
       "actors": [
         "DELHIVERY"
@@ -561,17 +712,17 @@
         "Montra Electric",
         "Tata Motors"
       ],
+      "direction": "opportunity",
+      "date": "2026-11-13",
+      "reader": "llm",
+      "corroborated": false,
       "counterparties": [
         "Tata Motors",
         "Euler Motors",
         "Montra Electric"
       ],
-      "direction": "opportunity",
-      "date": "2026-11-13",
-      "first_seen": "2026-11-17",
-      "link": "https://news.google.com/rss/articles/CBMisAFBVV95cUxOei1wekxFRE9zT0V2S3RCd3FGdDZkSUxpQnIxSlZiTncwWU1wLW5oZlE2N0ttOWxKWUVuTnlFUlIzWlVJakg0SmtyLTllLVdQeEFyVjdzbDktUjNQbURRSXpRQXE4VHBoNlRLMW00N1pzaG5UTzJJaDBSQXM3WWEyYk9WbG1TbzVELTRuM3ZtVlE4TVRLb1B4dHpfNEktT0NJR3I4blNQUktqbGVMcHQtUA?oc=5",
-      "source": "YourStory.com",
-      "corroborated": true,
+      "link": "https://news.google.com/rss/articles/CBMitAFBVV95cUxOZkVfNHhnRmJiOGh5WWFXcWFKTk1JbWlFbWtqdUVwYU9FR21qNUxETGFqMFhjUVByTjlHQzYtakZaM05lZ3B3MGhtT1pEcktISWV3aThpYWtrblowQmlGTW0tVGt6ODF3ZjZzYWowZlVLR05ONTNZVVQ2RHVZVHF3VjNGWTlpd2NpNFFjUW5TUk8xcTlzUzI2aEhsYU1nRGNsdnBKOWRzNERZVWx4V3E0SkNLdU4?oc=5",
+      "source": "ACKO Drive",
       "story": "Delhivery Partners Tata Motors, Euler Motors And Montra Electric For EV Fleet Expansion",
       "reports": 4
     },
@@ -640,34 +791,6 @@
       },
       "story": "Relaxo to take 51% Kenyan venture stake for Rs 35.70 crore",
       "reports": 1
-    },
-    {
-      "headline": "Delhivery Partners Tata Motors, Euler Motors And Montra Electric For EV Fleet Expansion",
-      "event_type": "tie_up",
-      "phrase": null,
-      "certainty": "announced",
-      "domains": [],
-      "actors": [
-        "DELHIVERY"
-      ],
-      "external": [
-        "Euler Motors",
-        "Montra Electric",
-        "Tata Motors"
-      ],
-      "direction": "opportunity",
-      "date": "2026-11-13",
-      "reader": "llm",
-      "corroborated": false,
-      "counterparties": [
-        "Tata Motors",
-        "Euler Motors",
-        "Montra Electric"
-      ],
-      "link": "https://news.google.com/rss/articles/CBMitAFBVV95cUxOZkVfNHhnRmJiOGh5WWFXcWFKTk1JbWlFbWtqdUVwYU9FR21qNUxETGFqMFhjUVByTjlHQzYtakZaM05lZ3B3MGhtT1pEcktISWV3aThpYWtrblowQmlGTW0tVGt6ODF3ZjZzYWowZlVLR05ONTNZVVQ2RHVZVHF3VjNGWTlpd2NpNFFjUW5TUk8xcTlzUzI2aEhsYU1nRGNsdnBKOWRzNERZVWx4V3E0SkNLdU4?oc=5",
-      "source": "ACKO Drive",
-      "story": "Delhivery Partners Tata Motors, Euler Motors And Montra Electric For EV Fleet Expansion",
-      "reports": 4
     },
     {
       "headline": "Delhivery partners Tata Motors, Euler Motors, Montra Electric to deploy up to 2,000 EVs",
@@ -739,132 +862,6 @@
       "first_seen": "2026-11-16",
       "link": "https://news.google.com/rss/articles/CBMikAFBVV95cUxPTk9rcGc5cURhcVhqT21uT0t6aWF6X0NvSG9TUk5EMHRWZDd3bXhEeUpNVUsxNnpuLU8wamg0QXlyazFSTWUtdDkwSVRKLThZU2RLdlJScjI1SjhtUUtWT2c4TlNWRVJwT3pCdFNKX2Zzby1yY2oyNUdxVnVEV2Ztd0xnRmRfME1vU3k2SlVQLWs?oc=5",
       "source": "Healthcare Today",
-      "corroborated": true
-    },
-    {
-      "headline": "Commvault partners with Zscaler, Databricks and NVIDIA",
-      "event_type": "tie_up",
-      "phrase": "partners with",
-      "certainty": "completed",
-      "domains": [],
-      "actors": [],
-      "external": [
-        "Nvidia",
-        "Zscaler"
-      ],
-      "counterparties": [],
-      "direction": "opportunity",
-      "date": "2026-11-13",
-      "first_seen": "2026-11-16",
-      "link": "https://news.google.com/rss/articles/CBMi7wFBVV95cUxPWHQ5WFM1Y0JTSWkzWkI1aTRJUFN3WUphWmNTZzF5OEhkNXRVWDJRSTRBQnBFYWNnSFVsRnNhRU1jYXRvQTdfaGtTbW55OUQ4VUFlVVdHdmNZR2dodkJBTGxralpRdVYxYUN2RV8xOVY1N0d3di1tSjhxRTBWYXh0bm5vMnlIa0RKc1lLSDJIcWwxaDh1bVo1V0gxSTRZOWlOUnNzb19VUnl0R3M2TDBKUUVjMUVaa1Q3cHJtSlpMQ1Z2ZXJIV3Ewa3F3YlF5YXNQZjlYVmV3czVsY2M0VVVDQklEOWZSODNnQVluNGdUNA?oc=5",
-      "source": "SourceSecurity.com",
-      "corroborated": true
-    },
-    {
-      "headline": "Godrej Properties Buys 31-Acre Land in Indore for ₹130 Crore, Plans Residential Project",
-      "event_type": "acquisition",
-      "phrase": null,
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "GODREJPROP"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-11-13",
-      "reader": "llm",
-      "corroborated": false,
-      "link": "https://news.google.com/rss/articles/CBMixwFBVV95cUxObU05YTRJU19RNWR4eHdLWWtMYXhHRl9rNnkxX1FvN3RBS1BUTlE2NU9DRTh6dzcyS21FXzBwWFdyRmFQTmpCaVFfd1Rtd2w3a0VKbzQzWmFJS2ZTbW9JU0d6TTl5WkoyUk0zZjdiVUNvelRFWXBDUzdzME5zNDNjVFpyVVFWVFFiVUZ1VkRkT2hVNExVRzVyQWZWbUZZZmNCVWp0M01sczExM0Vjci1vSThNQXROaWVjOVN4VTlZMUxySGtxYmdV?oc=5",
-      "source": "India Business Trade",
-      "story": "Godrej Properties Buys 31-Acre Land in Indore for ₹130 Crore, Plans Residential Project",
-      "reports": 3,
-      "amount_cr": 130.0,
-      "materiality": {
-        "GODREJPROP": {
-          "pct_of_revenue": 2.03,
-          "band": "minor"
-        }
-      }
-    },
-    {
-      "headline": "Tata Power approves investment in 1,800 MW pumped storage project",
-      "event_type": "capacity_add",
-      "phrase": null,
-      "certainty": "announced",
-      "domains": [],
-      "actors": [
-        "TATAPOWER"
-      ],
-      "external": [
-        "Tata Power"
-      ],
-      "direction": "opportunity",
-      "date": "2026-11-13",
-      "reader": "llm",
-      "corroborated": false,
-      "link": "https://news.google.com/rss/articles/CBMisAFBVV95cUxNSF9kLXVhVWE1R1BEUGs5M0JLM1pjQkliT0NMN0N3ZjAxYm1YVlRTTWNqTWtMeTAzMHNpX0h6bEMwT3VMMk9FOUFBV0xPWnNWWTJQR1JfVUJHU3ZCejdMbC1aTjBobU1aU3JFNmMwYUVLcmtoWGdCQWdHaGNoRW5laUVKMTJpQUxaR05OelFkWU1VNkNJdWlBTmFaZXhJUmE2R1VodFVtSEJtN3dTc01ULQ?oc=5",
-      "source": "Indian Infrastructure Magazine",
-      "story": "Tata Power Approved Investment Of 118.71 Billion Rupees In 1,800 MW Pumped Storage Project At Shirwata",
-      "reports": 2
-    },
-    {
-      "headline": "Godrej Properties acquires 31-acre land in Indore for plotted housing project",
-      "event_type": "acquisition",
-      "phrase": "acquires",
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "GODREJPROP"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-11-13",
-      "first_seen": "2026-11-14",
-      "link": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxQaUlhSDhBVGg5UE1nNE9rbVlmU3FzRmZKNXRaRGdPOVYtNldfbFlzYlFCbFk5a1FZTnVxeWYtVTJwbzRtcHN2WEFBUFR6dnNPOVphUE90blFJT3JqdjBqdko5Q1B6Sjl1X3BVaWlaVUNrVWpVYU9wcDBodG54cmtZTFJXYTZyQ3JNRlQ2SUxKUG1oc3VVUjM5RlJ3SE1ONm85eU9Zd203RVlBUFc2QzZxel9CT3NjclljSjlWbVh5SGNDZ0JBRThSTmhFVGZmVUhSZ2puMHZvNkVWamVVVVHSAeMBQVVfeXFMUE9XeUFEcWlDd2gxSEpJOUwwMW53dVVPcnFsYXM2VU9BSjNxS0pvYW8zQ0x6OEg3U0Uyd05YQ1ItWFhoMnNzUnIyMmc4UTJxT3RSNmZCZW5Dam4wMk13UWZWYWMyYnZWTGlnRkF0T24tQkxvMTJlNHhNNF9NSm1zQ1hQWEJuSmNYdl9MYS1DalZGMmY4eTNNcTQyMGgySy1EYVNKRVhNVWI0S1dCVzgtV0JZT2g5STBVUi0xRjhHV1poTm9TNklPT1prMEJGbkZ6dHBtdzdvenB2czlPR0lieXVOa0U?oc=5",
-      "source": "ET Realty",
-      "corroborated": true,
-      "story": "Godrej Properties Buys 31-Acre Land in Indore for ₹130 Crore, Plans Residential Project",
-      "reports": 3
-    },
-    {
-      "headline": "Arvind Ltd. and unspun announce partnership",
-      "event_type": "tie_up",
-      "phrase": null,
-      "certainty": "announced",
-      "domains": [],
-      "actors": [
-        "ARVIND"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-11-13",
-      "reader": "llm",
-      "corroborated": false,
-      "counterparties": [
-        "unspun"
-      ],
-      "link": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE1lV2hzbm1YNko0U2htdnRtZFA3SGFxVUJDYmxhRUhqRkducFNXZFhXUDN4N0JFLVNEc2dyMjY1U2VVZ1NrejRDNENGWnZKdjJlWURNbHBfc1dxTWZmTGJPb3FvX1lMV2pU?oc=5",
-      "source": "Specialty Fabrics Review",
-      "story": "Landmark Partnership Between Unspun And Arvind Limited",
-      "reports": 2
-    },
-    {
-      "headline": "Google to launch AI-powered smart glasses in partnership with Samsung",
-      "event_type": "tie_up",
-      "phrase": "partnership with",
-      "certainty": "completed",
-      "domains": [],
-      "actors": [],
-      "external": [
-        "Google",
-        "Samsung"
-      ],
-      "counterparties": [],
-      "direction": "opportunity",
-      "date": "2026-11-13",
-      "first_seen": "2026-11-13",
-      "link": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE1faXlPNHlwUTM0R3dsQ2R5cU84MjN0eFJiNmpNeFVQdWpreEoyS2hnMTZwVkU3ZjhyeUZmMmpldVlVWDh2LXlCYXZ0eVlsdmsya05aVg?oc=5",
-      "source": "AzerNews",
       "corroborated": true
     }
   ]
