@@ -768,9 +768,9 @@
     "name": "Optiemus Infra.",
     "price_at_decision": 789.75,
     "target_at_decision": null,
-    "scored": false,
-    "outcome": null,
-    "realized_return_pct": null,
+    "scored": true,
+    "outcome": "No Analyst Target (unscored)",
+    "realized_return_pct": 3.2,
     "target_made_up": 987.19
   },
   {
@@ -1358,6 +1358,18 @@
     "name": "Premier Energies",
     "price_at_decision": 833.0,
     "target_at_decision": 1050.0,
+    "scored": false,
+    "outcome": null,
+    "realized_return_pct": null
+  },
+  {
+    "date": "2026-11-19",
+    "action": "rotated_in",
+    "sector": "midcap_it",
+    "ticker": "PERSISTENT",
+    "name": "Persistent Systems",
+    "price_at_decision": 5880.0,
+    "target_at_decision": 6060.0,
     "scored": false,
     "outcome": null,
     "realized_return_pct": null
