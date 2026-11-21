@@ -28,6 +28,7 @@ import json
 import os
 import re
 import sys
+import html
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -766,8 +767,11 @@ def probe_publisher_news():
             continue
         _save(f"feed_{host}.xml", r.text)
         entries = feedparser.parse(r.content).entries
+        # ⚡ Bolt: Fast tag stripping via regex instead of BeautifulSoup
         summaries = [
-            " ".join(BeautifulSoup(e.get("summary", ""), "lxml").get_text(" ").split())
+            " ".join(
+                html.unescape(re.sub(r"<[^>]+>", " ", e.get("summary", ""))).split()
+            )
             for e in entries
         ]
         direct = [e for e in entries if host.split(".", 1)[-1] in e.get("link", "")]
