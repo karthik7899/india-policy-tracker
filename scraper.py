@@ -5,6 +5,7 @@ import datetime  # noqa: F401  (referenced via patch("scraper.datetime...") in t
 from bs4 import BeautifulSoup
 import urllib.parse
 import re
+import html
 from logger import log
 from config import SECTOR_QUERIES, GLOBAL_EVENT_QUERIES, PLI_SCHEMES
 from providers.rss import fetch_query_feed_async
@@ -685,7 +686,12 @@ def _headline_text(title, summary):
     would read as a company. Without the markup only the parser's
     company-suffix match ("... Ltd", "... Limited") can find a name.
     """
-    plain = BeautifulSoup(summary, "lxml").get_text(" ") if summary else ""
+    # ⚡ Bolt Optimization: Use regex and html.unescape for massive speedup over BeautifulSoup parsing in hot loops.
+    plain = (
+        " ".join(html.unescape(re.sub(r"<[^>]+>", " ", summary)).split())
+        if summary
+        else ""
+    )
     return f"{title} {plain}".strip()
 
 
