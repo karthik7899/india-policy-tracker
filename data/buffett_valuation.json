@@ -150,7 +150,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 51.6 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 51.8 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Buy Candidate"
@@ -244,7 +244,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 89.2 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 89.3 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Buy Candidate"
@@ -265,8 +265,8 @@
         "momentum_score": 8,
         "confidence": "High",
         "reasons": [
+          "Government Contract/MoU: Inventurus Knowledge Solutions Buys Turbo Health for $500,000",
           "Government Contract/MoU: IKS finds 3.5-4 times more TruBridge records than expected",
-          "Government Contract/MoU: Inventurus Knowledge Solutions Ltd (NSE:IKS) (Q2 2027) Earnings Call Highlights: TrueBridge ...",
           "Strong revenue growth (TTM +43.3%)",
           "High Return on Capital (ROCE: 31.5%)",
           "High Return on Equity (ROE: 31.4%)",
@@ -277,7 +277,7 @@
         "risks": [
           "Operating margin contracted (-4.0pp)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 35.1 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 35.2 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Buy Candidate"
@@ -345,38 +345,7 @@
         "risks": [
           "FII Selling (-1.03%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 45.8 > 15 & Price > Intrinsic)"
-        ],
-        "recommendations": [
-          "Buy Candidate"
-        ]
-      }
-    },
-    {
-      "ticker": "PREMIERENE",
-      "name": "Premier Energies",
-      "owner_earnings": 1620.2,
-      "moat": "Strong (Wide Moat)",
-      "moat_status": "Strong (Wide Moat)",
-      "retained_earnings_ratio": 2.86,
-      "passed_retained_test": true,
-      "score": {
-        "overall_score": 11,
-        "fundamental_score": 7,
-        "momentum_score": 4,
-        "confidence": "High",
-        "reasons": [
-          "Policy Notification: Solar Manufacturing: Waaree, Premier Energies and Emmvee Scale Up",
-          "Strong revenue growth (TTM +32.5%)",
-          "High Return on Capital (ROCE: 32.7%)",
-          "High Return on Equity (ROE: 41.5%)",
-          "Liquid (Rs 94 Cr traded daily)",
-          "DII Accumulation (+0.91%)",
-          "Wide Economic Moat (Sustained Margin Expansion)",
-          "Trading below Graham Intrinsic Value (944.3)"
-        ],
-        "risks": [
-          "Fails Debt Limit (Debt > Net Assets)"
+          "Fails P/E Screen (P/E 45.9 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Buy Candidate"
@@ -439,7 +408,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 42.7 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 42.6 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -480,6 +449,37 @@
       }
     },
     {
+      "ticker": "TECHM",
+      "name": "Tech Mahindra",
+      "owner_earnings": 3378.7,
+      "moat": "Strong (Wide Moat)",
+      "moat_status": "Strong (Wide Moat)",
+      "retained_earnings_ratio": 2.86,
+      "passed_retained_test": true,
+      "score": {
+        "overall_score": 11,
+        "fundamental_score": 3,
+        "momentum_score": 8,
+        "confidence": "High",
+        "reasons": [
+          "Government Contract/MoU: Tech Mahindra’s Agreement With Vodafone Business",
+          "Government Contract/MoU: Tech Mahindra (TECHM) Partners With Mastercard To Embed B2B Payments",
+          "High Return on Capital (ROCE: 23.1%)",
+          "High Return on Equity (ROE: 17.5%)",
+          "Liquid (Rs 463 Cr traded daily)",
+          "FII Accumulation (+2.1%)",
+          "Wide Economic Moat (Sustained Margin Expansion)"
+        ],
+        "risks": [
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Fails P/E Screen (P/E 30.0 > 15 & Price > Intrinsic)"
+        ],
+        "recommendations": [
+          "Buy Candidate"
+        ]
+      }
+    },
+    {
       "ticker": "CPPLUS",
       "name": "Aditya Infotech (CP PLUS)",
       "owner_earnings": 428.2,
@@ -507,7 +507,7 @@
         "risks": [
           "Promoters cut their stake (-2.91%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 80.4 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 80.0 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Buy Candidate"
@@ -567,7 +567,38 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 22.2 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 22.3 > 15 & Price > Intrinsic)"
+        ],
+        "recommendations": [
+          "Buy Candidate"
+        ]
+      }
+    },
+    {
+      "ticker": "PREMIERENE",
+      "name": "Premier Energies",
+      "owner_earnings": 1620.2,
+      "moat": "Strong (Wide Moat)",
+      "moat_status": "Strong (Wide Moat)",
+      "retained_earnings_ratio": 2.86,
+      "passed_retained_test": true,
+      "score": {
+        "overall_score": 10,
+        "fundamental_score": 6,
+        "momentum_score": 4,
+        "confidence": "High",
+        "reasons": [
+          "Policy Notification: Solar Manufacturing: Waaree, Premier Energies and Emmvee Scale Up",
+          "Strong revenue growth (TTM +32.5%)",
+          "High Return on Capital (ROCE: 32.7%)",
+          "High Return on Equity (ROE: 41.5%)",
+          "DII Accumulation (+0.91%)",
+          "Wide Economic Moat (Sustained Margin Expansion)",
+          "Trading below Graham Intrinsic Value (944.3)"
+        ],
+        "risks": [
+          "Rs 46.42 Cr traded but only 20% delivered — most of that volume is intraday churn, so the liquidity band flatters this name.",
+          "Fails Debt Limit (Debt > Net Assets)"
         ],
         "recommendations": [
           "Buy Candidate"
@@ -717,7 +748,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 71.5 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 71.4 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Hold / Monitor"
@@ -774,6 +805,33 @@
           "Trading below Graham Intrinsic Value (251.9)"
         ],
         "risks": [],
+        "recommendations": [
+          "Hold / Monitor"
+        ]
+      }
+    },
+    {
+      "ticker": "ANANTRAJ",
+      "name": "Anant Raj",
+      "owner_earnings": 553.0,
+      "moat": "Weak/None",
+      "moat_status": "Weak/None",
+      "retained_earnings_ratio": 2.86,
+      "passed_retained_test": true,
+      "score": {
+        "overall_score": 8,
+        "fundamental_score": 0,
+        "momentum_score": 8,
+        "confidence": "High",
+        "reasons": [
+          "Government Contract/MoU: Anant Raj Q2 FY27: Higher Profit, Data Centre Plans Advance",
+          "Policy Notification: Anant Raj (NSE:ANANTRAJ): What Does Its MoU With Haryana Govt and Orange Business Mean?",
+          "Liquid (Rs 84 Cr traded daily)",
+          "FII Accumulation (+0.22%)"
+        ],
+        "risks": [
+          "Fails Debt Limit (Debt > Net Assets)"
+        ],
         "recommendations": [
           "Hold / Monitor"
         ]
@@ -862,7 +920,7 @@
         "risks": [
           "FII Selling (-1.7%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 37.5 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 37.3 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -893,7 +951,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 52.4 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 52.5 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Hold / Monitor"
@@ -925,42 +983,6 @@
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
           "Fails P/E Screen (P/E 52.8 > 15 & Price > Intrinsic)",
-          "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
-        ],
-        "recommendations": [
-          "Hold / Monitor"
-        ]
-      }
-    },
-    {
-      "ticker": "PERSISTENT",
-      "name": "Persistent Systems",
-      "owner_earnings": 521.2,
-      "moat": "Strong (Wide Moat)",
-      "moat_status": "Strong (Wide Moat)",
-      "retained_earnings_ratio": 2.86,
-      "passed_retained_test": true,
-      "score": {
-        "overall_score": 8,
-        "fundamental_score": 0,
-        "momentum_score": 8,
-        "confidence": "High",
-        "reasons": [
-          "Government Contract/MoU: Persistent Systems to raise $842 mn debt to cover German acquisition loan",
-          "Government Contract/MoU: Persistent to squeeze out existing Nagarro shareholders en route to become seventh-largest",
-          "Strong revenue growth (TTM +27.1%)",
-          "High Return on Capital (ROCE: 34.4%)",
-          "High Return on Equity (ROE: 27.2%)",
-          "Liquid (Rs 372 Cr traded daily)",
-          "FII Accumulation (+0.51%)",
-          "DII Accumulation (+2.08%)",
-          "Wide Economic Moat (Sustained Margin Expansion)"
-        ],
-        "risks": [
-          "Operating margin contracted (-2.0pp)",
-          "Promoters cut their stake (-1.47%)",
-          "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 54.0 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -1052,7 +1074,38 @@
         "risks": [
           "FII Selling (-3.93%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 126.0 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 127.0 > 15 & Price > Intrinsic)"
+        ],
+        "recommendations": [
+          "Hold / Monitor"
+        ]
+      }
+    },
+    {
+      "ticker": "SYRMA",
+      "name": "Syrma SGS Technology",
+      "owner_earnings": 162.6,
+      "moat": "Medium (Narrow Moat)",
+      "moat_status": "Medium (Narrow Moat)",
+      "retained_earnings_ratio": 2.86,
+      "passed_retained_test": true,
+      "score": {
+        "overall_score": 7,
+        "fundamental_score": 0,
+        "momentum_score": 7,
+        "confidence": "High",
+        "reasons": [
+          "Government Contract/MoU [immaterial, 0.2% of revenue]: Syrma SGS invests ₹14.99 crore in subsidiary Syrma Kaga Electronics",
+          "Capacity/Product Launch: Syrma SGS revenue crosses ₹2,000 crore in Q2 FY27",
+          "Capacity/Product Launch: Syrma SGS Reports Record Quarterly Revenue of ₹19,995 Million in Q2 FY27",
+          "Strong revenue growth (TTM +62.4%)",
+          "Liquid (Rs 250 Cr traded daily)",
+          "FII Accumulation (+2.01%)",
+          "Narrow Economic Moat"
+        ],
+        "risks": [
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Fails P/E Screen (P/E 68.8 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Hold / Monitor"
@@ -1114,7 +1167,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 42.3 > 15; no intrinsic value to justify it)"
+          "Fails P/E Screen (P/E 42.5 > 15; no intrinsic value to justify it)"
         ],
         "recommendations": [
           "Hold / Monitor"
@@ -1202,7 +1255,7 @@
         "risks": [
           "Promoters cut their stake (-9.98%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 78.4 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 78.5 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Hold / Monitor"
@@ -1235,7 +1288,7 @@
           "Operating margin contracted (-5.0pp)",
           "FII Selling (-1.5%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 41.7 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 41.8 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -1267,38 +1320,8 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 46.4 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 46.1 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
-        ],
-        "recommendations": [
-          "Hold / Monitor"
-        ]
-      }
-    },
-    {
-      "ticker": "SYRMA",
-      "name": "Syrma SGS Technology",
-      "owner_earnings": 162.6,
-      "moat": "Medium (Narrow Moat)",
-      "moat_status": "Medium (Narrow Moat)",
-      "retained_earnings_ratio": 2.86,
-      "passed_retained_test": true,
-      "score": {
-        "overall_score": 6,
-        "fundamental_score": 0,
-        "momentum_score": 6,
-        "confidence": "High",
-        "reasons": [
-          "Capacity/Product Launch: Syrma SGS revenue crosses ₹2,000 crore in Q2 FY27",
-          "Capacity/Product Launch: Syrma SGS Reports Record Quarterly Revenue of ₹19,995 Million in Q2 FY27",
-          "Strong revenue growth (TTM +62.4%)",
-          "Liquid (Rs 250 Cr traded daily)",
-          "FII Accumulation (+2.01%)",
-          "Narrow Economic Moat"
-        ],
-        "risks": [
-          "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 68.9 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Hold / Monitor"
@@ -1328,7 +1351,7 @@
         "risks": [
           "Operating margin contracted (-4.0pp)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 43.5 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 43.4 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -1444,7 +1467,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 58.3 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 58.4 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -1474,8 +1497,37 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 38.9 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 38.8 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
+        ],
+        "recommendations": [
+          "Hold / Monitor"
+        ]
+      }
+    },
+    {
+      "ticker": "EIHOTEL",
+      "name": "EIH",
+      "owner_earnings": 448.7,
+      "moat": "Medium (Narrow Moat)",
+      "moat_status": "Medium (Narrow Moat)",
+      "retained_earnings_ratio": 2.86,
+      "passed_retained_test": true,
+      "score": {
+        "overall_score": 5,
+        "fundamental_score": 1,
+        "momentum_score": 4,
+        "confidence": "High",
+        "reasons": [
+          "Government Contract/MoU: EIH Limited (NSE:EIHOTEL) Q2 FY27 Webinar Insights: Revenue, EBITDA, and Expansion Plans Unveiled",
+          "Operating Margin Expansion (+2.0%)",
+          "High Return on Capital (ROCE: 20.7%)",
+          "FII Accumulation (+1.03%)",
+          "Narrow Economic Moat"
+        ],
+        "risks": [
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Fails P/E Screen (P/E 27.7 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Hold / Monitor"
@@ -1534,7 +1586,7 @@
         "risks": [
           "Operating margin contracted (-2.0pp)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 73.3 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 73.6 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -1566,33 +1618,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 71.9 > 15 & Price > Intrinsic)"
-        ],
-        "recommendations": [
-          "Avoid / High Risk"
-        ]
-      }
-    },
-    {
-      "ticker": "ANANTRAJ",
-      "name": "Anant Raj",
-      "owner_earnings": 553.0,
-      "moat": "Weak/None",
-      "moat_status": "Weak/None",
-      "retained_earnings_ratio": 2.86,
-      "passed_retained_test": true,
-      "score": {
-        "overall_score": 4,
-        "fundamental_score": 0,
-        "momentum_score": 4,
-        "confidence": "High",
-        "reasons": [
-          "Government Contract/MoU: Anant Raj Q2 FY27: Higher Profit, Data Centre Plans Advance",
-          "Liquid (Rs 84 Cr traded daily)",
-          "FII Accumulation (+0.22%)"
-        ],
-        "risks": [
-          "Fails Debt Limit (Debt > Net Assets)"
+          "Fails P/E Screen (P/E 72.1 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Avoid / High Risk"
@@ -1656,7 +1682,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 61.4 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 61.5 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -1678,8 +1704,8 @@
         "momentum_score": 8,
         "confidence": "High",
         "reasons": [
+          "Government Contract/MoU [transformative, 162.5% of revenue]: Chalet Hotels outlines ₹35 bn capex plan at Investor Day 2026",
           "Government Contract/MoU: Chalet Hotels reports strong Q2 FY27 results; core EBITDA grows 13%",
-          "Government Contract/MoU: Chalet revenue falls as real-estate income drops sharply",
           "High Return on Equity (ROE: 19.0%)",
           "DII Accumulation (+0.47%)",
           "Wide Economic Moat (Sustained Margin Expansion)"
@@ -1710,8 +1736,8 @@
         "momentum_score": 8,
         "confidence": "High",
         "reasons": [
+          "Government Contract/MoU: Lemon Tree Hotels signs Keys Lite property in Banga",
           "Government Contract/MoU: Lemon Tree Hotels (NSE:LEMONTREE) Signs Licence Agreement for 76-Room Lemon Tree Hotel in Sirhind, Punjab",
-          "Government Contract/MoU: Lemon Tree Hotels (NSEI:LEMONTREE)",
           "High Return on Equity (ROE: 19.2%)",
           "Liquid (Rs 58 Cr traded daily)",
           "DII Accumulation (+0.45%)",
@@ -1720,7 +1746,7 @@
         "risks": [
           "FII Selling (-1.17%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 38.0 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 37.9 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -1839,7 +1865,7 @@
         "risks": [
           "Promoters cut their stake (-1.07%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 92.4 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 92.9 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -1869,6 +1895,38 @@
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
           "Fails P/E Screen (P/E 25.3 > 15 & Price > Intrinsic)"
+        ],
+        "recommendations": [
+          "Avoid / High Risk"
+        ]
+      }
+    },
+    {
+      "ticker": "AVALON",
+      "name": "Avalon Technologies",
+      "owner_earnings": 82.3,
+      "moat": "Strong (Wide Moat)",
+      "moat_status": "Strong (Wide Moat)",
+      "retained_earnings_ratio": 2.86,
+      "passed_retained_test": true,
+      "score": {
+        "overall_score": 3,
+        "fundamental_score": -1,
+        "momentum_score": 4,
+        "confidence": "High",
+        "reasons": [
+          "Policy Notification: Proceedings of Extraordinary General Meeting held on November 21, 2026",
+          "Strong revenue growth (TTM +43.5%)",
+          "High Return on Equity (ROE: 16.7%)",
+          "Liquid (Rs 77 Cr traded daily)",
+          "FII Accumulation (+3.32%)",
+          "Wide Economic Moat (Sustained Margin Expansion)"
+        ],
+        "risks": [
+          "Promoters cut their stake (-4.04%)",
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Fails P/E Screen (P/E 77.9 > 15 & Price > Intrinsic)",
+          "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
           "Avoid / High Risk"
@@ -1940,35 +1998,6 @@
       }
     },
     {
-      "ticker": "EIHOTEL",
-      "name": "EIH",
-      "owner_earnings": 448.7,
-      "moat": "Medium (Narrow Moat)",
-      "moat_status": "Medium (Narrow Moat)",
-      "retained_earnings_ratio": 2.86,
-      "passed_retained_test": true,
-      "score": {
-        "overall_score": 2,
-        "fundamental_score": 1,
-        "momentum_score": 1,
-        "confidence": "High",
-        "reasons": [
-          "Sector benefits from macro policy tailwinds (Fallback)",
-          "Operating Margin Expansion (+2.0%)",
-          "High Return on Capital (ROCE: 20.7%)",
-          "FII Accumulation (+1.03%)",
-          "Narrow Economic Moat"
-        ],
-        "risks": [
-          "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 27.5 > 15 & Price > Intrinsic)"
-        ],
-        "recommendations": [
-          "Avoid / High Risk"
-        ]
-      }
-    },
-    {
       "ticker": "CUMMINSIND",
       "name": "Cummins India",
       "owner_earnings": 1370.8,
@@ -1993,7 +2022,7 @@
           "Operating margin contracted (-3.0pp)",
           "FII Selling (-1.72%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 48.8 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 48.9 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -2023,7 +2052,7 @@
         "risks": [
           "Promoters cut their stake (-4.22%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 56.9 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 56.3 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -2084,7 +2113,7 @@
         "risks": [
           "Operating margin contracted (-3.0pp)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 44.7 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 43.7 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -2117,7 +2146,7 @@
           "Operating margin contracted (-2.0pp)",
           "Thin: Rs 3.40 Cr traded daily, ~2 sessions to exit Rs 1 Cr",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 28.5 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 28.6 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Avoid / High Risk"
@@ -2199,7 +2228,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 28.2 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 28.3 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Avoid / High Risk"
@@ -2260,39 +2289,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 50.1 > 15 & Price > Intrinsic)"
-        ],
-        "recommendations": [
-          "Avoid / High Risk"
-        ]
-      }
-    },
-    {
-      "ticker": "AVALON",
-      "name": "Avalon Technologies",
-      "owner_earnings": 82.3,
-      "moat": "Strong (Wide Moat)",
-      "moat_status": "Strong (Wide Moat)",
-      "retained_earnings_ratio": 2.86,
-      "passed_retained_test": true,
-      "score": {
-        "overall_score": 0,
-        "fundamental_score": -1,
-        "momentum_score": 1,
-        "confidence": "High",
-        "reasons": [
-          "Sector benefits from macro policy tailwinds (Fallback)",
-          "Strong revenue growth (TTM +43.5%)",
-          "High Return on Equity (ROE: 16.7%)",
-          "Liquid (Rs 77 Cr traded daily)",
-          "FII Accumulation (+3.32%)",
-          "Wide Economic Moat (Sustained Margin Expansion)"
-        ],
-        "risks": [
-          "Promoters cut their stake (-4.04%)",
-          "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 78.1 > 15 & Price > Intrinsic)",
-          "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
+          "Fails P/E Screen (P/E 49.8 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Avoid / High Risk"
@@ -2324,7 +2321,7 @@
           "Operating margin contracted (-3.0pp)",
           "Thin: Rs 2.95 Cr traded daily, ~2 sessions to exit Rs 1 Cr",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 55.0 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 54.8 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -2357,7 +2354,7 @@
         "risks": [
           "FII Selling (-3.73%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 582.0 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 581.0 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -2415,7 +2412,37 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 64.9 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 65.3 > 15 & Price > Intrinsic)",
+          "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
+        ],
+        "recommendations": [
+          "Avoid / High Risk"
+        ]
+      }
+    },
+    {
+      "ticker": "PGEL",
+      "name": "PG Electroplast",
+      "owner_earnings": -66.9,
+      "moat": "Weak/None",
+      "moat_status": "Weak/None",
+      "retained_earnings_ratio": 2.86,
+      "passed_retained_test": true,
+      "score": {
+        "overall_score": -1,
+        "fundamental_score": -5,
+        "momentum_score": 4,
+        "confidence": "High",
+        "reasons": [
+          "Policy Notification: Monitoring Agency Report for the quarter ended September 30, 2026",
+          "Strong revenue growth (TTM +21.0%)",
+          "Liquid (Rs 114 Cr traded daily)",
+          "DII Accumulation (+2.7%)"
+        ],
+        "risks": [
+          "FII Selling (-1.23%)",
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Fails P/E Screen (P/E 77.9 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -2445,6 +2472,35 @@
           "Revenue shrinking (TTM -18.0%)",
           "Operating margin contracted (-9.0pp)",
           "Fails Debt Limit (Debt > Net Assets)"
+        ],
+        "recommendations": [
+          "Avoid / High Risk"
+        ]
+      }
+    },
+    {
+      "ticker": "APOLLO",
+      "name": "Apollo Micro Systems",
+      "owner_earnings": 159.4,
+      "moat": "Weak/None",
+      "moat_status": "Weak/None",
+      "retained_earnings_ratio": 2.86,
+      "passed_retained_test": true,
+      "score": {
+        "overall_score": -2,
+        "fundamental_score": -3,
+        "momentum_score": 1,
+        "confidence": "High",
+        "reasons": [
+          "Sector benefits from macro policy tailwinds (Fallback)",
+          "Strong revenue growth (TTM +77.0%)",
+          "Operating Margin Expansion (+8.0%)",
+          "Liquid (Rs 608 Cr traded daily)"
+        ],
+        "risks": [
+          "FII Selling (-1.64%)",
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Fails P/E Screen (P/E 115.0 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Avoid / High Risk"
@@ -2498,37 +2554,7 @@
         "risks": [
           "Thin: Rs 3.98 Cr traded daily, ~1 sessions to exit Rs 1 Cr",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 31.0 > 15 & Price > Intrinsic)",
-          "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
-        ],
-        "recommendations": [
-          "Avoid / High Risk"
-        ]
-      }
-    },
-    {
-      "ticker": "PGEL",
-      "name": "PG Electroplast",
-      "owner_earnings": -66.9,
-      "moat": "Weak/None",
-      "moat_status": "Weak/None",
-      "retained_earnings_ratio": 2.86,
-      "passed_retained_test": true,
-      "score": {
-        "overall_score": -2,
-        "fundamental_score": -6,
-        "momentum_score": 4,
-        "confidence": "High",
-        "reasons": [
-          "Policy Notification: Monitoring Agency Report for the quarter ended September 30, 2026",
-          "Strong revenue growth (TTM +21.0%)",
-          "DII Accumulation (+2.7%)"
-        ],
-        "risks": [
-          "Rs 418.94 Cr traded but only 14% delivered — most of that volume is intraday churn, so the liquidity band flatters this name.",
-          "FII Selling (-1.23%)",
-          "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 77.8 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 30.8 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -2557,37 +2583,8 @@
         "risks": [
           "FII Selling (-1.05%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 40.7 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 40.8 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
-        ],
-        "recommendations": [
-          "Avoid / High Risk"
-        ]
-      }
-    },
-    {
-      "ticker": "APOLLO",
-      "name": "Apollo Micro Systems",
-      "owner_earnings": 159.4,
-      "moat": "Weak/None",
-      "moat_status": "Weak/None",
-      "retained_earnings_ratio": 2.86,
-      "passed_retained_test": true,
-      "score": {
-        "overall_score": -3,
-        "fundamental_score": -4,
-        "momentum_score": 1,
-        "confidence": "High",
-        "reasons": [
-          "Sector benefits from macro policy tailwinds (Fallback)",
-          "Strong revenue growth (TTM +77.0%)",
-          "Operating Margin Expansion (+8.0%)"
-        ],
-        "risks": [
-          "Rs 406.95 Cr traded but only 22% delivered — most of that volume is intraday churn, so the liquidity band flatters this name.",
-          "FII Selling (-1.64%)",
-          "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 115.0 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Avoid / High Risk"
