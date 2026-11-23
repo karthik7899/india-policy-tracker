@@ -26,7 +26,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (149 days old)"
+      "exclusion_reason": "aged >120d (151 days old)"
     },
     {
       "date": "Tue, 30 Jun 2026 01:50:43 GMT",
@@ -40,7 +40,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (144 days old)"
+      "exclusion_reason": "aged >120d (146 days old)"
     },
     {
       "date": "17 Nov 2026",
@@ -197,6 +197,51 @@
       ],
       "confidence": "M",
       "status": "counted"
+    },
+    {
+      "date": "Mon, 23 Nov 2026 08:50:47 +0530",
+      "headline": "Rupee could rise to 91.50/$ on equity inflows, says HDFC Bank's treasury head",
+      "source_url": "https://economictimes.indiatimes.com/markets/forex/rupee-could-rise-to-91-50/-on-equity-inflows-says-hdfc-banks-treasury-head/articleshow/136088042.cms",
+      "source_label": "Economic Times",
+      "event_type": "",
+      "source_kind": "Markets news",
+      "event_tags": [
+        "Markets news"
+      ],
+      "confidence": "M",
+      "status": "counted",
+      "article_url": "https://economictimes.indiatimes.com/markets/forex/rupee-could-rise-to-91-50/-on-equity-inflows-says-hdfc-banks-treasury-head/articleshow/136088042.cms",
+      "summary": "The Indian rupee is experiencing a noteworthy appreciation, fueled by solid equity investment and lesser geopolitical uncertainties. Experts foresee further strengthening, potentially reaching 91.50 against the US dollar. A rate hike by the Reserve Bank of India is on the horizon, influenced by climbing inflation. Bond yields are likewise projected to increase moderately due to tighter liquidity."
+    },
+    {
+      "date": "Mon, 23 Nov 2026 08:25:27 +0530",
+      "headline": "HDFC Bank among 5 stocks showing White Marubozu pattern",
+      "source_url": "https://economictimes.indiatimes.com/markets/stocks/news/hdfc-bank-among-5-stocks-showing-white-marubozu-pattern/slideshow/136087788.cms",
+      "source_label": "Economic Times",
+      "event_type": "",
+      "source_kind": "Markets news",
+      "event_tags": [
+        "Markets news"
+      ],
+      "confidence": "M",
+      "status": "counted",
+      "article_url": "https://economictimes.indiatimes.com/markets/stocks/news/hdfc-bank-among-5-stocks-showing-white-marubozu-pattern/slideshow/136087788.cms",
+      "summary": "Five Nifty200 stocks featured in StockEdge’s White Marubozu bullish scanner on November 23, indicating strong buying momentum during the session, with prices moving higher from the opening level to the close."
+    },
+    {
+      "date": "Mon, 23 Nov 2026 14:31:03 +0530",
+      "headline": "Who is killing Nifty 50 rally? SBI, RIL, HDFC Bank, Axis Bank, Hindalco, JSW among stocks dragging index into red",
+      "source_url": "https://www.livemint.com/market/stock-market-news/who-is-killing-the-nifty-50-rally-sbi-ril-hdfc-axis-bank-hindalco-tata-steel-jsw-steel-among-key-stocks-giving-r-11795422323375.html",
+      "source_label": "Livemint",
+      "event_type": "",
+      "source_kind": "Markets news",
+      "event_tags": [
+        "Markets news"
+      ],
+      "confidence": "M",
+      "status": "counted",
+      "article_url": "https://www.livemint.com/market/stock-market-news/who-is-killing-the-nifty-50-rally-sbi-ril-hdfc-axis-bank-hindalco-tata-steel-jsw-steel-among-key-stocks-giving-r-11795422323375.html",
+      "summary": "Indian markets fell sharply on Monday after a five-session rally, with the Nifty 50 dropping below 25,500 and the Sensex losing about 1.5%. Metal, banking and finance stocks led the decline, as Tata Steel, Hindalco, Axis Bank, ICICI Bank and HDFC Bank weighed on the indexes."
     },
     {
       "date": "Fri, 20 Nov 2026 10:03:17 +0530",
@@ -449,10 +494,9 @@
       "headline": "HDFC Bank shares witness strong buying, rise 7% in 1 month. Can new CEO, improving fundamentals drive next leg of rally?",
       "source_url": "https://www.livemint.com/market/stock-market-news/hdfc-bank-shares-witness-strong-buying-rise-7-in-1-month-can-new-ceo-improving-fundamentals-drive-next-leg-of-rally-11793861115989.html",
       "source_label": "Livemint",
-      "event_type": "management_change",
+      "event_type": "",
       "source_kind": "Markets news",
       "event_tags": [
-        "management_change",
         "Markets news"
       ],
       "confidence": "M",
@@ -518,21 +562,6 @@
       "confidence": "M",
       "status": "counted",
       "article_url": "https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/hdfc-bank-share-price-live-29-oct-2026/liveblog/135288700.cms"
-    },
-    {
-      "date": "2026-11-05",
-      "headline": "HDFC Bank shares witness strong buying, rise 7% in 1 month. Can new CEO, improving fundamentals drive next leg of rally?",
-      "source_url": "https://www.livemint.com/market/stock-market-news/hdfc-bank-shares-witness-strong-buying-rise-7-in-1-month-can-new-ceo-improving-fundamentals-drive-next-leg-of-rally-11793861115989.html",
-      "source_label": "Livemint",
-      "event_type": "management_change",
-      "source_kind": "Event",
-      "event_tags": [
-        "management_change",
-        "Event"
-      ],
-      "confidence": "H",
-      "status": "merged",
-      "exclusion_reason": "merged: duplicate phrasing of “HDFC Bank shares witness strong buying, rise 7% in 1 month. ”"
     }
   ]
 }
