@@ -13,7 +13,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (146 days old)"
+      "exclusion_reason": "aged >120d (147 days old)"
     },
     {
       "date": "18 Nov 2026",
@@ -55,6 +55,20 @@
       "status": "counted"
     },
     {
+      "date": "Mon, 23 Nov 2026 10:09:47 +0530",
+      "headline": "Axis Bank Share Price Highlights: Axis Bank Stock Price History",
+      "source_url": "https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/axis-bank-stock-price-today-live-23-nov-2026/liveblog/136089569.cms",
+      "source_label": "Economic Times",
+      "event_type": "",
+      "source_kind": "Markets news",
+      "event_tags": [
+        "Markets news"
+      ],
+      "confidence": "M",
+      "status": "counted",
+      "article_url": "https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/axis-bank-stock-price-today-live-23-nov-2026/liveblog/136089569.cms"
+    },
+    {
       "date": "Mon, 23 Nov 2026 07:13:21 +0530",
       "headline": "Stock Market Highlight: Sensex crashes 1,484 pts, Nifty ends below 25,350; Axis Bank slides 4%, Hindalco 3%",
       "source_url": "https://economictimes.indiatimes.com/markets/stocks/live-blog/bse-sensex-today-nifty50-stock-market-live-updates-gift-nifty-maruti-adani-energy-share-price-23-november-2026/liveblog/136086783.cms",
@@ -94,8 +108,9 @@
         "Markets news"
       ],
       "confidence": "M",
-      "status": "counted",
-      "article_url": "https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/axis-bank-stock-price-livestock-price-today-live-updates-20-nov-2026/liveblog/136013459.cms"
+      "status": "merged",
+      "article_url": "https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/axis-bank-stock-price-livestock-price-today-live-updates-20-nov-2026/liveblog/136013459.cms",
+      "exclusion_reason": "merged: duplicate phrasing of “Axis Bank Share Price Highlights: Axis Bank Stock Price Hist”"
     },
     {
       "date": "Sat, 21 Nov 2026 10:45:33 +0530",

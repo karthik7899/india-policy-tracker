@@ -26,7 +26,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (148 days old)"
+      "exclusion_reason": "aged >120d (149 days old)"
     },
     {
       "date": "Tue, 01 Sep 2026 07:00:00 GMT",
@@ -93,7 +93,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (140 days old)"
+      "exclusion_reason": "aged >120d (141 days old)"
     },
     {
       "date": "Mon, 29 Jun 2026 08:06:00 GMT",
@@ -107,7 +107,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (147 days old)"
+      "exclusion_reason": "aged >120d (148 days old)"
     },
     {
       "date": "13 Nov 2026",
@@ -187,7 +187,21 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (313 days old)"
+      "exclusion_reason": "aged >120d (314 days old)"
+    },
+    {
+      "date": "Mon, 23 Nov 2026 10:13:06 +0530",
+      "headline": "ITC Share Price Highlights: ITC Stock Price History",
+      "source_url": "https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/itc-share-price-live-updates-23-nov-2026/liveblog/136089671.cms",
+      "source_label": "Economic Times",
+      "event_type": "",
+      "source_kind": "Markets news",
+      "event_tags": [
+        "Markets news"
+      ],
+      "confidence": "M",
+      "status": "counted",
+      "article_url": "https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/itc-share-price-live-updates-23-nov-2026/liveblog/136089671.cms"
     },
     {
       "date": "Thu, 19 Nov 2026 08:41:18 +0530",
@@ -272,8 +286,9 @@
         "Markets news"
       ],
       "confidence": "M",
-      "status": "counted",
-      "article_url": "https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/itc-share-price-today-live-updates-09-nov-2026/liveblog/135669422.cms"
+      "status": "merged",
+      "article_url": "https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/itc-share-price-today-live-updates-09-nov-2026/liveblog/135669422.cms",
+      "exclusion_reason": "merged: duplicate phrasing of “ITC Share Price Highlights: ITC Stock Price History”"
     },
     {
       "date": "Fri, 06 Nov 2026 08:18:28 +0530",
