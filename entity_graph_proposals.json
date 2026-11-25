@@ -2,6 +2,22 @@
   "_how_to_review": "Partner edges proposed from completed tie-up headlines. Nothing here reaches the graph until you set status to 'accepted'; 'rejected' stops the pair being proposed again. You may correct 'counterparty' before accepting (e.g. 'Vivo Mobile' -> 'Vivo') — it is the name the graph will match in future headlines. Leave 'proposed_as' alone: it is how the pipeline recognises the same pair next time.",
   "proposals": [
     {
+      "holding": "APOLLO",
+      "counterparty": "Tata Steel",
+      "proposed_as": "Tata Steel",
+      "status": "pending",
+      "first_seen": "2026-11-25",
+      "last_seen": "2026-11-25",
+      "evidence": [
+        {
+          "headline": "Valuation, debt worries overshadow Tata Steel-APL Apollo deal’s strategic gains",
+          "date": "2026-11-25",
+          "link": "https://www.livemint.com/market/mark-to-market/tata-steel-apl-apollo-acquisition-deal-review-11795510022151.html",
+          "source": "Livemint"
+        }
+      ]
+    },
+    {
       "holding": "CAMPUS",
       "counterparty": "Rugged Rush",
       "proposed_as": "Rugged Rush",
