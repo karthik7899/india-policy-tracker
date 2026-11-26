@@ -145,7 +145,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (125 days old)"
+      "exclusion_reason": "aged >120d (126 days old)"
     },
     {
       "date": "Thu, 23 Jul 2026 06:17:21 GMT",
@@ -159,7 +159,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (125 days old)"
+      "exclusion_reason": "aged >120d (126 days old)"
     },
     {
       "date": "Thu, 25 Jun 2026 09:00:00 GMT",
@@ -173,7 +173,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (153 days old)"
+      "exclusion_reason": "aged >120d (154 days old)"
     },
     {
       "date": "Thu, 25 Jun 2026 10:27:48 GMT",
@@ -187,7 +187,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (153 days old)"
+      "exclusion_reason": "aged >120d (154 days old)"
     },
     {
       "date": "Thu, 25 Jun 2026 07:21:29 GMT",
@@ -201,7 +201,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (153 days old)"
+      "exclusion_reason": "aged >120d (154 days old)"
     },
     {
       "date": "Thu, 04 Jun 2026 07:00:00 GMT",
@@ -215,7 +215,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (174 days old)"
+      "exclusion_reason": "aged >120d (175 days old)"
     },
     {
       "date": "Wed, 03 Jun 2026 07:00:00 GMT",
@@ -229,7 +229,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (175 days old)"
+      "exclusion_reason": "aged >120d (176 days old)"
     },
     {
       "date": "Fri, 25 Sep 2026 04:53:36 GMT",
@@ -307,7 +307,8 @@
         "Launch"
       ],
       "confidence": "M",
-      "status": "counted"
+      "status": "excluded",
+      "exclusion_reason": "aged >120d (121 days old)"
     },
     {
       "date": "Thu, 23 Jul 2026 09:00:00 GMT",
@@ -321,7 +322,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (125 days old)"
+      "exclusion_reason": "aged >120d (126 days old)"
     },
     {
       "date": "Wed, 03 Jun 2026 07:00:00 GMT",
@@ -335,7 +336,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (175 days old)"
+      "exclusion_reason": "aged >120d (176 days old)"
     },
     {
       "date": "Tue, 16 Jun 2026 07:00:00 GMT",
@@ -349,7 +350,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (162 days old)"
+      "exclusion_reason": "aged >120d (163 days old)"
     },
     {
       "date": "25 Nov 2026",
@@ -468,7 +469,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (246 days old)"
+      "exclusion_reason": "aged >120d (247 days old)"
     },
     {
       "date": "Tue, 24 Mar 2026 07:00:00 GMT",
@@ -482,7 +483,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (246 days old)"
+      "exclusion_reason": "aged >120d (247 days old)"
     },
     {
       "date": "Wed, 17 Dec 2025 08:00:00 GMT",
@@ -496,7 +497,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (343 days old)"
+      "exclusion_reason": "aged >120d (344 days old)"
     },
     {
       "date": "Mon, 09 Mar 2026 07:00:00 GMT",
@@ -510,7 +511,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (261 days old)"
+      "exclusion_reason": "aged >120d (262 days old)"
     },
     {
       "date": "Mon, 16 Nov 2026 13:57:18 +0530",
@@ -574,20 +575,6 @@
     },
     {
       "date": "2026-11-25",
-      "headline": "Suzlon Adds 1 GW Blade Capacity in Tamil Nadu for ₹200 Crore",
-      "source_url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxPa0RldXB6QkxuX3dWQ0VuZzBXdWFqTUJSUHZaYmJhN2M4Y0tuRkp5d1pqaGNkeGhCTjlhUnllUjg1OGM0U1oySVFfUXlueW5RQjJfTHhMcmNMa01Gal9vU2tvaXhMZ09SSHYzNk54YW42V0dROTJBTmMtdHIyc05RelJGdUV4d0t1MmxodnZReUdsRm13eG9JSHBtMU9ocXc?oc=5",
-      "source_label": "Equitypandit",
-      "event_type": "capacity_add",
-      "source_kind": "Event",
-      "event_tags": [
-        "capacity_add",
-        "Event"
-      ],
-      "confidence": "L",
-      "status": "counted"
-    },
-    {
-      "date": "2026-11-25",
       "headline": "Suzlon Energy Limited has informed the Exchange about Capacity addition",
       "source_url": "https://nsearchives.nseindia.in/corporate/SUZLON1_25112026133102_Suzlon25112026.pdf",
       "source_label": "NSE",
@@ -600,6 +587,20 @@
       "confidence": "L",
       "status": "merged",
       "exclusion_reason": "merged: duplicate phrasing of “Suzlon Energy Limited has informed the Exchange about Capaci”"
+    },
+    {
+      "date": "2026-11-25",
+      "headline": "Suzlon Adds 1 GW Blade Capacity in Tamil Nadu for ₹200 Crore",
+      "source_url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxPa0RldXB6QkxuX3dWQ0VuZzBXdWFqTUJSUHZaYmJhN2M4Y0tuRkp5d1pqaGNkeGhCTjlhUnllUjg1OGM0U1oySVFfUXlueW5RQjJfTHhMcmNMa01Gal9vU2tvaXhMZ09SSHYzNk54YW42V0dROTJBTmMtdHIyc05RelJGdUV4d0t1MmxodnZReUdsRm13eG9JSHBtMU9ocXc?oc=5",
+      "source_label": "Equitypandit",
+      "event_type": "capacity_add",
+      "source_kind": "Event",
+      "event_tags": [
+        "capacity_add",
+        "Event"
+      ],
+      "confidence": "L",
+      "status": "counted"
     },
     {
       "date": "2026-11-24",

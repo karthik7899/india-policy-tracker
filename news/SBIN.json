@@ -15,6 +15,20 @@
       "status": "counted"
     },
     {
+      "date": "Tue, 17 Nov 2026 10:22:00 GMT",
+      "headline": "State Bank of India (NSE:SBIN) Completes 9.90% Stake Buy in IFSC Rating Agency",
+      "source_url": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxQS0ZwYXFKc0hPdkpmdkhOQnhhblV2WVNMVFFocUtUbVZsVU1LM1NWc3VRQzA3enh1UkhOUWJRZ1FRMjQ2MVVFTmxVTS1odnRfZl9laFB3cDlhTHU3N3pDa3RHZ21iQkp0N1lkalF4UVhMZGNHUDJxbTdPUjgyYkMxMUxQQWEzb01vSkp1WnMxX0hsLWhiVnJTSldPdzFOT3liM1poUUc3N1pxaW5kRl9Jbll0WHNhTU10ZXdJTzFZb1RsWjBwZWt6QUx2QVMtLXByeFJXNmExbzhvMHVWaWl6Tk51dTg4RUtUUHc?oc=5",
+      "source_label": "Kalkine India",
+      "event_type": "acquisition",
+      "source_kind": "Filing",
+      "event_tags": [
+        "acquisition",
+        "Filing"
+      ],
+      "confidence": "M",
+      "status": "counted"
+    },
+    {
       "date": "03 Nov 2026",
       "headline": "State Bank Of India has informed the Exchange about statement of deviation(s) or variation(s) under Reg. 32",
       "source_url": "https://nsearchives.nseindia.com/corporate/SBIN_03112026151233_DeviationUtilisation.pdf",
@@ -91,7 +105,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (135 days old)"
+      "exclusion_reason": "aged >120d (136 days old)"
     },
     {
       "date": "26 Sep 2026",
@@ -131,6 +145,21 @@
       ],
       "confidence": "M",
       "status": "counted"
+    },
+    {
+      "date": "2026-11-17",
+      "headline": "State Bank of India (NSE:SBIN) Completes 9.90% Stake Buy in IFSC Rating Agency",
+      "source_url": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxQS0ZwYXFKc0hPdkpmdkhOQnhhblV2WVNMVFFocUtUbVZsVU1LM1NWc3VRQzA3enh1UkhOUWJRZ1FRMjQ2MVVFTmxVTS1odnRfZl9laFB3cDlhTHU3N3pDa3RHZ21iQkp0N1lkalF4UVhMZGNHUDJxbTdPUjgyYkMxMUxQQWEzb01vSkp1WnMxX0hsLWhiVnJTSldPdzFOT3liM1poUUc3N1pxaW5kRl9Jbll0WHNhTU10ZXdJTzFZb1RsWjBwZWt6QUx2QVMtLXByeFJXNmExbzhvMHVWaWl6Tk51dTg4RUtUUHc?oc=5",
+      "source_label": "Kalkine India",
+      "event_type": "acquisition",
+      "source_kind": "Event",
+      "event_tags": [
+        "acquisition",
+        "Event"
+      ],
+      "confidence": "L",
+      "status": "merged",
+      "exclusion_reason": "merged: duplicate phrasing of “State Bank of India (NSE:SBIN) Completes 9.90% Stake Buy in ”"
     }
   ]
 }

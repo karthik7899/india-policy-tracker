@@ -2,19 +2,6 @@
   "ticker": "CAMPUS",
   "items": [
     {
-      "date": "23 Nov 2026",
-      "headline": "Campus Activewear to host investor meet at Kotak Midcap Conference",
-      "source_url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxPbmdaUW04SUJpYjlDOUFvUTZfakU3RUNKTk9KbWJHMkh4OUFWaXBiU2JpcXgxVWpmTFAxcklYVXFGTEh5U1dDR3B6Q1ZKd2ZDTk1PUHBzd25QbXNuYzJacE0xUElTNV9JYUljUVJqLUF6RFNNQ2FvWWNxeUZucUZwcjU5REtvdEcwVkhheDNVOTI0eWRhSmRoVFBZZVhyWFZ5MnhFTmpqTHNCNF9icm1SeXVFd05QcEtN?oc=5",
-      "source_label": "scanx.trade",
-      "event_type": "",
-      "source_kind": "Sector news",
-      "event_tags": [
-        "Sector news"
-      ],
-      "confidence": "M",
-      "status": "counted"
-    },
-    {
       "date": "25 Nov 2026",
       "headline": "Campus Activewear Limited has informed the Exchange regarding Allotment of 23598  Shares.",
       "source_url": "https://nsearchives.nseindia.in/corporate/CAMPUSSHOES_25112026164611_NRCoutcome_25112026.pdf",
@@ -142,7 +129,8 @@
         "Filing"
       ],
       "confidence": "M",
-      "status": "counted"
+      "status": "excluded",
+      "exclusion_reason": "aged >120d (121 days old)"
     },
     {
       "date": "2026-11-20",

@@ -1,6 +1,43 @@
 {
   "value": [
     {
+      "headline": "L&T Secures Significant Order For 300 MW/900 MWh Battery Storage Project in Gujarat",
+      "event_type": "order_win",
+      "phrase": "secures significant order",
+      "certainty": "completed",
+      "domains": [
+        "clean_energy"
+      ],
+      "actors": [],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-26",
+      "first_seen": "2026-11-26",
+      "link": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxQa1ZxWFVwM0dQRFZUeUxQUW0wMWhlSDNFekY3cVZvSEs3eUNlUV85RDVsRk1yb2ZGWUpNd0F5aVBOaWVrNG1CdHVTTlFyRVJRUHpHY2ZaTVlUM2RLSVJWQWxsMEF5WG5nZEl0X2pWUFBNZTFRSnF0dDExRERyQml1VFotUllPbTk5d0wyWTdKem03NllWZTFtWHBmQU1FWjVsUWxfd0pNOE1jeXNmUG9XWE84Q1NYbm44eUxR?oc=5",
+      "source": "SolarQuarter",
+      "corroborated": true
+    },
+    {
+      "headline": "L&T secures INR 2,500-5,000 crore order to deploy NVIDIA B300 GPUs at Chennai data centre",
+      "event_type": "order_win",
+      "phrase": "secures inr 2,500-5,000 crore order",
+      "certainty": "completed",
+      "domains": [
+        "data_center_support"
+      ],
+      "actors": [],
+      "external": [
+        "Nvidia"
+      ],
+      "direction": "opportunity",
+      "date": "2026-11-26",
+      "first_seen": "2026-11-26",
+      "link": "https://news.google.com/rss/articles/CBMi2AFBVV95cUxNejVNYl9NcTRral9MckZONEJEWTJPOEgtQlBRTmh3NG41U3l0bG9ianVjc05xZ0hTX0tBRmpYbVBCN3RYWktUczJ6c1lTcnZtbGdnblJVcmFBWVMxRHdGUUdTOWtILTYzenF2LTkxUjg3dGN4YlZsTmZScHBoLTQ5cHpnV0RzTm1NTTRuZkNVV0lneHl6ZTFDSDNpOUNXS0xRRGU1bk92WFZuZVY2cmtaSUNQUDY4WXBabVFTdno0STh5dFBBaGlzRlpmRHpEWjFuRVBUcGFDLVk?oc=5",
+      "source": "Prop News Time",
+      "corroborated": true,
+      "amount_cr": 5000.0
+    },
+    {
       "headline": "China’s Xiamen Airlines to buy 50 Boeing jets in $7.4 billion deal",
       "event_type": "capacity_add",
       "phrase": "billion deal",
@@ -12,7 +49,7 @@
       ],
       "direction": "opportunity",
       "date": "2026-11-25",
-      "first_seen": "2026-11-25",
+      "first_seen": "2026-11-26",
       "link": "https://news.google.com/rss/articles/CBMibkFVX3lxTE9mQWZtYTE4eGdLdEFRZ0puU0JabElRVUJjM1lTdk91MnhxemNkeDFEWkdTaXRTZFFTYzdwLVBUNWk5N0liZEJDM3NQUktqeElDcDVmRHJxUGt4QTN6a3VMelRjaDNJMWhFN1VIQTVn0gFzQVVfeXFMUHFvd0k5cTNHRHhBX21OTHk1RTVaNmxZcTJsRl9vQ01fcUNMZUpYelNhbHRZc29wUHg3LWlwQlZoZWNadzVrWHlMd1ZvUzlnRlNtTVVSY1lmcG1DWXp2TXNVRC11S3cxSEFHclk3NzRzcDBzdw?oc=5",
       "source": "CNBC",
       "corroborated": false,
@@ -23,67 +60,24 @@
       "amount_cr": 61420.0
     },
     {
-      "headline": "L&T bags up to Rs 2,500 crore order for battery storage project in Gujarat",
-      "event_type": "order_win",
-      "phrase": "bags up to rs 2,500 crore order",
+      "headline": "Lemon Tree Signs McLeodganj and Madurai Hotels",
+      "event_type": "tie_up",
+      "phrase": null,
       "certainty": "completed",
-      "domains": [
-        "clean_energy"
+      "domains": [],
+      "actors": [
+        "LEMONTREE"
       ],
-      "actors": [],
       "external": [],
       "direction": "opportunity",
       "date": "2026-11-25",
-      "first_seen": "2026-11-25",
-      "link": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxNdldCX1dkZWhiTkhWYzVWRC1Lb19IQ25YWjhyTDlLRUx3MzVRNGpaMFJNanliNmpTUEdDVFpXOTB4M0dwMjU0dUdwSS1Qd1RkRGp1bDE5ZzdtS0x6eWYwVnljck5GWmJscFFTLW1aMTlIWUxxckdMSERZSUI1NEVNUHBPZ1lidXZ6Vm1DeEhYQVNzZVBJdFdOanJVaVJEMmFlVWhkMHV2Rk02dlRtSUZEQ0pIaGZMaFZFdzJNNU1aNUlkeTExMmRDODRDX29rYXo30gHXAUFVX3lxTE92ZWtaMmhOWHpLdnVaMU0wc1c5MGlzM3NkT3B6ZXUwMUZ4bEVVZFctQ3p1c2l2bHg2Y0lWMEpSTTlMWndfRTlHT0ZlYlRSLWVDdlFoMjRrZEJyQ2tqREFHZEprN1dmeDR1enNMb1NDSHBYNXBSWlN0SWUzSWNFZzRxb1JWT3p3UE95djBUS09Yb3pPZGphbHpJc3RSTUYwMlhkd3VZWm0yMXNMamNjRXRfbGR0NmlhOEh0LUVWYTJCS2s3SjVFOUl1S3Z1VEdSU1c5aXQ2LWhB?oc=5",
-      "source": "The Financial Express",
-      "corroborated": true,
-      "amount_cr": 2500.0
-    },
-    {
-      "headline": "Anant Raj posts ₹149.19 crore net profit in Q1FY27, approves cloud demerger",
-      "event_type": "divestment",
-      "phrase": null,
-      "certainty": "announced",
-      "domains": [],
-      "actors": [
-        "ANANTRAJ"
-      ],
-      "external": [],
-      "direction": "mixed",
-      "date": "2026-11-25",
       "reader": "llm",
       "corroborated": false,
-      "link": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxNQ3ZVWTJObmR6dVFnZng4dnVqbXh3d3BsS0tXdDF4c2tRcUJiQjZoOGNId205QThyUVhIb0pCSkhKV21rUDB3OXVBZ2tBUzdKdXhEcUpCWmU2X29BNHBuX0ozUU1GdjY1bktDOGdwdWJ3aUxudjZ5d3g4SXpBNFBaMmdiQ1l0bVdEWVdFTl9veTV3d1ExVThQNFhabDBPQlZ0S2U1YXpqQU43RlhIRDAyaU1XUXhkaWJidDY2TjNZbkhNWWNYTHlHNW9OV2tkV2tETThj?oc=5",
-      "source": "scanx.trade",
-      "story": "Anant Raj posts ₹149.19 crore net profit in Q1FY27, approves cloud demerger",
+      "counterparties": [],
+      "link": "https://news.google.com/rss/articles/CBMie0FVX3lxTE5aVUQtSnFRdzhqWWMzT0hWS21fb21aWExyemdCTGVfTURYaldyRjNQWTVGT2JHbXYzOWNneWZlWk1mT09FZkQzSlEzWER5YjlaajNsRnVFLWlncTJkVFE0cVo5VWNzZUV3eXprUUVwU1VMNXlBQ0pCRVQ1dw?oc=5",
+      "source": "https://safariindia.com/",
+      "story": "Lemon Tree Signs McLeodganj and Madurai Hotels",
       "reports": 1
-    },
-    {
-      "headline": "Suzlon Adds 1 GW Blade Capacity in Tamil Nadu for ₹200 Crore",
-      "event_type": "capacity_add",
-      "phrase": null,
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "SUZLON"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-11-25",
-      "reader": "llm",
-      "corroborated": false,
-      "link": "https://news.google.com/rss/articles/CBMinwFBVV95cUxPa0RldXB6QkxuX3dWQ0VuZzBXdWFqTUJSUHZaYmJhN2M4Y0tuRkp5d1pqaGNkeGhCTjlhUnllUjg1OGM0U1oySVFfUXlueW5RQjJfTHhMcmNMa01Gal9vU2tvaXhMZ09SSHYzNk54YW42V0dROTJBTmMtdHIyc05RelJGdUV4d0t1MmxodnZReUdsRm13eG9JSHBtMU9ocXc?oc=5",
-      "source": "Equitypandit",
-      "story": "Suzlon Adds 1 GW Blade Capacity in Tamil Nadu for ₹200 Crore",
-      "reports": 1,
-      "confirmation": {
-        "ticker": "SUZLON",
-        "source": "NSE",
-        "filing": "Suzlon Energy Limited has informed the Exchange about Capacity addition",
-        "date": "2026-11-25",
-        "link": "https://nsearchives.nseindia.in/corporate/SUZLON1_25112026133102_Suzlon25112026.pdf"
-      }
     },
     {
       "headline": "Coforge Expands Nuuron AI Platform for Cybersecurity; Shares Fall 3.94%",
@@ -172,6 +166,143 @@
       "reports": 1
     },
     {
+      "headline": "Govt Signs ₹1,476 Crore Deal with BEL for Advanced Electronic Systems for Army",
+      "event_type": "order_win",
+      "phrase": null,
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "BEL"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-25",
+      "reader": "llm",
+      "corroborated": false,
+      "link": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQWi10WDdRSTdKSlZDYl9MUE9NUDBMU3JJVjZzQnVqRERFYXhQVUNVQ1MxTmV6ZGpxRnVvZjhmOEc0M2ZMZjBOc1NrbmhoNXEtUTVFalBickk1UmsxcmEzNU1RcFY2Z3VrUk9fWWNPQ3VadTZrcmh6cnA3S2xwV2QzN0pwTUVJcmZkMWNFX0R6bWh2NDJEOHlWbXB5MnJDdzlFczdTLWRjeld2RlA2LTZPUA?oc=5",
+      "source": "DD News",
+      "amount_cr": 1476.0,
+      "materiality": {
+        "BEL": {
+          "pct_of_revenue": 4.88,
+          "band": "minor"
+        }
+      },
+      "story": "Govt Signs ₹1,476 Crore Deal with BEL for Advanced Electronic Systems for Army",
+      "reports": 1
+    },
+    {
+      "headline": "Chalet Hotels plans INR 3,500 crore investment over three years to expand hospitality portfolio",
+      "event_type": "capacity_add",
+      "phrase": null,
+      "certainty": "announced",
+      "domains": [],
+      "actors": [
+        "CHALET"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-25",
+      "reader": "llm",
+      "corroborated": false,
+      "link": "https://news.google.com/rss/articles/CBMi4AFBVV95cUxPN2tjc3R0TFFSZ0hoQzFTTmhnR3dCa3h6aXV6ZW5QMVR1SEpiWVo2WlVZTW53N1hMS05OLUpMZXIwdVMtaFp4WU52enhtam1qSnJoQzVwcEk1UmpJdjNhYlRBb3lzT3dMYllvbkhkYUl5Q250MTJnWGIxNkRKeGE0SGFBaUxsQ2JGdk1KLXdKOXZ6SG9fZVBaeUIzVWZ5aHRJdDREQ0ptRVNtVDVsczYyb1h4UHRIbkY3S2pIaGpSNWJnQTl1M0ZDRTFSM3NtZl84RDFReVlYeFYxeXlCR0xLYQ?oc=5",
+      "source": "Prop News Time",
+      "amount_cr": 3500.0,
+      "materiality": {
+        "CHALET": {
+          "pct_of_revenue": 162.49,
+          "band": "transformative"
+        }
+      },
+      "story": "Chalet Hotels outlines ₹35 bn capex plan at Investor Day 2026",
+      "reports": 2
+    },
+    {
+      "headline": "Tech Mahindra and Mahindra University Bring Together Financial Services GCC Leaders to Explore AI-Led Innovation",
+      "event_type": "tie_up",
+      "phrase": null,
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "TECHM"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-25",
+      "reader": "llm",
+      "corroborated": false,
+      "counterparties": [
+        "Mahindra University"
+      ],
+      "link": "https://news.google.com/rss/articles/CBMiswFBVV95cUxPVXZ2QXZjVHZiUFN3Z2FMeGplVk1FWFUwYVBES29WMmt4SmdJa2JTQjVIMUw0d2hQTTd1dXdza3VnNkREUnhGRmJVUTVRd0Q4dnBqZXRHVEhMRC1jOERtbWc3TUpyRkI1dTkyWVdZSVU5QkRreWQ5V1dZNzYzbXZWWUJSem5IVS05UFZtUWJqWkJyRDRkWkNuVWJyckk5MEJLaFlrUFlQb2o4QjFsdDQ1TTBOOA?oc=5",
+      "source": "Tech Mahindra",
+      "story": "Tech Mahindra and Mahindra University Bring Together Financial Services GCC Leaders to Explore AI-Led Innovation",
+      "reports": 1
+    },
+    {
+      "headline": "L&T bags up to Rs 2,500 crore order for battery storage project in Gujarat",
+      "event_type": "order_win",
+      "phrase": "bags up to rs 2,500 crore order",
+      "certainty": "completed",
+      "domains": [
+        "clean_energy"
+      ],
+      "actors": [],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-25",
+      "first_seen": "2026-11-25",
+      "link": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxNdldCX1dkZWhiTkhWYzVWRC1Lb19IQ25YWjhyTDlLRUx3MzVRNGpaMFJNanliNmpTUEdDVFpXOTB4M0dwMjU0dUdwSS1Qd1RkRGp1bDE5ZzdtS0x6eWYwVnljck5GWmJscFFTLW1aMTlIWUxxckdMSERZSUI1NEVNUHBPZ1lidXZ6Vm1DeEhYQVNzZVBJdFdOanJVaVJEMmFlVWhkMHV2Rk02dlRtSUZEQ0pIaGZMaFZFdzJNNU1aNUlkeTExMmRDODRDX29rYXo30gHXAUFVX3lxTE92ZWtaMmhOWHpLdnVaMU0wc1c5MGlzM3NkT3B6ZXUwMUZ4bEVVZFctQ3p1c2l2bHg2Y0lWMEpSTTlMWndfRTlHT0ZlYlRSLWVDdlFoMjRrZEJyQ2tqREFHZEprN1dmeDR1enNMb1NDSHBYNXBSWlN0SWUzSWNFZzRxb1JWT3p3UE95djBUS09Yb3pPZGphbHpJc3RSTUYwMlhkd3VZWm0yMXNMamNjRXRfbGR0NmlhOEh0LUVWYTJCS2s3SjVFOUl1S3Z1VEdSU1c5aXQ2LWhB?oc=5",
+      "source": "The Financial Express",
+      "corroborated": true,
+      "amount_cr": 2500.0
+    },
+    {
+      "headline": "Anant Raj posts ₹149.19 crore net profit in Q1FY27, approves cloud demerger",
+      "event_type": "divestment",
+      "phrase": null,
+      "certainty": "announced",
+      "domains": [],
+      "actors": [
+        "ANANTRAJ"
+      ],
+      "external": [],
+      "direction": "mixed",
+      "date": "2026-11-25",
+      "reader": "llm",
+      "corroborated": false,
+      "link": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxNQ3ZVWTJObmR6dVFnZng4dnVqbXh3d3BsS0tXdDF4c2tRcUJiQjZoOGNId205QThyUVhIb0pCSkhKV21rUDB3OXVBZ2tBUzdKdXhEcUpCWmU2X29BNHBuX0ozUU1GdjY1bktDOGdwdWJ3aUxudjZ5d3g4SXpBNFBaMmdiQ1l0bVdEWVdFTl9veTV3d1ExVThQNFhabDBPQlZ0S2U1YXpqQU43RlhIRDAyaU1XUXhkaWJidDY2TjNZbkhNWWNYTHlHNW9OV2tkV2tETThj?oc=5",
+      "source": "scanx.trade",
+      "story": "Anant Raj posts ₹149.19 crore net profit in Q1FY27, approves cloud demerger",
+      "reports": 1
+    },
+    {
+      "headline": "Suzlon Adds 1 GW Blade Capacity in Tamil Nadu for ₹200 Crore",
+      "event_type": "capacity_add",
+      "phrase": null,
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "SUZLON"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-25",
+      "reader": "llm",
+      "corroborated": false,
+      "link": "https://news.google.com/rss/articles/CBMinwFBVV95cUxPa0RldXB6QkxuX3dWQ0VuZzBXdWFqTUJSUHZaYmJhN2M4Y0tuRkp5d1pqaGNkeGhCTjlhUnllUjg1OGM0U1oySVFfUXlueW5RQjJfTHhMcmNMa01Gal9vU2tvaXhMZ09SSHYzNk54YW42V0dROTJBTmMtdHIyc05RelJGdUV4d0t1MmxodnZReUdsRm13eG9JSHBtMU9ocXc?oc=5",
+      "source": "Equitypandit",
+      "story": "Suzlon Adds 1 GW Blade Capacity in Tamil Nadu for ₹200 Crore",
+      "reports": 1,
+      "confirmation": {
+        "ticker": "SUZLON",
+        "source": "NSE",
+        "filing": "Suzlon Energy Limited has informed the Exchange about Capacity addition",
+        "date": "2026-11-25",
+        "link": "https://nsearchives.nseindia.in/corporate/SUZLON1_25112026133102_Suzlon25112026.pdf"
+      }
+    },
+    {
       "headline": "Suzlon Energy wins 105 MW order from Sunsure Energy for S175 turbines",
       "event_type": "order_win",
       "phrase": "wins 105 mw order",
@@ -183,7 +314,7 @@
       "external": [],
       "direction": "opportunity",
       "date": "2026-11-24",
-      "first_seen": "2026-11-25",
+      "first_seen": "2026-11-26",
       "link": "https://news.google.com/rss/articles/CBMi1wFBVV95cUxOemJPcnhFRGVQNUJQcjZxNzRucHNwbnF6a2sxZF9hUTFVQlQ2R0stOFpqN3U5T093WmFFdDFUclE2M0ZiNnB1MkdyektHa1kzQmdXZkxhdDBja3NyemROdDRfWXphWUFKNU1iNS1xYWNmbnRObFVZWTJ4ejZwLXotZ3BhYkFTVUlvTTdYb1NyRzBaMGVEeTNXcEFFM2hMUzZ4Y1oyYmlaUlo4cVBwZTRrOWhRYmFfVURoUGotcVJpcTZxVmY4cHVOX1ZiTjVXaU1TWFBrVWQ0UQ?oc=5",
       "source": "scanx.trade",
       "corroborated": true,
@@ -202,26 +333,9 @@
       "external": [],
       "direction": "risk",
       "date": "2026-11-24",
-      "first_seen": "2026-11-25",
+      "first_seen": "2026-11-26",
       "link": "https://news.google.com/rss/articles/CBMijwFBVV95cUxPUU1WYWxCa1V6R1RNRVVTSVZzc1dTQ2JOOEN4UzNQbXNpMzc2Z1h0VFRlVi1LaF9nbVg1cDdhdnJJSW8tOXp3eFU1U2JJSV9FUExYS3JqcDhrYlhfQnhWMkJNTkV4UFFDR3k5NzczYlNhcUZOYThJek1MVWdLYm5nT3E2SG1KMV9GbnB4U2dhNA?oc=5",
       "source": "Bisinfotech",
-      "corroborated": true
-    },
-    {
-      "headline": "AI boom deepens global PCB supply crunch, shortages may persist until 2028",
-      "event_type": "supply_disruption",
-      "phrase": "shortage",
-      "certainty": "reported",
-      "domains": [
-        "manufacturing_electronics"
-      ],
-      "actors": [],
-      "external": [],
-      "direction": "risk",
-      "date": "2026-11-24",
-      "first_seen": "2026-11-25",
-      "link": "https://news.google.com/rss/articles/CBMingFBVV95cUxPcGZfMVh2WXlFSDRFYnNpRWtYNk9jVFNHeXluY2YxU09ucng0TlpQZE5vMXM0Z3V4R09wOWU1c2l5UzM0dWtQRnNXNThGalAtYVpLRDM4dlVJRGRCVVNHM0RRNm9uQ3J1SjlVSmRRMXhJOFBlSFNzVUpuZ253UnJpWlZJMEU0WTJ1M2FRQVFYcmR2TlUydlotbV9rbXlQUQ?oc=5",
-      "source": "SME Futures",
       "corroborated": true
     },
     {
@@ -236,7 +350,7 @@
       ],
       "direction": "opportunity",
       "date": "2026-11-24",
-      "first_seen": "2026-11-25",
+      "first_seen": "2026-11-26",
       "link": "https://news.google.com/rss/articles/CBMisgFBVV95cUxQTGh1MGtqaHZpZHhveDhRMGJpVGFpNGtnbnE1ZXdOSW45akVJMnFlUmZtTFNqQnBUQUR4eWZwaERtMWkyRkdRVFdpZDF0UGFiMl9uMFNmUjdvSlFyOTBQZlNGUllFS0VkWklaQUh5aFNFUDRZWDBJOENtMVgyZVUtb0g3QWxiU0RIQWpXdGM0bmlFNzk3cWFWc2xodklVcFY4ZmxBZVh0SUJFTXBOYXBCTUdR?oc=5",
       "source": "Bloomberg.com",
       "corroborated": true,
@@ -254,11 +368,28 @@
       ],
       "direction": "opportunity",
       "date": "2026-11-24",
-      "first_seen": "2026-11-25",
+      "first_seen": "2026-11-26",
       "link": "https://news.google.com/rss/articles/CBMiigFBVV95cUxOSmNqcU9ncHZEbjdHeW0zWU9HeXNEd0FSM0ZLRUxPQVZpdjR2U2V3TktGLU9fc1hZYnVrZFRrMUZxTVlnTkJqbEI4bldRR3hlLUduQXQ5QkVUTHpNR3pmZDF4eVlOU280WDlxY20wREFWS2x0ZVk0LUdQTVZKTkpzTkdnbzYzYkpjRUE?oc=5",
       "source": "Asian Aviation",
       "corroborated": true,
       "amount_cr": 61420.0
+    },
+    {
+      "headline": "AI boom deepens global PCB supply crunch, shortages may persist until 2028",
+      "event_type": "supply_disruption",
+      "phrase": "shortage",
+      "certainty": "reported",
+      "domains": [
+        "manufacturing_electronics"
+      ],
+      "actors": [],
+      "external": [],
+      "direction": "risk",
+      "date": "2026-11-24",
+      "first_seen": "2026-11-25",
+      "link": "https://news.google.com/rss/articles/CBMingFBVV95cUxPcGZfMVh2WXlFSDRFYnNpRWtYNk9jVFNHeXluY2YxU09ucng0TlpQZE5vMXM0Z3V4R09wOWU1c2l5UzM0dWtQRnNXNThGalAtYVpLRDM4dlVJRGRCVVNHM0RRNm9uQ3J1SjlVSmRRMXhJOFBlSFNzVUpuZ253UnJpWlZJMEU0WTJ1M2FRQVFYcmR2TlUydlotbV9rbXlQUQ?oc=5",
+      "source": "SME Futures",
+      "corroborated": true
     },
     {
       "headline": "L&T's LTN Compute wins another Nvidia B300 order for its Chennai AI data center, from an unnamed inference provider",
@@ -280,26 +411,6 @@
       "corroborated": true
     },
     {
-      "headline": "Lemon Tree Signs McLeodganj and Madurai Hotels",
-      "event_type": "tie_up",
-      "phrase": null,
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "LEMONTREE"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-11-24",
-      "reader": "llm",
-      "corroborated": false,
-      "counterparties": [],
-      "link": "https://news.google.com/rss/articles/CBMie0FVX3lxTE5aVUQtSnFRdzhqWWMzT0hWS21fb21aWExyemdCTGVfTURYaldyRjNQWTVGT2JHbXYzOWNneWZlWk1mT09FZkQzSlEzWER5YjlaajNsRnVFLWlncTJkVFE0cVo5VWNzZUV3eXprUUVwU1VMNXlBQ0pCRVQ1dw?oc=5",
-      "source": "https://safariindia.com/",
-      "story": "Lemon Tree Signs McLeodganj and Madurai Hotels",
-      "reports": 1
-    },
-    {
       "headline": "Imperial College London signs MoU with Tata Power for energy research",
       "event_type": "tie_up",
       "phrase": "mou with",
@@ -312,10 +423,46 @@
       "counterparties": [],
       "direction": "opportunity",
       "date": "2026-11-23",
-      "first_seen": "2026-11-25",
+      "first_seen": "2026-11-26",
       "link": "https://news.google.com/rss/articles/CBMivwFBVV95cUxNaktIR1ZjVE50b3ZoRlpjNFFqTHlhazV0eVdkdGpfNUwxaGZlR1o1QW5hOWJRVk9QV2VsYm94SmU5Rk5kS0NwenFBWnRhakFzZlBMd0ZPVk1nblFGMFB4ZnQ3c2l0dmY0dVotdWR4Y2VpaEdJMzRhYnVRMHFnb3JsQlczU3VzQzZtMzNCTldLUndmZ3ppcUZQTk9zZGRwZlpXaVk0RldyWjlncGZMUGxDYTZGenlFdm9keS0tTEx0VQ?oc=5",
       "source": "Solarbytes",
       "corroborated": true
+    },
+    {
+      "headline": "Amazon to acquire AI startup Decart's chip software, hire founders",
+      "event_type": "acquisition",
+      "phrase": "to acquire",
+      "certainty": "announced",
+      "domains": [],
+      "actors": [],
+      "external": [
+        "Amazon"
+      ],
+      "direction": "opportunity",
+      "date": "2026-11-23",
+      "first_seen": "2026-11-26",
+      "link": "https://news.google.com/rss/articles/CBMidEFVX3lxTE9hSmFaemUzUldRaWhTb3diNE4wU2dQb29ab2FXLS16UzcwdFU1a2tjUVh5Y2t0WEJweGREQ1JIMVczYXhmZGRQT3pXa0FUU0xFZWEzVGpnT2Q4MUdhWEVFMWhmRkNyZXVNbkdqa2xpdW03QWFT0gF6QVVfeXFMTjg2VVVOYlVHWHJaNUhWUHZMNjFQQ2Q5MmptU1JiektEbXNWMUN4SzR6OWxRSjVUTFZuakcwSEtHUjU4MUluQi1QUXQtc2xvWnhSY0NXNm9SUXZraElHZ290VTlUMlloSXhBSVRGbEhBcmVRYXZreFdjc2c?oc=5",
+      "source": "CNBC",
+      "corroborated": true
+    },
+    {
+      "headline": "Tata Steel shares fall 5% as investors weigh ₹32,000 cr APL Apollo acquisition plan | Should you buy? Check key levels",
+      "event_type": "acquisition",
+      "phrase": null,
+      "certainty": "announced",
+      "domains": [],
+      "actors": [
+        "APOLLO"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-23",
+      "reader": "llm",
+      "corroborated": false,
+      "link": "https://www.livemint.com/market/stock-market-news/tata-steel-shares-fall-5-as-investors-weigh-rs-32-000-cr-apl-apollo-acquisition-plan-should-you-buy-check-key-levels-11795406091656.html",
+      "source": "Livemint",
+      "story": "Tata Steel shares fall 5% as investors weigh ₹32,000 cr APL Apollo acquisition plan | Should you buy? Check key levels",
+      "reports": 1
     },
     {
       "headline": "PCB shortages threaten AI, electronics production: Global Electronics Association",
@@ -352,23 +499,6 @@
       "corroborated": true
     },
     {
-      "headline": "Amazon to acquire AI startup Decart's chip software, hire founders",
-      "event_type": "acquisition",
-      "phrase": "to acquire",
-      "certainty": "announced",
-      "domains": [],
-      "actors": [],
-      "external": [
-        "Amazon"
-      ],
-      "direction": "opportunity",
-      "date": "2026-11-23",
-      "first_seen": "2026-11-25",
-      "link": "https://news.google.com/rss/articles/CBMidEFVX3lxTE9hSmFaemUzUldRaWhTb3diNE4wU2dQb29ab2FXLS16UzcwdFU1a2tjUVh5Y2t0WEJweGREQ1JIMVczYXhmZGRQT3pXa0FUU0xFZWEzVGpnT2Q4MUdhWEVFMWhmRkNyZXVNbkdqa2xpdW03QWFT0gF6QVVfeXFMTjg2VVVOYlVHWHJaNUhWUHZMNjFQQ2Q5MmptU1JiektEbXNWMUN4SzR6OWxRSjVUTFZuakcwSEtHUjU4MUluQi1QUXQtc2xvWnhSY0NXNm9SUXZraElHZ290VTlUMlloSXhBSVRGbEhBcmVRYXZreFdjc2c?oc=5",
-      "source": "CNBC",
-      "corroborated": true
-    },
-    {
       "headline": "ABB strikes $2.65 billion deal for German fan maker Ziehl-Abegg amid rising cooling demand",
       "event_type": "capacity_add",
       "phrase": "billion deal",
@@ -389,25 +519,6 @@
         "actors": []
       },
       "amount_cr": 21995.0
-    },
-    {
-      "headline": "Tata Steel shares fall 5% as investors weigh ₹32,000 cr APL Apollo acquisition plan | Should you buy? Check key levels",
-      "event_type": "acquisition",
-      "phrase": null,
-      "certainty": "announced",
-      "domains": [],
-      "actors": [
-        "APOLLO"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-11-23",
-      "reader": "llm",
-      "corroborated": false,
-      "link": "https://www.livemint.com/market/stock-market-news/tata-steel-shares-fall-5-as-investors-weigh-rs-32-000-cr-apl-apollo-acquisition-plan-should-you-buy-check-key-levels-11795406091656.html",
-      "source": "Livemint",
-      "story": "Tata Steel shares fall 5% as investors weigh ₹32,000 cr APL Apollo acquisition plan | Should you buy? Check key levels",
-      "reports": 1
     },
     {
       "headline": "Amazon signs $7.5 billion deal for Israeli AI startup Decart's technology and team",
@@ -532,6 +643,25 @@
       "corroborated": true
     },
     {
+      "headline": "Lodha Developers Chairman Mukund Chitale Steps Down; Akhil Gupta To Replace",
+      "event_type": "management_change",
+      "phrase": "chairman mukund chitale steps down",
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "LODHA"
+      ],
+      "external": [],
+      "direction": "mixed",
+      "date": "2026-11-22",
+      "first_seen": "2026-11-26",
+      "link": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxQTGpFLWpBYkttTHlkRDZWbE95bVpXOUhsYXBRYWZBZXBTR2VzNk4tRUpzOGlISGpabGszc0FNNlFrRjV6d2RIQ3BCSWZmeHJVdFNwQnprMFBkemZnZFJsSDJ6X0M1ZFFwcE4tTnUtU1VvZ3pLVU15emd2cHMyU1pXeVZ6OVpyWVlWVXdGbnAyUXVyMTZMNVI1a293UGVxeVQ2MnhCSzdMcFFzMjV2ZW1HNFdvY2JxTEktOWdB0gHDAUFVX3lxTE85T1RXUXJtTHRaX3VkVWpsMjZpWEx2R1d4MEU3djBpV2dFLVZ5X0FyUXRtckw2Wk41UTdjTTg0Z0EzZDhqeDhBX0VseGo0TnBxU2ZGYzFOQngwdmJwSFYxTmdjVFprMmg3RDlRd3ZPSEszaERSNUhqUW9Gb3VjdGl4cDBkZWtIQThVT2ZQUnp2MXNJWkFiMjlZdnRVTi1QWXh5SV9sWFlMaFE1ajlMZGJ2dEFWc0hfZk5VQTBRUzdkT1JFNA?oc=5",
+      "source": "NDTV Profit",
+      "corroborated": true,
+      "story": "Lodha Developers Chairman Mukund Chitale Steps Down; Akhil Gupta To Replace",
+      "reports": 1
+    },
+    {
       "headline": "Va Tech Wabag wins large order for Vienna water works",
       "event_type": "order_win",
       "phrase": "wins large order",
@@ -543,7 +673,7 @@
       "external": [],
       "direction": "opportunity",
       "date": "2026-11-22",
-      "first_seen": "2026-11-25",
+      "first_seen": "2026-11-26",
       "link": "https://news.google.com/rss/articles/CBMivAFBVV95cUxNdXVNQno4eDNqajVJRUpOeVg5cWptUWFfaVVacG1hZ2l5ek15d2Fqc1hDVllFckl0RzNRcnEwVTJaSm9GNlgyRXVwa1JMdEFMWU5vSTJLUkMwak9QMTZmQ01jalNfYm0xRFhPVlJCVmJxdG9XQUdQN0tZS3VSbGxKazBGYW9XQy1WZGlYYWMxdEgwMnY3bkJjM2hRLTVqQlUyZ092RFNhM1phUElGek55TE44V25Ca2kxRmJvOA?oc=5",
       "source": "scanx.trade",
       "corroborated": true,
@@ -635,149 +765,12 @@
       ],
       "direction": "opportunity",
       "date": "2026-11-20",
-      "first_seen": "2026-11-25",
+      "first_seen": "2026-11-26",
       "link": "https://news.google.com/rss/articles/CBMiugFBVV95cUxOX09uYkNsSkV3a1ZSdVlUampLRFlnZ2Vhb3phNXdPZEtVc3l0WWpmUWU3VHF3Y3QzNUJyZUdJN09FT3hWck1RMklXcUhWdF8zc1ZtaV9MSFIwdi16VUFja2wwOHNjbFFZWm5TOHFrNDBic3lPWUdvc1M2enlBdWRlc1lEa1ZSTURxYlBPSnJScEUtbHMzWm9EblBybzVVQTZBeEphVmN5cV9MOG5xdzFmZWRFTGpSNFVTZkE?oc=5",
       "source": "Kalkine India",
       "corroborated": true,
       "story": "Zen Technologies Signs PM-SETU Pact with Centre, Telangana",
       "reports": 1
-    },
-    {
-      "headline": "Delhivery ties up with RIDEV to deploy 150 EVs for last-mile deliveries",
-      "event_type": "tie_up",
-      "phrase": "ties up with",
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "DELHIVERY"
-      ],
-      "external": [],
-      "counterparties": [
-        "RIDEV"
-      ],
-      "direction": "opportunity",
-      "date": "2026-11-20",
-      "first_seen": "2026-11-25",
-      "link": "https://news.google.com/rss/articles/CBMi_gFBVV95cUxQeDd3d2EwOUR6aHZKWkhUQWRBd0xKbk1waHFPajVmWk5mVTZoSDZaT1d1RkZaZzlKNXFRdVFrV0ZSVG02Umt6Z1dKZ1BpckpfZWZYNVlfaWhyVW45MVhHWUltSkNFeXk1SmhGc3JVclcxX1hRdHZ1UVJhMzF4YjFYNjZGcmFpTVBUNHJvSVQxc09lbHE1Wk9weDZoSWQwR2FVXzlQX1hMVWkzanQ2WGR2N3pEOTN1aTg0X3gwM0NCcVRlZHAteWotTm10VWlDRVNRQnpEWHNaVVBZWkVqQTBDNVNZRmpMQmRUR1A0aXYzOURYMDlFZjBjaVcyZndPZ9IB-AFBVV95cUxNRFcwMUw5ZnRZYVlSdVRYM2c1Ymd0eUo5WnFuekV4bEdkdFR3eFFva2JxbFBucUc0ZmJSZkQ0WG1RTDBMLVhSSHdSVVd3cDNMWm9pV3NnNVlfR1BrbGF6WnFPc19UWWt3VzhDeG94NWN3QVB5Nm1uLXMzMUlmTS1TT25BMFFRMVJXaUVmYktEYlNsQk5BcWtkdE1XaDhwb0k0U1R4TzQ5RVo2MDBLRk9SdWI5b3J6REtCakQwSVp5SlBIZktLWkRqZHY2dE41MjNhVm0xbEVlMDJwRVk4cnNSdm00dnQ4M29Ba2tPOVFUR2V4RC16Q2N5dw?oc=5",
-      "source": "ET Auto",
-      "corroborated": true,
-      "story": "Delhivery ties up with RIDEV to deploy 150 EVs for last-mile deliveries",
-      "reports": 1
-    },
-    {
-      "headline": "EIH Limited (NSE:EIHOTEL) Q2 FY27 Webinar Insights: Revenue, EBITDA, and Expansion Plans Unveiled",
-      "event_type": "product_launch",
-      "phrase": "unveiled",
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "EIHOTEL"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-11-20",
-      "first_seen": "2026-11-25",
-      "link": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxPX2JieXZQRlJJWGR5NGRQNFdSa1J1ZXBzSkFxN1JGU1FLaG8ySTdtRWpoOUxXZnZFc21nZGpibmFHUDNDYkNaUFJCd0VTd3ZpSDFwY0doaC1hb215QmZTV2FTVWpWM3c4RDcxMVM0LWhzUWJaYWkwek5SUDBkaG9HbkR2NVhiZUN2REh6MkhEODExUDg2YlQ1MWJRU3p0NmJWaFRXWTdKY0R1S09fSTc0ZXBfWnd6bjk2cmNFeEs0R0N0ZUxEYURRcWpFVXhUN2VBbGg4dQ?oc=5",
-      "source": "Kalkine Media",
-      "corroborated": false,
-      "llm_reading": {
-        "event_type": "none",
-        "actors": []
-      },
-      "story": "EIH Limited (NSE:EIHOTEL) Q2 FY27 Webinar Insights: Revenue, EBITDA, and Expansion Plans Unveiled",
-      "reports": 1
-    },
-    {
-      "headline": "Chalet Hotels outlines ₹35 bn capex plan at Investor Day 2026",
-      "event_type": "capacity_add",
-      "phrase": null,
-      "certainty": "announced",
-      "domains": [],
-      "actors": [
-        "CHALET"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-11-20",
-      "reader": "llm",
-      "corroborated": false,
-      "link": "https://news.google.com/rss/articles/CBMirwFBVV95cUxNMFB1aU9MXzZ5X3c1TVBmX0lvaTlKUDFoLU5Ga0xmdG16cVRwX1VuSG9nZmlRSW4tWFA0YWRnN3J1VFlzcTA1OGI3SEhKdFhBVmNDZzRHdGlYbDA5VnlWa29NdWFOSXRrT3Y4ZFhNSFBzemFHNDhyc3MxdGxGX2ZSdnZZb3lxM3dEU2UzQmRSRFFsY3ZKS0J5bHFocHhXeDNQalR4Y0QwTjlJcm41S0Jz?oc=5",
-      "source": "scanx.trade",
-      "amount_cr": 3500.0,
-      "materiality": {
-        "CHALET": {
-          "pct_of_revenue": 162.49,
-          "band": "transformative"
-        }
-      },
-      "story": "Chalet Hotels outlines ₹35 bn capex plan at Investor Day 2026",
-      "reports": 1
-    },
-    {
-      "headline": "Inventurus Knowledge Solutions Limited has informed the Exchange about update on Merger of Turbo Health Holdings, LLC with Inventurus Knowledge Solutions, Inc.",
-      "event_type": "acquisition",
-      "phrase": null,
-      "certainty": "announced",
-      "domains": [],
-      "actors": [
-        "IKS"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-11-20",
-      "reader": "llm",
-      "corroborated": false,
-      "link": "https://nsearchives.nseindia.in/corporate/IKS2006_20112026145237_MergerCompletionSEDisclosure_20Nov2026_Final.pdf",
-      "source": "NSE",
-      "story": "Inventurus Knowledge Solutions Buys Turbo Health for $500,000",
-      "reports": 2,
-      "confirmation": {
-        "ticker": "IKS",
-        "source": "NSE",
-        "filing": "Inventurus Knowledge Solutions Limited has informed the Exchange about update on Merger of Turbo Health Holdings, LLC with Inventurus Knowledge Solutions, Inc.",
-        "date": "2026-11-20",
-        "link": "https://nsearchives.nseindia.in/corporate/IKS2006_20112026145237_MergerCompletionSEDisclosure_20Nov2026_Final.pdf"
-      }
-    },
-    {
-      "headline": "Campus Activewear and Rugged Rush set out to build India’s first homegrown Obstacle Racing Shoe",
-      "event_type": "tie_up",
-      "phrase": null,
-      "certainty": "announced",
-      "domains": [],
-      "actors": [
-        "CAMPUS"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-11-20",
-      "reader": "llm",
-      "corroborated": false,
-      "counterparties": [
-        "Rugged Rush"
-      ],
-      "link": "https://news.google.com/rss/articles/CBMizgFBVV95cUxQTlhqRVRwOTU4QVI4S0ZVekdCQ1h3RTdIc3ZLS2FzVW9zYkNucEtZMFlCQXZPeW54TUZac2VxV1pCMXFDQVlBZ0U5UHNranJ6aU5lZkJDdUJqOEJWTmxRa1pLMGRIT2pYdFBxUHlSXzNOekF6NDNfdXN3Um1yeEJpU19MNzdsSHZXUmRrMmNTQnRLSTZucWxnT0hDalhTcUJSb2U5Mm5qU21BRFV5X3l6cThzZ0VwRkdMZWJPS0psMHI2bzZtcGRJYUFLbWlrdw?oc=5",
-      "source": "Passionate In Marketing",
-      "story": "Campus Activewear partners with rugged rush to develop India’s first homegrown OCR shoe",
-      "reports": 3
-    },
-    {
-      "headline": "Infineon expands AI data centre push through partnership with Megmeet",
-      "event_type": "tie_up",
-      "phrase": "partnership with",
-      "certainty": "completed",
-      "domains": [
-        "data_center_support"
-      ],
-      "actors": [],
-      "external": [],
-      "counterparties": [],
-      "direction": "opportunity",
-      "date": "2026-11-20",
-      "first_seen": "2026-11-23",
-      "link": "https://news.google.com/rss/articles/CBMi2wFBVV95cUxQZ210QmpQQkVFR0xxa3JLTjAyX3N3TGFvQnVqNTJPRmlOWXdXSWhmdXFib19oeVhPVVZuWnI0aWV6dFIyLVlaSW1XeFJiM2l3cUFMaWpJMGx4Q09uNUpTbmtjR1pnSXhyb2xXS3ctcC1abHJzSEZ5aXZrU0oyU1o4UGRHZm1VSG15RVM2RmhxVFAtWmRkUVdnUHlOWU83YXJMNDg4TElRVG9BbENfOFMxUEVnTXd1cVlfNW5jRG1tTy1ZUEpYMW1rbWhJU25oQ1V6dlZCaXI2ZnJlaDjSAd8BQVVfeXFMTnI5a0x0UHE4eU1tSXYzanBWdkJ3UmNTaHp1UV8wYnJ5bnZMMzhlb1g0TjNQTXRpdXNXVVM1bWZMTTRlNjZYV1VMSW9IY3ZuSmtObjJYbnBNR2ltaHRqbXFpZkdDWkJUMnZQTVdDNzZoNzVMUE5EQWlSOWRISFE3TFJCcFV3YWVSQks0cXdzLWxYN3RHcDkyNzFDTTFONkJuRkMzZWlpNmtOYU9FSGZCYVZ3WWY2bWFJdDFnQll6M0thaThlMEMzWEltaG9zNnZ2cHpsU3RwYlRzLUppOUxTNA?oc=5",
-      "source": "ET Manufacturing",
-      "corroborated": true
     }
   ]
 }
