@@ -2,6 +2,28 @@
   "_how_to_review": "Partner edges proposed from completed tie-up headlines. Nothing here reaches the graph until you set status to 'accepted'; 'rejected' stops the pair being proposed again. You may correct 'counterparty' before accepting (e.g. 'Vivo Mobile' -> 'Vivo') — it is the name the graph will match in future headlines. Leave 'proposed_as' alone: it is how the pipeline recognises the same pair next time.",
   "proposals": [
     {
+      "holding": "CAMPUS",
+      "counterparty": "Rugged Rush",
+      "proposed_as": "Rugged Rush",
+      "status": "pending",
+      "first_seen": "2026-11-20",
+      "last_seen": "2026-11-27",
+      "evidence": [
+        {
+          "headline": "Campus Activewear Partners with Rugged Rush to Develop India's First OCR Shoe",
+          "date": "2026-11-20",
+          "link": "https://news.google.com/rss/articles/CBMixwFBVV95cUxPZUFjeE16NVFiVEV5bURpOFNhV1V0SkdNbEU2U3RSWDdrYUtVOThLTXhrbUptZ2sxSnN3cEFiak9UWUVFV1lNUnc2eVplRGtlTlZnS0owWldMZFZ0ckdPQVRIYkVTR090aVhqMGdwYXA0SmpDV0dMRDFGLVdHWGV0UjVEMFJraEFyUVNWNk5VQXA3NE4xVnI1MmdZbWZjNy0tUmw3ZmlzaFAwMngxUDZjMmtMUXltWlk4SmVqWFFBR3R6Mld3ekJV?oc=5",
+          "source": "Indian Retailer"
+        },
+        {
+          "headline": "Campus Activewear signs Rugged Rush deal, plans obstacle racing shoe",
+          "date": "2026-11-27",
+          "link": "https://news.google.com/rss/articles/CBMilgFBVV95cUxOTzNXZjdHSlhvbFoySFhPQXhGQVNEMjl3MHZmYm52RGZrSXgtWHNEUmFYZURsb0I1QnJaSDB2OXp0ZlVuYWE1YTVfSDNwM1FwYVB5eE5QbnY4c2RhT1dQVjVkbmxLd2N2VU1VNnMwM3RPc2pGbEMtYVJQSWJqSl9Jc1RhWlBaZmRPZE9YaF9PUXpUaHF1NUE?oc=5",
+          "source": "MediaBrief"
+        }
+      ]
+    },
+    {
       "holding": "APOLLO",
       "counterparty": "Tata Steel",
       "proposed_as": "Tata Steel",
@@ -14,22 +36,6 @@
           "date": "2026-11-25",
           "link": "https://www.livemint.com/market/mark-to-market/tata-steel-apl-apollo-acquisition-deal-review-11795510022151.html",
           "source": "Livemint"
-        }
-      ]
-    },
-    {
-      "holding": "CAMPUS",
-      "counterparty": "Rugged Rush",
-      "proposed_as": "Rugged Rush",
-      "status": "pending",
-      "first_seen": "2026-11-20",
-      "last_seen": "2026-11-20",
-      "evidence": [
-        {
-          "headline": "Campus Activewear Partners with Rugged Rush to Develop India's First OCR Shoe",
-          "date": "2026-11-20",
-          "link": "https://news.google.com/rss/articles/CBMixwFBVV95cUxPZUFjeE16NVFiVEV5bURpOFNhV1V0SkdNbEU2U3RSWDdrYUtVOThLTXhrbUptZ2sxSnN3cEFiak9UWUVFV1lNUnc2eVplRGtlTlZnS0owWldMZFZ0ckdPQVRIYkVTR090aVhqMGdwYXA0SmpDV0dMRDFGLVdHWGV0UjVEMFJraEFyUVNWNk5VQXA3NE4xVnI1MmdZbWZjNy0tUmw3ZmlzaFAwMngxUDZjMmtMUXltWlk4SmVqWFFBR3R6Mld3ekJV?oc=5",
-          "source": "Indian Retailer"
         }
       ]
     },

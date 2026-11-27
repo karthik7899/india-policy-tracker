@@ -2,6 +2,20 @@
   "ticker": "CAMPUS",
   "items": [
     {
+      "date": "27 Nov 2026",
+      "headline": "Campus Activewear signs Rugged Rush deal, plans obstacle racing shoe",
+      "source_url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxOTzNXZjdHSlhvbFoySFhPQXhGQVNEMjl3MHZmYm52RGZrSXgtWHNEUmFYZURsb0I1QnJaSDB2OXp0ZlVuYWE1YTVfSDNwM1FwYVB5eE5QbnY4c2RhT1dQVjVkbmxLd2N2VU1VNnMwM3RPc2pGbEMtYVJQSWJqSl9Jc1RhWlBaZmRPZE9YaF9PUXpUaHF1NUE?oc=5",
+      "source_label": "MediaBrief",
+      "event_type": "tie_up",
+      "source_kind": "Sector news",
+      "event_tags": [
+        "tie_up",
+        "Sector news"
+      ],
+      "confidence": "M",
+      "status": "counted"
+    },
+    {
       "date": "25 Nov 2026",
       "headline": "Campus Activewear Limited has informed the Exchange regarding Allotment of 23598  Shares.",
       "source_url": "https://nsearchives.nseindia.in/corporate/CAMPUSSHOES_25112026164611_NRCoutcome_25112026.pdf",
@@ -130,7 +144,22 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (121 days old)"
+      "exclusion_reason": "aged >120d (122 days old)"
+    },
+    {
+      "date": "2026-11-27",
+      "headline": "Campus Activewear signs Rugged Rush deal, plans obstacle racing shoe",
+      "source_url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxOTzNXZjdHSlhvbFoySFhPQXhGQVNEMjl3MHZmYm52RGZrSXgtWHNEUmFYZURsb0I1QnJaSDB2OXp0ZlVuYWE1YTVfSDNwM1FwYVB5eE5QbnY4c2RhT1dQVjVkbmxLd2N2VU1VNnMwM3RPc2pGbEMtYVJQSWJqSl9Jc1RhWlBaZmRPZE9YaF9PUXpUaHF1NUE?oc=5",
+      "source_label": "MediaBrief",
+      "event_type": "tie_up",
+      "source_kind": "Event",
+      "event_tags": [
+        "tie_up",
+        "Event"
+      ],
+      "confidence": "L",
+      "status": "merged",
+      "exclusion_reason": "merged: duplicate phrasing of “Campus Activewear signs Rugged Rush deal, plans obstacle rac”"
     },
     {
       "date": "2026-11-20",

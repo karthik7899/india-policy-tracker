@@ -2,20 +2,6 @@
   "ticker": "CHALET",
   "items": [
     {
-      "date": "25 Nov 2026",
-      "headline": "Chalet Hotels plans INR 3,500 crore investment over three years to expand hospitality portfolio",
-      "source_url": "https://news.google.com/rss/articles/CBMi4AFBVV95cUxPN2tjc3R0TFFSZ0hoQzFTTmhnR3dCa3h6aXV6ZW5QMVR1SEpiWVo2WlVZTW53N1hMS05OLUpMZXIwdVMtaFp4WU52enhtam1qSnJoQzVwcEk1UmpJdjNhYlRBb3lzT3dMYllvbkhkYUl5Q250MTJnWGIxNkRKeGE0SGFBaUxsQ2JGdk1KLXdKOXZ6SG9fZVBaeUIzVWZ5aHRJdDREQ0ptRVNtVDVsczYyb1h4UHRIbkY3S2pIaGpSNWJnQTl1M0ZDRTFSM3NtZl84RDFReVlYeFYxeXlCR0xLYQ?oc=5",
-      "source_label": "Prop News Time",
-      "event_type": "capacity_add",
-      "source_kind": "Sector news",
-      "event_tags": [
-        "capacity_add",
-        "Sector news"
-      ],
-      "confidence": "M",
-      "status": "counted"
-    },
-    {
       "date": "Fri, 20 Nov 2026 14:32:43 GMT",
       "headline": "Chalet Hotels outlines ₹35 bn capex plan at Investor Day 2026",
       "source_url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxNMFB1aU9MXzZ5X3c1TVBmX0lvaTlKUDFoLU5Ga0xmdG16cVRwX1VuSG9nZmlRSW4tWFA0YWRnN3J1VFlzcTA1OGI3SEhKdFhBVmNDZzRHdGlYbDA5VnlWa29NdWFOSXRrT3Y4ZFhNSFBzemFHNDhyc3MxdGxGX2ZSdnZZb3lxM3dEU2UzQmRSRFFsY3ZKS0J5bHFocHhXeDNQalR4Y0QwTjlJcm41S0Jz?oc=5",
@@ -67,7 +53,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (127 days old)"
+      "exclusion_reason": "aged >120d (128 days old)"
     },
     {
       "date": "Tue, 21 Jul 2026 08:58:52 GMT",
@@ -81,7 +67,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (128 days old)"
+      "exclusion_reason": "aged >120d (129 days old)"
     },
     {
       "date": "Tue, 03 Nov 2026 08:00:00 GMT",
@@ -120,7 +106,8 @@
         "Launch"
       ],
       "confidence": "M",
-      "status": "counted"
+      "status": "excluded",
+      "exclusion_reason": "aged >120d (121 days old)"
     },
     {
       "date": "13 Oct 2026",
@@ -162,8 +149,7 @@
         "Event"
       ],
       "confidence": "L",
-      "status": "merged",
-      "exclusion_reason": "merged: duplicate phrasing of “Chalet Hotels plans INR 3,500 crore investment over three ye”"
+      "status": "counted"
     },
     {
       "date": "2026-11-23",

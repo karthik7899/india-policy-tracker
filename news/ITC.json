@@ -26,7 +26,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (151 days old)"
+      "exclusion_reason": "aged >120d (152 days old)"
     },
     {
       "date": "Tue, 01 Sep 2026 07:00:00 GMT",
@@ -93,7 +93,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (143 days old)"
+      "exclusion_reason": "aged >120d (144 days old)"
     },
     {
       "date": "Mon, 29 Jun 2026 08:06:00 GMT",
@@ -107,7 +107,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (150 days old)"
+      "exclusion_reason": "aged >120d (151 days old)"
     },
     {
       "date": "13 Nov 2026",
@@ -187,20 +187,21 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (316 days old)"
+      "exclusion_reason": "aged >120d (317 days old)"
     },
     {
-      "date": "Thu, 26 Nov 2026 00:36:00 GMT",
-      "headline": "Gujarat businesses back review of ITC rules",
-      "source_url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQRGNURGlpdXRnbXBwb19NRHgwSW5RX3ctcGloVTJSNmFmM2tRMUxfeXdOd1Z1blZIRkxzSE1Jd1AzQ1JZRFd0LThyek9XbTBnTm5TTlhsbkhqYVpXSWpuZDNZYUt0T2pjemRQaWpQNmdjU1JOaHQtSW5GVmpqNF93ZlgzM180OW03c1NQODUzOUtLSnN1cmJsNlBqOWZYeGROOVlPb1FFM0k0Zzh2a19GWnFkdGNjZmZQS2ZEcTFvQXFXd9IBwgFBVV95cUxQRGNURGlpdXRnbXBwb19NRHgwSW5RX3ctcGloVTJSNmFmM2tRMUxfeXdOd1Z1blZIRkxzSE1Jd1AzQ1JZRFd0LThyek9XbTBnTm5TTlhsbkhqYVpXSWpuZDNZYUt0T2pjemRQaWpQNmdjU1JOaHQtSW5GVmpqNF93ZlgzM180OW03c1NQODUzOUtLSnN1cmJsNlBqOWZYeGROOVlPb1FFM0k0Zzh2a19GWnFkdGNjZmZQS2ZEcTFvQXFXdw?oc=5",
-      "source_label": "The Times of India",
+      "date": "Thu, 26 Nov 2026 10:07:02 +0530",
+      "headline": "ITC Share Price Highlights: ITC Stock Price History",
+      "source_url": "https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/itc-stock-price-live-updates-26-nov-2026/liveblog/136178775.cms",
+      "source_label": "Economic Times",
       "event_type": "",
-      "source_kind": "State policy",
+      "source_kind": "Markets news",
       "event_tags": [
-        "State policy"
+        "Markets news"
       ],
       "confidence": "M",
-      "status": "counted"
+      "status": "counted",
+      "article_url": "https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/itc-stock-price-live-updates-26-nov-2026/liveblog/136178775.cms"
     },
     {
       "date": "Mon, 23 Nov 2026 10:13:06 +0530",
@@ -213,8 +214,9 @@
         "Markets news"
       ],
       "confidence": "M",
-      "status": "counted",
-      "article_url": "https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/itc-share-price-live-updates-23-nov-2026/liveblog/136089671.cms"
+      "status": "merged",
+      "article_url": "https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/itc-share-price-live-updates-23-nov-2026/liveblog/136089671.cms",
+      "exclusion_reason": "merged: duplicate phrasing of “ITC Share Price Highlights: ITC Stock Price History”"
     },
     {
       "date": "Thu, 19 Nov 2026 08:41:18 +0530",
