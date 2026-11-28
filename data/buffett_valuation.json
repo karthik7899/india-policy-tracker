@@ -151,7 +151,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 51.7 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 51.9 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Buy Candidate"
@@ -245,7 +245,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 89.1 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 89.4 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Buy Candidate"
@@ -343,7 +343,7 @@
         "risks": [
           "FII Selling (-1.03%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 46.9 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 47.0 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Buy Candidate"
@@ -505,7 +505,7 @@
         "risks": [
           "Promoters cut their stake (-2.91%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 85.3 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 85.5 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Buy Candidate"
@@ -663,35 +663,6 @@
       }
     },
     {
-      "ticker": "GRSE",
-      "name": "Garden Reach Shipbuilders & Engineers",
-      "owner_earnings": 325.9,
-      "moat": "Weak/None",
-      "moat_status": "Weak/None",
-      "retained_earnings_ratio": 2.86,
-      "passed_retained_test": true,
-      "score": {
-        "overall_score": 9,
-        "fundamental_score": 1,
-        "momentum_score": 8,
-        "confidence": "Medium",
-        "reasons": [
-          "Government Contract/MoU: Garden Reach Shipbuilders & Engineers (NSEI:GRSE)",
-          "Government Contract/MoU: Paradip's cargo growth, GRSE's shipbuilding order and more | The Port Report #37",
-          "Strong revenue growth (TTM +29.8%)",
-          "Operating Margin Expansion (+3.0%)",
-          "Liquid (Rs 160 Cr traded daily)",
-          "DII Accumulation (+0.08%)"
-        ],
-        "risks": [
-          "Fails Debt Limit (Debt > Net Assets)"
-        ],
-        "recommendations": [
-          "Hold / Monitor"
-        ]
-      }
-    },
-    {
       "ticker": "VINCOFE",
       "name": "Vintage Coffee",
       "owner_earnings": 61.7,
@@ -744,7 +715,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 31.2 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 31.1 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -777,6 +748,35 @@
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
           "Fails P/E Screen (P/E 76.2 > 15 & Price > Intrinsic)"
+        ],
+        "recommendations": [
+          "Hold / Monitor"
+        ]
+      }
+    },
+    {
+      "ticker": "GRSE",
+      "name": "Garden Reach Shipbuilders & Engineers",
+      "owner_earnings": 325.9,
+      "moat": "Weak/None",
+      "moat_status": "Weak/None",
+      "retained_earnings_ratio": 2.86,
+      "passed_retained_test": true,
+      "score": {
+        "overall_score": 8,
+        "fundamental_score": 0,
+        "momentum_score": 8,
+        "confidence": "Medium",
+        "reasons": [
+          "Government Contract/MoU: Garden Reach Shipbuilders & Engineers (NSEI:GRSE)",
+          "Government Contract/MoU: Paradip's cargo growth, GRSE's shipbuilding order and more | The Port Report #37",
+          "Strong revenue growth (TTM +29.8%)",
+          "Operating Margin Expansion (+3.0%)",
+          "DII Accumulation (+0.08%)"
+        ],
+        "risks": [
+          "Rs 205.24 Cr traded but only 20% delivered — most of that volume is intraday churn, so the liquidity band flatters this name.",
+          "Fails Debt Limit (Debt > Net Assets)"
         ],
         "recommendations": [
           "Hold / Monitor"
@@ -825,7 +825,7 @@
         "confidence": "High",
         "reasons": [
           "Government Contract/MoU: Anant Raj Q2 FY27: Higher Profit, Data Centre Plans Advance",
-          "Policy Notification [transformative, 174.3% of revenue]: Anant Raj Tracked (NSE: ANANTRAJ) as Rs 4,500 Crore Andhra Pradesh Investment Plan Broadens Its Footprint",
+          "Policy Notification: Anant Raj (NSE:ANANTRAJ): What Does Its MoU With Haryana Govt and Orange Business Mean?",
           "Liquid (Rs 76 Cr traded daily)",
           "FII Accumulation (+0.22%)"
         ],
@@ -851,8 +851,8 @@
         "momentum_score": 8,
         "confidence": "Medium",
         "reasons": [
+          "Government Contract/MoU: The Bet Behind Hitachi Energy India's Rally",
           "Government Contract/MoU: Hitachi Energy India (NSEI:POWERINDIA) Stock Forecast & Analyst Predictions",
-          "Government Contract/MoU: Hitachi Energy India (NSEI:POWERINDIA)",
           "Strong revenue growth (TTM +51.5%)",
           "Liquid (Rs 554 Cr traded daily)",
           "DII Accumulation (+0.22%)"
@@ -920,7 +920,7 @@
         "risks": [
           "FII Selling (-1.7%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 37.6 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 37.4 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -951,7 +951,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 50.9 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 51.0 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Hold / Monitor"
@@ -1013,7 +1013,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 22.7 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 22.8 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Hold / Monitor"
@@ -1105,7 +1105,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 68.0 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 68.2 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Hold / Monitor"
@@ -1168,7 +1168,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 42.9 > 15; no intrinsic value to justify it)"
+          "Fails P/E Screen (P/E 42.8 > 15; no intrinsic value to justify it)"
         ],
         "recommendations": [
           "Hold / Monitor"
@@ -1282,7 +1282,7 @@
         "risks": [
           "Promoters cut their stake (-9.98%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 77.8 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 78.5 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Hold / Monitor"
@@ -1315,7 +1315,7 @@
           "Operating margin contracted (-5.0pp)",
           "FII Selling (-1.5%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 41.0 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 41.6 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -1466,7 +1466,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 58.1 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 58.0 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -1554,7 +1554,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 59.3 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 59.5 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Hold / Monitor"
@@ -1585,7 +1585,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 73.1 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 73.2 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Avoid / High Risk"
@@ -1616,7 +1616,7 @@
         "risks": [
           "FII Selling (-2.0%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 58.6 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 58.5 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -1681,7 +1681,7 @@
           "Revenue shrinking (TTM -17.5%)",
           "Operating margin contracted (-3.0pp)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 31.5 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 31.6 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -1713,7 +1713,7 @@
         "risks": [
           "FII Selling (-1.17%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 36.9 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 36.7 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -1775,9 +1775,9 @@
         ],
         "risks": [
           "Operating margin contracted (-2.0pp)",
-          "Rs 244.40 Cr traded but only 22% delivered — most of that volume is intraday churn, so the liquidity band flatters this name.",
+          "Rs 185.52 Cr traded but only 24% delivered — most of that volume is intraday churn, so the liquidity band flatters this name.",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 69.0 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 68.9 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -1806,7 +1806,7 @@
         "risks": [
           "Thin: Rs 1.57 Cr traded daily, ~3 sessions to exit Rs 1 Cr",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 15.8 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 15.9 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Avoid / High Risk"
@@ -1864,7 +1864,7 @@
         "risks": [
           "Promoters cut their stake (-1.07%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 88.4 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 87.5 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -1893,7 +1893,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 23.9 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 23.8 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Avoid / High Risk"
@@ -1957,7 +1957,7 @@
           "Promoters cut their stake (-1.44%)",
           "FII Selling (-1.33%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 30.2 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 30.3 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Avoid / High Risk"
@@ -1988,7 +1988,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 44.5 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 44.3 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -2021,7 +2021,7 @@
           "Operating margin contracted (-3.0pp)",
           "FII Selling (-1.72%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 50.1 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 50.2 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -2091,36 +2091,6 @@
       }
     },
     {
-      "ticker": "GOKEX",
-      "name": "Gokaldas Exports",
-      "owner_earnings": 29.5,
-      "moat": "Weak/None",
-      "moat_status": "Weak/None",
-      "retained_earnings_ratio": 2.86,
-      "passed_retained_test": true,
-      "score": {
-        "overall_score": 2,
-        "fundamental_score": -6,
-        "momentum_score": 8,
-        "confidence": "High",
-        "reasons": [
-          "Government Contract/MoU: Gokaldas Exports (NSEI:GOKEX)",
-          "Policy Notification: Schedule of meeting with Institutional Investors/Research Analysts to be held on September 17, 2026 and September 18, 2026.",
-          "Liquid (Rs 51 Cr traded daily)",
-          "DII Accumulation (+1.37%)"
-        ],
-        "risks": [
-          "FII Selling (-1.05%)",
-          "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 42.7 > 15 & Price > Intrinsic)",
-          "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
-        ],
-        "recommendations": [
-          "Avoid / High Risk"
-        ]
-      }
-    },
-    {
       "ticker": "KUSUMGAR",
       "name": "Kusumgar",
       "owner_earnings": 139.6,
@@ -2175,7 +2145,7 @@
           "Operating margin contracted (-2.0pp)",
           "Thin: Rs 3.27 Cr traded daily, ~2 sessions to exit Rs 1 Cr",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 29.0 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 29.1 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Avoid / High Risk"
@@ -2237,6 +2207,36 @@
       }
     },
     {
+      "ticker": "GOKEX",
+      "name": "Gokaldas Exports",
+      "owner_earnings": 29.5,
+      "moat": "Weak/None",
+      "moat_status": "Weak/None",
+      "retained_earnings_ratio": 2.86,
+      "passed_retained_test": true,
+      "score": {
+        "overall_score": 1,
+        "fundamental_score": -7,
+        "momentum_score": 8,
+        "confidence": "High",
+        "reasons": [
+          "Government Contract/MoU: Gokaldas Exports (NSEI:GOKEX)",
+          "Policy Notification: Schedule of meeting with Institutional Investors/Research Analysts to be held on September 17, 2026 and September 18, 2026.",
+          "DII Accumulation (+1.37%)"
+        ],
+        "risks": [
+          "Rs 267.71 Cr traded but only 19% delivered — most of that volume is intraday churn, so the liquidity band flatters this name.",
+          "FII Selling (-1.05%)",
+          "Fails Debt Limit (Debt > Net Assets)",
+          "Fails P/E Screen (P/E 42.7 > 15 & Price > Intrinsic)",
+          "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
+        ],
+        "recommendations": [
+          "Avoid / High Risk"
+        ]
+      }
+    },
+    {
       "ticker": "FAZE3Q",
       "name": "Faze Three",
       "owner_earnings": 36.8,
@@ -2257,7 +2257,35 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 27.1 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 26.9 > 15 & Price > Intrinsic)"
+        ],
+        "recommendations": [
+          "Avoid / High Risk"
+        ]
+      }
+    },
+    {
+      "ticker": "BDL",
+      "name": "Bharat Dynamics",
+      "owner_earnings": 399.9,
+      "moat": "Weak/None",
+      "moat_status": "Weak/None",
+      "retained_earnings_ratio": 2.86,
+      "passed_retained_test": true,
+      "score": {
+        "overall_score": 0,
+        "fundamental_score": -4,
+        "momentum_score": 4,
+        "confidence": "Medium",
+        "reasons": [
+          "Government Contract/MoU: BEML, Bharat Dynamics, GRSE, and HAL share price display buying interest. What's driving the rally?",
+          "FII Accumulation (+0.07%)"
+        ],
+        "risks": [
+          "Revenue shrinking (TTM -18.0%)",
+          "Operating margin contracted (-9.0pp)",
+          "Rs 362.87 Cr traded but only 25% delivered — most of that volume is intraday churn, so the liquidity band flatters this name.",
+          "Fails Debt Limit (Debt > Net Assets)"
         ],
         "recommendations": [
           "Avoid / High Risk"
@@ -2318,7 +2346,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 49.0 > 15 & Price > Intrinsic)"
+          "Fails P/E Screen (P/E 49.2 > 15 & Price > Intrinsic)"
         ],
         "recommendations": [
           "Avoid / High Risk"
@@ -2350,7 +2378,7 @@
           "Operating margin contracted (-3.0pp)",
           "Thin: Rs 2.65 Cr traded daily, ~2 sessions to exit Rs 1 Cr",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 53.3 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 53.7 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -2383,7 +2411,7 @@
         "risks": [
           "FII Selling (-3.73%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 584.0 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 585.0 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -2411,7 +2439,7 @@
         ],
         "risks": [
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 66.6 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 66.5 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -2471,36 +2499,8 @@
         "risks": [
           "FII Selling (-1.23%)",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 75.9 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 75.6 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
-        ],
-        "recommendations": [
-          "Avoid / High Risk"
-        ]
-      }
-    },
-    {
-      "ticker": "BDL",
-      "name": "Bharat Dynamics",
-      "owner_earnings": 399.9,
-      "moat": "Weak/None",
-      "moat_status": "Weak/None",
-      "retained_earnings_ratio": 2.86,
-      "passed_retained_test": true,
-      "score": {
-        "overall_score": -2,
-        "fundamental_score": -3,
-        "momentum_score": 1,
-        "confidence": "Medium",
-        "reasons": [
-          "Sector benefits from macro policy tailwinds (Fallback)",
-          "Liquid (Rs 147 Cr traded daily)",
-          "FII Accumulation (+0.07%)"
-        ],
-        "risks": [
-          "Revenue shrinking (TTM -18.0%)",
-          "Operating margin contracted (-9.0pp)",
-          "Fails Debt Limit (Debt > Net Assets)"
         ],
         "recommendations": [
           "Avoid / High Risk"
@@ -2554,7 +2554,7 @@
         "risks": [
           "Thin: Rs 3.83 Cr traded daily, ~1 sessions to exit Rs 1 Cr",
           "Fails Debt Limit (Debt > Net Assets)",
-          "Fails P/E Screen (P/E 31.0 > 15 & Price > Intrinsic)",
+          "Fails P/E Screen (P/E 31.1 > 15 & Price > Intrinsic)",
           "Hyper-Growth Reality Check (P/E > 30 & revenue growth decelerating)"
         ],
         "recommendations": [
@@ -2581,7 +2581,7 @@
           "Operating Margin Expansion (+8.0%)"
         ],
         "risks": [
-          "Rs 287.94 Cr traded but only 21% delivered — most of that volume is intraday churn, so the liquidity band flatters this name.",
+          "Rs 305.19 Cr traded but only 23% delivered — most of that volume is intraday churn, so the liquidity band flatters this name.",
           "FII Selling (-1.64%)",
           "Fails Debt Limit (Debt > Net Assets)",
           "Fails P/E Screen (P/E 117.0 > 15 & Price > Intrinsic)"

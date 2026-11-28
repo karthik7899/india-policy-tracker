@@ -1,6 +1,25 @@
 {
   "value": [
     {
+      "headline": "Suzlon Energy shares: Down 36% in 6 months! Will it rebound after winning wind repowering project from Tata Group?",
+      "event_type": "order_win",
+      "phrase": null,
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "SUZLON"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-28",
+      "reader": "llm",
+      "corroborated": false,
+      "link": "https://www.livemint.com/market/stock-market-news/suzlon-energy-shares-down-36-in-6-months-will-it-rebound-after-winning-wind-repowering-project-from-tata-group-11795841310470.html",
+      "source": "Livemint",
+      "story": "Suzlon Energy shares: Down 36% in 6 months! Will it rebound after winning wind repowering project from Tata Group?",
+      "reports": 1
+    },
+    {
       "headline": "Suzlon bags India’s first major wind\nrepowering order",
       "event_type": "order_win",
       "phrase": "bags india’s first major wind\nrepowering order",
@@ -12,12 +31,38 @@
       "external": [],
       "direction": "opportunity",
       "date": "2026-11-27",
-      "first_seen": "2026-11-27",
+      "first_seen": "2026-11-28",
       "link": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxPWWMxZlVyc2VCSGg4emdFWms5ZVVBQjhtazAtSm5TUUlyMWg5V1YwQzRZOWltMzkzbjdmaEc1Yy1hVnpmMW9XNWZ6aUxLcFlBbXRUMUlvSGZaSTl4V3J6V3dPS2gtTVh2NjVyOGM4eHViV2wtU25yVE0tOEdvTk9ST0JYVHF1MEUteDlsbVdQd3hlQ2l4WWktUWdzUDFYYlhiZGswN09ta1cyQdIBtwFBVV95cUxQMzBuN3U4TW55a0JnaWhPSk56ejlwMXRFLTVQY2xmUkVLMDNxRlhBY1IxYjduc2wxVzdYeWtDSFBJVHBRUkIyVU1tbzNOV19TS0hCdFdIQ2l2NE14TUlXci1aSGJOeUJaeTdMMjNFbTQ0V2ZnZ1lCYmRLaHBzT3dzc2E5cmIxTlFLVzRaQlNzX09ISjN4NXhncVZ5RGRONW9WMEdHQ0hLVkV3RHZ0ZjJIdmk3UmMwc0k?oc=5",
       "source": "The New Indian Express",
       "corroborated": true,
       "story": "Suzlon bags India’s first major wind\nrepowering order",
       "reports": 1
+    },
+    {
+      "headline": "Aditya Infotech acquires 30% stake in KGraph AI for ₹45.39 crore",
+      "event_type": "acquisition",
+      "phrase": "acquires",
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "CPPLUS"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-27",
+      "first_seen": "2026-11-28",
+      "link": "https://news.google.com/rss/articles/CBMisgFBVV95cUxQZVR2TFpkbElDSDNOUUxpN1o4dEtzNDVMYWkweEFscU5SMUN6ZDVuRlJvcld5dnFBNTRVb1VtdXFLdmJ3N2NNc1hTZUFmMEVJYk0xR1Yxa2stVTNNc2tURzFlbXJHYkU4TEhrSUxLeEhvblNyb0QtQ3NpZnhPa2pvVzNTRWNGcW5KVF9VTU83WDIyeEJNR3l3RHlQOGZMVVdqblZWeE9aSU8wYVJZNWtONS1n?oc=5",
+      "source": "scanx.trade",
+      "corroborated": true,
+      "amount_cr": 45.39,
+      "materiality": {
+        "CPPLUS": {
+          "pct_of_revenue": 0.8,
+          "band": "immaterial"
+        }
+      },
+      "story": "Aditya Infotech Completes KGraph Stake Deal for AI Surveillance",
+      "reports": 3
     },
     {
       "headline": "AI Server PCB Demand Surges, Supply Shortage Expected to Persist Until Mid-2028",
@@ -31,27 +76,34 @@
       "external": [],
       "direction": "risk",
       "date": "2026-11-27",
-      "first_seen": "2026-11-27",
+      "first_seen": "2026-11-28",
       "link": "https://news.google.com/rss/articles/CBMidkFVX3lxTFBMa3lhMGpuaWpDMTkwellLc0tzNFIzNjFUd18zTjRJVjcyb01wTEhkOFJuem1zbFhlOWk1czhDcV8xNXpRNzlQQzB1aS1QSUsyU1c0XzJrektWbUxkaDE0V2M0Qi1NNEZQNzk2MjZiYVAwRDhQRnc?oc=5",
       "source": "BigGo Finance",
       "corroborated": true
     },
     {
-      "headline": "PCB Supply-Chain Shortage Alarm Sounds; Bank Stocks Defy Trend to Record Highs as Combined Turnover Shrinks to CNY 1.32 Trillion",
-      "event_type": "supply_disruption",
-      "phrase": "shortage",
+      "headline": "Kaynes, Vishay Intertechnology enter into strategic joint venture",
+      "event_type": "tie_up",
+      "phrase": "joint venture",
       "certainty": "completed",
-      "domains": [
-        "manufacturing_electronics"
+      "domains": [],
+      "actors": [
+        "KAYNES"
       ],
-      "actors": [],
-      "external": [],
-      "direction": "risk",
+      "external": [
+        "Vishay Intertechnology"
+      ],
+      "counterparties": [
+        "Vishay Intertechnology"
+      ],
+      "direction": "opportunity",
       "date": "2026-11-27",
-      "first_seen": "2026-11-27",
-      "link": "https://news.google.com/rss/articles/CBMidkFVX3lxTFBHVHNxNzFzTVlVS1lZYmo2TVNVQVpIOVhqd01xUXp5UGV3YVJvOVJiVzhNTGwyWE11TExyZXBrTzdhUm92MVFrczJDRWY2S3ZlN2xia2RkLUI4NEViZnlONmVnWU1ib0lBVGNwUGp4VjJXUHZHTkE?oc=5",
-      "source": "BigGo Finance",
-      "corroborated": true
+      "first_seen": "2026-11-28",
+      "link": "https://news.google.com/rss/articles/CBMipAFBVV95cUxQMFJxRVVMb1Bacl9xN0syU1h3MjhDa21JRVBIZFZyeHI0VGlqSXYtdGxjNWllUG1oVF9RTkozUVhwYjh0ZjZiQm9qVnNuLTRpdEVlbGdWa25LN0RzNHlCSkpzd20tVXBNY2hLbi1aOUZPTzBfSlFTS1dWV0xpU2psTU16YjEwcmYteFFCM3cyUkVsZWdJOTlmYWVFckxBSWZNUjl0ZA?oc=5",
+      "source": "Evertiq",
+      "corroborated": true,
+      "story": "Kaynes, Vishay Intertechnology enter into strategic joint venture",
+      "reports": 1
     },
     {
       "headline": "Campus Activewear signs Rugged Rush deal, plans obstacle racing shoe",
@@ -74,6 +126,123 @@
       "source": "MediaBrief",
       "story": "Campus Activewear partners with rugged rush to develop India’s first homegrown OCR shoe",
       "reports": 4
+    },
+    {
+      "headline": "Aditya Infotech Completes KGraph Stake Deal for AI Surveillance",
+      "event_type": "acquisition",
+      "phrase": null,
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "CPPLUS"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-27",
+      "reader": "llm",
+      "corroborated": false,
+      "link": "https://news.google.com/rss/articles/CBMijgFBVV95cUxNY3RMdlUzWlp4SGFIbjJET3JYNm40ejJZc1hnRHQxM21lM2VCaWdTdS1LQlVxazZRbnNaWklFcDhza0pRcjE3eF9XendVMVk3dU1ZcmFOZHNnZVVSOEx4bFBDSk9rM0p2aUlqUHhGQjljQTRXY1h3dzlfUFFVYk00SUt3WmFfaDJsSEVHTmZR?oc=5",
+      "source": "Unite.AI",
+      "story": "Aditya Infotech Completes KGraph Stake Deal for AI Surveillance",
+      "reports": 3
+    },
+    {
+      "headline": "Aditya Infotech Limited completes ₹45.39 crore KGraph stake buy",
+      "event_type": "acquisition",
+      "phrase": null,
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "CPPLUS"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-27",
+      "reader": "llm",
+      "corroborated": false,
+      "link": "https://news.google.com/rss/articles/CBMivwFBVV95cUxOMEoyQWZ4aGhfQzlpRkNxaUxDM0hSY2xkVFRKVlFEcHlmTFVaZm5yZ2dHVUxoblh1SnBXQ1JqbThsX24ydFJ5Y1d3M2pGd0gwTThlcG9iRDB3ZnhFN1c1djhNbEM2YzROQmdBOTdybWtRc1EyZkx1TFRYNXRBM1UtWFh6NzRUSXp3d184N2k4NGk2V2otOFBmc1o0T0JjYmxDYWFoWkNicHpFNF80RlZpWXNXZDlYMnJPQ1NZUWw4QQ?oc=5",
+      "source": "Multibagg AI",
+      "amount_cr": 45.39,
+      "materiality": {
+        "CPPLUS": {
+          "pct_of_revenue": 0.8,
+          "band": "immaterial"
+        }
+      },
+      "story": "Aditya Infotech Completes KGraph Stake Deal for AI Surveillance",
+      "reports": 3
+    },
+    {
+      "headline": "Gokaldas Exports and Sportking Gain as Global Fashion Brands Shift Apparel Orders from Bangladesh to India",
+      "event_type": "order_win",
+      "phrase": null,
+      "certainty": "reported",
+      "domains": [],
+      "actors": [
+        "GOKEX"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-27",
+      "reader": "llm",
+      "corroborated": false,
+      "link": "https://news.google.com/rss/articles/CBMi7AFBVV95cUxOdVpoejBrUmtOT0NKbDNuQXEzY1RvMmVFdEFudmRxcWozbm1OOEpKY25QSWl5TGhJSktINGFaT25MS2M1T2x4bHJfVm1ScDV0ai1wdlFLUGlOWFlnZ1ZIZHYzMlNBS1haempCckgtMUxldUJiNWlQczFBNmVWSUZ5c1c1ZXRycENLS2FpZ0NfRkJQdDFVUGZrOWJSZzc1dWZhdGNaWWhJOG1VV0ZvY1NKb1Q4VmwzTDQ1VF9GTjBLLXEyOW9KbS0tMDJhSlR6YUJwYjh5ZGNqWGY5U0lITGk1TklEYU12bExCY3hqSg?oc=5",
+      "source": "Kotak Neo",
+      "story": "Gokaldas Exports and Sportking Gain as Global Fashion Brands Shift Apparel Orders from Bangladesh to India",
+      "reports": 1
+    },
+    {
+      "headline": "Godrej Properties Takes Godrej Epoque to the Edge of Space in an Indian Real Estate First",
+      "event_type": "product_launch",
+      "phrase": null,
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "GODREJPROP"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-27",
+      "reader": "llm",
+      "corroborated": false,
+      "link": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxNQTBCcnBhU19PV2hyUlZSR1BPMGYySmhfbEpoeTFtaTRXYUxiSFl0dDA5cmx1VDRrbDlMQXJUZmxibVFwaFlmR3pwUU1iVVY3Tm9pV3FPNHh4N2xIM2RmZmpLZUJ4LUxHQWJ4dm9JdzdxVHlRREtxWUs5VFRwR2RvVkk2bmlhX245cTVuU1JweGlIbVZyOGk2TE1JdTBpanJMU0FVc1JMTXU5NXdMaFBSTklhZzVEMklYdjQybDdvc1oycDFTWGdQSkdvaGlMTVdoY0pGRw?oc=5",
+      "source": "Telugu Times",
+      "story": "Godrej Properties Takes Godrej Epoque to the Edge of Space in an Indian Real Estate First",
+      "reports": 1
+    },
+    {
+      "headline": "PCB Supply-Chain Shortage Alarm Sounds; Bank Stocks Defy Trend to Record Highs as Combined Turnover Shrinks to CNY 1.32 Trillion",
+      "event_type": "supply_disruption",
+      "phrase": "shortage",
+      "certainty": "completed",
+      "domains": [
+        "manufacturing_electronics"
+      ],
+      "actors": [],
+      "external": [],
+      "direction": "risk",
+      "date": "2026-11-27",
+      "first_seen": "2026-11-27",
+      "link": "https://news.google.com/rss/articles/CBMidkFVX3lxTFBHVHNxNzFzTVlVS1lZYmo2TVNVQVpIOVhqd01xUXp5UGV3YVJvOVJiVzhNTGwyWE11TExyZXBrTzdhUm92MVFrczJDRWY2S3ZlN2xia2RkLUI4NEViZnlONmVnWU1ib0lBVGNwUGp4VjJXUHZHTkE?oc=5",
+      "source": "BigGo Finance",
+      "corroborated": true
+    },
+    {
+      "headline": "Space42 begins production of ThurayaTwo satellite smartphone with APSI",
+      "event_type": "capacity_add",
+      "phrase": "begins production",
+      "certainty": "completed",
+      "domains": [
+        "manufacturing_electronics"
+      ],
+      "actors": [],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-26",
+      "first_seen": "2026-11-28",
+      "link": "https://news.google.com/rss/articles/CBMipgFBVV95cUxOTng1RFJEWksxczJuQ0FMblhKLUZodHZmVm14UGlGbGI1cHhJNVlDTHJfOXJKLTgyZFFJZS1Ubzl5RFdEWU85VHpxTlpqbm1KZkd5R042YTJMbDJPYVhBZkgwRG1iMmoydThqS3VUYjhlOFRrS0FxQ01EWWRNQTdfcWZpTHB2MEJUOHVqUWdjLUV5UWktdVAtdEZETzJvdUtjbkNPTXpB?oc=5",
+      "source": "SatellitePro ME",
+      "corroborated": true
     },
     {
       "headline": "L&T Secures Significant Order For 300 MW/900 MWh Battery Storage Project in Gujarat",
@@ -124,7 +293,7 @@
       ],
       "direction": "opportunity",
       "date": "2026-11-25",
-      "first_seen": "2026-11-27",
+      "first_seen": "2026-11-28",
       "link": "https://news.google.com/rss/articles/CBMizAFBVV95cUxPWEtzNzh2NUdSdE41Yi1FYUY2Unk4Q3Z6bGlrb1UxVkxScVV5cmJzRmNZaUp4VFhCSEUwcWNOVHM2aUU3LVByVG81UEhHSFBnWWlmbnFqbC10QzhmVW5JMk84Y0RiVXpvZ3dUWElUNWVnWFBYZEN6Nk8xMVFHWlVPOUxPYi1MdHFSa3NXeVJ0ck9RdHVWYTdXSVJHZzBTZ3lNdFdzUU03MzFjaThMREZxaDUwdm8wQ2JjM25UNlR1ODlOb2c0Vk9DRHRKR3Y?oc=5",
       "source": "Reuters",
       "corroborated": true
@@ -141,7 +310,7 @@
       ],
       "direction": "opportunity",
       "date": "2026-11-25",
-      "first_seen": "2026-11-27",
+      "first_seen": "2026-11-28",
       "link": "https://news.google.com/rss/articles/CBMibkFVX3lxTE9mQWZtYTE4eGdLdEFRZ0puU0JabElRVUJjM1lTdk91MnhxemNkeDFEWkdTaXRTZFFTYzdwLVBUNWk5N0liZEJDM3NQUktqeElDcDVmRHJxUGt4QTN6a3VMelRjaDNJMWhFN1VIQTVn0gFzQVVfeXFMUHFvd0k5cTNHRHhBX21OTHk1RTVaNmxZcTJsRl9vQ01fcUNMZUpYelNhbHRZc29wUHg3LWlwQlZoZWNadzVrWHlMd1ZvUzlnRlNtTVVSY1lmcG1DWXp2TXNVRC11S3cxSEFHclk3NzRzcDBzdw?oc=5",
       "source": "CNBC",
       "corroborated": false,
@@ -152,69 +321,56 @@
       "amount_cr": 61420.0
     },
     {
-      "headline": "Govt Signs ₹1,476 Crore Deal with BEL for Advanced Electronic Systems for Army",
-      "event_type": "order_win",
+      "headline": "Suzlon Energy begins construction of a wind blade factory in Thoothukudi",
+      "event_type": "capacity_add",
       "phrase": null,
       "certainty": "completed",
       "domains": [],
       "actors": [
-        "BEL"
+        "SUZLON"
       ],
       "external": [],
       "direction": "opportunity",
       "date": "2026-11-25",
       "reader": "llm",
       "corroborated": false,
-      "link": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQWi10WDdRSTdKSlZDYl9MUE9NUDBMU3JJVjZzQnVqRERFYXhQVUNVQ1MxTmV6ZGpxRnVvZjhmOEc0M2ZMZjBOc1NrbmhoNXEtUTVFalBickk1UmsxcmEzNU1RcFY2Z3VrUk9fWWNPQ3VadTZrcmh6cnA3S2xwV2QzN0pwTUVJcmZkMWNFX0R6bWh2NDJEOHlWbXB5MnJDdzlFczdTLWRjeld2RlA2LTZPUA?oc=5",
-      "source": "DD News",
-      "amount_cr": 1476.0,
-      "materiality": {
-        "BEL": {
-          "pct_of_revenue": 4.88,
-          "band": "minor"
-        }
-      },
-      "story": "Govt Signs ₹1,476 Crore Deal with BEL for Advanced Electronic Systems for Army",
-      "reports": 1
+      "link": "https://news.google.com/rss/articles/CBMinAFBVV95cUxNd1lDYjcyR2Q1anFBRFhSeG04NVJsa1pWd0U2OXZ0VXdzWTlheFhiWGYwZHhlUHpnZFRfYXVRNDdxVFdoNU9OM1RTVzJNaEtzMzY0Q3ozWndxekc4RHQycHpwUFhnS1dIWVFjSzRJdHp6cFNSc21uX1RTTldBRFJkYTI0U3VON21GcUkzTWk1SlVuMlYzUElBT09wekI?oc=5",
+      "source": "BigInfo.in",
+      "story": "Suzlon Energy begins construction of a wind blade factory in Thoothukudi",
+      "reports": 1,
+      "confirmation": {
+        "ticker": "SUZLON",
+        "source": "NSE",
+        "filing": "Suzlon Energy Limited has informed the Exchange about Capacity addition",
+        "date": "2026-11-25",
+        "link": "https://nsearchives.nseindia.in/corporate/SUZLON1_25112026133102_Suzlon25112026.pdf"
+      }
     },
     {
-      "headline": "Lemon Tree Signs McLeodganj and Madurai Hotels",
-      "event_type": "tie_up",
+      "headline": "Suzlon begins development of 1GW blade plant in Tamil Nadu",
+      "event_type": "capacity_add",
       "phrase": null,
       "certainty": "completed",
       "domains": [],
       "actors": [
-        "LEMONTREE"
+        "SUZLON"
       ],
       "external": [],
       "direction": "opportunity",
       "date": "2026-11-25",
       "reader": "llm",
       "corroborated": false,
-      "counterparties": [],
-      "link": "https://news.google.com/rss/articles/CBMie0FVX3lxTE5aVUQtSnFRdzhqWWMzT0hWS21fb21aWExyemdCTGVfTURYaldyRjNQWTVGT2JHbXYzOWNneWZlWk1mT09FZkQzSlEzWER5YjlaajNsRnVFLWlncTJkVFE0cVo5VWNzZUV3eXprUUVwU1VMNXlBQ0pCRVQ1dw?oc=5",
-      "source": "https://safariindia.com/",
-      "story": "Lemon Tree Signs McLeodganj and Madurai Hotels",
-      "reports": 1
-    },
-    {
-      "headline": "Coforge Expands Nuuron AI Platform for Cybersecurity; Shares Fall 3.94%",
-      "event_type": "product_launch",
-      "phrase": null,
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "COFORGE"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-11-25",
-      "reader": "llm",
-      "corroborated": false,
-      "link": "https://news.google.com/rss/articles/CBMipAFBVV95cUxNQmlnc2R3a2tuVkhGNi1BdGZtb2xXVzc2MExHcy1NMWNwWGxuYWM2bFllNkJoTHBPZ2F4R2phRVAzcVhhcDdldHBadXZaN0RLTTFtNmxjeEZVNUtYRUZsemNsaEZ5Rk5CMkZIY1BYbXlyN1dEenJDdlU3ajd0LXBTQVBkM2tPNXVwQXhSZEx0dFM4S2JKWDVHRDVvcFQ3TEpELVJOZw?oc=5",
-      "source": "HDFC Sky",
-      "story": "Coforge Expands Nuuron AI Platform for Cybersecurity; Shares Fall 3.94%",
-      "reports": 1
+      "link": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQRmZLOXkyOVJCNkwtX0hDWjB6dzdmMWV5X252S3VFRWQ4M0g4OHZEMUhsWXBJYlVIdVhUODY2bE90MDVrdVpoUERNOFJhUDhOTVA4TExFQWc4bzVOOXJhSFpUSndkTmlGc1l0WEhPQzlja2lKZW1Ba1RoMDZERjJ0M24tWGJOS0xX?oc=5",
+      "source": "Yahoo Finance",
+      "story": "Suzlon Adds 1 GW Blade Capacity in Tamil Nadu for ₹200 Crore",
+      "reports": 4,
+      "confirmation": {
+        "ticker": "SUZLON",
+        "source": "NSE",
+        "filing": "Suzlon Energy Limited has informed the Exchange about Capacity addition",
+        "date": "2026-11-25",
+        "link": "https://nsearchives.nseindia.in/corporate/SUZLON1_25112026133102_Suzlon25112026.pdf"
+      }
     },
     {
       "headline": "Tech Mahindra and Mahindra University Bring Together Financial Services GCC Leaders to Explore AI-Led Innovation",
@@ -237,6 +393,58 @@
       "source": "Tech Mahindra",
       "story": "Tech Mahindra and Mahindra University Bring Together Financial Services GCC Leaders to Explore AI-Led Innovation",
       "reports": 1
+    },
+    {
+      "headline": "Suzlon's 1 GW AI-powered wind blade factory in Tamil Nadu to create 1,000 jobs",
+      "event_type": "capacity_add",
+      "phrase": null,
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "SUZLON"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-25",
+      "reader": "llm",
+      "corroborated": false,
+      "link": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxNa2V3V0NRRzZnUjhUUEZSbWdocFJRZUxNLUtTWVB0MUJ4N0VRZXQyTWtLTGpDeWN2Z1BQT0REcTV2cUdrMjlNT2hjV21IamM3UHJ6Nzd6NFhDYTJWT1dfNEw2aGFEYTJ1S3FXTFpwSWRTVjNKN3Y3bmVaWTMwdEU2b1ZqUGpab2RkcDUyR09vVDU0SDVFUlNYZmNpdEVSWUpjV0dTVUR1clJGallHNHlINFYwVWNtcHRiV2tKYS1QNlY0NW00Q1dRelgwX3oxUEJWczhIeDF4LW82WURMRlHSAeQBQVVfeXFMTnNVZ294cEF4TDAxeXpPdGo5YlVySFBJbHFaTExCRFo0dnZ5RzktMS1Ec0JBZi03Tktfb0JLRl8tZm5fSnkwbWpHZGk3UF9FR3BJOC05emQtV0RUQll4c2EzUUdsYVJCbVpPYWhYUkFoQnJZM1BUR1ZPLWkxTkRzRTZVQkgyM3o1SXdyNjh0RWluQ2xSZXRqQkxmMXRlMVJmSndZVWVDWWtwakR2cnlRMG0zTzlmSGY5QlFNbm01dDdjejItazZBM1laSldWbUltQWpPbThiTlV6UjhvQUpTVTJiR3d4?oc=5",
+      "source": "BusinessLine",
+      "story": "Suzlon Adds 1 GW Blade Capacity in Tamil Nadu for ₹200 Crore",
+      "reports": 4,
+      "confirmation": {
+        "ticker": "SUZLON",
+        "source": "NSE",
+        "filing": "Suzlon Energy Limited has informed the Exchange about Capacity addition",
+        "date": "2026-11-25",
+        "link": "https://nsearchives.nseindia.in/corporate/SUZLON1_25112026133102_Suzlon25112026.pdf"
+      }
+    },
+    {
+      "headline": "Tamil Nadu CM Lays Foundation For Suzlon’s Third Smart Blade Factory Of 1 GW",
+      "event_type": "capacity_add",
+      "phrase": null,
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "SUZLON"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-25",
+      "reader": "llm",
+      "corroborated": false,
+      "link": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxONDBKYUFFNjNNTG1OLU5CUldwWjVva3hrUmdyRER3ekJSZS1LaFI2NnpjVkZfTHRJRmFpMVJxb09CMjNiNG1DWGROU0dMbmdHZERpRXh5bFVJeVFET0pVcWpMYXFXMms5MU9mTW9VUTBueGpUOWVHT1UySWF4Mkk1ZFlEQ0pUZ3dWSTRMUkpVSGxScUtDeTZ1bG5KejN6M0ZyS1BlZVNBU3gtTWlrX3l3Nl9wSWFxejBDUXU1bkhJZmExTFp6UU9Bag?oc=5",
+      "source": "Saur Energy",
+      "story": "Suzlon Adds 1 GW Blade Capacity in Tamil Nadu for ₹200 Crore",
+      "reports": 4,
+      "confirmation": {
+        "ticker": "SUZLON",
+        "source": "NSE",
+        "filing": "Suzlon Energy Limited has informed the Exchange about Capacity addition",
+        "date": "2026-11-25",
+        "link": "https://nsearchives.nseindia.in/corporate/SUZLON1_25112026133102_Suzlon25112026.pdf"
+      }
     },
     {
       "headline": "Coforge Limited has informed the Exchange regarding a press release dated November 25, 2026, titled \"Coforge Nuuron Expands Agentic Capabilities to Accelerate Vulnerability Remedia",
@@ -306,6 +514,71 @@
       "reports": 1
     },
     {
+      "headline": "Govt Signs ₹1,476 Crore Deal with BEL for Advanced Electronic Systems for Army",
+      "event_type": "order_win",
+      "phrase": null,
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "BEL"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-25",
+      "reader": "llm",
+      "corroborated": false,
+      "link": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQWi10WDdRSTdKSlZDYl9MUE9NUDBMU3JJVjZzQnVqRERFYXhQVUNVQ1MxTmV6ZGpxRnVvZjhmOEc0M2ZMZjBOc1NrbmhoNXEtUTVFalBickk1UmsxcmEzNU1RcFY2Z3VrUk9fWWNPQ3VadTZrcmh6cnA3S2xwV2QzN0pwTUVJcmZkMWNFX0R6bWh2NDJEOHlWbXB5MnJDdzlFczdTLWRjeld2RlA2LTZPUA?oc=5",
+      "source": "DD News",
+      "story": "Govt Signs ₹1,476 Crore Deal with BEL for Advanced Electronic Systems for Army",
+      "reports": 1,
+      "amount_cr": 1476.0,
+      "materiality": {
+        "BEL": {
+          "pct_of_revenue": 4.88,
+          "band": "minor"
+        }
+      }
+    },
+    {
+      "headline": "Lemon Tree Signs McLeodganj and Madurai Hotels",
+      "event_type": "tie_up",
+      "phrase": null,
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "LEMONTREE"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-25",
+      "reader": "llm",
+      "corroborated": false,
+      "counterparties": [],
+      "link": "https://news.google.com/rss/articles/CBMie0FVX3lxTE5aVUQtSnFRdzhqWWMzT0hWS21fb21aWExyemdCTGVfTURYaldyRjNQWTVGT2JHbXYzOWNneWZlWk1mT09FZkQzSlEzWER5YjlaajNsRnVFLWlncTJkVFE0cVo5VWNzZUV3eXprUUVwU1VMNXlBQ0pCRVQ1dw?oc=5",
+      "source": "https://safariindia.com/",
+      "story": "Lemon Tree Signs McLeodganj and Madurai Hotels",
+      "reports": 1
+    },
+    {
+      "headline": "Coforge Expands Nuuron AI Platform for Cybersecurity; Shares Fall 3.94%",
+      "event_type": "product_launch",
+      "phrase": null,
+      "certainty": "completed",
+      "domains": [],
+      "actors": [
+        "COFORGE"
+      ],
+      "external": [],
+      "direction": "opportunity",
+      "date": "2026-11-25",
+      "reader": "llm",
+      "corroborated": false,
+      "link": "https://news.google.com/rss/articles/CBMipAFBVV95cUxNQmlnc2R3a2tuVkhGNi1BdGZtb2xXVzc2MExHcy1NMWNwWGxuYWM2bFllNkJoTHBPZ2F4R2phRVAzcVhhcDdldHBadXZaN0RLTTFtNmxjeEZVNUtYRUZsemNsaEZ5Rk5CMkZIY1BYbXlyN1dEenJDdlU3ajd0LXBTQVBkM2tPNXVwQXhSZEx0dFM4S2JKWDVHRDVvcFQ3TEpELVJOZw?oc=5",
+      "source": "HDFC Sky",
+      "story": "Coforge Expands Nuuron AI Platform for Cybersecurity; Shares Fall 3.94%",
+      "reports": 1
+    },
+    {
       "headline": "Godrej Properties Limited Appoints Dhiraj Dilip Khetwani As Project Director, Mahalunge",
       "event_type": "management_change",
       "phrase": null,
@@ -323,110 +596,6 @@
       "source": "Realty Plus Magazine",
       "story": "Godrej Properties Limited Appoints Dhiraj Dilip Khetwani As Project Director, Mahalunge",
       "reports": 1
-    },
-    {
-      "headline": "Suzlon Energy begins construction of a wind blade factory in Thoothukudi",
-      "event_type": "capacity_add",
-      "phrase": null,
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "SUZLON"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-11-25",
-      "reader": "llm",
-      "corroborated": false,
-      "link": "https://news.google.com/rss/articles/CBMinAFBVV95cUxNd1lDYjcyR2Q1anFBRFhSeG04NVJsa1pWd0U2OXZ0VXdzWTlheFhiWGYwZHhlUHpnZFRfYXVRNDdxVFdoNU9OM1RTVzJNaEtzMzY0Q3ozWndxekc4RHQycHpwUFhnS1dIWVFjSzRJdHp6cFNSc21uX1RTTldBRFJkYTI0U3VON21GcUkzTWk1SlVuMlYzUElBT09wekI?oc=5",
-      "source": "BigInfo.in",
-      "story": "Suzlon Energy begins construction of a wind blade factory in Thoothukudi",
-      "reports": 1,
-      "confirmation": {
-        "ticker": "SUZLON",
-        "source": "NSE",
-        "filing": "Suzlon Energy Limited has informed the Exchange about Capacity addition",
-        "date": "2026-11-25",
-        "link": "https://nsearchives.nseindia.in/corporate/SUZLON1_25112026133102_Suzlon25112026.pdf"
-      }
-    },
-    {
-      "headline": "Suzlon begins development of 1GW blade plant in Tamil Nadu",
-      "event_type": "capacity_add",
-      "phrase": null,
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "SUZLON"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-11-25",
-      "reader": "llm",
-      "corroborated": false,
-      "link": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQRmZLOXkyOVJCNkwtX0hDWjB6dzdmMWV5X252S3VFRWQ4M0g4OHZEMUhsWXBJYlVIdVhUODY2bE90MDVrdVpoUERNOFJhUDhOTVA4TExFQWc4bzVOOXJhSFpUSndkTmlGc1l0WEhPQzlja2lKZW1Ba1RoMDZERjJ0M24tWGJOS0xX?oc=5",
-      "source": "Yahoo Finance",
-      "story": "Suzlon Adds 1 GW Blade Capacity in Tamil Nadu for ₹200 Crore",
-      "reports": 4,
-      "confirmation": {
-        "ticker": "SUZLON",
-        "source": "NSE",
-        "filing": "Suzlon Energy Limited has informed the Exchange about Capacity addition",
-        "date": "2026-11-25",
-        "link": "https://nsearchives.nseindia.in/corporate/SUZLON1_25112026133102_Suzlon25112026.pdf"
-      }
-    },
-    {
-      "headline": "Suzlon's 1 GW AI-powered wind blade factory in Tamil Nadu to create 1,000 jobs",
-      "event_type": "capacity_add",
-      "phrase": null,
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "SUZLON"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-11-25",
-      "reader": "llm",
-      "corroborated": false,
-      "link": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxNa2V3V0NRRzZnUjhUUEZSbWdocFJRZUxNLUtTWVB0MUJ4N0VRZXQyTWtLTGpDeWN2Z1BQT0REcTV2cUdrMjlNT2hjV21IamM3UHJ6Nzd6NFhDYTJWT1dfNEw2aGFEYTJ1S3FXTFpwSWRTVjNKN3Y3bmVaWTMwdEU2b1ZqUGpab2RkcDUyR09vVDU0SDVFUlNYZmNpdEVSWUpjV0dTVUR1clJGallHNHlINFYwVWNtcHRiV2tKYS1QNlY0NW00Q1dRelgwX3oxUEJWczhIeDF4LW82WURMRlHSAeQBQVVfeXFMTnNVZ294cEF4TDAxeXpPdGo5YlVySFBJbHFaTExCRFo0dnZ5RzktMS1Ec0JBZi03Tktfb0JLRl8tZm5fSnkwbWpHZGk3UF9FR3BJOC05emQtV0RUQll4c2EzUUdsYVJCbVpPYWhYUkFoQnJZM1BUR1ZPLWkxTkRzRTZVQkgyM3o1SXdyNjh0RWluQ2xSZXRqQkxmMXRlMVJmSndZVWVDWWtwakR2cnlRMG0zTzlmSGY5QlFNbm01dDdjejItazZBM1laSldWbUltQWpPbThiTlV6UjhvQUpTVTJiR3d4?oc=5",
-      "source": "BusinessLine",
-      "story": "Suzlon Adds 1 GW Blade Capacity in Tamil Nadu for ₹200 Crore",
-      "reports": 4,
-      "confirmation": {
-        "ticker": "SUZLON",
-        "source": "NSE",
-        "filing": "Suzlon Energy Limited has informed the Exchange about Capacity addition",
-        "date": "2026-11-25",
-        "link": "https://nsearchives.nseindia.in/corporate/SUZLON1_25112026133102_Suzlon25112026.pdf"
-      }
-    },
-    {
-      "headline": "Tamil Nadu CM Lays Foundation For Suzlon’s Third Smart Blade Factory Of 1 GW",
-      "event_type": "capacity_add",
-      "phrase": null,
-      "certainty": "completed",
-      "domains": [],
-      "actors": [
-        "SUZLON"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-11-25",
-      "reader": "llm",
-      "corroborated": false,
-      "link": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxONDBKYUFFNjNNTG1OLU5CUldwWjVva3hrUmdyRER3ekJSZS1LaFI2NnpjVkZfTHRJRmFpMVJxb09CMjNiNG1DWGROU0dMbmdHZERpRXh5bFVJeVFET0pVcWpMYXFXMms5MU9mTW9VUTBueGpUOWVHT1UySWF4Mkk1ZFlEQ0pUZ3dWSTRMUkpVSGxScUtDeTZ1bG5KejN6M0ZyS1BlZVNBU3gtTWlrX3l3Nl9wSWFxejBDUXU1bkhJZmExTFp6UU9Bag?oc=5",
-      "source": "Saur Energy",
-      "story": "Suzlon Adds 1 GW Blade Capacity in Tamil Nadu for ₹200 Crore",
-      "reports": 4,
-      "confirmation": {
-        "ticker": "SUZLON",
-        "source": "NSE",
-        "filing": "Suzlon Energy Limited has informed the Exchange about Capacity addition",
-        "date": "2026-11-25",
-        "link": "https://nsearchives.nseindia.in/corporate/SUZLON1_25112026133102_Suzlon25112026.pdf"
-      }
     },
     {
       "headline": "Chalet Hotels plans INR 3,500 crore investment over three years to expand hospitality portfolio",
@@ -638,26 +807,9 @@
       "counterparties": [],
       "direction": "opportunity",
       "date": "2026-11-23",
-      "first_seen": "2026-11-27",
+      "first_seen": "2026-11-28",
       "link": "https://news.google.com/rss/articles/CBMivwFBVV95cUxNaktIR1ZjVE50b3ZoRlpjNFFqTHlhazV0eVdkdGpfNUwxaGZlR1o1QW5hOWJRVk9QV2VsYm94SmU5Rk5kS0NwenFBWnRhakFzZlBMd0ZPVk1nblFGMFB4ZnQ3c2l0dmY0dVotdWR4Y2VpaEdJMzRhYnVRMHFnb3JsQlczU3VzQzZtMzNCTldLUndmZ3ppcUZQTk9zZGRwZlpXaVk0RldyWjlncGZMUGxDYTZGenlFdm9keS0tTEx0VQ?oc=5",
       "source": "Solarbytes",
-      "corroborated": true
-    },
-    {
-      "headline": "Amazon to acquire AI startup Decart's chip software, hire founders",
-      "event_type": "acquisition",
-      "phrase": "to acquire",
-      "certainty": "announced",
-      "domains": [],
-      "actors": [],
-      "external": [
-        "Amazon"
-      ],
-      "direction": "opportunity",
-      "date": "2026-11-23",
-      "first_seen": "2026-11-27",
-      "link": "https://news.google.com/rss/articles/CBMidEFVX3lxTE9hSmFaemUzUldRaWhTb3diNE4wU2dQb29ab2FXLS16UzcwdFU1a2tjUVh5Y2t0WEJweGREQ1JIMVczYXhmZGRQT3pXa0FUU0xFZWEzVGpnT2Q4MUdhWEVFMWhmRkNyZXVNbkdqa2xpdW03QWFT0gF6QVVfeXFMTjg2VVVOYlVHWHJaNUhWUHZMNjFQQ2Q5MmptU1JiektEbXNWMUN4SzR6OWxRSjVUTFZuakcwSEtHUjU4MUluQi1QUXQtc2xvWnhSY0NXNm9SUXZraElHZ290VTlUMlloSXhBSVRGbEhBcmVRYXZreFdjc2c?oc=5",
-      "source": "CNBC",
       "corroborated": true
     },
     {
@@ -677,133 +829,6 @@
       "link": "https://www.livemint.com/market/stock-market-news/tata-steel-shares-fall-5-as-investors-weigh-rs-32-000-cr-apl-apollo-acquisition-plan-should-you-buy-check-key-levels-11795406091656.html",
       "source": "Livemint",
       "story": "Tata Steel shares fall 5% as investors weigh ₹32,000 cr APL Apollo acquisition plan | Should you buy? Check key levels",
-      "reports": 1
-    },
-    {
-      "headline": "PCB shortages threaten AI, electronics production: Global Electronics Association",
-      "event_type": "supply_disruption",
-      "phrase": "shortage",
-      "certainty": "completed",
-      "domains": [
-        "manufacturing_electronics"
-      ],
-      "actors": [],
-      "external": [],
-      "direction": "risk",
-      "date": "2026-11-23",
-      "first_seen": "2026-11-25",
-      "link": "https://news.google.com/rss/articles/CBMi-gFBVV95cUxQaEdNVjZZRWhZTlhLUmZwSURwWTJsd01UNTg3eXB3cU1Qa0tBODRWQ3lybGhSM05uQVpiYlpncmFtSkVKTFpLSU02SlhlbEpxUEg1RUkyQnRrUk5mTk5faDFqTDZiWmJPMW8zTWN4MUJrSEVDRlVpRTlrOVptZ3kxQ2c3M1B1TG9ETGR5TV9ROGRCVDBCRlY5YUp4WVhNcE45QkVCZGwxUkpYeE1mdU1YLWNiU1h6RHYwV21XOHEwZzg3dnFkaFRMd0VnQW1RZzA4bHJSVTV4NDYtZmNzSmhSWmVILTB1OUtWdFBJSThObjR1aEh6VXJ2X1Z30gH6AUFVX3lxTFBoR01WNllFaFlOWEtSZnBJRHBZMmx3TVQ1ODd5cHdxTVBrS0E4NFZDeXJsaFIzTm5BWmJiWmdyYW1KRUpMWktJTTZKWGVsSnFQSDVFSTJCdGtSTmZOTl9oMWpMNmJaYk8xbzNNY3gxQmtIRUNGVWlFOWs5Wm1neTFDZzczUHVMb0RMZHlNX1E4ZEJUMEJGVjlhSnhZWE1wTjlCRUJkbDFSSlh4TWZ1TVgtY2JTWHpEdjBXbVc4cTBnODd2cWRoVEx3RWdBbVFnMDhsclJVNXg0Ni1mY3NKaFJaZUgtMHU5S1Z0UElJOE5uNHVoSHpVcnZfVnc?oc=5",
-      "source": "electronics.economictimes.indiatimes.com",
-      "corroborated": true
-    },
-    {
-      "headline": "PCB supply shortages threaten global electronics manufacturing through 2027",
-      "event_type": "supply_disruption",
-      "phrase": "shortage",
-      "certainty": "completed",
-      "domains": [
-        "manufacturing_electronics"
-      ],
-      "actors": [],
-      "external": [],
-      "direction": "risk",
-      "date": "2026-11-23",
-      "first_seen": "2026-11-25",
-      "link": "https://news.google.com/rss/articles/CBMifEFVX3lxTE52LTNkTDEzZFd2alh0T2RZZ0YtWU5aSWpXNlJRb0NkeVNsSjg3RVhJS3NmU1dxVUxwaEdkbXJlU1JTQWluR2pFVGJ2MGFQYlVzVERxUFM5WERXU2Rqc0wzdGVxYnVveEczYzVZV2xTcnU2dnUyc1JSS1Y1NkE?oc=5",
-      "source": "Manufacturing Today India",
-      "corroborated": true
-    },
-    {
-      "headline": "ABB strikes $2.65 billion deal for German fan maker Ziehl-Abegg amid rising cooling demand",
-      "event_type": "capacity_add",
-      "phrase": "billion deal",
-      "certainty": "completed",
-      "domains": [],
-      "actors": [],
-      "external": [
-        "ABB"
-      ],
-      "direction": "opportunity",
-      "date": "2026-11-23",
-      "first_seen": "2026-11-25",
-      "link": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxPZGVTS0JrMFdoVU1BdEdUZDhqcDNVWWZKX2pVNFlQQTVfX183SWpvZENVdUVnaG1jelVNdW5OOU96NThSSEdncE8yX2N4bkRUTTVzNVdRQUdKR2M2MlFzTzFYNUQtTGp5RjQ4SV9lQTRLeFFrdFc3dTY1a2MxeUZvaEFCSmszby0yRUxNZzJkd0FWN050c1ZzbkVBaGVSMkJ1TUZxM05MMklKNzNfcHU2V3U2aTlXeVU4NWY3TEdxUVpsWFhCYWw3QzIzTFd6MTZJNHhUMG42U3g1ZFhuNFlz0gHkAUFVX3lxTE9EbnRCQUtIOVloMkNlS2N3eS1YVTFQSGdwT3M2Mm1KdVBfTDZWM0J5TzdMQTMzaHVvdFZoYTIzaXJLQjFvOXVvRXR3Y3RFWHVwTWRvdWVydXJ3NnFETTRiWGxaMll4WFowa0d5dmQ5dlYyUnQ5dE1LTXg2cFFqMGlHZ3RCQTl6VDlqQURtZmR3NzZXZy1QOG8wcEV1UktrenQyWWsyWWdKdmVndkhDWWlqSDFCMGRBQi1lb1I2d0hBQms4VjNpTFdaUU1rZUVOYm5jOTFxYmlwcFlxcDZuRUhZT0NvVw?oc=5",
-      "source": "CNBC TV18",
-      "corroborated": false,
-      "llm_reading": {
-        "event_type": "acquisition",
-        "actors": []
-      },
-      "amount_cr": 21995.0
-    },
-    {
-      "headline": "Amazon signs $7.5 billion deal for Israeli AI startup Decart's technology and team",
-      "event_type": "capacity_add",
-      "phrase": "billion deal",
-      "certainty": "completed",
-      "domains": [],
-      "actors": [],
-      "external": [
-        "Amazon"
-      ],
-      "direction": "opportunity",
-      "date": "2026-11-23",
-      "first_seen": "2026-11-24",
-      "link": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE9ZTGJWcUNFNXRnM0V0R2pheVhHNzJLYTBoZWVLdTdWUVBpMEtQTFMzUVFmMmQ1elAzQzRxUWxTX3Y1RWVQalFfM3RlblgxOG5YVlJ0eXV1TGZ4MDEzakRvNzZ6Nk9oRTQ?oc=5",
-      "source": "CTech",
-      "amount_cr": 62250.0
-    },
-    {
-      "headline": "Amazon buying AI tech from startup in reported $7.5 billion deal",
-      "event_type": "capacity_add",
-      "phrase": "billion deal",
-      "certainty": "completed",
-      "domains": [],
-      "actors": [],
-      "external": [
-        "Amazon"
-      ],
-      "direction": "opportunity",
-      "date": "2026-11-23",
-      "first_seen": "2026-11-24",
-      "link": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQZDhYQ1Zsa1M0WjlwdTZ0UEF3cmpUZWhYNXJzM0oyN1N4eUt3M2tOZVIwRmVMTDM2a25mNlg4UmpRZ2ZFdXlDSHZxTU5VdVpqdlZvZmhBdGdHRUdybWtqZkJla0R1RDBGV0lMSmU0V3hqRmhQV0g4U3lzdkVkazhYUzJyc0xhOGhPd0ltRkVfSWkxLXEzR3BkSDVJakFGZC1wMG9BNmVrSHc?oc=5",
-      "source": "The Business Journals",
-      "amount_cr": 62250.0
-    },
-    {
-      "headline": "Aurionpro Wins Rs. 1 bn Data Centre Order",
-      "event_type": "order_win",
-      "phrase": "wins rs. 1 bn data centre order",
-      "certainty": "completed",
-      "domains": [
-        "data_center_support"
-      ],
-      "actors": [],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-11-23",
-      "first_seen": "2026-11-24",
-      "link": "https://news.google.com/rss/articles/CBMitAFBVV95cUxPQ0pVdkZvSWFfaDhHc1hLX2M1ZmRVRUpVeUVHQWxkREFkZEh3Q25IcGdkLVhobmtob1NhRkdhVlJRTmZBbDc3MXdBc2dUUEdJekhqM19CMzZsZmZxM29qRG1nMW9CbHJoQ0VleUhvYjc5YmQ4VjRhR2F5UDRpRGNpaDlOU2pNdmdJdnFrN3dPT19nSDRQdXY3VjRkVTd6TTRZdkpBcnJaWVVzaHo4UFB2b2thaFo?oc=5",
-      "source": "Construction World",
-      "corroborated": true,
-      "amount_cr": 100.0
-    },
-    {
-      "headline": "Chalet Hotels gains 3% on ₹3,500-cr expansion plan; analysts stay bullish",
-      "event_type": "capacity_add",
-      "phrase": null,
-      "certainty": "announced",
-      "domains": [],
-      "actors": [
-        "CHALET"
-      ],
-      "external": [],
-      "direction": "opportunity",
-      "date": "2026-11-23",
-      "reader": "llm",
-      "corroborated": false,
-      "link": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxQTXMwaDZCbDFJMzl5UV9uQ0FVd0tpZVp6UzlvRWZGNDZiNTRKV2JYMzJnM1RZMjd6a1FEVnFHWExBOUdNY09ycFZuMU9VekVGbVppOTd0ck1vNVlLSE9HSHhXekhTRUVldjRMa3JBUVpNMGpCOC1xZ2szN3E5Yl9RRkNpV25VSUlINU1nLUN5RTc3cDVGUUY0QTNYQS11d1BzRk92cVZtSXk2c0ozakpSUTE2bDMyZlg0TVl6ekhINlE0WjN4djlMV1RPVEE1ZkRTNGNB0gHYAUFVX3lxTE11REJOcTZXNVRnOTFLX01Pa2RReWR4OVJaUGtqNUNMdlNjVGgyR0dMeFJ6Mm9nSjlMSVpsbV9ObVZhOFpSZWlzbXRLeWUtaXo0TXR2YTRCYl94aGczOEJrXzZnS3h2SmhYV3BiZUFZWm03azBHcndvb1ZhUFB2eUdMNkdPQ3Fmd0FhaDY2dzk0ZUptVG5TQm42WEdqUjlrV3VmNl80S3lZcC1JT291dUp5ZDhmZV8xV3pPeTlrOHhQR056MW8yZDZUazNFanRTTkNRR1ZzUUVsaA?oc=5",
-      "source": "Business Standard",
-      "story": "Chalet Hotels gains 3% on ₹3,500-cr expansion plan; analysts stay bullish",
       "reports": 1
     }
   ]

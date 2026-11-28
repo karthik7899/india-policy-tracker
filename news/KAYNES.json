@@ -523,7 +523,7 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (357 days old)"
+      "exclusion_reason": "aged >120d (358 days old)"
     },
     {
       "date": "Thu, 05 Feb 2026 08:00:00 GMT",
@@ -537,7 +537,21 @@
       ],
       "confidence": "M",
       "status": "excluded",
-      "exclusion_reason": "aged >120d (295 days old)"
+      "exclusion_reason": "aged >120d (296 days old)"
+    },
+    {
+      "date": "Fri, 27 Nov 2026 12:00:00 GMT",
+      "headline": "Kaynes, Vishay Intertechnology enter into strategic joint venture",
+      "source_url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxQMFJxRVVMb1Bacl9xN0syU1h3MjhDa21JRVBIZFZyeHI0VGlqSXYtdGxjNWllUG1oVF9RTkozUVhwYjh0ZjZiQm9qVnNuLTRpdEVlbGdWa25LN0RzNHlCSkpzd20tVXBNY2hLbi1aOUZPTzBfSlFTS1dWV0xpU2psTU16YjEwcmYteFFCM3cyUkVsZWdJOTlmYWVFckxBSWZNUjl0ZA?oc=5",
+      "source_label": "Evertiq",
+      "event_type": "tie_up",
+      "source_kind": "Global",
+      "event_tags": [
+        "tie_up",
+        "Global"
+      ],
+      "confidence": "L",
+      "status": "counted"
     },
     {
       "date": "Tue, 17 Nov 2026 13:42:10 +0530",
@@ -598,6 +612,21 @@
       "status": "counted",
       "article_url": "https://www.livemint.com/market/stock-market-news/why-kaynes-technology-shares-crashed-20-to-52-week-low-stock-down-54-in-a-year-what-stock-market-experts-say-11794807033272.html",
       "summary": "Kaynes Technology shares hit 20% lower circuit after Q2 FY27 net profit fell 61.6% year-on-year, despite modest revenue growth. Brokerages cited weakness in smart metering, rising debt and uneven segment performance, while auditor observations and financial restatements added to investor concerns."
+    },
+    {
+      "date": "2026-11-27",
+      "headline": "Kaynes, Vishay Intertechnology enter into strategic joint venture",
+      "source_url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxQMFJxRVVMb1Bacl9xN0syU1h3MjhDa21JRVBIZFZyeHI0VGlqSXYtdGxjNWllUG1oVF9RTkozUVhwYjh0ZjZiQm9qVnNuLTRpdEVlbGdWa25LN0RzNHlCSkpzd20tVXBNY2hLbi1aOUZPTzBfSlFTS1dWV0xpU2psTU16YjEwcmYteFFCM3cyUkVsZWdJOTlmYWVFckxBSWZNUjl0ZA?oc=5",
+      "source_label": "Evertiq",
+      "event_type": "tie_up",
+      "source_kind": "Event",
+      "event_tags": [
+        "tie_up",
+        "Event"
+      ],
+      "confidence": "H",
+      "status": "merged",
+      "exclusion_reason": "merged: duplicate phrasing of “Kaynes, Vishay Intertechnology enter into strategic joint ve”"
     }
   ]
 }
